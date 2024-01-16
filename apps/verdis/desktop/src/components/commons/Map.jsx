@@ -1,5 +1,5 @@
 import 'react-cismap/topicMaps.css';
-// import "leaflet/dist/leaflet.css";
+import 'leaflet/dist/leaflet.css';
 
 import { Card, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
