@@ -1,0 +1,30 @@
+{
+  "name": "cismap-playground-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "playgrounds/cismap-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "playgrounds/cismap-e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "cismap-playground:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "cismap-playground:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "cismap-playground:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "implicitDependencies": ["cismap-playground"],
+  "tags": []
+}
