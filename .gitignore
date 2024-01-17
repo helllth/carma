@@ -42,3 +42,5 @@ Thumbs.db
 
 # Dev Secrets
 **/devSecrets.json
+apps/wunda/verkehrszeichenkataster/public/signs/*
+
