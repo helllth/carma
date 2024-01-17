@@ -10,6 +10,9 @@ export default defineConfig({
   server: {
     port: 4200,
     host: 'localhost',
+    fs: {
+      allow: ['../../..'],
+    },
   },
 
   preview: {
@@ -45,5 +48,8 @@ export default defineConfig({
       reportsDirectory: '../../../coverage/apps/wunda/verkehrszeichenkataster',
       provider: 'v8',
     },
+  },
+  define: {
+    'process.env.IS_PREACT': JSON.stringify('true'),
   },
 });

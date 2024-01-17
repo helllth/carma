@@ -1,7 +1,10 @@
-import Login from "../components/authentication/Login";
-import packageJson from "../../package.json";
-import wupperwurm from "../assets/wupperwurm.svg";
-
+import Login from '../components/authentication/Login';
+// import packageJson from "../../package.json";
+import wupperwurm from '../assets/wupperwurm.svg';
+const packageJson = {
+  version: '?.?.?',
+  dependencies: { 'react-cismap': '?.?.?' },
+};
 const Page = () => {
   return (
     <div className="h-screen">
@@ -20,10 +23,10 @@ const Page = () => {
         </div>
         <div className="absolute bottom-6 right-6 text-white/80 font-semibold flex flex-col gap-2 items-end">
           <span>
-            Verkehrszeichen Kataster v:{packageJson.version}{" "}
+            Verkehrszeichen Kataster v:{packageJson.version}{' '}
             <a href="https://cismet.de" className="text-white/50 no-underline">
               cismet GmbH
-            </a>{" "}
+            </a>{' '}
             auf Basis von
           </span>
           <span>
@@ -32,14 +35,14 @@ const Page = () => {
               className="text-white/50 no-underline"
             >
               Leaflet
-            </a>{" "}
-            und{" "}
+            </a>{' '}
+            und{' '}
             <a
               href="https://cismet.de/#refs"
               className="text-white/50 no-underline"
             >
               cids | react cismap v
-              {packageJson.dependencies["react-cismap"].slice(1)} |
+              {packageJson.dependencies['react-cismap'].slice(1)} |
             </a>
           </span>
           <a
