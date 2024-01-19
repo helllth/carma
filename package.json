@@ -1,6 +1,6 @@
 {
   "name": "@carma/source",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {},
   "private": true,
@@ -53,10 +53,12 @@
     "tailwind-merge": "^2.2.0"
   },
   "devDependencies": {
+    "@nx-tools/container-metadata": "^5.1.0",
+    "@nx-tools/nx-container": "^5.1.0",
     "@nx/cypress": "17.2.8",
     "@nx/eslint": "17.2.8",
     "@nx/eslint-plugin": "17.2.8",
-    "@nx/js": "17.2.8",
+    "@nx/js": "^17.2.8",
     "@nx/react": "17.2.8",
     "@nx/vite": "17.2.8",
     "@nx/workspace": "17.2.8",
