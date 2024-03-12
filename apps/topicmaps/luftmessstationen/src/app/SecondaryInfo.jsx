@@ -198,8 +198,6 @@ const InfoPanel = () => {
         </SecondaryInfoPanelSection>
       );
     }
-
-    Chart.defaults.global.legend.display = false;
     if (Object.keys(avgsChartData).length > 0) {
       subSections.push(
         <SecondaryInfoPanelSection
