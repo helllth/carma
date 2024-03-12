@@ -1,20 +1,20 @@
-import React, { useContext, useRef } from "react";
-import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
-import SecondaryInfoPanelSection from "react-cismap/topicmaps/SecondaryInfoPanelSection";
-import SecondaryInfo from "react-cismap/topicmaps/SecondaryInfo";
+import React, { useContext, useRef } from 'react';
+import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
+import SecondaryInfoPanelSection from 'react-cismap/topicmaps/SecondaryInfoPanelSection';
+import SecondaryInfo from 'react-cismap/topicmaps/SecondaryInfo';
 import {
   getLastYearMeasurements,
   getLastYearMinus1Measurements,
   getStatus4Value,
-} from "./helper/convertItemToFeature";
-import Chart from "chart.js";
-import ReactChartkick, { ColumnChart } from "react-chartkick";
-import { LOOKUP, MONTHS, opendataLinkSections } from "./helper/constants";
-import Color from "color";
-import Icon from "react-cismap/commons/Icon";
-import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopicMapContextProvider";
-import { getApplicationVersion } from "./version";
-import { version as reactCismapVersion } from "react-cismap/meta";
+} from './helper/convertItemToFeature';
+import { Chart } from 'chart.js';
+import ReactChartkick, { ColumnChart } from 'react-chartkick';
+import { LOOKUP, MONTHS, opendataLinkSections } from './helper/constants';
+import Color from 'color';
+import Icon from 'react-cismap/commons/Icon';
+import { ResponsiveTopicMapContext } from 'react-cismap/contexts/ResponsiveTopicMapContextProvider';
+import { getApplicationVersion } from './version';
+import { version as reactCismapVersion } from 'react-cismap/meta';
 
 ReactChartkick.addAdapter(Chart);
 
@@ -23,28 +23,28 @@ const InfoPanel = () => {
   const { windowSize } = useContext(ResponsiveTopicMapContext);
   const station = selectedFeature?.properties;
   const footer = (
-    <div style={{ fontSize: "11px" }}>
+    <div style={{ fontSize: '11px' }}>
       <div>
         <b>
           {document.title} v{getApplicationVersion()}
         </b>
-        :{" "}
-        <a href='https://cismet.de/' target='_cismet'>
+        :{' '}
+        <a href="https://cismet.de/" target="_cismet">
           cismet GmbH
-        </a>{" "}
-        auf Basis von{" "}
-        <a href='http://leafletjs.com/' target='_more'>
+        </a>{' '}
+        auf Basis von{' '}
+        <a href="http://leafletjs.com/" target="_more">
           Leaflet
-        </a>{" "}
-        und{" "}
-        <a href='https://cismet.de/#refs' target='_cismet'>
+        </a>{' '}
+        und{' '}
+        <a href="https://cismet.de/#refs" target="_cismet">
           cids | react-cismap v{reactCismapVersion}
-        </a>{" "}
-        |{" "}
+        </a>{' '}
+        |{' '}
         <a
-          target='_blank'
-          rel='noopener noreferrer'
-          href='https://cismet.de/datenschutzerklaerung.html'
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://cismet.de/datenschutzerklaerung.html"
         >
           Datenschutzerklärung (Privacy Policy)
         </a>
@@ -83,7 +83,8 @@ const InfoPanel = () => {
 
     if (station?.werte && Object.keys(station?.werte).length > 0) {
       // --- measurements of the last 12 months
-      let { values: lastYearValues, year: lastYear } = getLastYearMeasurements(station);
+      let { values: lastYearValues, year: lastYear } =
+        getLastYearMeasurements(station);
       let lastYearM1Values = getLastYearMinus1Measurements(station);
 
       let twoYearVals = [];
@@ -118,10 +119,12 @@ const InfoPanel = () => {
       // ---create the chart objects
 
       for (const entry of last12) {
-        const key = entry.year + " " + MONTHS[entry.index].shortname;
+        const key = entry.year + ' ' + MONTHS[entry.index].shortname;
         if (entry.value !== -9999) {
           last12ChartData.push([key, entry.value]);
-          last12Colors.push(new Color(LOOKUP[getStatus4Value(entry.value)].color).fade(0.5));
+          last12Colors.push(
+            new Color(LOOKUP[getStatus4Value(entry.value)].color).fade(0.5)
+          );
         } else {
           last12ChartData.push([key, null]);
           last12Colors.push(null);
@@ -130,7 +133,9 @@ const InfoPanel = () => {
 
       for (const year of Object.keys(avgs)) {
         avgsChartData.push([year, avgs[year]]);
-        avgsColors.push(new Color(LOOKUP[getStatus4Value(avgs[year])].color).fade(0.5));
+        avgsColors.push(
+          new Color(LOOKUP[getStatus4Value(avgs[year])].color).fade(0.5)
+        );
       }
 
       for (const year of Object.keys(avgs)) {
@@ -140,31 +145,35 @@ const InfoPanel = () => {
 
     const subSections = [];
     const legend = (
-      <div style={{ fontSize: "90%", textAlign: "center" }}>
+      <div style={{ fontSize: '90%', textAlign: 'center' }}>
         <div>
-          <span style={{ whiteSpace: "nowrap" }}>
-            <Icon style={{ color: LOOKUP.unauffaellig.color }} name='square' /> unauffällig{" "}
-            {"(≦ 35)"}
+          <span style={{ whiteSpace: 'nowrap' }}>
+            <Icon style={{ color: LOOKUP.unauffaellig.color }} name="square" />{' '}
+            unauffällig {'(≦ 35)'}
           </span>
-          <span style={{ whiteSpace: "nowrap", marginLeft: 10, marginRight: 10 }}>
-            <Icon style={{ color: LOOKUP.auffaellig.color }} name='square' /> auffällig {"(> 35)"}
+          <span
+            style={{ whiteSpace: 'nowrap', marginLeft: 10, marginRight: 10 }}
+          >
+            <Icon style={{ color: LOOKUP.auffaellig.color }} name="square" />{' '}
+            auffällig {'(> 35)'}
           </span>
           {windowSize?.width < 463 && <br />}
-          <span style={{ whiteSpace: "nowrap" }}>
-            <Icon style={{ color: LOOKUP.warnend.color }} name='square' /> warnend {"(> 40)"}
+          <span style={{ whiteSpace: 'nowrap' }}>
+            <Icon style={{ color: LOOKUP.warnend.color }} name="square" />{' '}
+            warnend {'(> 40)'}
           </span>
         </div>
-        <div style={{ fontSize: "80%" }}> Messwerte in µg/m³</div>
+        <div style={{ fontSize: '80%' }}> Messwerte in µg/m³</div>
       </div>
     );
     if (station?.bis === undefined) {
       subSections.push(
         <SecondaryInfoPanelSection
-          key='last12'
-          bsStyle='info'
-          header={"NO₂-Messwerte der letzten 12 Monate"}
+          key="last12"
+          bsStyle="info"
+          header={'NO₂-Messwerte der letzten 12 Monate'}
         >
-          <div style={{ fontSize: "115%", padding: "10px", paddingTop: "0px" }}>
+          <div style={{ fontSize: '115%', padding: '10px', paddingTop: '0px' }}>
             {legend}
             <ColumnChart
               data={[
@@ -178,7 +187,7 @@ const InfoPanel = () => {
                     legend: {
                       display: false,
                       labels: {
-                        fontColor: "rgb(255, 99, 132)",
+                        fontColor: 'rgb(255, 99, 132)',
                       },
                     },
                   },
@@ -194,11 +203,11 @@ const InfoPanel = () => {
     if (Object.keys(avgsChartData).length > 0) {
       subSections.push(
         <SecondaryInfoPanelSection
-          key='average10'
-          bsStyle='warning'
-          header={"NO₂-Jahresmittelwerte der letzten zehn Kalenderjahre"}
+          key="average10"
+          bsStyle="warning"
+          header={'NO₂-Jahresmittelwerte der letzten zehn Kalenderjahre'}
         >
-          <div style={{ fontSize: "115%", padding: "10px", paddingTop: "0px" }}>
+          <div style={{ fontSize: '115%', padding: '10px', paddingTop: '0px' }}>
             {legend}
             <ColumnChart
               data={[
@@ -220,15 +229,15 @@ const InfoPanel = () => {
     }
     let opendataLink = (
       <a
-        href='https://offenedaten-wuppertal.de/dataset/luftmessstationen-wuppertal-passivsammler'
-        target='_opendata'
+        href="https://offenedaten-wuppertal.de/dataset/luftmessstationen-wuppertal-passivsammler"
+        target="_opendata"
       >
         diesem Link
       </a>
     );
 
     let stationsaktivitaet;
-    const twothousandandeight = new Date("2008-01-01");
+    const twothousandandeight = new Date('2008-01-01');
 
     if (new Date(station?.bis) < twothousandandeight) {
       //Fall 1
@@ -236,8 +245,9 @@ const InfoPanel = () => {
         <div>
           <b>Stationsaktivität:</b>
           <p>
-            Von {new Date(station?.von).toLocaleDateString()} bis{" "}
-            {new Date(station?.bis).toLocaleDateString()} generierte diese Station NO₂-Messwerte.
+            Von {new Date(station?.von).toLocaleDateString()} bis{' '}
+            {new Date(station?.bis).toLocaleDateString()} generierte diese
+            Station NO₂-Messwerte.
             {opendataLinkSections[0]}
           </p>
         </div>
@@ -251,86 +261,103 @@ const InfoPanel = () => {
         <div>
           <b>Stationsaktivität:</b>
           <p>
-            Von {new Date(station?.von).toLocaleDateString()} bis{" "}
-            {new Date(station?.bis).toLocaleDateString()} generierte diese Station insgesamt{" "}
-            {valueCounter} NO₂-Messwerte (Ausfälle und Messwerte vor 1.1.2008 nicht berücksichtigt).
+            Von {new Date(station?.von).toLocaleDateString()} bis{' '}
+            {new Date(station?.bis).toLocaleDateString()} generierte diese
+            Station insgesamt {valueCounter} NO₂-Messwerte (Ausfälle und
+            Messwerte vor 1.1.2008 nicht berücksichtigt).
             {opendataLinkSections[1]}
           </p>
         </div>
       );
-    } else if (new Date(station?.von) >= twothousandandeight && station?.bis !== undefined) {
+    } else if (
+      new Date(station?.von) >= twothousandandeight &&
+      station?.bis !== undefined
+    ) {
       //Fall 3
       stationsaktivitaet = (
         <div>
           <b>Stationsaktivität:</b>
 
           <p>
-            Von {new Date(station?.von).toLocaleDateString()} bis{" "}
-            {new Date(station?.bis).toLocaleDateString()} generierte diese Station insgesamt{" "}
-            {valueCounter} NO₂-Messwerte (Ausfälle nicht berücksichtigt).
+            Von {new Date(station?.von).toLocaleDateString()} bis{' '}
+            {new Date(station?.bis).toLocaleDateString()} generierte diese
+            Station insgesamt {valueCounter} NO₂-Messwerte (Ausfälle nicht
+            berücksichtigt).
             {opendataLinkSections[2]}
           </p>
 
           <b>Messausfälle:</b>
           {outageCounter > 0 && (
             <p>
-              Diese Messstation generierte an {outageCounter}{" "}
-              {outageCounter === 1 ? "Monat" : "Monaten"} einen Messausfall. Damit besitzt sie eine
-              Zuverlässigkeit von{" "}
+              Diese Messstation generierte an {outageCounter}{' '}
+              {outageCounter === 1 ? 'Monat' : 'Monaten'} einen Messausfall.
+              Damit besitzt sie eine Zuverlässigkeit von{' '}
               {(
-                Math.round((valueCounter / (valueCounter + outageCounter)) * 1000) / 10
+                Math.round(
+                  (valueCounter / (valueCounter + outageCounter)) * 1000
+                ) / 10
               ).toLocaleString()}
               %.
             </p>
           )}
           {outageCounter === 0 && (
             <p>
-              Diese Messstation lieferte in jedem Monat der Stationsaktivität einen NO₂-Messwert.
-              Damit liegt bisher kein Messausfall vor.
+              Diese Messstation lieferte in jedem Monat der Stationsaktivität
+              einen NO₂-Messwert. Damit liegt bisher kein Messausfall vor.
             </p>
           )}
         </div>
       );
-    } else if (new Date(station?.von) >= twothousandandeight && station?.bis === undefined) {
+    } else if (
+      new Date(station?.von) >= twothousandandeight &&
+      station?.bis === undefined
+    ) {
       //Fall 3.5
       stationsaktivitaet = (
         <div>
           <b>Stationsaktivität:</b>
 
           <p>
-            Seit {new Date(station?.von).toLocaleDateString()} generierte diese Station{" "}
-            {valueCounter} NO₂-Messwerte (Ausfälle nicht berücksichtigt).
+            Seit {new Date(station?.von).toLocaleDateString()} generierte diese
+            Station {valueCounter} NO₂-Messwerte (Ausfälle nicht
+            berücksichtigt).
             {opendataLinkSections[3]}
           </p>
 
           <b>Messausfälle:</b>
           {outageCounter > 0 && (
             <p>
-              Diese Messstation generierte an {outageCounter}{" "}
-              {outageCounter === 1 ? "Monat" : "Monaten"} einen Messausfall. Damit besitzt sie eine
-              Zuverlässigkeit von{" "}
+              Diese Messstation generierte an {outageCounter}{' '}
+              {outageCounter === 1 ? 'Monat' : 'Monaten'} einen Messausfall.
+              Damit besitzt sie eine Zuverlässigkeit von{' '}
               {(
-                Math.round((valueCounter / (valueCounter + outageCounter)) * 1000) / 10
+                Math.round(
+                  (valueCounter / (valueCounter + outageCounter)) * 1000
+                ) / 10
               ).toLocaleString()}
               %.
             </p>
           )}
           {outageCounter === 0 && (
             <p>
-              Diese Messstation lieferte in jedem Monat der Stationsaktivität einen NO₂-Messwert.
-              Damit liegt bisher kein Messausfall vor.
+              Diese Messstation lieferte in jedem Monat der Stationsaktivität
+              einen NO₂-Messwert. Damit liegt bisher kein Messausfall vor.
             </p>
           )}
         </div>
       );
-    } else if (new Date(station?.von) < twothousandandeight && station?.bis === undefined) {
+    } else if (
+      new Date(station?.von) < twothousandandeight &&
+      station?.bis === undefined
+    ) {
       //Fall 4
       stationsaktivitaet = (
         <div>
           <b>Stationsaktivität:</b>
           <p>
-            Seit {new Date(station?.von).toLocaleDateString()} generierte diese Station{" "}
-            {valueCounter} NO₂-Messwerte (Ausfälle und Messwerte vor 1.1.2008 nicht berücksichtigt).
+            Seit {new Date(station?.von).toLocaleDateString()} generierte diese
+            Station {valueCounter} NO₂-Messwerte (Ausfälle und Messwerte vor
+            1.1.2008 nicht berücksichtigt).
           </p>
 
           {opendataLinkSections[1]}
@@ -344,33 +371,37 @@ const InfoPanel = () => {
 
           {station?.bis !== undefined && (
             <p>
-              Von {new Date(station?.von).toLocaleDateString()} bis{" "}
-              {new Date(station?.bis).toLocaleDateString()} generierte diese Station insgesamt{" "}
-              {valueCounter} NO₂-Messwerte (Ausfälle nicht berücksichtigt).
+              Von {new Date(station?.von).toLocaleDateString()} bis{' '}
+              {new Date(station?.bis).toLocaleDateString()} generierte diese
+              Station insgesamt {valueCounter} NO₂-Messwerte (Ausfälle nicht
+              berücksichtigt).
             </p>
           )}
           {station?.bis === undefined && (
             <p>
-              Seit {new Date(station?.von).toLocaleDateString()} generierte diese Station{" "}
-              {valueCounter} NO₂-Messwerte (Ausfälle nicht berücksichtigt).
+              Seit {new Date(station?.von).toLocaleDateString()} generierte
+              diese Station {valueCounter} NO₂-Messwerte (Ausfälle nicht
+              berücksichtigt).
             </p>
           )}
           <b>Messausfälle:</b>
           {outageCounter > 0 && (
             <p>
-              Diese Messstation generierte an {outageCounter}{" "}
-              {outageCounter === 1 ? "Monat" : "Monaten"} einen Messausfall. Damit besitzt sie eine
-              Zuverlässigkeit von{" "}
+              Diese Messstation generierte an {outageCounter}{' '}
+              {outageCounter === 1 ? 'Monat' : 'Monaten'} einen Messausfall.
+              Damit besitzt sie eine Zuverlässigkeit von{' '}
               {(
-                Math.round((valueCounter / (valueCounter + outageCounter)) * 1000) / 10
+                Math.round(
+                  (valueCounter / (valueCounter + outageCounter)) * 1000
+                ) / 10
               ).toLocaleString()}
               %.
             </p>
           )}
           {outageCounter === 0 && (
             <p>
-              Diese Messstation lieferte in jedem Monat der Stationsaktivität einen NO₂-Messwert.
-              Damit liegt bisher kein Messausfall vor.
+              Diese Messstation lieferte in jedem Monat der Stationsaktivität
+              einen NO₂-Messwert. Damit liegt bisher kein Messausfall vor.
             </p>
           )}
           {opendataLinkSections[1]}
@@ -380,42 +411,42 @@ const InfoPanel = () => {
 
     return (
       <SecondaryInfo
-        titleIconName='info-circle'
-        title={"Datenblatt: Messstation für Stickstoffdioxid (NO₂)"}
+        titleIconName="info-circle"
+        title={'Datenblatt: Messstation für Stickstoffdioxid (NO₂)'}
         mainSection={
-          <div style={{ width: "100%", minHeight: minHeight4MainSextion }}>
+          <div style={{ width: '100%', minHeight: minHeight4MainSextion }}>
             {foto !== undefined && (
               <div
                 style={{
-                  textAlign: "center",
-                  float: windowSize?.width < 500 ? undefined : "right",
+                  textAlign: 'center',
+                  float: windowSize?.width < 500 ? undefined : 'right',
                 }}
               >
                 <img
-                  alt='Bild'
+                  alt="Bild"
                   style={{
                     paddingLeft: 10,
                     paddingRight: 10,
-                    horizontalAlignment: "center",
-                    paddingBottom: "5px",
+                    horizontalAlignment: 'center',
+                    paddingBottom: '5px',
                   }}
                   src={foto}
-                  width='250'
+                  width="250"
                 />
               </div>
             )}
             <div
               style={{
-                fontSize: "115%",
-                padding: "10px",
-                paddingTop: "0px",
+                fontSize: '115%',
+                padding: '10px',
+                paddingTop: '0px',
               }}
             >
               <div>
                 <b>Adresse:</b>
 
                 <p>
-                  {station?.strasse} {station?.hausnummer}{" "}
+                  {station?.strasse} {station?.hausnummer}{' '}
                   {station?.zusatzinfo && <span>({station?.zusatzinfo})</span>}
                 </p>
                 {stationsaktivitaet}
