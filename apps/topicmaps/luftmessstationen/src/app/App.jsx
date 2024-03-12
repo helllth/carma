@@ -27,10 +27,6 @@ import InfoPanel from './SecondaryInfo';
 import { MappingConstants } from 'react-cismap';
 import Luftmessstationskarte from './Luftmessstationskarte';
 
-if (typeof global === 'undefined') {
-  window.global = window;
-}
-
 function App() {
   const [gazData, setGazData] = useState([]);
   useEffect(() => {
