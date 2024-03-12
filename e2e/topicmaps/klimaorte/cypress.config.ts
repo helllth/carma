@@ -5,4 +5,5 @@ export default defineConfig({
   e2e: nxE2EPreset(__dirname, {
     bundler: 'vite',
   }),
+  screenshotOnRunFailure: true,
 });
