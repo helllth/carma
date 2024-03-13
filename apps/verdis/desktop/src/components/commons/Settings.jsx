@@ -1,19 +1,22 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   getSyncKassenzeichen,
   setSyncKassenzeichen,
-} from "../../store/slices/settings";
-import { Checkbox, Radio, Slider, Switch } from "antd";
-import { useContext } from "react";
-import {
-  TopicMapStylingContext,
-  TopicMapStylingDispatchContext,
-} from "react-cismap/contexts/TopicMapStylingContextProvider";
-import {
+  getBackgroundLayerOpacities,
+  getActiveBackgroundLayer,
+  getActiveAdditionalLayers,
+  setActiveBackgroundLayer,
+  setBackgroundLayerOpacities,
+  setActiveAdditionaLayers,
+  setAdditionalLayerOpacities,
   getAdditionalLayerOpacities,
-  setLayerOpacity,
-} from "../../store/slices/mapping";
+} from '../../store/slices/ui';
 
+import { Checkbox, Radio, Slider, Switch } from 'antd';
+
+import { configuration as additionalLayerConfigurations } from './AdditionalLayers';
+import { configuration as backgroundLayerConfigurations } from './BackgroundLayers';
 const SettingsRow = ({ onClick, title, children }) => {
   return (
     <div
@@ -26,51 +29,62 @@ const SettingsRow = ({ onClick, title, children }) => {
   );
 };
 
-const OptionalLayerRow = ({ title, value }) => {
-  const { activeAdditionalLayerKeys, additionalLayerConfiguration } =
-    useContext(TopicMapStylingContext);
+const AdditionalLayerRow = ({
+  layerkey,
+  title,
+  active,
+  opacity = 1,
+  activeChanged = (layerkey) => {
+    console.log(' activeChanged', layerkey);
+  },
 
-  const { setActiveAdditionalLayerKeys } = useContext(
-    TopicMapStylingDispatchContext
-  );
-
-  const dispatch = useDispatch();
-  const opacity = useSelector(getAdditionalLayerOpacities)[value];
-
-  const changeActiveAdditionalLayer = (value) => {
-    if (activeAdditionalLayerKeys?.includes(value)) {
-      // remove it from the array
-
-      setActiveAdditionalLayerKeys(
-        activeAdditionalLayerKeys.filter((item) => item !== value)
-      );
-    } else {
-      setActiveAdditionalLayerKeys([
-        ...(activeAdditionalLayerKeys || []),
-        value,
-      ]);
-    }
-  };
-
+  opacityChanged = (key, opacity) => {
+    console.log(' opacityChanged', key, opacity);
+  },
+}) => {
   return (
-    <div className="flex items-center gap-2 hover:bg-zinc-100 p-1">
+    <div
+      key={'div.' + layerkey}
+      className="flex items-center gap-2 hover:bg-zinc-100 p-1"
+    >
       <Checkbox
-        checked={activeAdditionalLayerKeys?.includes(value)}
-        onClick={() => changeActiveAdditionalLayer(value)}
+        className="w-7"
+        checked={active}
+        onClick={() => activeChanged(layerkey)}
       />
       <span
-        className="w-1/4 cursor-pointer"
-        onClick={() => changeActiveAdditionalLayer(value)}
+        className="w-[calc(90%-10px)] cursor-pointer"
+        onClick={() => activeChanged(layerkey)}
       >
         {title}
       </span>
+
       <Slider
         defaultValue={opacity * 100}
-        onAfterChange={(opacity) =>
-          dispatch(setLayerOpacity({ layer: value, opacity: opacity / 100 }))
-        }
         disabled={false}
         className="w-full"
+        onAfterChange={(value) => opacityChanged(layerkey, value / 100)}
+      />
+    </div>
+  );
+};
+
+const BackgroundLayerRow = ({
+  layerkey,
+  title,
+  opacity = 1,
+  opacityChanged = (e) => {},
+}) => {
+  return (
+    <div className="flex items-center gap-2 hover:bg-zinc-100 p-1">
+      <Radio value={layerkey} className="min-w-[calc(52%-22px)]">
+        {title}
+      </Radio>
+      <Slider
+        defaultValue={opacity * 100}
+        disabled={false}
+        className="w-full"
+        onAfterChange={(value) => opacityChanged(layerkey, value / 100)}
       />
     </div>
   );
@@ -80,41 +94,86 @@ const Settings = () => {
   const dispatch = useDispatch();
   const syncKassenzeichen = useSelector(getSyncKassenzeichen);
 
-  const { selectedBackground } = useContext(TopicMapStylingContext);
-
-  const { setSelectedBackground } = useContext(TopicMapStylingDispatchContext);
+  const backgroundLayerOpacities = useSelector(getBackgroundLayerOpacities);
+  const additionalLayerOpacities = useSelector(getAdditionalLayerOpacities);
+  const activebBackgroundLayer = useSelector(getActiveBackgroundLayer);
+  const activeAdditionalLayers = useSelector(getActiveAdditionalLayers);
 
   return (
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-2">
         <h3>Allgemein</h3>
-        <SettingsRow
-          onClick={() => dispatch(setSyncKassenzeichen(!syncKassenzeichen))}
-          title="Kassenzeichen mit Java Anwendung synchronisieren"
-        >
-          <Switch className="w-fit" checked={syncKassenzeichen} />
-        </SettingsRow>
+        {
+          <SettingsRow
+            onClick={() => dispatch(setSyncKassenzeichen(!syncKassenzeichen))}
+            title="Kassenzeichen mit Java Anwendung synchronisieren"
+          >
+            <Switch className="w-fit" checked={syncKassenzeichen} />
+          </SettingsRow>
+        }
       </div>
       <div className="flex flex-col gap-2">
         <h3>Karte</h3>
         <h4>Optionale Layer</h4>
-        <OptionalLayerRow title="Gebäude" value="nrwAlkisGebaeude" />
-        <OptionalLayerRow title="Flurstücke" value="nrwAlkisFstck" />
+        {Object.keys(additionalLayerConfigurations).map(
+          (layerConfKey, index) => {
+            const layerConf = additionalLayerConfigurations[layerConfKey];
+            if (layerConf.virtual === true) return null;
+            return (
+              <AdditionalLayerRow
+                layerkey={layerConfKey}
+                title={layerConf.title}
+                active={activeAdditionalLayers.includes(layerConfKey)}
+                activeChanged={(layerkey) => {
+                  const activeLayers = [...activeAdditionalLayers];
+                  if (activeLayers.includes(layerkey)) {
+                    activeLayers.splice(activeLayers.indexOf(layerkey), 1);
+                  } else {
+                    activeLayers.push(layerkey);
+                  }
+                  dispatch(setActiveAdditionaLayers(activeLayers));
+                }}
+                opacity={additionalLayerOpacities[layerConfKey]}
+                opacityChanged={(layerkey, opacity) => {
+                  const opacities = { ...additionalLayerOpacities };
+                  opacities[layerkey] = opacity;
+
+                  dispatch(setAdditionalLayerOpacities(opacities));
+                }}
+              />
+            );
+          }
+        )}
+
         <h4>Hintergrund</h4>
         <Radio.Group
-          onChange={(e) => setSelectedBackground(e.target.value)}
-          value={selectedBackground}
+          onChange={(e) => {
+            dispatch(setActiveBackgroundLayer(e.target.value));
+          }}
+          value={activebBackgroundLayer}
         >
           <div className="flex flex-col gap-2 p-1">
-            <Radio value="default">Standard</Radio>
-            <Radio value="stadtplan">Stadtplan</Radio>
-            <Radio value="lbk">Lbk</Radio>
-            <Radio value="ortho">Orthofoto</Radio>
+            {Object.keys(backgroundLayerConfigurations).map(
+              (layerConfKey, index) => {
+                const layerConf = backgroundLayerConfigurations[layerConfKey];
+                return (
+                  <BackgroundLayerRow
+                    layerkey={layerConfKey}
+                    title={layerConf.title}
+                    opacity={backgroundLayerOpacities[layerConfKey]}
+                    opacityChanged={(layerkey, opacity) => {
+                      const opacities = { ...backgroundLayerOpacities };
+                      opacities[layerkey] = opacity;
+                      dispatch(setBackgroundLayerOpacities(opacities));
+                    }}
+                  />
+                );
+              }
+            )}
           </div>
         </Radio.Group>
       </div>
     </div>
   );
 };
-
 export default Settings;

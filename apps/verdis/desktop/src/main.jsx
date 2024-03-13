@@ -43,6 +43,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { persistStore } from 'redux-persist';
 import { loadGazeteerEntries } from './store/slices/gazData';
 import { getVirtualCityPassword } from './store/slices/search';
+import { MapContainer } from 'react-leaflet';
 
 const baseLayerConf = extendBaseLayerConf({ ...defaultLayerConf });
 
