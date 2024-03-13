@@ -45,3 +45,6 @@ Thumbs.db
 apps/wunda/verkehrszeichenkataster/public/signs/*
 
 apps/**/.env
+
+# Cypress screenshots
+report-cy/
