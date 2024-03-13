@@ -10,6 +10,7 @@ import { compare, defaultLinksColor } from "../../core/tools/helper";
 import { HistoryOutlined } from "@ant-design/icons";
 import { Modal, Table } from "antd";
 import "../../components/ui/control-board/toggle.css";
+import Item from "antd/es/list/Item";
 const columns = [
   {
     title: "Dienststelle",
@@ -24,7 +25,6 @@ const columns = [
             backgroundColor: record?.color || "transporent",
           }}
         ></span>
-        <span>{title}</span>
       </div>
     ),
     sorter: (a, b) => compare(a.type, b.type),
@@ -89,6 +89,9 @@ const Agencies = ({
   width = 231,
   height = 188,
   style,
+  setAgencyGeom,
+  setActiveTableRow,
+  activeRowId,
 }) => {
   const isStory = false;
   const storyStyle = { width, height, ...style };
@@ -109,7 +112,7 @@ const Agencies = ({
     const updatedArray = agency.filter((row) => row.id !== activeRow.id);
     setAgency(updatedArray);
     setAgency(updatedArray);
-    if (activeRow.id === agency[0].id) {
+    if (activeRow.id === agency[0]?.id) {
       setActiveRow(agency[1]);
     } else {
       setActiveRow(agency[0]);
@@ -141,6 +144,23 @@ const Agencies = ({
     setActiveRow(data?.currentOffices[0]);
     setHistory(data?.history);
   }, [dataIn]);
+  useEffect(() => {
+    if (activeRow?.extraGeomeOffice?.geo_field) {
+      setActiveTableRow(activeRow?.id);
+      setAgencyGeom({
+        agency,
+      });
+    }
+  }, [activeRow]);
+
+  useEffect(() => {
+    if (activeRowId && activeRowId !== activeRow?.id) {
+      const agencyWithId = agency.filter((a) => a.id === activeRowId);
+      if (agencyWithId) {
+        setActiveRow(agencyWithId[0]);
+      }
+    }
+  }, [activeRowId]);
 
   return (
     <div

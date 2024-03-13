@@ -1,4 +1,3 @@
-import { nanoid } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
@@ -14,7 +13,7 @@ export function mipaPageExtractor(dataIn) {
     if (mipa.length > 0) {
       let formattedVertragsbeginn;
       let formattedVertragsende;
-      const data = mipa.map((m) => {
+      const data = mipa.map((m, idx) => {
         if (m.vertragsbeginn) {
           const dateVertragsbeginn = dayjs(m.vertragsbeginn).toDate();
           formattedVertragsbeginn =
@@ -29,7 +28,7 @@ export function mipaPageExtractor(dataIn) {
           formattedVertragsende = null;
         }
         return {
-          id: nanoid(),
+          id: idx,
           lage: m.lage,
           aktenzeichen: m.aktenzeichen,
           flaeche: m.flaeche,
@@ -39,6 +38,7 @@ export function mipaPageExtractor(dataIn) {
           merkmale: m.ar_mipa_merkmaleArray ? m.ar_mipa_merkmaleArray : [],
           querverweise: "",
           note: m.bemerkung ? m.bemerkung : "",
+          extendedGeom: m.extended_geom,
         };
       });
 
@@ -48,3 +48,86 @@ export function mipaPageExtractor(dataIn) {
     return [];
   }
 }
+
+export const mapMipaExtractor = ({
+  landparcel,
+  geometry,
+  extraGeom,
+  selectedTableRowId,
+  inspectMode,
+  ondblclick,
+}) => {
+  if (extraGeom && geometry) {
+    const feature = {
+      type: "Feature",
+      featureType: "landparcel",
+      id: "landparcel." + landparcel?.id || "noIdBCtmpGeom",
+      geometry: geometry,
+      featuretype: landparcel ? "lagis" : "private",
+      crs: geometry?.crs,
+      properties: {
+        id: landparcel?.id,
+      },
+      tableId: selectedTableRowId,
+      isCommonGeometry: true,
+      selectedTableGeom: false,
+      color: "#F2E2C2",
+    };
+
+    const mipaColors = ["#AEFFFF", "#07FFFF", "#00B9B9"];
+
+    const features = [feature];
+    extraGeom.forEach((rent, idx) => {
+      const { extendedGeom, id: tableId } = rent;
+      const feature = {
+        type: "Feature",
+        featureType: "landparcel",
+        id: "landparcel." + landparcel?.id || "noIdBCtmpGeom",
+        geometry: {
+          ...extendedGeom.geo_field,
+        },
+        featuretype: landparcel ? "lagis" : "private",
+        crs: {
+          type: "name",
+          properties: {
+            name: "urn:ogc:def:crs:EPSG::25832",
+          },
+        },
+        properties: {
+          id: landparcel?.id,
+        },
+        tableId,
+        selectedTableGeom: selectedTableRowId === tableId,
+        isCommonGeometry: false,
+        color: mipaColors[idx % mipaColors.length],
+      };
+
+      features.push(feature);
+    });
+
+    return {
+      homeCenter: [51.272570027476256, 7.19963690266013],
+      homeZoom: 16,
+      featureCollection: features,
+      styler: (feature) => {
+        const style = {
+          color: inspectMode ? "#6e6e6e" : "#005F6B",
+          weight: feature.selectedTableGeom ? 3 : inspectMode ? 2 : 1,
+          opacity: feature.selectedTableGeom ? 0.6 : inspectMode ? 0.6 : 0.3,
+          fillColor: feature.color,
+          fillOpacity: feature.selectedTableGeom ? 0.6 : inspectMode ? 0 : 0.6,
+          className: "landparcel-" + feature.properties.id,
+        };
+        return style;
+      },
+      ondblclick,
+    };
+  } else {
+    return {
+      homeCenter: [51.272570027476256, 7.19963690266013],
+      homeZoom: 13,
+      featureCollection: [],
+      ondblclick,
+    };
+  }
+};

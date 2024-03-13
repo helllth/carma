@@ -22,16 +22,19 @@ import {
 import {
   getShowBackground,
   getShowCurrentFeatureCollection,
+  getShowInspectMode,
   setFeatureCollection,
   setFlaechenSelected,
   setFrontenSelected,
   setGeneralGeometrySelected,
+  setGraphqlLayerStatus,
   setLeafletElement,
   setShowBackground,
   setShowCurrentFeatureCollection,
+  setShowInspectMode,
 } from '../../store/slices/mapping';
 import { useDispatch, useSelector } from 'react-redux';
-// import { ScaleControl } from "react-leaflet";
+import { ScaleControl } from 'react-leaflet';
 import { FileImageOutlined, FileImageFilled } from '@ant-design/icons';
 import getLayers from 'react-cismap/tools/layerFactory';
 import { getArea25832 } from '../../core/tools/kassenzeichenMappingTools';
@@ -52,7 +55,8 @@ import proj4 from 'proj4';
 import { proj4crs25832def, proj4crs3857def } from 'react-cismap/constants/gis';
 import { getJWT } from '../../store/slices/auth';
 import HoveredLandparcelInfo from './HoveredLandparcelInfo';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBinoculars } from '@fortawesome/free-solid-svg-icons';
 const mockExtractor = (input) => {
   return {
     homeCenter: [51.27225612927373, 7.199918031692506],
@@ -83,6 +87,8 @@ const Map = ({
   height = 500,
   children,
   boundingBoxChangedHandler = () => {},
+  onClickHandler = () => {},
+  page,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -93,6 +99,7 @@ const Map = ({
   );
   const gazData = useSelector(getGazData);
   const showBackground = useSelector(getShowBackground);
+  const showInspectMode = useSelector(getShowInspectMode);
   const jwt = useSelector(getJWT);
   const [overlayFeature, setOverlayFeature] = useState(null);
   const [gazetteerHit, setGazetteerHit] = useState(null);
@@ -174,6 +181,9 @@ const Map = ({
   const handleShowCurrentFeatureCollection = () => {
     dispatch(setShowCurrentFeatureCollection(!showCurrentFeatureCollection));
   };
+  const handleSetShowInspectMode = () => {
+    dispatch(setShowInspectMode(!showInspectMode));
+  };
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
@@ -252,6 +262,27 @@ const Map = ({
       extra={
         <div className="flex items-center gap-3">
           <HoveredLandparcelInfo />
+          {page && (
+            <div
+              className="relative flex items-center"
+              style={{ height: '24px' }}
+            >
+              <Tooltip title="Untersuchungsmodus">
+                <FontAwesomeIcon
+                  icon={faBinoculars}
+                  style={{ fontSize: '19px' }}
+                  onClick={handleSetShowInspectMode}
+                />
+              </Tooltip>
+              <div
+                className={`w-3 h-3 rounded-full bg-[#4ABC96] ${
+                  showInspectMode ? 'absolute' : 'hidden'
+                } bottom-0 -right-1 cursor-pointer`}
+                onClick={handleSetShowInspectMode}
+              />
+            </div>
+          )}
+
           <div className="relative flex items-center">
             <Tooltip title="Hintergrund an/aus">
               <FileImageFilled
@@ -399,6 +430,7 @@ const Map = ({
                           'no featureClickHandler set',
                           e.target.feature
                         );
+                        onClickHandler(e.target.feature);
                       }
                     }
                   }
@@ -419,8 +451,13 @@ const Map = ({
               mapRef={refRoutedMap}
               activeLayers={activeAdditionalLayers}
               opacities={additionalLayerOpacities}
+              onGraphqlLayerStatus={(status) => {
+                dispatch(setGraphqlLayerStatus(status));
+                if (status === 'NOT_ALLOWED') {
+                  dispatch(setHoveredLandparcel(''));
+                }
+              }}
               onHoverUpdate={(feature) => {
-                console.log('hovered LP', landparcelToString(feature));
                 dispatch(setHoveredLandparcel(landparcelToString(feature)));
               }}
             />

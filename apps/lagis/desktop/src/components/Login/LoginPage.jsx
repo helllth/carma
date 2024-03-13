@@ -10,10 +10,8 @@ import useDevSecrets from '../../core/hooks/useDevSecrets';
 // import packageJson from "../../../package.json";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
-const packageJson = {
-  version: '?.?.?',
-  dependencies: { 'react-cismap': '?.?.?' },
-};
+const packageJson = { version: '?.?.?' };
+
 const LoginPage = () => {
   const { user: devSecretUser, pw: devSecretPassword } = useDevSecrets();
 
@@ -95,7 +93,7 @@ const LoginPage = () => {
             </div>
             <div className="absolute bottom-6 right-6 text-white/80 font-semibold flex flex-col gap-2 items-end">
               <span>
-                LagIS Desktop v:{packageJson.version}{' '}
+                LagIS Desktop v:{packageJson?.version}{' '}
                 <a
                   href="https://cismet.de"
                   className="text-white/50 no-underline"
@@ -117,7 +115,7 @@ const LoginPage = () => {
                   className="text-white/50 no-underline"
                 >
                   cids | react cismap v
-                  {packageJson.dependencies['react-cismap'].slice(1)} |
+                  {/* {packageJson?.dependencies['react-cismap'].slice(1)} | */}
                 </a>
               </span>
               <a

@@ -170,6 +170,7 @@ export default function AdditionalLayers({
   mapRef,
   jwt,
   onHoverUpdate,
+  onGraphqlLayerStatus = (status) => {},
 }) {
   return (
     <>
@@ -187,6 +188,7 @@ export default function AdditionalLayers({
             moreProps.onMouseOver = (feature) => {
               onHoverUpdate(feature.properties);
             };
+            moreProps.onStatus = onGraphqlLayerStatus;
           }
 
           return (

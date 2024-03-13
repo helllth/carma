@@ -16,6 +16,24 @@ dayjs.extend(localeData);
 dayjs.extend(customParseFormat);
 const columns = [
   {
+    title: "Farbe",
+    dataIndex: "farbe",
+    render: (title, record, rowIndex) => (
+      <div className="flex items-center">
+        <span
+          style={{
+            width: "9px",
+            height: "11px",
+            marginRight: "6px",
+            backgroundColor: record?.color || "transporent",
+          }}
+        ></span>
+        <span>{title}</span>
+      </div>
+    ),
+    sorter: (a, b) => compare(a.recht, b.recht),
+  },
+  {
     title: "ist Recht",
     dataIndex: "recht",
     render: (record) => <Switch size="small" checked={record} />,
@@ -103,6 +121,10 @@ const RightsAndEncumbrances = ({
   width = 231,
   height = 188,
   style,
+  setExtraGeom,
+  selectedTableRowId,
+  setSelectedTableRowId,
+  selectedTableIdByMap,
 }) => {
   // const data = extractor(dataIn);
   const isStory = false;
@@ -127,7 +149,7 @@ const RightsAndEncumbrances = ({
   const deleteRow = () => {
     const updatedArray = rights.filter((row) => row.id !== activeRow?.id);
     setRghts(updatedArray);
-    if (activeRow?.id === rights[0].id) {
+    if (activeRow?.id === rights[0]?.id) {
       setActiveRow(rights[1]);
     } else {
       setActiveRow(rights[0]);
@@ -137,7 +159,25 @@ const RightsAndEncumbrances = ({
     const data = extractor(dataIn);
     setRghts(data);
     setActiveRow(data[0]);
+    setSelectedTableRowId(data[0]?.id);
   }, [dataIn]);
+  useEffect(() => {
+    if (
+      activeRow &&
+      setSelectedTableRowId !== null &&
+      activeRow !== setSelectedTableRowId
+    ) {
+      setExtraGeom(rights);
+      setSelectedTableRowId(activeRow.id);
+    }
+  }, [activeRow]);
+  useEffect(() => {
+    if (selectedTableIdByMap !== null && activeRow) {
+      if (selectedTableIdByMap !== activeRow.id) {
+        setActiveRow(rights[selectedTableIdByMap]);
+      }
+    }
+  }, [selectedTableIdByMap]);
   return (
     <div
       style={isStory ? storyStyle : { height: "100%" }}

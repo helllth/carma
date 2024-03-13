@@ -105,7 +105,7 @@ const Settings = () => {
         <h3>Allgemein</h3>
         <SettingsRow
           onClick={() => dispatch(setSyncLandparcel(!syncKassenzeichen))}
-          title="Kassenzeichen mit Java Anwendung synchronisieren"
+          title="Flurstück mit Java Anwendung synchronisieren"
         >
           <Switch className="w-fit" checked={syncKassenzeichen} />
         </SettingsRow>

@@ -127,6 +127,10 @@ const RentBlock = ({
   width = 231,
   height = 188,
   style,
+  setExtraRentsGeom,
+  selectedTableRowId,
+  setSelectedTableRowId,
+  selectedTableIdByMap,
 }) => {
   const isStory = false;
   const storyStyle = { width, height, ...style };
@@ -165,8 +169,20 @@ const RentBlock = ({
     setActiveRow(data[0]);
   }, [dataIn]);
   useEffect(() => {
-    // console.log("rents", rents);
-  }, [rents]);
+    if (
+      selectedTableIdByMap !== null &&
+      selectedTableIdByMap !== activeRow.id
+    ) {
+      setActiveRow(rents[selectedTableIdByMap]);
+    }
+  }, [selectedTableIdByMap]);
+  useEffect(() => {
+    if (activeRow) {
+      const { id } = activeRow;
+      setExtraRentsGeom(rents);
+      setSelectedTableRowId(id);
+    }
+  }, [activeRow]);
   return (
     <div
       style={

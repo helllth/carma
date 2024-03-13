@@ -109,6 +109,12 @@ const persisUIConfig = {
   ],
 };
 
+const persisMappingConfig = {
+  key: "@lagis-desktop.1.app.mapping",
+  storage: localForage,
+  whitelist: ["showInspectMode"],
+};
+
 // const persis
 
 // const persistlagisLandparcelConfig = {
@@ -123,7 +129,7 @@ export default configureStore({
     lagis: persistReducer(persistLagisSliceConfig, lagisSlice.reducer),
     landParcels: persistReducer(persistParcelsConfig, landParcels.reducer),
     permissions: permissionsSlice.reducer,
-    mapping: mappingSlice.reducer,
+    mapping: persistReducer(persisMappingConfig, mappingSlice.reducer),
     ui: persistReducer(persisUIConfig, uiSlice.reducer),
     gazetteerData: gazDataSlice.reducer,
     search: searchSlice.reducer,

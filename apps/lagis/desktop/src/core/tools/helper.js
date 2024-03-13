@@ -119,6 +119,7 @@ export function getOfficesWithColorAndSquare(
 ) {
   const nameGeomColorData = [];
   const alkisArea = dataIn.alkisLandparcel?.area;
+
   let area;
   officesArray?.verwaltungsbereichArrayRelationShip.forEach((item) => {
     const color =
@@ -132,16 +133,19 @@ export function getOfficesWithColorAndSquare(
     } else {
       if (item.flaeche !== null) {
         area = item.flaeche;
+        area = item?.extended_geom?.area || item.flaeche;
       } else {
-        area = 0;
+        area = item?.extended_geom?.area || 0;
       }
     }
     const title = `${item.verwaltende_dienststelle.ressort.abkuerzung}.${item.verwaltende_dienststelle.abkuerzung_abteilung}`;
+
     nameGeomColorData.push({
       id: nanoid(),
       title,
       size: Math.round(area),
       color: getColorFromCode(color),
+      officeGeom: item.extended_geom,
     });
   });
 

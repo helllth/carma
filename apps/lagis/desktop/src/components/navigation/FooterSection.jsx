@@ -1,6 +1,7 @@
 import React from 'react';
 // import packageJson from "../../../package.json";
 const packageJson = { version: '?.?.?' };
+
 const FooterSection = () => {
   return (
     <div
