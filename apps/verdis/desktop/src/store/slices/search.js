@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import {
   ENDPOINT,
   WUNDA_ENDPOINT,
@@ -9,21 +9,23 @@ import {
   kassenzeichenForBuchungsblattQuery,
   pointquery,
   query,
-} from "../../constants/verdis";
+} from '../../constants/verdis';
 import {
   setBefreiungErlaubnisCollection,
   setFeatureCollection,
   setFlaechenCollection,
   setFrontenCollection,
   setGeneralGeometryCollection,
-} from "./mapping";
+  setCollections,
+  fitBounds,
+} from './mapping';
 import {
   getFlaechenFeatureCollection,
   getFrontenFeatureCollection,
   getGeneralGeomfeatureCollection,
   getVersickerungsGenFeatureCollection,
-} from "../../tools/featureFactories";
-import { createFeatureArray } from "../../tools/mappingTools";
+} from '../../tools/featureFactories';
+import { createFeatureArray } from '../../tools/mappingTools';
 
 const initialState = {
   kassenzeichen: {},
@@ -43,7 +45,7 @@ const initialState = {
   isLoadingBuchungsblatt: false,
   isLoadingKassenzeichenForBuchungsblatt: false,
   buchungsblattError: false,
-  virtualCity: "",
+  virtualCity: '',
   febBlob: null,
   errorMessage: null,
   buchungsblatt: null,
@@ -52,7 +54,7 @@ const initialState = {
 };
 
 const slice = createSlice({
-  name: "search",
+  name: 'search',
   initialState,
   reducers: {
     storeKassenzeichen(state, action) {
@@ -178,9 +180,9 @@ export const searchForGeoFields = (bbPoly) => {
     const jwt = getState().auth.jwt;
     dispatch(setIsLoadingGeofields(true));
     fetch(ENDPOINT, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify({
@@ -191,7 +193,7 @@ export const searchForGeoFields = (bbPoly) => {
       .then((response) => {
         if (!response.ok) {
           dispatch(setIsLoadingGeofields(false));
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
         return response.json();
       })
@@ -202,7 +204,7 @@ export const searchForGeoFields = (bbPoly) => {
       .catch((error) => {
         dispatch(setIsLoadingGeofields(false));
         console.error(
-          "There was a problem with the fetch operation:",
+          'There was a problem with the fetch operation:',
           error.message
         );
       });
@@ -213,17 +215,17 @@ export const getVirtualCityPassword = () => {
   return async (dispatch, getState) => {
     const jwt = getState().auth.jwt;
     fetch(
-      "https://wunda-api.cismet.de/configattributes/virtualcitymap_secret",
+      'https://wunda-api.cismet.de/configattributes/virtualcitymap_secret',
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
         },
       }
     )
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
         return response.json();
       })
@@ -232,7 +234,7 @@ export const getVirtualCityPassword = () => {
       })
       .catch((error) => {
         console.error(
-          "There was a problem with the fetch operation:",
+          'There was a problem with the fetch operation:',
           error.message
         );
       });
@@ -243,9 +245,9 @@ export const getflurstuecke = () => {
   return async (dispatch, getState) => {
     const jwt = getState().auth.jwt;
     fetch(WUNDA_ENDPOINT, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify({
@@ -255,7 +257,7 @@ export const getflurstuecke = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
         return response.json();
       })
@@ -265,7 +267,7 @@ export const getflurstuecke = () => {
       })
       .catch((error) => {
         console.error(
-          "There was a problem with the fetch operation:",
+          'There was a problem with the fetch operation:',
           error.message
         );
       });
@@ -278,9 +280,9 @@ export const getBuchungsblatt = (buchblattnummer) => {
     dispatch(storeIsLoadingBuchungsblatt(true));
     const jwt = getState().auth.jwt;
     fetch(WUNDA_ENDPOINT, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify({
@@ -291,7 +293,7 @@ export const getBuchungsblatt = (buchblattnummer) => {
       .then((response) => {
         if (!response.ok) {
           dispatch(storeIsLoadingBuchungsblatt(false));
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
         return response.json();
       })
@@ -311,8 +313,9 @@ export const getBuchungsblatt = (buchblattnummer) => {
       })
       .catch((error) => {
         dispatch(storeIsLoadingBuchungsblatt(false));
+        dispatch(storeBuchungsblattError(true));
         console.error(
-          "There was a problem with the fetch operation:",
+          'There was a problem with the fetch operation:',
           error.message
         );
       });
@@ -324,9 +327,9 @@ export const getKassenzeichenForBuchungsblatt = (geom) => {
     dispatch(storeIsLoadingKassenzeichenForBuchungsblatt(true));
     const jwt = getState().auth.jwt;
     fetch(ENDPOINT, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify({
@@ -337,7 +340,7 @@ export const getKassenzeichenForBuchungsblatt = (geom) => {
       .then((response) => {
         if (!response.ok) {
           dispatch(storeIsLoadingKassenzeichenForBuchungsblatt(false));
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
         return response.json();
       })
@@ -348,7 +351,7 @@ export const getKassenzeichenForBuchungsblatt = (geom) => {
       .catch((error) => {
         dispatch(storeIsLoadingKassenzeichenForBuchungsblatt(false));
         console.error(
-          "There was a problem with the fetch operation:",
+          'There was a problem with the fetch operation:',
           error.message
         );
       });
@@ -365,9 +368,9 @@ export const searchForKassenzeichenWithPoint = (
     const jwt = getState().auth.jwt;
     dispatch(setIsLoadingKassenzeichenWithPoint(true));
     fetch(ENDPOINT, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify({
@@ -378,7 +381,7 @@ export const searchForKassenzeichenWithPoint = (
       .then((response) => {
         if (!response.ok) {
           dispatch(setIsLoadingKassenzeichenWithPoint(false));
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
         return response.json();
       })
@@ -387,7 +390,7 @@ export const searchForKassenzeichenWithPoint = (
 
         dispatch(
           searchForKassenzeichen(
-            result.data.kassenzeichen[0].kassenzeichennummer8 + "",
+            result.data.kassenzeichen[0].kassenzeichennummer8 + '',
             urlParams,
             setUrlParams
           )
@@ -397,7 +400,7 @@ export const searchForKassenzeichenWithPoint = (
         dispatch(setIsLoadingKassenzeichenWithPoint(false));
 
         console.error(
-          "There was a problem with the fetch operation:",
+          'There was a problem with the fetch operation:',
           error.message
         );
       });
@@ -418,31 +421,31 @@ export const getFEBByStac = (
     const form = new FormData();
     let taskParameters = {
       parameters: {
-        BODY: "STRING_AS_BYTE_ARRAY",
-        TYPE: "FLAECHEN",
+        BODY: 'STRING_AS_BYTE_ARRAY',
+        TYPE: 'FLAECHEN',
         MAP_FORMAT:
-          format === "optimal"
-            ? "A4"
-            : format + orientation === "optimal"
-            ? ""
+          format === 'optimal'
+            ? 'A4'
+            : format + orientation === 'optimal'
+            ? ''
             : orientation,
-        HINTS: hints || "",
-        MAP_SCALE: scale === "optimal" ? "1000" : scale || "1000",
-        ABLUSSWIRKSAMKEIT: drainEffectiveness ? "TRUE" : "FALSE",
+        HINTS: hints || '',
+        MAP_SCALE: scale === 'optimal' ? '1000' : scale || '1000',
+        ABLUSSWIRKSAMKEIT: drainEffectiveness ? 'TRUE' : 'FALSE',
       },
     };
     form.append(
-      "taskparams",
-      new Blob([JSON.stringify(taskParameters)], { type: "application/json" })
+      'taskparams',
+      new Blob([JSON.stringify(taskParameters)], { type: 'application/json' })
     );
-    form.append("file", `${kassenzeichen}`);
+    form.append('file', `${kassenzeichen}`);
 
     dispatch(setIsLoading(true));
 
     fetch(
-      "https://verdis-api.cismet.de/actions/VERDIS_GRUNDIS.EBReport/tasks?resultingInstanceType=result",
+      'https://verdis-api.cismet.de/actions/VERDIS_GRUNDIS.EBReport/tasks?resultingInstanceType=result',
       {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
@@ -455,7 +458,7 @@ export const getFEBByStac = (
         } else {
           dispatch(setIsLoading(false));
           console.log(
-            "Error:" + response.status + " -> " + response.statusText
+            'Error:' + response.status + ' -> ' + response.statusText
           );
         }
       })
@@ -473,7 +476,7 @@ export const getFEBByStac = (
 
           let byteArray = new Uint8Array(byteNumbers);
 
-          var blob = new Blob([byteArray], { type: "application/pdf" });
+          var blob = new Blob([byteArray], { type: 'application/pdf' });
           dispatch(storeFebBlob(blob));
           dispatch(setIsLoading(false));
         } else {
@@ -488,9 +491,9 @@ export const searchForAlkisLandparcel = (id) => {
   return async (dispatch, getState) => {
     const jwt = getState().auth.jwt;
     fetch(WUNDA_ENDPOINT, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify({
@@ -500,7 +503,7 @@ export const searchForAlkisLandparcel = (id) => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
         return response.json();
       })
@@ -509,13 +512,27 @@ export const searchForAlkisLandparcel = (id) => {
       })
       .catch((error) => {
         console.error(
-          "There was a problem with the fetch operation:",
+          'There was a problem with the fetch operation:',
           error.message
         );
       });
   };
 };
+const updateQueryParams = (newKassenzeichen) => {
+  const trimmedQuery = newKassenzeichen.trim();
+  if (urlParams && setUrlParams) {
+    // Create a new URLSearchParams object from the existing one
+    const newParams = new URLSearchParams(urlParams);
 
+    // Update or add the 'kassenzeichen' parameter
+    newParams.set('kassenzeichen', trimmedQuery);
+
+    // Check if there's a need to update the URL
+    if (urlParams.get('kassenzeichen') !== trimmedQuery) {
+      setUrlParams(newParams);
+    }
+  }
+};
 export const searchForKassenzeichen = (
   kassenzeichen,
   urlParams,
@@ -523,21 +540,32 @@ export const searchForKassenzeichen = (
 ) => {
   return async (dispatch, getState) => {
     const jwt = getState().auth.jwt;
-    const syncKassenzeichen = getState().settings.syncKassenzeichen;
-    const lockMap = getState().mapping.lockMap;
+    const syncKassenzeichen = getState().ui.syncKassenzeichen;
+    const state = getState();
+    const lockMap = state.mapping.lockMap;
+    const lockMapOnlyInKassenzeichen = state.mapping.lockMapOnlyInKassenzeichen;
     if (!kassenzeichen || isNaN(+kassenzeichen)) {
-      console.error("Invalid kassenzeichen");
-      dispatch(setErrorMessage("Invalid kassenzeichen"));
+      console.error('Invalid kassenzeichen');
+      dispatch(setErrorMessage('Invalid kassenzeichen'));
       dispatch(setIsLoading(false));
       return;
     }
 
+    const trimmedQuery = kassenzeichen.trim();
+    if (urlParams && setUrlParams) {
+      if (urlParams.get('kassenzeichen') !== trimmedQuery) {
+        setUrlParams((prev) => {
+          prev.set('kassenzeichen', trimmedQuery);
+          return prev;
+        });
+      }
+    }
     dispatch(setIsLoading(true));
 
     fetch(ENDPOINT, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify({
@@ -548,35 +576,22 @@ export const searchForKassenzeichen = (
       .then((response) => {
         if (!response.ok) {
           dispatch(setIsLoading(false));
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
         return response.json();
       })
       .then((result) => {
         const data = result?.data;
         if (data?.kassenzeichen?.length > 0) {
-          const trimmedQuery = kassenzeichen.trim();
-
           dispatch(storeKassenzeichen(data.kassenzeichen[0]));
           dispatch(storeAenderungsAnfrage(data.aenderungsanfrage));
-          if (urlParams && setUrlParams) {
-            if (urlParams.get("kassenzeichen") !== trimmedQuery) {
-              if (lockMap) {
-                setUrlParams((prev) => {
-                  prev.set("kassenzeichen", trimmedQuery);
-                  return prev;
-                });
-              } else {
-                setUrlParams({ kassenzeichen: trimmedQuery });
-              }
-            }
-          }
+
           dispatch(addSearch(trimmedQuery));
           dispatch(resetStates());
 
           if (syncKassenzeichen) {
             fetch(
-              "http://localhost:18000/gotoKassenzeichen?kassenzeichen=" +
+              'http://localhost:18000/gotoKassenzeichen?kassenzeichen=' +
                 trimmedQuery
             ).catch((error) => {
               //  i expect an error here
@@ -586,36 +601,33 @@ export const searchForKassenzeichen = (
           //create the featureCollections
 
           dispatch(
-            setFlaechenCollection(
-              getFlaechenFeatureCollection(data.kassenzeichen[0])
-            )
-          );
-          dispatch(
-            setFrontenCollection(
-              getFrontenFeatureCollection(data.kassenzeichen[0])
-            )
+            setCollections({
+              flaechenCollection: getFlaechenFeatureCollection(
+                data.kassenzeichen[0]
+              ),
+              frontenCollection: getFrontenFeatureCollection(
+                data.kassenzeichen[0]
+              ),
+              generalGeometryCollection: getGeneralGeomfeatureCollection(
+                data.kassenzeichen[0]
+              ),
+              befreiungErlaubnisCollection:
+                getVersickerungsGenFeatureCollection(data.kassenzeichen[0]),
+            })
           );
 
-          dispatch(
-            setGeneralGeometryCollection(
-              getGeneralGeomfeatureCollection(data.kassenzeichen[0])
-            )
-          );
-
-          dispatch(
-            setBefreiungErlaubnisCollection(
-              getVersickerungsGenFeatureCollection(data.kassenzeichen[0])
-            )
-          );
           dispatch(setIsLoading(false));
+          if (!lockMap) {
+            dispatch(fitBounds());
+          }
         } else {
-          dispatch(setErrorMessage("Kassenzeichen not found"));
+          dispatch(setErrorMessage('Kassenzeichen not found'));
           dispatch(setIsLoading(false));
         }
       })
       .catch((error) => {
         console.error(
-          "There was a problem with the fetch operation:",
+          'There was a problem with the fetch operation:',
           error.message
         );
         dispatch(setIsLoading(false));

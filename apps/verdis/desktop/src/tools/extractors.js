@@ -1,11 +1,11 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 import {
   createStyler,
   getMarkerStyleFromFeatureConsideringSelection,
-} from "./mappingTools";
+} from './mappingTools';
 
 export const generalExtractor = (kassenzeichen, aenderungsAnfrage) => {
-  const dateFormat = "DD.MM.YYYY";
+  const dateFormat = 'DD.MM.YYYY';
   const bemerkungsObject = kassenzeichen?.bemerkung;
   let formattedBemerkungen;
   if (bemerkungsObject) {
@@ -13,9 +13,9 @@ export const generalExtractor = (kassenzeichen, aenderungsAnfrage) => {
       const bemerkungen = JSON.parse(bemerkungsObject).bemerkungen.map(
         (bemerkung) => bemerkung.bemerkung
       );
-      formattedBemerkungen = bemerkungen.join("\n");
+      formattedBemerkungen = bemerkungen.join('\n');
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
 
       formattedBemerkungen = bemerkungsObject;
     }
@@ -39,25 +39,25 @@ export const statisticsExtractor = (kassenzeichen, aenderungsAnfrage) => {
   return [
     {
       value: kassenzeichen?.flaechenArray?.length,
-      title: "Flächen",
+      title: 'Flächen',
     },
     {
       value: kassenzeichen?.frontenArray?.length,
-      title: "Fronten",
+      title: 'Fronten',
     },
     {
       value:
         kassenzeichen?.kanalanschlussObject?.befreiungenunderlaubnisseArray
           ?.length,
-      title: "Versickerungsgenehmigungen",
+      title: 'Versickerungsgenehmigungen',
     },
     {
       value: kassenzeichen?.kassenzeichen_geometrienArray?.length,
-      title: "Geometrien",
+      title: 'Geometrien',
     },
     {
       value: aenderungsAnfrage?.length,
-      title: "Änderungsanfragen",
+      title: 'Änderungsanfragen',
     },
   ];
 };
@@ -97,11 +97,11 @@ export const sumsExtractor = (kassenzeichen) => {
 
   return [
     {
-      title: "Veranlagung",
+      title: 'Veranlagung',
       items: types,
     },
     {
-      title: "Anschlussgrad",
+      title: 'Anschlussgrad',
       items: connections,
     },
   ];
@@ -112,7 +112,7 @@ export const summaryExtractor = (kassenzeichen) => {
     key:
       front?.frontObject?.frontinfoObject?.lage_sr_satzung?.strassenreinigung
         ?.key +
-      "-" +
+      '-' +
       front?.frontObject?.frontinfoObject?.lage_sr_satzung?.strassenreinigung
         ?.schluessel,
     streetNumber:
@@ -172,13 +172,13 @@ export const sewerConnectionExtractor = (kassenzeichen) => {
   const getSelectValue = (angeschlossen) => {
     switch (angeschlossen) {
       case 0:
-        return "ja";
+        return 'ja';
       case 1:
-        return "nein";
+        return 'nein';
       case 2:
-        return "unklar";
+        return 'unklar';
       default:
-        return "";
+        return '';
     }
   };
 
@@ -219,17 +219,17 @@ export const fileNumberExtractor = (kassenzeichen) => {
       (befreiungErlaubnis) => ({
         title:
           befreiungErlaubnis?.befreiungerlaubnisObject?.aktenzeichen +
-          " (" +
+          ' (' +
           befreiungErlaubnis?.befreiungerlaubnisObject
             ?.befreiungerlaubnis_nutzung?.name +
-          ")",
+          ')',
         data: befreiungErlaubnis?.befreiungerlaubnisObject?.befreiungerlaubnis_geometrieArrayRelationShip?.map(
           (relationship) => ({
             title:
               relationship?.befreiungerlaubnis_geometrie_typ_versickerung
                 ?.name ||
               relationship?.befreiungerlaubnis_geometrie_typ_einleitung?.name,
-            value: relationship?.durchfluss + " l/s",
+            value: relationship?.durchfluss + ' l/s',
           })
         ),
       })
@@ -245,10 +245,10 @@ export const exemptionExtractor = (kassenzeichen) => {
         key: i,
         name:
           befreiungErlaubnis?.befreiungerlaubnisObject?.aktenzeichen +
-          " (" +
+          ' (' +
           befreiungErlaubnis?.befreiungerlaubnisObject
             ?.befreiungerlaubnis_nutzung?.name +
-          ")",
+          ')',
         aktenzeichen:
           befreiungErlaubnis?.befreiungerlaubnisObject?.aktenzeichen,
         seepageFrom: befreiungErlaubnis?.befreiungerlaubnisObject?.antrag_vom,
@@ -335,28 +335,30 @@ export const mappingExtractor = ({
   shownFeatureTypes,
   ondblclick,
 }) => {
-  if (kassenzeichen !== undefined && JSON.stringify(kassenzeichen) !== "{}") {
+  if (kassenzeichen !== undefined && JSON.stringify(kassenzeichen) !== '{}') {
     const featureArray = [];
-
-    if (shownFeatureTypes.includes("front")) {
+    const allFeatures = [
+      ...(flaechenArray || []),
+      ...(frontenArray || []),
+      ...(generalGeomArray || []),
+      ...(befreiungErlaubnisseArray || []),
+    ];
+    if (shownFeatureTypes.includes('front')) {
       //add frontenArray to featureArray
-      featureArray.push(...frontenArray);
+      featureArray.push(...(frontenArray || []));
     }
-
-    if (shownFeatureTypes.includes("general")) {
+    if (shownFeatureTypes.includes('general')) {
       //add generalGeomArray to featureArray
-      featureArray.push(...generalGeomArray);
+      featureArray.push(...(generalGeomArray || []));
     }
-    if (shownFeatureTypes.includes("flaeche")) {
+    if (shownFeatureTypes.includes('flaeche')) {
       //add flaechenArray to featureArray
-      featureArray.push(...flaechenArray);
+      featureArray.push(...(flaechenArray || []));
     }
-    if (shownFeatureTypes.includes("befreiung")) {
+    if (shownFeatureTypes.includes('befreiung')) {
       //add flaechenArray to featureArray
-      featureArray.push(...befreiungErlaubnisseArray);
+      featureArray.push(...(befreiungErlaubnisseArray || []));
     }
-
-    const featureCollections = [];
 
     let featureCollection;
     if (featureArray.length > 0) {
@@ -364,8 +366,9 @@ export const mappingExtractor = ({
     }
 
     return {
-      homeCenter: [51.272570027476256, 7.19963690266013],
+      _homeCenter: [51.272570027476256, 7.19963690266013],
       featureCollection,
+      allFeatures,
       styler: createStyler(false, featureArray),
       markerStyle: getMarkerStyleFromFeatureConsideringSelection,
       showMarkerCollection: false,
@@ -374,8 +377,9 @@ export const mappingExtractor = ({
   }
 
   return {
-    homeCenter: [51.272570027476256, 7.19963690266013],
-    homeZoom: 16,
+    fallback: true,
+    _homeCenter: [51.272570027476256, 7.19963690266013],
+    _homeZoom: 16,
     ondblclick,
     featureCollection: undefined,
   };

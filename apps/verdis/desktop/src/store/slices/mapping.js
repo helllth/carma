@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { getBoundsForFeatureArray } from "../../tools/mappingTools";
+import { createSlice } from '@reduxjs/toolkit';
+import { getBoundsForFeatureArray } from '../../tools/mappingTools';
 
 const initialState = {
   flaechenCollection: undefined,
@@ -10,19 +10,26 @@ const initialState = {
   featureCollection: undefined,
   showCurrentFeatureCollection: true,
   showBackground: true,
-  additionalLayerOpacities: {
-    nrwAlkisFstck: 0.7,
-    nrwAlkisGebaeude: 0.7,
-  },
   toolbarProperties: {},
   lockMap: false,
-  lockScale: false,
+  lockMapOnlyInKassenzeichen: false,
+  graphqlStatus: undefined,
+  fitBoundsCounter: 0,
 };
 
 const slice = createSlice({
-  name: "mapping",
+  name: 'mapping',
   initialState,
   reducers: {
+    setCollections(state, action) {
+      state.flaechenCollection = action.payload.flaechenCollection;
+      state.frontenCollection = action.payload.frontenCollection;
+      state.generalGeometryCollection =
+        action.payload.generalGeometryCollection;
+      state.befreiungErlaubnisCollection =
+        action.payload.befreiungErlaubnisCollection;
+      return state;
+    },
     setFlaechenCollection(state, action) {
       state.flaechenCollection = action.payload;
       return state;
@@ -130,11 +137,6 @@ const slice = createSlice({
       state.showBackground = action.payload;
       return state;
     },
-    setLayerOpacity(state, action) {
-      const { layer, opacity } = action.payload;
-      state.additionalLayerOpacities[layer] = opacity;
-      return state;
-    },
     setToolbarProperties(state, action) {
       state.toolbarProperties = action.payload;
       return state;
@@ -143,8 +145,8 @@ const slice = createSlice({
       state.lockMap = action.payload;
       return state;
     },
-    setLockScale(state, action) {
-      state.lockScale = action.payload;
+    setLockMapOnlyInKassenzeichen(state, action) {
+      state.lockMapOnlyInKassenzeichen = action.payload;
       return state;
     },
     clear(state) {
@@ -154,12 +156,22 @@ const slice = createSlice({
       state.befreiungErlaubnisCollection = undefined;
       return state;
     },
+
+    setGraphqlStatus(state, action) {
+      state.graphqlStatus = action.payload;
+      return state;
+    },
+    setFitBoundsCounter(state, action) {
+      state.fitBoundsCounter = action.payload;
+      return state;
+    },
   },
 });
 
 export default slice;
 
 export const {
+  setCollections,
   setFlaechenCollection,
   setFrontenCollection,
   setGeneralGeometryCollection,
@@ -172,11 +184,12 @@ export const {
   setFeatureCollection,
   setShowCurrentFeatureCollection,
   setShowBackground,
-  setLayerOpacity,
   setToolbarProperties,
   setLockMap,
-  setLockScale,
+  setLockMapOnlyInKassenzeichen,
   clear,
+  setGraphqlStatus,
+  setFitBoundsCounter,
 } = slice.actions;
 
 export const getFlaechenCollection = (state) => {
@@ -207,10 +220,6 @@ export const getShowBackground = (state) => {
   return state.mapping.showBackground;
 };
 
-export const getAdditionalLayerOpacities = (state) => {
-  return state.mapping.additionalLayerOpacities;
-};
-
 export const getToolbarProperties = (state) => {
   return state.mapping.toolbarProperties;
 };
@@ -223,6 +232,20 @@ export const getLeafletElement = (state) => {
   return state.mapping.leafletElement;
 };
 
-export const getLockScale = (state) => {
-  return state.mapping.lockScale;
+export const getLockMapOnlyInKassenzeichen = (state) => {
+  return state.mapping.lockMapOnlyInKassenzeichen;
+};
+
+export const getGraphqlStatus = (state) => {
+  return state.mapping.graphqlStatus;
+};
+export const getFitBoundsCounter = (state) => {
+  return state.mapping.fitBoundsCounter;
+};
+
+export const fitBounds = (state) => {
+  return async (dispatch, getState) => {
+    const counter = getState().mapping.fitBoundsCounter + 1;
+    dispatch(setFitBoundsCounter(counter));
+  };
 };

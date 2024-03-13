@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   readOnly: false,
@@ -6,11 +6,10 @@ const initialState = {
   showSurfaceDetails: false,
   showFrontDetails: false,
   showSeepageDetails: false,
-  syncKassenzeichen: false,
 };
 
 const slice = createSlice({
-  name: "settings",
+  name: 'settings',
   initialState,
   reducers: {
     setReadOnly(state, action) {
@@ -33,8 +32,10 @@ const slice = createSlice({
       state.showSeepageDetails = action.payload;
       return state;
     },
-    setSyncKassenzeichen(state, action) {
-      state.syncKassenzeichen = action.payload;
+
+    setLayerOpacity(state, action) {
+      const { layer, opacity } = action.payload;
+      state.additionalLayerOpacities[layer] = opacity;
       return state;
     },
   },
@@ -48,7 +49,7 @@ export const {
   setShowSurfaceDetails,
   setShowFrontDetails,
   setShowSeepageDetails,
-  setSyncKassenzeichen,
+  setLayerOpacity,
 } = slice.actions;
 
 export const getReadOnly = (state) => {
@@ -71,6 +72,6 @@ export const getShowSeepageDetails = (state) => {
   return state.settings.showSeepageDetails;
 };
 
-export const getSyncKassenzeichen = (state) => {
-  return state.settings.syncKassenzeichen;
+export const getAdditionalLayerOpacities = (state) => {
+  return state.settings.additionalLayerOpacities;
 };
