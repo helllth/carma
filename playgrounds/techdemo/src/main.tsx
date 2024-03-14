@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
+import * as serviceWorkerRegistration from './app/serviceWorkerRegistration';
 import App from './app/App';
 import Landing from './app/Landing';
 import LibreMap from './app/LibreMap';
@@ -31,3 +32,8 @@ root.render(
     </Router>
   </StrictMode>
 );
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://cra.link/PWA
+serviceWorkerRegistration.unregister();
