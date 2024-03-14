@@ -20,7 +20,7 @@ root.render(
         <Routes>
           <Route path="/" element={<Landing></Landing>}></Route>
 
-          {/* <Route path="/turnableTopicMap" element={<LibreMap />}></Route> */}
+          <Route path="/turnableTopicMap" element={<LibreMap />}></Route>
 
           <Route path="/topicmapWithNewLocator" element={<App />}></Route>
 
