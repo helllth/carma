@@ -3,6 +3,7 @@ import React from 'react';
 import { addSVGToProps } from 'react-cismap/tools/svgHelper';
 
 import { getColorForProperties } from './styler';
+import { constants } from './constants';
 
 const getSignature = (properties) => {
   if (properties.signatur) {
@@ -23,21 +24,15 @@ const convertItemToFeature = async (itemIn, poiColors) => {
         signatur: 'child.svg',
         lebenslagen: ['Kinderbetreuung'],
       },
-      info: `Kindertageseinrichtung mit ${itemIn.plaetze} Plätzen`,
+      info: `Kindertageseinrichtung mit ${itemIn.plaetze} Plätzen in ${
+        constants.TRAEGERTEXT[itemIn.traegertyp]
+      }`,
     })
   );
 
   let item = await addSVGToProps(clonedItem, (i) => getSignature(i));
   const headerColor = Color(getColorForProperties(item, poiColors));
-  console.log({
-    ...itemIn,
-    mainlocationtype: {
-      id: -99,
-      name: 'Kita',
-      signatur: 'child.svg',
-      lebenslagen: ['Kinderbetreuung'],
-    },
-  });
+
   const info = {
     header: 'Kita',
     title: item.name,
