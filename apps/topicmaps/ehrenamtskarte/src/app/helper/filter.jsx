@@ -23,77 +23,65 @@ const itemFilterFunction = ({ filterState, filterMode }) => {
 };
 export default itemFilterFunction;
 
-export const createFilterRows = (
-  apps,
-  lebenslagen,
-  toggleFilter,
-  filterState,
-  setFilterState
-) => {
-  let appsMap = new Map();
-
-  let llOptions = [];
-
-  for (let ll of lebenslagen) {
-    llOptions.push({ label: ll, cat: 'lebenslage', value: ll });
-    for (const app of apps) {
-      if (app.on.indexOf(ll) !== -1) {
-        appsMap.set(ll, app);
-      }
-    }
-  }
+export const createFilterRows = (section, filterState, setFilterState) => {
   let rows = [];
-  for (let item of lebenslagen) {
-    let buttonValue = 'two'; // neutral state
 
-    if (filterState.positiv.indexOf(item) !== -1) {
+  for (let item of section) {
+    let buttonValue = 'two';
+
+    if (filterState?.positiv?.indexOf(item) !== -1) {
       buttonValue = 'one';
-    } else if (filterState.negativ.indexOf(item) !== -1) {
+    } else if (filterState?.negativ?.indexOf(item) !== -1) {
       buttonValue = 'three';
     }
 
-    let footnote;
-    if (appsMap.has(item)) {
-      footnote = ' *'; //(<div title="Themenspezifische Karte verfügbar"> *</div>);
-    }
     let cb = (
-      <div key={'div1.' + item} style={{ display: 'flex' }}>
-        <div
-          key={'div2.' + item}
+      <tr key={'tr.for.mtbutton.' + section + '.' + item}>
+        <td
+          key={'td1.for.mtbutton.' + section + '.' + item}
           style={{
-            whiteSpace: 'nowrap',
-            flex: '50%',
+            textAlign: 'left',
+            verticalAlign: 'top',
+            padding: '5px',
           }}
         >
           {item}
-          {footnote}
-        </div>
-
-        <MultiToggleButton
+        </td>
+        <td
+          key={'td2.for.mtbutton.' + section + '.' + item}
           style={{
-            flex: '50%',
+            textAlign: 'left',
+            verticalAlign: 'top',
+            padding: '5px',
           }}
-          key={'mtbutton.lebenslagen.' + item}
-          value={buttonValue}
-          valueChanged={(selectedValue) => {
-            if (selectedValue === 'one') {
-              toggleFilter('positiv', item, filterState, setFilterState);
-            } else if (selectedValue === 'three') {
-              toggleFilter('negativ', item, filterState, setFilterState);
-            } else {
-              //deselect existing selection
-              if (buttonValue === 'one') {
-                toggleFilter('positiv', item, setFilterState);
-              } else if (buttonValue === 'three') {
+        >
+          <MultiToggleButton
+            style={{
+              flex: '50%',
+            }}
+            key={'mtbutton.lebenslagen.' + item}
+            value={buttonValue}
+            valueChanged={(selectedValue) => {
+              if (selectedValue === 'one') {
+                toggleFilter('positiv', item, filterState, setFilterState);
+              } else if (selectedValue === 'three') {
                 toggleFilter('negativ', item, filterState, setFilterState);
+              } else {
+                //deselect existing selection
+                if (buttonValue === 'one') {
+                  toggleFilter('positiv', item, setFilterState);
+                } else if (buttonValue === 'three') {
+                  toggleFilter('negativ', item, filterState, setFilterState);
+                }
               }
-            }
-          }}
-        />
-      </div>
+            }}
+          />
+        </td>
+      </tr>
     );
     rows.push(cb);
   }
+
   return rows;
 };
 

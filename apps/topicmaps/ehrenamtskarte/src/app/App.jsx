@@ -7,7 +7,7 @@ import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvid
 import convertItemToFeature, {
   getConvertItemToFeatureWithPOIColors,
 } from './helper/convertItemToFeature';
-import createItemsDictionary from './helper/createItemsDistionary';
+
 import itemFilterFunction from './helper/filter';
 import { getPOIColors } from './helper/helper';
 import { ehrenAmtClusterIconCreator, getFeatureStyler } from './helper/styler';
@@ -19,6 +19,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'leaflet/dist/leaflet.css';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-cismap/topicMaps.css';
+import { createItemsDictionary } from './helper/createItemsDictionary';
 if (typeof global === 'undefined') {
   window.global = window;
 }
@@ -37,6 +38,7 @@ function App() {
         featureItemsURL={
           'https://wupp-topicmaps-data.cismet.de/ehrenamt/data.json'
         }
+        createFeatureItemsDictionary={createItemsDictionary}
         referenceSystemDefinition={MappingConstants.proj4crs25832def}
         mapEPSGCode="25832"
         referenceSystem={MappingConstants.crs25832}

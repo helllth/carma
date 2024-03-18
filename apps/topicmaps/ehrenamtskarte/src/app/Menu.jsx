@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import Icon from 'react-cismap/commons/Icon';
 import CustomizationContextProvider from 'react-cismap/contexts/CustomizationContextProvider';
 import {
@@ -6,13 +6,8 @@ import {
   FeatureCollectionDispatchContext,
 } from 'react-cismap/contexts/FeatureCollectionContextProvider';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
-import { addSVGToProps } from 'react-cismap/tools/svgHelper';
-import { getSimpleHelpForTM } from 'react-cismap/tools/uiHelper';
 import ConfigurableDocBlocks from 'react-cismap/topicmaps/ConfigurableDocBlocks';
-import Einstellungen from 'react-cismap/topicmaps/docBlocks/Einstellungen';
 import GenericHelpTextForMyLocation from 'react-cismap/topicmaps/docBlocks/GenericHelpTextForMyLocation';
-import DefaultSettingsPanel from 'react-cismap/topicmaps/menu/DefaultSettingsPanel';
-import FilterPanel from 'react-cismap/topicmaps/menu/FilterPanel';
 import ModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
 import Section from 'react-cismap/topicmaps/menu/Section';
 import LicenseLuftbildkarte from 'react-cismap/topicmaps/wuppertal/LicenseLuftbildkarte';
@@ -21,69 +16,8 @@ import { Link } from 'react-scroll';
 
 import FilterUI from './FilterUI';
 import MenuFooter from './MenuFooter';
-
-const apps = [
-  {
-    on: ['Kinderbetreuung'],
-    name: 'Kita-Finder',
-    bsStyle: 'success',
-    backgroundColor: null,
-    link: '/#/kitas',
-    target: '_kitas',
-  },
-  {
-    on: ['Sport', 'Freizeit'],
-    name: 'Bäderkarte',
-    bsStyle: 'primary',
-    backgroundColor: null,
-    link: '/#/baeder',
-    target: '_baeder',
-  },
-  {
-    on: ['Kultur'],
-    name: 'Kulturstadtplan',
-    bsStyle: 'warning',
-    backgroundColor: null,
-    link: '/#/kulturstadtplan',
-    target: '_kulturstadtplan',
-  },
-  {
-    on: ['Mobilität'],
-    name: 'Park+Ride-Karte',
-    bsStyle: 'warning',
-    backgroundColor: '#62B7D5',
-    link: '/#/xandride',
-    target: '_xandride',
-  },
-
-  {
-    on: ['Mobilität'],
-    name: 'E-Auto-Ladestationskarte',
-    bsStyle: 'warning',
-    backgroundColor: '#003E7A',
-    link: '/#/elektromobilitaet',
-    target: '_elektromobilitaet',
-  },
-  {
-    on: ['Mobilität'],
-    name: 'E-Fahrrad-Karte',
-    bsStyle: 'warning',
-    backgroundColor: '#326C88', //'#15A44C', //'#EC7529',
-    link: '/#ebikes',
-    target: '_ebikes',
-  },
-  // {
-  //   on: ['Gesundheit'],
-  //   name: 'Corona-Präventionskarte',
-  //   bsStyle: 'warning',
-  //   backgroundColor: '#BD000E', //'#15A44C', //'#EC7529',
-  //   link: 'https://topicmaps-wuppertal.github.io/corona-praevention/#/?title',
-  //   target: '_corona',
-  // },
-
-  // {   on: ["Sport"],   name: "Sporthallen",   bsStyle: "default",
-  // backgroundColor: null,   link: "/#/ehrenamt",   target: "_hallen" }
-];
+import { createFilterRows } from './helper/filter';
+import FilterRowUI from './FilterRowUI';
 
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];
@@ -104,11 +38,20 @@ const Menu = () => {
     FeatureCollectionDispatchContext
   );
 
-  const { items } = useContext(FeatureCollectionContext);
+  const globalbereiche = useMemo(
+    () => itemsDictionary?.globalbereiche || [],
+    [itemsDictionary]
+  );
 
-  if ((filterState === undefined) & (items !== undefined)) {
-    setFilterState(getDefaultFilterConfiguration(itemsDictionary?.lebenslagen));
-  }
+  const kenntnisse = useMemo(
+    () => itemsDictionary?.kenntnisse || [],
+    [itemsDictionary]
+  );
+
+  const zielgruppen = useMemo(
+    () => itemsDictionary?.zielgruppen || [],
+    [itemsDictionary]
+  );
 
   const getFilterHeader = () => {
     const count = filteredItems?.length || 0;
@@ -179,6 +122,45 @@ const Menu = () => {
             sectionTitle={getFilterHeader()}
             sectionBsStyle="primary"
             sectionContent={<FilterUI />}
+          />,
+          <Section
+            key="glb"
+            sectionKey="glb"
+            sectionTitle="Welches Ausgabenfeld interessiert mich?"
+            sectionBsStyle="warning"
+            sectionContent={
+              <table border={0}>
+                <tbody>
+                  <FilterRowUI items={globalbereiche} />
+                </tbody>
+              </table>
+            }
+          />,
+          <Section
+            key="ken"
+            sectionKey="ken"
+            sectionTitle="Was will ich tun?"
+            sectionBsStyle="info"
+            sectionContent={
+              <table border={0}>
+                <tbody>
+                  <FilterRowUI items={kenntnisse} />
+                </tbody>
+              </table>
+            }
+          />,
+          <Section
+            key="zg"
+            sectionKey="zg"
+            sectionTitle="Mit wem möchte ich arbeiten?"
+            sectionBsStyle="success"
+            sectionContent={
+              <table border={0}>
+                <tbody>
+                  <FilterRowUI items={zielgruppen} />
+                </tbody>
+              </table>
+            }
           />,
           <Section
             key="merkliste"
