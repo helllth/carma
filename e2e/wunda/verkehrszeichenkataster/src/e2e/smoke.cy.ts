@@ -11,7 +11,7 @@ describe('verkehrszeichenkataster smoke test', () => {
     cy.visit('/');
   });
 
-  it('page show map, dashboard, search, intern and extern buttons', () => {
+  it('page show map, dashboard, search, navigation, control buttons', () => {
     cy.contains('Verkehrszeichen Kataster').should('exist');
     cy.get('#username').type(userData.cheatingUser);
     cy.get('#password').type(userData.cheatingPassword);
