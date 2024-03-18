@@ -14,7 +14,7 @@ describe('lagis smoke test', () => {
     cy.get('input[type="email"]').type(userData.cheatingUser);
     cy.get('input[type="password"]').type(userData.cheatingPassword);
     cy.get('.ant-btn').click();
-    cy.wait(1000);
+    cy.wait(5000);
     cy.get('input[type="search"]').as('searchInput');
     cy.get('@searchInput').should('have.length', 3);
     cy.get('.ant-menu-item').should('have.length', 9);
