@@ -2,17 +2,29 @@ import React from 'react';
 
 import MultiToggleButton from '../MultiToggleButton';
 
-const itemFilterFunction = ({ filterState, filterMode }) => {
+const itemFilterFunction = ({ filterState }) => {
   return (item) => {
     let result = true;
     //positive
     if (filterState?.positiv && filterState?.negativ) {
-      // for (let ll of item?.mainlocationtype?.lebenslagen) {
-      //   result = result || filterState.positiv.indexOf(ll) !== -1;
-      //   if (filterState.negativ.indexOf(ll) !== -1) {
-      //     return false;
-      //   }
-      // }
+      for (let globalbereiche of item.globalbereiche) {
+        result = result || filterState.positiv.indexOf(globalbereiche) !== -1;
+        if (filterState.negativ.indexOf(globalbereiche) !== -1) {
+          return false;
+        }
+      }
+      for (let kenntnisse of item.kenntnisse) {
+        result = result || filterState.positiv.indexOf(kenntnisse) !== -1;
+        if (filterState.negativ.indexOf(kenntnisse) !== -1) {
+          return false;
+        }
+      }
+      for (let zielgruppen of item.zielgruppen) {
+        result = result || filterState.positiv.indexOf(zielgruppen) !== -1;
+        if (filterState.negativ.indexOf(zielgruppen) !== -1) {
+          return false;
+        }
+      }
       return result;
     } else {
       console.log('no filterstate, no filtering');
