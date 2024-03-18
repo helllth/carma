@@ -109,33 +109,18 @@ const Menu = () => {
   if ((filterState === undefined) & (items !== undefined)) {
     setFilterState(getDefaultFilterConfiguration(itemsDictionary?.lebenslagen));
   }
-  //   if ((filterMode === undefined) & (items !== undefined)) {
-  //     setFilterMode(defaultFilterMode;
-  //   }
-  const topicMapTitle = 'Hintergrund';
-  const simpleHelp = {
-    content: `Die Möglichkeiten zum Klima- und Umweltschutz werden aktuell global diskutiert, wobei bereits 
-              auf kommunaler Ebene viele Akteure und Einrichtungen an deren Umsetzung beteiligt sind. 
-              An diesen "Klimaorten" wird das Thema Klimaschutz praktiziert und vermittelt; hier wird der 
-              Klimaschutz für die Bürger\\*innen erlebbar. Viele dieser Klimaorte sind im Rahmen von innovativen 
-              Projekten durch den Wissenstransfer und das Engagement von Unternehmen, Vereinen, Verbänden sowie 
-              Quartiersbewohner\\*innen entstanden, die sich aktiv für Lösungen zum Klima- und Umweltschutz in ihrem 
-              Quartier und für die Stadt Wuppertal einsetzen. Zu den zielführenden Projekten gehören z.B. Wuppertals 
-              Klimasiedlungen, Anlagen zur effizienten und/oder regenerativen Energieerzeugung, Projekte der Verkehrswende 
-              sowie der Klima- und Umweltbildung, an denen zahlreiche Akteure mitwirken und mitgestalten.`,
-  };
 
   const getFilterHeader = () => {
     const count = filteredItems?.length || 0;
 
     let term;
     if (count === 1) {
-      term = 'POI';
+      term = 'Angebot';
     } else {
-      term = 'POIs';
+      term = 'Angebote';
     }
 
-    return `Mein Themenstadtplan (${count} ${term} gefunden, davon ${
+    return `Filtern (${count} ${term} gefunden, davon ${
       shownFeatures?.length || '0'
     } in der Karte)`;
   };
@@ -144,14 +129,11 @@ const Menu = () => {
     <CustomizationContextProvider customizations={{}}>
       <ModalApplicationMenu
         menuIcon={'bars'}
-        menuTitle={'Themenstadtplan, Einstellungen und Kompaktanleitung'}
+        menuTitle={'Filter, Merkliste und Kompaktanleitung'}
         menuFooter={<MenuFooter />}
         menuIntroduction={
           <span>
-            Verwandeln Sie den Wuppertaler Online-Stadtplan in Ihren
-            persönlichen Themenstadtplan.
-            <br />
-            W&auml;hlen Sie dazu unter{' '}
+            W&auml;hlen Sie Ihre Such- und Ausschlussbedingungen in den{' '}
             <Link
               className="useAClassNameToRenderProperLink"
               to="filter"
@@ -160,10 +142,11 @@ const Menu = () => {
               delay={100}
               onClick={() => setAppMenuActiveMenuSection('filter')}
             >
-              Mein Themenstadtplan
+              Filtern
             </Link>{' '}
-            die Themenfelder aus, zu denen Sie die Points Of Interest (POI)
-            anzeigen oder ausblenden möchten. Über{' '}
+            aus, um die angezeigten Angebote an Ihre Interessen anzupassen
+            (alternativ über die Einstellungen unter den darunter folgenden
+            Leitfragen). Über{' '}
             <Link
               className="useAClassNameToRenderProperLink"
               to="settings"
@@ -172,10 +155,10 @@ const Menu = () => {
               delay={100}
               onClick={() => setAppMenuActiveMenuSection('settings')}
             >
-              Einstellungen
+              meine Merkliste
             </Link>{' '}
-            können Sie die Karten- und POI-Darstellung an Ihre Vorlieben
-            anpassen. W&auml;hlen Sie{' '}
+            erreichen Sie die Liste der Angebote, die Sie festgehalten haben.
+            Wählen Sie{' '}
             <Link
               className="useAClassNameToRenderProperLink"
               to="help"
@@ -197,7 +180,12 @@ const Menu = () => {
             sectionBsStyle="primary"
             sectionContent={<FilterUI />}
           />,
-          <DefaultSettingsPanel key="settings" />,
+          <Section
+            key="merkliste"
+            sectionKey="merkliste"
+            sectionTitle="meine Merkliste"
+            sectionBsStyle="primary"
+          />,
           <Section
             key="help"
             sectionKey="help"

@@ -59,7 +59,7 @@ const Ehrenamtkarte = ({ poiColors }) => {
           );
         }
       }}
-      applicationMenuTooltipString="Themenstadtplan | Einstellungen | Kompaktanleitung"
+      applicationMenuTooltipString="Filter | Merkliste | Kompaktanleitung"
       infoBox={
         <GenericInfoBoxFromFeature
           pixelwidth={350}
