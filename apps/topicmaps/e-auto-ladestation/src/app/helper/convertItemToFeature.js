@@ -28,6 +28,18 @@ const convertItemToFeature = async (itemIn, poiColors) => {
       'https://www.wuppertal.de/geoportal/emobil/autos/fotos/' + item.foto;
   }
 
+  if (item.betreiber.email) {
+    item.email = item.betreiber.email;
+  }
+
+  if (item.betreiber.telefon) {
+    item.tel = item.betreiber.telefon;
+  }
+
+  if (item.betreiber.homepage) {
+    item.url = item.betreiber.homepage;
+  }
+
   item.color = headerColor;
   const id = item.id;
   const type = 'Feature';
