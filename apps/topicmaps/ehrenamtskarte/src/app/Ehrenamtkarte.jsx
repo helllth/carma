@@ -48,12 +48,12 @@ const Ehrenamtkarte = ({ poiColors }) => {
     }
   }, [markerSymbolSize]);
 
-  const selectedId = selectedFeature?.id;
+  const selectedId = selectedFeature?.properties?.id;
 
   return (
     <TopicMapComponent
       gazData={gazData}
-      modalMenu={<Menu bookmarks={bookmarks} />}
+      modalMenu={<Menu bookmarks={bookmarks} setBookmarks={setBookmarks} />}
       locatorControl={true}
       gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
       gazetteerHitTrigger={(hits) => {

@@ -1,7 +1,10 @@
 import React, { useContext, useMemo } from 'react';
 import Icon from 'react-cismap/commons/Icon';
 import CustomizationContextProvider from 'react-cismap/contexts/CustomizationContextProvider';
-import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
+import {
+  FeatureCollectionContext,
+  FeatureCollectionDispatchContext,
+} from 'react-cismap/contexts/FeatureCollectionContextProvider';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 import ConfigurableDocBlocks from 'react-cismap/topicmaps/ConfigurableDocBlocks';
 import GenericHelpTextForMyLocation from 'react-cismap/topicmaps/docBlocks/GenericHelpTextForMyLocation';
@@ -14,11 +17,18 @@ import { Link } from 'react-scroll';
 import FilterUI from './FilterUI';
 import MenuFooter from './MenuFooter';
 import FilterRowUI from './FilterRowUI';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faMagnifyingGlass,
+  faSquareMinus,
+} from '@fortawesome/free-solid-svg-icons';
+import { Tooltip } from 'antd';
 
-const Menu = ({ bookmarks }) => {
+const Menu = ({ bookmarks, setBookmarks }) => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const { filteredItems, shownFeatures, itemsDictionary, allFeatures } =
     useContext(FeatureCollectionContext);
+  const { zoomToFeature } = useContext(FeatureCollectionDispatchContext);
 
   const globalbereiche = useMemo(
     () => itemsDictionary?.globalbereiche || [],
@@ -152,14 +162,52 @@ const Menu = ({ bookmarks }) => {
             }`}
             sectionBsStyle="primary"
             sectionContent={
-              <div>
+              <ul>
                 {bookmarks.map((value) => {
-                  const feature = allFeatures.find((obj) => obj.id === value);
+                  const feature = allFeatures.find(
+                    (obj) => obj.properties.id === value
+                  );
                   const text = feature.text;
                   const id = feature.properties.id;
-                  return <span>{feature.text}</span>;
+                  return (
+                    <li key={'cart.li.' + id}>
+                      <h5>
+                        Angebot Nr. {id}{' '}
+                        <Tooltip title="In Karte anzeigen">
+                          <FontAwesomeIcon
+                            icon={faMagnifyingGlass}
+                            onClick={zoomToFeature}
+                            style={{
+                              height: 13,
+                              paddingLeft: '12px',
+                              paddingRight: '16px',
+                              cursor: 'pointer',
+                            }}
+                          />
+                        </Tooltip>
+                        <Tooltip title="Aus Merkliste entfernen">
+                          <FontAwesomeIcon
+                            icon={faSquareMinus}
+                            onClick={() => {
+                              setBookmarks((prev) =>
+                                prev.filter(
+                                  (id) => id !== feature.properties.id
+                                )
+                              );
+                            }}
+                            style={{
+                              height: 14,
+                              color: '#C33D17',
+                              cursor: 'pointer',
+                            }}
+                          />
+                        </Tooltip>
+                      </h5>
+                      <h6>{text}</h6>
+                    </li>
+                  );
                 })}
-              </div>
+              </ul>
             }
           />,
           <Section
