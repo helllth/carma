@@ -5,33 +5,36 @@ import {
   FeatureCollectionDispatchContext,
 } from 'react-cismap/contexts/FeatureCollectionContextProvider';
 import { LightBoxContext } from 'react-cismap/contexts/LightBoxContextProvider';
-import {
-  TopicMapStylingContext,
-  TopicMapStylingDispatchContext,
-} from 'react-cismap/contexts/TopicMapStylingContextProvider';
+import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
 import FeatureCollection from 'react-cismap/FeatureCollection';
-import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-
-import {
-  fotoKraemerCaptionFactory,
-  fotoKraemerUrlManipulation,
-  getGazData,
-  getPOIColors,
-} from './helper/helper';
+import { getGazData } from './helper/helper';
 import Menu from './Menu';
 import { ehrenAmtClusterIconCreator } from './helper/styler';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faBookmark,
+  faSquareCheck,
+  faSquarePlus,
+} from '@fortawesome/free-solid-svg-icons';
+import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
+import { Tooltip } from 'antd';
 
 const Ehrenamtkarte = ({ poiColors }) => {
   const [gazData, setGazData] = useState([]);
-  const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
-    FeatureCollectionDispatchContext
-  );
-  const lightBoxContext = useContext(LightBoxContext);
+  const [bookmarks, setBookmarks] = useState([]);
+  const {
+    setSelectedFeatureByPredicate,
+    setClusteringOptions,
+    fitBoundsForCollection,
+    prev,
+    next,
+  } = useContext(FeatureCollectionDispatchContext);
+  const { setAppMenuVisible, setAppMenuActiveMenuSection } =
+    useContext(UIDispatchContext);
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
-  const { clusteringOptions, selectedFeature } = useContext(
-    FeatureCollectionContext
-  );
+  const { clusteringOptions, selectedFeature, filteredItems, shownFeatures } =
+    useContext(FeatureCollectionContext);
   useEffect(() => {
     getGazData(setGazData);
   }, []);
@@ -45,10 +48,12 @@ const Ehrenamtkarte = ({ poiColors }) => {
     }
   }, [markerSymbolSize]);
 
+  const selectedId = selectedFeature?.id;
+
   return (
     <TopicMapComponent
       gazData={gazData}
-      modalMenu={<Menu />}
+      modalMenu={<Menu bookmarks={bookmarks} />}
       locatorControl={true}
       gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
       gazetteerHitTrigger={(hits) => {
@@ -61,28 +66,133 @@ const Ehrenamtkarte = ({ poiColors }) => {
       }}
       applicationMenuTooltipString="Filter | Merkliste | Kompaktanleitung"
       infoBox={
-        <GenericInfoBoxFromFeature
-          pixelwidth={350}
-          config={{
-            displaySecondaryInfoAction: false,
-            city: 'Wuppertal',
-            navigator: {
-              noun: {
-                singular: 'Angebot',
-                plural: 'Angebote',
-              },
-            },
-            noCurrentFeatureTitle: 'Keine Angebote gefunden',
-            noCurrentFeatureContent: (
-              <span>
-                Für mehr Angebote Ansicht mit verkleinern. Um nach Aufgaben oder
-                Zielgruppen zu filtern, das Menü öffnen.
-              </span>
-            ),
-          }}
-          photoUrlManipulation={fotoKraemerUrlManipulation}
-          captionFactory={fotoKraemerCaptionFactory}
-        />
+        <div className="leaflet-bottom leaflet-right">
+          <div className="leaflet-control">
+            <div
+              style={{
+                opacity: '0.9',
+                backgroundColor: 'white',
+                width: '250px',
+                padding: '9px',
+              }}
+            >
+              <table style={{ width: '100%' }}>
+                <tbody>
+                  <tr>
+                    <td style={{ textAlign: 'left', verticalAlign: 'top' }}>
+                      <table style={{ width: '100%' }}>
+                        <tbody>
+                          <tr>
+                            <td style={{ textAlign: 'left' }}>
+                              <h5>
+                                Angebot Nr. {selectedFeature?.properties?.id}
+                              </h5>
+                            </td>
+                            <td style={{ textAlign: 'right' }}>
+                              <Tooltip
+                                title="Merkliste öffnen"
+                                placement="left"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faBookmark}
+                                  style={{
+                                    height: 24,
+                                    paddingRight: '2px',
+                                    color: 'rgb(102, 102, 102)',
+                                    cursor: 'pointer',
+                                  }}
+                                  onClick={() => {
+                                    setAppMenuVisible(true);
+                                    setAppMenuActiveMenuSection('merkliste');
+                                  }}
+                                />
+                              </Tooltip>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table style={{ width: '100%' }}>
+                        <tbody>
+                          <tr>
+                            <td style={{ textAlign: 'left' }}>
+                              <h6>{selectedFeature?.text}</h6>
+                            </td>
+                            <td style={{ textAlign: 'right' }}>
+                              <Tooltip title="Angebot merken" placement="left">
+                                <FontAwesomeIcon
+                                  icon={
+                                    bookmarks.includes(selectedId)
+                                      ? faSquareCheck
+                                      : faSquarePlus
+                                  }
+                                  style={{ height: 24, cursor: 'pointer' }}
+                                  onClick={() => {
+                                    if (bookmarks.includes(selectedId)) {
+                                      setBookmarks((prev) =>
+                                        prev.filter((id) => id !== selectedId)
+                                      );
+                                    } else {
+                                      setBookmarks((prev) => [
+                                        ...prev,
+                                        selectedId,
+                                      ]);
+                                    }
+                                  }}
+                                />
+                              </Tooltip>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table style={{ width: '100%' }}>
+                <tbody>
+                  <tr>
+                    <td />
+                    <td
+                      style={{ textAlign: 'center', verticalAlign: 'center' }}
+                    >
+                      <a
+                        onClick={fitBoundsForCollection}
+                        style={{ color: '#0078A8' }}
+                      >
+                        {filteredItems?.length} Angebote in Wuppertal
+                      </a>
+                    </td>
+
+                    <td />
+                  </tr>
+                </tbody>
+              </table>
+              <table style={{ width: '100%' }}>
+                <tbody>
+                  <tr>
+                    <td style={{ textAlign: 'left', verticalAlign: 'center' }}>
+                      <a title="vorheriger Treffer" onClick={prev}>
+                        &lt;&lt;
+                      </a>
+                    </td>
+
+                    <td
+                      style={{ textAlign: 'center', verticalAlign: 'center' }}
+                    >
+                      {shownFeatures?.length} Angebote angezeigt
+                    </td>
+
+                    <td style={{ textAlign: 'right', verticalAlign: 'center' }}>
+                      <a title="nächster Treffer" onClick={next}>
+                        &gt;&gt;
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       }
     >
       <FeatureCollection></FeatureCollection>
