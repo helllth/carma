@@ -1,10 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import Icon from 'react-cismap/commons/Icon';
 import CustomizationContextProvider from 'react-cismap/contexts/CustomizationContextProvider';
-import {
-  FeatureCollectionContext,
-  FeatureCollectionDispatchContext,
-} from 'react-cismap/contexts/FeatureCollectionContextProvider';
+import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 import ConfigurableDocBlocks from 'react-cismap/topicmaps/ConfigurableDocBlocks';
 import GenericHelpTextForMyLocation from 'react-cismap/topicmaps/docBlocks/GenericHelpTextForMyLocation';
@@ -16,27 +13,12 @@ import { Link } from 'react-scroll';
 
 import FilterUI from './FilterUI';
 import MenuFooter from './MenuFooter';
-import { createFilterRows } from './helper/filter';
 import FilterRowUI from './FilterRowUI';
 
-const getDefaultFilterConfiguration = (lebenslagen) => {
-  const positiv = [...lebenslagen];
-  const negativ = [];
-  return { positiv, negativ };
-};
-
-const Menu = () => {
+const Menu = ({ bookmarks }) => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
-  const {
-    filterState,
-    filterMode,
-    filteredItems,
-    shownFeatures,
-    itemsDictionary,
-  } = useContext(FeatureCollectionContext);
-  const { setFilterState, setFilterMode } = useContext(
-    FeatureCollectionDispatchContext
-  );
+  const { filteredItems, shownFeatures, itemsDictionary, allFeatures } =
+    useContext(FeatureCollectionContext);
 
   const globalbereiche = useMemo(
     () => itemsDictionary?.globalbereiche || [],
@@ -96,7 +78,7 @@ const Menu = () => {
               containerId="myMenu"
               smooth={true}
               delay={100}
-              onClick={() => setAppMenuActiveMenuSection('settings')}
+              onClick={() => setAppMenuActiveMenuSection('merkliste')}
             >
               meine Merkliste
             </Link>{' '}
@@ -165,8 +147,20 @@ const Menu = () => {
           <Section
             key="merkliste"
             sectionKey="merkliste"
-            sectionTitle="meine Merkliste"
+            sectionTitle={`meine Merkliste ${
+              bookmarks.length > 0 ? '(' + bookmarks.length + ')' : ''
+            }`}
             sectionBsStyle="primary"
+            sectionContent={
+              <div>
+                {bookmarks.map((value) => {
+                  const feature = allFeatures.find((obj) => obj.id === value);
+                  const text = feature.text;
+                  const id = feature.properties.id;
+                  return <span>{feature.text}</span>;
+                })}
+              </div>
+            }
           />,
           <Section
             key="help"
