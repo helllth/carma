@@ -253,7 +253,10 @@ const Menu = ({ bookmarks, setBookmarks }) => {
                               </Tooltip>
                             }
                           >
-                            <Button variant="light">
+                            <Button
+                              variant="light"
+                              onClick={() => setBookmarks([])}
+                            >
                               <FontAwesomeIcon icon={faTrash} />
                             </Button>
                           </OverlayTrigger>
@@ -286,7 +289,9 @@ const Menu = ({ bookmarks, setBookmarks }) => {
                               <Dropdown.Item
                                 eventKey="1"
                                 onClick={() => {
-                                  copy(window.location.href);
+                                  navigator.clipboard.writeText(
+                                    window.location.href
+                                  );
                                 }}
                               >
                                 <FontAwesomeIcon icon={faCopy} /> Link kopieren
