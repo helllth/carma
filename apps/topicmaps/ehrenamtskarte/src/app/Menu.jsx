@@ -19,16 +19,31 @@ import MenuFooter from './MenuFooter';
 import FilterRowUI from './FilterRowUI';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faAt,
+  faCopy,
   faMagnifyingGlass,
+  faMap,
+  faPrint,
+  faShareFromSquare,
   faSquareMinus,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { Tooltip } from 'antd';
+// import { Tooltip } from 'antd';
+import { TopicMapDispatchContext } from 'react-cismap/contexts/TopicMapContextProvider';
+import {
+  Button,
+  ButtonGroup,
+  Dropdown,
+  Alert,
+  Tooltip,
+  OverlayTrigger,
+} from 'react-bootstrap';
 
 const Menu = ({ bookmarks, setBookmarks }) => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const { filteredItems, shownFeatures, itemsDictionary, allFeatures } =
     useContext(FeatureCollectionContext);
-  const { zoomToFeature } = useContext(FeatureCollectionDispatchContext);
+  const { zoomToFeature } = useContext(TopicMapDispatchContext);
 
   const globalbereiche = useMemo(
     () => itemsDictionary?.globalbereiche || [],
@@ -157,57 +172,149 @@ const Menu = ({ bookmarks, setBookmarks }) => {
           <Section
             key="merkliste"
             sectionKey="merkliste"
-            sectionTitle={`meine Merkliste ${
-              bookmarks.length > 0 ? '(' + bookmarks.length + ')' : ''
-            }`}
+            sectionTitle={`meine Merkliste ${'(' + bookmarks.length + ')'}`}
             sectionBsStyle="primary"
             sectionContent={
-              <ul>
-                {bookmarks.map((value) => {
-                  const feature = allFeatures.find(
-                    (obj) => obj.properties.id === value
-                  );
-                  const text = feature.text;
-                  const id = feature.properties.id;
-                  return (
-                    <li key={'cart.li.' + id}>
-                      <h5>
-                        Angebot Nr. {id}{' '}
-                        <Tooltip title="In Karte anzeigen">
-                          <FontAwesomeIcon
-                            icon={faMagnifyingGlass}
-                            onClick={zoomToFeature}
-                            style={{
-                              height: 13,
-                              paddingLeft: '12px',
-                              paddingRight: '16px',
-                              cursor: 'pointer',
-                            }}
-                          />
-                        </Tooltip>
-                        <Tooltip title="Aus Merkliste entfernen">
-                          <FontAwesomeIcon
-                            icon={faSquareMinus}
-                            onClick={() => {
-                              setBookmarks((prev) =>
-                                prev.filter(
-                                  (id) => id !== feature.properties.id
-                                )
-                              );
-                            }}
-                            style={{
-                              height: 14,
-                              color: '#C33D17',
-                              cursor: 'pointer',
-                            }}
-                          />
-                        </Tooltip>
-                      </h5>
-                      <h6>{text}</h6>
-                    </li>
-                  );
-                })}
-              </ul>
+              <>
+                <table width="100%" border={0}>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <ul>
+                          {bookmarks.map((value) => {
+                            const feature = allFeatures.find(
+                              (obj) => obj.properties.id === value
+                            );
+                            const text = feature.text;
+                            const id = feature.properties.id;
+                            return (
+                              <li key={'cart.li.' + id}>
+                                <h5>
+                                  Angebot Nr. {id}{' '}
+                                  <OverlayTrigger
+                                    placement="top"
+                                    overlay={
+                                      <Tooltip style={{ zIndex: 30000000000 }}>
+                                        In Karte anzeigen
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faMagnifyingGlass}
+                                      onClick={() => {
+                                        zoomToFeature(feature);
+                                      }}
+                                      style={{
+                                        height: 13,
+                                        paddingLeft: '12px',
+                                        paddingRight: '16px',
+                                        cursor: 'pointer',
+                                      }}
+                                    />
+                                  </OverlayTrigger>
+                                  <OverlayTrigger
+                                    placement="top"
+                                    overlay={
+                                      <Tooltip style={{ zIndex: 30000000000 }}>
+                                        Aus Merkliste entfernen
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faSquareMinus}
+                                      onClick={() => {
+                                        setBookmarks((prev) =>
+                                          prev.filter(
+                                            (id) => id !== feature.properties.id
+                                          )
+                                        );
+                                      }}
+                                      style={{
+                                        height: 14,
+                                        color: '#C33D17',
+                                        cursor: 'pointer',
+                                      }}
+                                    />
+                                  </OverlayTrigger>
+                                </h5>
+                                <h6>{text}</h6>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </td>
+                      <td style={{ textAlign: 'right', verticalAlign: 'top' }}>
+                        <ButtonGroup bsStyle="default">
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip style={{ zIndex: 30000000000 }}>
+                                Merkliste löschen
+                              </Tooltip>
+                            }
+                          >
+                            <Button variant="light">
+                              <FontAwesomeIcon icon={faTrash} />
+                            </Button>
+                          </OverlayTrigger>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip style={{ zIndex: 30000000000 }}>
+                                Merklistenfilter aktivieren
+                              </Tooltip>
+                            }
+                          >
+                            <Button variant="light">
+                              <FontAwesomeIcon icon={faMap} />
+                            </Button>
+                          </OverlayTrigger>
+                          <Dropdown>
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={
+                                <Tooltip style={{ zIndex: 30000000000 }}>
+                                  Merkliste teilen
+                                </Tooltip>
+                              }
+                            >
+                              <Dropdown.Toggle variant="light">
+                                <FontAwesomeIcon icon={faShareFromSquare} />
+                              </Dropdown.Toggle>
+                            </OverlayTrigger>
+                            <Dropdown.Menu>
+                              <Dropdown.Item
+                                eventKey="1"
+                                onClick={() => {
+                                  copy(window.location.href);
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faCopy} /> Link kopieren
+                              </Dropdown.Item>
+                              <Dropdown.Item eventKey="2">
+                                <FontAwesomeIcon icon={faAt} /> Merkliste per
+                                Mail senden
+                              </Dropdown.Item>
+                              <Dropdown.Item eventKey="3" disabled={true}>
+                                <FontAwesomeIcon icon={faPrint} /> Merkliste
+                                drucken
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </ButtonGroup>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <Alert variant="warning" style={{ marginTop: '4px' }}>
+                  <div>
+                    Haben Sie interessante Angebote gefunden? Dann treten Sie
+                    mit uns in Kontakt (Telefon +49-(0)202-946-20445 oder E-Mail{' '}
+                    <a href="mailto:post@zfgt.de">post@zfgt.de</a>
+                    ). Wir werden Sie bei den weiteren Schritten beraten.
+                  </div>
+                </Alert>
+              </>
             }
           />,
           <Section
