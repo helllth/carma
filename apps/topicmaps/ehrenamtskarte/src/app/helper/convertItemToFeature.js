@@ -50,7 +50,7 @@ const convertItemToFeature = async (itemIn, poiColors) => {
         name: 'urn:ogc:def:crs:EPSG::25832',
       },
     },
-    properties: { ...itemIn, info: info },
+    properties: { ...itemIn, info: info, inCart: false },
   };
 };
 
