@@ -39,8 +39,6 @@ const EMobiKarte = () => {
     }
   }, [markerSymbolSize]);
 
-  console.log(selectedFeature);
-
   return (
     <TopicMapComponent
       gazData={gazData}
