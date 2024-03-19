@@ -39,7 +39,7 @@ const EMobiKarte = () => {
     }
   }, [markerSymbolSize]);
 
-  const selectedId = selectedFeature?.properties?.id;
+  console.log(selectedFeature);
 
   return (
     <TopicMapComponent
@@ -60,7 +60,7 @@ const EMobiKarte = () => {
         <GenericInfoBoxFromFeature
           pixelwidth={350}
           config={{
-            displaySecondaryInfoAction: false,
+            displaySecondaryInfoAction: true,
             city: 'Wuppertal',
             navigator: {
               noun: {

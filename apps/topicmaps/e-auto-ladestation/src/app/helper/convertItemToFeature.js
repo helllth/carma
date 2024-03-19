@@ -23,6 +23,10 @@ const convertItemToFeature = async (itemIn, poiColors) => {
     subtitle: itemIn.strasse + itemIn.hausnummer,
   };
   item.info = info;
+  if (item.foto) {
+    item.foto =
+      'https://www.wuppertal.de/geoportal/emobil/autos/fotos/' + item.foto;
+  }
 
   item.color = headerColor;
   const id = item.id;
