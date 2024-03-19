@@ -26,6 +26,7 @@ if (typeof global === 'undefined') {
 
 function App() {
   const [poiColors, setPoiColors] = useState();
+  const [bookmarks, setBookmarks] = useState([]);
 
   useEffect(() => {
     getPOIColors(setPoiColors);
@@ -52,7 +53,7 @@ function App() {
         itemFilterFunction={itemFilterFunction}
         additionalStylingInfo={{ poiColors }}
       >
-        <Ehrenamtkarte poiColors={poiColors} />
+        <Ehrenamtkarte bookmarks={bookmarks} setBookmarks={setBookmarks} />
       </TopicMapContextProvider>
     );
   } else {

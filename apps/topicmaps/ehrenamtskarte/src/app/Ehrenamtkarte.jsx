@@ -20,9 +20,8 @@ import {
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 import { Tooltip } from 'antd';
 
-const Ehrenamtkarte = ({ poiColors }) => {
+const Ehrenamtkarte = ({ bookmarks, setBookmarks }) => {
   const [gazData, setGazData] = useState([]);
-  const [bookmarks, setBookmarks] = useState([]);
   const {
     setSelectedFeatureByPredicate,
     setClusteringOptions,
