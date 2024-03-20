@@ -22,6 +22,12 @@ const itemFilterFunction = ({ filterState }) => {
       result = item.gruener_strom;
     }
 
+    if (filterState.nur_schnelllader) {
+      if (!item.schnellladestation) {
+        result = false;
+      }
+    }
+
     return result;
   };
 };
