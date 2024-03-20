@@ -13,15 +13,19 @@ import Section from 'react-cismap/topicmaps/menu/Section';
 import LicenseLuftbildkarte from 'react-cismap/topicmaps/wuppertal/LicenseLuftbildkarte';
 import LicenseStadtplanTagNacht from 'react-cismap/topicmaps/wuppertal/LicenseStadtplanTagNacht';
 import { Link } from 'react-scroll';
+import PieChart from './PieChart';
 
 import FilterUI from './FilterUI';
 import MenuFooter from './MenuFooter';
 import { TopicMapDispatchContext } from 'react-cismap/contexts/TopicMapContextProvider';
+import { getColorForProperties } from './helper/styler';
 
 const Menu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
-  const { filteredItems, shownFeatures, itemsDictionary, allFeatures } =
-    useContext(FeatureCollectionContext);
+  const { filteredItems, shownFeatures, filterState } = useContext(
+    FeatureCollectionContext
+  );
+  const { setFilterState } = useContext(FeatureCollectionDispatchContext);
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
 
   const getFilterHeader = () => {
@@ -92,7 +96,26 @@ const Menu = () => {
             sectionKey="filter"
             sectionTitle={getFilterHeader()}
             sectionBsStyle="primary"
-            sectionContent={<FilterUI />}
+            sectionContent={
+              <FilterUI
+                filter={filterState}
+                setFilter={setFilterState}
+                // steckertypes={steckertypes}
+                pieChart={
+                  <PieChart
+                    filteredObjects={filteredItems}
+                    colorizer={getColorForProperties}
+                    groupingFunction={(obj) => {
+                      if (obj.online === true) {
+                        return 'online';
+                      } else {
+                        return 'offline';
+                      }
+                    }}
+                  />
+                }
+              />
+            }
           />,
           <Section
             key="help"
