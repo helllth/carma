@@ -25,9 +25,11 @@ import SecondaryInfoModal from './SecondaryInfoModal';
 
 const EMobiKarte = () => {
   const [gazData, setGazData] = useState([]);
-  const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
-    FeatureCollectionDispatchContext
-  );
+  const {
+    setSelectedFeatureByPredicate,
+    setClusteringOptions,
+    setFilterState,
+  } = useContext(FeatureCollectionDispatchContext);
   const { secondaryInfoVisible } = useContext(UIContext);
   const { setSecondaryInfoVisible } = useContext(UIDispatchContext);
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
@@ -45,6 +47,16 @@ const EMobiKarte = () => {
       });
     }
   }, [markerSymbolSize]);
+
+  useEffect(() => {
+    setFilterState({
+      nur_online: false,
+      oeffnungszeiten: '*',
+      stecker: undefined,
+      nur_gruener_strom: false,
+      nur_schnelllader: false,
+    });
+  }, []);
 
   return (
     <TopicMapComponent
