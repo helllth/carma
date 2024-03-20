@@ -1,6 +1,9 @@
 import {
   faChargingStation,
+  faPhoneFlip,
   faQuestion,
+  faSquareArrowUpRight,
+  faSquareEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Modal, Accordion, Card, Table } from 'react-bootstrap';
@@ -16,6 +19,42 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
   if (ladestation.foto !== undefined) {
     foto = ladestation.foto;
   }
+
+  let links = [];
+  if (ladestation?.betreiber?.telefon) {
+    links.push(
+      <a href={'tel:' + ladestation?.betreiber?.telefon}>
+        <FontAwesomeIcon
+          icon={faPhoneFlip}
+          style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+          size="2x"
+        />
+      </a>
+    );
+  }
+  if (ladestation?.betreiber?.email) {
+    links.push(
+      <a href={'mailto:' + ladestation?.betreiber?.email} target="_blank">
+        <FontAwesomeIcon
+          icon={faSquareEnvelope}
+          style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+          size="2x"
+        />
+      </a>
+    );
+  }
+  if (ladestation?.betreiber?.homepage) {
+    links.push(
+      <a href={ladestation?.betreiber?.homepage} target="_blank">
+        <FontAwesomeIcon
+          icon={faSquareArrowUpRight}
+          style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+          size="2x"
+        />
+      </a>
+    );
+  }
+
   let steckerverbindungenTableArr = [];
   if (
     ladestation.steckerverbindungen &&
@@ -28,7 +67,6 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
           getConnectorImageUrl(v.steckdosentypkey);
         let image;
 
-        console.log(imageUrl);
         if (imageUrl) {
           image = (
             <img
@@ -158,6 +196,68 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
                   <b>Schnellladestation:</b>{' '}
                   {ladestation.schnellladestation === true ? 'Ja' : 'Nein'}
                 </div>
+              </Card.Body>
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
+        <Accordion style={{ marginBottom: 6 }} defaultActiveKey={'1'}>
+          <Card style={{ backgroundColor: '#faebcc' }}>
+            <Card.Header>
+              <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                Bezahlen
+              </Accordion.Toggle>
+            </Card.Header>
+            <Accordion.Collapse eventKey="1">
+              <Card.Body style={{ backgroundColor: 'white' }}>
+                <div>
+                  <b>Authentifizierung:</b>{' '}
+                  {ladestation.authentifizierung.join(' / ')}
+                </div>
+                <div>
+                  <b>Ladekosten:</b>{' '}
+                  {ladestation.ladekosten.startsWith('http') ? (
+                    <a href={ladestation.ladekosten} target="_ladekosten">
+                      in anderem Fenster anschauen
+                    </a>
+                  ) : (
+                    ladestation.ladekosten
+                  )}
+                </div>
+                <div>
+                  <b>Parkgebühr:</b> {ladestation.parkgebuehr}
+                </div>
+              </Card.Body>
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
+        <Accordion style={{ marginBottom: 6 }} defaultActiveKey={'2'}>
+          <Card style={{ backgroundColor: '#d6e9c6' }}>
+            <Card.Header>
+              <Accordion.Toggle as={Button} variant="link" eventKey="2">
+                Betreiber
+              </Accordion.Toggle>
+            </Card.Header>
+            <Accordion.Collapse eventKey="2">
+              <Card.Body style={{ backgroundColor: 'white' }}>
+                <div
+                  style={{
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    float: 'right',
+                    paddingBottom: '5px',
+                  }}
+                >
+                  {links}
+                </div>
+                <div>{ladestation?.betreiber?.name}</div>
+                <div>
+                  {ladestation?.betreiber?.strasse}{' '}
+                  {ladestation?.betreiber?.hausnummer}
+                </div>
+                <div>
+                  {ladestation?.betreiber?.plz} {ladestation?.betreiber?.ort}
+                </div>
+                <br />
               </Card.Body>
             </Accordion.Collapse>
           </Card>
