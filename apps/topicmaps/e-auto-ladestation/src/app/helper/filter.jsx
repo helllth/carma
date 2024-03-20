@@ -18,6 +18,10 @@ const itemFilterFunction = ({ filterState }) => {
       }
     }
 
+    if (filterState.nur_gruener_strom) {
+      result = item.gruener_strom;
+    }
+
     return result;
   };
 };
