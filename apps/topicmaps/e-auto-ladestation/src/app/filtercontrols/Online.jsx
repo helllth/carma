@@ -3,8 +3,6 @@ import { faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Online = ({ filter, setFilter }) => {
-  console.log(filter);
-
   return (
     <div>
       <Form>
