@@ -12,6 +12,7 @@ import ModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMe
 import Section from 'react-cismap/topicmaps/menu/Section';
 import LicenseLuftbildkarte from 'react-cismap/topicmaps/wuppertal/LicenseLuftbildkarte';
 import LicenseStadtplanTagNacht from 'react-cismap/topicmaps/wuppertal/LicenseStadtplanTagNacht';
+import DefaultSettingsPanel from 'react-cismap/topicmaps/menu/DefaultSettingsPanel';
 import { Link } from 'react-scroll';
 import PieChart from './PieChart';
 
@@ -121,6 +122,7 @@ const Menu = () => {
               />
             }
           />,
+          <DefaultSettingsPanel key="settings" />,
           <Section
             key="help"
             sectionKey="help"
