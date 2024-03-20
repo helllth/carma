@@ -14,7 +14,6 @@ import {
   getFeatureStyler,
   getPoiClusterIconCreatorFunction,
 } from './helper/styler';
-import titleFactory from './helper/titleFactory';
 import './index.css';
 if (typeof global === 'undefined') {
   window.global = window;
@@ -40,7 +39,6 @@ function App() {
       clusteringOptions={{
         iconCreateFunction: getPoiClusterIconCreatorFunction({ svgSize: 24 }),
       }}
-      titleFactory={titleFactory}
     >
       <Baederkarte />
     </TopicMapContextProvider>
