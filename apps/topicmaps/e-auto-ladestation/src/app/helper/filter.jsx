@@ -7,7 +7,15 @@ const itemFilterFunction = ({ filterState }) => {
     let result = true;
 
     if (filterState.nur_online) {
-      return item.online;
+      result = item.online;
+    }
+
+    if (filterState.oeffnungszeiten) {
+      if (filterState.oeffnungszeiten === '24') {
+        if (item.oeffnungszeiten !== '24 Stunden / 7 Tage') {
+          result = false;
+        }
+      }
     }
 
     return result;
