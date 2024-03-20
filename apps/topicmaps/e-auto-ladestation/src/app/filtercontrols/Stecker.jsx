@@ -27,6 +27,7 @@ const Stecker = ({ filter, setFilter, steckertypes }) => {
                   <Form.Check
                     readOnly={true}
                     key={'filter.emob.stecker.' + typ}
+                    id={'filter.emob.stecker.' + typ}
                     onClick={(e) => {
                       const newFilterState = { ...filter };
 

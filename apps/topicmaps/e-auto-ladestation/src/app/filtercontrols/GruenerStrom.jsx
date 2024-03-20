@@ -24,7 +24,7 @@ const GruenerStrom = ({ filter, setFilter }) => {
             <Form.Check
               type="radio"
               readOnly={true}
-              key={'filter.emob.green.only'}
+              id={'filter.emob.green.only'}
               onClick={(e) => {
                 const newFilterState = { ...filter };
                 newFilterState.nur_gruener_strom = e.target.checked;
@@ -38,7 +38,7 @@ const GruenerStrom = ({ filter, setFilter }) => {
             <Form.Check
               type="radio"
               readOnly={true}
-              key={'filter.emob.green.all'}
+              id={'filter.emob.green.all'}
               onClick={(e) => {
                 const newFilterState = { ...filter };
                 newFilterState.nur_gruener_strom = !e.target.checked;

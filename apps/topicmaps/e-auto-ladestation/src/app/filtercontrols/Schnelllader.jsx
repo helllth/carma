@@ -24,7 +24,7 @@ const Schnelllader = ({ filter, setFilter }) => {
             <Form.Check
               type="radio"
               readOnly={true}
-              key={'filter.prbr.bandr'}
+              id={'filter.prbr.bandr'}
               onClick={(e) => {
                 const newFilterState = { ...filter };
                 newFilterState.nur_schnelllader = e.target.checked;
@@ -38,7 +38,7 @@ const Schnelllader = ({ filter, setFilter }) => {
             <Form.Check
               type="radio"
               readOnly={true}
-              key={'filter.prbr.pandr'}
+              id={'filter.prbr.pandr'}
               onClick={(e) => {
                 const newFilterState = { ...filter };
                 newFilterState.nur_schnelllader = !e.target.checked;

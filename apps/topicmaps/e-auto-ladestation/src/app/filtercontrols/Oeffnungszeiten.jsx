@@ -24,7 +24,7 @@ const Oeffnungszeiten = ({ filter, setFilter }) => {
             <Form.Check
               type="radio"
               readOnly={true}
-              key={'filter.emob.open.24/7'}
+              id={'filter.emob.open.24/7'}
               onClick={(e) => {
                 const newFilterState = { ...filter };
                 if (e.target.checked) {
@@ -42,7 +42,7 @@ const Oeffnungszeiten = ({ filter, setFilter }) => {
             <Form.Check
               type="radio"
               readOnly={true}
-              key={'filter.emob.open.*'}
+              id={'filter.emob.open.*'}
               onClick={(e) => {
                 const newFilterState = { ...filter };
                 if (e.target.checked) {

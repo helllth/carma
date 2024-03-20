@@ -24,7 +24,7 @@ const Online = ({ filter, setFilter }) => {
             <Form.Check
               type="radio"
               readOnly={true}
-              key={'filter.emob.online.only'}
+              id={'filter.emob.online.only'}
               label="nur verfügbare Ladestationen (online)"
               onClick={(e) => {
                 const newFilterState = { ...filter };
@@ -38,7 +38,7 @@ const Online = ({ filter, setFilter }) => {
             <Form.Check
               type="radio"
               readOnly={true}
-              key={'filter.emob.online.all'}
+              id={'filter.emob.online.all'}
               label="alle Ladestationen"
               onClick={(e) => {
                 const newFilterState = { ...filter };
