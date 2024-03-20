@@ -17,12 +17,19 @@ import {
 import Menu from './Menu';
 import { getPoiClusterIconCreatorFunction } from './helper/styler';
 import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
+import {
+  UIContext,
+  UIDispatchContext,
+} from 'react-cismap/contexts/UIContextProvider';
+import SecondaryInfoModal from './SecondaryInfoModal';
 
 const EMobiKarte = () => {
   const [gazData, setGazData] = useState([]);
   const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
     FeatureCollectionDispatchContext
   );
+  const { secondaryInfoVisible } = useContext(UIContext);
+  const { setSecondaryInfoVisible } = useContext(UIDispatchContext);
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   const { clusteringOptions, selectedFeature, filteredItems, shownFeatures } =
     useContext(FeatureCollectionContext);
@@ -80,6 +87,12 @@ const EMobiKarte = () => {
       }
     >
       <FeatureCollection></FeatureCollection>
+      {secondaryInfoVisible && (
+        <SecondaryInfoModal
+          feature={selectedFeature}
+          setOpen={setSecondaryInfoVisible}
+        />
+      )}
     </TopicMapComponent>
   );
 };
