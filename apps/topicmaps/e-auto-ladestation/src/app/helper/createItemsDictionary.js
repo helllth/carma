@@ -11,7 +11,7 @@ export const createItemsDictionary = (items) => {
     }
   }
 
-  const steckerverbindungen = Array.from(steckerSet).sort();
+  const steckerverbindungen = Array.from(steckerSet);
 
   return { steckerverbindungen };
 };
