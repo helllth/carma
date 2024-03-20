@@ -15,8 +15,6 @@ const FilterRowUI = ({ items }) => {
     setFilterRows(createFilterRows(items, filterState, setFilterState));
   }, [items, setFilterState, filterState]);
 
-  console.log(filterState);
-
   return <div>{filterRows}</div>;
 };
 
