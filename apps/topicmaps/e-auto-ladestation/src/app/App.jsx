@@ -22,6 +22,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'leaflet/dist/leaflet.css';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-cismap/topicMaps.css';
+import { createItemsDictionary } from './helper/createItemsDictionary';
 if (typeof global === 'undefined') {
   window.global = window;
 }
@@ -40,6 +41,7 @@ function App() {
         featureItemsURL={
           'https://wupp-topicmaps-data.cismet.de/data/emob.data.json'
         }
+        createFeatureItemsDictionary={createItemsDictionary}
         referenceSystemDefinition={MappingConstants.proj4crs25832def}
         mapEPSGCode="25832"
         referenceSystem={MappingConstants.crs25832}

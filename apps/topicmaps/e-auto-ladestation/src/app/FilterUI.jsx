@@ -36,7 +36,7 @@ const FilterUI = ({
               <OnlineFC filter={filter} setFilter={setFilter} />
               <OeffnungszeitenFC filter={filter} setFilter={setFilter} />
               <SteckerFC
-                // steckertypes={steckertypes}
+                steckertypes={steckertypes}
                 filter={filter}
                 setFilter={setFilter}
               />

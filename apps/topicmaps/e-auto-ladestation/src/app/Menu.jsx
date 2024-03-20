@@ -22,9 +22,8 @@ import { getColorForProperties } from './helper/styler';
 
 const Menu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
-  const { filteredItems, shownFeatures, filterState } = useContext(
-    FeatureCollectionContext
-  );
+  const { filteredItems, shownFeatures, filterState, itemsDictionary } =
+    useContext(FeatureCollectionContext);
   const { setFilterState } = useContext(FeatureCollectionDispatchContext);
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
 
@@ -42,6 +41,11 @@ const Menu = () => {
       shownFeatures?.length || '0'
     } in der Karte)`;
   };
+
+  const steckertypes = useMemo(
+    () => itemsDictionary?.steckerverbindungen || [],
+    [itemsDictionary]
+  );
 
   return (
     <CustomizationContextProvider customizations={{}}>
@@ -100,7 +104,7 @@ const Menu = () => {
               <FilterUI
                 filter={filterState}
                 setFilter={setFilterState}
-                // steckertypes={steckertypes}
+                steckertypes={steckertypes}
                 pieChart={
                   <PieChart
                     filteredObjects={filteredItems}

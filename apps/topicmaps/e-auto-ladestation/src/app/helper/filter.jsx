@@ -6,6 +6,8 @@ const itemFilterFunction = ({ filterState }) => {
   return (item) => {
     let result = true;
 
+    console.log(item);
+
     if (filterState.nur_online) {
       result = item.online;
     }
