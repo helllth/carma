@@ -29,7 +29,7 @@ const itemFilterFunction = ({ filterState }) => {
     }
 
     for (let stecker of item.steckerverbindungen) {
-      if (filterState.stecker.indexOf(stecker.steckdosentyp) === -1) {
+      if (filterState?.stecker?.indexOf(stecker.steckdosentyp) === -1) {
         result = false;
       }
     }
