@@ -6,8 +6,6 @@ const itemFilterFunction = ({ filterState }) => {
   return (item) => {
     let result = true;
 
-    console.log(item);
-
     if (filterState.nur_online) {
       result = item.online;
     }
@@ -26,6 +24,12 @@ const itemFilterFunction = ({ filterState }) => {
 
     if (filterState.nur_schnelllader) {
       if (!item.schnellladestation) {
+        result = false;
+      }
+    }
+
+    for (let stecker of item.steckerverbindungen) {
+      if (filterState.stecker.indexOf(stecker.steckdosentyp) === -1) {
         result = false;
       }
     }

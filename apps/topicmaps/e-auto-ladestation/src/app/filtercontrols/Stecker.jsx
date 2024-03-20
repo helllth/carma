@@ -35,14 +35,14 @@ const Stecker = ({ filter, setFilter, steckertypes }) => {
                         newFilterState.stecker = steckertypes;
                       }
                       const add = newFilterState.stecker.indexOf(typ) === -1;
+                      let stecker = [...newFilterState.stecker];
 
                       if (add === true) {
-                        newFilterState.stecker.push(typ);
+                        stecker.push(typ);
+                        newFilterState.stecker = stecker;
                       } else {
-                        newFilterState.stecker.splice(
-                          newFilterState.stecker.indexOf(typ),
-                          1
-                        );
+                        stecker.splice(stecker.indexOf(typ), 1);
+                        newFilterState.stecker = stecker;
                       }
 
                       setFilter(newFilterState);
