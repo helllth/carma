@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { constants } from '../constants/Documents';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import DocMap from './components/DocMap';
 
 /* eslint-disable-next-line */
 export interface DocumentViewerProps {}
@@ -94,7 +95,7 @@ export function DocumentViewer(props: DocumentViewerProps) {
             width: 200,
           }}
         >
-          {/* {docmap} */}
+          <DocMap />
         </div>
       </div>
     </div>
