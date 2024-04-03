@@ -54,7 +54,7 @@ const aevConfig = {
 
 export default configureStore({
   reducer: {
-    mapping: persistReducer(aevConfig, aevSlice.reducer),
+    aev: persistReducer(aevConfig, aevSlice.reducer),
   },
   devTools: devToolsEnabled === true && inProduction === false,
   middleware,

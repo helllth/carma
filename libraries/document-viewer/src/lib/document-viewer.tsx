@@ -3,12 +3,27 @@ import { constants } from '../constants/Documents';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import DocMap from './components/DocMap';
+import { useParams } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'leaflet/dist/leaflet.css';
+
+export type Doc = {
+  url: string;
+  layer: string;
+  title: string;
+  group: string;
+  file: string;
+  meta: string;
+};
 
 /* eslint-disable-next-line */
-export interface DocumentViewerProps {}
+export interface DocumentViewerProps {
+  docs: Doc[];
+}
 
-export function DocumentViewer(props: DocumentViewerProps) {
+export function DocumentViewer({ docs }: DocumentViewerProps) {
   const [pendingLoader, setPendingLoader] = useState(0);
+  let { file } = useParams();
 
   const LOADING_FINISHED = 'LOADING_FINISHED';
   const LOADING_OVERLAY = 'LOADING_OVERLAY';
@@ -53,7 +68,11 @@ export function DocumentViewer(props: DocumentViewerProps) {
 
   return (
     <div style={{ background: '#343a40' }}>
-      <Navbar />
+      <Navbar
+        title={docs[0]?.title}
+        currentIndex={parseInt(file!)}
+        maxIndex={docs.length}
+      />
       <div
         style={{
           height: mapHeight,
@@ -77,7 +96,7 @@ export function DocumentViewer(props: DocumentViewerProps) {
           }}
           // ref={(ref) => (this.sidebarRef = ref)}
         >
-          <Sidebar />
+          <Sidebar docs={docs} index={parseInt(file!)} />
         </div>
         <div
           id="sidebar-slider"
@@ -95,7 +114,7 @@ export function DocumentViewer(props: DocumentViewerProps) {
             width: 200,
           }}
         >
-          <DocMap />
+          <DocMap docs={docs} index={parseInt(file!)} />
         </div>
       </div>
     </div>

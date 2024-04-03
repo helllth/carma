@@ -1,8 +1,14 @@
 import { useRef } from 'react';
 // @ts-ignore
 import Icon from 'react-cismap/commons/Icon';
+import { Doc } from '../document-viewer';
 
-const Sidebar = () => {
+interface SidebarProps {
+  docs?: Doc[];
+  index: number;
+}
+
+const Sidebar = ({ docs, index }: SidebarProps) => {
   const sidebarRef = useRef(null);
   const iconName = 'file-o';
   const selected = false;
@@ -11,21 +17,40 @@ const Sidebar = () => {
   return (
     <div ref={sidebarRef}>
       <div style={{ marginBottom: 8 }}>
-        <div style={{ background: '#777777', height: '100%', padding: 6 }}>
-          <div>
-            <Icon name="file-pdf-o" />
-            <p
+        {docs?.length > 0 &&
+          docs?.map((doc, i) => (
+            <div
               style={{
-                marginTop: 2,
-                marginBottom: 5,
-                fontSize: 11,
-                wordWrap: 'break-word',
+                background: `${index - 1 === i ? '#777777' : 'white'}`,
+                height: '100%',
+                padding: 6,
+                marginBottom: 8,
               }}
             >
-              Hier steht der Titel
-            </p>
-          </div>
-        </div>
+              <div
+                style={{
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  display: 'flex',
+                  gap: '6px',
+                }}
+              >
+                <Icon name="file-pdf-o" size="4x" />
+
+                <p
+                  style={{
+                    marginTop: 2,
+                    marginBottom: 5,
+                    fontSize: 11,
+                    wordWrap: 'break-word',
+                  }}
+                >
+                  {doc.title || doc.file}
+                </p>
+              </div>
+            </div>
+          ))}
       </div>
     </div>
   );

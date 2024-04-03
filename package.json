@@ -30,6 +30,7 @@
     "graphql-request": "^6.1.0",
     "graphviz-react": "^1.2.5",
     "leaflet": "^1.9.4",
+    "leaflet-rastercoords": "^1.0.6",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "maplibre-gl": "^4.1.0",

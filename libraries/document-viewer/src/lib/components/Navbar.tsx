@@ -2,7 +2,13 @@ import { Navbar as BootstrapNavbar, Nav, NavItem } from 'react-bootstrap';
 // @ts-ignore
 import Icon from 'react-cismap/commons/Icon';
 
-const Navbar = () => {
+interface NavProps {
+  title?: string;
+  currentIndex: number;
+  maxIndex: number;
+}
+
+const Navbar = ({ title, currentIndex, maxIndex }: NavProps) => {
   return (
     <BootstrapNavbar
       style={{
@@ -15,14 +21,16 @@ const Navbar = () => {
       expand="lg"
     >
       <BootstrapNavbar.Brand>
-        <a>Dokument</a>
+        <a>{title}</a>
       </BootstrapNavbar.Brand>
       <BootstrapNavbar.Collapse>
         <Nav className="mr-auto">
           <NavItem>
             <Icon name="chevron-left" />
           </NavItem>
-          <NavItem>1 | 2</NavItem>
+          <NavItem>
+            {currentIndex} | {maxIndex}
+          </NavItem>
           <NavItem>
             <Icon name="chevron-right" />
           </NavItem>
