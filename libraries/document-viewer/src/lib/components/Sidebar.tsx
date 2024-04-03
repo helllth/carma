@@ -2,6 +2,7 @@ import { useRef } from 'react';
 // @ts-ignore
 import Icon from 'react-cismap/commons/Icon';
 import { Doc } from '../document-viewer';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 interface SidebarProps {
   docs?: Doc[];
@@ -9,6 +10,8 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ docs, index }: SidebarProps) => {
+  const { docPackageId, file, page } = useParams();
+  const navigate = useNavigate();
   const sidebarRef = useRef(null);
   const iconName = 'file-o';
   const selected = false;
@@ -25,7 +28,9 @@ const Sidebar = ({ docs, index }: SidebarProps) => {
                 height: '100%',
                 padding: 6,
                 marginBottom: 8,
+                cursor: 'pointer',
               }}
+              onClick={() => navigate(`/docs/${docPackageId}/${i + 1}/1`)}
             >
               <div
                 style={{

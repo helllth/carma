@@ -64,15 +64,9 @@ export function DocumentViewer({ docs }: DocumentViewerProps) {
     return promise;
   };
 
-  useEffect(() => {}, []);
-
   return (
     <div style={{ background: '#343a40' }}>
-      <Navbar
-        title={docs[0]?.title}
-        currentIndex={parseInt(file!)}
-        maxIndex={docs.length}
-      />
+      <Navbar title={docs[0]?.title} maxIndex={docs.length} />
       <div
         style={{
           height: mapHeight,

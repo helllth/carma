@@ -1,14 +1,17 @@
 import { Navbar as BootstrapNavbar, Nav, NavItem } from 'react-bootstrap';
 // @ts-ignore
 import Icon from 'react-cismap/commons/Icon';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface NavProps {
   title?: string;
-  currentIndex: number;
   maxIndex: number;
 }
 
-const Navbar = ({ title, currentIndex, maxIndex }: NavProps) => {
+const Navbar = ({ title, maxIndex }: NavProps) => {
+  const { docPackageId, file, page } = useParams();
+  const navigate = useNavigate();
+
   return (
     <BootstrapNavbar
       style={{
@@ -16,23 +19,50 @@ const Navbar = ({ title, currentIndex, maxIndex }: NavProps) => {
         width: '66%',
         marginLeft: 'auto',
         marginRight: 'auto',
+        color: 'grey',
       }}
       bg="gray-dark"
       expand="lg"
     >
       <BootstrapNavbar.Brand>
-        <a>{title}</a>
+        <a style={{ color: 'grey' }}>{title}</a>
       </BootstrapNavbar.Brand>
       <BootstrapNavbar.Collapse>
         <Nav className="mr-auto">
           <NavItem>
-            <Icon name="chevron-left" />
+            <div
+              style={{
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                if (parseInt(page) > 1) {
+                  navigate(
+                    `/docs/${docPackageId}/${file}/${parseInt(page) - 1}`
+                  );
+                }
+              }}
+            >
+              <Icon name="chevron-left" />
+            </div>
           </NavItem>
           <NavItem>
-            {currentIndex} | {maxIndex}
+            {page} | {maxIndex}
           </NavItem>
           <NavItem>
-            <Icon name="chevron-right" />
+            <div
+              style={{
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                if (parseInt(page) < maxIndex) {
+                  navigate(
+                    `/docs/${docPackageId}/${file}/${parseInt(page) + 1}`
+                  );
+                }
+              }}
+            >
+              <Icon name="chevron-right" />
+            </div>
           </NavItem>
         </Nav>
         <BootstrapNavbar.Text>
