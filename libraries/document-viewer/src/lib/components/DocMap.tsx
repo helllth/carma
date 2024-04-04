@@ -107,7 +107,7 @@ const DocMap = ({ docs, index }: DocMapsProps) => {
       referenceSystem={L.CRS.Simple}
       ref={leafletMapRef}
     >
-      {/* {layer?.layerUrl && (
+      {layer?.layerUrl && (
         <CismapLayer
           {...{
             type: 'tiles',
@@ -120,7 +120,7 @@ const DocMap = ({ docs, index }: DocMapsProps) => {
             key: 'tileLayer',
           }}
         />
-      )} */}
+      )}
     </RoutedMap>
   );
 };
