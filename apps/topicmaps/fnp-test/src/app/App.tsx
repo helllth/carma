@@ -1,4 +1,4 @@
-import { DocumentViewer } from '@cismet/document-viewer';
+import { Doc, DocumentViewer } from '@cismet/document-viewer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
@@ -11,24 +11,60 @@ import { getDocsForAEVGazetteerEntry } from '../utils/DocsHelper';
 
 export function App() {
   const dispatch = useDispatch();
-  let { docPackageId, file, page } = useParams();
-  const [docs, setDocs] = useState([]);
+  let { docPackageId } = useParams();
+  const [docs, setDocs] = useState<Doc[]>([]);
+
+  const getMeta = async (url: string) => {
+    const extra = await fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((result) => {
+        return result;
+      });
+    return extra;
+  };
+
+  const getDocsWithUpdatedMetaData = async (tmpDocs: Doc[]) => {
+    await Promise.all(
+      tmpDocs.map(async (doc) => {
+        // @ts-ignore
+        const test2 = await getMeta(doc.meta);
+        doc.meta = test2;
+      })
+    );
+
+    return tmpDocs;
+  };
 
   useEffect(() => {
+    // @ts-ignore
     dispatch(loadAEVs());
 
+    const getUpdatedDocs = async (tmpDocs: Doc[]) => {
+      const updatedDocs = await getDocsWithUpdatedMetaData(tmpDocs);
+
+      setDocs(updatedDocs);
+    };
+
     if (docPackageId) {
-      let tmp;
-      tmp = getDocsForAEVGazetteerEntry({
+      let tmpDocs;
+      tmpDocs = getDocsForAEVGazetteerEntry({
         gazHit: { type: 'aenderungsv', more: { v: docPackageId } },
+        // @ts-ignore
         searchForAEVs: (aevs) => dispatch(searchForAEVs(aevs)),
       });
 
-      setDocs(tmp);
+      if (tmpDocs) {
+        getUpdatedDocs(tmpDocs);
+      }
     }
   }, [docPackageId]);
 
-  return <>{docs && <DocumentViewer docs={docs} />}</>;
+  return <>{docs.length > 0 && <DocumentViewer docs={docs} />}</>;
 }
 
 export default App;
