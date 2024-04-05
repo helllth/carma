@@ -2,7 +2,7 @@ import { Doc } from '@cismet/document-viewer';
 
 const tileservice = 'https://resources.cismet.de/tiles/';
 
-function replaceUmlauteAndSpaces(str) {
+function replaceUmlauteAndSpaces(str: string) {
   const umlautMap = {
     Ü: 'UE',
     Ä: 'AE',
@@ -12,22 +12,22 @@ function replaceUmlauteAndSpaces(str) {
     ö: 'oe',
     ß: 'ss',
     ' ': '_',
+  } as {
+    [key: string]: string;
   };
   let ret = str
-    .replace(/[\u00dc|\u00c4|\u00d6][a-z]/g, (a) => {
+    .replace(/[\u00dc|\u00c4|\u00d6][a-z]/g, (a: string) => {
       var big = umlautMap[a.slice(0, 1)];
       return big.charAt(0) + big.charAt(1) + a.slice(1);
     })
     .replace(
       new RegExp('[' + Object.keys(umlautMap).join('|') + ']', 'g'),
-      (a) => umlautMap[a]
+      (a: any) => umlautMap[a]
     );
-  // console.log('in', str);
-  // console.log('out', ret);
   return ret;
 }
 
-export function getDocsForAEVGazetteerEntry(props) {
+export function getDocsForAEVGazetteerEntry(props: any) {
   let { gazHit, searchForAEVs } = props;
   let docs: Doc[] = [];
 
@@ -40,7 +40,6 @@ export function getDocsForAEVGazetteerEntry(props) {
         return;
       }
       const aev = aevFeatures[0];
-      console.log(aev);
       let title =
         aev.verfahren === ''
           ? 'FNP-Änderung ' + aev.name
@@ -62,6 +61,7 @@ export function getDocsForAEVGazetteerEntry(props) {
             aev.url.replace('http://www.wuppertal.de/geoportal/', tileservice) +
               '/{z}/{x}/{y}.png'
           ),
+          // @ts-ignore
           meta: replaceUmlauteAndSpaces(
             aev.url.replace('http://www.wuppertal.de/geoportal/', tileservice) +
               '/meta.json'
@@ -84,6 +84,7 @@ export function getDocsForAEVGazetteerEntry(props) {
               url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
                 '/{z}/{x}/{y}.png'
             ),
+            // @ts-ignore
             meta: replaceUmlauteAndSpaces(
               url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
                 '/meta.json'
@@ -96,7 +97,6 @@ export function getDocsForAEVGazetteerEntry(props) {
           docs.push({
             group: 'Zusatzdokumente',
             file: filename,
-            title: filename,
             url: url.replace(
               'https://www.wuppertal.de/geoportal/',
               'https://wunda-geoportal-docs.cismet.de/'
@@ -105,6 +105,7 @@ export function getDocsForAEVGazetteerEntry(props) {
               url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
                 '/{z}/{x}/{y}.png'
             ),
+            // @ts-ignore
             meta: replaceUmlauteAndSpaces(
               url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
                 '/meta.json'
@@ -115,6 +116,5 @@ export function getDocsForAEVGazetteerEntry(props) {
     },
   });
 
-  console.log(docs);
   return docs;
 }

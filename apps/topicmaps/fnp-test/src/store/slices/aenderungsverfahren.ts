@@ -20,7 +20,7 @@ const slice = createSlice({
 export default slice;
 
 export const loadAEVs = () => {
-  return async (dispatch, getState) => {
+  return async (dispatch: any) => {
     fetch('https://wunda-geoportal.cismet.de/data/aenderungsv.data.json')
       .then((response) => {
         if (!response.ok) {
@@ -44,15 +44,16 @@ export function searchForAEVs({
   gazObject,
   boundingBox,
   point,
-  done = (result) => {
+  done = (result: any) => {
     console.log(result);
   },
+}: {
+  gazObject: any;
+  boundingBox: any;
+  point: any;
+  done: (result: any) => void;
 }) {
-  return function (dispatch, getState) {
-    let selectionIndexWish = 0;
-
-    console.log(gazObject);
-
+  return function (dispatch: any, getState: any) {
     const state = getState();
     let finalResults = [];
 
@@ -79,7 +80,7 @@ export function searchForAEVs({
 
       for (let feature of state.fnpAenderungsverfahren.dataState.features) {
         // console.log('feature', feature);
-        if (!booleanDisjoint(bboxPoly, feature)) {
+        if (!booleanDisjoint(bboxPoly as any, feature)) {
           finalResults.push(feature);
         }
       }
@@ -92,7 +93,7 @@ export function searchForAEVs({
         loadAEVs();
       }
 
-      let hit = state.aev.data.find((elem) => {
+      let hit = state.aev.data.find((elem: any) => {
         return elem.name === gazObject[0].more.v;
       });
       if (hit) {
