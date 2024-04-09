@@ -7,6 +7,7 @@ import {
   FeatureCollectionDisplay,
   MappingConstants,
   RoutedMap,
+  TransitiveReactLeaflet,
 } from 'react-cismap';
 import {
   TopicMapStylingContext,
@@ -59,7 +60,6 @@ import {
   faImage as solidImage,
 } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { ScaleControl } from 'react-leaflet';
 import { FileImageOutlined, FileImageFilled } from '@ant-design/icons';
 
 import { getGazData } from '../../store/slices/gazData';
@@ -79,6 +79,8 @@ import { proj4crs3857def } from 'react-cismap/constants/gis';
 import { getJWT } from '../../store/slices/auth';
 import Toolbar from './Toolbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const { ScaleControl } = TransitiveReactLeaflet;
 
 const mockExtractor = (input) => {
   return {
@@ -454,7 +456,7 @@ const Map = ({
         //   }
         // }}
       >
-        {/* <ScaleControl {...defaults} position="topright" /> */}
+        <ScaleControl {...defaults} position="topright" />
         {/* {overlayFeature && (
           <ProjSingleGeoJson
             key={JSON.stringify(overlayFeature)}

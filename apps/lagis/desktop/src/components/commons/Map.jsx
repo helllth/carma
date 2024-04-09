@@ -7,6 +7,7 @@ import {
   FeatureCollectionDisplay,
   MappingConstants,
   RoutedMap,
+  TransitiveReactLeaflet,
 } from 'react-cismap';
 import {
   TopicMapStylingContext,
@@ -34,7 +35,6 @@ import {
   setShowInspectMode,
 } from '../../store/slices/mapping';
 import { useDispatch, useSelector } from 'react-redux';
-import { ScaleControl } from 'react-leaflet';
 import { FileImageOutlined, FileImageFilled } from '@ant-design/icons';
 import getLayers from 'react-cismap/tools/layerFactory';
 import { getArea25832 } from '../../core/tools/kassenzeichenMappingTools';
@@ -57,6 +57,9 @@ import { getJWT } from '../../store/slices/auth';
 import HoveredLandparcelInfo from './HoveredLandparcelInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBinoculars } from '@fortawesome/free-solid-svg-icons';
+
+const { ScaleControl } = TransitiveReactLeaflet;
+
 const mockExtractor = (input) => {
   return {
     homeCenter: [51.27225612927373, 7.199918031692506],
@@ -354,7 +357,7 @@ const Map = ({
           }
         }}
       >
-        {/* <ScaleControl {...defaults} position="topright" /> */}
+        <ScaleControl {...defaults} position="topright" />
         {overlayFeature && (
           <ProjSingleGeoJson
             key={JSON.stringify(overlayFeature)}
