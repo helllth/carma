@@ -412,7 +412,9 @@ export const renewCache = (
     dispatch(setCachingProgress({ key, cachingProgress: 0 }));
     dispatch(setUpdateCount({ key, updateCount: 0 }));
 
-    const progressListener = (message) => {
+    const progressListener = (progressEvent) => {
+      //backwards compatibility
+      const message = { data: progressEvent };
       if (
         message.data.target !== undefined &&
         message.data.objectstorename === itemKey
@@ -432,7 +434,9 @@ export const renewCache = (
     };
     const tmpdexieW = workerInstance;
 
-    tmpdexieW.addEventListener('message', Comlink.proxy(progressListener));
+    const proxiedProgressListener = Comlink.proxy(progressListener);
+
+    // tmpdexieW.addEventListener('message', proxiedProgressListener);
 
     fetchGraphQL(
       cacheQueries[itemKey],
@@ -455,7 +459,8 @@ export const renewCache = (
                 result.dataz[itemKey + '_length'],
                 countElements,
                 chunk,
-                itemKey
+                itemKey,
+                proxiedProgressListener
               );
             }
 
@@ -476,7 +481,7 @@ export const renewCache = (
             dispatch(clearIntermediateResults(key));
 
             //removeEVent Listener to free memory
-            tmpdexieW.removeEventListener('message', progressListener);
+            // tmpdexieW.removeEventListener('message', proxiedProgressListener);
 
             if (itemKey === 'raw_point_index') {
               //todo: the initIndex function should be called, after the cache was completely refreshed

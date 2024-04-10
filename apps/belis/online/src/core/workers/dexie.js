@@ -3,7 +3,11 @@ import { db } from '../indexeddb/dexiedb';
 import Pako from 'pako';
 import { Buffer } from 'buffer';
 
-export async function putZArray(zip, objectstorename) {
+export async function putZArray(
+  zip,
+  objectstorename,
+  progressListener = () => {}
+) {
   let zippedData = Uint8Array.from(atob(zip), (c) => c.charCodeAt(0));
   let unpackedString = Pako.inflate(zippedData, { to: 'string' });
   zippedData = undefined;
@@ -11,7 +15,7 @@ export async function putZArray(zip, objectstorename) {
   const result = JSON.parse(unpackedString);
   unpackedString = undefined;
   const inputArray = result.data[objectstorename];
-  postMessage({ target: inputArray.length, objectstorename });
+  progressListener({ target: inputArray.length, objectstorename });
   return await putArray(inputArray, objectstorename);
 }
 
@@ -19,7 +23,8 @@ export async function putChunkedZArray(
   targetLength,
   countElements,
   zip,
-  objectstorename
+  objectstorename,
+  progressListener = () => {}
 ) {
   //the next line fixes the buffer is not defined error. See https://github.com/remix-run/remix/issues/2248#issuecomment-1239022303
   // window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -37,10 +42,13 @@ export async function putChunkedZArray(
     cleanUpObject(item);
   }
   const chunkLength = results.length;
-  postMessage({ target: targetLength, objectstorename });
-  postMessage({ progress: countElements + chunkLength / 2, objectstorename });
+  progressListener({ target: targetLength, objectstorename });
+  progressListener({
+    progress: countElements + chunkLength / 2,
+    objectstorename,
+  });
   await db[objectstorename].bulkPut(results);
-  postMessage({ progress: countElements + chunkLength, objectstorename });
+  progressListener({ progress: countElements + chunkLength, objectstorename });
   return countElements + chunkLength;
 }
 
