@@ -16,7 +16,7 @@ if (typeof global === 'undefined') {
 function App() {
   return (
     <TopicMapContextProvider>
-      <TopicMapComponent gazData={[]} backgroundlayers="empty">
+      <TopicMapComponent gazData={[]}>
         <StyledWMSTileLayer
           {...{
             type: 'wmts',
