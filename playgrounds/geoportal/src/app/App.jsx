@@ -1,4 +1,3 @@
-import React from 'react';
 import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
 
 import './index.css';
@@ -7,28 +6,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'leaflet/dist/leaflet.css';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-cismap/topicMaps.css';
-import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
-import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
+import { MappingConstants } from 'react-cismap';
+import Map from './Map';
+import { useState } from 'react';
+import { getConvertItemToFeatureWithPOIColors } from './helper/convertItemToFeature';
 if (typeof global === 'undefined') {
   window.global = window;
 }
 
 function App() {
+  const [poiColors, setPoiColors] = useState();
+
   return (
-    <TopicMapContextProvider>
-      <TopicMapComponent gazData={[]}>
-        <StyledWMSTileLayer
-          {...{
-            type: 'wmts',
-            url: 'https://geodaten.metropoleruhr.de/spw2/service',
-            layers: 'spw2_light_grundriss',
-            version: '1.3.0',
-            tileSize: 512,
-            transparent: true,
-            opacity: 0.3,
-          }}
-        ></StyledWMSTileLayer>
-      </TopicMapComponent>
+    <TopicMapContextProvider
+      mapEPSGCode="25832"
+      referenceSystem={MappingConstants.crs25832}
+      referenceSystemDefinition={MappingConstants.proj4crs25832def}
+      convertItemToFeature={getConvertItemToFeatureWithPOIColors(poiColors)}
+    >
+      <Map />
     </TopicMapContextProvider>
   );
 }
