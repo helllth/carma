@@ -7,9 +7,9 @@ import 'leaflet/dist/leaflet.css';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-cismap/topicMaps.css';
 import { MappingConstants } from 'react-cismap';
-import Map from './Map';
 import { useState } from 'react';
 import { getConvertItemToFeatureWithPOIColors } from './helper/convertItemToFeature';
+import Map from './components/Map';
 if (typeof global === 'undefined') {
   window.global = window;
 }

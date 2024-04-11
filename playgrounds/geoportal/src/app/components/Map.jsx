@@ -1,9 +1,9 @@
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import { getGazData } from './helper/helper';
 import { FeatureCollectionDispatchContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
 import { useContext, useEffect, useState } from 'react';
 import FeatureCollection from 'react-cismap/FeatureCollection';
+import { getGazData } from '../helper/helper';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -24,7 +24,6 @@ const Map = () => {
       gazetteerHitTrigger={(hits) => {
         if ((Array.isArray(hits) && hits[0]?.more?.pid) || hits[0]?.more?.kid) {
           const gazId = hits[0]?.more?.pid || hits[0]?.more?.kid;
-          console.log(gazId);
           setSelectedFeatureByPredicate(
             (feature) => feature.properties.id === gazId
           );
