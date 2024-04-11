@@ -20,7 +20,5 @@ export const getGazData = async (setGazData) => {
     'adressen',
   ]);
 
-  console.log(gazData);
-
   setGazData(gazData);
 };
