@@ -48,6 +48,7 @@ const Map = () => {
     <div className="h-full w-full" ref={wrapperRef}>
       <TopicMapComponent
         gazData={gazData}
+        hamburgerMenu={false}
         locatorControl={true}
         mapStyle={{ width, height }}
         gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
