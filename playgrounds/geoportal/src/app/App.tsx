@@ -1,16 +1,21 @@
-import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
-
 import './index.css';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'leaflet/dist/leaflet.css';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-cismap/topicMaps.css';
+// @ts-ignore
+import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
+// @ts-ignore
 import { MappingConstants } from 'react-cismap';
 import { useState } from 'react';
+// @ts-ignore
 import { getConvertItemToFeatureWithPOIColors } from './helper/convertItemToFeature';
 import Map from './components/Map';
+// @ts-ignore
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
+import TopNavbar from './components/TopNavbar';
+import BottomNavbar from './components/BottomNavbar';
 if (typeof global === 'undefined') {
   window.global = window;
 }
@@ -84,7 +89,13 @@ function App() {
         },
       }}
     >
-      <Map />
+      <div className="flex flex-col h-screen w-full">
+        <TopNavbar />
+
+        <Map />
+
+        <BottomNavbar />
+      </div>
     </TopicMapContextProvider>
   );
 }
