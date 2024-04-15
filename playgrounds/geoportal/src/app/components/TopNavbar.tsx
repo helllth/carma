@@ -11,20 +11,23 @@ import {
   faPrint,
   faRedo,
 } from '@fortawesome/free-solid-svg-icons';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 // @ts-ignore
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
+import LibModal from './Modals/LibModal';
 
 const { Search } = Input;
 
 const TopNavbar = () => {
   const dispatch = useDispatch();
   const mode = useSelector(getMode);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
 
   return (
     <div className="h-16 w-full flex items-center justify-between py-2 px-[12px]">
+      <LibModal open={isModalOpen} setOpen={setIsModalOpen} />
       {/* <Button
         onClick={() => {
           dispatch(setMode(mode === 'normal' ? 'map' : 'normal'));
@@ -36,12 +39,19 @@ const TopNavbar = () => {
         <div className="flex items-center gap-2">
           <p className="mb-0 font-semibold text-lg">Geoportal</p>
         </div>
-        {/* <Button icon={<FontAwesomeIcon icon={faLayerGroup} />}>Layer</Button> */}
         <FontAwesomeIcon icon={faRedo} />
       </div>
 
       <div className="flex items-center gap-6">
-        <Search placeholder="Suche nach Themen" className="w-96" />
+        <Button
+          icon={<FontAwesomeIcon icon={faLayerGroup} />}
+          onClick={() => {
+            setIsModalOpen(true);
+          }}
+        >
+          Layer
+        </Button>
+        {/* <Search placeholder="Suche nach Themen" className="w-96" /> */}
         <FontAwesomeIcon icon={faPrint} />
 
         <Button
