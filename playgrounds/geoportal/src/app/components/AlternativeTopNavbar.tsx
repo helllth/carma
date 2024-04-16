@@ -1,8 +1,6 @@
-import { Button, Input, Radio } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button, Input } from 'antd';
 // @ts-ignore
 import {
-  faB,
   faBars,
   faLandmark,
   faLayerGroup,
@@ -14,17 +12,13 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
 // @ts-ignore
-import { getMode } from './../store/slices/ui';
-// @ts-ignore
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 import LibModal from './Modals/LibModal';
 import './switch.css';
 
 const { Search } = Input;
 
-const TopNavbar = () => {
-  const dispatch = useDispatch();
-  const mode = useSelector(getMode);
+const AlternativeTopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
@@ -39,7 +33,7 @@ const TopNavbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-6 absolute left-1/2 -ml-60">
+      <div className="flex items-center gap-6">
         <FontAwesomeIcon icon={faRedo} className="text-xl" />
         <FontAwesomeIcon icon={faLandmark} className="text-xl" />
         <FontAwesomeIcon icon={faMap} className="text-xl" />
@@ -50,17 +44,11 @@ const TopNavbar = () => {
           }}
           className="cursor-pointer text-xl"
         />
-        <FontAwesomeIcon icon={faB} className="text-xl" />
-        <FontAwesomeIcon icon={faPrint} className="text-xl" />
-        <FontAwesomeIcon icon={faShareNodes} className="text-xl" />
       </div>
 
       <div className="flex items-center gap-6">
-        <Radio.Group value={'standard'}>
-          <Radio.Button value="standard">Standard</Radio.Button>
-          <Radio.Button value="hybrid">Hybrid</Radio.Button>
-          <Radio.Button value="satellit">Satellit</Radio.Button>
-        </Radio.Group>
+        <FontAwesomeIcon icon={faPrint} className="text-xl" />
+        <FontAwesomeIcon icon={faShareNodes} className="text-xl" />
 
         <Button
           onClick={() => {
@@ -74,4 +62,4 @@ const TopNavbar = () => {
   );
 };
 
-export default TopNavbar;
+export default AlternativeTopNavbar;

@@ -68,7 +68,7 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
         />
         <div className="">
           <div id="general">
-            <p className="mb-0 text-xl font-semibold">General</p>
+            <p className="mb-4 text-2xl font-semibold">General</p>
             <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
               <LayerItem
                 thumbnail="https://library-thumbnails.felt.com/Bathymetry-q80.jpg"
@@ -114,7 +114,7 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
           </div>
 
           <div id="boundaries">
-            <p className="mb-0 text-xl font-semibold">Boundaries</p>
+            <p className="mb-4 text-2xl font-semibold">Boundaries</p>
             <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
               <LayerItem
                 thumbnail="https://library-thumbnails.felt.com/Bathymetry-q80.jpg"

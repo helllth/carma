@@ -8,20 +8,19 @@ import './index.css';
 import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
 // @ts-ignore
 import { useState } from 'react';
-// @ts-ignore
 import { MappingConstants } from 'react-cismap';
 // @ts-ignore
 import Map from './components/Map';
-// @ts-ignore
 import { getConvertItemToFeatureWithPOIColors } from './helper/convertItemToFeature';
 // @ts-ignore
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
-import TopNavbar from './components/TopNavbar';
+import AlternativeTopNavbar from './components/AlternativeTopNavbar';
+import BottomNavbar from './components/BottomNavbar';
 if (typeof global === 'undefined') {
   window.global = window;
 }
 
-function App() {
+const AlternativeUI = () => {
   const [poiColors, setPoiColors] = useState();
 
   return (
@@ -91,12 +90,14 @@ function App() {
       }}
     >
       <div className="flex flex-col h-screen w-full">
-        <TopNavbar />
+        <AlternativeTopNavbar />
 
         <Map />
+
+        <BottomNavbar />
       </div>
     </TopicMapContextProvider>
   );
-}
+};
 
-export default App;
+export default AlternativeUI;
