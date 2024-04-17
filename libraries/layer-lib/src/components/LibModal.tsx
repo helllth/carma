@@ -16,6 +16,7 @@ interface LayerItemProps {
   name: string;
   bbox: any;
   getMapUrl: string;
+  categoryTitle: string;
 }
 
 const LayerItem = ({
@@ -25,11 +26,12 @@ const LayerItem = ({
   name,
   bbox,
   getMapUrl,
+  categoryTitle,
 }: LayerItemProps) => {
   const box = bbox.find((box: any) => box.crs === 'EPSG:25832').extent;
   const url = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
-  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=512&srs=EPSG%3A25832&bbox=374278.143326039,5681612.396143014,374354.58035432384,5681688.8331713`;
+  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=256&height=256&srs=EPSG%3A25832&bbox=374813.20252403466,5681918.144256154,374966.07658060483,5682071.018312723`;
   const umweltUrl = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=512&srs=EPSG%3A25832&bbox=${
@@ -47,7 +49,7 @@ const LayerItem = ({
         onClick={() => {}}
       >
         <img
-          src={title.includes('Umwelt') ? umweltUrl : url}
+          src={categoryTitle.includes('Umwelt') ? umweltUrl : url}
           alt={title}
           className="object-cover h-full overflow-clip w-[calc(130%+7.2px)]"
         />
@@ -161,6 +163,7 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
                     name={layer.name}
                     bbox={layer.BoundingBox}
                     getMapUrl={layer.url}
+                    categoryTitle={topLayer.title}
                   />
                 ))}
               </div>
