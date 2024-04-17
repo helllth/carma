@@ -30,24 +30,31 @@ const LayerItem = ({
   const url = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=512&srs=EPSG%3A25832&bbox=374278.143326039,5681612.396143014,374354.58035432384,5681688.8331713`;
-  //   const test = `https://maps.wuppertal.de/karten?service=WMS&request=GetMap&layers=${encodeURIComponent(
-  //     name
-  //   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=512&srs=EPSG%3A25832&bbox=${
-  //     box[0]
-  //   },${box[1]},${box[2]},${box[3]}`;
+  const umweltUrl = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
+    name
+  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=512&srs=EPSG%3A25832&bbox=${
+    box[0]
+  },${box[1]},${box[2]},${box[3]}`;
+
+  const regex = /Inhalt:(.*?)Sichtbarkeit:/s;
+
+  const match = description?.match(regex);
 
   return (
     <div className="flex flex-col rounded-lg w-fit h-fit">
-      <button className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]">
+      <button
+        className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]"
+        onClick={() => {}}
+      >
         <img
-          src={url}
+          src={title.includes('Umwelt') ? umweltUrl : url}
           alt={title}
           className="object-cover h-full overflow-clip w-[calc(130%+7.2px)]"
         />
       </button>
       <h3 className="text-lg">{title}</h3>
       <p className="text-md" style={{ color: 'rgba(0,0,0,0.7)' }}>
-        {description}
+        {match && match.length > 1 ? match[1].trim() : description}
       </p>
       <p style={{ color: 'rgba(0,0,0,0.5)', fontSize: '0.875rem' }}>
         {tags?.map((tag, i) => (
