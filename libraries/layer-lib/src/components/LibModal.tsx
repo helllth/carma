@@ -10,18 +10,35 @@ const { Search } = Input;
 const parser = new WMSCapabilities();
 
 interface LayerItemProps {
-  thumbnail: string;
   title: string;
   description: string;
   tags?: string[];
+  name: string;
+  bbox: any;
 }
 
-const LayerItem = ({ thumbnail, title, description, tags }: LayerItemProps) => {
+const LayerItem = ({
+  title,
+  description,
+  tags,
+  name,
+  bbox,
+}: LayerItemProps) => {
+  const box = bbox.find((box: any) => box.crs === 'EPSG:25832').extent;
+  const url = `https://maps.wuppertal.de/karten?service=WMS&request=GetMap&layers=${encodeURIComponent(
+    name
+  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=512&srs=EPSG%3A25832&bbox=374278.143326039,5681612.396143014,374354.58035432384,5681688.8331713`;
+  //   const test = `https://maps.wuppertal.de/karten?service=WMS&request=GetMap&layers=${encodeURIComponent(
+  //     name
+  //   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=512&srs=EPSG%3A25832&bbox=${
+  //     box[0]
+  //   },${box[1]},${box[2]},${box[3]}`;
+
   return (
     <div className="flex flex-col rounded-lg w-fit h-fit">
       <button className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]">
         <img
-          src={thumbnail}
+          src={url}
           alt={title}
           className="object-cover h-full overflow-clip w-[calc(130%+7.2px)]"
         />
@@ -111,10 +128,11 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
               <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
                 {topLayer.layers.map((layer: any) => (
                   <LayerItem
-                    thumbnail="https://library-thumbnails.felt.com/Bathymetry-q80.jpg"
                     title={layer.title}
                     description={layer.description}
                     tags={layer.tags.slice(1, -1)}
+                    name={layer.name}
+                    bbox={layer.BoundingBox}
                   />
                 ))}
               </div>
