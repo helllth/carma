@@ -17,8 +17,9 @@ import { useContext, useState } from 'react';
 import { getMode } from './../store/slices/ui';
 // @ts-ignore
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
-import LibModal from './Modals/LibModal';
+
 import './switch.css';
+import { LayerLib } from '@cismet/layer-lib';
 
 const { Search } = Input;
 
@@ -31,7 +32,7 @@ const TopNavbar = () => {
 
   return (
     <div className="h-16 w-full flex items-center relative justify-between py-2 px-[12px]">
-      <LibModal open={isModalOpen} setOpen={setIsModalOpen} />
+      <LayerLib open={isModalOpen} setOpen={setIsModalOpen} />
 
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2">

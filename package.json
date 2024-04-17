@@ -56,7 +56,8 @@
     "reproject": "^1.2.7",
     "sort-by": "^1.2.0",
     "tailwind-merge": "^2.2.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "wms-capabilities": "^0.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.5",

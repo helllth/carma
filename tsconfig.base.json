@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@cismet/document-viewer": ["libraries/document-viewer/src/index.ts"]
+      "@cismet/document-viewer": ["libraries/document-viewer/src/index.ts"],
+      "@cismet/layer-lib": ["libraries/layer-lib/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
