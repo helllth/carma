@@ -9,6 +9,19 @@ const { Search } = Input;
 // @ts-ignore
 const parser = new WMSCapabilities();
 
+const fullBboxLayers = [
+  'wuppertal:2004',
+  'wuppertal:1979',
+  'wuppertal:1929',
+  'wuppertal:1827',
+  'R102:UEK125',
+  'Hitze-Ist',
+  'Hitze-Stark-Ist',
+  'Hitze-2050',
+  'Frischluftschneisen',
+  'Freiflaechen',
+];
+
 interface LayerItemProps {
   title: string;
   description: string;
@@ -16,7 +29,6 @@ interface LayerItemProps {
   name: string;
   bbox: any;
   getMapUrl: string;
-  categoryTitle: string;
 }
 
 const LayerItem = ({
@@ -26,13 +38,12 @@ const LayerItem = ({
   name,
   bbox,
   getMapUrl,
-  categoryTitle,
 }: LayerItemProps) => {
   const box = bbox.find((box: any) => box.crs === 'EPSG:25832').extent;
   const url = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=256&height=256&srs=EPSG%3A25832&bbox=374813.20252403466,5681918.144256154,374966.07658060483,5682071.018312723`;
-  const umweltUrl = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
+  const bboxUrl = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=512&srs=EPSG%3A25832&bbox=${
     box[0]
@@ -44,12 +55,9 @@ const LayerItem = ({
 
   return (
     <div className="flex flex-col rounded-lg w-fit h-fit">
-      <button
-        className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]"
-        onClick={() => {}}
-      >
+      <button className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]">
         <img
-          src={categoryTitle.includes('Umwelt') ? umweltUrl : url}
+          src={fullBboxLayers.find((value) => value === name) ? bboxUrl : url}
           alt={title}
           className="object-cover h-full overflow-clip w-[calc(130%+7.2px)]"
         />
@@ -163,7 +171,6 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
                     name={layer.name}
                     bbox={layer.BoundingBox}
                     getMapUrl={layer.url}
-                    categoryTitle={topLayer.title}
                   />
                 ))}
               </div>
