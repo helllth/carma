@@ -27,15 +27,17 @@ const LayerItem = ({ thumbnail, title, description, tags }: LayerItemProps) => {
         />
       </button>
       <h3 className="text-lg">{title}</h3>
-      <p className="text-md text-gray-400">{description}</p>
-      <div>
+      <p className="text-md" style={{ color: 'rgba(0,0,0,0.7)' }}>
+        {description}
+      </p>
+      <p style={{ color: 'rgba(0,0,0,0.5)', fontSize: '0.875rem' }}>
         {tags?.map((tag, i) => (
-          <span className="text-sm text-gray-200">
-            {tag}
-            {i + 1 < tags.length && ' - '}
-          </span>
+          <>
+            <span>{tag}</span>
+            {i + 1 < tags.length && <span> · </span>}
+          </>
         ))}
-      </div>
+      </p>
     </div>
   );
 };
@@ -105,7 +107,7 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
         <div className="">
           {layers.map((topLayer) => (
             <div id={topLayer.title}>
-              <p>{topLayer.title}</p>
+              <p className="mb-4 text-2xl font-semibold">{topLayer.title}</p>
               <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
                 {topLayer.layers.map((layer: any) => (
                   <LayerItem
