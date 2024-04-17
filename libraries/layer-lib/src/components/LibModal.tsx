@@ -15,6 +15,7 @@ interface LayerItemProps {
   tags?: string[];
   name: string;
   bbox: any;
+  getMapUrl: string;
 }
 
 const LayerItem = ({
@@ -23,9 +24,10 @@ const LayerItem = ({
   tags,
   name,
   bbox,
+  getMapUrl,
 }: LayerItemProps) => {
   const box = bbox.find((box: any) => box.crs === 'EPSG:25832').extent;
-  const url = `https://maps.wuppertal.de/karten?service=WMS&request=GetMap&layers=${encodeURIComponent(
+  const url = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=512&srs=EPSG%3A25832&bbox=374278.143326039,5681612.396143014,374354.58035432384,5681688.8331713`;
   //   const test = `https://maps.wuppertal.de/karten?service=WMS&request=GetMap&layers=${encodeURIComponent(
@@ -49,10 +51,10 @@ const LayerItem = ({
       </p>
       <p style={{ color: 'rgba(0,0,0,0.5)', fontSize: '0.875rem' }}>
         {tags?.map((tag, i) => (
-          <>
+          <span key={'tag_' + tag + '_' + i}>
             <span>{tag}</span>
             {i + 1 < tags.length && <span> · </span>}
-          </>
+          </span>
         ))}
       </p>
     </div>
@@ -67,25 +69,39 @@ export interface LibModalProps {
 const LibModal = ({ open, setOpen }: LibModalProps) => {
   const [layers, setLayers] = useState<any[]>([]);
 
-  const getDataFromJson = (data: any) => {
-    // console.log(data);
-    const flattenedLayers = [];
-    const rootLayer = data.Capability.Layer;
-    flattenedLayers.push(flattenLayer(rootLayer));
+  const layerNames = [
+    'karten',
+    'gebiet',
+    'immo',
+    'infra',
+    'inspire',
+    'planung',
+    'poi',
+    'umwelt',
+    'verkehr',
+  ];
 
-    console.log(flattenedLayers);
-    setLayers(flattenedLayers);
+  const getDataFromJson = (data: any) => {
+    const flattenedLayers: any[] = [];
+    const rootLayer = data.Capability.Layer;
+    const getUrl =
+      data.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
+    flattenedLayers.push(flattenLayer(rootLayer, [], getUrl));
+
+    setLayers((prev) => [...prev, flattenedLayers[0]]);
   };
 
   useEffect(() => {
-    fetch('/karten.xml')
-      .then((response) => {
-        return response.text();
-      })
-      .then((text) => {
-        const result = parser.toJSON(text);
-        getDataFromJson(result);
-      });
+    layerNames.forEach((layer) => {
+      fetch(`/${layer}.xml`)
+        .then((response) => {
+          return response.text();
+        })
+        .then((text) => {
+          const result = parser.toJSON(text);
+          getDataFromJson(result);
+        });
+    });
   }, []);
 
   return (
@@ -111,10 +127,12 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
         </div>
         <Tabs
           defaultActiveKey="1"
-          items={[
-            { key: 'general', label: 'General' },
-            { key: 'boundaries', label: 'Boundaries' },
-          ]}
+          items={layerNames.map((layer) => {
+            return {
+              key: ' WMS ' + layer.charAt(0).toUpperCase() + layer.slice(1),
+              label: layer.charAt(0).toUpperCase() + layer.slice(1),
+            };
+          })}
           onTabClick={(key) => {
             document
               .getElementById(key)
@@ -123,16 +141,19 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
         />
         <div className="">
           {layers.map((topLayer) => (
-            <div id={topLayer.title}>
-              <p className="mb-4 text-2xl font-semibold">{topLayer.title}</p>
+            <div id={topLayer.title.split('-')[1]}>
+              <p className="mb-4 text-2xl font-semibold">
+                {topLayer.title.split('-')[1]}
+              </p>
               <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
-                {topLayer.layers.map((layer: any) => (
+                {topLayer?.layers?.map((layer: any) => (
                   <LayerItem
                     title={layer.title}
                     description={layer.description}
                     tags={layer.tags.slice(1, -1)}
                     name={layer.name}
                     bbox={layer.BoundingBox}
+                    getMapUrl={layer.url}
                   />
                 ))}
               </div>

@@ -1,4 +1,4 @@
-export const flattenLayer = (layer: any, parentTitles = []) => {
+export const flattenLayer = (layer: any, parentTitles = [], url: string) => {
   const layerTitle = layer.Title;
   const layerTags = [...parentTitles, layerTitle];
 
@@ -14,12 +14,13 @@ export const flattenLayer = (layer: any, parentTitles = []) => {
     noSubsets: layer.noSubsets,
     opaque: layer.opaque,
     queryable: layer.queryable,
+    url,
   };
 
   if (layer.Layer) {
     const childLayers: any[] = [];
     layer.Layer.forEach((subLayer: any) => {
-      const flattennedSubLayer = flattenLayer(subLayer, layerTags);
+      const flattennedSubLayer = flattenLayer(subLayer, layerTags, url);
       if (flattennedSubLayer?.layers) {
         childLayers.push(...flattennedSubLayer.layers);
         delete flattennedSubLayer.layers;
