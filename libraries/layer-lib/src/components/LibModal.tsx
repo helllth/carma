@@ -54,7 +54,7 @@ const LayerItem = ({
   const match = description?.match(regex);
 
   return (
-    <div className="flex flex-col rounded-lg w-fit h-fit">
+    <div className="flex flex-col rounded-lg w-full h-fit">
       <button className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]">
         <img
           src={fullBboxLayers.find((value) => value === name) ? bboxUrl : url}
