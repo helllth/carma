@@ -5,6 +5,7 @@ import WMSCapabilities from 'wms-capabilities';
 import { useEffect, useState } from 'react';
 import { flattenLayer } from '../helper/layerHelper';
 const { Search } = Input;
+import './modal.css';
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -143,49 +144,52 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
       wrapClassName="h-full"
       className="h-[90%]"
     >
-      <div className="w-full h-full flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <h1 className="mb-0 text-2xl font-semibold">Layer Library</h1>
-          <Search placeholder="Layer durchsuchen" className="w-[76%]" />
-          <Button type="text">Frage einen neuen Layer an</Button>
-          <Button type="text" onClick={() => setOpen(false)}>
-            <FontAwesomeIcon icon={faX} />
-          </Button>
+      <div className="w-full h-full flex flex-col">
+        <div className="sticky top-0 px-6 pt-6">
+          <div className="flex justify-between items-center">
+            <h1 className="mb-0 text-2xl font-semibold">Layer Library</h1>
+            <Search placeholder="Layer durchsuchen" className="w-[76%]" />
+            <Button type="text" onClick={() => setOpen(false)}>
+              <FontAwesomeIcon icon={faX} />
+            </Button>
+          </div>
+          <Tabs
+            defaultActiveKey="1"
+            items={layerNames.map((layer) => {
+              return {
+                key: ' WMS ' + layer.charAt(0).toUpperCase() + layer.slice(1),
+                label: layer.charAt(0).toUpperCase() + layer.slice(1),
+              };
+            })}
+            onTabClick={(key) => {
+              document
+                .getElementById(key)
+                ?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          />
         </div>
-        <Tabs
-          defaultActiveKey="1"
-          items={layerNames.map((layer) => {
-            return {
-              key: ' WMS ' + layer.charAt(0).toUpperCase() + layer.slice(1),
-              label: layer.charAt(0).toUpperCase() + layer.slice(1),
-            };
-          })}
-          onTabClick={(key) => {
-            document
-              .getElementById(key)
-              ?.scrollIntoView({ behavior: 'smooth' });
-          }}
-        />
-        <div className="">
-          {layers.map((topLayer) => (
-            <div id={topLayer.title.split('-')[1]}>
-              <p className="mb-4 text-2xl font-semibold">
-                {topLayer.title.split('-')[1]}
-              </p>
-              <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
-                {topLayer?.layers?.map((layer: any) => (
-                  <LayerItem
-                    title={layer.title}
-                    description={layer.description}
-                    tags={layer.tags.slice(1, -1)}
-                    name={layer.name}
-                    bbox={layer.BoundingBox}
-                    getMapUrl={layer.url}
-                  />
-                ))}
+        <div className="overflow-auto">
+          <div className="p-6">
+            {layers.map((topLayer) => (
+              <div id={topLayer.title.split('-')[1]}>
+                <p className="mb-4 text-2xl font-semibold">
+                  {topLayer.title.split('-')[1]}
+                </p>
+                <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
+                  {topLayer?.layers?.map((layer: any) => (
+                    <LayerItem
+                      title={layer.title}
+                      description={layer.description}
+                      tags={layer.tags.slice(1, -1)}
+                      name={layer.name}
+                      bbox={layer.BoundingBox}
+                      getMapUrl={layer.url}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </Modal>
