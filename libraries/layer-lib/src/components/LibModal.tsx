@@ -1,11 +1,12 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Input, Modal, Spin, Tabs } from 'antd';
+import { Button, Input, Modal, Spin } from 'antd';
 import WMSCapabilities from 'wms-capabilities';
 import { useEffect, useState } from 'react';
 import { flattenLayer } from '../helper/layerHelper';
 const { Search } = Input;
 import './modal.css';
+import LayerTabs from './LayerTabs';
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -153,25 +154,12 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
               <FontAwesomeIcon icon={faX} />
             </Button>
           </div>
-          <Tabs
-            defaultActiveKey="1"
-            items={layerNames.map((layer) => {
-              return {
-                key: ' WMS ' + layer.charAt(0).toUpperCase() + layer.slice(1),
-                label: layer.charAt(0).toUpperCase() + layer.slice(1),
-              };
-            })}
-            onTabClick={(key) => {
-              document
-                .getElementById(key)
-                ?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          />
+          {layers.length > 0 && <LayerTabs />}
         </div>
         <div className="overflow-auto">
           <div className="p-6">
             {layers.map((topLayer) => (
-              <div id={topLayer.title.split('-')[1]}>
+              <div id={topLayer.title.split('-')[1].substring(1)}>
                 <p className="mb-4 text-2xl font-semibold">
                   {topLayer.title.split('-')[1]}
                 </p>
