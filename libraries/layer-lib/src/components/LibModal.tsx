@@ -1,6 +1,6 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Input, Modal, Tabs } from 'antd';
+import { Button, Input, Modal, Spin, Tabs } from 'antd';
 import WMSCapabilities from 'wms-capabilities';
 import { useEffect, useState } from 'react';
 import { flattenLayer } from '../helper/layerHelper';
@@ -53,13 +53,24 @@ const LayerItem = ({
 
   const match = description?.match(regex);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <div className="flex flex-col rounded-lg w-full h-fit">
       <button className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]">
+        {isLoading && (
+          <div style={{ position: 'absolute', left: '50%' }}>
+            <Spin />
+          </div>
+        )}
+
         <img
           src={fullBboxLayers.find((value) => value === name) ? bboxUrl : url}
           alt={title}
           className="object-cover h-full overflow-clip w-[calc(130%+7.2px)]"
+          onLoad={(e) => {
+            setIsLoading(false);
+          }}
         />
       </button>
       <h3 className="text-lg">{title}</h3>
@@ -120,7 +131,6 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
         });
     });
   }, []);
-
   return (
     <Modal
       open={open}
