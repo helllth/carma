@@ -154,7 +154,7 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
               <FontAwesomeIcon icon={faX} />
             </Button>
           </div>
-          {layers.length > 0 && <LayerTabs />}
+          {layers.length > 0 && <LayerTabs layers={layers} />}
         </div>
         <div className="overflow-auto">
           <div className="p-6">

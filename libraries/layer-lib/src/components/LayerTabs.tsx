@@ -1,20 +1,12 @@
-import { Tabs } from 'antd';
+import { Badge, Tabs } from 'antd';
 import { useState } from 'react';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
-const LayerTabs = () => {
-  const layerNames = [
-    'karten',
-    'gebiet',
-    'immo',
-    'infra',
-    'inspire',
-    'planung',
-    'poi',
-    'umwelt',
-    'verkehr',
-  ];
+interface LayerTabsProps {
+  layers: any[];
+}
 
+const LayerTabs = ({ layers }: LayerTabsProps) => {
   const [activeId, setActiveId] = useState<string>();
 
   const layerIds = [
@@ -35,10 +27,16 @@ const LayerTabs = () => {
     <>
       <Tabs
         defaultActiveKey="1"
-        items={layerNames.map((layer, i) => {
+        items={layers.map((layer, i) => {
           return {
             key: layerIds[i],
-            label: layer.charAt(0).toUpperCase() + layer.slice(1),
+            label: (
+              <div className="flex items-center gap-2">
+                <span>{layerIds[i]}</span>
+                <Badge count={layer.layers.length} color="#808080" />
+              </div>
+            ),
+            disabled: layer.layers.length === 0,
           };
         })}
         activeKey={activeId}
