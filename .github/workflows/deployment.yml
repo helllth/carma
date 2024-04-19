@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       project-name:
-        description: 'Please enter a project name (Default=Deployment)'
+        description: 'Please enter a project name'
         required: true
   push:
     branches:
