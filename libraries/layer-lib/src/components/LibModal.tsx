@@ -203,24 +203,28 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
         </div>
         <div className="overflow-auto">
           <div className="p-6">
-            {layers.map((topLayer) => (
-              <div id={topLayer.title.split('-')[1].substring(1)}>
-                <p className="mb-4 text-2xl font-semibold">
-                  {topLayer.title.split('-')[1]}
-                </p>
-                <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
-                  {topLayer?.layers?.map((layer: any) => (
-                    <LayerItem
-                      title={layer.title}
-                      description={layer.description}
-                      tags={layer.tags.slice(1, -1)}
-                      name={layer.name}
-                      bbox={layer.BoundingBox}
-                      getMapUrl={layer.url}
-                    />
-                  ))}
-                </div>
-              </div>
+            {layers.map((category) => (
+              <>
+                {category.layers.length > 0 && (
+                  <div id={category.title.split('-')[1].substring(1)}>
+                    <p className="mb-4 text-2xl font-semibold">
+                      {category.title.split('-')[1]}
+                    </p>
+                    <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
+                      {category?.layers?.map((layer: any) => (
+                        <LayerItem
+                          title={layer.title}
+                          description={layer.description}
+                          tags={layer.tags.slice(1, -1)}
+                          name={layer.name}
+                          bbox={layer.BoundingBox}
+                          getMapUrl={layer.url}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
             ))}
           </div>
         </div>
