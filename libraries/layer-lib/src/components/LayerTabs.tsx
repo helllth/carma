@@ -33,7 +33,9 @@ const LayerTabs = ({ layers }: LayerTabsProps) => {
             label: (
               <div className="flex items-center gap-2">
                 <span>{layerIds[i]}</span>
-                <Badge count={layer.layers.length} color="#808080" />
+                {layer.layers.length > 0 && (
+                  <Badge count={layer.layers.length} color="#808080" />
+                )}
               </div>
             ),
             disabled: layer.layers.length === 0,
