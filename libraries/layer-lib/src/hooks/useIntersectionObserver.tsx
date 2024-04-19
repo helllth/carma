@@ -16,11 +16,8 @@ export const useIntersectionObserver = (
       });
 
       const getIndexFromId = (id) => {
-        console.log(id);
         elements.findIndex((heading) => heading.id === id);
       };
-
-      console.log(visibleHeadings);
 
       if (visibleHeadings.length === 1) {
         setActiveId(visibleHeadings[0].target.id);
@@ -33,7 +30,7 @@ export const useIntersectionObserver = (
     };
 
     const observer = new IntersectionObserver(callback, {
-      rootMargin: '-20px 0px -20% 0px',
+      rootMargin: '-100px 0px -20% 0px',
     });
     const elements: HTMLElement[] = [];
 
