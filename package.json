@@ -26,6 +26,7 @@
     "clsx": "^2.1.0",
     "dagre": "^0.8.5",
     "dayjs": "^1.11.10",
+    "fuse.js": "^7.0.0",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "graphviz-react": "^1.2.5",

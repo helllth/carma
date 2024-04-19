@@ -7,6 +7,8 @@ import { flattenLayer } from '../helper/layerHelper';
 const { Search } = Input;
 import './modal.css';
 import LayerTabs from './LayerTabs';
+import './text.css';
+import Fuse from 'fuse.js';
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -76,7 +78,7 @@ const LayerItem = ({
         />
       </button>
       <h3 className="text-lg">{title}</h3>
-      <p className="text-md" style={{ color: 'rgba(0,0,0,0.7)' }}>
+      <p className="text-md line-clamp-3" style={{ color: 'rgba(0,0,0,0.7)' }}>
         {match && match.length > 1 ? match[1].trim() : description}
       </p>
       <p style={{ color: 'rgba(0,0,0,0.5)', fontSize: '0.875rem' }}>
@@ -98,6 +100,14 @@ export interface LibModalProps {
 
 const LibModal = ({ open, setOpen }: LibModalProps) => {
   const [layers, setLayers] = useState<any[]>([]);
+  const [allLayers, setAllLayers] = useState<any[]>([]);
+
+  const flattenedLayers = layers.flatMap((obj) => obj.layers);
+  const fuse = new Fuse(flattenedLayers, {
+    keys: ['title'],
+    shouldSort: false,
+    includeMatches: true,
+  });
 
   const layerNames = [
     'karten',
@@ -119,6 +129,7 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
     flattenedLayers.push(flattenLayer(rootLayer, [], getUrl));
 
     setLayers((prev) => [...prev, flattenedLayers[0]]);
+    setAllLayers((prev) => [...prev, flattenedLayers[0]]);
   };
 
   useEffect(() => {
@@ -133,6 +144,7 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
         });
     });
   }, []);
+
   return (
     <Modal
       open={open}
@@ -149,7 +161,40 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
         <div className="sticky top-0 px-6 pt-6">
           <div className="flex justify-between items-center">
             <h1 className="mb-0 text-2xl font-semibold">Layer Library</h1>
-            <Search placeholder="Layer durchsuchen" className="w-[76%]" />
+            <Search
+              placeholder="Layer durchsuchen"
+              className="w-[76%]"
+              onSearch={(value) => {
+                if (value) {
+                  const results = fuse.search(value);
+                  // have to use allLayers.map to create a deep copy so the allLayers state wont change here
+                  const resultsWithCategories = allLayers.map((item) => {
+                    return {
+                      ...item,
+                    };
+                  });
+
+                  resultsWithCategories.map((category) => {
+                    const newLayers: any[] = [];
+
+                    results.forEach((result) => {
+                      if (category.title === result.item.tags[0]) {
+                        newLayers.push({
+                          ...result.item,
+                          highlight: result.matches,
+                        });
+                      }
+                    });
+
+                    category.layers = newLayers;
+                  });
+
+                  setLayers(resultsWithCategories);
+                } else {
+                  setLayers(allLayers);
+                }
+              }}
+            />
             <Button type="text" onClick={() => setOpen(false)}>
               <FontAwesomeIcon icon={faX} />
             </Button>
