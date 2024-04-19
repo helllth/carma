@@ -10,14 +10,6 @@
           "dev": {
             "org": "carma-dev-deployments",
             "prj": "topicmaps-stadtplan"
-          },
-          "alpha": {
-            "org": "carma-dev-deployments",
-            "prj": "stadtplan-alpha"
-          },
-          "omega": {
-            "org": "carma-dev-deployments",
-            "prj": "stadtplan-omega"
           }
         }
       },
