@@ -33,6 +33,7 @@ interface LayerItemProps {
   name: string;
   bbox: any;
   getMapUrl: string;
+  highlight?: any;
 }
 
 const LayerItem = ({
@@ -42,6 +43,7 @@ const LayerItem = ({
   name,
   bbox,
   getMapUrl,
+  highlight,
 }: LayerItemProps) => {
   const box = bbox.find((box: any) => box.crs === 'EPSG:25832').extent;
   const url = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
@@ -58,6 +60,8 @@ const LayerItem = ({
   const match = description?.match(regex);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const hightlightTextIndexes = highlight && highlight[0].indices[0];
 
   return (
     <div className="flex flex-col rounded-lg w-full h-fit">
@@ -77,7 +81,28 @@ const LayerItem = ({
           }}
         />
       </button>
-      <h3 className="text-lg">{title}</h3>
+      <h3 className="text-lg">
+        {hightlightTextIndexes ? (
+          <>
+            {title.substring(0, hightlightTextIndexes[0])}
+            <span
+              style={{
+                backgroundColor: 'rgba(240, 215, 139, 0.8)',
+                padding: '0 0.08em',
+              }}
+            >
+              {title.substring(
+                hightlightTextIndexes[0],
+                hightlightTextIndexes[1] + 1
+              )}
+            </span>
+
+            {title.substring(hightlightTextIndexes[1] + 1)}
+          </>
+        ) : (
+          title
+        )}
+      </h3>
       <p className="text-md line-clamp-3" style={{ color: 'rgba(0,0,0,0.7)' }}>
         {match && match.length > 1 ? match[1].trim() : description}
       </p>
@@ -219,6 +244,7 @@ const LibModal = ({ open, setOpen }: LibModalProps) => {
                           name={layer.name}
                           bbox={layer.BoundingBox}
                           getMapUrl={layer.url}
+                          highlight={layer.highlight}
                         />
                       ))}
                     </div>
