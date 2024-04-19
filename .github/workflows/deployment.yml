@@ -1,0 +1,237 @@
+name: Deployment
+
+run-name: ${{ inputs.project-name || github.event.head_commit.message }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      project-name:
+        description: 'Please enter a project name (Default=Deployment)'
+        required: true
+  push:
+    branches:
+      - dev
+      - omega
+      - alpha
+
+jobs:
+  split_nx_projects:
+    if: "!contains(github.event.head_commit.message, 'skip-deploy') && !contains(github.event.head_commit.message, 'no-deploy')"
+    runs-on: ubuntu-latest
+    outputs:
+      project_list: ${{ steps.set_up_matrix.outputs.project_list }}
+      is_affected: ${{ steps.myaction.outputs.stdout != '' }}
+
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set Directory as Safe
+        run: |
+          git config --local --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        id: setSHAs
+        uses: nrwl/nx-set-shas@v4
+        with:
+          main-branch-name: ${{ steps.extract_branch.outputs.branch }}
+
+      - run: |
+          echo "BASE: ${{ steps.setSHAs.outputs.base }}"
+          echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
+
+      - name: Run nx command to show affected projects
+        uses: gh640/command-result-action@v1
+        with:
+          command: npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
+        id: myaction
+
+      - name: Set up matrix
+        if: steps.myaction.outputs.stdout != ''
+        id: set_up_matrix
+        run: |
+          cleaned_output=$(echo "${{ steps.myaction.outputs.stdout }}" | tr '\t\n' ' ')
+
+          IFS=' ' read -r -a words <<< "$cleaned_output"
+
+          json_array="["
+          for word in "${words[@]}"
+          do
+            json_array+="\"$word\","
+          done
+          json_array="${json_array%,}"
+          json_array+="]"
+
+          echo "::set-output name=project_list::$json_array"
+
+      - name: Show project list
+        run: echo "The project list is ${{ steps.set_up_matrix.outputs.project_list }}"
+
+  build:
+    needs: split_nx_projects
+    runs-on: ubuntu-latest
+    if: ${{ needs.split_nx_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == '' }}
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    strategy:
+      matrix:
+        project: ${{fromJson(needs.split_nx_projects.outputs.project_list)}}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install Nx
+        run: npm install nx@17.2.8
+
+      - name: Read project config
+        id: read_project_config
+        run: echo "::set-output name=config::$(cat deployment-config.json)"
+        shell: bash
+
+      - name: Extract branch name build
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Debug branch variable
+        run: echo "branch variable" ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Process deploy steps
+        id: process_deploy_steps
+        run: |
+          config=$(cat deployment-config.json)
+          deploymentProject=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.repo)
+          baseUrl=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.base)
+          orgDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.org)
+          prjDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.prj)
+          projectPath=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].projectPath')
+          echo "DEPLOYMENT_PROJECT=${deploymentProject}" >> $GITHUB_ENV
+          echo "BASE_URL=${baseUrl}" >> $GITHUB_ENV
+          echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
+          echo "ORG_DEPLOY=${orgDeploy}" >> $GITHUB_ENV
+          echo "PRJ_DEPLOY=${prjDeploy}" >> $GITHUB_ENV
+          echo "    publish_dir: ${{ env.PROJECT_PATH }}"
+        shell: bash
+
+      - name: Build project
+        run: |
+          if [ "${{ env.BASE_URL }}" = "null" ]; then
+            base_url="https://${{ env.ORG_DEPLOY }}.github.io/${{ env.PRJ_DEPLOY }}/"
+          else
+            base_url="${{ env.BASE_URL }}"
+          fi
+
+          npx nx run ${{ matrix.project }}:build --configuration=production --base="$base_url"
+        shell: bash
+
+      - name: Build deployment project link
+        run: |
+          if [ "${{ env.DEPLOYMENT_PROJECT }}" = "null" ]; then
+            deployment_project="${{ env.ORG_DEPLOY }}/${{ env.PRJ_DEPLOY }}"
+          else
+            deployment_project="${{ env.DEPLOYMENT_PROJECT }}"
+          fi
+          echo "EXTERNAL_REPO=${deployment_project}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Debug deployment variables
+        run: |
+          echo "DEBUG: deploymentProject = ${{ env.DEPLOYMENT_PROJECT }}"
+          echo "DEBUG: projectPath = ${{ env.PROJECT_PATH }}",
+          echo "DEBUG: baseUrl = ${{ env.BASE_URL }}",
+        shell: bash
+
+      - name: Deploy using GH Pages action
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
+          # deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          external_repository: ${{ env.EXTERNAL_REPO }}
+          publish_dir: ${{ env.PROJECT_PATH }}
+
+  single_build:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.project-name != '' }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Nx
+        run: npm install nx@17.2.8
+
+      - name: Get properties from json
+        id: find_project
+        run: |
+          config=$(cat deployment-config.json)
+          project_name="${{ github.event.inputs.project-name }}"
+          echo "Project name is: $project_name"
+          deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.repo')
+          baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.base')
+          orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.org')
+          prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.prj')
+          projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
+          echo "Deploymen Project name is: $deploymentManual"
+          echo "Project Path is: $deploymentManual"
+          echo "DEPLOYMENT_MANUAL=${deploymentManual}" >> $GITHUB_ENV
+          echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
+          echo "BASE_URL=${baseUrl}" >> $GITHUB_ENV
+          echo "ORG_DEPLOY=${orgDeploy}" >> $GITHUB_ENV
+          echo "PRJ_DEPLOY=${prjDeploy}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Build project
+        run: |
+          if [ "${{ env.BASE_URL }}" = "null" ]; then
+            base_url="https://${{ env.ORG_DEPLOY }}.github.io/${{ env.PRJ_DEPLOY }}/"
+          else
+            base_url="${{ env.BASE_URL }}"
+          fi
+
+          npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url"
+        shell: bash
+
+      - name: Build deployment project link
+        run: |
+          if [ "${{ env.DEPLOYMENT_MANUAL }}" = "null" ]; then
+            deployment_project="${{ env.ORG_DEPLOY }}/${{ env.PRJ_DEPLOY }}"
+          else
+            deployment_project="${{ env.DEPLOYMENT_MANUAL }}"
+          fi
+          echo "EXTERNAL_REPO=${deployment_project}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Show deployment project and project path
+        run: |
+          echo "DEPLOYMENT_MANUAL: $DEPLOYMENT_MANUAL"
+          echo "PROJECT_PATH: $PROJECT_PATH"
+          echo "DEPLOYMENT_AUTO: $DEPLOYMENT_AUTO"
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
+          # deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          external_repository: ${{ env.EXTERNAL_REPO}}
+          publish_dir: ${{ env.PROJECT_PATH }}
