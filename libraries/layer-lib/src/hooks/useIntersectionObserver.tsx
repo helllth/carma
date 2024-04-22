@@ -15,21 +15,21 @@ export const useIntersectionObserver = (
         if (headingElement.isIntersecting) visibleHeadings.push(headingElement);
       });
 
-      const getIndexFromId = (id) => {
-        elements.findIndex((heading) => heading.id === id);
+      const getIndexFromId = (id: any) => {
+        return elements.findIndex((heading) => heading.id === id);
       };
 
       if (visibleHeadings.length === 1) {
         setActiveId(visibleHeadings[0].target.id);
       } else if (visibleHeadings.length > 1) {
         const sortedVisibleHeadings = visibleHeadings.sort(
-          (a, b) => getIndexFromId(a.target.id) > getIndexFromId(b.target.id)
+          (a, b) => getIndexFromId(a.target.id) - getIndexFromId(b.target.id)
         );
         setActiveId(sortedVisibleHeadings[0].target.id);
       }
     };
 
-    const observer = new IntersectionObserver(callback, {
+    const observer = new IntersectionObserver(callback as any, {
       rootMargin: '-100px 0px -20% 0px',
     });
     const elements: HTMLElement[] = [];

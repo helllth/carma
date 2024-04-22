@@ -1,8 +1,12 @@
-export const flattenLayer = (layer: any, parentTitles = [], url: string) => {
+export const flattenLayer = (
+  layer: any,
+  parentTitles: any = [],
+  url: string
+) => {
   const layerTitle = layer.Title;
   const layerTags = [...parentTitles, layerTitle];
 
-  const flattenedLayer = {
+  const flattenedLayer: any = {
     title: layerTitle,
     name: layer.Name ? layer.Name : '',
     description: layer.Abstract,
