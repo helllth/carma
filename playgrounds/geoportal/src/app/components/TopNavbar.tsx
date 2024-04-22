@@ -23,7 +23,11 @@ import { LayerLib } from '@cismet/layer-lib';
 
 const { Search } = Input;
 
-const TopNavbar = () => {
+interface NavProps {
+  setAdditionalLayers: any;
+}
+
+const TopNavbar = ({ setAdditionalLayers }: NavProps) => {
   const dispatch = useDispatch();
   const mode = useSelector(getMode);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +36,11 @@ const TopNavbar = () => {
 
   return (
     <div className="h-16 w-full flex items-center relative justify-between py-2 px-[12px]">
-      <LayerLib open={isModalOpen} setOpen={setIsModalOpen} />
+      <LayerLib
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        setAdditionalLayers={setAdditionalLayers}
+      />
 
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2">
