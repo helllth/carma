@@ -49,8 +49,18 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
       data.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
     flattenedLayers.push(flattenLayer(rootLayer, [], getUrl));
 
-    setLayers((prev) => [...prev, flattenedLayers[0]]);
-    setAllLayers((prev) => [...prev, flattenedLayers[0]]);
+    setLayers((prev) => {
+      const newLayers = [...prev, flattenedLayers[0]];
+      newLayers.sort((a, b) => b.layers.length - a.layers.length);
+
+      return newLayers;
+    });
+    setAllLayers((prev) => {
+      const newLayers = [...prev, flattenedLayers[0]];
+      newLayers.sort((a, b) => b.layers.length - a.layers.length);
+
+      return newLayers;
+    });
   };
 
   useEffect(() => {
