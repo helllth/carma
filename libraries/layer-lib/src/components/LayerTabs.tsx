@@ -28,11 +28,12 @@ const LayerTabs = ({ layers }: LayerTabsProps) => {
       <Tabs
         defaultActiveKey="1"
         items={layers.map((layer, i) => {
+          const title = layer.title.split('-')[1].substring(1);
           return {
-            key: layerIds[i],
+            key: title,
             label: (
               <div className="flex items-center gap-2">
-                <span>{layerIds[i]}</span>
+                <span>{title}</span>
                 {layer.layers.length > 0 && (
                   <Badge count={layer.layers.length} color="#808080" />
                 )}
