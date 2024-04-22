@@ -7,7 +7,6 @@ import { flattenLayer } from '../helper/layerHelper';
 const { Search } = Input;
 import './modal.css';
 import LayerTabs from './LayerTabs';
-import './text.css';
 import Fuse from 'fuse.js';
 import LibItem from './LibItem';
 
