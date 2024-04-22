@@ -230,9 +230,6 @@ function SearchComponent({
           setValue('');
         }}
       />
-      <span>
-        Try manually chart <i className="fas fa-chart-pie"></i>
-      </span>
       <AutoComplete
         options={options}
         style={{ width: 600, borderRadius: '2px' }}
@@ -243,7 +240,10 @@ function SearchComponent({
         onSelect={(value, option) => {
           internalGazetteerHitTrigger([option.sData]);
           // setGazetteerHit(option.sData);
-          if (option.sData.type === 'bezirke') {
+          if (
+            option.sData.type === 'bezirke' ||
+            option.sData.type === 'quartiere'
+          ) {
             setGazetteerHit(null);
           } else {
             setGazetteerHit(option.sData);
