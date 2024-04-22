@@ -13,51 +13,51 @@ on:
       - dev
       - omega
       - alpha
-      jobs:
-        split_nx_projects:
-          runs-on: ubuntu-latest
-          outputs:
-            project_list: ${{ steps.filter_projects.outputs.project_list }}
-            is_affected: ${{ steps.filter_projects.outputs.project_list != '[]' }}
-      
-          steps:
-            - uses: actions/checkout@v3
-              with:
-                fetch-depth: 0
-      
-            - name: Install dependencies
-              run: npm install
-      
-            - name: Set Directory as Safe
-              run: |
-                git config --local --add safe.directory "$GITHUB_WORKSPACE"
-      
-            - name: Run nx command to show affected projects
-              uses: gh640/command-result-action@v1
-              with:
-                command: npx nx show projects --affected -t build --base=${{ github.event.before }} --head=${{ github.sha }}
-              id: myaction
-      
-            - name: Filter projects with deployment configs
-              if: steps.myaction.outputs.stdout != ''
-              id: filter_projects
-              run: |
-                config=$(cat deployment-config.json)
-                affected_projects=(${{ steps.myaction.outputs.stdout }})
-                project_list=[]
-      
-                for project in "${affected_projects[@]}"
-                do
-                  path=$(echo "$config" | jq -r --arg project "$project" '.projects[$project].projectPath // "null"')
-                  if [ "$path" != "null" ]; then
-                    project_list+=("$project")
-                  fi
-                done
-      
-                echo "::set-output name=project_list::${project_list[@]}"
-        
-            - name: Show project list
-              run: echo "The project list is ${{ steps.filter_projects.outputs.project_list }}"
+jobs:
+    split_nx_projects:
+      runs-on: ubuntu-latest
+      outputs:
+        project_list: ${{ steps.filter_projects.outputs.project_list }}
+        is_affected: ${{ steps.filter_projects.outputs.project_list != '[]' }}
+  
+      steps:
+        - uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+  
+        - name: Install dependencies
+          run: npm install
+  
+        - name: Set Directory as Safe
+          run: |
+            git config --local --add safe.directory "$GITHUB_WORKSPACE"
+  
+        - name: Run nx command to show affected projects
+          uses: gh640/command-result-action@v1
+          with:
+            command: npx nx show projects --affected -t build --base=${{ github.event.before }} --head=${{ github.sha }}
+          id: myaction
+  
+        - name: Filter projects with deployment configs
+          if: steps.myaction.outputs.stdout != ''
+          id: filter_projects
+          run: |
+            config=$(cat deployment-config.json)
+            affected_projects=(${{ steps.myaction.outputs.stdout }})
+            project_list=[]
+  
+            for project in "${affected_projects[@]}"
+            do
+              path=$(echo "$config" | jq -r --arg project "$project" '.projects[$project].projectPath // "null"')
+              if [ "$path" != "null" ]; then
+                project_list+=("$project")
+              fi
+            done
+  
+            echo "::set-output name=project_list::${project_list[@]}"
+    
+        - name: Show project list
+          run: echo "The project list is ${{ steps.filter_projects.outputs.project_list }}"
       
 
   build:
