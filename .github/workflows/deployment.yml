@@ -13,83 +13,52 @@ on:
       - dev
       - omega
       - alpha
-
-jobs:
-  split_nx_projects:
-    if: "!contains(github.event.head_commit.message, 'skip-deploy') && !contains(github.event.head_commit.message, 'no-deploy')"
-    runs-on: ubuntu-latest
-    outputs:
-      project_list: ${{ steps.set_up_matrix.outputs.project_list }}
-      is_affected: ${{ steps.myaction.outputs.stdout != '' }}
-
-    permissions:
-      contents: read
-      actions: read
-      pages: write
-      id-token: write
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Cache npm cache and node modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Set Directory as Safe
-        run: |
-          git config --local --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Extract branch name
-        shell: bash
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-        id: extract_branch
-
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        id: setSHAs
-        uses: nrwl/nx-set-shas@v4
-        with:
-          main-branch-name: ${{ steps.extract_branch.outputs.branch }}
-
-      - run: |
-          echo "BASE: ${{ steps.setSHAs.outputs.base }}"
-          echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
-
-      - name: Run nx command to show affected projects
-        uses: gh640/command-result-action@v1
-        with:
-          command: npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
-        id: myaction
-
-      - name: Set up matrix
-        if: steps.myaction.outputs.stdout != ''
-        id: set_up_matrix
-        run: |
-          cleaned_output=$(echo "${{ steps.myaction.outputs.stdout }}" | tr '\t\n' ' ')
-
-          IFS=' ' read -r -a words <<< "$cleaned_output"
-
-          json_array="["
-          for word in "${words[@]}"
-          do
-            json_array+="\"$word\","
-          done
-          json_array="${json_array%,}"
-          json_array+="]"
-
-          echo "::set-output name=project_list::$json_array"
-
-      - name: Show project list
-        run: echo "The project list is ${{ steps.set_up_matrix.outputs.project_list }}"
+      jobs:
+        split_nx_projects:
+          runs-on: ubuntu-latest
+          outputs:
+            project_list: ${{ steps.filter_projects.outputs.project_list }}
+            is_affected: ${{ steps.filter_projects.outputs.project_list != '[]' }}
+      
+          steps:
+            - uses: actions/checkout@v3
+              with:
+                fetch-depth: 0
+      
+            - name: Install dependencies
+              run: npm install
+      
+            - name: Set Directory as Safe
+              run: |
+                git config --local --add safe.directory "$GITHUB_WORKSPACE"
+      
+            - name: Run nx command to show affected projects
+              uses: gh640/command-result-action@v1
+              with:
+                command: npx nx show projects --affected -t build --base=${{ github.event.before }} --head=${{ github.sha }}
+              id: myaction
+      
+            - name: Filter projects with deployment configs
+              if: steps.myaction.outputs.stdout != ''
+              id: filter_projects
+              run: |
+                config=$(cat deployment-config.json)
+                affected_projects=(${{ steps.myaction.outputs.stdout }})
+                project_list=[]
+      
+                for project in "${affected_projects[@]}"
+                do
+                  path=$(echo "$config" | jq -r --arg project "$project" '.projects[$project].projectPath // "null"')
+                  if [ "$path" != "null" ]; then
+                    project_list+=("$project")
+                  fi
+                done
+      
+                echo "::set-output name=project_list::${project_list[@]}"
+        
+            - name: Show project list
+              run: echo "The project list is ${{ steps.filter_projects.outputs.project_list }}"
+      
 
   build:
     needs: split_nx_projects
