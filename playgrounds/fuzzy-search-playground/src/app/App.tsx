@@ -28,7 +28,7 @@ export const getGazData = async (
   ]
 ) => {
   const prefix = 'GazDataForStories';
-  const sources = {};
+  const sources: any = {};
 
   sources.adressen = await md5FetchText(
     prefix,
@@ -116,9 +116,7 @@ export function App() {
           doubleClickZoom={false}
           onclick={(e) => console.log('gazetteerHit', gazetteerHit)}
           ondblclick={(e) => console.log('doubleclick', e)}
-          autoFitProcessedHandler={() =>
-            this.props.mappingActions.setAutoFit(false)
-          }
+          autoFitProcessedHandler={() => {}}
           backgroundlayers={'rvrGrau'}
           urlSearchParams={urlSearchParams}
           fullScreenControlEnabled={false}
