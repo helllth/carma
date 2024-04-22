@@ -55,7 +55,9 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
 
   useEffect(() => {
     layerNames.forEach((layer) => {
-      fetch(`/${layer}.xml`)
+      fetch(
+        `https://maps.wuppertal.de//${layer}?service=WMS&request=GetCapabilities&version=1.1.1`
+      )
         .then((response) => {
           return response.text();
         })
