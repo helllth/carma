@@ -1,4 +1,4 @@
-import { Button, Radio } from 'antd';
+import { Button, Radio, message } from 'antd';
 // @ts-ignore
 import {
   faB,
@@ -36,28 +36,44 @@ const TopNavbar = () => {
   // @ts-ignore
   const { additionalLayerConfiguration } = useContext(TopicMapStylingContext);
 
+  const [messageApi, contextHolder] = message.useMessage();
+
   const updateLayers = (layer: any) => {
     const url = layer.getMapUrl.substring(0, layer.getMapUrl.length - 1);
-    const testLayer = {
+    let newAdditionalLayers;
+    newAdditionalLayers = { ...additionalLayerConfiguration };
+    newAdditionalLayers[layer.title.replace(/\s/g, '_').toLowerCase()] = {
       title: layer.title,
       layer: (
         <StyledWMSTileLayer
-          key="test"
+          key={`key_${layer.title}`}
           type="wms"
           url={url}
           layers={layer.name}
+          format="image/png"
+          tiled={true}
+          transparent="true"
+          opacity={0.7}
         />
       ),
     };
-    setAdditionalLayerConfiguration({
-      testLayer: {
-        ...testLayer,
-      },
-    });
+    try {
+      setAdditionalLayerConfiguration(newAdditionalLayers);
+      messageApi.open({
+        type: 'success',
+        content: 'Layer wurde erfolgreich hinzugefügt.',
+      });
+    } catch {
+      messageApi.open({
+        type: 'error',
+        content: 'Es gab einen Fehler beim hinzufügen des Layers.',
+      });
+    }
   };
 
   return (
     <div className="h-16 w-full flex items-center relative justify-between py-2 px-[12px]">
+      {contextHolder}
       <LayerLib
         open={isModalOpen}
         setOpen={setIsModalOpen}
