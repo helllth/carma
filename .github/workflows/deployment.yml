@@ -58,7 +58,7 @@ jobs:
     
         - name: Show project list
           run: echo "The project list is ${{ steps.filter_projects.outputs.project_list }}"
-      
+
 
   build:
     needs: split_nx_projects
@@ -213,3 +213,4 @@ jobs:
           # deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           external_repository: ${{ env.EXTERNAL_REPO}}
           publish_dir: ${{ env.PROJECT_PATH }}
+
