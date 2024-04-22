@@ -13,8 +13,13 @@ export default defineConfig({
     fs: {
       // Add the directory to the allow list
       allow: [
-        // Allow serving files from the leaflet-extra-markers/dist/img directory
-        '/Users/cismet/Desktop/dev/work/carma-monorepo/node_modules/leaflet-extra-markers/dist/img/',
+        // Add the directories containing the CSS files to the allow list
+        '/Users/cismet/Desktop/dev/work/carma-monorepo/node_modules/font-awesome/',
+        '/Users/cismet/Desktop/dev/work/carma-monorepo/node_modules/react-cismap/node_modules/react-leaflet-markercluster/dist/',
+        '/Users/cismet/Desktop/dev/work/carma-monorepo/node_modules/leaflet-fullscreen-custom-container-fork/dist/',
+        '/Users/cismet/Desktop/dev/work/carma-monorepo/node_modules/leaflet.locatecontrol/dist/',
+        '/Users/cismet/Desktop/dev/work/carma-monorepo/node_modules/leaflet-easybutton/src/',
+        '/Users/cismet/Desktop/dev/work/carma-monorepo/node_modules/react-cismap/',
       ],
     },
   },
