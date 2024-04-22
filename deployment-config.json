@@ -14,6 +14,36 @@
         }
       },
       "projectPath": "./dist/apps/topicmaps/stadtplan"
+    },
+    "fuzzy-search-playground": {
+      "deployment": {
+        "manual": {
+          "org": "carma-dev-playground-deployments",
+          "prj": "fuzzy-search-playground"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-playground-deployments",
+            "prj": "fuzzy-search-playground"
+          }
+        }
+      },
+      "projectPath": "./dist/playgrounds/fuzzy-search-playground"
+    },
+    "techdemo": {
+      "deployment": {
+        "manual": {
+          "org": "carma-dev-playground-deployments",
+          "prj": "techdemo"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-playground-deployments",
+            "prj": "techdemo"
+          }
+        }
+      },
+      "projectPath": "./dist/playgrounds/techdemo"
     }
   }
 }
