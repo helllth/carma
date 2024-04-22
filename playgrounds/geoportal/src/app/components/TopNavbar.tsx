@@ -1,5 +1,4 @@
-import { Button, Input, Radio } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button, Radio } from 'antd';
 // @ts-ignore
 import {
   faB,
@@ -14,32 +13,55 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
 // @ts-ignore
-import { getMode } from './../store/slices/ui';
-// @ts-ignore
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
+// @ts-ignore
+import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
+import {
+  TopicMapStylingContext,
+  TopicMapStylingDispatchContext,
+  // @ts-ignore
+} from 'react-cismap/contexts/TopicMapStylingContextProvider';
 
 import './switch.css';
 import { LayerLib } from '@cismet/layer-lib';
 
-const { Search } = Input;
-
-interface NavProps {
-  setAdditionalLayers: any;
-}
-
-const TopNavbar = ({ setAdditionalLayers }: NavProps) => {
-  const dispatch = useDispatch();
-  const mode = useSelector(getMode);
+const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
+  // @ts-ignore
+  const { setAdditionalLayerConfiguration } = useContext(
+    TopicMapStylingDispatchContext
+  );
+  // @ts-ignore
+  const { additionalLayerConfiguration } = useContext(TopicMapStylingContext);
+
+  const updateLayers = (layer: any) => {
+    const url = layer.getMapUrl.substring(0, layer.getMapUrl.length - 1);
+    const testLayer = {
+      title: layer.title,
+      layer: (
+        <StyledWMSTileLayer
+          key="test"
+          type="wms"
+          url={url}
+          layers={layer.name}
+        />
+      ),
+    };
+    setAdditionalLayerConfiguration({
+      testLayer: {
+        ...testLayer,
+      },
+    });
+  };
 
   return (
     <div className="h-16 w-full flex items-center relative justify-between py-2 px-[12px]">
       <LayerLib
         open={isModalOpen}
         setOpen={setIsModalOpen}
-        setAdditionalLayers={setAdditionalLayers}
+        setAdditionalLayers={updateLayers}
       />
 
       <div className="flex items-center gap-6">

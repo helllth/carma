@@ -14,8 +14,6 @@ import { MappingConstants } from 'react-cismap';
 import Map from './components/Map';
 // @ts-ignore
 import { getConvertItemToFeatureWithPOIColors } from './helper/convertItemToFeature';
-// @ts-ignore
-import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 import TopNavbar from './components/TopNavbar';
 if (typeof global === 'undefined') {
   window.global = window;
@@ -23,27 +21,6 @@ if (typeof global === 'undefined') {
 
 function App() {
   const [poiColors, setPoiColors] = useState();
-  const [additionalLayers, setAdditionalLayers] = useState<any>();
-
-  const updateLayers = (layer: any) => {
-    const url = layer.getMapUrl.substring(0, layer.getMapUrl.length - 1);
-    const testLayer = {
-      title: layer.title,
-      layer: (
-        <StyledWMSTileLayer
-          key="test"
-          type="wms"
-          url={url}
-          layers={layer.name}
-        />
-      ),
-    };
-    setAdditionalLayers({
-      testLayer: {
-        ...testLayer,
-      },
-    });
-  };
 
   return (
     <TopicMapContextProvider
@@ -51,12 +28,11 @@ function App() {
       referenceSystem={MappingConstants.crs25832}
       referenceSystemDefinition={MappingConstants.proj4crs25832def}
       convertItemToFeature={getConvertItemToFeatureWithPOIColors(poiColors)}
-      additionalLayerConfiguration={additionalLayers}
     >
       <div className="flex flex-col h-screen w-full">
-        <TopNavbar setAdditionalLayers={updateLayers} />
+        <TopNavbar />
 
-        <Map key={JSON.stringify(additionalLayers)} />
+        <Map />
       </div>
     </TopicMapContextProvider>
   );
