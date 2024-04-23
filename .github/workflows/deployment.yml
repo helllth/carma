@@ -293,6 +293,15 @@ jobs:
 
       - name: Install Nx
         run: npm install nx@17.2.8
+      - name: Debug Outputs
+        run: |
+          echo -----------------------------------
+          echo "-- Project name is: $PROJECT_NAME"
+          echo "ORG_DEPLOY: $ORG_DEPLOY"
+          echo "PROJECT_PATH: $PRJ_DEPLOY"
+          echo "BASE_URL: $BASE_URL"
+          echo "EXTERNAL_REPO: $EXTERNAL_REPO"
+          echo -----------------------------------
       - name: Build project
         run: |
           npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url"
