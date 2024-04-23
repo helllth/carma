@@ -48,3 +48,5 @@ apps/**/.env
 
 # Cypress screenshots
 report-cy/
+
+dispatch.*.event
