@@ -9,8 +9,6 @@ import LibreMap from './app/LibreMap';
 import SensorMap from './app/SensorMap';
 import Klima from './app/klima/App';
 
-// import 'antd/dist/antd.css';
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
