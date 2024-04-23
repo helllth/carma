@@ -8,7 +8,7 @@ import Landing from './app/Landing';
 import LibreMap from './app/LibreMap';
 import Klima from './app/klima/App';
 import SensorMap from './app/SensorMap';
-
+// x
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
