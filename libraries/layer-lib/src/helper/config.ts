@@ -5,6 +5,10 @@ export const config = {
       {
         name: 'R102:luftbild2022',
         Title: 'Test',
+        pictureBoundingBox: [
+          370838.47705320554, 5680848.0258601615, 371144.2251663466,
+          5681153.773973303,
+        ],
       },
       {
         name: 'R102:luftbild2020',
