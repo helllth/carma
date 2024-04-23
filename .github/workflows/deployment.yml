@@ -43,7 +43,7 @@ jobs:
           else
             deployment_project="${deploymentManual}"
           fi
-
+          echo "PROJECT_NAME=${project_name}" >> $GITHUB_ENV
           echo "EXTERNAL_REPO=${deployment_project}" >> $GITHUB_ENV
           echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
           echo "BASE_URL=${baseUrl}" >> $GITHUB_ENV
@@ -53,7 +53,7 @@ jobs:
       - name: Debug Outputs
         run: |
           echo -----------------------------------
-          echo "-- Project name is: $project_name"
+          echo "-- Project name is: $PROJECT_NAME"
           echo "ORG_DEPLOY: $ORG_DEPLOY"
           echo "PROJECT_PATH: $PRJ_DEPLOY"
           echo "BASE_URL: $BASE_URL"
@@ -193,7 +193,7 @@ jobs:
   build:
     needs: split_nx_projects
     runs-on: ubuntu-latest
-    if: ${{ needs.split_nx_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == ''  && needs.split_nx_projects.outputs.project_list != '[]' }}
+    if: ${{ github.event.inputs.project-name == '' && needs.split_nx_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == ''  && needs.split_nx_projects.outputs.project_list != '[]' }}
 
     permissions:
       contents: read
@@ -273,7 +273,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
-          # deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           external_repository: ${{ env.EXTERNAL_REPO }}
           publish_dir: ${{ env.PROJECT_PATH }}
 
@@ -290,12 +289,10 @@ jobs:
 
       - name: Install Nx
         run: npm install nx@17.2.8
-
       - name: Build project
         run: |
-          npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url"
+          npx nx run $PROJECT_NAME:build --configuration=production --base="$base_url"
         shell: bash
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
