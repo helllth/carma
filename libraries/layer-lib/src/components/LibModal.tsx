@@ -80,12 +80,15 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
         .then((text) => {
           const result = parser.toJSON(text);
           if (result) {
-            const tmpLayer = getLayerStructure(config, result);
-            const mergedLayer = mergeStructures(tmpLayer, newLayers);
-            newLayers = mergedLayer;
-            setLayers(newLayers);
+            if (config) {
+              const tmpLayer = getLayerStructure(config, result);
+              const mergedLayer = mergeStructures(tmpLayer, newLayers);
+              newLayers = mergedLayer;
+              setLayers(newLayers);
+            } else {
+              getDataFromJson(result);
+            }
           }
-          // getDataFromJson(result);
         });
     });
   }, []);
