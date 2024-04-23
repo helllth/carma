@@ -215,16 +215,19 @@ jobs:
           echo "ORG_DEPLOY: $ORG_DEPLOY"
           echo "PROJECT_PATH: $PRJ_DEPLOY"
 
-      - name: Build project
-        run: |
-          if [ "${{ env.BASE_URL }}" = "null" ]; then
-            base_url="https://${{ env.ORG_DEPLOY }}.github.io/${{ env.PRJ_DEPLOY }}/"
-          else
-            base_url="${{ env.BASE_URL }}"
-          fi
+      # - name: Build project
+      #   run: |
+      #     if [ "${{ env.BASE_URL }}" = "null" ]; then
+      #       base_url="https://${{ env.ORG_DEPLOY }}.github.io/${{ env.PRJ_DEPLOY }}/"
+      #     else
+      #       base_url="${{ env.BASE_URL }}"
+      #     fi
 
-          npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url"
-        shell: bash
+      #     npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url"
+      #   shell: bash
+
+      - name: Build project
+        run: npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url"
 
       - name: Build deployment project link
         run: |
