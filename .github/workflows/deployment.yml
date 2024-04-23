@@ -74,12 +74,18 @@ jobs:
           echo "Projects in deployment configuration: $project_keys"  # Debug output
           echo "::set-output name=deployment_projects::$project_keys"
 
+      # - name: Run nx command to show affected projects
+      #   uses: gh640/command-result-action@v1
+      #   with:
+      #     command: npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
+      #   id: list_affected_projects
       - name: Run nx command to show affected projects
-        uses: gh640/command-result-action@v1
-        with:
-          command: npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
         id: list_affected_projects
-      # - name: Load deployment configuration
+        run: |
+          projects=$(npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }})
+          projects=$(echo $projects | tr '\n' ' ')
+          echo "::set-output name=project_list::$projects"
+      # - name: Full Project list for debug reasons
       #   id: list_affected_projects
       #   run: |
       #     projects=$(echo -e "fuzzy-search-playground\nverkehrszeichenkataster\ne-auto-ladestation\ne2e-verkehrszeichenkataster\ncorona-praeventation\nluftmessstationen\ne2e-luftmessstationen\nparkscheinautomaten\nehrenamtskarte\ngeneric-topicmaps\npotenzialflaechen-online\ne2e-potenzialflaechen\nbaederkarte\nkita-finder\ndocument-viewer\ne2e-kita-finder\ne2e-verdis-desktop\nhochwasser\nstarkregen\ne2e-hochwasser\ne2e-starkregen\nklimaorte\nstadtplan\ne2e-klimaorte\ne2e-lagis-desktop\ne2e-stadtplan\nfnp-test\numweltalarm\ntailwind-playground\ntechdemo\nverdis-desktop\ncismap-playground\nlagis-desktop\nvector\nbelis-online")
