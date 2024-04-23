@@ -79,19 +79,19 @@ jobs:
       #   with:
       #     command: npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
       #   id: list_affected_projects
-      - name: Run nx command to show affected projects
-        id: list_affected_projects
-        run: |
-          projects=$(npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }})
-          projects=$(echo $projects | tr '\n' ' ')
-          echo "Affected projects: $projects"
-          echo "::set-output name=project_list::$projects"
-      # - name: Full Project list for debug reasons
+      # - name: Run nx command to show affected projects
       #   id: list_affected_projects
       #   run: |
-      #     projects=$(echo -e "fuzzy-search-playground\nverkehrszeichenkataster\ne-auto-ladestation\ne2e-verkehrszeichenkataster\ncorona-praeventation\nluftmessstationen\ne2e-luftmessstationen\nparkscheinautomaten\nehrenamtskarte\ngeneric-topicmaps\npotenzialflaechen-online\ne2e-potenzialflaechen\nbaederkarte\nkita-finder\ndocument-viewer\ne2e-kita-finder\ne2e-verdis-desktop\nhochwasser\nstarkregen\ne2e-hochwasser\ne2e-starkregen\nklimaorte\nstadtplan\ne2e-klimaorte\ne2e-lagis-desktop\ne2e-stadtplan\nfnp-test\numweltalarm\ntailwind-playground\ntechdemo\nverdis-desktop\ncismap-playground\nlagis-desktop\nvector\nbelis-online")
+      #     projects=$(npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }})
       #     projects=$(echo $projects | tr '\n' ' ')
+      #     echo "Affected projects: $projects"
       #     echo "::set-output name=project_list::$projects"
+      - name: Full Project list for debug reasons
+        id: list_affected_projects
+        run: |
+          projects=$(echo -e "fuzzy-search-playground\nverkehrszeichenkataster\ne-auto-ladestation\ne2e-verkehrszeichenkataster\ncorona-praeventation\nluftmessstationen\ne2e-luftmessstationen\nparkscheinautomaten\nehrenamtskarte\ngeneric-topicmaps\npotenzialflaechen-online\ne2e-potenzialflaechen\nbaederkarte\nkita-finder\ndocument-viewer\ne2e-kita-finder\ne2e-verdis-desktop\nhochwasser\nstarkregen\ne2e-hochwasser\ne2e-starkregen\nklimaorte\nstadtplan\ne2e-klimaorte\ne2e-lagis-desktop\ne2e-stadtplan\nfnp-test\numweltalarm\ntailwind-playground\ntechdemo\nverdis-desktop\ncismap-playground\nlagis-desktop\nvector\nbelis-online")
+          projects=$(echo $projects | tr '\n' ' ')
+          echo "::set-output name=project_list::$projects"
       - name: Set up matrix
         if: steps.list_affected_projects.outputs.project_list != ''
         id: set_up_matrix
