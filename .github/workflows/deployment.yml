@@ -147,7 +147,7 @@ jobs:
   build:
     needs: split_nx_projects
     runs-on: ubuntu-latest
-    if: ${{ needs.split_nx_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == '' }} && fromJson(needs.split_nx_projects.outputs.project_list).length > 0
+    if: ${{ needs.split_nx_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == ''  && fromJson(needs.split_nx_projects.outputs.project_list).length > 0}}
 
     permissions:
       contents: read
