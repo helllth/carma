@@ -263,7 +263,7 @@ jobs:
             baseUrl="${baseUrl}"
           fi
           if [ "${deploymentManual}" = "null" ]; then
-            deployment_project="https://${orgDeploy}.github.io/${prjDeploy}/"
+            deployment_project="https://github.com/${orgDeploy}/${prjDeploy}.git"
           else
             deployment_project="${deploymentManual}"
           fi
