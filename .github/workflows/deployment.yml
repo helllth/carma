@@ -142,11 +142,6 @@ jobs:
           echo "    publish_dir: ${{ env.PROJECT_PATH }}"
         shell: bash
 
-      - name: Debug of baseUrl
-        run: |
-          echo "ORG_DEPLOY: $ORG_DEPLOY"
-          echo "PROJECT_PATH: $PRJ_DEPLOY"
-
       - name: Build project
         run: |
           if [ "${{ env.BASE_URL }}" = "null" ]; then
@@ -214,6 +209,11 @@ jobs:
           echo "ORG_DEPLOY=${orgDeploy}" >> $GITHUB_ENV
           echo "PRJ_DEPLOY=${prjDeploy}" >> $GITHUB_ENV
         shell: bash
+
+      - name: Debug of baseUrl
+        run: |
+          echo "ORG_DEPLOY: $ORG_DEPLOY"
+          echo "PROJECT_PATH: $PRJ_DEPLOY"
 
       - name: Build project
         run: |
