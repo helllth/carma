@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
-import { Card, Row, Col } from 'antd';
+import { Card } from 'antd';
 
 const { Meta } = Card;
+const base = import.meta.env.BASE_URL;
+console.log('base', base);
 
 export default function Landing() {
   return (
@@ -17,39 +19,39 @@ export default function Landing() {
         <h2 style={{ width: '80%', margin: 20 }}>
           Demo Basistechnologie für dig. FußgängerIS (WIP)
         </h2>
-        <a href={'/#/topicmapWithNewLocator'}>
+        <Link to="/topicmapWithNewLocator">
           <Card
             hoverable
             style={{ width: 240, margin: 20 }}
-            cover={<img alt="example" src={'/locator.jpeg'} />}
+            cover={<img alt="example" src={base + 'locator.jpeg'} />}
           >
             <Meta
               title="Standortvisualisierung"
               description="mit Richtungsanzeige"
             />
           </Card>
-        </a>
-        <a href={'/#/turnableTopicMap'}>
+        </Link>
+        <Link to="turnableTopicMap">
           <Card
             hoverable
             style={{ width: 240, margin: 20 }}
-            cover={<img alt="example" src={'/turnableMap.jpeg'} />}
+            cover={<img alt="example" src={base + 'turnableMap.jpeg'} />}
           >
             <Meta
               title="TopicMap 3.0?"
               description="dreh- und kippbare Karte"
             />
           </Card>
-        </a>
-        <a href={'/#/qrklima'}>
+        </Link>
+        <Link to="qrklima">
           <Card
             hoverable
             style={{ width: 240, margin: 20 }}
-            cover={<img alt="example" src={'/qrklima.jpeg'} />}
+            cover={<img alt="example" src={base + 'qrklima.jpeg'} />}
           >
             <Meta title="Klimastandorte" description="QR Code enabled" />
           </Card>
-        </a>
+        </Link>
         {/* <a href='/sensorDemo'>
           <Card
             hoverable
