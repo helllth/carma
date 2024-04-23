@@ -1,3 +1,5 @@
+import { Layer, WMSCapabilitiesJSON } from 'wms-capabilities';
+
 export const flattenLayer = (
   layer: any,
   parentTitles: any = [],
@@ -37,6 +39,55 @@ export const flattenLayer = (
   }
 
   return flattenedLayer;
+};
+
+export const getLayerStructure = (config, wms: WMSCapabilitiesJSON) => {
+  const structure: any[] = [];
+  for (let category in config) {
+    const categoryConfig = config[category];
+    const layers: any[] = [];
+    let categoryObject = {
+      title: category,
+      layers,
+    };
+    for (let layerIndex in categoryConfig.layers) {
+      const layer = categoryConfig.layers[layerIndex];
+      const foundLayer = findLayerAndAddTags(
+        wms.Capability.Layer,
+        layer.name,
+        []
+      );
+      foundLayer['url'] =
+        wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
+      if (foundLayer) {
+        layers.push(foundLayer);
+      }
+    }
+    categoryObject.layers = layers;
+    structure.push(categoryObject);
+  }
+  return structure;
+};
+
+export const mergeStructures = (structure1, structure2) => {
+  let mergedObj = {};
+
+  structure1.forEach((obj) => {
+    if (!mergedObj[obj.title]) {
+      mergedObj[obj.title] = { title: obj.title, layers: [] };
+    }
+    mergedObj[obj.title].layers.push(...obj.layers);
+  });
+
+  structure2.forEach((obj) => {
+    if (!mergedObj[obj.title]) {
+      mergedObj[obj.title] = { title: obj.title, layers: [] };
+    }
+    mergedObj[obj.title].layers.push(...obj.layers);
+  });
+
+  let mergedArray = Object.values(mergedObj);
+  return mergedArray;
 };
 
 export const findLayerAndAddTags = (layer, name, tagsToAdd) => {

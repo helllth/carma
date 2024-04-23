@@ -28,7 +28,7 @@ const LayerTabs = ({ layers }: LayerTabsProps) => {
       <Tabs
         defaultActiveKey="1"
         items={layers.map((layer, i) => {
-          const title = layer.title.split('-')[1].substring(1);
+          const title = layer.title;
           return {
             key: title,
             label: (
