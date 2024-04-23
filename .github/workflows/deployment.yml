@@ -212,7 +212,7 @@ jobs:
 
       - name: Build project
         run: |
-          npx nx run ${{ matrix.project }}:build --configuration=production --base="$base_url"
+          npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}"
         shell: bash
       - name: Deploy using GH Pages action
         uses: peaceiris/actions-gh-pages@v3
