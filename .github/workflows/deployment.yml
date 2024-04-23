@@ -141,9 +141,12 @@ jobs:
           # Print the result JSON
           # echo "$result_json"
           echo "::set-output name=project_list::$result_json"
+          echo "PROJECT_LIST=${result_json}" >> $GITHUB_ENV
       - name: Show project list
-        run: echo "The project list is ${{ steps.set_up_matrix.outputs.project_list }}"
-
+        run: |
+          echo "The project list is ${{ steps.set_up_matrix.outputs.project_list }}"
+          echo "Is affected: ${{ steps.list_affected_projects.outputs.project_list != '' }}"
+          echo "ProjectListLength:  ${{ fromJson(steps.set_up_matrix.outputs.project_list).length }}"
   build:
     needs: split_nx_projects
     runs-on: ubuntu-latest
