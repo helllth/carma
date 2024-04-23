@@ -3,6 +3,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
+// Use an environment variable to set the base URL
+const base = process.env.BASE_URL || '/';
+
 export default defineConfig({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/playgrounds/techdemo',
@@ -21,7 +24,7 @@ export default defineConfig({
   },
 
   plugins: [react(), nxViteTsPaths()],
-
+  base: base,
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],
