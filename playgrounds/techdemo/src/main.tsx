@@ -6,8 +6,8 @@ import * as serviceWorkerRegistration from './app/serviceWorkerRegistration';
 import App from './app/App';
 import Landing from './app/Landing';
 import LibreMap from './app/LibreMap';
-import SensorMap from './app/SensorMap';
 import Klima from './app/klima/App';
+import SensorMap from './app/SensorMap';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
