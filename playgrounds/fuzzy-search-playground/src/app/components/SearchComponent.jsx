@@ -8,70 +8,38 @@ const renderTitle = (title) => {
   return <span>{title}</span>;
 };
 
-const renderItem = (item) => ({
-  key: `${item?.searchData || '-'}${item?.s || '-'}${item?.n || '-'}${
-    item?.nr
-  }${item?.g || '-'}${item?.nr}${item?.gr || '-'}${item?.x || '-'}${
-    item?.y || '-'
-  }`,
-  value: item.s,
-  label: (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'start',
-      }}
-    >
-      <span style={{ marginRight: '6px' }}>
-        <i className={item?.g && 'fas ' + 'fa-' + item.g}></i>
+const renderItem = (address) => {
+  const addressLabel = buildAddressWithIconUI(address);
+  return {
+    key: address.sorter,
+    value: address.string,
+    label: addressLabel,
+  };
+};
+
+function buildAddressWithIconUI(addresObj) {
+  let icon;
+  if (addresObj.glyph === 'pie-chart') {
+    icon = 'chart-pie';
+  } else {
+    icon = addresObj.glyph;
+  }
+  const streetLabel = (
+    <div>
+      <span>
+        <i className={icon && 'fas ' + 'fa-' + icon}></i>
         {'  '}
       </span>
-      {item.searchData}
+      <span>{addresObj.string}</span>
     </div>
-  ),
-});
+  );
 
-// const generateOptions = (results) => {
-//   return results.map((result, idx) => {
-//     const streetLabel = (
-//       <div>
-//         <span>
-//           <i
-//             className={result.item?.glyph && 'fas ' + 'fa-' + result.item.glyph}
-//           ></i>
-//           {'  '}
-//         </span>
-//         <span>{result.item?.string}</span>
-//       </div>
-//     );
-
-//     return {
-//       key: idx,
-//       label: <div>{streetLabel}</div>,
-//       value: result.item?.string,
-//       sData: result.item,
-//     };
-//   });
-// };
+  return streetLabel;
+}
 
 const generateOptions = (results) => {
   return results.map((result, idx) => {
-    let icon;
-    if (result.item?.glyph === 'pie-chart') {
-      icon = 'chart-pie';
-    } else {
-      icon = result.item?.glyph;
-    }
-    const streetLabel = (
-      <div>
-        <span>
-          <i className={icon && 'fas ' + 'fa-' + icon}></i>
-          {'  '}
-        </span>
-        <span>{result.item?.string}</span>
-      </div>
-    );
-
+    const streetLabel = buildAddressWithIconUI(result.item);
     return {
       key: result.item.sorter,
       label: <div>{streetLabel}</div>,
@@ -82,12 +50,11 @@ const generateOptions = (results) => {
 };
 
 const mapDataToSearchResult = (data) => {
-  // const categoryName =
   const splittedCategories = {};
 
   data.forEach((item) => {
     const address = item.item;
-    const catName = address.gr;
+    const catName = address.type;
 
     if (splittedCategories.hasOwnProperty(catName)) {
       splittedCategories[catName].push(renderItem(address));
