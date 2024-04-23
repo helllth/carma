@@ -161,14 +161,8 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
                     <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
                       {category?.layers?.map((layer: any) => (
                         <LibItem
-                          title={layer.Title}
-                          description={layer.Abstract}
-                          tags={layer.tags.slice(1, -1)}
-                          name={layer.Name}
-                          bbox={layer.BoundingBox}
-                          getMapUrl={layer.url}
-                          highlight={layer.highlight}
                           setAdditionalLayers={setAdditionalLayers}
+                          layer={layer}
                         />
                       ))}
                     </div>
