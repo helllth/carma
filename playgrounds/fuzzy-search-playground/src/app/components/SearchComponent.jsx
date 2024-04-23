@@ -58,6 +58,7 @@ const generateOptions = (results) => {
   return results.map((result, idx) => {
     let icon;
 
+    // console.log('ggg', result);
     if (result.item?.glyph === 'pie-chart') {
       icon = 'chart-pie';
     } else {
@@ -66,7 +67,7 @@ const generateOptions = (results) => {
     const streetLabel = (
       <div>
         <span>
-          <i className={result.item?.glyph && 'fas ' + 'fa-' + icon}></i>
+          <i className={icon && 'fas ' + 'fa-' + icon}></i>
           {'  '}
         </span>
         <span>{result.item?.string}</span>
@@ -222,12 +223,18 @@ function SearchComponent({
 
   return (
     <div style={{ marginTop: '40px' }}>
+      <span>
+        <i className={'fas fa-graduation-cap'}></i>
+        {'  '}
+      </span>
       <Button
         icon={<CloseOutlined />}
         style={{ borderRadius: '4px' }}
         onClick={() => {
           setGazetteerHit(null);
           setValue('');
+          setOptions([]);
+          setOverlayFeature(null);
         }}
       />
       <AutoComplete
