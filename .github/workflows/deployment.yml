@@ -301,5 +301,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
-          external_repository: $EXTERNAL_REPO
-          publish_dir: $PROJECT_PATH
+          external_repository: ${{ env.EXTERNAL_REPO}}
+          publish_dir: ${{ env.PROJECT_PATH }}
