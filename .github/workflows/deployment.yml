@@ -84,6 +84,7 @@ jobs:
         run: |
           projects=$(npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }})
           projects=$(echo $projects | tr '\n' ' ')
+          echo "Affected projects: $projects"
           echo "::set-output name=project_list::$projects"
       # - name: Full Project list for debug reasons
       #   id: list_affected_projects
