@@ -240,8 +240,6 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v2
-      - name: Install Nx
-        run: npm install nx@17.2.8
 
       - name: Get properties from json
         id: find_project
@@ -254,7 +252,12 @@ jobs:
           orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.org')
           prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.prj')
           projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
-          echo "Deploymen Project name is: $deploymentManual"
+          if [ "${baseUrl}" = "null" ]; then
+            baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
+          else
+            baseUrl="${baseUrl}"
+          fi
+          echo "Deployment Project name is: $deploymentManual"
           echo "Project Path is: $deploymentManual"
           echo "DEPLOYMENT_MANUAL=${deploymentManual}" >> $GITHUB_ENV
           echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
@@ -265,18 +268,17 @@ jobs:
 
       - name: Debug of baseUrl
         run: |
+          echo ----------------------------
           echo "ORG_DEPLOY: $ORG_DEPLOY"
           echo "PROJECT_PATH: $PRJ_DEPLOY"
+          echo "BASE_URL: $BASE_URL"
+          echo ----------------------------
+
+      - name: Install Nx
+        run: npm install nx@17.2.8
 
       - name: Build project
         run: |
-          if [ "${{ env.BASE_URL }}" = "null" ]; then
-            base_url="https://${{ env.ORG_DEPLOY }}.github.io/${{ env.PRJ_DEPLOY }}/"
-          else
-            # base_url="${{ env.BASE_URL }}"
-            base_url="https://${{ env.ORG_DEPLOY }}.github.io/${{ env.PRJ_DEPLOY }}/"
-          fi
-
           npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url"
         shell: bash
 
