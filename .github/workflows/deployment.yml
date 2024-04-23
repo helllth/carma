@@ -32,6 +32,36 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Get properties from json
+        id: get_props_from_json
+        run: |
+          config=$(cat deployment-config.json)
+          project_name="${{ github.event.inputs.project-name }}"
+
+          deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.repo')
+          baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.base')
+          orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.org')
+          prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.prj')
+          projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
+          if [ "${baseUrl}" = "null" ]; then
+            baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
+          else
+            baseUrl="${baseUrl}"
+          fi
+          if [ "${deploymentManual}" = "null" ]; then
+            deployment_project="https://${orgDeploy}.github.io/${prjDeploy}/"
+          else
+            deployment_project="${deploymentManual}"
+          fi
+
+          echo "EXTERNAL_REPO=${deployment_project}" >> $GITHUB_ENV
+          echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
+          echo "BASE_URL=${baseUrl}" >> $GITHUB_ENV
+          echo "ORG_DEPLOY=${orgDeploy}" >> $GITHUB_ENV
+          echo "PRJ_DEPLOY=${prjDeploy}" >> $GITHUB_ENV
+        shell: bash
+
       - name: Cache npm cache and node modules
         uses: actions/cache@v2
         with:
@@ -243,38 +273,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get properties from json
-        id: find_project
+      - name: Debug Outputs
         run: |
-          config=$(cat deployment-config.json)
-          project_name="${{ github.event.inputs.project-name }}"
-          echo "Project name is: $project_name"
-          deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.repo')
-          baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.base')
-          orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.org')
-          prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.prj')
-          projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
-          if [ "${baseUrl}" = "null" ]; then
-            baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
-          else
-            baseUrl="${baseUrl}"
-          fi
-          echo "Deployment Project name is: $deploymentManual"
-          echo "Project Path is: $deploymentManual"
-          echo "DEPLOYMENT_MANUAL=${deploymentManual}" >> $GITHUB_ENV
-          echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
-          echo "BASE_URL=${baseUrl}" >> $GITHUB_ENV
-          echo "ORG_DEPLOY=${orgDeploy}" >> $GITHUB_ENV
-          echo "PRJ_DEPLOY=${prjDeploy}" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Debug of baseUrl
-        run: |
-          echo ----------------------------
+          echo -----------------------------------
+          echo "-- Project name is: $project_name"
           echo "ORG_DEPLOY: $ORG_DEPLOY"
           echo "PROJECT_PATH: $PRJ_DEPLOY"
           echo "BASE_URL: $BASE_URL"
-          echo ----------------------------
+          echo "EXTERNAL_REPO: $EXTERNAL_REPO"
+          echo -----------------------------------
 
       - name: Install Nx
         run: npm install nx@17.2.8
@@ -284,26 +291,9 @@ jobs:
           npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url"
         shell: bash
 
-      - name: Build deployment project link
-        run: |
-          if [ "${{ env.DEPLOYMENT_MANUAL }}" = "null" ]; then
-            deployment_project="${{ env.ORG_DEPLOY }}/${{ env.PRJ_DEPLOY }}"
-          else
-            deployment_project="${{ env.DEPLOYMENT_MANUAL }}"
-          fi
-          echo "EXTERNAL_REPO=${deployment_project}" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Show deployment project and project path
-        run: |
-          echo "DEPLOYMENT_MANUAL: $DEPLOYMENT_MANUAL"
-          echo "PROJECT_PATH: $PROJECT_PATH"
-          echo "DEPLOYMENT_AUTO: $DEPLOYMENT_AUTO"
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
-          # deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          external_repository: ${{ env.EXTERNAL_REPO}}
-          publish_dir: ${{ env.PROJECT_PATH }}
+          external_repository: $EXTERNAL_REPO
+          publish_dir: $PROJECT_PATH
