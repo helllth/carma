@@ -91,9 +91,9 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
       className="h-[90%]"
     >
       <div className="w-full h-full flex flex-col">
-        <div className="sticky top-0 px-6 pt-6">
+        <div className="sticky top-0 px-6 pt-6 pb-4">
           <div className="flex justify-between items-center">
-            <h1 className="mb-0 text-2xl font-semibold">Layer Library</h1>
+            <h1 className="mb-0 text-2xl font-semibold">Wuppertal Layer</h1>
             <Search
               placeholder="Layer durchsuchen"
               className="w-[76%]"
