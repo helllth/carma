@@ -12,6 +12,8 @@ export const config = {
       },
       {
         name: 'R102:luftbild2020',
+        thumbnail:
+          'https://vcdn.bergfex.at/images/resized/66/a67e008700b85f66_1358c6f03d864fd1@2x.jpg',
       },
       {
         name: 'R102:luftbild2018',
