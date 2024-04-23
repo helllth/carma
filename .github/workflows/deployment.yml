@@ -14,6 +14,7 @@ on:
 
 jobs:
   prepare:
+    if: "!contains(github.event.head_commit.message, 'skip-deploy') && !contains(github.event.head_commit.message, 'no-deploy')"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
