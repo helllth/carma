@@ -51,7 +51,7 @@ const LibItem = ({
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const hightlightTextIndexes = highlight && highlight[0].indices[0];
+  const hightlightTextIndexes = undefined;
 
   return (
     <div className="flex flex-col rounded-lg w-full h-fit">
