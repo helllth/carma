@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       project_list: ${{ steps.set_up_matrix.outputs.project_list }}
-      is_affected: ${{ steps.list_affected_projects.outputs.stdout != '' }}
+      is_affected: ${{ steps.list_affected_projects.outputs.project_list != '' }}
 
     permissions:
       contents: read
