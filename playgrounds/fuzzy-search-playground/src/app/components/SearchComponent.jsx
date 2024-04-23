@@ -57,7 +57,6 @@ const renderItem = (item) => ({
 const generateOptions = (results) => {
   return results.map((result, idx) => {
     let icon;
-
     if (result.item?.glyph === 'pie-chart') {
       icon = 'chart-pie';
     } else {
@@ -66,7 +65,7 @@ const generateOptions = (results) => {
     const streetLabel = (
       <div>
         <span>
-          <i className={result.item?.glyph && 'fas ' + 'fa-' + icon}></i>
+          <i className={icon && 'fas ' + 'fa-' + icon}></i>
           {'  '}
         </span>
         <span>{result.item?.string}</span>
@@ -74,7 +73,7 @@ const generateOptions = (results) => {
     );
 
     return {
-      key: idx,
+      key: result.item.sorter,
       label: <div>{streetLabel}</div>,
       value: result.item?.string,
       sData: result.item,
@@ -183,7 +182,6 @@ function SearchComponent({
       const fuse = new Fuse(allGazeteerData, fuseAddressesOptions);
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuse.search(removeStopWords);
-      console.log('rrr', result);
       const groupedResults = mapDataToSearchResult(result);
       setOptions(generateOptions(result));
     }
@@ -228,6 +226,8 @@ function SearchComponent({
         onClick={() => {
           setGazetteerHit(null);
           setValue('');
+          setOptions([]);
+          setOverlayFeature(null);
         }}
       />
       <AutoComplete
