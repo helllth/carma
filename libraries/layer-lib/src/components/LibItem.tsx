@@ -22,7 +22,7 @@ interface LayerItemProps {
 const LibItem = ({ setAdditionalLayers, layer }: LayerItemProps) => {
   const title = layer.Title;
   const description = layer.Abstract;
-  const tags = layer.tags.slice(1, -1);
+  const tags = layer.tags.slice(1);
   const name = layer.Name;
   const bbox = layer.BoundingBox;
   const getMapUrl = layer.url;
@@ -69,7 +69,13 @@ const LibItem = ({ setAdditionalLayers, layer }: LayerItemProps) => {
         )}
 
         <img
-          src={layer.pictureBoundingBox ? bboxUrl : url}
+          src={
+            layer.thumbnail
+              ? layer.thumbnail
+              : layer.pictureBoundingBox
+              ? bboxUrl
+              : url
+          }
           alt={title}
           className="object-cover h-full overflow-clip w-[calc(130%+7.2px)]"
           onLoad={(e) => {
