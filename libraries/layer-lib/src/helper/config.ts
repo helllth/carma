@@ -4,6 +4,7 @@ export const config = {
     layers: [
       {
         name: 'R102:luftbild2022',
+        Title: 'Test',
       },
       {
         name: 'R102:luftbild2020',
@@ -55,6 +56,18 @@ export const config = {
       },
       {
         name: 'R102:trueortho2018',
+      },
+    ],
+  },
+  Test: {
+    title: 'Test',
+    layers: [
+      {
+        name: 'poi',
+        Abstract: 'Hier steht eine custom Beschreibung',
+      },
+      {
+        name: 'r102:fnp',
       },
     ],
   },
