@@ -9,9 +9,9 @@ export const flattenLayer = (
   const layerTags = [...parentTitles, layerTitle];
 
   const flattenedLayer: any = {
-    title: layerTitle,
-    name: layer.Name ? layer.Name : '',
-    description: layer.Abstract,
+    Title: layerTitle,
+    Name: layer.Name ? layer.Name : '',
+    Abstract: layer.Abstract,
     tags: layerTags,
     srs: layer.SRS,
     BoundingBox: layer.BoundingBox,
@@ -47,19 +47,20 @@ export const getLayerStructure = (config, wms: WMSCapabilitiesJSON) => {
     const categoryConfig = config[category];
     const layers: any[] = [];
     let categoryObject = {
-      title: category,
+      title: categoryConfig.title || category,
       layers,
     };
     for (let layerIndex in categoryConfig.layers) {
       const layer = categoryConfig.layers[layerIndex];
-      const foundLayer = findLayerAndAddTags(
+      let foundLayer = findLayerAndAddTags(
         wms.Capability.Layer,
         layer.name,
         []
       );
-      foundLayer['url'] =
-        wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
       if (foundLayer) {
+        foundLayer['url'] =
+          wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
+        foundLayer = { ...foundLayer, ...layer };
         layers.push(foundLayer);
       }
     }
