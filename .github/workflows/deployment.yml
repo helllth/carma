@@ -295,7 +295,7 @@ jobs:
         run: npm install nx@17.2.8
       - name: Build project
         run: |
-          npx nx run {{ env.PROJECTNAME }}:build --configuration=production --base="$base_url"
+          npx nx run ${{ env.PROJECTNAME }}:build --configuration=production --base="$base_url"
         shell: bash
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
