@@ -31,14 +31,42 @@ const renderItem = (item) => ({
   ),
 });
 
+// const generateOptions = (results) => {
+//   return results.map((result, idx) => {
+//     const streetLabel = (
+//       <div>
+//         <span>
+//           <i
+//             className={result.item?.glyph && 'fas ' + 'fa-' + result.item.glyph}
+//           ></i>
+//           {'  '}
+//         </span>
+//         <span>{result.item?.string}</span>
+//       </div>
+//     );
+
+//     return {
+//       key: idx,
+//       label: <div>{streetLabel}</div>,
+//       value: result.item?.string,
+//       sData: result.item,
+//     };
+//   });
+// };
+
 const generateOptions = (results) => {
   return results.map((result, idx) => {
+    let icon;
+
+    if (result.item?.glyph === 'pie-chart') {
+      icon = 'chart-pie';
+    } else {
+      icon = result.item?.glyph;
+    }
     const streetLabel = (
       <div>
         <span>
-          <i
-            className={result.item?.glyph && 'fas ' + 'fa-' + result.item.glyph}
-          ></i>
+          <i className={result.item?.glyph && 'fas ' + 'fa-' + icon}></i>
           {'  '}
         </span>
         <span>{result.item?.string}</span>
@@ -152,13 +180,11 @@ function SearchComponent({
         threshold: 0.5,
         keys: ['xSearchData'],
       };
-
       const fuse = new Fuse(allGazeteerData, fuseAddressesOptions);
-
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuse.search(removeStopWords);
+      console.log('rrr', result);
       const groupedResults = mapDataToSearchResult(result);
-
       setOptions(generateOptions(result));
     }
   };
@@ -213,7 +239,15 @@ function SearchComponent({
         value={value}
         onSelect={(value, option) => {
           internalGazetteerHitTrigger([option.sData]);
-          setGazetteerHit(option.sData);
+          // setGazetteerHit(option.sData);
+          if (
+            option.sData.type === 'bezirke' ||
+            option.sData.type === 'quartiere'
+          ) {
+            setGazetteerHit(null);
+          } else {
+            setGazetteerHit(option.sData);
+          }
         }}
       />
       <div>
