@@ -176,7 +176,7 @@ jobs:
         id: process_deploy_steps
         run: |
           config=$(cat deployment-config.json)
-          deploymentProject=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.repo)
+          deployment_project=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.repo)
           baseUrl=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.base)
           orgDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.org)
           prjDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.prj)
@@ -193,7 +193,7 @@ jobs:
           fi
 
           echo "PROJECT_NAME=${{ matrix.project }}" >> $GITHUB_ENV
-          echo "DEPLOYMENT_PROJECT=${deploymentProject}" >> $GITHUB_ENV
+          echo "EXTERNAL_REPO=${deployment_project}" >> $GITHUB_ENV
           echo "BASE_URL=${baseUrl}" >> $GITHUB_ENV
           echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
           echo "ORG_DEPLOY=${orgDeploy}" >> $GITHUB_ENV
