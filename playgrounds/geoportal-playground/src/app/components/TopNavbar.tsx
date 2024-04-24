@@ -1,4 +1,4 @@
-import { Button, Radio, message } from 'antd';
+import { Button, Radio, Tooltip, message } from 'antd';
 // @ts-ignore
 import {
   faB,
@@ -87,19 +87,31 @@ const TopNavbar = () => {
       </div>
 
       <div className="flex items-center gap-6 absolute left-1/2 -ml-60">
-        <FontAwesomeIcon icon={faRedo} className="text-xl" />
-        <FontAwesomeIcon icon={faLandmark} className="text-xl" />
-        <FontAwesomeIcon icon={faMap} className="text-xl" />
-        <FontAwesomeIcon
-          icon={faLayerGroup}
-          onClick={() => {
-            setIsModalOpen(true);
-          }}
-          className="cursor-pointer text-xl"
-        />
-        <FontAwesomeIcon icon={faB} className="text-xl" />
-        <FontAwesomeIcon icon={faPrint} className="text-xl" />
-        <FontAwesomeIcon icon={faShareNodes} className="text-xl" />
+        <Tooltip title="Refresh">
+          <FontAwesomeIcon icon={faRedo} className="text-xl" />
+        </Tooltip>
+        <Tooltip title="Legende">
+          <FontAwesomeIcon icon={faLandmark} className="text-xl" />
+        </Tooltip>
+        {/* <FontAwesomeIcon icon={faMap} className="text-xl" /> */}
+        <Tooltip title="Layer Library">
+          <FontAwesomeIcon
+            icon={faLayerGroup}
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
+            className="cursor-pointer text-xl"
+          />
+        </Tooltip>
+        <Tooltip title="Blass">
+          <FontAwesomeIcon icon={faB} className="text-xl" />
+        </Tooltip>
+        <Tooltip title="Drucken">
+          <FontAwesomeIcon icon={faPrint} className="text-xl" />
+        </Tooltip>
+        <Tooltip title="Teilen">
+          <FontAwesomeIcon icon={faShareNodes} className="text-xl" />
+        </Tooltip>
       </div>
 
       <div className="flex items-center gap-6">
