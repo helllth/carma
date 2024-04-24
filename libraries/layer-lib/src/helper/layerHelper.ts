@@ -47,7 +47,7 @@ export const getLayerStructure = (config, wms: WMSCapabilitiesJSON) => {
     const categoryConfig = config[category];
     const layers: any[] = [];
     let categoryObject = {
-      title: categoryConfig.title || category,
+      Title: categoryConfig.title || category,
       layers,
     };
     for (let layerIndex in categoryConfig.layers) {
@@ -74,17 +74,17 @@ export const mergeStructures = (structure1, structure2) => {
   let mergedObj = {};
 
   structure1.forEach((obj) => {
-    if (!mergedObj[obj.title]) {
-      mergedObj[obj.title] = { title: obj.title, layers: [] };
+    if (!mergedObj[obj.Title]) {
+      mergedObj[obj.Title] = { Title: obj.Title, layers: [] };
     }
-    mergedObj[obj.title].layers.push(...obj.layers);
+    mergedObj[obj.Title].layers.push(...obj.layers);
   });
 
   structure2.forEach((obj) => {
-    if (!mergedObj[obj.title]) {
-      mergedObj[obj.title] = { title: obj.title, layers: [] };
+    if (!mergedObj[obj.Title]) {
+      mergedObj[obj.Title] = { Title: obj.Title, layers: [] };
     }
-    mergedObj[obj.title].layers.push(...obj.layers);
+    mergedObj[obj.Title].layers.push(...obj.layers);
   });
 
   let mergedArray = Object.values(mergedObj);
