@@ -31,7 +31,7 @@ export const flattenLayer = (
         childLayers.push(...flattennedSubLayer.layers);
         delete flattennedSubLayer.layers;
       }
-      if (flattennedSubLayer.name !== '') {
+      if (flattennedSubLayer.Name !== '') {
         childLayers.push(flattennedSubLayer);
       }
     });
@@ -41,13 +41,25 @@ export const flattenLayer = (
   return flattenedLayer;
 };
 
+export const createBaseConfig = (layers) => {
+  const result = {};
+  layers.forEach((item) => {
+    result[item.Title] = {
+      layers: item.layers.map((layer) => ({ name: layer.Name })),
+    };
+  });
+  console.log(result);
+
+  return null;
+};
+
 export const getLayerStructure = (config, wms: WMSCapabilitiesJSON) => {
   const structure: any[] = [];
   for (let category in config) {
     const categoryConfig = config[category];
     const layers: any[] = [];
     let categoryObject = {
-      title: categoryConfig.title || category,
+      Title: categoryConfig.title || category,
       layers,
     };
     for (let layerIndex in categoryConfig.layers) {
@@ -74,17 +86,17 @@ export const mergeStructures = (structure1, structure2) => {
   let mergedObj = {};
 
   structure1.forEach((obj) => {
-    if (!mergedObj[obj.title]) {
-      mergedObj[obj.title] = { title: obj.title, layers: [] };
+    if (!mergedObj[obj.Title]) {
+      mergedObj[obj.Title] = { Title: obj.Title, layers: [] };
     }
-    mergedObj[obj.title].layers.push(...obj.layers);
+    mergedObj[obj.Title].layers.push(...obj.layers);
   });
 
   structure2.forEach((obj) => {
-    if (!mergedObj[obj.title]) {
-      mergedObj[obj.title] = { title: obj.title, layers: [] };
+    if (!mergedObj[obj.Title]) {
+      mergedObj[obj.Title] = { Title: obj.Title, layers: [] };
     }
-    mergedObj[obj.title].layers.push(...obj.layers);
+    mergedObj[obj.Title].layers.push(...obj.layers);
   });
 
   let mergedArray = Object.values(mergedObj);

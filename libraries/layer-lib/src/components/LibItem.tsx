@@ -1,19 +1,6 @@
 import { Spin } from 'antd';
 import { useState } from 'react';
 
-const fullBboxLayers = [
-  'wuppertal:2004',
-  'wuppertal:1979',
-  'wuppertal:1929',
-  'wuppertal:1827',
-  'R102:UEK125',
-  'Hitze-Ist',
-  'Hitze-Stark-Ist',
-  'Hitze-2050',
-  'Frischluftschneisen',
-  'Freiflaechen',
-];
-
 interface LayerItemProps {
   setAdditionalLayers: any;
   layer: any;
@@ -30,14 +17,14 @@ const LibItem = ({ setAdditionalLayers, layer }: LayerItemProps) => {
 
   const box =
     layer.pictureBoundingBox ||
-    bbox.find((box: any) => box.crs === 'EPSG:25832').extent;
+    bbox.find((box: any) => box.crs === 'EPSG:3857').extent;
 
   const url = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
-  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=256&height=256&srs=EPSG%3A25832&bbox=374813.20252403466,5681918.144256154,374966.07658060483,5682071.018312723`;
+  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=800903.8186576363,6669199.149176236,802126.8111101991,6670013.681258901`;
   const bboxUrl = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
-  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=512&srs=EPSG%3A25832&bbox=${
+  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=${
     box[0]
   },${box[1]},${box[2]},${box[3]}`;
 
@@ -77,6 +64,7 @@ const LibItem = ({ setAdditionalLayers, layer }: LayerItemProps) => {
               : url
           }
           alt={title}
+          loading="lazy"
           className="object-cover h-full overflow-clip w-[calc(130%+7.2px)]"
           onLoad={(e) => {
             setIsLoading(false);

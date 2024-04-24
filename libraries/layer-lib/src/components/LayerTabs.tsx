@@ -28,7 +28,7 @@ const LayerTabs = ({ layers }: LayerTabsProps) => {
       <Tabs
         defaultActiveKey="1"
         items={layers.map((layer, i) => {
-          const title = layer.title;
+          const title = layer.Title;
           return {
             key: title,
             label: (

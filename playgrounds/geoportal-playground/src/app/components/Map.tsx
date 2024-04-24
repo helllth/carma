@@ -20,6 +20,14 @@ const Map = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const mode = useSelector(getMode);
 
+  function createWMSBbox(bbox) {
+    // Extracting values from the object
+    const { left, top, right, bottom } = bbox;
+
+    // Constructing the bbox string for WMS request
+    return `width=1024&height=682&bbox=${left},${bottom},${right},${top}`;
+  }
+
   // @ts-ignore
   const { setSelectedFeatureByPredicate } = useContext(
     FeatureCollectionDispatchContext
@@ -51,6 +59,9 @@ const Map = () => {
         hamburgerMenu={false}
         locatorControl={true}
         mapStyle={{ width, height }}
+        mappingBoundsChanged={(boundingbox) => {
+          console.log('xxx bbox', createWMSBbox(boundingbox));
+        }}
         gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
         gazetteerHitTrigger={(hits: any) => {
           if (

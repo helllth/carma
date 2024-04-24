@@ -4,6 +4,7 @@ import { Button, Input, Modal } from 'antd';
 import WMSCapabilities from 'wms-capabilities';
 import { useEffect, useState } from 'react';
 import {
+  createBaseConfig,
   flattenLayer,
   getLayerStructure,
   mergeStructures,
@@ -13,7 +14,7 @@ import './modal.css';
 import LayerTabs from './LayerTabs';
 import Fuse from 'fuse.js';
 import LibItem from './LibItem';
-import { config } from '../helper/config';
+import { baseConfig as config } from '../helper/config';
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -72,7 +73,7 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
     let newLayers: any[] = [];
     layerNames.forEach((layer) => {
       fetch(
-        `https://maps.wuppertal.de//${layer}?service=WMS&request=GetCapabilities&version=1.1.1`
+        `https://maps.wuppertal.de/${layer}?service=WMS&request=GetCapabilities&version=1.1.1`
       )
         .then((response) => {
           return response.text();
@@ -109,6 +110,13 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
         <div className="sticky top-0 px-6 pt-6 pb-4">
           <div className="flex justify-between items-center">
             <h1 className="mb-0 text-2xl font-semibold">Wuppertal Layer</h1>
+            {/* <Button
+              onClick={() => {
+                createBaseConfig(layers);
+              }}
+            >
+              Create Base Config
+            </Button> */}
             <Search
               placeholder="Layer durchsuchen"
               className="w-[76%]"
@@ -154,15 +162,16 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
             {layers.map((category) => (
               <>
                 {category.layers.length > 0 && (
-                  <div id={category?.title}>
+                  <div id={category?.Title} key={category?.Title}>
                     <p className="mb-4 text-2xl font-semibold">
-                      {category?.title}
+                      {category?.Title}
                     </p>
                     <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
-                      {category?.layers?.map((layer: any) => (
+                      {category?.layers?.map((layer: any, i) => (
                         <LibItem
                           setAdditionalLayers={setAdditionalLayers}
                           layer={layer}
+                          key={`${category.Title}_layer_${i}`}
                         />
                       ))}
                     </div>
