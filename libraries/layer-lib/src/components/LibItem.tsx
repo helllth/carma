@@ -21,10 +21,10 @@ const LibItem = ({ setAdditionalLayers, layer }: LayerItemProps) => {
 
   const url = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
-  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=1024&height=574&srs=EPSG%3A3857&bbox=800903.8186576363,6669199.149176236,802126.8111101991,6670013.681258901`;
+  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=800903.8186576363,6669199.149176236,802126.8111101991,6670013.681258901`;
   const bboxUrl = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
-  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=1024&height=574&srs=EPSG%3A3857&bbox=${
+  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=${
     box[0]
   },${box[1]},${box[2]},${box[3]}`;
 
@@ -64,6 +64,7 @@ const LibItem = ({ setAdditionalLayers, layer }: LayerItemProps) => {
               : url
           }
           alt={title}
+          loading="lazy"
           className="object-cover h-full overflow-clip w-[calc(130%+7.2px)]"
           onLoad={(e) => {
             setIsLoading(false);
