@@ -31,7 +31,7 @@ export const flattenLayer = (
         childLayers.push(...flattennedSubLayer.layers);
         delete flattennedSubLayer.layers;
       }
-      if (flattennedSubLayer.name !== '') {
+      if (flattennedSubLayer.Name !== '') {
         childLayers.push(flattennedSubLayer);
       }
     });
@@ -39,6 +39,18 @@ export const flattenLayer = (
   }
 
   return flattenedLayer;
+};
+
+export const createBaseConfig = (layers) => {
+  const result = {};
+  layers.forEach((item) => {
+    result[item.Title] = {
+      layers: item.layers.map((layer) => ({ name: layer.Name })),
+    };
+  });
+  console.log(result);
+
+  return null;
 };
 
 export const getLayerStructure = (config, wms: WMSCapabilitiesJSON) => {

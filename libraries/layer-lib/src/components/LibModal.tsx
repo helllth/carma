@@ -4,6 +4,7 @@ import { Button, Input, Modal } from 'antd';
 import WMSCapabilities from 'wms-capabilities';
 import { useEffect, useState } from 'react';
 import {
+  createBaseConfig,
   flattenLayer,
   getLayerStructure,
   mergeStructures,
@@ -13,7 +14,7 @@ import './modal.css';
 import LayerTabs from './LayerTabs';
 import Fuse from 'fuse.js';
 import LibItem from './LibItem';
-import { config } from '../helper/config';
+import { baseConfig as config } from '../helper/config';
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -109,6 +110,13 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
         <div className="sticky top-0 px-6 pt-6 pb-4">
           <div className="flex justify-between items-center">
             <h1 className="mb-0 text-2xl font-semibold">Wuppertal Layer</h1>
+            {/* <Button
+              onClick={() => {
+                createBaseConfig(layers);
+              }}
+            >
+              Create Base Config
+            </Button> */}
             <Search
               placeholder="Layer durchsuchen"
               className="w-[76%]"
