@@ -44,6 +44,7 @@ const TopNavbar = () => {
     newAdditionalLayers = { ...additionalLayerConfiguration };
     newAdditionalLayers[layer.title.replace(/\s/g, '_').toLowerCase()] = {
       title: layer.title,
+      initialActive: true,
       layer: (
         <StyledWMSTileLayer
           key={`key_${layer.title}`}
@@ -57,6 +58,8 @@ const TopNavbar = () => {
         />
       ),
     };
+
+    console.log(newAdditionalLayers);
     try {
       setAdditionalLayerConfiguration(newAdditionalLayers);
       messageApi.open({
