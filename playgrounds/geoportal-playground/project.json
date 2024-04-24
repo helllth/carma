@@ -1,7 +1,7 @@
 {
-  "name": "geoportal",
+  "name": "geoportal-playground",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "playgrounds/geoportal/src",
+  "sourceRoot": "playgrounds/geoportal-playground/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/playgrounds/geoportal"
+        "outputPath": "dist/playgrounds/geoportal-playground"
       },
       "configurations": {
         "development": {
@@ -24,15 +24,15 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "geoportal:build"
+        "buildTarget": "geoportal-playground:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "geoportal:build:development",
+          "buildTarget": "geoportal-playground:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "geoportal:build:production",
+          "buildTarget": "geoportal-playground:build:production",
           "hmr": false
         }
       }
@@ -41,14 +41,14 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "geoportal:build"
+        "buildTarget": "geoportal-playground:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "geoportal:build:development"
+          "buildTarget": "geoportal-playground:build:development"
         },
         "production": {
-          "buildTarget": "geoportal:build:production"
+          "buildTarget": "geoportal-playground:build:production"
         }
       }
     },
@@ -56,7 +56,7 @@
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/playgrounds/geoportal"
+        "reportsDirectory": "../../coverage/playgrounds/geoportal-playground"
       }
     },
     "lint": {
