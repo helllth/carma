@@ -4,16 +4,9 @@ export const config = {
     layers: [
       {
         name: 'R102:luftbild2022',
-        Title: 'Test',
-        pictureBoundingBox: [
-          370838.47705320554, 5680848.0258601615, 371144.2251663466,
-          5681153.773973303,
-        ],
       },
       {
         name: 'R102:luftbild2020',
-        thumbnail:
-          'https://vcdn.bergfex.at/images/resized/66/a67e008700b85f66_1358c6f03d864fd1@2x.jpg',
       },
       {
         name: 'R102:luftbild2018',
@@ -65,15 +58,163 @@ export const config = {
       },
     ],
   },
-  Test: {
-    title: 'Test',
+  Starkregen: {
     layers: [
       {
-        name: 'poi',
-        Abstract: 'Hier steht eine custom Beschreibung',
+        name: 'R102:50md',
       },
       {
-        name: 'r102:fnp',
+        name: 'R102:50d',
+      },
+      {
+        name: 'R102:50v',
+      },
+      {
+        name: 'R102:100md',
+      },
+      {
+        name: 'R102:100d',
+      },
+      {
+        name: 'R102:100v',
+      },
+      {
+        name: 'R102:90md',
+      },
+      {
+        name: 'R102:90d',
+      },
+      {
+        name: 'R102:90v',
+      },
+      {
+        name: 'R102:SRmd',
+      },
+      {
+        name: 'R102:SRd',
+      },
+      {
+        name: 'R102:SRv',
+      },
+    ],
+  },
+  Lärmkarten: {
+    layers: [
+      {
+        name: 'laerm2016:STR_RAST_DEN',
+        Title: '2016 Straßenverkehrslärm (LDEN)',
+        pictureBoundingBox: [
+          784621.3180330665, 6660622.321170634, 794304.9340539448,
+          6666636.959833823,
+        ],
+      },
+      {
+        name: 'laerm2016:STR_RAST_NGT',
+        Title: '2016 Straßenverkehrslärm (LNIGHT)',
+        pictureBoundingBox: [
+          784621.3180330665, 6660622.321170634, 794304.9340539448,
+          6666636.959833823,
+        ],
+      },
+      {
+        name: 'laerm2016:SCS_RAST_NGT',
+        Title: '2016 Schienenverkehrslärm (LNIGHT)',
+        pictureBoundingBox: [
+          793306.4753719696, 6664907.572068873, 802990.091392848,
+          6670922.2107320605,
+        ],
+      },
+      {
+        name: 'laerm2016:IND_RAST_NGT',
+        Title: '2016 Gewerbelärm (LNIGHT)',
+        pictureBoundingBox: [
+          788913.734902706, 6663818.344415807, 793755.542913145,
+          6666825.663747405,
+        ],
+      },
+      {
+        name: 'laerm2022:STR_RAST_DEN',
+        Title: '2022 Straßenverkehrslärm (LDEN)',
+        pictureBoundingBox: [
+          784621.3180330665, 6660622.321170634, 794304.9340539448,
+          6666636.959833823,
+        ],
+      },
+      {
+        name: 'laerm2022:STR_RAST_NGT',
+        Title: '2022 Straßenverkehrslärm (LNIGHT)',
+        pictureBoundingBox: [
+          784621.3180330665, 6660622.321170634, 794304.9340539448,
+          6666636.959833823,
+        ],
+      },
+      {
+        name: 'laerm2022:SCS_RAST_DEN',
+        Title: '2022 Schienenverkehrslärm (LNIGHT)',
+        pictureBoundingBox: [
+          793306.4753719696, 6664907.572068873, 802990.091392848,
+          6670922.2107320605,
+        ],
+      },
+    ],
+  },
+  Schulen: {
+    layers: [
+      {
+        name: 'poi_schulen_grund',
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+      },
+      {
+        name: 'poi_schulen_gym',
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+      },
+      {
+        name: 'poi_schulen_real',
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+      },
+      {
+        name: 'poi_schulen_haupt',
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+      },
+      {
+        name: 'poi_schulen_gesamt',
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+      },
+      {
+        name: 'poi_schulen_forder',
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+      },
+      {
+        name: 'poi_schulen_andere',
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+      },
+      {
+        name: 'poi_schulen_beruf',
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
       },
     ],
   },
