@@ -1,3 +1,5 @@
+import { Layer, WMSCapabilitiesJSON } from 'wms-capabilities';
+
 export const flattenLayer = (
   layer: any,
   parentTitles: any = [],
@@ -7,9 +9,9 @@ export const flattenLayer = (
   const layerTags = [...parentTitles, layerTitle];
 
   const flattenedLayer: any = {
-    title: layerTitle,
-    name: layer.Name ? layer.Name : '',
-    description: layer.Abstract,
+    Title: layerTitle,
+    Name: layer.Name ? layer.Name : '',
+    Abstract: layer.Abstract,
     tags: layerTags,
     srs: layer.SRS,
     BoundingBox: layer.BoundingBox,
@@ -37,6 +39,56 @@ export const flattenLayer = (
   }
 
   return flattenedLayer;
+};
+
+export const getLayerStructure = (config, wms: WMSCapabilitiesJSON) => {
+  const structure: any[] = [];
+  for (let category in config) {
+    const categoryConfig = config[category];
+    const layers: any[] = [];
+    let categoryObject = {
+      title: categoryConfig.title || category,
+      layers,
+    };
+    for (let layerIndex in categoryConfig.layers) {
+      const layer = categoryConfig.layers[layerIndex];
+      let foundLayer = findLayerAndAddTags(
+        wms.Capability.Layer,
+        layer.name,
+        []
+      );
+      if (foundLayer) {
+        foundLayer['url'] =
+          wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
+        foundLayer = { ...foundLayer, ...layer };
+        layers.push(foundLayer);
+      }
+    }
+    categoryObject.layers = layers;
+    structure.push(categoryObject);
+  }
+  return structure;
+};
+
+export const mergeStructures = (structure1, structure2) => {
+  let mergedObj = {};
+
+  structure1.forEach((obj) => {
+    if (!mergedObj[obj.title]) {
+      mergedObj[obj.title] = { title: obj.title, layers: [] };
+    }
+    mergedObj[obj.title].layers.push(...obj.layers);
+  });
+
+  structure2.forEach((obj) => {
+    if (!mergedObj[obj.title]) {
+      mergedObj[obj.title] = { title: obj.title, layers: [] };
+    }
+    mergedObj[obj.title].layers.push(...obj.layers);
+  });
+
+  let mergedArray = Object.values(mergedObj);
+  return mergedArray;
 };
 
 export const findLayerAndAddTags = (layer, name, tagsToAdd) => {

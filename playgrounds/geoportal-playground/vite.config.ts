@@ -5,7 +5,7 @@ import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/playgrounds/geoportal',
+  cacheDir: '../../node_modules/.vite/playgrounds/geoportal-playground',
 
   server: {
     port: 4200,
@@ -28,7 +28,7 @@ export default defineConfig({
   // },
 
   build: {
-    outDir: '../../dist/playgrounds/geoportal',
+    outDir: '../../dist/playgrounds/geoportal-playground',
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
@@ -45,7 +45,7 @@ export default defineConfig({
 
     reporters: ['default'],
     coverage: {
-      reportsDirectory: '../../coverage/playgrounds/geoportal',
+      reportsDirectory: '../../coverage/playgrounds/geoportal-playground',
       provider: 'v8',
     },
   },

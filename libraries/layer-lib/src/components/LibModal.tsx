@@ -3,12 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Input, Modal } from 'antd';
 import WMSCapabilities from 'wms-capabilities';
 import { useEffect, useState } from 'react';
-import { flattenLayer } from '../helper/layerHelper';
+import {
+  flattenLayer,
+  getLayerStructure,
+  mergeStructures,
+} from '../helper/layerHelper';
 const { Search } = Input;
 import './modal.css';
 import LayerTabs from './LayerTabs';
 import Fuse from 'fuse.js';
 import LibItem from './LibItem';
+import { config } from '../helper/config';
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -64,6 +69,7 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
   };
 
   useEffect(() => {
+    let newLayers: any[] = [];
     layerNames.forEach((layer) => {
       fetch(
         `https://maps.wuppertal.de//${layer}?service=WMS&request=GetCapabilities&version=1.1.1`
@@ -73,7 +79,16 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
         })
         .then((text) => {
           const result = parser.toJSON(text);
-          getDataFromJson(result);
+          if (result) {
+            if (config) {
+              const tmpLayer = getLayerStructure(config, result);
+              const mergedLayer = mergeStructures(tmpLayer, newLayers);
+              newLayers = mergedLayer;
+              setLayers(newLayers);
+            } else {
+              getDataFromJson(result);
+            }
+          }
         });
     });
   }, []);
@@ -139,21 +154,15 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
             {layers.map((category) => (
               <>
                 {category.layers.length > 0 && (
-                  <div id={category.title.split('-')[1].substring(1)}>
+                  <div id={category?.title}>
                     <p className="mb-4 text-2xl font-semibold">
-                      {category.title.split('-')[1]}
+                      {category?.title}
                     </p>
                     <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
                       {category?.layers?.map((layer: any) => (
                         <LibItem
-                          title={layer.title}
-                          description={layer.description}
-                          tags={layer.tags.slice(1, -1)}
-                          name={layer.name}
-                          bbox={layer.BoundingBox}
-                          getMapUrl={layer.url}
-                          highlight={layer.highlight}
                           setAdditionalLayers={setAdditionalLayers}
+                          layer={layer}
                         />
                       ))}
                     </div>

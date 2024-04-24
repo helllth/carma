@@ -15,27 +15,23 @@ const fullBboxLayers = [
 ];
 
 interface LayerItemProps {
-  title: string;
-  description: string;
-  tags?: string[];
-  name: string;
-  bbox: any;
-  getMapUrl: string;
-  highlight?: any;
   setAdditionalLayers: any;
+  layer: any;
 }
 
-const LibItem = ({
-  title,
-  description,
-  tags,
-  name,
-  bbox,
-  getMapUrl,
-  highlight,
-  setAdditionalLayers,
-}: LayerItemProps) => {
-  const box = bbox.find((box: any) => box.crs === 'EPSG:25832').extent;
+const LibItem = ({ setAdditionalLayers, layer }: LayerItemProps) => {
+  const title = layer.Title;
+  const description = layer.Abstract;
+  const tags = layer.tags.slice(1);
+  const name = layer.Name;
+  const bbox = layer.BoundingBox;
+  const getMapUrl = layer.url;
+  const highlight = layer.highlight;
+
+  const box =
+    layer.pictureBoundingBox ||
+    bbox.find((box: any) => box.crs === 'EPSG:25832').extent;
+
   const url = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=256&height=256&srs=EPSG%3A25832&bbox=374813.20252403466,5681918.144256154,374966.07658060483,5682071.018312723`;
@@ -62,6 +58,7 @@ const LibItem = ({
             title,
             getMapUrl,
           });
+          console.log(name);
         }}
         className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]"
       >
@@ -72,7 +69,13 @@ const LibItem = ({
         )}
 
         <img
-          src={fullBboxLayers.find((value) => value === name) ? bboxUrl : url}
+          src={
+            layer.thumbnail
+              ? layer.thumbnail
+              : layer.pictureBoundingBox
+              ? bboxUrl
+              : url
+          }
           alt={title}
           className="object-cover h-full overflow-clip w-[calc(130%+7.2px)]"
           onLoad={(e) => {
