@@ -24,9 +24,6 @@ function App() {
 
   return (
     <TopicMapContextProvider
-      mapEPSGCode="25832"
-      referenceSystem={MappingConstants.crs25832}
-      referenceSystemDefinition={MappingConstants.proj4crs25832def}
       convertItemToFeature={getConvertItemToFeatureWithPOIColors(poiColors)}
     >
       <div className="flex flex-col h-screen w-full">
