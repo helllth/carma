@@ -31,7 +31,7 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
 
   const flattenedLayers = layers.flatMap((obj) => obj.layers);
   const fuse = new Fuse(flattenedLayers, {
-    keys: ['title'],
+    keys: ['Title'],
     shouldSort: false,
     includeMatches: true,
   });
@@ -86,6 +86,7 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
               const mergedLayer = mergeStructures(tmpLayer, newLayers);
               newLayers = mergedLayer;
               setLayers(newLayers);
+              setAllLayers(newLayers);
             } else {
               getDataFromJson(result);
             }
@@ -134,7 +135,7 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
                     const newLayers: any[] = [];
 
                     results.forEach((result) => {
-                      if (category.title === result.item.tags[0]) {
+                      if (category.Title === result.item.tags[0]) {
                         newLayers.push({
                           ...result.item,
                           highlight: result.matches,

@@ -72,7 +72,9 @@ export const getLayerStructure = (config, wms: WMSCapabilitiesJSON) => {
       if (foundLayer) {
         foundLayer['url'] =
           wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
-        foundLayer = { ...foundLayer, ...layer };
+        let tags = foundLayer.tags;
+        tags[0] = categoryObject.Title;
+        foundLayer = { ...foundLayer, ...layer, ...tags };
         layers.push(foundLayer);
       }
     }
