@@ -72,7 +72,7 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
     let newLayers: any[] = [];
     layerNames.forEach((layer) => {
       fetch(
-        `https://maps.wuppertal.de//${layer}?service=WMS&request=GetCapabilities&version=1.1.1`
+        `https://maps.wuppertal.de/${layer}?service=WMS&request=GetCapabilities&version=1.1.1`
       )
         .then((response) => {
           return response.text();
@@ -154,15 +154,16 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
             {layers.map((category) => (
               <>
                 {category.layers.length > 0 && (
-                  <div id={category?.title}>
+                  <div id={category?.Title} key={category?.Title}>
                     <p className="mb-4 text-2xl font-semibold">
-                      {category?.title}
+                      {category?.Title}
                     </p>
                     <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
-                      {category?.layers?.map((layer: any) => (
+                      {category?.layers?.map((layer: any, i) => (
                         <LibItem
                           setAdditionalLayers={setAdditionalLayers}
                           layer={layer}
+                          key={`${category.Title}_layer_${i}`}
                         />
                       ))}
                     </div>
