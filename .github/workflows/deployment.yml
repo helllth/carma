@@ -13,7 +13,7 @@ on:
       - dev
 
 jobs:
-  split_nx_projects:
+  determine_projects:
     if: "github.event.inputs.project-name == '' && !contains(github.event.head_commit.message, 'skip-deploy') && !contains(github.event.head_commit.message, 'no-deploy')"
     runs-on: ubuntu-latest
     outputs:
@@ -135,9 +135,9 @@ jobs:
           echo "The project list is |${{ steps.set_up_matrix.outputs.project_list }}|"
           echo "Is affected: ${{ steps.list_affected_projects.outputs.project_list != '' }}"
   build:
-    needs: split_nx_projects
+    needs: determine_projects
     runs-on: ubuntu-latest
-    if: ${{ needs.split_nx_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == ''  && needs.split_nx_projects.outputs.project_list != '[]' }}
+    if: ${{ needs.determine_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == ''  && needs.determine_projects.outputs.project_list != '[]' }}
 
     permissions:
       contents: read
@@ -145,7 +145,7 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        project: ${{fromJson(needs.split_nx_projects.outputs.project_list)}}
+        project: ${{fromJson(needs.determine_projects.outputs.project_list)}}
 
     steps:
       - name: Checkout Repository
