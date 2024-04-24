@@ -15,18 +15,19 @@ const LibItem = ({ setAdditionalLayers, layer }: LayerItemProps) => {
   const getMapUrl = layer.url;
   const highlight = layer.highlight;
 
-  const box =
-    layer.pictureBoundingBox ||
-    bbox.find((box: any) => box.crs === 'EPSG:3857').extent;
+  const box = layer.pictureBoundingBox;
 
   const url = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=800903.8186576363,6669199.149176236,802126.8111101991,6670013.681258901`;
-  const bboxUrl = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
-    name
-  )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=${
-    box[0]
-  },${box[1]},${box[2]},${box[3]}`;
+  let bboxUrl = '';
+  if (layer.pictureBoundingBox) {
+    bboxUrl = `${getMapUrl}service=WMS&request=GetMap&layers=${encodeURIComponent(
+      name
+    )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=${
+      box[0]
+    },${box[1]},${box[2]},${box[3]}`;
+  }
 
   const regex = /Inhalt:(.*?)Sichtbarkeit:/s;
 
