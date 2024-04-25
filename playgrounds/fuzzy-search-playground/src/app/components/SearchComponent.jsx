@@ -4,7 +4,31 @@ import { AutoComplete, Button, Checkbox } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import { builtInGazetteerHitTrigger } from 'react-cismap/tools/gazetteerHelper';
 
-const renderTitle = (title) => {
+const renderTitle = (category) => {
+  let title = '???';
+  switch (category) {
+    case 'pois':
+      title = 'POIS';
+      break;
+    case 'bpklimastandorte':
+      title = 'Klimastandorte';
+      break;
+    case 'kitas':
+      title = 'Kitas';
+      break;
+    case 'bezirke':
+      title = 'Bezirke';
+      break;
+    case 'quartiere':
+      title = 'Quartiere';
+      break;
+    case 'adressen':
+      title = 'Adressen';
+      break;
+    default:
+      title = category;
+      break;
+  }
   return <span>{title}</span>;
 };
 
@@ -51,6 +75,7 @@ const generateOptions = (results) => {
 };
 
 const mapDataToSearchResult = (data) => {
+  console.log('vvv', data);
   const splittedCategories = {};
 
   data.forEach((item) => {
@@ -173,6 +198,8 @@ function SearchComponent({
   };
 
   useEffect(() => {
+    console.log('bbb', allData);
+
     if (allData) {
       const allModifiedData = prepareGazData(allData);
       setAllGazeteerData(allModifiedData);
@@ -183,9 +210,10 @@ function SearchComponent({
     console.log('ccc', showCategories);
   }, [showCategories]);
 
-  const handleSwowCategories = (e) => {
+  const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
     setOptions([]);
+    setSearchResult([]);
     setValue('');
   };
 
@@ -231,7 +259,7 @@ function SearchComponent({
         </AutoComplete>
       )}
       <span style={{ marginLeft: '20px' }}>
-        <Checkbox onChange={handleSwowCategories} checked={showCategories}>
+        <Checkbox onChange={handleShowCategories} checked={showCategories}>
           <span style={{ fontSize: '14px' }}>Kategorien anzeigen</span>
         </Checkbox>
       </span>

@@ -67,6 +67,7 @@ export function App() {
   const [gazData, setGazData] = useState([]);
   useEffect(() => {
     const res = getGazData(setGazData);
+    console.log('bbb', res);
   }, []);
 
   useEffect(() => {
