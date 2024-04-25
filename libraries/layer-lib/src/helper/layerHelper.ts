@@ -1,4 +1,5 @@
 import { Layer, WMSCapabilitiesJSON } from 'wms-capabilities';
+import { serviceConfig } from './config';
 
 export const flattenLayer = (
   layer: any,
@@ -53,8 +54,13 @@ export const createBaseConfig = (layers) => {
   return null;
 };
 
-export const getLayerStructure = (config, wms: WMSCapabilitiesJSON) => {
+export const getLayerStructure = (
+  config,
+  wms: WMSCapabilitiesJSON,
+  serviceName: string
+) => {
   const structure: any[] = [];
+  const services = serviceConfig;
   for (let category in config) {
     const categoryConfig = config[category];
     const layers: any[] = [];
@@ -62,20 +68,29 @@ export const getLayerStructure = (config, wms: WMSCapabilitiesJSON) => {
       Title: categoryConfig.Title || category,
       layers,
     };
+
     for (let layerIndex in categoryConfig.layers) {
       const layer = categoryConfig.layers[layerIndex];
-      let foundLayer = findLayerAndAddTags(
-        wms.Capability.Layer,
-        layer.name,
-        []
-      );
-      if (foundLayer) {
-        foundLayer['url'] =
-          wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
-        let tags = foundLayer.tags;
-        tags[0] = categoryObject.Title;
-        foundLayer = { ...foundLayer, ...layer, ...tags };
-        layers.push(foundLayer);
+      let service;
+      if (layer.serviceName) {
+        service = services[layer.serviceName];
+      } else {
+        service = services[categoryConfig.serviceName];
+      }
+      if (service.name === serviceName) {
+        let foundLayer = findLayerAndAddTags(
+          wms.Capability.Layer,
+          layer.name,
+          []
+        );
+        if (foundLayer) {
+          foundLayer['url'] =
+            wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
+          let tags = foundLayer.tags;
+          tags[0] = categoryObject.Title;
+          foundLayer = { ...foundLayer, ...layer, tags, service };
+          layers.push(foundLayer);
+        }
       }
     }
     categoryObject.layers = layers;
