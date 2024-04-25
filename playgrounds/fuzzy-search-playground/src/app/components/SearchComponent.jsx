@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Fuse from 'fuse.js';
-import { AutoComplete, Button } from 'antd';
+import { AutoComplete, Button, Checkbox } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import { builtInGazetteerHitTrigger } from 'react-cismap/tools/gazetteerHelper';
 
@@ -8,70 +8,39 @@ const renderTitle = (title) => {
   return <span>{title}</span>;
 };
 
-const renderItem = (item) => ({
-  key: `${item?.searchData || '-'}${item?.s || '-'}${item?.n || '-'}${
-    item?.nr
-  }${item?.g || '-'}${item?.nr}${item?.gr || '-'}${item?.x || '-'}${
-    item?.y || '-'
-  }`,
-  value: item.s,
-  label: (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'start',
-      }}
-    >
-      <span style={{ marginRight: '6px' }}>
-        <i className={item?.g && 'fas ' + 'fa-' + item.g}></i>
+const renderItem = (address) => {
+  const addressLabel = buildAddressWithIconUI(address);
+  return {
+    key: address.sorter,
+    value: address.string,
+    label: addressLabel,
+    sData: address,
+  };
+};
+
+function buildAddressWithIconUI(addresObj) {
+  let icon;
+  if (addresObj.glyph === 'pie-chart') {
+    icon = 'chart-pie';
+  } else {
+    icon = addresObj.glyph;
+  }
+  const streetLabel = (
+    <div>
+      <span>
+        <i className={icon && 'fas ' + 'fa-' + icon}></i>
         {'  '}
       </span>
-      {item.searchData}
+      <span>{addresObj.string}</span>
     </div>
-  ),
-});
+  );
 
-// const generateOptions = (results) => {
-//   return results.map((result, idx) => {
-//     const streetLabel = (
-//       <div>
-//         <span>
-//           <i
-//             className={result.item?.glyph && 'fas ' + 'fa-' + result.item.glyph}
-//           ></i>
-//           {'  '}
-//         </span>
-//         <span>{result.item?.string}</span>
-//       </div>
-//     );
-
-//     return {
-//       key: idx,
-//       label: <div>{streetLabel}</div>,
-//       value: result.item?.string,
-//       sData: result.item,
-//     };
-//   });
-// };
+  return streetLabel;
+}
 
 const generateOptions = (results) => {
   return results.map((result, idx) => {
-    let icon;
-    if (result.item?.glyph === 'pie-chart') {
-      icon = 'chart-pie';
-    } else {
-      icon = result.item?.glyph;
-    }
-    const streetLabel = (
-      <div>
-        <span>
-          <i className={icon && 'fas ' + 'fa-' + icon}></i>
-          {'  '}
-        </span>
-        <span>{result.item?.string}</span>
-      </div>
-    );
-
+    const streetLabel = buildAddressWithIconUI(result.item);
     return {
       key: result.item.sorter,
       label: <div>{streetLabel}</div>,
@@ -86,7 +55,7 @@ const mapDataToSearchResult = (data) => {
 
   data.forEach((item) => {
     const address = item.item;
-    const catName = address.gr;
+    const catName = address.type;
 
     if (splittedCategories.hasOwnProperty(catName)) {
       splittedCategories[catName].push(renderItem(address));
@@ -150,9 +119,12 @@ function SearchComponent({
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
+  ifShowCategories: standardSearch = false,
 }) {
   const [options, setOptions] = useState([]);
+  const [showCategories, setSfStandardSearch] = useState(standardSearch);
   const _gazetteerHitTrigger = undefined;
+  const inputStyle = { width: 570, borderRadius: '2px', color: '#495057' };
 
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
@@ -166,11 +138,10 @@ function SearchComponent({
     );
   };
 
-  // const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState([]);
   const [allGazeteerData, setAllGazeteerData] = useState([]);
   const [value, setValue] = useState('');
 
-  const debugReplaceWordFunct = replaceFirstWord('bei der Blutfinke', 'auf');
   const handleSearchAutoComplete = (value) => {
     if (allGazeteerData.length > 0) {
       const fuseAddressesOptions = {
@@ -182,10 +153,25 @@ function SearchComponent({
       const fuse = new Fuse(allGazeteerData, fuseAddressesOptions);
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuse.search(removeStopWords);
-      const groupedResults = mapDataToSearchResult(result);
-      setOptions(generateOptions(result));
+      if (!showCategories) {
+        setOptions(generateOptions(result));
+      } else {
+        const groupedResults = mapDataToSearchResult(result);
+        setSearchResult(groupedResults);
+      }
     }
   };
+
+  const handleOnSelect = (option) => {
+    console.log('hhh', option);
+    internalGazetteerHitTrigger([option.sData]);
+    if (option.sData.type === 'bezirke' || option.sData.type === 'quartiere') {
+      setGazetteerHit(null);
+    } else {
+      setGazetteerHit(option.sData);
+    }
+  };
+
   useEffect(() => {
     if (allData) {
       const allModifiedData = prepareGazData(allData);
@@ -193,33 +179,21 @@ function SearchComponent({
     }
   }, [allData]);
 
-  //   const fuseAddressesOptions = {
-  //     distance: 100,
-  //     useExtendedSearch: true,
-  //     // threshold: 0.5,
-  //     threshold: 0.5,
-  //     // keys: ["searchData", "an", "auf", "bei"],
-  //     keys: ['xSearchData'],
-  //   };
+  useEffect(() => {
+    console.log('ccc', showCategories);
+  }, [showCategories]);
 
-  //   const fuse = new Fuse(allGazeteerData, fuseAddressesOptions);
-
-  //   const handleSearchAutoComplete = (value) => {
-  //     //const removeStopWords = removeWordsWithSpaces(value);
-  //     const removeStopWords = removeStopwords(value, stopwords);
-  //     // const removeStopWords = value;
-  //     console.log('eee', removeStopWords);
-  //     const result = fuse.search(removeStopWords);
-  //     // const result = fuse.search(value);
-  //     console.log('mmm', result);
-  //     const groupedResults = mapDataToSearchResult(result);
-
-  //     setOptions(generateOptions(result));
-  //     // setSearchResult(groupedResults);
-  //   };
+  const handleSwowCategories = (e) => {
+    setSfStandardSearch(e.target.checked);
+    setOptions([]);
+    setValue('');
+  };
 
   return (
     <div style={{ marginTop: '40px' }}>
+      <div style={{ margin: '8px 0 12px' }}>
+        <h5> Fuzzy search</h5>
+      </div>
       <Button
         icon={<CloseOutlined />}
         style={{ borderRadius: '4px' }}
@@ -227,64 +201,51 @@ function SearchComponent({
           setGazetteerHit(null);
           setValue('');
           setOptions([]);
+          setSearchResult([]);
           setOverlayFeature(null);
         }}
       />
-      <AutoComplete
-        options={options}
-        style={{ width: 600, borderRadius: '2px' }}
-        onSearch={(value) => handleSearchAutoComplete(value)}
-        onChange={(value) => setValue(value)}
-        placeholder="Stadtteil | Adresse | POI"
-        value={value}
-        onSelect={(value, option) => {
-          internalGazetteerHitTrigger([option.sData]);
-          // setGazetteerHit(option.sData);
-          if (
-            option.sData.type === 'bezirke' ||
-            option.sData.type === 'quartiere'
-          ) {
-            setGazetteerHit(null);
-          } else {
-            setGazetteerHit(option.sData);
-          }
-        }}
-      />
-      <div>
-        {/* <AutoComplete
-        popupClassName="certain-category-search-dropdown"
-        popupMatchSelectWidth={500} 
-        onSearch={(value) => handleSearchAutoComplete(value)}
-        style={{
-          width: 500,
-        }}
-        options={searchResult}
-        size="large"
-      >
-      <Input.Search size="large" placeholder="input here" />
-    </AutoComplete> */}
-      </div>
+      {!showCategories ? (
+        <AutoComplete
+          options={options}
+          style={inputStyle}
+          onSearch={(value) => handleSearchAutoComplete(value)}
+          onChange={(value) => setValue(value)}
+          placeholder="Stadtteil | Adresse | POI"
+          value={value}
+          onSelect={(value, option) => handleOnSelect(option)}
+        />
+      ) : (
+        <AutoComplete
+          popupClassName="certain-category-search-dropdown"
+          popupMatchSelectWidth={500}
+          style={inputStyle}
+          onSearch={(value) => handleSearchAutoComplete(value)}
+          placeholder="Stadtteil | Adresse | POI"
+          options={searchResult}
+          onSelect={(value, option) => handleOnSelect(option)}
+          value={value}
+          onChange={(value) => setValue(value)}
+        >
+          {/* <Input.Search size="large" placeholder="input here" /> */}
+        </AutoComplete>
+      )}
+      <span style={{ marginLeft: '20px' }}>
+        <Checkbox onChange={handleSwowCategories} checked={showCategories}>
+          <span style={{ fontSize: '14px' }}>Kategorien anzeigen</span>
+        </Checkbox>
+      </span>
+      {/* <div style={{ marginTop: '8px' }}>
+        <Checkbox onChange={handleSwowCategories} checked={showCategories}>
+          <span style={{ fontSize: '14px' }}>Kategorien anzeigen</span>
+        </Checkbox>
+      </div> */}
     </div>
   );
 }
 
 export default SearchComponent;
 
-// Prepare with category
-// function prepareDataSources(dataObj) {
-//   const dataWithCategories = Object.keys(dataObj).map((key) =>
-//     addCategoryAndSearchKeys(dataObj[key], key)
-//   );
-
-//   return dataWithCategories.flat();
-// }
-function prepareDataSources(dataObj) {
-  const dataWithCategories = Object.keys(dataObj).map((key) =>
-    addCategoryAndSearchKeys(dataObj[key], key)
-  );
-
-  return dataWithCategories.flat();
-}
 function removeStopwords(text, stopwords) {
   const words = text.split(' ');
   const placeholderWords = words.map((word) => {
@@ -297,79 +258,16 @@ function removeStopwords(text, stopwords) {
   });
   return placeholderWords.join(' ');
 }
-// Prepare with category
-// function addCategoryAndSearchKeys(data, category) {
-//   return data.map((item) => {
-//     const searchData = item?.s
-//       ? `${item.s} ${item?.nr || ''} ${item?.z || ''}`
-//       : `${item?.n} ${item?.nr || ''}`;
-//     const address = {
-//       ...item,
-//       gr: category,
-//       searchData,
-//       xSearchData: removeStopwords(searchData, stopwords),
-//     };
 
-//     return processPrepositions(address);
-//   });
-// }
-function addCategoryAndSearchKeys(data) {
-  return data.map((item) => {
-    const searchData = item?.s
-      ? `${item.s} ${item?.nr || ''} ${item?.z || ''}`
-      : `${item?.n} ${item?.nr || ''}`;
-    const address = {
-      ...item,
-      //   gr: category,
-      searchData,
-      xSearchData: removeStopwords(searchData, stopwords),
-    };
-    return address;
-    // return processPrepositions(address);
-  });
-}
 function prepareGazData(data) {
   const modifiedData = data.map((item) => {
     const searchData = item?.string;
     const address = {
       ...item,
-      //   gr: category,
-      //   searchData,
       xSearchData: removeStopwords(searchData, stopwords),
     };
     return address;
-    // return processPrepositions(address);
   });
 
   return modifiedData;
-}
-
-function processPrepositions(obj) {
-  const address = obj?.searchData.toLowerCase() || '';
-  if (
-    address.startsWith('in') ||
-    address.startsWith('auf') ||
-    address.startsWith('an') ||
-    address.startsWith('bei')
-  ) {
-    return {
-      ...obj,
-      an: replaceFirstWord(address, 'an'),
-      in: replaceFirstWord(address, 'in'),
-      auf: replaceFirstWord(address, 'auf'),
-      bei: replaceFirstWord(address, 'bei'),
-      prep: true,
-    };
-  } else {
-    return obj;
-  }
-}
-
-function replaceFirstWord(address, preposition) {
-  const firstWord = address.trim().split(' ');
-  firstWord[0] = preposition;
-
-  const result = firstWord.join(' ');
-
-  return result;
 }
