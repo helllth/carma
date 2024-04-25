@@ -15,6 +15,7 @@ import LayerTabs from './LayerTabs';
 import Fuse from 'fuse.js';
 import LibItem from './LibItem';
 import { baseConfig as config } from '../helper/config';
+import { InView } from 'react-intersection-observer';
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -28,6 +29,8 @@ export interface LibModalProps {
 const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
   const [layers, setLayers] = useState<any[]>([]);
   const [allLayers, setAllLayers] = useState<any[]>([]);
+  const [inViewCategory, setInViewCategory] = useState('');
+  const [allCategoriesInView, setAllCategoriesInView] = useState<string[]>([]);
 
   const flattenedLayers = allLayers.flatMap((obj) => obj.layers);
   const fuse = new Fuse(flattenedLayers, {
@@ -156,14 +159,44 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
               <FontAwesomeIcon icon={faX} />
             </Button>
           </div>
-          {layers.length > 0 && <LayerTabs layers={layers} />}
+          {layers.length > 0 && (
+            <LayerTabs layers={layers} activeId={inViewCategory} />
+          )}
         </div>
         <div className="overflow-auto">
           <div className="p-6">
-            {layers.map((category) => (
+            {layers.map((category, i) => (
               <>
                 {category.layers.length > 0 && (
-                  <div id={category?.Title} key={category?.Title}>
+                  <InView
+                    rootMargin="20px 0px 20px 0px"
+                    as="div"
+                    onChange={(inView, entry) => {
+                      if (inView) {
+                        setInViewCategory(entry.target.id);
+
+                        setAllCategoriesInView((prev) => {
+                          return [...prev, entry.target.id];
+                        });
+                      } else {
+                        const updatedCategoriesInView =
+                          allCategoriesInView.filter(
+                            (item) => item !== entry.target.id
+                          );
+                        setAllCategoriesInView(updatedCategoriesInView);
+                        if (inViewCategory === entry.target.id && i > 0) {
+                          for (let j = i - 1; j >= 0; j--) {
+                            if (layers[j].layers.length > 0) {
+                              setInViewCategory(layers[j].Title);
+                            }
+                          }
+                        }
+                      }
+                    }}
+                    id={category?.Title}
+                    key={category?.Title}
+                  >
+                    {/* <div id={category?.Title} key={category?.Title}> */}
                     <p className="mb-4 text-2xl font-semibold">
                       {category?.Title}
                     </p>
@@ -176,7 +209,8 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
                         />
                       ))}
                     </div>
-                  </div>
+                    {/* </div> */}
+                  </InView>
                 )}
               </>
             ))}
