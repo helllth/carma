@@ -29,7 +29,7 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
   const [layers, setLayers] = useState<any[]>([]);
   const [allLayers, setAllLayers] = useState<any[]>([]);
 
-  const flattenedLayers = layers.flatMap((obj) => obj.layers);
+  const flattenedLayers = allLayers.flatMap((obj) => obj.layers);
   const fuse = new Fuse(flattenedLayers, {
     keys: ['Title'],
     shouldSort: false,
