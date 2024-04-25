@@ -91,10 +91,13 @@ const TopNavbar = () => {
 
       <div className="flex items-center gap-6 absolute left-1/2 -ml-60">
         <Tooltip title="Refresh">
-          <FontAwesomeIcon icon={faRedo} className="text-xl" />
+          <FontAwesomeIcon icon={faRedo} className="text-xl text-gray-300" />
         </Tooltip>
         <Tooltip title="Legende">
-          <FontAwesomeIcon icon={faLandmark} className="text-xl" />
+          <FontAwesomeIcon
+            icon={faLandmark}
+            className="text-xl text-gray-300"
+          />
         </Tooltip>
         {/* <FontAwesomeIcon icon={faMap} className="text-xl" /> */}
         <Tooltip title="Layer Library">
@@ -107,13 +110,16 @@ const TopNavbar = () => {
           />
         </Tooltip>
         <Tooltip title="Blass">
-          <FontAwesomeIcon icon={faB} className="text-xl" />
+          <FontAwesomeIcon icon={faB} className="text-xl text-gray-300" />
         </Tooltip>
         <Tooltip title="Drucken">
-          <FontAwesomeIcon icon={faPrint} className="text-xl" />
+          <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
         </Tooltip>
         <Tooltip title="Teilen">
-          <FontAwesomeIcon icon={faShareNodes} className="text-xl" />
+          <FontAwesomeIcon
+            icon={faShareNodes}
+            className="text-xl text-gray-300"
+          />
         </Tooltip>
       </div>
 
