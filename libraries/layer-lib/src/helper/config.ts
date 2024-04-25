@@ -220,9 +220,49 @@ export const config = {
   },
 };
 
+export const serviceConfig = {
+  wuppKarten: {
+    url: 'https://maps.wuppertal.de/karten',
+    name: 'karten',
+  },
+  wuppUmwelt: {
+    url: 'https://maps.wuppertal.de/umwelt',
+    name: 'umwelt',
+  },
+  wuppInfra: {
+    url: 'https://maps.wuppertal.de/infra',
+    name: 'infra',
+  },
+  wuppPOI: {
+    url: 'https://maps.wuppertal.de/poi',
+    name: 'poi',
+  },
+  wuppPlanung: {
+    url: 'https://maps.wuppertal.de/planung',
+    name: 'planung',
+  },
+  wuppInspire: {
+    url: 'https://maps.wuppertal.de/inspire',
+    name: 'inspire',
+  },
+  wuppImmo: {
+    url: 'https://maps.wuppertal.de/immo',
+    name: 'immo',
+  },
+  wuppVerkehr: {
+    url: 'https://maps.wuppertal.de/verkehr',
+    name: 'verkehr',
+  },
+  wuppGebiet: {
+    url: 'https://maps.wuppertal.de/gebiet',
+    name: 'gebiet',
+  },
+};
+
 export const baseConfig = {
   karten: {
     Title: 'Karten',
+    serviceName: 'wuppKarten',
     layers: [
       {
         name: 'R102:luftbild2022',
@@ -399,6 +439,8 @@ export const baseConfig = {
     ],
   },
   Umwelt: {
+    Title: 'Umwelt',
+    serviceName: 'wuppUmwelt',
     layers: [
       {
         name: 'baeume',
@@ -769,6 +811,8 @@ export const baseConfig = {
     ],
   },
   POI: {
+    Title: 'POI',
+    serviceName: 'wuppPOI',
     layers: [
       {
         name: 'poi',
@@ -1034,8 +1078,9 @@ export const baseConfig = {
       },
     ],
   },
-
   Planung: {
+    Title: 'Planung',
+    serviceName: 'wuppPlanung',
     layers: [
       {
         name: 'bverfahren-r',
@@ -1178,6 +1223,8 @@ export const baseConfig = {
     ],
   },
   Infra: {
+    Title: 'Infra',
+    serviceName: 'wuppInfra',
     layers: [
       {
         name: 'apotheken',
@@ -1230,6 +1277,8 @@ export const baseConfig = {
     ],
   },
   Gebiet: {
+    Title: 'Gebiet',
+    serviceName: 'wuppGebiet',
     layers: [
       {
         name: 'R102:fluruebersicht',
@@ -1237,6 +1286,8 @@ export const baseConfig = {
     ],
   },
   Verkehr: {
+    Title: 'Verkehr',
+    serviceName: 'wuppVerkehr',
     layers: [
       {
         name: 'einstr',
@@ -1244,6 +1295,8 @@ export const baseConfig = {
     ],
   },
   Inspire: {
+    Title: 'Inspire',
+    serviceName: 'wuppInspire',
     layers: [
       {
         name: 'US.ChildCareService',
@@ -1251,6 +1304,8 @@ export const baseConfig = {
     ],
   },
   Immo: {
+    Title: 'Immo',
+    serviceName: 'wuppImmo',
     layers: [
       {
         name: 'borisplus_brw',

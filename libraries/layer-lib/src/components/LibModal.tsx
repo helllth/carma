@@ -14,7 +14,7 @@ import './modal.css';
 import LayerTabs from './LayerTabs';
 import Fuse from 'fuse.js';
 import LibItem from './LibItem';
-import { baseConfig as config } from '../helper/config';
+import { baseConfig as config, serviceConfig } from '../helper/config';
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -28,6 +28,7 @@ export interface LibModalProps {
 const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
   const [layers, setLayers] = useState<any[]>([]);
   const [allLayers, setAllLayers] = useState<any[]>([]);
+  const services = serviceConfig;
 
   const flattenedLayers = allLayers.flatMap((obj) => obj.layers);
   const fuse = new Fuse(flattenedLayers, {
@@ -35,18 +36,6 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
     shouldSort: false,
     includeMatches: true,
   });
-
-  const layerNames = [
-    'karten',
-    'gebiet',
-    'immo',
-    'infra',
-    'inspire',
-    'planung',
-    'poi',
-    'umwelt',
-    'verkehr',
-  ];
 
   const getDataFromJson = (data: any) => {
     const flattenedLayers: any[] = [];
@@ -71,9 +60,9 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
 
   useEffect(() => {
     let newLayers: any[] = [];
-    layerNames.forEach((layer) => {
+    for (let key in services) {
       fetch(
-        `https://maps.wuppertal.de/${layer}?service=WMS&request=GetCapabilities&version=1.1.1`
+        `${services[key].url}?service=WMS&request=GetCapabilities&version=1.1.1`
       )
         .then((response) => {
           return response.text();
@@ -82,7 +71,11 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
           const result = parser.toJSON(text);
           if (result) {
             if (config) {
-              const tmpLayer = getLayerStructure(config, result);
+              const tmpLayer = getLayerStructure(
+                config,
+                result,
+                services[key].name
+              );
               const mergedLayer = mergeStructures(tmpLayer, newLayers);
               newLayers = mergedLayer;
               setLayers(newLayers);
@@ -92,7 +85,7 @@ const LibModal = ({ open, setOpen, setAdditionalLayers }: LibModalProps) => {
             }
           }
         });
-    });
+    }
   }, []);
 
   return (
