@@ -201,6 +201,7 @@ function SearchComponent({
           setGazetteerHit(null);
           setValue('');
           setOptions([]);
+          setSearchResult([]);
           setOverlayFeature(null);
         }}
       />
@@ -223,6 +224,8 @@ function SearchComponent({
           placeholder="Stadtteil | Adresse | POI"
           options={searchResult}
           onSelect={(value, option) => handleOnSelect(option)}
+          value={value}
+          onChange={(value) => setValue(value)}
         >
           {/* <Input.Search size="large" placeholder="input here" /> */}
         </AutoComplete>
