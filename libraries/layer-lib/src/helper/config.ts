@@ -221,6 +221,183 @@ export const config = {
 };
 
 export const baseConfig = {
+  karten: {
+    Title: 'Karten',
+    layers: [
+      {
+        name: 'R102:luftbild2022',
+      },
+      {
+        name: 'R102:luftbild2020',
+      },
+      {
+        name: 'R102:luftbild2018',
+      },
+      {
+        name: 'R102:luftbild2016',
+      },
+      {
+        name: 'R102:luftbild2014',
+      },
+      {
+        name: 'R102:luftbild2012',
+      },
+      {
+        name: 'R102:luftbild2010',
+      },
+      {
+        name: 'R102:luftbild2007',
+      },
+      {
+        name: 'R102:luftbild2005',
+      },
+      {
+        name: 'R102:luftbild2002',
+      },
+      {
+        name: 'R102:luftbild1997',
+      },
+      {
+        name: 'R102:luftbild1991',
+      },
+      {
+        name: 'R102:luftbild1985',
+      },
+      {
+        name: 'R102:luftbild1979',
+      },
+      {
+        name: 'R102:luftbild1928',
+      },
+      {
+        name: 'R102:trueortho2022',
+      },
+      {
+        name: 'R102:trueortho2020',
+      },
+      {
+        name: 'R102:trueortho2018',
+      },
+      {
+        name: 'spw2_orange',
+      },
+      {
+        name: 'spw2_light',
+      },
+      {
+        name: 'spw2_graublau',
+      },
+      {
+        name: 'oepnv_rvr',
+      },
+      {
+        name: 'abkf',
+      },
+      {
+        name: 'abkg',
+      },
+      {
+        name: 'abkt',
+      },
+      {
+        name: 'alf',
+      },
+      {
+        name: 'algw',
+      },
+      {
+        name: 'alkomf',
+      },
+      {
+        name: 'alkomgw',
+      },
+      {
+        name: 'albsf',
+      },
+      {
+        name: 'albsgw',
+      },
+      {
+        name: 'expsw',
+        pictureBoundingBox: [
+          784874.5156892611, 6655868.893474152, 821182.1041247197,
+          6679927.448126909,
+        ],
+      },
+      {
+        name: 'expg',
+        pictureBoundingBox: [
+          784874.5156892611, 6655868.893474152, 821182.1041247197,
+          6679927.448126909,
+        ],
+      },
+      {
+        name: 'R102:UEK125',
+        pictureBoundingBox: [
+          784874.5156892611, 6655868.893474152, 821182.1041247197,
+          6679927.448126909,
+        ],
+      },
+      {
+        name: 'R102:STADTRSW',
+      },
+      {
+        name: 'R102:stadtgrundkarte_hausnr',
+      },
+      {
+        name: 'urban',
+      },
+      {
+        name: 'bplanreihe',
+      },
+      {
+        name: 'bplanhintergrund',
+      },
+      {
+        name: 'wuppertal:1827',
+        pictureBoundingBox: [
+          784874.5156892611, 6655868.893474152, 821182.1041247197,
+          6679927.448126909,
+        ],
+      },
+      {
+        name: 'wuppertal:1929',
+        pictureBoundingBox: [
+          784874.5156892611, 6655868.893474152, 821182.1041247197,
+          6679927.448126909,
+        ],
+      },
+      {
+        name: 'wuppertal:1979',
+        pictureBoundingBox: [
+          784874.5156892611, 6655868.893474152, 821182.1041247197,
+          6679927.448126909,
+        ],
+      },
+      {
+        name: 'wuppertal:2004',
+        pictureBoundingBox: [
+          784874.5156892611, 6655868.893474152, 821182.1041247197,
+          6679927.448126909,
+        ],
+      },
+      {
+        name: 'R102:DGK:schwarz',
+      },
+      {
+        name: 'R102:DGK:gelb',
+      },
+      {
+        name: 'R102:DGK:grau',
+      },
+      {
+        name: 'R102:DGK:grau_nt',
+      },
+      {
+        name: 'hillshade',
+      },
+    ],
+  },
   Umwelt: {
     layers: [
       {
@@ -857,182 +1034,7 @@ export const baseConfig = {
       },
     ],
   },
-  Karten: {
-    layers: [
-      {
-        name: 'R102:luftbild2022',
-      },
-      {
-        name: 'R102:luftbild2020',
-      },
-      {
-        name: 'R102:luftbild2018',
-      },
-      {
-        name: 'R102:luftbild2016',
-      },
-      {
-        name: 'R102:luftbild2014',
-      },
-      {
-        name: 'R102:luftbild2012',
-      },
-      {
-        name: 'R102:luftbild2010',
-      },
-      {
-        name: 'R102:luftbild2007',
-      },
-      {
-        name: 'R102:luftbild2005',
-      },
-      {
-        name: 'R102:luftbild2002',
-      },
-      {
-        name: 'R102:luftbild1997',
-      },
-      {
-        name: 'R102:luftbild1991',
-      },
-      {
-        name: 'R102:luftbild1985',
-      },
-      {
-        name: 'R102:luftbild1979',
-      },
-      {
-        name: 'R102:luftbild1928',
-      },
-      {
-        name: 'R102:trueortho2022',
-      },
-      {
-        name: 'R102:trueortho2020',
-      },
-      {
-        name: 'R102:trueortho2018',
-      },
-      {
-        name: 'spw2_orange',
-      },
-      {
-        name: 'spw2_light',
-      },
-      {
-        name: 'spw2_graublau',
-      },
-      {
-        name: 'oepnv_rvr',
-      },
-      {
-        name: 'abkf',
-      },
-      {
-        name: 'abkg',
-      },
-      {
-        name: 'abkt',
-      },
-      {
-        name: 'alf',
-      },
-      {
-        name: 'algw',
-      },
-      {
-        name: 'alkomf',
-      },
-      {
-        name: 'alkomgw',
-      },
-      {
-        name: 'albsf',
-      },
-      {
-        name: 'albsgw',
-      },
-      {
-        name: 'expsw',
-        pictureBoundingBox: [
-          784874.5156892611, 6655868.893474152, 821182.1041247197,
-          6679927.448126909,
-        ],
-      },
-      {
-        name: 'expg',
-        pictureBoundingBox: [
-          784874.5156892611, 6655868.893474152, 821182.1041247197,
-          6679927.448126909,
-        ],
-      },
-      {
-        name: 'R102:UEK125',
-        pictureBoundingBox: [
-          784874.5156892611, 6655868.893474152, 821182.1041247197,
-          6679927.448126909,
-        ],
-      },
-      {
-        name: 'R102:STADTRSW',
-      },
-      {
-        name: 'R102:stadtgrundkarte_hausnr',
-      },
-      {
-        name: 'urban',
-      },
-      {
-        name: 'bplanreihe',
-      },
-      {
-        name: 'bplanhintergrund',
-      },
-      {
-        name: 'wuppertal:1827',
-        pictureBoundingBox: [
-          784874.5156892611, 6655868.893474152, 821182.1041247197,
-          6679927.448126909,
-        ],
-      },
-      {
-        name: 'wuppertal:1929',
-        pictureBoundingBox: [
-          784874.5156892611, 6655868.893474152, 821182.1041247197,
-          6679927.448126909,
-        ],
-      },
-      {
-        name: 'wuppertal:1979',
-        pictureBoundingBox: [
-          784874.5156892611, 6655868.893474152, 821182.1041247197,
-          6679927.448126909,
-        ],
-      },
-      {
-        name: 'wuppertal:2004',
-        pictureBoundingBox: [
-          784874.5156892611, 6655868.893474152, 821182.1041247197,
-          6679927.448126909,
-        ],
-      },
-      {
-        name: 'R102:DGK:schwarz',
-      },
-      {
-        name: 'R102:DGK:gelb',
-      },
-      {
-        name: 'R102:DGK:grau',
-      },
-      {
-        name: 'R102:DGK:grau_nt',
-      },
-      {
-        name: 'hillshade',
-      },
-    ],
-  },
+
   Planung: {
     layers: [
       {

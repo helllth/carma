@@ -59,7 +59,7 @@ export const getLayerStructure = (config, wms: WMSCapabilitiesJSON) => {
     const categoryConfig = config[category];
     const layers: any[] = [];
     let categoryObject = {
-      Title: categoryConfig.title || category,
+      Title: categoryConfig.Title || category,
       layers,
     };
     for (let layerIndex in categoryConfig.layers) {
