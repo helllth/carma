@@ -1,10 +1,9 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 // @ts-ignore
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 // @ts-ignore
-import { FeatureCollectionDispatchContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
 // @ts-ignore
 import FeatureCollection from 'react-cismap/FeatureCollection';
 // @ts-ignore
@@ -27,11 +26,6 @@ const Map = () => {
     // Constructing the bbox string for WMS request
     return `width=1024&height=682&bbox=${left},${bottom},${right},${top}`;
   }
-
-  // @ts-ignore
-  const { setSelectedFeatureByPredicate } = useContext(
-    FeatureCollectionDispatchContext
-  );
 
   useEffect(() => {
     getGazData(setGazData);
@@ -63,17 +57,6 @@ const Map = () => {
           console.log('xxx bbox', createWMSBbox(boundingbox));
         }}
         gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
-        gazetteerHitTrigger={(hits: any) => {
-          if (
-            (Array.isArray(hits) && hits[0]?.more?.pid) ||
-            hits[0]?.more?.kid
-          ) {
-            const gazId = hits[0]?.more?.pid || hits[0]?.more?.kid;
-            setSelectedFeatureByPredicate(
-              (feature: any) => feature.properties.id === gazId
-            );
-          }
-        }}
       >
         <StyledWMSTileLayer
           {...{
