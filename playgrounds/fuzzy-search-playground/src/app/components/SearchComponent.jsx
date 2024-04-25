@@ -119,12 +119,12 @@ function SearchComponent({
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
-  ifShowCategories: standardSearch = true,
+  ifShowCategories: standardSearch = false,
 }) {
   const [options, setOptions] = useState([]);
-  const [ifStandardSearch, setSfStandardSearch] = useState(standardSearch);
+  const [showCategories, setSfStandardSearch] = useState(standardSearch);
   const _gazetteerHitTrigger = undefined;
-  const inoutStyle = { width: 600, borderRadius: '2px' };
+  const inputStyle = { width: 570, borderRadius: '2px', color: '#495057' };
 
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
@@ -153,7 +153,7 @@ function SearchComponent({
       const fuse = new Fuse(allGazeteerData, fuseAddressesOptions);
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuse.search(removeStopWords);
-      if (ifStandardSearch) {
+      if (!showCategories) {
         setOptions(generateOptions(result));
       } else {
         const groupedResults = mapDataToSearchResult(result);
@@ -180,8 +180,8 @@ function SearchComponent({
   }, [allData]);
 
   useEffect(() => {
-    console.log('ccc', ifStandardSearch);
-  }, [ifStandardSearch]);
+    console.log('ccc', showCategories);
+  }, [showCategories]);
 
   const handleSwowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
@@ -192,11 +192,7 @@ function SearchComponent({
   return (
     <div style={{ marginTop: '40px' }}>
       <div style={{ margin: '8px 0 12px' }}>
-        <Checkbox onChange={handleSwowCategories} checked={ifStandardSearch}>
-          <span style={{ fontSize: '14px' }}>
-            Fuzzy search, Standard Search
-          </span>
-        </Checkbox>
+        <h5> Fuzzy search</h5>
       </div>
       <Button
         icon={<CloseOutlined />}
@@ -208,10 +204,10 @@ function SearchComponent({
           setOverlayFeature(null);
         }}
       />
-      {ifStandardSearch ? (
+      {!showCategories ? (
         <AutoComplete
           options={options}
-          style={inoutStyle}
+          style={inputStyle}
           onSearch={(value) => handleSearchAutoComplete(value)}
           onChange={(value) => setValue(value)}
           placeholder="Stadtteil | Adresse | POI"
@@ -222,7 +218,7 @@ function SearchComponent({
         <AutoComplete
           popupClassName="certain-category-search-dropdown"
           popupMatchSelectWidth={500}
-          style={inoutStyle}
+          style={inputStyle}
           onSearch={(value) => handleSearchAutoComplete(value)}
           placeholder="Stadtteil | Adresse | POI"
           options={searchResult}
@@ -231,6 +227,16 @@ function SearchComponent({
           {/* <Input.Search size="large" placeholder="input here" /> */}
         </AutoComplete>
       )}
+      <span style={{ marginLeft: '20px' }}>
+        <Checkbox onChange={handleSwowCategories} checked={showCategories}>
+          <span style={{ fontSize: '14px' }}>Kategorien anzeigen</span>
+        </Checkbox>
+      </span>
+      {/* <div style={{ marginTop: '8px' }}>
+        <Checkbox onChange={handleSwowCategories} checked={showCategories}>
+          <span style={{ fontSize: '14px' }}>Kategorien anzeigen</span>
+        </Checkbox>
+      </div> */}
     </div>
   );
 }
@@ -249,35 +255,7 @@ function removeStopwords(text, stopwords) {
   });
   return placeholderWords.join(' ');
 }
-// Prepare with category
-// function addCategoryAndSearchKeys(data, category) {
-//   return data.map((item) => {
-//     const searchData = item?.s
-//       ? `${item.s} ${item?.nr || ''} ${item?.z || ''}`
-//       : `${item?.n} ${item?.nr || ''}`;
-//     const address = {
-//       ...item,
-//       gr: category,
-//       searchData,
-//       xSearchData: removeStopwords(searchData, stopwords),
-//     };
 
-//     return processPrepositions(address);
-//   });
-// }
-// function addCategoryAndSearchKeys(data) {
-//   return data.map((item) => {
-//     const searchData = item?.s
-//       ? `${item.s} ${item?.nr || ''} ${item?.z || ''}`
-//       : `${item?.n} ${item?.nr || ''}`;
-//     const address = {
-//       ...item,
-//       searchData,
-//       xSearchData: removeStopwords(searchData, stopwords),
-//     };
-//     return address;
-//   });
-// }
 function prepareGazData(data) {
   const modifiedData = data.map((item) => {
     const searchData = item?.string;
@@ -290,33 +268,3 @@ function prepareGazData(data) {
 
   return modifiedData;
 }
-
-// function processPrepositions(obj) {
-//   const address = obj?.searchData.toLowerCase() || '';
-//   if (
-//     address.startsWith('in') ||
-//     address.startsWith('auf') ||
-//     address.startsWith('an') ||
-//     address.startsWith('bei')
-//   ) {
-//     return {
-//       ...obj,
-//       an: replaceFirstWord(address, 'an'),
-//       in: replaceFirstWord(address, 'in'),
-//       auf: replaceFirstWord(address, 'auf'),
-//       bei: replaceFirstWord(address, 'bei'),
-//       prep: true,
-//     };
-//   } else {
-//     return obj;
-//   }
-// }
-
-// function replaceFirstWord(address, preposition) {
-//   const firstWord = address.trim().split(' ');
-//   firstWord[0] = preposition;
-
-//   const result = firstWord.join(' ');
-
-//   return result;
-// }
