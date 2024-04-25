@@ -40,6 +40,7 @@ const TopNavbar = () => {
 
   const updateLayers = (layer: any) => {
     const url = layer.getMapUrl.substring(0, layer.getMapUrl.length - 1);
+    console.log(layer);
     let newAdditionalLayers;
     newAdditionalLayers = { ...additionalLayerConfiguration };
     newAdditionalLayers[layer.title.replace(/\s/g, '_').toLowerCase()] = {
@@ -58,18 +59,16 @@ const TopNavbar = () => {
         />
       ),
     };
-
-    console.log(newAdditionalLayers);
     try {
       setAdditionalLayerConfiguration(newAdditionalLayers);
       messageApi.open({
         type: 'success',
-        content: 'Layer wurde erfolgreich hinzugefügt.',
+        content: `${layer.title} wurde erfolgreich hinzugefügt.`,
       });
     } catch {
       messageApi.open({
         type: 'error',
-        content: 'Es gab einen Fehler beim hinzufügen des Layers.',
+        content: `Es gab einen Fehler beim hinzufügen von ${layer.title}`,
       });
     }
   };
