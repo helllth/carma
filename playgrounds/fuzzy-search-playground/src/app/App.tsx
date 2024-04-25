@@ -88,11 +88,10 @@ export function App() {
           allData={gazData}
           referenceSystem={MappingConstants.crs3857}
           referenceSystemDefinition={MappingConstants.proj4crs3857def}
-          ifShowCategories={false}
         />
       </div>
       <TopicMapContextProvider featureItemsURL="/data/parkscheinautomatenfeatures.json">
-        <div style={{ marginLeft: '10px', marginTop: '12px' }}>
+        <div style={{ marginLeft: '10px', marginTop: '24px' }}>
           <GazetteerSearchComponent
             mapRef={mapRef}
             gazetteerHit={gazetteerHit}
