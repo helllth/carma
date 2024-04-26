@@ -97,13 +97,6 @@ export function App() {
         }
         gazetteerSearchComponent={SearchComponent}
         _gazetteerSearchComponent={GazetteerSearchComponent}
-        // _gazetteerSearchComponent={({ pixelwidth }) => {
-        //   return (
-        //     <div style={{ width: pixelwidth }}>
-        //       <input style={{ width: pixelwidth }}></input>
-        //     </div>
-        //   );
-        // }}
       >
         <FeatureCollection />
       </TopicMapComponent>
