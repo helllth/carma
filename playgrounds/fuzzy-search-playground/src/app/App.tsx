@@ -1,18 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-// import styles from './App.module.css';
-// import Button from 'react-bootstrap/Button';
-// import Form from 'react-bootstrap/Form';
-// import Nav from 'react-bootstrap/Nav';
-// import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
-import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
-import GazetteerHitDisplay from 'react-cismap/GazetteerHitDisplay';
-import GazetteerSearchComponent from 'react-cismap/GazetteerSearchComponent';
+
 import ProjSingleGeoJson from 'react-cismap/ProjSingleGeoJson';
-import { MappingConstants, RoutedMap } from 'react-cismap';
-import { md5FetchText, fetchJSON } from 'react-cismap/tools/fetching';
 import { getGazDataForTopicIds } from 'react-cismap/tools/gazetteerHelper';
 import SearchComponent from './components/SearchComponent.jsx';
+import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
+import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
+
+import GazetteerHitDisplay from 'react-cismap/GazetteerHitDisplay';
+import GazetteerSearchComponent from 'react-cismap/GazetteerSearchComponent';
+import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
+import FeatureCollection from 'react-cismap/FeatureCollection';
+import { MappingConstants, RoutedMap } from 'react-cismap';
+import { md5FetchText, fetchJSON } from 'react-cismap/tools/fetching';
 
 const host = 'https://wupp-topicmaps-data.cismet.de';
 
@@ -67,7 +66,6 @@ export function App() {
   const [gazData, setGazData] = useState([]);
   useEffect(() => {
     const res = getGazData(setGazData);
-    console.log('bbb', res);
   }, []);
 
   useEffect(() => {
@@ -78,72 +76,38 @@ export function App() {
   }, [overlayFeature]);
 
   return (
-    <div>
-      <div style={{ marginLeft: '10px' }}>
-        <SearchComponent
-          mapRef={mapRef}
-          gazetteerHit={gazetteerHit}
-          setGazetteerHit={setGazetteerHit}
-          overlayFeature={overlayFeature}
-          setOverlayFeature={setOverlayFeature}
-          allData={gazData}
-          referenceSystem={MappingConstants.crs3857}
-          referenceSystemDefinition={MappingConstants.proj4crs3857def}
-        />
-      </div>
-      <TopicMapContextProvider featureItemsURL="/data/parkscheinautomatenfeatures.json">
-        <div style={{ marginLeft: '10px', marginTop: '28px' }}>
-          <h5>Standard Search</h5>
-          <GazetteerSearchComponent
-            mapRef={mapRef}
-            gazetteerHit={gazetteerHit}
-            setGazetteerHit={setGazetteerHit}
-            overlayFeature={overlayFeature}
-            setOverlayFeature={setOverlayFeature}
-            gazData={gazData}
-            enabled={gazData.length > 0}
-            dropup={false}
-            referenceSystem={MappingConstants.crs3857}
-            referenceSystemDefinition={MappingConstants.proj4crs3857def}
-            pixelwidth={600}
+    <TopicMapContextProvider featureItemsURL="/data/parkscheinautomatenfeatures.json">
+      <TopicMapComponent
+        gazData={gazData}
+        infoBox={
+          <GenericInfoBoxFromFeature
+            config={{
+              city: 'Wuppertal',
+              header: 'Parkscheinautomat',
+              navigator: {
+                noun: {
+                  singular: 'Parkscheinautomat',
+                  plural: 'Parkscheinautomaten',
+                },
+              },
+              noCurrentFeatureTitle: 'Keine Parkscheinautomaten gefunden',
+              noCurrentFeatureContent: '',
+            }}
           />
-        </div>
-        <div style={{ height: 30 }}></div>
-        <RoutedMap
-          style={mapStyle}
-          key={'leafletRoutedMap'}
-          referenceSystem={MappingConstants.crs3857}
-          referenceSystemDefinition={MappingConstants.proj4crs3857def}
-          ref={mapRef}
-          layers=""
-          doubleClickZoom={false}
-          onclick={(e) => console.log('gazetteerHit', gazetteerHit)}
-          ondblclick={(e) => console.log('doubleclick', e)}
-          autoFitProcessedHandler={() => {}}
-          backgroundlayers={'rvrGrau'}
-          urlSearchParams={urlSearchParams}
-          fullScreenControlEnabled={false}
-          locateControlEnabled={false}
-          minZoom={7}
-          maxZoom={18}
-          zoomSnap={0.5}
-          zoomDelta={0.5}
-        >
-          {overlayFeature && (
-            <ProjSingleGeoJson
-              key={JSON.stringify(overlayFeature)}
-              geoJson={overlayFeature}
-              masked={true}
-              mapRef={mapRef}
-            />
-          )}
-          <GazetteerHitDisplay
-            key={'gazHit' + JSON.stringify(gazetteerHit)}
-            gazetteerHit={gazetteerHit}
-          />
-        </RoutedMap>
-      </TopicMapContextProvider>
-    </div>
+        }
+        gazetteerSearchComponent={SearchComponent}
+        _gazetteerSearchComponent={GazetteerSearchComponent}
+        // _gazetteerSearchComponent={({ pixelwidth }) => {
+        //   return (
+        //     <div style={{ width: pixelwidth }}>
+        //       <input style={{ width: pixelwidth }}></input>
+        //     </div>
+        //   );
+        // }}
+      >
+        <FeatureCollection />
+      </TopicMapComponent>
+    </TopicMapContextProvider>
   );
 }
 
