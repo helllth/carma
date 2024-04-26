@@ -136,7 +136,7 @@ const articles = ['der', 'die', 'das', 'den', 'dem', 'des'];
 const stopwords = [...preps, ...articles];
 
 function SearchComponent({
-  allData,
+  gazData,
   setGazetteerHit,
   gazetteerHit,
   mapRef,
@@ -144,12 +144,16 @@ function SearchComponent({
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
+  pixelwidth = 300,
   ifShowCategories: standardSearch = false,
 }) {
   const [options, setOptions] = useState([]);
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
   const _gazetteerHitTrigger = undefined;
-  const inputStyle = { width: 570, borderRadius: '2px', color: '#495057' };
+  const inputStyle = {
+    width: 'calc(100% - 32px)',
+    borderRadius: '2px',
+  };
 
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
@@ -198,17 +202,15 @@ function SearchComponent({
   };
 
   useEffect(() => {
-    console.log('bbb', allData);
+    console.log('bbb', gazData);
 
-    if (allData) {
-      const allModifiedData = prepareGazData(allData);
+    if (gazData) {
+      const allModifiedData = prepareGazData(gazData);
       setAllGazeteerData(allModifiedData);
     }
-  }, [allData]);
+  }, [gazData]);
 
-  useEffect(() => {
-    console.log('ccc', showCategories);
-  }, [showCategories]);
+  useEffect(() => {}, [showCategories]);
 
   const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
@@ -218,10 +220,12 @@ function SearchComponent({
   };
 
   return (
-    <div style={{ marginTop: '40px' }}>
-      <div style={{ margin: '8px 0 12px' }}>
-        <h5> Fuzzy search</h5>
-      </div>
+    <div
+      style={{
+        marginTop: '20px',
+        width: pixelwidth,
+      }}
+    >
       <Button
         icon={<CloseOutlined />}
         style={{ borderRadius: '4px' }}
@@ -258,16 +262,11 @@ function SearchComponent({
           {/* <Input.Search size="large" placeholder="input here" /> */}
         </AutoComplete>
       )}
-      <span style={{ marginLeft: '20px' }}>
-        <Checkbox onChange={handleShowCategories} checked={showCategories}>
-          <span style={{ fontSize: '14px' }}>Kategorien anzeigen</span>
-        </Checkbox>
-      </span>
-      {/* <div style={{ marginTop: '8px' }}>
-        <Checkbox onChange={handleSwowCategories} checked={showCategories}>
-          <span style={{ fontSize: '14px' }}>Kategorien anzeigen</span>
-        </Checkbox>
-      </div> */}
+      {/* <div style={{ marginLeft: '20px', flexShrink: 0 }}>
+    <Checkbox onChange={handleShowCategories} checked={showCategories}>
+      <span style={{ fontSize: '14px' }}>Kategorien anzeigen</span>
+    </Checkbox>
+  </div> */}
     </div>
   );
 }
