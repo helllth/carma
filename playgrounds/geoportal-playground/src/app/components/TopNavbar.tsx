@@ -99,7 +99,7 @@ const TopNavbar = () => {
           />
         </Tooltip>
         {/* <FontAwesomeIcon icon={faMap} className="text-xl" /> */}
-        <Tooltip title="Layer Library">
+        <Tooltip title="Layer">
           <FontAwesomeIcon
             icon={faLayerGroup}
             onClick={() => {
