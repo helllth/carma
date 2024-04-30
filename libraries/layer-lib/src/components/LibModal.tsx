@@ -204,7 +204,7 @@ const LibModal = ({
                     <p className="mb-4 text-2xl font-semibold">
                       {category?.Title}
                     </p>
-                    <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8">
+                    <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8 mb-4">
                       {category?.layers?.map((layer: any, i) => (
                         <LibItem
                           setAdditionalLayers={setAdditionalLayers}
