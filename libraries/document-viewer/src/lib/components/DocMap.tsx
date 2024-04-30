@@ -8,7 +8,7 @@ import CismapLayer from 'react-cismap/CismapLayer';
 import Raster from 'leaflet-rastercoords';
 // @ts-ignore
 import L from 'leaflet';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
 
 const { Rectangle } = TransitiveReactLeaflet;
@@ -20,9 +20,18 @@ interface DocMapsProps {
   index: number;
   height: number;
   width: number;
+  setWholeWidth: any;
+  setWholeHeight: any;
 }
 
-const DocMap = ({ docs, index, height, width }: DocMapsProps) => {
+const DocMap = ({
+  docs,
+  index,
+  height,
+  width,
+  setWholeWidth,
+  setWholeHeight,
+}: DocMapsProps) => {
   const [layer, setLayer] = useState<
     | {
         layerUrl: string;
@@ -41,6 +50,10 @@ const DocMap = ({ docs, index, height, width }: DocMapsProps) => {
   >();
   const { page } = useParams();
   const leafletMapRef = useRef<L.Map>(null);
+  const [urlParams, setUrlParams] = useSearchParams();
+
+  const WIDTH = 'WIDTH';
+  const HEIGHT = 'HEIGHT';
 
   const getPureArrayBounds4LatLngBounds = (llBounds: any) => {
     return [
@@ -119,11 +132,141 @@ const DocMap = ({ docs, index, height, width }: DocMapsProps) => {
     }
   };
 
+  const getOptimalBounds = (forDimension?: string) => {
+    const meta = docs[index - 1].meta;
+    const pageNumber = parseInt(page!);
+    let dimensions;
+
+    try {
+      dimensions = [
+        meta['layer' + `${pageNumber - 1}`].x,
+        meta['layer' + `${pageNumber - 1}`].y,
+      ];
+    } catch (e) {
+      dimensions = [2000, 2000];
+    }
+
+    const leafletSize = { x: width, y: height };
+    if (forDimension) {
+      if (leafletSize.x / leafletSize.y < 1) {
+        if (forDimension === WIDTH) {
+          let targetDimensions = [dimensions[0], dimensions[1]];
+          const rc = new L.RasterCoords(
+            leafletMapRef.current.leafletMap.leafletElement,
+            targetDimensions
+          );
+
+          return [
+            [
+              rc.unproject([0, 0]),
+              rc.unproject([targetDimensions[0], targetDimensions[1]]),
+            ],
+          ];
+        } else if (forDimension === HEIGHT) {
+          let targetDimensions = [
+            (dimensions[1] * leafletSize.x) / leafletSize.y,
+            dimensions[1],
+          ];
+          let rc = new L.RasterCoords(
+            leafletMapRef.current.leafletMap.leafletElement,
+            targetDimensions
+          );
+          return [
+            [
+              rc.unproject([0, 0]),
+              rc.unproject([targetDimensions[0], targetDimensions[1]]),
+            ],
+          ];
+        }
+      } else {
+        if (forDimension === WIDTH) {
+          let targetDimensions = [
+            dimensions[0],
+            (dimensions[0] * leafletSize.y) / leafletSize.x,
+          ];
+          let rc = new L.RasterCoords(
+            leafletMapRef.current.leafletMap.leafletElement,
+            targetDimensions
+          );
+          return [
+            [
+              rc.unproject([0, 0]),
+              rc.unproject([targetDimensions[0], targetDimensions[1]]),
+            ],
+          ];
+        } else if (forDimension === HEIGHT) {
+          let targetDimensions = [dimensions[0], dimensions[1]];
+          let rc = new L.RasterCoords(
+            leafletMapRef.current.leafletMap.leafletElement,
+            targetDimensions
+          );
+          return [
+            [
+              rc.unproject([0, 0]),
+              rc.unproject([targetDimensions[0], targetDimensions[1]]),
+            ],
+          ];
+        }
+      }
+      if (leafletMapRef.current.leafletMap?.leafletElement) {
+        const rc = new L.RasterCoords(
+          leafletMapRef.current.leafletMap.leafletElement,
+          dimensions
+        );
+        const layerBounds = [
+          [rc.unproject([0, 0]), rc.unproject([dimensions[0], dimensions[1]])],
+        ];
+
+        return layerBounds;
+      }
+    }
+  };
+
+  const gotoWholeWidth = () => {
+    let wb = getOptimalBounds(WIDTH);
+
+    leafletMapRef.current.leafletMap.leafletElement.fitBounds(wb);
+  };
+
+  const gotoWholeDocument = () => {
+    let wb = getOptimalBounds();
+    //this.props.docsActions.setDebugBounds(wb);
+    if (leafletMapRef.current.leafletMap?.leafletElement) {
+      leafletMapRef.current.leafletMap.leafletElement.invalidateSize();
+      leafletMapRef.current.leafletMap.leafletElement.fitBounds(wb);
+    }
+  };
+
+  const gotoWholeHeight = () => {
+    let hb = getOptimalBounds(HEIGHT);
+
+    leafletMapRef.current.leafletMap.leafletElement.fitBounds(hb);
+  };
+
+  function paramsToObject(entries) {
+    const result = {};
+    for (const [key, value] of entries) {
+      // each 'entry' is a [key, value] tupple
+      result[key] = value;
+    }
+    return result;
+  }
+
   useEffect(() => {
     if (docs.length > 0 && index) {
       getLayer();
     }
   }, [index, docs, page]);
+
+  useEffect(() => {
+    gotoWholeHeight();
+  }, [setWholeHeight]);
+
+  useEffect(() => {
+    if (setWholeWidth) {
+      gotoWholeWidth();
+    }
+  }, [setWholeWidth]);
 
   return (
     <RoutedMap
@@ -139,6 +282,10 @@ const DocMap = ({ docs, index, height, width }: DocMapsProps) => {
       fullScreenControlEnabled={true}
       ref={leafletMapRef}
       key={'leafletRoutedMap.' + index + layer?.layerUrl}
+      locationChangedHandler={(location) => {
+        const newParams = { ...paramsToObject(urlParams), ...location };
+        setUrlParams(newParams);
+      }}
     >
       {layer?.layerUrl && (
         <>
