@@ -5,7 +5,7 @@ import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../../../node_modules/.vite/apps/topicmaps/fnp-test',
+  cacheDir: '../../../node_modules/.vite/apps/topicmaps/fnp-doc-viewer',
 
   server: {
     port: 4200,
@@ -28,7 +28,7 @@ export default defineConfig({
   // },
 
   build: {
-    outDir: '../../../dist/apps/topicmaps/fnp-test',
+    outDir: '../../../dist/apps/topicmaps/fnp-doc-viewer',
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
