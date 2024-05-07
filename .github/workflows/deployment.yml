@@ -241,6 +241,11 @@ jobs:
         with:
           fetch-depth: 0
           submodules: 'recursive' # Fetch all submodules recursively
+      - name: add cismet-dev registry secret to .npmrc
+        shell: bash
+        run: |
+          touch .npmrc
+          echo "${{ secrets.CISMET_DEV_REGISTRY_SECRET_4_DOT_NPMRC }}" >> .npmrc
       - name: Install Nx
         run: npm install nx@17.2.8
       - name: Get properties from json
