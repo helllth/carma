@@ -1,0 +1,74 @@
+{
+  "name": "bplaene-doc-viewer",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/topicmaps/bplaene-doc-viewer/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/topicmaps/bplaene-doc-viewer"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "bplaene-doc-viewer:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "bplaene-doc-viewer:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "bplaene-doc-viewer:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "bplaene-doc-viewer:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "bplaene-doc-viewer:build:development"
+        },
+        "production": {
+          "buildTarget": "bplaene-doc-viewer:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../coverage/apps/topicmaps/bplaene-doc-viewer"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "bplaene-doc-viewer:build"
+      }
+    }
+  },
+  "tags": []
+}
