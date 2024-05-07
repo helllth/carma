@@ -64,7 +64,9 @@ export function App() {
     }
   }, [docPackageId]);
 
-  return <>{docs.length > 0 && <DocumentViewer docs={docs} />}</>;
+  return (
+    <>{docs.length > 0 && <DocumentViewer docs={docs} mode="aenderungsv" />}</>
+  );
 }
 
 export default App;

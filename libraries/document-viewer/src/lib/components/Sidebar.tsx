@@ -12,9 +12,17 @@ interface SidebarProps {
   docs: Doc[];
   index: number;
   maxIndex: number;
+  mode: string;
+  compactView: boolean;
 }
 
-const Sidebar = ({ docs, index, maxIndex }: SidebarProps) => {
+const Sidebar = ({
+  docs,
+  index,
+  maxIndex,
+  mode,
+  compactView,
+}: SidebarProps) => {
   const { docPackageId, page } = useParams();
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
@@ -33,7 +41,7 @@ const Sidebar = ({ docs, index, maxIndex }: SidebarProps) => {
   };
 
   const filenameShortener = (original: string) => {
-    const shorty = SIDEBAR_FILENAME_SHORTENER['aenderungsv'](original);
+    const shorty = SIDEBAR_FILENAME_SHORTENER[mode](original);
 
     return shorty;
   };
@@ -63,14 +71,15 @@ const Sidebar = ({ docs, index, maxIndex }: SidebarProps) => {
                   alignItems: 'center',
                   display: 'flex',
                   gap: '6px',
-                  padding: 8,
-                  overflowWrap: 'break-word',
                 }}
               >
                 {doc.group === 'Zusatzdokumente' ? (
-                  <FontAwesomeIcon icon={faFile} size="3x" />
+                  <FontAwesomeIcon
+                    icon={faFile}
+                    size={compactView ? '3x' : '1x'}
+                  />
                 ) : (
-                  <Icon name="file-pdf-o" size="3x" />
+                  <Icon name="file-pdf-o" size={compactView ? '3x' : '1x'} />
                 )}
 
                 <p
@@ -81,6 +90,7 @@ const Sidebar = ({ docs, index, maxIndex }: SidebarProps) => {
                     wordWrap: 'break-word',
                     textWrap: 'pretty',
                     overflowWrap: 'break-word',
+                    textAlign: 'center',
                   }}
                 >
                   <span>{doc.title || filenameShortener(doc.file)}</span>

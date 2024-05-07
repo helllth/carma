@@ -270,7 +270,7 @@ const DocMap = ({
 
   return (
     <RoutedMap
-      style={{ height: height, width: width, backgroundColor: 'white' }}
+      style={{ height: height, width: '100%', backgroundColor: 'white' }}
       backgroundLayers="no"
       minZoom={1}
       maxZoom={6}
@@ -281,7 +281,7 @@ const DocMap = ({
       referenceSystem={L.CRS.Simple}
       fullScreenControlEnabled={true}
       ref={leafletMapRef}
-      key={'leafletRoutedMap.' + index + layer?.layerUrl}
+      key={'leafletRoutedMap.' + index + layer?.layerUrl + '_' + width}
       locationChangedHandler={(location) => {
         const newParams = { ...paramsToObject(urlParams), ...location };
         setUrlParams(newParams);

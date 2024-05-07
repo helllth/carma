@@ -17,6 +17,7 @@ export type Doc = {
   url: string;
   layer: string;
   title?: string;
+  docTitle?: string;
   group: string;
   file: string;
   meta: {
@@ -34,75 +35,55 @@ export type Doc = {
 /* eslint-disable-next-line */
 export interface DocumentViewerProps {
   docs: Doc[];
+  mode: string;
 }
 
-export function DocumentViewer({ docs }: DocumentViewerProps) {
+export function DocumentViewer({ docs, mode }: DocumentViewerProps) {
   let { file } = useParams();
   const sideBarMinSize = 130;
   const mapWrapperRef = useRef<HTMLDivElement>(null);
   const [wholeWidthTrigger, setWholeWidthTrigger] = useState(undefined);
   const [wholeHeightTrigger, setWholeHeightTrigger] = useState(undefined);
-  const [resizing, setResizing] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useState(sideBarMinSize);
+  const [mapWidth, setMapWidth] = useState(0);
+  const [compactView, setCompactView] = useState(true);
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const isResizingRef = useRef(false);
 
   const mapHeight = 'calc(100vh - 49px)';
 
-  const onMouseDown = (e) => {
-    if (e.button === 0) {
-      startResizing();
-    }
+  const handleMouseDown = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    isResizingRef.current = true;
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
   };
 
-  const startResizing = () => {
-    setResizing(true);
-  };
+  const handleMouseMove = (event: MouseEvent) => {
+    if (!isResizingRef.current) return;
 
-  const stopResizing = () => {
-    setResizing(false);
-  };
+    let newWidth = event.clientX;
 
-  const onMouseMove = (e) => {
-    if (resizing) {
-      e.preventDefault();
-      resize(e.clientX);
-    }
-  };
+    if (newWidth < sideBarMinSize) newWidth = sideBarMinSize;
+    if (newWidth > 400) newWidth = 400;
 
-  const onTouchMove = (e) => {
-    if (resizing) {
-      e.preventDefault();
-      resize(e.touches[0].clientX);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('touchmove', onTouchMove);
-    window.addEventListener('mouseup', stopResizing);
-
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('mouseup', stopResizing);
-    };
-  }, []);
-
-  const resize = (clientX) => {
-    if (resizing) {
-      let newSidebarWidth;
-      if (sidebarRef.current) {
-        newSidebarWidth =
-          clientX - sidebarRef.current?.getBoundingClientRect().left + 5;
+    if (sidebarRef.current) {
+      sidebarRef.current.style.width = `${newWidth}px`;
+      if (newWidth === 400) {
+        setCompactView(false);
       } else {
-        newSidebarWidth = sidebarWidth;
-      }
-
-      let countWrapps = 0;
-      if (newSidebarWidth > sideBarMinSize) {
-        setSidebarWidth(newSidebarWidth);
+        setCompactView(true);
       }
     }
+  };
+
+  const handleMouseUp = () => {
+    isResizingRef.current = false;
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
   };
 
   return (
@@ -113,7 +94,7 @@ export function DocumentViewer({ docs }: DocumentViewerProps) {
         }}
       >
         <Navbar
-          title={docs[0]?.title}
+          title={docs[0]?.title || docs[0].docTitle}
           // @ts-ignore
           maxIndex={docs[parseInt(file!) - 1]?.meta.pages}
           downloadUrl={docs[parseInt(file!) - 1]?.url}
@@ -143,7 +124,7 @@ export function DocumentViewer({ docs }: DocumentViewerProps) {
             style={{
               background: 'rgb(153, 153, 153)',
               height: mapHeight,
-              width: sidebarWidth,
+              // width: sidebarWidth,
               padding: '5px 1px 5px 5px',
               overflow: 'scroll',
             }}
@@ -154,6 +135,8 @@ export function DocumentViewer({ docs }: DocumentViewerProps) {
               index={parseInt(file!)}
               // @ts-ignore
               maxIndex={docs[parseInt(file!) - 1]?.meta.pages}
+              mode={mode}
+              compactView={compactView}
             />
           </div>
         )}
@@ -165,9 +148,9 @@ export function DocumentViewer({ docs }: DocumentViewerProps) {
             width: 10,
             cursor: 'col-resize',
           }}
-          onMouseDown={onMouseDown}
-          onTouchStart={startResizing}
-          onTouchEnd={stopResizing}
+          onMouseDown={handleMouseDown}
+          // onTouchStart={startResizing}
+          // onTouchEnd={stopResizing}
         ></div>
         <div
           id="docviewer"
@@ -182,7 +165,7 @@ export function DocumentViewer({ docs }: DocumentViewerProps) {
               docs={docs}
               index={parseInt(file!)}
               height={mapWrapperRef?.current?.clientHeight}
-              width={mapWrapperRef?.current?.clientWidth}
+              width={mapWidth}
               setWholeHeight={wholeHeightTrigger}
               setWholeWidth={wholeWidthTrigger}
             />
