@@ -72,7 +72,8 @@
             "prj": "floodingmap-wuppertal"
           }
         }
-      }
+      },
+      "projectPath": "./dist/envirometrics/wuppertal/floodingmap"
     }
   }
 }
