@@ -40,7 +40,7 @@ jobs:
         shell: bash
         run: |
           touch .npmrc
-          echo ${{ secrets.CISMET_DEV_REGISTRY_SECRET_4_DOT_NPMRC }} >> .npmrc
+          echo "${{ secrets.CISMET_DEV_REGISTRY_SECRET_4_DOT_NPMRC }}" >> .npmrc
       - name: Install dependencies
         run: npm install
 
