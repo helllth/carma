@@ -17,7 +17,8 @@ import Haftungsausschluss from './help/Help90HaftungsausschlussWupp';
 import Footer from '@cismet-dev/react-cismap-envirometrics-maps/components/customizablehelp/Help99Footer';
 import { getGazDataForTopicIds } from 'react-cismap/tools/gazetteerHelper';
 import { md5FetchJSON } from 'react-cismap/tools/fetching';
-
+import CrossTabCommunicationControl from 'react-cismap/CrossTabCommunicationControl';
+import CrossTabCommunicationContextProvider from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
 import config from './config';
 import { getApplicationVersion } from './version';
 import NotesDisplay from './NotesDisplay';
@@ -104,78 +105,84 @@ function App() {
   }, []);
 
   return (
-    <TopicMapContextProvider
-      appKey={'cismetRainhazardMap.Wuppertal'}
-      referenceSystem={MappingConstants.crs3857}
-      referenceSystemDefinition={MappingConstants.proj4crs3857def}
-      infoBoxPixelWidth={370}
+    <CrossTabCommunicationContextProvider
+      role="sync"
+      token="floodingAndRainhazardSyncWupp"
     >
-      <HeavyRainHazardMap
-        applicationMenuTooltipString="Anleitung | Hintergrund"
-        appMenu={
-          <GenericModalApplicationMenu
-            menuIntroduction={
-              <span>
-                Bitte wählen Sie eine der folgenden farbigen Schaltflächen, um
-                sich weitere Informationen zu dem entsprechenden Thema anzeigen
-                zu lassen:
-              </span>
-            }
-            menuIcon="info"
-            menuTitle="Kompaktanleitung und Hintergrundinformationen"
-            menuSections={[
-              <Datengrundlage key="Datengrundlage" />,
-              <Karteninhalt
-                key="Karteninhalt"
-                simulationsklammer={undefined}
-              />,
-              <InKartePositionieren key="InKartePositionieren" />,
-              <MeinStandort key="MeinStandort" />,
-              <ZeitlicherVerlauf key="ZeitlicherVerlauf" />,
-              <WasserstandAbfragen key="Wasserstand" />,
-              <SimulierteSzenarien key="SimulierteSzenarien" />,
-              <Aussagekraft key="Aussagekraft" />,
-              <ModellfehlerMelden key="ModellfehlerMelden" email={email} />,
-              <Haftungsausschluss key="Haftungsausschluss" />,
-            ]}
-            menuFooter={
-              <Footer
-                appName="Starkregengefahrenkarte Wuppertal"
-                version={getApplicationVersion()}
-                hintergrundkartenText="True Orthophoto 2022, Amtliche Basiskarte (ABK), Hillshade © Stadt Wuppertal | Stadtkarte 2.0 © RVR | WebAtlasDE © BKG"
-                taglineModelling={
-                  <div>
-                    <b>Modellierung und Simulationsberechnung</b> (Version 2.1 |
-                    10/2022):{' '}
-                    <a
-                      target="_customer"
-                      href="https://www.wsw-online.de/wsw-energie-wasser/privatkunden/"
-                    >
-                      WSW Energie und Wasser AG
-                    </a>{' '}
-                    |{' '}
-                    <a target="_pecher" href="https://www.pecher.de/">
-                      Dr. Pecher AG (Erkrath)
-                    </a>
-                  </div>
-                }
-              />
-            }
-          />
-        }
-        gazetteerSearchPlaceholder="Stadtteil | Adresse | POI | GEP"
-        emailaddress={email}
-        initialState={config.initialState}
-        config={config.config}
-        homeZoom={18}
-        homeCenter={[51.27202324060668, 7.20162372978018]}
-        modeSwitcherTitle="Starkregengefahrenkarte"
-        documentTitle="Starkregengefahrenkarte Wuppertal"
-        gazData={gazData}
+      <TopicMapContextProvider
+        appKey={'cismetRainhazardMap.Wuppertal'}
+        referenceSystem={MappingConstants.crs3857}
+        referenceSystemDefinition={MappingConstants.proj4crs3857def}
+        infoBoxPixelWidth={370}
       >
-        <NotesDisplay hinweisData={hinweisData} />
-      </HeavyRainHazardMap>
-    </TopicMapContextProvider>
+        <HeavyRainHazardMap
+          applicationMenuTooltipString="Anleitung | Hintergrund"
+          appMenu={
+            <GenericModalApplicationMenu
+              menuIntroduction={
+                <span>
+                  Bitte wählen Sie eine der folgenden farbigen Schaltflächen, um
+                  sich weitere Informationen zu dem entsprechenden Thema
+                  anzeigen zu lassen:
+                </span>
+              }
+              menuIcon="info"
+              menuTitle="Kompaktanleitung und Hintergrundinformationen"
+              menuSections={[
+                <Datengrundlage key="Datengrundlage" />,
+                <Karteninhalt
+                  key="Karteninhalt"
+                  simulationsklammer={undefined}
+                />,
+                <InKartePositionieren key="InKartePositionieren" />,
+                <MeinStandort key="MeinStandort" />,
+                <ZeitlicherVerlauf key="ZeitlicherVerlauf" />,
+                <WasserstandAbfragen key="Wasserstand" />,
+                <SimulierteSzenarien key="SimulierteSzenarien" />,
+                <Aussagekraft key="Aussagekraft" />,
+                <ModellfehlerMelden key="ModellfehlerMelden" email={email} />,
+                <Haftungsausschluss key="Haftungsausschluss" />,
+              ]}
+              menuFooter={
+                <Footer
+                  appName="Starkregengefahrenkarte Wuppertal"
+                  version={getApplicationVersion()}
+                  hintergrundkartenText="True Orthophoto 2022, Amtliche Basiskarte (ABK), Hillshade © Stadt Wuppertal | Stadtkarte 2.0 © RVR | WebAtlasDE © BKG"
+                  taglineModelling={
+                    <div>
+                      <b>Modellierung und Simulationsberechnung</b> (Version 2.1
+                      | 10/2022):{' '}
+                      <a
+                        target="_customer"
+                        href="https://www.wsw-online.de/wsw-energie-wasser/privatkunden/"
+                      >
+                        WSW Energie und Wasser AG
+                      </a>{' '}
+                      |{' '}
+                      <a target="_pecher" href="https://www.pecher.de/">
+                        Dr. Pecher AG (Erkrath)
+                      </a>
+                    </div>
+                  }
+                />
+              }
+            />
+          }
+          gazetteerSearchPlaceholder="Stadtteil | Adresse | POI | GEP"
+          emailaddress={email}
+          initialState={config.initialState}
+          config={config.config}
+          homeZoom={18}
+          homeCenter={[51.27202324060668, 7.20162372978018]}
+          modeSwitcherTitle="Starkregengefahrenkarte"
+          documentTitle="Starkregengefahrenkarte Wuppertal"
+          gazData={gazData}
+        >
+          <NotesDisplay hinweisData={hinweisData} />
+          <CrossTabCommunicationControl hideWhenNoSibblingIsPresent={true} />
+        </HeavyRainHazardMap>
+      </TopicMapContextProvider>
+    </CrossTabCommunicationContextProvider>
   );
 }
 
