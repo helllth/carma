@@ -59,6 +59,19 @@
         }
       },
       "projectPath": "./dist/playgrounds/techdemo"
+    },
+    "floodingmap-wuppertal": {
+      "deployment": {
+        "manual": {
+          "org": "carma-dev-deployments",
+          "prj": "floodingmap-wuppertal"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "floodingmap-wuppertal"
+          }
+        }
     }
   }
 }
