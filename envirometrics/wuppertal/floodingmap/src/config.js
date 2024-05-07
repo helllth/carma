@@ -1,5 +1,7 @@
 import { starkregenConstants } from '@cismet-dev/react-cismap-envirometrics-maps/constants';
-
+import topoBG from './assets/map-bg/topo.png';
+import citymapBG from './assets/map-bg/citymap.png';
+import mixedBG from './assets/map-bg/mixed.png';
 const overridingBaseLayerConf = {};
 
 const config = {
@@ -74,20 +76,17 @@ const config = {
   backgrounds: [
     {
       layerkey: 'hillshade|bplan_abkg@30|rvrGrundriss@20',
-      src: '/hochwasser/images/rain-hazard-map-bg/topo.png',
-      // src: "/images/rain-hazard-map-bg/topo.png",
+      src: topoBG,
       title: 'Top. Karte',
     },
     {
       layerkey: 'rvrGrundriss@100|trueOrtho2022@75|rvrSchriftNT@100',
-      src: '/hochwasser/images/rain-hazard-map-bg/ortho.png',
-      // src: "/images/rain-hazard-map-bg/ortho.png",
+      src: mixedBG,
       title: 'Luftbildkarte',
     },
     {
       layerkey: 'wupp-plan-live@40',
-      src: '/hochwasser/images/rain-hazard-map-bg/citymap.png',
-      //src: "/images/rain-hazard-map-bg/citymap.png",
+      src: citymapBG,
       title: 'Stadtplan',
     },
   ],
