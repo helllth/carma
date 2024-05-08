@@ -40,11 +40,11 @@ root.render(
     <PersistGate loading={null} persistor={persistor}>
       <Provider store={store}>
         <TopicMapContextProvider
-          featureItemsURL={
-            'https://wunda-geoportal.cismet.de/data/bplaene.data.json'
-          }
+          // featureItemsURL={
+          //   'https://wunda-geoportal.cismet.de/data/bplaene.data.json'
+          // }
           convertItemToFeature={convertItemToFeature}
-          getFeatureStyler={bplanFeatureStyler}
+          // getFeatureStyler={bplanFeatureStyler}
         >
           <RouterProvider router={router} />
         </TopicMapContextProvider>

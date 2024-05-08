@@ -1,15 +1,15 @@
-export const bplanFeatureStyler = () => {
-  return (feature) => {
-    const style = {
-      color: getColorFromFeatureConsideringSelection(feature),
-      weight: 3,
-      opacity: 1.0,
-      //    "dashArray": "30",
-      fillColor: getColorFromFeature(feature),
-      fillOpacity: getFeatureOpacityConsideringSelection(feature),
-    };
-    return style;
+export const bplanFeatureStyler = (feature) => {
+  // return (feature) => {
+  const style = {
+    color: getColorFromFeatureConsideringSelection(feature),
+    weight: 3,
+    opacity: 1.0,
+    //    "dashArray": "30",
+    fillColor: getColorFromFeature(feature),
+    fillOpacity: getFeatureOpacityConsideringSelection(feature),
   };
+  return style;
+  // };
 };
 
 export const getColorFromFeature = (feature) => {
