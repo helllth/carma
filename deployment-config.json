@@ -63,8 +63,8 @@
     "floodingmap-wuppertal": {
       "deployment": {
         "manual": {
-          "org": "carma-dev-deployments",
-          "prj": "floodingmap-wuppertal"
+          "org": "digital-twin-wuppertal-live",
+          "prj": "floodingmap"
         },
         "auto": {
           "dev": {
@@ -78,8 +78,8 @@
     "rainhazardmap-wuppertal": {
       "deployment": {
         "manual": {
-          "org": "carma-dev-deployments",
-          "prj": "rainhazardmap-wuppertal"
+          "org": "digital-twin-wuppertal-live",
+          "prj": "rainhazardmap"
         },
         "auto": {
           "dev": {
