@@ -1,0 +1,143 @@
+import { useContext } from 'react';
+import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
+import ResponsiveInfoBox, {
+  MODES,
+} from 'react-cismap/topicmaps/ResponsiveInfoBox';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import Icon from 'react-cismap/commons/Icon';
+import { useNavigate } from 'react-router-dom';
+import Color from 'color';
+
+const BPlanInfo = ({ pixelwidth }) => {
+  const { selectedFeature } = useContext(FeatureCollectionContext);
+  const navigate = useNavigate();
+  let headertext;
+  let headerColor;
+
+  const next = () => {};
+
+  if (!selectedFeature) {
+    return null;
+  }
+
+  let status = selectedFeature?.properties.status;
+
+  if (status === 'rechtskräftig') {
+    headertext = 'rechtswirksam';
+    headerColor = '#82BB8F'; //'#2AFF00';
+  } else if (status === 'nicht rechtskräftig') {
+    headertext = 'nicht rechtswirksam';
+
+    headerColor = '#F48286'; //'#FC0000'
+  } else {
+  }
+
+  let headerBackgroundColor = Color(headerColor);
+
+  const planTooltip = <Tooltip id="test">Test</Tooltip>;
+
+  let llVis = (
+    <table style={{ width: '100%' }}>
+      <tbody>
+        <tr>
+          <td
+            style={{
+              textAlign: 'left',
+              verticalAlign: 'top',
+              background: headerColor,
+              color: 'black',
+              opacity: '0.9',
+              paddingLeft: '3px',
+              paddingTop: '0px',
+              paddingBottom: '0px',
+            }}
+          >
+            {headertext}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  );
+
+  let divWhenLarge = (
+    <div>
+      <table border={0} style={{ width: '100%' }}>
+        <tbody>
+          <tr>
+            <td
+              style={{
+                textAlign: 'left',
+                verticalAlign: 'top',
+                padding: '5px',
+                maxWidth: '160px',
+                overflowWrap: 'break-word',
+              }}
+            >
+              <h4>B-Plan {selectedFeature.properties.nummer}</h4>
+              <h6>{selectedFeature.properties.name}</h6>
+            </td>
+            <td
+              style={{
+                textAlign: 'center',
+                verticalAlign: 'top',
+                padding: '5px',
+                paddingTop: '1px',
+              }}
+            >
+              <a
+                style={{ color: '#333' }}
+                onClick={() => {
+                  navigate(`/docs/${selectedFeature.properties.nummer}/1/1`);
+                }}
+              >
+                <h4 style={{ marginLeft: 5, marginRight: 5 }}>
+                  {/* <font size='30'> */}
+                  <OverlayTrigger placement="left" overlay={planTooltip}>
+                    <Icon
+                      style={{ textDecoration: 'none' }}
+                      name="file-pdf-o"
+                    />
+                  </OverlayTrigger>
+                  {/* </font> */}
+                </h4>
+                {/* <OverlayTrigger placement='left' overlay={planTooltip}>
+                                <div>Dokumente</div>
+                            </OverlayTrigger> */}
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <table style={{ width: '100%' }}>
+        <tbody>
+          <tr>
+            <td style={{ textAlign: 'left', verticalAlign: 'center' }}>
+              <a title="vorheriger Treffer">&lt;&lt;</a>
+            </td>
+
+            <td style={{ textAlign: 'center', verticalAlign: 'center' }}>
+              {/* <a>alle {allFeatures.length} Treffer anzeigen</a> */}
+            </td>
+            <td style={{ textAlign: 'right', verticalAlign: 'center' }}>
+              <a title="nächster Treffer" onClick={next}>
+                &gt;&gt;
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+
+  return (
+    <ResponsiveInfoBox
+      pixelwidth={pixelwidth}
+      header={llVis}
+      mode={MODES.AB}
+      divWhenLarge={divWhenLarge}
+    ></ResponsiveInfoBox>
+  );
+};
+
+export default BPlanInfo;
