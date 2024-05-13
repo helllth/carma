@@ -339,7 +339,7 @@ jobs:
           fi
       - name: Build project
         run: |
-          npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url" --emptyOutDir
+          npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="${{ env.BASE_URL }}" --emptyOutDir
         shell: bash
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
