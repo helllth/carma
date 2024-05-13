@@ -219,6 +219,8 @@ jobs:
           echo "PROJECT_PATH: $PRJ_DEPLOY"
           echo "BASE_URL: $BASE_URL"
           echo "EXTERNAL_REPO: $EXTERNAL_REPO"
+          echo "SRC_PATH: $SRC_PATH"
+          echo "SRC_MD5: $SRC_MD5"
           echo -----------------------------------
       - name: set version
         run: sed -i "s/%APPLICATION_VERSION%/$SRC_MD5_SHORT/" $SRC_PATH/version.js
@@ -298,6 +300,8 @@ jobs:
           echo "PROJECT_PATH: $PRJ_DEPLOY"
           echo "BASE_URL: $BASE_URL"
           echo "EXTERNAL_REPO: $EXTERNAL_REPO"
+          echo "SRC_PATH: $SRC_PATH"
+          echo "SRC_MD5: $SRC_MD5"
           echo -----------------------------------
       - name: set version
         run: sed -i "s/%APPLICATION_VERSION%/$SRC_MD5_SHORT/" $SRC_PATH/version.js
