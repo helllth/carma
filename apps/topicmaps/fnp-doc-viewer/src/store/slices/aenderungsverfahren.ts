@@ -29,7 +29,14 @@ export const loadAEVs = () => {
         return response.json();
       })
       .then((result) => {
-        dispatch(setData(result));
+        let features: any = [];
+        let counter = 0;
+        for (let item of result) {
+          let itemFeature = convertAEVToFeature(item, counter);
+          features.push(itemFeature);
+          counter++;
+        }
+        dispatch(setData(features));
       })
       .catch((error) => {
         console.error(
@@ -55,7 +62,7 @@ export function searchForAEVs({
 }) {
   return function (dispatch: any, getState: any) {
     const state = getState();
-    let finalResults = [];
+    let finalResults: any = [];
 
     if (
       gazObject === undefined &&
@@ -102,6 +109,62 @@ export function searchForAEVs({
     }
 
     done(finalResults);
+  };
+}
+
+export function getAEVsByNrs(nrArr, done = (results: any) => {}) {
+  return function (dispatch, getState) {
+    const state = getState();
+    let finalResults: any = [];
+    if (state.aev.data.length === 0) {
+      loadAEVs();
+    }
+    for (const nr of nrArr) {
+      let hit = state.aev.data.find((elem, index) => {
+        return elem.properties.name === nr;
+      });
+      if (hit) {
+        finalResults.push(hit);
+      }
+    }
+    done(finalResults);
+  };
+}
+
+export function getAEVByNr(nr, done = (results: any) => {}) {
+  return function (dispatch, getState) {
+    dispatch(getAEVsByNrs([nr], done));
+  };
+}
+
+function convertAEVToFeature(aev, index) {
+  if (aev === undefined) {
+    return undefined;
+  }
+  const id = aev.id;
+  const type = 'Feature';
+  const featuretype = 'Änderungsverfahren';
+
+  const selected = false;
+  const geometry = aev.geojson;
+
+  const text = aev.name;
+
+  return {
+    id,
+    index,
+    text,
+    type,
+    featuretype,
+    selected,
+    geometry,
+    crs: {
+      type: 'name',
+      properties: {
+        name: 'urn:ogc:def:crs:EPSG::25832',
+      },
+    },
+    properties: aev,
   };
 }
 

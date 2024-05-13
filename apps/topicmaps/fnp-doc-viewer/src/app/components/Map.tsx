@@ -12,12 +12,20 @@ import HNInfo from './infos/HNInfo';
 import HN9999Info from './infos/HN9999Info';
 import EmptyAEVInfo from './infos/EmptyAEVInfo';
 import EmptyHNInfo from './infos/EmptyHNInfo';
-import { useDispatch } from 'react-redux';
-import { loadHauptnutzungen } from '../../store/slices/hauptnutzungen';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  loadHauptnutzungen,
+  searchForHauptnutzungen,
+} from '../../store/slices/hauptnutzungen';
+import proj4 from 'proj4';
+import { proj4crs25832def } from 'react-cismap/constants/gis';
+import { loadAEVs } from '../../store/slices/aenderungsverfahren';
+import { getFeatureCollection } from '../../store/slices/mapping';
 
 const Map = () => {
+  const searchMinZoom = 7;
   const [boundingBox, setBoundingBox] = useState(null);
-  const [features, setFeatures] = useState([]);
+  const features = useSelector(getFeatureCollection);
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(0);
   const [gazData, setGazData] = useState([]);
   const [mapMode, setMapMode] = useState({ mode: 'rechtsplan' });
@@ -32,6 +40,8 @@ const Map = () => {
     document.title = `FNP-Inspektor Wuppertal`;
     // @ts-ignore
     dispatch(loadHauptnutzungen());
+    // @ts-ignore
+    dispatch(loadAEVs());
   }, []);
 
   useEffect(() => {
@@ -168,6 +178,28 @@ const Map = () => {
     return result;
   }
 
+  const doubleMapClick = (event) => {
+    const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
+      event.latlng.lng,
+      event.latlng.lat,
+    ]);
+
+    if (mapMode.mode === 'rechtsplan') {
+      // this.props.aevActions.searchForAEVs({
+      //   point: { x: pos[0], y: pos[1] },
+      //   mappingActions: this.props.mappingActions,
+      //   fitAll: false,
+      // });
+    } else if (mapMode.mode === 'arbeitskarte') {
+      dispatch(
+        // @ts-ignore
+        searchForHauptnutzungen({
+          point: { x: pos[0], y: pos[1] },
+        })
+      );
+    }
+  };
+
   return (
     <div>
       {title}
@@ -189,9 +221,38 @@ const Map = () => {
           const newParams = { ...paramsToObject(searchParams), ...location };
           setSearchParams(newParams);
         }}
+        ondblclick={doubleMapClick}
       >
         <FeatureCollectionDisplayWithTooltipLabels
           featureCollection={features}
+          style={(feature) => {
+            const style = {
+              color: '#155317',
+              weight: 3,
+              opacity: 0.8,
+              fillColor: '#ffffff',
+              fillOpacity: 0.6,
+            };
+            if (10 >= searchMinZoom) {
+              if (feature.properties.status === 'r') {
+                style.color = '#155317';
+              } else {
+                style.color = '#9F111B';
+              }
+            } else {
+              if (feature.properties.status === 'r') {
+                style.color = '#155317';
+                style.fillColor = '#155317';
+                style.opacity = 0.0;
+              } else {
+                style.color = '#9F111B';
+                style.fillColor = '#9F111B';
+                style.opacity = 0.0;
+              }
+            }
+
+            return style;
+          }}
         />
         <GazetteerSearchControl
           gazData={gazData}
