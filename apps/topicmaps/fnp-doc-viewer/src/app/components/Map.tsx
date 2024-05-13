@@ -12,6 +12,8 @@ import HNInfo from './infos/HNInfo';
 import HN9999Info from './infos/HN9999Info';
 import EmptyAEVInfo from './infos/EmptyAEVInfo';
 import EmptyHNInfo from './infos/EmptyHNInfo';
+import { useDispatch } from 'react-redux';
+import { loadHauptnutzungen } from '../../store/slices/hauptnutzungen';
 
 const Map = () => {
   const [boundingBox, setBoundingBox] = useState(null);
@@ -23,6 +25,7 @@ const Map = () => {
   const navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
   let aevVisible = searchParams.get('aevVisible') !== null;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // @ts-ignore
@@ -154,6 +157,15 @@ const Map = () => {
     </table>
   );
 
+  function paramsToObject(entries) {
+    const result = {};
+    for (const [key, value] of entries) {
+      // each 'entry' is a [key, value] tupple
+      result[key] = value;
+    }
+    return result;
+  }
+
   return (
     <div>
       {title}
@@ -170,6 +182,10 @@ const Map = () => {
         applicationMenuIconname="info"
         mappingBoundsChanged={(bbox) => {
           setBoundingBox(bbox);
+        }}
+        locationChangedHandler={(location) => {
+          const newParams = { ...paramsToObject(searchParams), ...location };
+          setSearchParams(newParams);
         }}
       >
         <FeatureCollectionDisplayWithTooltipLabels
