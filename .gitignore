@@ -50,4 +50,4 @@ apps/**/.env
 report-cy/
 
 dispatch.*.event
- .github/workflows/test.yml
+.github/workflows/test.yml
