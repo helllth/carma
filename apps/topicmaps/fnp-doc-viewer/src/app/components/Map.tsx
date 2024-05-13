@@ -4,16 +4,31 @@ import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import { FeatureCollectionDisplayWithTooltipLabels } from 'react-cismap';
 import GazetteerSearchControl from 'react-cismap/GazetteerSearchControl';
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Map = () => {
   const [boundingBox, setBoundingBox] = useState(null);
   const [features, setFeatures] = useState([]);
   const [gazData, setGazData] = useState([]);
+  const [mapMode, setMapMode] = useState({});
+  let { mode } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // @ts-ignore
     document.title = `FNP-Inspektor Wuppertal`;
   }, []);
+
+  useEffect(() => {
+    if (mode !== 'arbeitskarte' && mode !== 'rechtsplan') {
+      navigate('/rechtsplan');
+      setMapMode({ mode: 'rechtsplan' });
+    } else if (mode === 'arbeitskarte') {
+      setMapMode({ mode: 'arbeitskarte' });
+    } else {
+      setMapMode({ mode: 'rechtsplan' });
+    }
+  }, [mode]);
 
   return (
     <TopicMapComponent

@@ -23,7 +23,7 @@ const router = createHashRouter(
       element: <App />,
     },
     {
-      path: '/',
+      path: '/:mode?',
       element: <Map />,
     },
   ],
