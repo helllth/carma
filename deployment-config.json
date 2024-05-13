@@ -15,6 +15,21 @@
       },
       "projectPath": "./dist/apps/topicmaps/stadtplan"
     },
+    "bplaene": {
+      "deployment": {
+        "manual": {
+          "org": "carma-dev-deployments",
+          "prj": "topicmaps-bplan-auskunft-wuppertal"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "topicmaps-bplan-auskunft-wuppertal"
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/bplaene-doc-viewer"
+    },
     "fuzzy-search-playground": {
       "deployment": {
         "manual": {
