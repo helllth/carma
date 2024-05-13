@@ -209,8 +209,9 @@ jobs:
           echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
           echo "ORG_DEPLOY=${orgDeploy}" >> $GITHUB_ENV
           echo "PRJ_DEPLOY=${prjDeploy}" >> $GITHUB_ENV
-          echo "    publish_dir: ${{ env.PROJECT_PATH }}"
-        shell: bash
+          echo "SRC_MD5=${srcMD5}" >> $GITHUB_ENV
+          echo "SRC_MD5_SHORT=${srcMD5short}" >> $GITHUB_ENV
+          echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV        shell: bash
       - name: Debug Outputs
         run: |
           echo -----------------------------------
