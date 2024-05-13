@@ -94,7 +94,7 @@ function App() {
           appMenu={
             <GenericModalApplicationMenu
               {...getCollabedHelpComponentConfig({
-                versionString: version,
+                versionString: '#' + version,
                 reactCismapRHMVersion: reactCismapEnvirometricsVersion,
 
                 email,
