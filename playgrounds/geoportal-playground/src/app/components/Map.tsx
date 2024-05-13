@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 // @ts-ignore
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 // @ts-ignore
@@ -11,6 +11,8 @@ import { getGazData } from '../helper/helper';
 import { useSelector } from 'react-redux';
 // @ts-ignore
 import { getMode } from './../store/slices/ui';
+import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
+import ResponsiveInfoBox from 'react-cismap/topicmaps/ResponsiveInfoBox';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -53,12 +55,16 @@ const Map = () => {
         hamburgerMenu={false}
         locatorControl={true}
         mapStyle={{ width, height }}
+        leafletMapProps={{ editable: true }}
         mappingBoundsChanged={(boundingbox) => {
-          console.log('xxx bbox', createWMSBbox(boundingbox));
+          // console.log('xxx bbox', createWMSBbox(boundingbox));
         }}
         gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
+        _infoBox={
+          <ResponsiveInfoBox pixelwidth={300} header={<span>Messen</span>} />
+        }
       >
-        <StyledWMSTileLayer
+        {/* <StyledWMSTileLayer
           {...{
             type: 'wmts',
             url: 'https://geodaten.metropoleruhr.de/spw2/service',
@@ -68,7 +74,7 @@ const Map = () => {
             transparent: true,
             opacity: 0.3,
           }}
-        ></StyledWMSTileLayer>
+        ></StyledWMSTileLayer> */}
         <FeatureCollection></FeatureCollection>
       </TopicMapComponent>
     </div>

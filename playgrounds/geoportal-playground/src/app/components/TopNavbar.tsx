@@ -9,6 +9,7 @@ import {
   faPrint,
   faRedo,
   faShareNodes,
+  faDrawPolygon,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
@@ -55,9 +56,11 @@ const TopNavbar = () => {
         initialActive: true,
         url,
         layer: (
+          //Here comes the main template for every additional layer added to the map
           <StyledWMSTileLayer
             type="wms"
             url={url}
+            maxZoom={26}
             layers={layer.name}
             format="image/png"
             tiled={true}
@@ -137,6 +140,12 @@ const TopNavbar = () => {
             className="text-xl text-gray-300"
           />
         </Tooltip>
+        {/* <Tooltip title="Messungen">
+          <FontAwesomeIcon
+            icon={faDrawPolygon}
+            className="text-xl text-gray-300"
+          />
+        </Tooltip> */}
       </div>
 
       <div className="flex items-center gap-6">

@@ -47,6 +47,9 @@ const LibModal = ({
     keys: ['Title'],
     shouldSort: false,
     includeMatches: true,
+    useExtendedSearch: true,
+    distance: 10,
+    threshold: 0.2,
   });
 
   const getDataFromJson = (data: any) => {

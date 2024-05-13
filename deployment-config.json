@@ -59,6 +59,36 @@
         }
       },
       "projectPath": "./dist/playgrounds/techdemo"
+    },
+    "floodingmap-wuppertal": {
+      "deployment": {
+        "manual": {
+          "org": "digital-twin-wuppertal-live",
+          "prj": "floodingmap"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "floodingmap-wuppertal"
+          }
+        }
+      },
+      "projectPath": "./dist/envirometrics/wuppertal/floodingmap"
+    },
+    "rainhazardmap-wuppertal": {
+      "deployment": {
+        "manual": {
+          "org": "digital-twin-wuppertal-live",
+          "prj": "rainhazardmap"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "rainhazardmap-wuppertal"
+          }
+        }
+      },
+      "projectPath": "./dist/envirometrics/wuppertal/rainhazardmap"
     }
   }
 }
