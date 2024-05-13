@@ -188,6 +188,10 @@ jobs:
           orgDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.org)
           prjDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.prj)
           projectPath=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].projectPath')
+          srcPath=".${projectPath#./dist}/src"
+          srcMD5="$(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum  | cut -f 1 -d ' ')"
+          srcMD5short="${srcMD5:0:4}"
+
           if [ "${baseUrl}" = "null" ]; then
             baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
           else
@@ -217,6 +221,12 @@ jobs:
           echo "EXTERNAL_REPO: $EXTERNAL_REPO"
           echo -----------------------------------
 
+      - name: prepare 0
+        run: echo $srcMD5 > .hash && echo $srcMD5short > .shorthash
+      - name: prepare 1 (version stuff)
+        run: VERSION=`cat .shorthash`; sed -i "s/%APPLICATION_VERSION%/$VERSION/" src/version.js
+      - name: prepare 2 (hash stuff)
+        run: HASH=`cat .hash`; sed -i "s/%APPLICATION_HASH%/$HASH/" src/version.js
       - name: Build project
         run: |
           npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}" --emptyOutDir
@@ -259,6 +269,10 @@ jobs:
           orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.org')
           prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.prj')
           projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
+          srcPath=".${projectPath#./dist}/src"
+          srcMD5="$(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum  | cut -f 1 -d ' ')"
+          srcMD5short="${srcMD5:0:4}"
+
           if [ "${baseUrl}" = "null" ]; then
             baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
           else
@@ -285,6 +299,13 @@ jobs:
           echo "BASE_URL: $BASE_URL"
           echo "EXTERNAL_REPO: $EXTERNAL_REPO"
           echo -----------------------------------
+
+      - name: prepare 0
+        run: echo $srcMD5 > .hash && echo $srcMD5short > .shorthash
+      - name: prepare 1 (version stuff)
+        run: VERSION=`cat .shorthash`; sed -i "s/%APPLICATION_VERSION%/$VERSION/" src/version.js
+      - name: prepare 2 (hash stuff)
+        run: HASH=`cat .hash`; sed -i "s/%APPLICATION_HASH%/$HASH/" src/version.js
       - name: Build project
         run: |
           npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url" --emptyOutDir
