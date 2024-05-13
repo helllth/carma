@@ -14,7 +14,7 @@ import SimulierteSzenarien from './help/Help60SimulierteSzenarien';
 import Aussagekraft from './help/Help70AussagekraftDerSimulationen';
 import ModellfehlerMelden from './help//Help80ModellfehlerMelden';
 import Haftungsausschluss from './help/Help90HaftungsausschlussWupp';
-import Footer from '@cismet-dev/react-cismap-envirometrics-maps/components/customizablehelp/Help99Footer';
+import { Help99Footer } from '@cismet-collab/rainhazardmaps-base-texts';
 import { getGazDataForTopicIds } from 'react-cismap/tools/gazetteerHelper';
 import { md5FetchJSON } from 'react-cismap/tools/fetching';
 import CrossTabCommunicationControl from 'react-cismap/CrossTabCommunicationControl';
@@ -144,9 +144,9 @@ function App() {
                 <Haftungsausschluss key="Haftungsausschluss" />,
               ]}
               menuFooter={
-                <Footer
+                <Help99Footer
                   appName="Starkregengefahrenkarte Wuppertal"
-                  versionString={getApplicationVersion()}
+                  versionString={'#' + getApplicationVersion()}
                   hintergrundkartenText="True Orthophoto 2022, Amtliche Basiskarte (ABK), Hillshade © Stadt Wuppertal | Stadtkarte 2.0 © RVR | WebAtlasDE © BKG"
                   taglineModelling={
                     <div>
