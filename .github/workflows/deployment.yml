@@ -220,13 +220,10 @@ jobs:
           echo "BASE_URL: $BASE_URL"
           echo "EXTERNAL_REPO: $EXTERNAL_REPO"
           echo -----------------------------------
-
-      - name: prepare 0
-        run: echo $srcMD5 > .hash && echo $srcMD5short > .shorthash
-      - name: prepare 1 (version stuff)
-        run: VERSION=`cat .shorthash`; sed -i "s/%APPLICATION_VERSION%/$VERSION/" src/version.js
-      - name: prepare 2 (hash stuff)
-        run: HASH=`cat .hash`; sed -i "s/%APPLICATION_HASH%/$HASH/" src/version.js
+      - name: set version
+        run: sed -i "s/%APPLICATION_VERSION%/$SRC_MD5_SHORT/" $SRC_PATH/version.js
+      - name: set hash
+        run: sed -i "s/%APPLICATION_HASH%/$SRC_MD5/" $SRC_PATH/version.js
       - name: Build project
         run: |
           npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}" --emptyOutDir
