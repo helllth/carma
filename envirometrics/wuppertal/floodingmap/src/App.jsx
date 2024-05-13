@@ -94,7 +94,7 @@ function App() {
           appMenu={
             <GenericModalApplicationMenu
               {...getCollabedHelpComponentConfig({
-                version,
+                versionString: version,
                 reactCismapRHMVersion: reactCismapEnvirometricsVersion,
 
                 email,
@@ -130,7 +130,7 @@ function App() {
     </CrossTabCommunicationContextProvider>
   );
 }
-
+//x
 const StateAwareChildren = () => {
   const { controlState } = useContext(EnviroMetricMapContext);
   const conf = config.config;
