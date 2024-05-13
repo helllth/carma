@@ -146,7 +146,7 @@ function App() {
               menuFooter={
                 <Footer
                   appName="Starkregengefahrenkarte Wuppertal"
-                  version={getApplicationVersion()}
+                  versionString={getApplicationVersion()}
                   hintergrundkartenText="True Orthophoto 2022, Amtliche Basiskarte (ABK), Hillshade © Stadt Wuppertal | Stadtkarte 2.0 © RVR | WebAtlasDE © BKG"
                   taglineModelling={
                     <div>
