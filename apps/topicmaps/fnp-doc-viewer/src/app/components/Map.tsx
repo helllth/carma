@@ -30,6 +30,8 @@ const Map = () => {
   useEffect(() => {
     // @ts-ignore
     document.title = `FNP-Inspektor Wuppertal`;
+    // @ts-ignore
+    dispatch(loadHauptnutzungen());
   }, []);
 
   useEffect(() => {
