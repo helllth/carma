@@ -3,9 +3,14 @@ import {
   INFO_DOC_DATEINAMEN_NAME,
   INFO_DOC_DATEINAMEN_URL,
 } from '../../constants/bplaene';
+import booleanDisjoint from '@turf/boolean-disjoint';
+import bboxPolygon from '@turf/bbox-polygon';
+import center from '@turf/center';
+import proj4 from 'proj4';
 
 const initialState = {
   data: undefined,
+  loading: false,
 };
 
 const slice = createSlice({
@@ -16,6 +21,10 @@ const slice = createSlice({
       state.data = action.payload;
       return state;
     },
+    setLoading(state, action) {
+      state.loading = action.payload;
+      return state;
+    },
   },
 });
 
@@ -23,6 +32,7 @@ export default slice;
 
 export const loadBPlaene = (finishedHandler = () => {}) => {
   return async (dispatch: any) => {
+    dispatch(setLoading(true));
     fetch('https://wunda-geoportal.cismet.de/data/bplaene.data.json')
       .then((response) => {
         if (!response.ok) {
@@ -40,12 +50,14 @@ export const loadBPlaene = (finishedHandler = () => {}) => {
           counter++;
         }
         dispatch(setData(features));
+        dispatch(setLoading(false));
       })
       .catch((error) => {
         console.error(
           'There was a problem with the fetch operation:',
           error.message
         );
+        dispatch(setLoading(false));
       });
   };
 };
@@ -112,4 +124,81 @@ export function getPlanFeatureByGazObject(
   };
 }
 
-export const { setData } = slice.actions;
+function distance(p, q) {
+  var dx = p.x - q.x;
+  var dy = p.y - q.y;
+  var dist = Math.sqrt(dx * dx + dy * dy);
+  return dist;
+}
+
+function getXYFromPointFeature(feature) {
+  return {
+    x: feature.geometry.coordinates[0],
+    y: feature.geometry.coordinates[1],
+  };
+}
+
+export function getPlanFeatures({
+  boundingBox,
+  point,
+  done,
+}: {
+  boundingBox?: any;
+  point?: any;
+  done?: any;
+}) {
+  return function (dispatch, getState) {
+    let bboxPoly;
+    let finalResults: any = [];
+
+    const state = getState();
+    if (boundingBox !== undefined) {
+      const southWest25832 = proj4('EPSG:3857', 'EPSG:25832', [
+        boundingBox.left,
+        boundingBox.top,
+      ]);
+      const northEast25832 = proj4('EPSG:3857', 'EPSG:25832', [
+        boundingBox.right,
+        boundingBox.bottom,
+      ]);
+
+      bboxPoly = bboxPolygon([
+        southWest25832[0],
+        southWest25832[1],
+        northEast25832[0],
+        northEast25832[1],
+      ]);
+    } else if (point !== undefined) {
+      bboxPoly = bboxPolygon([
+        point.x - 0.05,
+        point.y - 0.05,
+        point.x + 0.05,
+        point.y + 0.05,
+      ]);
+    }
+
+    for (const feature of state.bplaene.data) {
+      if (!booleanDisjoint(bboxPoly, feature)) {
+        let tmpFeature = { ...feature };
+        tmpFeature.searchDistance = distance(
+          getXYFromPointFeature(center(bboxPoly)),
+          getXYFromPointFeature(center(feature))
+        );
+        finalResults.push(tmpFeature);
+      }
+    }
+    finalResults.sort((a, b) => a.searchDistance - b.searchDistance);
+
+    done(finalResults);
+  };
+}
+
+export const { setData, setLoading } = slice.actions;
+
+export const getBPLaene = (state) => {
+  return state.bplaene.data;
+};
+
+export const getLoading = (state) => {
+  return state.bplaene.loading;
+};

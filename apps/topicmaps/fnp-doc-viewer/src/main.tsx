@@ -11,6 +11,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import store from './store';
 import { persistStore } from 'redux-persist';
+import Map from './app/components/Map';
+import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
 
 const persistor = persistStore(store);
 
@@ -21,8 +23,8 @@ const router = createHashRouter(
       element: <App />,
     },
     {
-      path: '/',
-      element: <App />,
+      path: '/:mode?',
+      element: <Map />,
     },
   ],
   {}
@@ -35,7 +37,9 @@ root.render(
   <StrictMode>
     <PersistGate loading={null} persistor={persistor}>
       <Provider store={store}>
-        <RouterProvider router={router} />
+        <TopicMapContextProvider>
+          <RouterProvider router={router} />
+        </TopicMapContextProvider>
       </Provider>
     </PersistGate>
   </StrictMode>
