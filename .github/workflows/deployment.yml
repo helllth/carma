@@ -239,7 +239,12 @@ jobs:
             echo "No version.js file found. Hash information will not be updated."
           fi
       - name: debug log version.js
-        run: cat $SRC_PATH/version.js
+        run: |
+          if [[ -f "$SRC_PATH/version.js" ]]; then
+          cat $SRC_PATH/version.js
+          else
+            echo "No version.js file found. Hash information will not be updated."
+          fi
       - name: Build project
         run: |
           npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}" --emptyOutDir
