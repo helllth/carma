@@ -3,22 +3,122 @@ import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectio
 import ResponsiveInfoBox, {
   MODES,
 } from 'react-cismap/topicmaps/ResponsiveInfoBox';
+import InfoBox from 'react-cismap/topicmaps/InfoBox';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-cismap/commons/Icon';
 import { useNavigate } from 'react-router-dom';
 import Color from 'color';
+import L from 'leaflet';
+import {
+  TopicMapContext,
+  TopicMapDispatchContext,
+} from 'react-cismap/contexts/TopicMapContextProvider';
+import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
-const BPlanInfo = ({ pixelwidth }) => {
-  const { selectedFeature } = useContext(FeatureCollectionContext);
-  const navigate = useNavigate();
+const BPlanInfo = ({
+  pixelwidth,
+  features,
+  selectedIndex,
+  setSelectedIndex,
+  fitAll,
+  setFeatures,
+}) => {
+  // @ts-ignore
+  const { setAppMenuVisible } = useContext(UIDispatchContext);
   let headertext;
   let headerColor;
 
-  const next = () => {};
+  const next = () => {
+    let potIndex = selectedIndex + 1;
+    if (potIndex >= features.length) {
+      potIndex = 0;
+    }
+    const tmpFeatures = features;
+    tmpFeatures.forEach((obj, i) => {
+      obj.selected = i === potIndex;
+    });
+    setFeatures(tmpFeatures);
+    setSelectedIndex(potIndex);
+  };
 
-  if (!selectedFeature) {
-    return null;
+  const prev = () => {
+    let potIndex = selectedIndex - 1;
+    if (potIndex < 0) {
+      potIndex = features.length - 1;
+    }
+    const tmpFeatures = features;
+    tmpFeatures.forEach((obj, i) => {
+      obj.selected = i === potIndex;
+    });
+    setFeatures(tmpFeatures);
+    setSelectedIndex(potIndex);
+  };
+
+  if (features.length < 1) {
+    let tmpVis = (
+      <table style={{ width: '100%' }}>
+        <tbody>
+          <tr>
+            <td
+              style={{
+                textAlign: 'left',
+                verticalAlign: 'top',
+                color: 'black',
+                opacity: '0.9',
+                backgroundColor: 'rgb(245, 245, 245)',
+                paddingLeft: '3px',
+                paddingTop: '0px',
+                paddingBottom: '0px',
+              }}
+            >
+              Aktuell keine Bebauungspl&auml;ne geladen.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    );
+
+    return (
+      <ResponsiveInfoBox
+        pixelwidth={pixelwidth}
+        header={tmpVis}
+        isCollapsible={false}
+        collapsibleDiv={<></>}
+        alwaysVisibleDiv={
+          <>
+            <ul>
+              <li>
+                <b>einen B-Plan laden:</b> Doppelklick auf Plan in
+                Hintergrundkarte
+              </li>
+              <li>
+                <b>alle B-Pl&auml;ne im Kartenausschnitt laden:</b>{' '}
+                <Icon name="search" />
+              </li>
+              <li>
+                <b>bekannten B-Plan laden:</b> Nummer als Suchbegriff eingeben,
+                Auswahl aus Vorschlagsliste
+              </li>
+              <li>
+                <b>Suche nach B-Pl&auml;nen:</b> Adresse oder POI als
+                Suchbegriff eingeben, Auswahl aus Vorschlagsliste
+              </li>
+            </ul>
+            <a
+              onClick={() => {
+                setAppMenuVisible(true);
+              }}
+              style={{ cursor: 'pointer', color: '#0078A8' }}
+            >
+              Kompaktanleitung
+            </a>
+          </>
+        }
+      ></ResponsiveInfoBox>
+    );
   }
+
+  const selectedFeature = features[selectedIndex];
 
   let status = selectedFeature?.properties.status;
 
@@ -34,7 +134,7 @@ const BPlanInfo = ({ pixelwidth }) => {
 
   let headerBackgroundColor = Color(headerColor);
 
-  const planTooltip = <Tooltip id="test">Test</Tooltip>;
+  const planTooltip = <Tooltip id="test">PDF Dokument</Tooltip>;
 
   let llVis = (
     <table style={{ width: '100%' }}>
@@ -86,11 +186,10 @@ const BPlanInfo = ({ pixelwidth }) => {
             >
               <a
                 style={{ color: '#333' }}
-                onClick={() => {
-                  navigate(`/docs/${selectedFeature.properties.nummer}/1/1`);
-                }}
+                href={`/#/docs/${selectedFeature.properties.nummer}/1/1`}
+                target="doc"
               >
-                <h4 style={{ marginLeft: 5, marginRight: 5 }}>
+                <h4 style={{ marginLeft: 5, marginRight: 5, fontSize: 36 }}>
                   {/* <font size='30'> */}
                   <OverlayTrigger placement="left" overlay={planTooltip}>
                     <Icon
@@ -100,28 +199,83 @@ const BPlanInfo = ({ pixelwidth }) => {
                   </OverlayTrigger>
                   {/* </font> */}
                 </h4>
-                {/* <OverlayTrigger placement='left' overlay={planTooltip}>
-                                <div>Dokumente</div>
-                            </OverlayTrigger> */}
+                <OverlayTrigger placement="left" overlay={planTooltip}>
+                  <div style={{ fontSize: 16 }}>Dokumente</div>
+                </OverlayTrigger>
               </a>
             </td>
           </tr>
         </tbody>
       </table>
       <br />
-      <table style={{ width: '100%' }}>
+      <table style={{ width: '100%', color: '#0078A8' }}>
         <tbody>
           <tr>
             <td style={{ textAlign: 'left', verticalAlign: 'center' }}>
-              <a title="vorheriger Treffer">&lt;&lt;</a>
+              <a title="vorheriger Treffer" onClick={prev}>
+                &lt;&lt;
+              </a>
             </td>
 
             <td style={{ textAlign: 'center', verticalAlign: 'center' }}>
-              {/* <a>alle {allFeatures.length} Treffer anzeigen</a> */}
+              <a
+                onClick={() => {
+                  const projectedFC = L.Proj.geoJson(features);
+                  const bounds = projectedFC.getBounds();
+                  // fitBBox(bounds);
+                }}
+              >
+                alle {features.length} Treffer anzeigen
+              </a>
             </td>
             <td style={{ textAlign: 'right', verticalAlign: 'center' }}>
               <a title="nächster Treffer" onClick={next}>
                 &gt;&gt;
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+
+  let divWhenCollapsed = (
+    <div>
+      <table border={0} style={{ width: '100%' }}>
+        <tbody>
+          <tr>
+            <td
+              style={{
+                textAlign: 'left',
+                verticalAlign: 'top',
+                padding: '5px',
+                maxWidth: '160px',
+                overflowWrap: 'break-word',
+              }}
+            >
+              <h4>B-Plan {selectedFeature.properties.nummer}</h4>
+            </td>
+            <td
+              style={{
+                textAlign: 'center',
+                verticalAlign: 'center',
+                padding: '5px',
+                paddingTop: '1px',
+              }}
+            >
+              <a
+                style={{ color: '#333' }}
+                href={`/#/docs/${selectedFeature.properties.nummer}/1/1`}
+                target="doc"
+              >
+                <h4 style={{ marginLeft: 5, marginRight: 5 }}>
+                  <OverlayTrigger placement="left" overlay={planTooltip}>
+                    <Icon
+                      style={{ textDecoration: 'none', fontSize: 26 }}
+                      name="file-pdf-o"
+                    />
+                  </OverlayTrigger>
+                </h4>
               </a>
             </td>
           </tr>
@@ -136,6 +290,7 @@ const BPlanInfo = ({ pixelwidth }) => {
       header={llVis}
       mode={MODES.AB}
       divWhenLarge={divWhenLarge}
+      divWhenCollapsed={divWhenCollapsed}
     ></ResponsiveInfoBox>
   );
 };
