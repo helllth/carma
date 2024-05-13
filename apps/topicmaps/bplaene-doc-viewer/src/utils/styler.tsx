@@ -93,7 +93,7 @@ export const getFeatureOpacityConsideringSelection = (feature) => {
   if (feature.selected) {
     return 0.5;
   } else {
-    return 0.2;
+    return 0.4;
   }
 };
 
