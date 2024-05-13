@@ -219,7 +219,7 @@ jobs:
 
       - name: Build project
         run: |
-          npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}"
+          npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}" --emptyOutDir
         shell: bash
       - name: Deploy using GH Pages action
         uses: peaceiris/actions-gh-pages@v3
@@ -287,7 +287,7 @@ jobs:
           echo -----------------------------------
       - name: Build project
         run: |
-          npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url"
+          npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="$base_url" --emptyOutDir
         shell: bash
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
