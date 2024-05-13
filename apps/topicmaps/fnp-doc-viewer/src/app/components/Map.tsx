@@ -7,10 +7,16 @@ import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShuffle } from '@fortawesome/free-solid-svg-icons';
+import AEVInfo from './infos/AEVInfo';
+import HNInfo from './infos/HNInfo';
+import HN9999Info from './infos/HN9999Info';
+import EmptyAEVInfo from './infos/EmptyAEVInfo';
+import EmptyHNInfo from './infos/EmptyHNInfo';
 
 const Map = () => {
   const [boundingBox, setBoundingBox] = useState(null);
   const [features, setFeatures] = useState([]);
+  const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(0);
   const [gazData, setGazData] = useState([]);
   const [mapMode, setMapMode] = useState({ mode: 'rechtsplan' });
   let { mode } = useParams();
@@ -33,6 +39,27 @@ const Map = () => {
       setMapMode({ mode: 'rechtsplan' });
     }
   }, [mode]);
+
+  let info;
+
+  if (features.length > 0 && (aevVisible || mapMode.mode === 'arbeitskarte')) {
+    if (mapMode.mode === 'rechtsplan') {
+      info = <AEVInfo />;
+    } else if (mapMode.mode === 'arbeitskarte') {
+      // @ts-ignore
+      if (features[selectedFeatureIndex].properties.os !== '9999') {
+        info = <HNInfo />;
+      } else {
+        info = <HN9999Info />;
+      }
+    }
+  } else {
+    if (mapMode.mode === 'rechtsplan') {
+      info = <EmptyAEVInfo />;
+    } else if (mapMode.mode === 'arbeitskarte') {
+      info = <EmptyHNInfo />;
+    }
+  }
 
   let titleContent;
   let backgrounds;
@@ -138,7 +165,7 @@ const Map = () => {
         gazetteerSearchControl={false}
         backgroundlayers={'wupp-plan-live'}
         //   modalMenu={<Modal />}
-        infoBox={<></>}
+        infoBox={info}
         applicationMenuTooltipString="Kompaktanleitung anzeigen"
         applicationMenuIconname="info"
         mappingBoundsChanged={(bbox) => {
