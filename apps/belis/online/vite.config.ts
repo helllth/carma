@@ -6,7 +6,6 @@ import { comlink } from 'vite-plugin-comlink';
 
 export default defineConfig({
   root: __dirname,
-  base: './', // This sets the base URL to the current directory
   cacheDir: '../../../node_modules/.vite/apps/belis/online',
 
   server: {
