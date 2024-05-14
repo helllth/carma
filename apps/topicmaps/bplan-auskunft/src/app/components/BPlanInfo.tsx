@@ -9,10 +9,7 @@ import Icon from 'react-cismap/commons/Icon';
 import { useNavigate } from 'react-router-dom';
 import Color from 'color';
 import L from 'leaflet';
-import {
-  TopicMapContext,
-  TopicMapDispatchContext,
-} from 'react-cismap/contexts/TopicMapContextProvider';
+import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
 const BPlanInfo = ({
@@ -20,11 +17,12 @@ const BPlanInfo = ({
   features,
   selectedIndex,
   setSelectedIndex,
-  fitAll,
   setFeatures,
 }) => {
   // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
+  // @ts-ignore
+  const { routedMapRef } = useContext(TopicMapContext);
   let headertext;
   let headerColor;
 
@@ -222,7 +220,11 @@ const BPlanInfo = ({
                 onClick={() => {
                   const projectedFC = L.Proj.geoJson(features);
                   const bounds = projectedFC.getBounds();
-                  // fitBBox(bounds);
+                  const map = routedMapRef?.leafletMap?.leafletElement;
+                  if (map === undefined) {
+                    return;
+                  }
+                  map.fitBounds(bounds);
                 }}
               >
                 alle {features.length} Treffer anzeigen
