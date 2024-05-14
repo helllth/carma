@@ -46,7 +46,6 @@ const Footer = () => {
           Datenschutzerklärung (Privacy Policy)
         </a>
       </div>
-      </div>
     </div>
   );
 };
