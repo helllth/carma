@@ -1,5 +1,5 @@
 // @ts-ignore
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import { FeatureCollectionDisplayWithTooltipLabels } from 'react-cismap';
 import GazetteerSearchControl from 'react-cismap/GazetteerSearchControl';
@@ -45,6 +45,8 @@ const Map = () => {
   let aevVisible = searchParams.get('aevVisible') !== null;
   const dispatch = useDispatch();
   const aevFeatures = useSelector(getData);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState<number>(0);
 
   useEffect(() => {
     // @ts-ignore
@@ -163,7 +165,7 @@ const Map = () => {
   title = (
     <table
       style={{
-        width: '95%',
+        width: width - 54 - 12 - 38 - 12 + 'px',
         height: '30px',
         position: 'absolute',
         left: 54,
@@ -222,8 +224,26 @@ const Map = () => {
     }
   };
 
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (wrapperRef.current) {
+          setWidth(wrapperRef.current?.offsetWidth);
+        }
+      }
+    });
+
+    if (wrapperRef.current) {
+      resizeObserver.observe(wrapperRef.current);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [wrapperRef]);
+
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative' }} ref={wrapperRef}>
       {title}
       <TopicMapComponent
         initialLoadingText="Laden der B-Plan-Daten"
