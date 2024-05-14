@@ -4,12 +4,12 @@
       "deployment": {
         "manual": {
           "org": "carma-dev-deployments",
-          "prj": "topicmaps-stadtplan"
+          "prj": "topicmaps-stadtplan-wuppertal"
         },
         "auto": {
           "dev": {
             "org": "carma-dev-deployments",
-            "prj": "topicmaps-stadtplan"
+            "prj": "topicmaps-stadtplan-wuppertal"
           }
         }
       },
@@ -104,6 +104,96 @@
         }
       },
       "projectPath": "./dist/envirometrics/wuppertal/rainhazardmap"
+    },
+    "luftmessstationen": {
+      "deployment": {
+        "manual": {
+          "org": "digital-twin-wuppertal-live",
+          "prj": "luftmessstationen"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "topicmaps-luftmessstationen-wuppertal"
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/luftmessstationen"
+    },
+    "klimaorte": {
+      "deployment": {
+        "manual": {
+          "org": "digital-twin-wuppertal-live",
+          "prj": "klimaorte"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "topicmaps-klimaorte-wuppertal"
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/luftmessstationen"
+    },
+    "kita-finder": {
+      "deployment": {
+        "manual": {
+          "org": "digital-twin-wuppertal-live",
+          "prj": "kita-finder"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "topicmaps-kita-finder-wuppertal"
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/kita-finder"
+    },
+    "ehrenamtskarte": {
+      "deployment": {
+        "manual": {
+          "org": "digital-twin-wuppertal-live",
+          "prj": "ehrenamtskarte"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "topicmaps-ehrenamtskarte-wuppertal"
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/ehrenamtskarte"
+    },
+    "e-auto-ladestation": {
+      "deployment": {
+        "manual": {
+          "org": "digital-twin-wuppertal-live",
+          "prj": "e-auto-ladestationen"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "topicmaps-e-auto-ladestationen-wuppertal"
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/e-auto-ladestation"
+    },
+    "baederkarte": {
+      "deployment": {
+        "manual": {
+          "org": "digital-twin-wuppertal-live",
+          "prj": "baederkarte"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "topicmaps-baederkarte-wuppertal"
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/baederkarte"
     }
   }
 }
