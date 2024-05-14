@@ -184,7 +184,11 @@ const BPlanInfo = ({
             >
               <a
                 style={{ color: '#333' }}
-                href={`/#/docs/${selectedFeature.properties.nummer}/1/1`}
+                href={
+                  window.location.origin +
+                  window.location.pathname +
+                  `/#/docs/${selectedFeature.properties.nummer}/1/1`
+                }
                 target="doc"
               >
                 <h4 style={{ marginLeft: 5, marginRight: 5, fontSize: 36 }}>
@@ -267,7 +271,11 @@ const BPlanInfo = ({
             >
               <a
                 style={{ color: '#333' }}
-                href={`/#/docs/${selectedFeature.properties.nummer}/1/1`}
+                href={
+                  window.location.origin +
+                  window.location.pathname +
+                  `/#/docs/${selectedFeature.properties.nummer}/1/1`
+                }
                 target="doc"
               >
                 <h4 style={{ marginLeft: 5, marginRight: 5 }}>
