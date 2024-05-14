@@ -45,6 +45,7 @@ export function DocumentViewer({ docs, mode }: DocumentViewerProps) {
   const [wholeWidthTrigger, setWholeWidthTrigger] = useState(undefined);
   const [wholeHeightTrigger, setWholeHeightTrigger] = useState(undefined);
   const [mapWidth, setMapWidth] = useState(0);
+  const [height, setHeight] = useState(0);
   const [compactView, setCompactView] = useState(true);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const isResizingRef = useRef(false);
@@ -85,6 +86,12 @@ export function DocumentViewer({ docs, mode }: DocumentViewerProps) {
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
   };
+
+  useEffect(() => {
+    if (mapWrapperRef.current) {
+      setHeight(mapWrapperRef.current.clientHeight);
+    }
+  }, [mapWrapperRef]);
 
   return (
     <div style={{ background: '#343a40', height: '100vh' }}>
@@ -160,16 +167,14 @@ export function DocumentViewer({ docs, mode }: DocumentViewerProps) {
           }}
           ref={mapWrapperRef}
         >
-          {mapWrapperRef.current && (
-            <DocMap
-              docs={docs}
-              index={parseInt(file!)}
-              height={mapWrapperRef?.current?.clientHeight}
-              width={mapWidth}
-              setWholeHeight={wholeHeightTrigger}
-              setWholeWidth={wholeWidthTrigger}
-            />
-          )}
+          <DocMap
+            docs={docs}
+            index={parseInt(file!)}
+            height={height}
+            width={mapWidth}
+            setWholeHeight={wholeHeightTrigger}
+            setWholeWidth={wholeWidthTrigger}
+          />
         </div>
       </div>
     </div>
