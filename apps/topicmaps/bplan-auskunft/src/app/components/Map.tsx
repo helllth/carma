@@ -16,6 +16,7 @@ import { getGazData } from '../../utils/gazData';
 import GazetteerSearchControl from 'react-cismap/GazetteerSearchControl';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Modal from './Modal';
+import { useSearchParams } from 'react-router-dom';
 
 const Map = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,9 @@ const Map = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [boundingBox, setBoundingBox] = useState(null);
   const [gazData, setGazData] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
   let refRoutedMap = useRef(null);
+  const zoom = searchParams.get('zoom');
 
   const doubleMapClick = (event) => {
     const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
@@ -66,6 +69,15 @@ const Map = () => {
     document.title = `B-Plan-Auskunft Wuppertal`;
   }, []);
 
+  function paramsToObject(entries) {
+    const result = {};
+    for (const [key, value] of entries) {
+      // each 'entry' is a [key, value] tupple
+      result[key] = value;
+    }
+    return result;
+  }
+
   return (
     <TopicMapComponent
       initialLoadingText="Laden der B-Plan-Daten"
@@ -73,9 +85,13 @@ const Map = () => {
       pendingLoader={isLoading ? 1 : 0}
       locatorControl
       ref={refRoutedMap}
-      gazetteerSearchControl={false}
+      gazetteerSearchControl={true}
       backgroundlayers={'uwBPlan|wupp-plan-live@20'}
       modalMenu={<Modal />}
+      locationChangedHandler={(location) => {
+        const newParams = { ...paramsToObject(searchParams), ...location };
+        setSearchParams(newParams);
+      }}
       infoBox={
         <BPlanInfo
           pixelwidth={350}
@@ -92,21 +108,19 @@ const Map = () => {
       mappingBoundsChanged={(bbox) => {
         setBoundingBox(bbox);
       }}
+      gazetteerSearchControlProps={{
+        tertiaryAction: bplanSearchButtonHit,
+        tertiaryActionIcon: faSearch,
+        tertiaryActionTooltip: 'B-Pläne Suchen',
+        teriaryActionDisabled: Number(zoom) < 14,
+      }}
+      gazetteerSearchPlaceholder="B-Plan-Nr. | Adresse | POI"
+      gazData={gazData}
     >
       <FeatureCollectionDisplayWithTooltipLabels
         featureCollection={features}
         style={bplanFeatureStyler}
         labeler={bplanLabeler}
-      />
-      <GazetteerSearchControl
-        mapRef={refRoutedMap}
-        gazData={gazData}
-        enabled={gazData.length > 0}
-        pixelwidth={300}
-        placeholder="B-Plan-Nr. | Adresse | POI"
-        tertiaryAction={bplanSearchButtonHit}
-        tertiaryActionIcon={faSearch}
-        tertiaryActionTooltip="B-Pläne Suchen"
       />
     </TopicMapComponent>
   );

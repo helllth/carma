@@ -14,7 +14,7 @@ import { persistStore } from 'redux-persist';
 import Map from './app/components/Map';
 import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
 import convertItemToFeature from './utils/convertItemToFeature';
-import { bplanFeatureStyler } from './utils/styler';
+import { MappingConstants } from 'react-cismap';
 
 const persistor = persistStore(store);
 
@@ -60,11 +60,10 @@ root.render(
     <PersistGate loading={null} persistor={persistor}>
       <Provider store={store}>
         <TopicMapContextProvider
-          // featureItemsURL={
-          //   'https://wunda-geoportal.cismet.de/data/bplaene.data.json'
-          // }
           convertItemToFeature={convertItemToFeature}
-          // getFeatureStyler={bplanFeatureStyler}
+          referenceSystemDefinition={MappingConstants.proj4crs25832def}
+          mapEPSGCode="25832"
+          referenceSystem={MappingConstants.crs25832}
         >
           <RouterProvider router={router} />
         </TopicMapContextProvider>

@@ -6,7 +6,6 @@ import {
 import booleanDisjoint from '@turf/boolean-disjoint';
 import bboxPolygon from '@turf/bbox-polygon';
 import center from '@turf/center';
-import proj4 from 'proj4';
 
 const initialState = {
   data: undefined,
@@ -153,20 +152,11 @@ export function getPlanFeatures({
 
     const state = getState();
     if (boundingBox !== undefined) {
-      const southWest25832 = proj4('EPSG:3857', 'EPSG:25832', [
+      bboxPoly = bboxPolygon([
         boundingBox.left,
         boundingBox.top,
-      ]);
-      const northEast25832 = proj4('EPSG:3857', 'EPSG:25832', [
         boundingBox.right,
         boundingBox.bottom,
-      ]);
-
-      bboxPoly = bboxPolygon([
-        southWest25832[0],
-        southWest25832[1],
-        northEast25832[0],
-        northEast25832[1],
       ]);
     } else if (point !== undefined) {
       bboxPoly = bboxPolygon([
