@@ -1,12 +1,11 @@
 // @ts-ignore
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import { FeatureCollectionDisplayWithTooltipLabels } from 'react-cismap';
-import GazetteerSearchControl from 'react-cismap/GazetteerSearchControl';
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShuffle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faShuffle } from '@fortawesome/free-solid-svg-icons';
 import AEVInfo from './infos/AEVInfo';
 import HNInfo from './infos/HNInfo';
 import HN9999Info from './infos/HN9999Info';
@@ -31,6 +30,7 @@ import {
 import ShowAEVModeButton from './ShowAEVModeButton';
 import { aevFeatureStyler } from '../../utils/Styler';
 import Modal from './help/Modal';
+import { getGazData } from '../../utils/gazData';
 
 const Map = () => {
   const searchMinZoom = 7;
@@ -55,6 +55,7 @@ const Map = () => {
     dispatch(loadHauptnutzungen());
     // @ts-ignore
     dispatch(loadAEVs());
+    getGazData(setGazData);
   }, []);
 
   useEffect(() => {
@@ -250,7 +251,8 @@ const Map = () => {
         fullScreenControl
         //   pendingLoader={isLoading ? 1 : 0}
         locatorControl
-        gazetteerSearchControl={false}
+        gazetteerSearchControl={true}
+        gazData={gazData}
         backgroundlayers={'wupp-plan-live'}
         modalMenu={<Modal />}
         infoBox={info}
@@ -265,6 +267,12 @@ const Map = () => {
           setSearchParams(newParams);
         }}
         ondblclick={doubleMapClick}
+        gazetteerSearchControlProps={{
+          tertiaryAction: () => {},
+          tertiaryActionIcon: faSearch,
+          tertiaryActionTooltip: 'Änderungsverfahren Suchen',
+          teriaryActionDisabled: mapMode.mode === 'arbeitskarte',
+        }}
       >
         {mapMode.mode === 'rechtsplan' && <ShowAEVModeButton />}
         <FeatureCollectionDisplayWithTooltipLabels
@@ -349,13 +357,6 @@ const Map = () => {
             }}
           />
         )}
-
-        <GazetteerSearchControl
-          gazData={gazData}
-          enabled={gazData.length > 0}
-          pixelwidth={300}
-          placeholder="ÄV | BPL | Stadtteil | Adresse | POI"
-        />
         {backgrounds}
       </TopicMapComponent>
     </div>

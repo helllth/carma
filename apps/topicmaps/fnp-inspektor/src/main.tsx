@@ -13,6 +13,7 @@ import store from './store';
 import { persistStore } from 'redux-persist';
 import Map from './app/components/Map';
 import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
+import { MappingConstants } from 'react-cismap';
 
 const persistor = persistStore(store);
 
@@ -56,7 +57,11 @@ root.render(
   <StrictMode>
     <PersistGate loading={null} persistor={persistor}>
       <Provider store={store}>
-        <TopicMapContextProvider>
+        <TopicMapContextProvider
+          referenceSystemDefinition={MappingConstants.proj4crs25832def}
+          mapEPSGCode="25832"
+          referenceSystem={MappingConstants.crs25832}
+        >
           <RouterProvider router={router} />
         </TopicMapContextProvider>
       </Provider>
