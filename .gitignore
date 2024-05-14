@@ -51,3 +51,4 @@ report-cy/
 
 dispatch.*.event
 .github/workflows/test.yml
+nx-cloud.env
