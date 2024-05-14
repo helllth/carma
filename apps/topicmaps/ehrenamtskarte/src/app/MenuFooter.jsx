@@ -36,8 +36,8 @@ const Footer = () => {
           Leaflet
         </a>{' '}
         und{' '}
-        <a href="https://cismet.de/#refs" target="_cismet">
-          cids | react-cismap v{reactCismapVersion}
+        <a href="https://github.com/cismet/carma" target="_carma">
+          carma
         </a>{' '}
         |{' '}
         <a
@@ -47,6 +47,7 @@ const Footer = () => {
         >
           Datenschutzerklärung (Privacy Policy)
         </a>
+      </div>
       </div>
     </div>
   );
