@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import bboxPolygon from '@turf/bbox-polygon';
 import booleanDisjoint from '@turf/boolean-disjoint';
+import { setFeatureCollection, setSelectedFeatureIndex } from './mapping';
 
 const initialState = {
   data: undefined,
@@ -85,8 +86,7 @@ export function searchForAEVs({
         ]);
       }
 
-      for (let feature of state.fnpAenderungsverfahren.dataState.features) {
-        // console.log('feature', feature);
+      for (let feature of state.aev.data) {
         if (!booleanDisjoint(bboxPoly as any, feature)) {
           finalResults.push(feature);
         }
@@ -107,6 +107,8 @@ export function searchForAEVs({
         finalResults.push(hit);
       }
     }
+    dispatch(setFeatureCollection(finalResults));
+    dispatch(setSelectedFeatureIndex(0));
 
     done(finalResults);
   };

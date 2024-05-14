@@ -19,8 +19,12 @@ import {
 } from '../../store/slices/hauptnutzungen';
 import proj4 from 'proj4';
 import { proj4crs25832def } from 'react-cismap/constants/gis';
-import { loadAEVs } from '../../store/slices/aenderungsverfahren';
+import {
+  loadAEVs,
+  searchForAEVs,
+} from '../../store/slices/aenderungsverfahren';
 import { getFeatureCollection } from '../../store/slices/mapping';
+import ShowAEVModeButton from './ShowAEVModeButton';
 
 const Map = () => {
   const searchMinZoom = 7;
@@ -185,11 +189,12 @@ const Map = () => {
     ]);
 
     if (mapMode.mode === 'rechtsplan') {
-      // this.props.aevActions.searchForAEVs({
-      //   point: { x: pos[0], y: pos[1] },
-      //   mappingActions: this.props.mappingActions,
-      //   fitAll: false,
-      // });
+      dispatch(
+        // @ts-ignore
+        searchForAEVs({
+          point: { x: pos[0], y: pos[1] },
+        })
+      );
     } else if (mapMode.mode === 'arbeitskarte') {
       dispatch(
         // @ts-ignore
@@ -201,7 +206,7 @@ const Map = () => {
   };
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       {title}
       <TopicMapComponent
         initialLoadingText="Laden der B-Plan-Daten"
@@ -223,6 +228,7 @@ const Map = () => {
         }}
         ondblclick={doubleMapClick}
       >
+        <ShowAEVModeButton />
         <FeatureCollectionDisplayWithTooltipLabels
           featureCollection={features}
           style={(feature) => {
@@ -252,6 +258,20 @@ const Map = () => {
             }
 
             return style;
+          }}
+          labeler={(feature) => {
+            return (
+              <h3
+                style={{
+                  color: '#155317',
+                  opacity: 0.7,
+                  textShadow:
+                    '1px 1px 0px  #000000,-1px 1px 0px  #000000, 1px -1px 0px  #000000, -1px -1px 0px  #000000, 2px 2px 15px #000000',
+                }}
+              >
+                {feature.text}
+              </h3>
+            );
           }}
         />
         <GazetteerSearchControl
