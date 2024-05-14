@@ -171,3 +171,7 @@ function convertAEVToFeature(aev, index) {
 }
 
 export const { setData } = slice.actions;
+
+export const getData = (state) => {
+  return state.aev.data;
+};
