@@ -87,6 +87,7 @@ const Map = () => {
       }
       applicationMenuTooltipString="Kompaktanleitung anzeigen"
       ondblclick={doubleMapClick}
+      homeZoom={16}
       applicationMenuIconname="info"
       mappingBoundsChanged={(bbox) => {
         setBoundingBox(bbox);

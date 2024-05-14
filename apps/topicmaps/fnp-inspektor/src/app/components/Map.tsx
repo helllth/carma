@@ -20,11 +20,16 @@ import {
 import proj4 from 'proj4';
 import { proj4crs25832def } from 'react-cismap/constants/gis';
 import {
+  getData,
   loadAEVs,
   searchForAEVs,
 } from '../../store/slices/aenderungsverfahren';
-import { getFeatureCollection } from '../../store/slices/mapping';
+import {
+  getFeatureCollection,
+  setFeatureCollection,
+} from '../../store/slices/mapping';
 import ShowAEVModeButton from './ShowAEVModeButton';
+import { aevFeatureStyler } from '../../utils/Styler';
 
 const Map = () => {
   const searchMinZoom = 7;
@@ -38,6 +43,7 @@ const Map = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   let aevVisible = searchParams.get('aevVisible') !== null;
   const dispatch = useDispatch();
+  const aevFeatures = useSelector(getData);
 
   useEffect(() => {
     // @ts-ignore
@@ -88,7 +94,12 @@ const Map = () => {
         <b>Arbeitskarte: </b> fortgeschriebene Hauptnutzungen (informeller
         FNP-Auszug)
         <div style={{ float: 'right', paddingRight: 10 }}>
-          <a href={'/#/rechtsplan?' + searchParams}>
+          <a
+            href={'/#/rechtsplan?' + searchParams}
+            onClick={() => {
+              dispatch(setFeatureCollection([]));
+            }}
+          >
             <FontAwesomeIcon icon={faShuffle} style={{ marginRight: 5 }} />
             zum Rechtsplan
           </a>
@@ -117,7 +128,12 @@ const Map = () => {
         <b>Rechtsplan: </b> Flächennutzungsplan (FNP){' '}
         {aevVisible === true ? 'mit Änderungsverfahren (ÄV)' : ''}
         <div style={{ float: 'right', paddingRight: 10 }}>
-          <a href={'/#/arbeitskarte?' + searchParams}>
+          <a
+            href={'/#/arbeitskarte?' + searchParams}
+            onClick={() => {
+              dispatch(setFeatureCollection([]));
+            }}
+          >
             <FontAwesomeIcon icon={faShuffle} style={{ marginRight: 5 }} /> zur
             Arbeitskarte
           </a>
@@ -188,7 +204,7 @@ const Map = () => {
       event.latlng.lat,
     ]);
 
-    if (mapMode.mode === 'rechtsplan') {
+    if (mapMode.mode === 'rechtsplan' && aevVisible) {
       dispatch(
         // @ts-ignore
         searchForAEVs({
@@ -228,37 +244,41 @@ const Map = () => {
         }}
         ondblclick={doubleMapClick}
       >
-        <ShowAEVModeButton />
+        {mapMode.mode === 'rechtsplan' && <ShowAEVModeButton />}
         <FeatureCollectionDisplayWithTooltipLabels
           featureCollection={features}
-          style={(feature) => {
-            const style = {
-              color: '#155317',
-              weight: 3,
-              opacity: 0.8,
-              fillColor: '#ffffff',
-              fillOpacity: 0.6,
-            };
-            if (10 >= searchMinZoom) {
-              if (feature.properties.status === 'r') {
-                style.color = '#155317';
-              } else {
-                style.color = '#9F111B';
-              }
-            } else {
-              if (feature.properties.status === 'r') {
-                style.color = '#155317';
-                style.fillColor = '#155317';
-                style.opacity = 0.0;
-              } else {
-                style.color = '#9F111B';
-                style.fillColor = '#9F111B';
-                style.opacity = 0.0;
-              }
-            }
+          style={
+            mapMode.mode === 'arbeitskarte'
+              ? (feature) => {
+                  const style = {
+                    color: '#155317',
+                    weight: 3,
+                    opacity: 0.8,
+                    fillColor: '#ffffff',
+                    fillOpacity: 0.6,
+                  };
+                  if (10 >= searchMinZoom) {
+                    if (feature.properties.status === 'r') {
+                      style.color = '#155317';
+                    } else {
+                      style.color = '#9F111B';
+                    }
+                  } else {
+                    if (feature.properties.status === 'r') {
+                      style.color = '#155317';
+                      style.fillColor = '#155317';
+                      style.opacity = 0.0;
+                    } else {
+                      style.color = '#9F111B';
+                      style.fillColor = '#9F111B';
+                      style.opacity = 0.0;
+                    }
+                  }
 
-            return style;
-          }}
+                  return style;
+                }
+              : aevFeatureStyler
+          }
           labeler={(feature) => {
             return (
               <h3
@@ -274,6 +294,40 @@ const Map = () => {
             );
           }}
         />
+        {aevVisible && mapMode.mode === 'rechtsplan' && (
+          <FeatureCollectionDisplayWithTooltipLabels
+            featureCollection={aevFeatures}
+            style={(feature) => {
+              const style = {
+                color: '#155317',
+                weight: 3,
+                opacity: 0.8,
+                fillColor: '#ffffff',
+                fillOpacity: 0.6,
+              };
+              if (10 >= searchMinZoom) {
+                if (feature.properties.status === 'r') {
+                  style.color = '#155317';
+                } else {
+                  style.color = '#9F111B';
+                }
+              } else {
+                if (feature.properties.status === 'r') {
+                  style.color = '#155317';
+                  style.fillColor = '#155317';
+                  style.opacity = 0.0;
+                } else {
+                  style.color = '#9F111B';
+                  style.fillColor = '#9F111B';
+                  style.opacity = 0.0;
+                }
+              }
+
+              return style;
+            }}
+          />
+        )}
+
         <GazetteerSearchControl
           gazData={gazData}
           enabled={gazData.length > 0}

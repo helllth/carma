@@ -1,7 +1,7 @@
 {
-  "name": "fnp-doc-viewer",
+  "name": "fnp-inspektor",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/topicmaps/fnp-doc-viewer/src",
+  "sourceRoot": "apps/topicmaps/fnp-inspektor/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/topicmaps/fnp-doc-viewer"
+        "outputPath": "dist/apps/topicmaps/fnp-inspektor"
       },
       "configurations": {
         "development": {
@@ -24,15 +24,15 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "fnp-doc-viewer:build"
+        "buildTarget": "fnp-inspektor:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "fnp-doc-viewer:build:development",
+          "buildTarget": "fnp-inspektor:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "fnp-doc-viewer:build:production",
+          "buildTarget": "fnp-inspektor:build:production",
           "hmr": false
         }
       }
@@ -41,14 +41,14 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "fnp-doc-viewer:build"
+        "buildTarget": "fnp-inspektor:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "fnp-doc-viewer:build:development"
+          "buildTarget": "fnp-inspektor:build:development"
         },
         "production": {
-          "buildTarget": "fnp-doc-viewer:build:production"
+          "buildTarget": "fnp-inspektor:build:production"
         }
       }
     },

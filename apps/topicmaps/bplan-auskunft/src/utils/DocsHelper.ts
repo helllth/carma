@@ -120,6 +120,5 @@ export function getDocsForBPlaeneGazetteerEntry(props: any) {
       }
     }
   });
-  console.log('docs', docs);
   return docs;
 }
