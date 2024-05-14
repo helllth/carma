@@ -133,7 +133,7 @@
           }
         }
       },
-      "projectPath": "./dist/apps/topicmaps/luftmessstationen"
+      "projectPath": "./dist/apps/topicmaps/klimaorte"
     },
     "kita-finder": {
       "deployment": {
