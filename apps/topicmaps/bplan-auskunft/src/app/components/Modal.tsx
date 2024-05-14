@@ -5,7 +5,6 @@ import Section from 'react-cismap/topicmaps/menu/Section';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import meinStandpunktMarkerDoppel from './MeinStandpunktMarkerDoppel.jpg';
-import meinStandpunktMarker from './MeinStandpunktMarker.jpg';
 import meinStandpunktMarkerMitKompass from './MeinStandpunktMarkerMitKompass.jpg';
 import Icon from 'react-cismap/commons/Icon';
 

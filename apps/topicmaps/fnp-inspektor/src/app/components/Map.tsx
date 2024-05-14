@@ -30,6 +30,7 @@ import {
 } from '../../store/slices/mapping';
 import ShowAEVModeButton from './ShowAEVModeButton';
 import { aevFeatureStyler } from '../../utils/Styler';
+import Modal from './help/Modal';
 
 const Map = () => {
   const searchMinZoom = 7;
@@ -231,7 +232,7 @@ const Map = () => {
         locatorControl
         gazetteerSearchControl={false}
         backgroundlayers={'wupp-plan-live'}
-        //   modalMenu={<Modal />}
+        modalMenu={<Modal />}
         infoBox={info}
         applicationMenuTooltipString="Kompaktanleitung anzeigen"
         applicationMenuIconname="info"
