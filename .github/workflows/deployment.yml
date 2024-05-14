@@ -8,17 +8,18 @@ on:
       project-name:
         description: 'Please enter a project name'
         required: true
-        
+
       target:
         type: choice
-        description: 'Where should i deploy?'
+        description: 'Where should I deploy?'
         options:
           - live
           - dev
 
-     create-docker-image:
+      create-docker-image:
         type: boolean
         description: Create a Docker image? 🐳
+
   push:
     branches:
       - dev
