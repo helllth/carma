@@ -5,7 +5,7 @@ import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../../../node_modules/.vite/apps/topicmaps/bplaene-doc-viewer',
+  cacheDir: '../../../node_modules/.vite/apps/topicmaps/bplan-auskunft',
 
   server: {
     port: 4200,
@@ -28,7 +28,7 @@ export default defineConfig({
   // },
 
   build: {
-    outDir: '../../../dist/apps/topicmaps/bplaene-doc-viewer',
+    outDir: '../../../dist/apps/topicmaps/bplan-auskunft',
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
@@ -48,7 +48,7 @@ export default defineConfig({
     includeSource: ['src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     reporters: ['default'],
     coverage: {
-      reportsDirectory: '../../../coverage/apps/topicmaps/bplaene-doc-viewer',
+      reportsDirectory: '../../../coverage/apps/topicmaps/bplan-auskunft',
       provider: 'v8',
     },
   },

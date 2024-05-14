@@ -1,5 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import aevSlice from './slices/aenderungsverfahren';
+import hauptnutzungenSlice from './slices/hauptnutzungen';
+import mappingSlice from './slices/mapping';
 // @ts-ignore
 import { createLogger } from 'redux-logger';
 import { persistReducer } from 'redux-persist';
@@ -52,9 +54,26 @@ const aevConfig = {
   whitelist: ['data'],
 };
 
+const hauptnutzungenConfig = {
+  key: '@' + APP_KEY + '.' + STORAGE_PREFIX + '.app.hauptnutzungen',
+  storage: localForage,
+  whitelist: ['data'],
+};
+
+const mappingConfig = {
+  key: '@' + APP_KEY + '.' + STORAGE_PREFIX + '.app.mapping',
+  storage: localForage,
+  whitelist: [],
+};
+
 export default configureStore({
   reducer: {
     aev: persistReducer(aevConfig, aevSlice.reducer),
+    hauptnutzungen: persistReducer(
+      hauptnutzungenConfig,
+      hauptnutzungenSlice.reducer
+    ),
+    mapping: persistReducer(mappingConfig, mappingSlice.reducer),
   },
   devTools: devToolsEnabled === true && inProduction === false,
   middleware,

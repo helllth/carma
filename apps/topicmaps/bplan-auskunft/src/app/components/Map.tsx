@@ -59,15 +59,6 @@ const Map = () => {
     );
   };
 
-  const fitAll = (bounds) => {
-    // @ts-ignore
-    const map = refRoutedMap?.current?.leafletMap?.leafletElement;
-    if (map === undefined) {
-      return;
-    }
-    map.fitBounds(bounds);
-  };
-
   useEffect(() => {
     // @ts-ignore
     dispatch(loadBPlaene());
@@ -91,7 +82,6 @@ const Map = () => {
           features={features}
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
-          fitAll={fitAll}
           setFeatures={setFeatures}
         />
       }
