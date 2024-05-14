@@ -263,10 +263,33 @@ const AEVInfo = () => {
     </div>
   );
 
+  let llVis = (
+    <table style={{ width: '100%' }}>
+      <tbody>
+        <tr>
+          <td
+            style={{
+              textAlign: 'left',
+              verticalAlign: 'top',
+              background: headerColor,
+              color: 'black',
+              opacity: '0.9',
+              paddingLeft: '3px',
+              paddingTop: '0px',
+              paddingBottom: '0px',
+            }}
+          >
+            {statusText}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  );
+
   return (
     <ResponsiveInfoBox
       pixelwidth={350}
-      // header={llVis}
+      header={llVis}
       mode={MODES.AB}
       divWhenLarge={divWhenLarge}
       divWhenCollapsed={divWhenCollapsed}
