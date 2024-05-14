@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
-import { version as reactCismapVersion } from 'react-cismap//meta';
+import { getApplicationVersion } from './version';
 
 const Footer = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
@@ -14,7 +14,10 @@ const Footer = () => {
       </a>
       <br />
       <div>
-        <b>TopicMaps Wuppertal (Version 1.22.3)</b>:{' '}
+        <b>
+          {document.title} #{getApplicationVersion()}
+        </b>
+        :{' '}
         <a href="https://cismet.de/" target="_cismet">
           cismet GmbH
         </a>{' '}
@@ -23,8 +26,8 @@ const Footer = () => {
           Leaflet
         </a>{' '}
         und{' '}
-        <a href="https://cismet.de/#refs" target="_cismet">
-          cids | react-cismap v{reactCismapVersion}
+        <a href="https://github.com/cismet/carma" target="_carma">
+          carma
         </a>{' '}
         |{' '}
         <a
