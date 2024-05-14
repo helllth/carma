@@ -1,7 +1,7 @@
 {
-  "name": "bplaene-doc-viewer",
+  "name": "bplan-auskunft",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/topicmaps/bplaene-doc-viewer/src",
+  "sourceRoot": "apps/topicmaps/bplan-auskunft/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/topicmaps/bplaene-doc-viewer"
+        "outputPath": "dist/apps/topicmaps/bplan-auskunft"
       },
       "configurations": {
         "development": {
@@ -24,15 +24,15 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "bplaene-doc-viewer:build"
+        "buildTarget": "bplan-auskunft:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "bplaene-doc-viewer:build:development",
+          "buildTarget": "bplan-auskunft:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "bplaene-doc-viewer:build:production",
+          "buildTarget": "bplan-auskunft:build:production",
           "hmr": false
         }
       }
@@ -41,14 +41,14 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "bplaene-doc-viewer:build"
+        "buildTarget": "bplan-auskunft:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "bplaene-doc-viewer:build:development"
+          "buildTarget": "bplan-auskunft:build:development"
         },
         "production": {
-          "buildTarget": "bplaene-doc-viewer:build:production"
+          "buildTarget": "bplan-auskunft:build:production"
         }
       }
     },
@@ -56,7 +56,7 @@
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../../coverage/apps/topicmaps/bplaene-doc-viewer"
+        "reportsDirectory": "../../../coverage/apps/topicmaps/bplan-auskunft"
       }
     },
     "lint": {
@@ -66,7 +66,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "bplaene-doc-viewer:build"
+        "buildTarget": "bplan-auskunft:build"
       }
     }
   },
