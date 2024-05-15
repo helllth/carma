@@ -41,7 +41,7 @@ const AEVInfo = () => {
     currentFeature.properties.url !== undefined &&
     currentFeature.properties.url !== null &&
     currentFeature.properties.url.trim() !== '';
-  let urlPrefix = '';
+  let urlPrefix = window.location.origin + window.location.pathname;
   let target = '_docviewer';
   let docOrDocs;
   let mainDocOrDocs;
@@ -91,7 +91,13 @@ const AEVInfo = () => {
   bplArr.forEach((nr, index) => {
     linkArr.push(
       <span key={'bpl.' + index}>
-        <a href={urlPrefix + `/#/docs/bplaene/${nr}/1`} target={target}>
+        <a
+          href={
+            'https://carma-dev-deployments.github.io/topicmaps-bplan-auskunft-wuppertal/' +
+            `#/docs/${nr}/1/1`
+          }
+          target={target}
+        >
           B-Plan {nr}
         </a>
         {index < bplArr.length - 1 ? ', ' : ''}
