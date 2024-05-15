@@ -18,8 +18,10 @@ const slice = createSlice({
       const features = state.featureCollection;
       features.forEach((feature, i) => {
         if (i === action.payload) {
+          // @ts-ignore
           feature.selected = true;
         } else {
+          // @ts-ignore
           feature.selected = false;
         }
       });
