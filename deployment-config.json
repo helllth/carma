@@ -30,6 +30,21 @@
       },
       "projectPath": "./dist/apps/topicmaps/bplan-auskunft"
     },
+    "fnp-inspektor": {
+      "deployment": {
+        "manual": {
+          "org": "carma-dev-deployments",
+          "prj": "fnp-inspektor-wuppertal"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "fnp-inspektor-wuppertal"
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/fnp-inspektor"
+    },
     "fuzzy-search-playground": {
       "deployment": {
         "manual": {
