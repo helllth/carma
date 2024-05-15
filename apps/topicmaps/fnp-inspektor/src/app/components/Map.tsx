@@ -225,6 +225,15 @@ const Map = () => {
     }
   };
 
+  const aevSearchButtonHit = (event) => {
+    dispatch(
+      // @ts-ignore
+      searchForAEVs({
+        boundingBox: boundingBox,
+      })
+    );
+  };
+
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
@@ -268,7 +277,7 @@ const Map = () => {
         }}
         ondblclick={doubleMapClick}
         gazetteerSearchControlProps={{
-          tertiaryAction: () => {},
+          tertiaryAction: aevSearchButtonHit,
           tertiaryActionIcon: faSearch,
           tertiaryActionTooltip: 'Änderungsverfahren Suchen',
           teriaryActionDisabled: mapMode.mode === 'arbeitskarte',
