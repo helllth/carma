@@ -162,7 +162,7 @@ const Map = () => {
         tiled="true"
         styles="default"
         maxZoom={19}
-        opacity={1.0}
+        opacity={aevVisible ? 0.5 : 1.0}
         caching={true}
       />,
     ];
@@ -310,6 +310,7 @@ const Map = () => {
       >
         {mapMode.mode === 'rechtsplan' && <ShowAEVModeButton />}
         <FeatureCollectionDisplayWithTooltipLabels
+          key={`map_` + JSON.stringify(features[0])}
           featureCollection={features}
           featureClickHandler={featureClick}
           style={
@@ -361,6 +362,7 @@ const Map = () => {
         />
         {aevVisible && mapMode.mode === 'rechtsplan' && (
           <FeatureCollectionDisplayWithTooltipLabels
+            key={`map_` + selectedFeatureIndex}
             featureCollection={aevFeatures}
             featureClickHandler={featureClick}
             style={(feature) => {
