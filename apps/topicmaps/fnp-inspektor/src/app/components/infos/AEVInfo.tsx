@@ -26,11 +26,6 @@ const AEVInfo = () => {
     if (potIndex >= features.length) {
       potIndex = 0;
     }
-    const tmpFeatures = features;
-    tmpFeatures.forEach((obj, i) => {
-      obj.selected = i === potIndex;
-    });
-    dispatch(setFeatureCollection(tmpFeatures));
     dispatch(setSelectedFeatureIndex(potIndex));
   };
 
@@ -39,11 +34,6 @@ const AEVInfo = () => {
     if (potIndex < 0) {
       potIndex = features.length - 1;
     }
-    const tmpFeatures = features;
-    tmpFeatures.forEach((obj, i) => {
-      obj.selected = i === potIndex;
-    });
-    dispatch(setFeatureCollection(tmpFeatures));
     dispatch(setSelectedFeatureIndex(potIndex));
   };
 
