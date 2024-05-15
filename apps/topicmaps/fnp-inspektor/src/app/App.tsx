@@ -67,6 +67,8 @@ export function App() {
         getUpdatedDocs(tmpDocs);
       }
     }
+
+    document.title = `Dokumentenansicht | ${docPackageId}`;
   }, [docPackageId]);
 
   return (
