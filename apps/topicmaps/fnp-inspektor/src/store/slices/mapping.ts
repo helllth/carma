@@ -15,6 +15,16 @@ const slice = createSlice({
     },
     setSelectedFeatureIndex(state, action) {
       state.selectedFeatureIndex = action.payload;
+      const features = state.featureCollection;
+      features.forEach((feature, i) => {
+        if (i === action.payload) {
+          feature.selected = true;
+        } else {
+          feature.selected = false;
+        }
+      });
+      console.log(features);
+      state.featureCollection = features;
       return state;
     },
   },

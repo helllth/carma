@@ -25,18 +25,22 @@ import {
 } from '../../store/slices/aenderungsverfahren';
 import {
   getFeatureCollection,
+  getSelectedFeatureIndex,
   setFeatureCollection,
+  setSelectedFeatureIndex,
 } from '../../store/slices/mapping';
 import ShowAEVModeButton from './ShowAEVModeButton';
 import { aevFeatureStyler } from '../../utils/Styler';
 import Modal from './help/Modal';
 import { getGazData } from '../../utils/gazData';
+import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
+import L from 'leaflet';
 
 const Map = () => {
   const searchMinZoom = 7;
   const [boundingBox, setBoundingBox] = useState(null);
   const features = useSelector(getFeatureCollection);
-  const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(0);
+  const selectedFeatureIndex = useSelector(getSelectedFeatureIndex);
   const [gazData, setGazData] = useState([]);
   const [mapMode, setMapMode] = useState({ mode: 'rechtsplan' });
   let { mode } = useParams();
@@ -47,6 +51,8 @@ const Map = () => {
   const aevFeatures = useSelector(getData);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState<number>(0);
+  // @ts-ignore
+  const { routedMapRef } = useContext(TopicMapContext);
 
   useEffect(() => {
     // @ts-ignore
@@ -225,6 +231,25 @@ const Map = () => {
     }
   };
 
+  const featureClick = (event) => {
+    if (event.target.feature.selected) {
+      const projectedFC = L.Proj.geoJson(event.target.feature);
+      const bounds = projectedFC.getBounds();
+      const map = routedMapRef?.leafletMap?.leafletElement;
+      if (map === undefined) {
+        return;
+      }
+      map.fitBounds(bounds);
+    } else {
+      const index = features.findIndex(
+        (element) => element.id === event.target.feature.id
+      );
+      if (index !== -1) {
+        dispatch(setSelectedFeatureIndex(index));
+      }
+    }
+  };
+
   const aevSearchButtonHit = (event) => {
     dispatch(
       // @ts-ignore
@@ -286,6 +311,7 @@ const Map = () => {
         {mapMode.mode === 'rechtsplan' && <ShowAEVModeButton />}
         <FeatureCollectionDisplayWithTooltipLabels
           featureCollection={features}
+          featureClickHandler={featureClick}
           style={
             mapMode.mode === 'arbeitskarte'
               ? (feature) => {
@@ -336,6 +362,7 @@ const Map = () => {
         {aevVisible && mapMode.mode === 'rechtsplan' && (
           <FeatureCollectionDisplayWithTooltipLabels
             featureCollection={aevFeatures}
+            featureClickHandler={featureClick}
             style={(feature) => {
               const style = {
                 color: '#155317',
