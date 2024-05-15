@@ -23,7 +23,6 @@ const slice = createSlice({
           feature.selected = false;
         }
       });
-      console.log(features);
       state.featureCollection = features;
       return state;
     },
