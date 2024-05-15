@@ -297,7 +297,7 @@ const Map = () => {
         infoBox={info}
         applicationMenuTooltipString="Kompaktanleitung anzeigen"
         applicationMenuIconname="info"
-        homeZoom={16}
+        homeZoom={12}
         mappingBoundsChanged={(bbox) => {
           setBoundingBox(bbox);
         }}
