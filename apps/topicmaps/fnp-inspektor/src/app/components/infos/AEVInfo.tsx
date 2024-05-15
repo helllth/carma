@@ -151,9 +151,7 @@ const AEVInfo = () => {
               {hasMainDocument === true && (
                 <a
                   style={{ color: '#333' }}
-                  href={
-                    urlPrefix + `/#/docs/aenderungsv/${currentFeature.text}/1`
-                  }
+                  href={urlPrefix + `/#/docs/${currentFeature.text}/1/1`}
                   target={target}
                 >
                   <h4

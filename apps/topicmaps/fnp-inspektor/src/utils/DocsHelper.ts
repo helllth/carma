@@ -31,89 +31,85 @@ export function getDocsForAEVGazetteerEntry(props: any) {
   let { gazHit, searchForAEVs } = props;
   let docs: Doc[] = [];
 
-  searchForAEVs({
-    gazObject: [gazHit],
-    done: (aevFeatures: any) => {
-      if (aevFeatures === undefined || aevFeatures.length === 0) {
-        console.log('::this should not happen -- race condition?');
+  searchForAEVs([gazHit], (aevFeatures: any) => {
+    let aev;
 
-        return;
-      }
-      const aev = aevFeatures[0];
+    if (aevFeatures.length > 0) {
+      aev = aevFeatures[0].properties;
+    }
+
+    if (aev) {
       let title =
         aev.verfahren === ''
           ? 'FNP-Änderung ' + aev.name
           : 'FNP-Berichtigung ' + aev.name;
+      const filename =
+        aev.verfahren === ''
+          ? 'FNP-Änderung.' + aev.name + '.pdf'
+          : 'FNP-Berichtigung.' + aev.name + '.pdf';
+      docs.push({
+        group: 'Änderungsverfahren',
+        file: filename,
+        url: aev.url.replace(
+          'http://www.wuppertal.de/geoportal/',
+          'https://wunda-geoportal-docs.cismet.de/'
+        ),
+        layer: replaceUmlauteAndSpaces(
+          aev.url.replace('http://www.wuppertal.de/geoportal/', tileservice) +
+            '/{z}/{x}/{y}.png'
+        ),
+        // @ts-ignore
+        meta: replaceUmlauteAndSpaces(
+          aev.url.replace('http://www.wuppertal.de/geoportal/', tileservice) +
+            '/meta.json'
+        ),
+        title: title,
+      });
 
-      if (aev) {
-        const filename =
-          aev.verfahren === ''
-            ? 'FNP-Änderung.' + aev.name + '.pdf'
-            : 'FNP-Berichtigung.' + aev.name + '.pdf';
+      if (aev.docUrls.length > 0) {
+        let url =
+          'https://www.wuppertal.de/geoportal/fnp_dokumente/Info_FNP-Zusatzdokumente_WUP.pdf';
         docs.push({
-          group: 'Änderungsverfahren',
-          file: filename,
-          url: aev.url.replace(
-            'http://www.wuppertal.de/geoportal/',
+          group: 'Zusatzdokumente',
+          title: 'Info Dateinamen',
+          file: 'Info_FNP-Zusatzdokumente_WUP.pdf',
+          url: url.replace(
+            'https://www.wuppertal.de/geoportal/',
             'https://wunda-geoportal-docs.cismet.de/'
           ),
           layer: replaceUmlauteAndSpaces(
-            aev.url.replace('http://www.wuppertal.de/geoportal/', tileservice) +
+            url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
               '/{z}/{x}/{y}.png'
           ),
           // @ts-ignore
           meta: replaceUmlauteAndSpaces(
-            aev.url.replace('http://www.wuppertal.de/geoportal/', tileservice) +
+            url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
               '/meta.json'
           ),
-          title: title,
         });
-
-        if (aev.docUrls.length > 0) {
-          let url =
-            'https://www.wuppertal.de/geoportal/fnp_dokumente/Info_FNP-Zusatzdokumente_WUP.pdf';
-          docs.push({
-            group: 'Zusatzdokumente',
-            title: 'Info Dateinamen',
-            file: 'Info_FNP-Zusatzdokumente_WUP.pdf',
-            url: url.replace(
-              'https://www.wuppertal.de/geoportal/',
-              'https://wunda-geoportal-docs.cismet.de/'
-            ),
-            layer: replaceUmlauteAndSpaces(
-              url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
-                '/{z}/{x}/{y}.png'
-            ),
-            // @ts-ignore
-            meta: replaceUmlauteAndSpaces(
-              url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
-                '/meta.json'
-            ),
-          });
-        }
-
-        for (let url of aev.docUrls) {
-          const filename = url.substring(url.lastIndexOf('/') + 1);
-          docs.push({
-            group: 'Zusatzdokumente',
-            file: filename,
-            url: url.replace(
-              'https://www.wuppertal.de/geoportal/',
-              'https://wunda-geoportal-docs.cismet.de/'
-            ),
-            layer: replaceUmlauteAndSpaces(
-              url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
-                '/{z}/{x}/{y}.png'
-            ),
-            // @ts-ignore
-            meta: replaceUmlauteAndSpaces(
-              url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
-                '/meta.json'
-            ),
-          });
-        }
       }
-    },
+
+      for (let url of aev.docUrls) {
+        const filename = url.substring(url.lastIndexOf('/') + 1);
+        docs.push({
+          group: 'Zusatzdokumente',
+          file: filename,
+          url: url.replace(
+            'https://www.wuppertal.de/geoportal/',
+            'https://wunda-geoportal-docs.cismet.de/'
+          ),
+          layer: replaceUmlauteAndSpaces(
+            url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
+              '/{z}/{x}/{y}.png'
+          ),
+          // @ts-ignore
+          meta: replaceUmlauteAndSpaces(
+            url.replace('https://www.wuppertal.de/geoportal/', tileservice) +
+              '/meta.json'
+          ),
+        });
+      }
+    }
   });
 
   return docs;

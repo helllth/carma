@@ -5,7 +5,11 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-cismap/topicMaps.css';
-import { loadAEVs, searchForAEVs } from '../store/slices/aenderungsverfahren';
+import {
+  getAEVFeatureByGazObject,
+  loadAEVs,
+  searchForAEVs,
+} from '../store/slices/aenderungsverfahren';
 import { useParams } from 'react-router-dom';
 import { getDocsForAEVGazetteerEntry } from '../utils/DocsHelper';
 
@@ -54,8 +58,9 @@ export function App() {
       let tmpDocs;
       tmpDocs = getDocsForAEVGazetteerEntry({
         gazHit: { type: 'aenderungsv', more: { v: docPackageId } },
-        // @ts-ignore
-        searchForAEVs: (aevs) => dispatch(searchForAEVs(aevs)),
+        searchForAEVs: (aevs, done) =>
+          // @ts-ignore
+          dispatch(getAEVFeatureByGazObject(aevs, done)),
       });
 
       if (tmpDocs) {

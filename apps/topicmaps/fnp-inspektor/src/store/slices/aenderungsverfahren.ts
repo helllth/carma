@@ -48,6 +48,28 @@ export const loadAEVs = () => {
   };
 };
 
+export function getAEVFeatureByGazObject(
+  gazObjects,
+  done = (result) => {
+    console.log(result);
+  }
+) {
+  return function (dispatch, getState) {
+    const state = getState();
+    let finalResults: any = [];
+
+    let hit = state.aev.data.find((elem: any) => {
+      return elem.text === gazObjects[0].more.v;
+    });
+
+    if (hit) {
+      finalResults.push(hit);
+    }
+
+    done(finalResults);
+  };
+}
+
 export function searchForAEVs({
   gazObject,
   boundingBox,
