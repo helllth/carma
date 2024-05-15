@@ -30,7 +30,12 @@ import {
   setSelectedFeatureIndex,
 } from '../../store/slices/mapping';
 import ShowAEVModeButton from './ShowAEVModeButton';
-import { aevFeatureStyler } from '../../utils/Styler';
+import {
+  aevFeatureStyler,
+  aevLabeler,
+  hnFeatureStyler,
+  hnLabeler,
+} from '../../utils/Styler';
 import Modal from './help/Modal';
 import { getGazData } from '../../utils/gazData';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
@@ -314,51 +319,9 @@ const Map = () => {
           featureCollection={features}
           featureClickHandler={featureClick}
           style={
-            mapMode.mode === 'arbeitskarte'
-              ? (feature) => {
-                  const style = {
-                    color: '#155317',
-                    weight: 3,
-                    opacity: 0.8,
-                    fillColor: '#ffffff',
-                    fillOpacity: 0.6,
-                  };
-                  if (10 >= searchMinZoom) {
-                    if (feature.properties.status === 'r') {
-                      style.color = '#155317';
-                    } else {
-                      style.color = '#9F111B';
-                    }
-                  } else {
-                    if (feature.properties.status === 'r') {
-                      style.color = '#155317';
-                      style.fillColor = '#155317';
-                      style.opacity = 0.0;
-                    } else {
-                      style.color = '#9F111B';
-                      style.fillColor = '#9F111B';
-                      style.opacity = 0.0;
-                    }
-                  }
-
-                  return style;
-                }
-              : aevFeatureStyler
+            mapMode.mode === 'arbeitskarte' ? hnFeatureStyler : aevFeatureStyler
           }
-          labeler={(feature) => {
-            return (
-              <h3
-                style={{
-                  color: '#155317',
-                  opacity: 0.7,
-                  textShadow:
-                    '1px 1px 0px  #000000,-1px 1px 0px  #000000, 1px -1px 0px  #000000, -1px -1px 0px  #000000, 2px 2px 15px #000000',
-                }}
-              >
-                {feature.text}
-              </h3>
-            );
-          }}
+          labeler={mapMode.mode === 'arbeitskarte' ? hnLabeler : aevLabeler}
         />
         {aevVisible && mapMode.mode === 'rechtsplan' && (
           <FeatureCollectionDisplayWithTooltipLabels
