@@ -253,10 +253,10 @@ const DocMap = ({
   }
 
   useEffect(() => {
-    if (docs.length > 0 && index) {
+    if (docs.length > 0 && index && leafletMapRef.current) {
       getLayer();
     }
-  }, [index, docs, page]);
+  }, [index, docs, page, height, leafletMapRef]);
 
   useEffect(() => {
     gotoWholeHeight();
