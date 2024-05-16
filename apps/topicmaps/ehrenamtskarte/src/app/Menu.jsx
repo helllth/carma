@@ -130,45 +130,51 @@ const Menu = ({ bookmarks, setBookmarks }) => {
             sectionBsStyle="primary"
             sectionContent={<FilterUI />}
           />,
-          <Section
-            key="glb"
-            sectionKey="glb"
-            sectionTitle="Welches Ausgabenfeld interessiert mich?"
-            sectionBsStyle="warning"
-            sectionContent={
-              <table border={0}>
-                <tbody>
-                  <FilterRowUI items={globalbereiche} />
-                </tbody>
-              </table>
-            }
-          />,
-          <Section
-            key="ken"
-            sectionKey="ken"
-            sectionTitle="Was will ich tun?"
-            sectionBsStyle="info"
-            sectionContent={
-              <table border={0}>
-                <tbody>
-                  <FilterRowUI items={kenntnisse} />
-                </tbody>
-              </table>
-            }
-          />,
-          <Section
-            key="zg"
-            sectionKey="zg"
-            sectionTitle="Mit wem möchte ich arbeiten?"
-            sectionBsStyle="success"
-            sectionContent={
-              <table border={0}>
-                <tbody>
-                  <FilterRowUI items={zielgruppen} />
-                </tbody>
-              </table>
-            }
-          />,
+          globalbereiche.length > 0 && (
+            <Section
+              key="glb"
+              sectionKey="glb"
+              sectionTitle="Welches Ausgabenfeld interessiert mich?"
+              sectionBsStyle="warning"
+              sectionContent={
+                <table border={0}>
+                  <tbody>
+                    <FilterRowUI items={globalbereiche} />
+                  </tbody>
+                </table>
+              }
+            />
+          ),
+          kenntnisse.length > 0 && (
+            <Section
+              key="ken"
+              sectionKey="ken"
+              sectionTitle="Was will ich tun?"
+              sectionBsStyle="info"
+              sectionContent={
+                <table border={0}>
+                  <tbody>
+                    <FilterRowUI items={kenntnisse} />
+                  </tbody>
+                </table>
+              }
+            />
+          ),
+          zielgruppen.length > 0 && (
+            <Section
+              key="zg"
+              sectionKey="zg"
+              sectionTitle="Mit wem möchte ich arbeiten?"
+              sectionBsStyle="success"
+              sectionContent={
+                <table border={0}>
+                  <tbody>
+                    <FilterRowUI items={zielgruppen} />
+                  </tbody>
+                </table>
+              }
+            />
+          ),
           <Section
             key="merkliste"
             sectionKey="merkliste"
