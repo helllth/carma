@@ -217,13 +217,14 @@ const FilterUI = () => {
                   readOnly={true}
                   key={'filter.kita.alter.unter2'}
                   onClick={(e) => {
-                    // if (e.target.checked === true) {
-                    //   addFilterFor('alter', kitasConstants.ALTER_UNTER2);
-                    //   removeFilterFor('alter', kitasConstants.ALTER_AB2);
-                    //   removeFilterFor('alter', kitasConstants.ALTER_AB3);
-                    // }
+                    const newFilterState = { ...filterState };
+                    if (e.target.checked) {
+                      newFilterState.alter = 'unter2';
+                    }
+
+                    setFilterState(newFilterState);
                   }}
-                  checked={true}
+                  checked={filterState.alter === 'unter2' || !filterState.alter}
                   inline
                   label="unter 2 Jahre"
                 />
@@ -234,13 +235,14 @@ const FilterUI = () => {
                   readOnly={true}
                   key={'filter.kita.alter.ab2'}
                   onClick={(e) => {
-                    // if (e.target.checked === true) {
-                    //   addFilterFor('alter', kitasConstants.ALTER_AB2);
-                    //   removeFilterFor('alter', kitasConstants.ALTER_UNTER2);
-                    //   removeFilterFor('alter', kitasConstants.ALTER_AB3);
-                    // }
+                    const newFilterState = { ...filterState };
+                    if (e.target.checked) {
+                      newFilterState.alter = 'ab2';
+                    }
+
+                    setFilterState(newFilterState);
                   }}
-                  checked={false}
+                  checked={filterState.alter === 'ab2'}
                   inline
                   label="2 bis 3 Jahre"
                 />
@@ -250,13 +252,14 @@ const FilterUI = () => {
                   readOnly={true}
                   key={'filter.kita.alter.ab3'}
                   onClick={(e) => {
-                    // if (e.target.checked === true) {
-                    //   addFilterFor('alter', kitasConstants.ALTER_AB3);
-                    //   removeFilterFor('alter', kitasConstants.ALTER_AB2);
-                    //   removeFilterFor('alter', kitasConstants.ALTER_UNTER2);
-                    // }
+                    const newFilterState = { ...filterState };
+                    if (e.target.checked) {
+                      newFilterState.alter = 'ab3';
+                    }
+
+                    setFilterState(newFilterState);
                   }}
-                  checked={false}
+                  checked={filterState.alter === 'ab3'}
                   inline
                   label="ab 3 Jahre"
                 />

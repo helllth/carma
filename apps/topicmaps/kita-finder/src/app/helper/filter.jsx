@@ -14,6 +14,28 @@ const itemFilterFunction = ({ filterState }) => {
       }
     }
 
+    if (filterState.alter) {
+      if (filterState.alter === 'unter2') {
+        if (item.alter === 0) {
+          result = true;
+        } else {
+          result = false;
+        }
+      } else if (filterState.alter === 'ab2') {
+        if (item.alter === 0 || item.alter === 1) {
+          result = true;
+        } else {
+          result = false;
+        }
+      } else if (filterState.alter === 'ab3') {
+        if (item.alter < 3) {
+          result = true;
+        } else {
+          result = false;
+        }
+      }
+    }
+
     return result;
   };
 };
