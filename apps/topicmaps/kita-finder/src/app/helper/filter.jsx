@@ -1,3 +1,14 @@
+import { constants as kitasConstants } from './constants';
+
+export const traegertypMap = [
+  { text: 'städtisch', c: kitasConstants.TRAEGERTYP_STAEDTISCH },
+  { text: 'evangelisch', c: kitasConstants.TRAEGERTYP_EVANGELISCH },
+  { text: 'katholisch', c: kitasConstants.TRAEGERTYP_KATHOLISCH },
+  { text: 'Elterninitiative', c: kitasConstants.TRAEGERTYP_ELTERNINITIATIVE },
+  { text: 'Betrieb', c: kitasConstants.TRAEGERTYP_BETRIEBSKITA },
+  { text: 'andere freie Träger', c: kitasConstants.TRAEGERTYP_ANDERE },
+];
+
 const itemFilterFunction = ({ filterState }) => {
   return (item) => {
     let result = false;
@@ -13,6 +24,15 @@ const itemFilterFunction = ({ filterState }) => {
         result = true;
       }
     }
+
+    traegertypMap.forEach((traeger) => {
+      if (!filterState[traeger.text]) {
+        const kitaTraeger = kitasConstants.TRAEGERTYP[item.traegertyp];
+        if (traeger.c === kitaTraeger) {
+          result = false;
+        }
+      }
+    });
 
     if (filterState.alter) {
       if (filterState.alter === 'unter2') {

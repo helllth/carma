@@ -15,6 +15,7 @@ import 'url-search-params-polyfill';
 import KitasTraegertypMapVisSymbol from './helper/KitasTraegertypMapVisSymbol';
 import KitasProfileMapVisSymbol from './helper/KitasProfileMapVisSymbol';
 import KitasPieChart from './KitasPieChart';
+import { traegertypMap } from './helper/filter';
 
 const FilterUI = () => {
   const { itemsDictionary, filteredItems, filterState } = useContext(
@@ -28,14 +29,6 @@ const FilterUI = () => {
 
   const width = windowSize?.width || 500;
 
-  const traegertypMap = [
-    { text: 'städtisch', c: kitasConstants.TRAEGERTYP_STAEDTISCH },
-    { text: 'evangelisch', c: kitasConstants.TRAEGERTYP_EVANGELISCH },
-    { text: 'katholisch', c: kitasConstants.TRAEGERTYP_KATHOLISCH },
-    { text: 'Elterninitiative', c: kitasConstants.TRAEGERTYP_ELTERNINITIATIVE },
-    { text: 'Betrieb', c: kitasConstants.TRAEGERTYP_BETRIEBSKITA },
-    { text: 'andere freie Träger', c: kitasConstants.TRAEGERTYP_ANDERE },
-  ];
   let widePieChartPlaceholder = null;
   let narrowPieChartPlaceholder = null;
 
@@ -89,11 +82,16 @@ const FilterUI = () => {
                         readOnly={true}
                         key={'filter.kita.traeger.' + item.c}
                         onClick={(e) => {
-                          // const newFilterState = { ...filter };
-                          // newFilterState.nur_online = e.target.checked;
-                          // setFilter(newFilterState);
+                          const newFilterState = { ...filterState };
+                          if (e.target.checked) {
+                            newFilterState[item.text] = true;
+                          } else {
+                            newFilterState[item.text] = false;
+                          }
+
+                          setFilterState(newFilterState);
                         }}
-                        checked={true}
+                        checked={filterState[item.text]}
                         label={
                           <>
                             {item.text}{' '}
