@@ -40,6 +40,52 @@ export const verleihstationSVG = `<?xml version="1.0" encoding="UTF-8" standalon
 </svg>
 `;
 
+export const getSymbolSVG = (
+  svgSize = 30,
+  bg = '#FF0000',
+  kind = '-',
+  svgStyleRelatedId = 'default',
+  svgCodeInput = verleihstationSVG
+) => {
+  let bdim = {
+    width: 20,
+    height: 20,
+  };
+
+  let svgCode = `<svg  id="${svgStyleRelatedId}" height="${svgSize}" width="${svgSize}"> 
+                    <style>
+                    /* <![CDATA[ */
+                        #${svgStyleRelatedId} .bg-fill  {
+                            fill: ${bg};
+                        }
+                        #${svgStyleRelatedId} .bg-stroke  {
+                            stroke: ${bg};
+                        }
+                        #${svgStyleRelatedId} .fg-fill  {
+                            fill: white;
+                        }
+                        #${svgStyleRelatedId} .fg-stroke  {
+                            stroke: white;
+                        }
+                    /* ]]> */
+                    </style>
+                <svg x="${svgSize / bdim.width / 2}" y="${
+    svgSize / bdim.height / 2
+  }"  width="${svgSize - (2 * svgSize) / bdim.width / 2}" height="${
+    svgSize - (2 * svgSize) / bdim.height / 2
+  }" viewBox="0 0 ${bdim.width} ${bdim.height || 24}">       
+                    ${svgCodeInput}
+                </svg>
+                </svg>  `;
+
+  return (
+    <span
+      style={{ width: 'fit-content' }}
+      dangerouslySetInnerHTML={{ __html: svgCode }}
+    />
+  );
+};
+
 export const getColorForProperties = (properties) => {
   if (properties?.typ === 'Verleihstation') {
     return '#EC7529';
