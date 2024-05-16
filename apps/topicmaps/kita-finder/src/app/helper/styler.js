@@ -196,7 +196,6 @@ opts[opts.length - 1][kC.TRAEGERTYP.indexOf(kC.TRAEGERTYP_EVANGELISCH)] =
 
 export const getColorForProperties = (properties, poiColors) => {
   let { mainlocationtype, color } = properties;
-  let ll = mainlocationtype.lebenslagen;
   //console.log(colorHash.hex("" + JSON.stringify({ll})));
   if (color !== undefined) {
     return color;
@@ -210,6 +209,42 @@ export const getColorForProperties = (properties, poiColors) => {
     } else {
       return '#<a>&lt;&lt;</a><a>&lt;&lt;</a>';
     }
+  }
+};
+
+export const getColor = (properties, featureRendering) => {
+  if (featureRendering === constants.FEATURE_RENDERING_BY_PROFIL) {
+    if (properties.plaetze_fuer_behinderte === true) {
+      return '#00B4CC';
+    } else {
+      return '#A83F6A';
+    }
+  } else if (featureRendering === constants.FEATURE_RENDERING_BY_TRAEGERTYP) {
+    const lookup = opts[0];
+    const color = lookup[properties.traegertyp];
+    if (color) {
+      return color;
+    } else {
+      return '#<a>&lt;&lt;</a><a>&lt;&lt;</a>';
+    }
+  } else if (featureRendering === constants.FEATURE_RENDERING_BY_TRAEGERTYP2) {
+    const lookup = opts[1];
+    const color = lookup[properties.traegertyp];
+    if (color) {
+      return color;
+    } else {
+      return '#<a>&lt;&lt;</a><a>&lt;&lt;</a>';
+    }
+  } else if (featureRendering === constants.FEATURE_RENDERING_BY_TRAEGERTYP3) {
+    const lookup = opts[2];
+    const color = lookup[properties.traegertyp];
+    if (color) {
+      return color;
+    } else {
+      return '#<a>&lt;&lt;</a><a>&lt;&lt;</a>';
+    }
+  } else {
+    return '#333333';
   }
 };
 

@@ -1,9 +1,6 @@
-import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chart } from 'chart.js';
-import React, { useEffect, useMemo, useState } from 'react';
 import { useContext } from 'react';
-import { Badge, Button, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import ReactChartkick, { PieChart } from 'react-chartkick';
 import {
   FeatureCollectionContext,
@@ -11,74 +8,40 @@ import {
 } from 'react-cismap/contexts/FeatureCollectionContextProvider';
 import { ResponsiveTopicMapContext } from 'react-cismap/contexts/ResponsiveTopicMapContextProvider';
 import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
-
-import { crossLinkApps } from './helper/constants';
-import {
-  clearFilter,
-  createFilterRows,
-  setAllLebenslagenToFilter,
-  toggleFilter,
-} from './helper/filter';
 import { getColorFromLebenslagenCombination } from './helper/styler';
-import MultiToggleButton from './MultiToggleButton';
+import { constants as kitasConstants } from './helper/constants';
+import Icon from 'react-cismap/commons/Icon';
 
 import 'url-search-params-polyfill';
+import KitasTraegertypMapVisSymbol from './helper/KitasTraegertypMapVisSymbol';
+import KitasProfileMapVisSymbol from './helper/KitasProfileMapVisSymbol';
 
 ReactChartkick.addAdapter(Chart);
 
-const FilterUI = ({ apps = crossLinkApps }) => {
+const FilterUI = () => {
   const { itemsDictionary, filteredItems, filterState } = useContext(
     FeatureCollectionContext
   );
   const { setFilterState } = useContext(FeatureCollectionDispatchContext);
-  const filteredPOIs = filteredItems || [];
-  const lebenslagen = useMemo(
-    () => itemsDictionary?.lebenslagen || [],
-    [itemsDictionary]
-  );
   const { windowSize } = useContext(ResponsiveTopicMapContext);
-  const [filterRows, setFilterRows] = useState();
+
   const { additionalStylingInfo } = useContext(TopicMapStylingContext);
   const poiColors = additionalStylingInfo?.poiColors;
-  useEffect(() => {
-    setFilterRows(
-      createFilterRows(
-        apps,
-        lebenslagen,
-        toggleFilter,
-        filterState,
-        setFilterState
-      )
-    );
-  }, [apps, lebenslagen, setFilterState, filterState]);
 
   const width = windowSize?.width || 500;
 
-  // kind means negativ or positiv
-  // filter measn single lebenslage
-
-  let widePieChartPlaceholder;
-  let narrowPieChartPlaceholder;
+  const traegertypMap = [
+    { text: 'städtisch', c: kitasConstants.TRAEGERTYP_STAEDTISCH },
+    { text: 'evangelisch', c: kitasConstants.TRAEGERTYP_EVANGELISCH },
+    { text: 'katholisch', c: kitasConstants.TRAEGERTYP_KATHOLISCH },
+    { text: 'Elterninitiative', c: kitasConstants.TRAEGERTYP_ELTERNINITIATIVE },
+    { text: 'Betrieb', c: kitasConstants.TRAEGERTYP_BETRIEBSKITA },
+    { text: 'andere freie Träger', c: kitasConstants.TRAEGERTYP_ANDERE },
+  ];
+  let widePieChartPlaceholder = null;
+  let narrowPieChartPlaceholder = null;
 
   let stats = {};
-  let colormodel = {};
-  // for (let poi of filteredPOIs) {
-  //   if (stats[poi?.mainlocationtype?.lebenslagen.join(', ')] === undefined) {
-  //     const ll = poi?.mainlocationtype?.lebenslagen;
-
-  //     const key = ll
-  //       .slice()
-  //       .sort(function (a, b) {
-  //         return a.localeCompare(b);
-  //       })
-  //       .join(', ');
-  //     stats[key] = 1;
-  //     colormodel[key] = getColorFromLebenslagenCombination(key, poiColors);
-  //   } else {
-  //     stats[poi?.mainlocationtype?.lebenslagen.join(', ')] =
-  //       stats[poi?.mainlocationtype?.lebenslagen.join(', ')] + 1;
-  //   }
-  // }
 
   let piechartData = [];
   let piechartColor = [];
@@ -108,177 +71,267 @@ const FilterUI = ({ apps = crossLinkApps }) => {
     widePieChartPlaceholder = pieChart;
   }
 
-  let additionalApps;
-  let additionalAppArray = [];
-  let usedApps = [];
-
-  for (const app of apps) {
-    for (const appLebenslage of app.on) {
-      if (
-        filterState?.positiv &&
-        filterState.positiv.indexOf(appLebenslage) !== -1 &&
-        usedApps.indexOf(app.name) === -1
-      ) {
-        usedApps.push(app.name);
-        additionalAppArray.push(
-          <a
-            key={'appLink_' + app.name}
-            style={{
-              textDecoration: 'none',
-            }}
-            href={app.link}
-            target={app.target}
-            rel="noopener noreferrer"
-          >
-            <Badge
-              variant={app.bsStyle}
-              style={{
-                backgroundColor: app.backgroundColor,
-                marginRight: '5px',
-                display: 'inline-block',
-                color: 'white',
-              }}
-            >
-              {app.name}
-            </Badge>
-          </a>
-        );
-      }
-    }
-  }
-
-  if (usedApps.length > 0) {
-    additionalApps = (
-      <div>
-        <hr />
-        <strong>* Themenspezifische Karten:</strong>
-        {'  '}
-        <h4
-          style={{
-            lineHeight: 1.7,
-            wordWrap: 'break-word',
-            wordBreak: 'normal',
-            lineBreak: 'strict',
-            hyphens: 'none',
-            overflowWrap: 'break-word',
-            WebkitHyphens: 'none',
-            MozHyphens: 'none',
-          }}
-        >
-          {additionalAppArray}
-        </h4>
-      </div>
-    );
-  }
-
   return (
     <div>
-      <div align="center">
-        <Button
-          style={{
-            margin: 4,
-            marginLeft: 0,
-          }}
-          variant="light"
-          onClick={() => {
-            setAllLebenslagenToFilter(
-              'positiv',
-              lebenslagen,
-              clearFilter('negativ', filterState, setFilterState),
-              setFilterState
-            );
-          }}
-        >
-          alle Themen ausw&auml;hlen
-        </Button>
+      <table border={0} width="100%">
+        <tbody>
+          <tr>
+            <td valign="center" style={{ width: '330px' }}>
+              <Form>
+                <label
+                  style={{
+                    display: 'inline-block',
+                    maxWidth: '100%',
+                    marginBottom: '5px',
+                    fontWeight: 700,
+                  }}
+                >
+                  Trägertyp
+                  {'  '}
+                  <Icon
+                    style={{
+                      color: 'grey',
+                      width: '30px',
+                      textAlign: 'center',
+                    }}
+                    size="2x"
+                    name={'home'}
+                  />
+                </label>
+                {traegertypMap.map((item) => {
+                  return (
+                    <div key={'filter.kita.traeger.div.' + item.c}>
+                      <Form.Check
+                        readOnly={true}
+                        key={'filter.kita.traeger.' + item.c}
+                        onClick={(e) => {
+                          // const newFilterState = { ...filter };
+                          // newFilterState.nur_online = e.target.checked;
+                          // setFilter(newFilterState);
+                        }}
+                        checked={true}
+                        label={
+                          <>
+                            {item.text}{' '}
+                            <KitasTraegertypMapVisSymbol
+                              visible={true}
+                              traegertyp={kitasConstants.TRAEGERTYP.indexOf(
+                                item.c
+                              )}
+                            />
+                          </>
+                        }
+                      />
+                    </div>
+                  );
+                })}
+              </Form>
+              <br />
+              <Form>
+                <label
+                  style={{
+                    display: 'inline-block',
+                    maxWidth: '100%',
+                    marginBottom: '5px',
+                    fontWeight: 700,
+                  }}
+                >
+                  Profil
+                  {'  '}
+                  <Icon
+                    style={{
+                      color: 'grey',
+                      width: '30px',
+                      textAlign: 'center',
+                    }}
+                    size="2x"
+                    name={'child'}
+                  />
+                </label>
+                <br />
+                <Form.Check
+                  readOnly={true}
+                  key={'filter.kita.inklusion.checkbox'}
+                  onClick={(e) => {
+                    // if (e.target.checked === false) {
+                    //   removeFilterFor(
+                    //     'profil',
+                    //     kitasConstants.PROFIL_INKLUSION
+                    //   );
+                    // } else {
+                    //   addFilterFor('profil', kitasConstants.PROFIL_INKLUSION);
+                    // }
+                  }}
+                  checked={true}
+                  inline
+                  label="Schwerpunkt Inklusion"
+                />
 
-        <Button
-          variant="light"
-          style={{
-            margin: 4,
-          }}
-          onClick={() => {
-            clearFilter('positiv', filterState, setFilterState);
-          }}
-        >
-          keine Themen ausw&auml;hlen
-        </Button>
-        <Button
-          variant="light"
-          style={{
-            margin: 4,
-          }}
-          onClick={() => {
-            clearFilter('negativ', filterState, setFilterState);
-          }}
-        >
-          keine Themen ausschlie&szlig;en
-        </Button>
-      </div>
-      <br />
-      {widePieChartPlaceholder && (
-        <div
-          style={{
-            width: '100%',
-            // background: "green",
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'nowrap',
-            justifyContent: 'normal',
-            alignItems: 'normal',
-            alignContent: 'normal',
-          }}
-        >
-          <div
-            style={{
-              display: 'block',
-              // background: "yellow",
-              flexGrow: '0',
-              flexShrink: '1',
-              flexBasis: 'auto',
-              alignSelf: 'auto',
-              order: '0',
-            }}
-          >
-            {filterRows}
-          </div>
-          <div
-            style={{
-              display: 'block',
+                {'  '}
+                <KitasProfileMapVisSymbol inklusion={true} visible={true} />
+                <br />
+                <Form.Check
+                  readOnly={true}
+                  key={'filter.kita.normal.checkbox'}
+                  onClick={(e) => {
+                    // if (e.target.checked === false) {
+                    //   removeFilterFor('profil', kitasConstants.PROFIL_NORMAL);
+                    // } else {
+                    //   addFilterFor('profil', kitasConstants.PROFIL_NORMAL);
+                    // }
+                  }}
+                  checked={true}
+                  inline
+                  label="ohne Schwerpunkt Inklusion"
+                />
+                {'  '}
+                <KitasProfileMapVisSymbol inklusion={false} visible={true} />
+              </Form>
+              <Form>
+                <br />
+                <label
+                  style={{
+                    display: 'inline-block',
+                    maxWidth: '100%',
+                    marginBottom: '5px',
+                    fontWeight: 700,
+                  }}
+                >
+                  Kindesalter{' '}
+                  <Icon
+                    style={{
+                      color: 'grey',
+                      width: '30px',
+                      textAlign: 'center',
+                    }}
+                    size="2x"
+                    name={'user'}
+                  />
+                </label>
+                <br />
+                <Form.Check
+                  type="radio"
+                  readOnly={true}
+                  key={'filter.kita.alter.unter2'}
+                  onClick={(e) => {
+                    // if (e.target.checked === true) {
+                    //   addFilterFor('alter', kitasConstants.ALTER_UNTER2);
+                    //   removeFilterFor('alter', kitasConstants.ALTER_AB2);
+                    //   removeFilterFor('alter', kitasConstants.ALTER_AB3);
+                    // }
+                  }}
+                  checked={true}
+                  inline
+                  label="unter 2 Jahre"
+                />
 
-              // background: "blue",
+                <br />
+                <Form.Check
+                  type="radio"
+                  readOnly={true}
+                  key={'filter.kita.alter.ab2'}
+                  onClick={(e) => {
+                    // if (e.target.checked === true) {
+                    //   addFilterFor('alter', kitasConstants.ALTER_AB2);
+                    //   removeFilterFor('alter', kitasConstants.ALTER_UNTER2);
+                    //   removeFilterFor('alter', kitasConstants.ALTER_AB3);
+                    // }
+                  }}
+                  checked={false}
+                  inline
+                  label="2 bis 3 Jahre"
+                />
+                <br />
+                <Form.Check
+                  type="radio"
+                  readOnly={true}
+                  key={'filter.kita.alter.ab3'}
+                  onClick={(e) => {
+                    // if (e.target.checked === true) {
+                    //   addFilterFor('alter', kitasConstants.ALTER_AB3);
+                    //   removeFilterFor('alter', kitasConstants.ALTER_AB2);
+                    //   removeFilterFor('alter', kitasConstants.ALTER_UNTER2);
+                    // }
+                  }}
+                  checked={false}
+                  inline
+                  label="ab 3 Jahre"
+                />
+              </Form>
+              <Form>
+                <br />
+                <label
+                  style={{
+                    display: 'inline-block',
+                    maxWidth: '100%',
+                    marginBottom: '5px',
+                    fontWeight: 700,
+                  }}
+                >
+                  Betreuungsumfang{' '}
+                  <Icon
+                    style={{
+                      color: 'grey',
+                      width: '40px',
+                      textAlign: 'center',
+                    }}
+                    size="2x"
+                    name={'calendar'}
+                  />
+                </label>
+                <br />
+                <Form.Check
+                  key="filter.kita.umfang.35h"
+                  readOnly={true}
+                  onClick={(e) => {
+                    // if (e.target.checked === false) {
+                    //   removeFilterFor(
+                    //     'umfang',
+                    //     kitasConstants.STUNDEN_FILTER_35
+                    //   );
+                    // } else {
+                    //   addFilterFor('umfang', kitasConstants.STUNDEN_FILTER_35);
+                    // }
+                  }}
+                  checked={true}
+                  name="mapBackground"
+                  inline
+                  label="35 Stunden pro Woche"
+                />
 
-              flexGrow: '1',
-              flexShrink: '1',
-              flexBasis: 'auto',
-              alignSelf: 'auto',
-              order: '0',
-              alignContent: 'center',
-            }}
-          >
+                <br />
+                <Form.Check
+                  key="filter.kita.umfang.45h"
+                  readOnly={true}
+                  onClick={(e) => {
+                    // if (e.target.checked === false) {
+                    //   removeFilterFor(
+                    //     'umfang',
+                    //     kitasConstants.STUNDEN_FILTER_45
+                    //   );
+                    // } else {
+                    //   addFilterFor('umfang', kitasConstants.STUNDEN_FILTER_45);
+                    // }
+                  }}
+                  name="mapBackground"
+                  checked={true}
+                  inline
+                  label="45 Stunden pro Woche"
+                />
+              </Form>
+              <br />
+              <br />
+              <p>
+                <Button bsSize="small" onClick={() => resetFilter()}>
+                  Filter zurücksetzen (Alle Kitas anzeigen)
+                </Button>
+              </p>
+            </td>
             {widePieChartPlaceholder}
-          </div>
-        </div>
-      )}
-      {narrowPieChartPlaceholder && (
-        <div
-          style={{
-            display: 'block',
-            // background: "yellow",
-            flexGrow: '0',
-            flexShrink: '1',
-            flexBasis: 'auto',
-            alignSelf: 'auto',
-            order: '0',
-            paddingLeft: 20,
-            paddingRight: 20,
-          }}
-        >
-          {filterRows}
-        </div>
-      )}
+          </tr>
+        </tbody>
+      </table>
       {narrowPieChartPlaceholder}
-      {additionalApps}
     </div>
   );
 };
