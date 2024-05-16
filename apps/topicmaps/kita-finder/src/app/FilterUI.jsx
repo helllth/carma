@@ -153,16 +153,16 @@ const FilterUI = () => {
                   readOnly={true}
                   key={'filter.kita.inklusion.checkbox'}
                   onClick={(e) => {
-                    // if (e.target.checked === false) {
-                    //   removeFilterFor(
-                    //     'profil',
-                    //     kitasConstants.PROFIL_INKLUSION
-                    //   );
-                    // } else {
-                    //   addFilterFor('profil', kitasConstants.PROFIL_INKLUSION);
-                    // }
+                    const newFilterState = { ...filterState };
+                    if (e.target.checked) {
+                      newFilterState.inklusion = true;
+                    } else {
+                      newFilterState.inklusion = false;
+                    }
+
+                    setFilterState(newFilterState);
                   }}
-                  checked={true}
+                  checked={filterState.inklusion}
                   inline
                   label="Schwerpunkt Inklusion"
                 />
@@ -174,13 +174,16 @@ const FilterUI = () => {
                   readOnly={true}
                   key={'filter.kita.normal.checkbox'}
                   onClick={(e) => {
-                    // if (e.target.checked === false) {
-                    //   removeFilterFor('profil', kitasConstants.PROFIL_NORMAL);
-                    // } else {
-                    //   addFilterFor('profil', kitasConstants.PROFIL_NORMAL);
-                    // }
+                    const newFilterState = { ...filterState };
+                    if (e.target.checked) {
+                      newFilterState.normal = true;
+                    } else {
+                      newFilterState.normal = false;
+                    }
+
+                    setFilterState(newFilterState);
                   }}
-                  checked={true}
+                  checked={filterState.normal}
                   inline
                   label="ohne Schwerpunkt Inklusion"
                 />
