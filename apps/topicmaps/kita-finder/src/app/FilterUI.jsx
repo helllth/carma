@@ -310,7 +310,24 @@ const FilterUI = () => {
               <br />
               <br />
               <p>
-                <Button bsSize="small" onClick={() => resetFilter()}>
+                <Button
+                  bsSize="small"
+                  onClick={() => {
+                    const newFilterState = {};
+                    traegertypMap.forEach((traeger) => {
+                      newFilterState[traeger.text] = true;
+                    });
+
+                    setFilterState({
+                      umfang_45: true,
+                      umfang_35: true,
+                      alter: 'ab3',
+                      normal: true,
+                      inklusion: true,
+                      ...newFilterState,
+                    });
+                  }}
+                >
                   Filter zurücksetzen (Alle Kitas anzeigen)
                 </Button>
               </p>
