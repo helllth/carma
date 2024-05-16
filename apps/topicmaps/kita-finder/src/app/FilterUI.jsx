@@ -1,7 +1,6 @@
-import { Chart } from 'chart.js';
 import { useContext } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import ReactChartkick, { PieChart } from 'react-chartkick';
+
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
@@ -15,8 +14,7 @@ import Icon from 'react-cismap/commons/Icon';
 import 'url-search-params-polyfill';
 import KitasTraegertypMapVisSymbol from './helper/KitasTraegertypMapVisSymbol';
 import KitasProfileMapVisSymbol from './helper/KitasProfileMapVisSymbol';
-
-ReactChartkick.addAdapter(Chart);
+import KitasPieChart from './KitasPieChart';
 
 const FilterUI = () => {
   const { itemsDictionary, filteredItems, filterState } = useContext(
@@ -41,23 +39,9 @@ const FilterUI = () => {
   let widePieChartPlaceholder = null;
   let narrowPieChartPlaceholder = null;
 
-  let stats = {};
-
-  let piechartData = [];
-  let piechartColor = [];
-
-  for (let key in stats) {
-    piechartData.push([key, stats[key]]);
-    piechartColor.push(getColorFromLebenslagenCombination(key, poiColors));
-  }
-
   let pieChart = (
-    <PieChart
-      data={piechartData}
-      donut={true}
-      title="Verteilung"
-      legend={false}
-      colors={piechartColor}
+    <KitasPieChart
+      renderingOption={'KITAS/CONSTS/FEATURE_RENDERING_BY_TRAEGERTYP'}
     />
   );
 
@@ -290,16 +274,16 @@ const FilterUI = () => {
                   key="filter.kita.umfang.35h"
                   readOnly={true}
                   onClick={(e) => {
-                    // if (e.target.checked === false) {
-                    //   removeFilterFor(
-                    //     'umfang',
-                    //     kitasConstants.STUNDEN_FILTER_35
-                    //   );
-                    // } else {
-                    //   addFilterFor('umfang', kitasConstants.STUNDEN_FILTER_35);
-                    // }
+                    const newFilterState = { ...filterState };
+                    if (e.target.checked) {
+                      newFilterState.umfang_35 = true;
+                    } else {
+                      newFilterState.umfang_35 = false;
+                    }
+
+                    setFilterState(newFilterState);
                   }}
-                  checked={true}
+                  checked={filterState.umfang_35}
                   name="mapBackground"
                   inline
                   label="35 Stunden pro Woche"
@@ -310,17 +294,17 @@ const FilterUI = () => {
                   key="filter.kita.umfang.45h"
                   readOnly={true}
                   onClick={(e) => {
-                    // if (e.target.checked === false) {
-                    //   removeFilterFor(
-                    //     'umfang',
-                    //     kitasConstants.STUNDEN_FILTER_45
-                    //   );
-                    // } else {
-                    //   addFilterFor('umfang', kitasConstants.STUNDEN_FILTER_45);
-                    // }
+                    const newFilterState = { ...filterState };
+                    if (e.target.checked) {
+                      newFilterState.umfang_45 = true;
+                    } else {
+                      newFilterState.umfang_45 = false;
+                    }
+
+                    setFilterState(newFilterState);
                   }}
                   name="mapBackground"
-                  checked={true}
+                  checked={filterState.umfang_45}
                   inline
                   label="45 Stunden pro Woche"
                 />

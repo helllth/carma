@@ -135,6 +135,14 @@ constants.TRAEGERTEXT[3] = 'Trägerschaft einer Elterninitiative';
 constants.TRAEGERTEXT[4] = 'kirchlicher Trägerschaft (evangelisch)';
 constants.TRAEGERTEXT[5] = 'kirchlicher Trägerschaft (katholisch)';
 
+constants.TRAEGERTEXT[constants.TRAEGERTYP_ANDERE] = 'andere freie Träger';
+constants.TRAEGERTEXT[constants.TRAEGERTYP_BETRIEBSKITA] = 'Betrieb';
+constants.TRAEGERTEXT[constants.TRAEGERTYP_STAEDTISCH] = 'städtisch';
+constants.TRAEGERTEXT[constants.TRAEGERTYP_ELTERNINITIATIVE] =
+  'Elterninitiative';
+constants.TRAEGERTEXT[constants.TRAEGERTYP_EVANGELISCH] = 'evangelisch';
+constants.TRAEGERTEXT[constants.TRAEGERTYP_KATHOLISCH] = 'katholisch';
+
 constants.TRAEGERTEXT_FOR_DESCRIPTION[constants.TRAEGERTYP_ANDERE] =
   'andere Einrichtungen in freier Trägerschaft';
 constants.TRAEGERTEXT_FOR_DESCRIPTION[constants.TRAEGERTYP_BETRIEBSKITA] =
