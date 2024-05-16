@@ -22,69 +22,6 @@ import { Link } from 'react-scroll';
 import FilterUI from './FilterUI';
 import MenuFooter from './MenuFooter';
 
-const apps = [
-  {
-    on: ['Kinderbetreuung'],
-    name: 'Kita-Finder',
-    bsStyle: 'success',
-    backgroundColor: null,
-    link: '/#/kitas',
-    target: '_kitas',
-  },
-  {
-    on: ['Sport', 'Freizeit'],
-    name: 'Bäderkarte',
-    bsStyle: 'primary',
-    backgroundColor: null,
-    link: '/#/baeder',
-    target: '_baeder',
-  },
-  {
-    on: ['Kultur'],
-    name: 'Kulturstadtplan',
-    bsStyle: 'warning',
-    backgroundColor: null,
-    link: '/#/kulturstadtplan',
-    target: '_kulturstadtplan',
-  },
-  {
-    on: ['Mobilität'],
-    name: 'Park+Ride-Karte',
-    bsStyle: 'warning',
-    backgroundColor: '#62B7D5',
-    link: '/#/xandride',
-    target: '_xandride',
-  },
-
-  {
-    on: ['Mobilität'],
-    name: 'E-Auto-Ladestationskarte',
-    bsStyle: 'warning',
-    backgroundColor: '#003E7A',
-    link: '/#/elektromobilitaet',
-    target: '_elektromobilitaet',
-  },
-  {
-    on: ['Mobilität'],
-    name: 'E-Fahrrad-Karte',
-    bsStyle: 'warning',
-    backgroundColor: '#326C88', //'#15A44C', //'#EC7529',
-    link: '/#ebikes',
-    target: '_ebikes',
-  },
-  // {
-  //   on: ['Gesundheit'],
-  //   name: 'Corona-Präventionskarte',
-  //   bsStyle: 'warning',
-  //   backgroundColor: '#BD000E', //'#15A44C', //'#EC7529',
-  //   link: 'https://topicmaps-wuppertal.github.io/corona-praevention/#/?title',
-  //   target: '_corona',
-  // },
-
-  // {   on: ["Sport"],   name: "Sporthallen",   bsStyle: "default",
-  // backgroundColor: null,   link: "/#/ehrenamt",   target: "_hallen" }
-];
-
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];
   const negativ = [];
@@ -109,33 +46,18 @@ const Menu = () => {
   if ((filterState === undefined) & (items !== undefined)) {
     setFilterState(getDefaultFilterConfiguration(itemsDictionary?.lebenslagen));
   }
-  //   if ((filterMode === undefined) & (items !== undefined)) {
-  //     setFilterMode(defaultFilterMode;
-  //   }
-  const topicMapTitle = 'Hintergrund';
-  const simpleHelp = {
-    content: `Die Möglichkeiten zum Klima- und Umweltschutz werden aktuell global diskutiert, wobei bereits 
-              auf kommunaler Ebene viele Akteure und Einrichtungen an deren Umsetzung beteiligt sind. 
-              An diesen "Klimaorten" wird das Thema Klimaschutz praktiziert und vermittelt; hier wird der 
-              Klimaschutz für die Bürger\\*innen erlebbar. Viele dieser Klimaorte sind im Rahmen von innovativen 
-              Projekten durch den Wissenstransfer und das Engagement von Unternehmen, Vereinen, Verbänden sowie 
-              Quartiersbewohner\\*innen entstanden, die sich aktiv für Lösungen zum Klima- und Umweltschutz in ihrem 
-              Quartier und für die Stadt Wuppertal einsetzen. Zu den zielführenden Projekten gehören z.B. Wuppertals 
-              Klimasiedlungen, Anlagen zur effizienten und/oder regenerativen Energieerzeugung, Projekte der Verkehrswende 
-              sowie der Klima- und Umweltbildung, an denen zahlreiche Akteure mitwirken und mitgestalten.`,
-  };
 
   const getFilterHeader = () => {
     const count = filteredItems?.length || 0;
 
     let term;
     if (count === 1) {
-      term = 'POI';
+      term = 'Kita';
     } else {
-      term = 'POIs';
+      term = 'Kitas';
     }
 
-    return `Mein Themenstadtplan (${count} ${term} gefunden, davon ${
+    return `Filtern (${count} ${term} gefunden, davon ${
       shownFeatures?.length || '0'
     } in der Karte)`;
   };
@@ -144,14 +66,11 @@ const Menu = () => {
     <CustomizationContextProvider customizations={{}}>
       <ModalApplicationMenu
         menuIcon={'bars'}
-        menuTitle={'Themenstadtplan, Einstellungen und Kompaktanleitung'}
+        menuTitle={'Filter, Einstellungen und Kompaktanleitung'}
         menuFooter={<MenuFooter />}
         menuIntroduction={
           <span>
-            Verwandeln Sie den Wuppertaler Online-Stadtplan in Ihren
-            persönlichen Themenstadtplan.
-            <br />
-            W&auml;hlen Sie dazu unter{' '}
+            Benutzen Sie die Auswahlmöglichkeiten unter{' '}
             <Link
               className="useAClassNameToRenderProperLink"
               to="filter"
@@ -160,10 +79,10 @@ const Menu = () => {
               delay={100}
               onClick={() => setAppMenuActiveMenuSection('filter')}
             >
-              Mein Themenstadtplan
-            </Link>{' '}
-            die Themenfelder aus, zu denen Sie die Points Of Interest (POI)
-            anzeigen oder ausblenden möchten. Über{' '}
+              Filtern
+            </Link>
+            , um die in der Karte angezeigten Kindertageseinrichtungen (Kitas)
+            auf die für Sie relevanten Kitas zu beschränken. Über{' '}
             <Link
               className="useAClassNameToRenderProperLink"
               to="settings"
@@ -174,8 +93,8 @@ const Menu = () => {
             >
               Einstellungen
             </Link>{' '}
-            können Sie die Karten- und POI-Darstellung an Ihre Vorlieben
-            anpassen. W&auml;hlen Sie{' '}
+            können Sie die Darstellung der Hintergrundkarte und der Kitas an
+            Ihre Vorlieben anpassen. Wählen Sie{' '}
             <Link
               className="useAClassNameToRenderProperLink"
               to="help"

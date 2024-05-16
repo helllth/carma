@@ -62,7 +62,7 @@ const Stadtplankarte = ({ poiColors }) => {
           );
         }
       }}
-      applicationMenuTooltipString="Themenstadtplan | Einstellungen | Kompaktanleitung"
+      applicationMenuTooltipString="Filter | Einstellungen | Kompaktanleitung"
       infoBox={
         <GenericInfoBoxFromFeature
           pixelwidth={350}
