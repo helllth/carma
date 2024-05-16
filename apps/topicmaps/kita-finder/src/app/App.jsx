@@ -6,7 +6,7 @@ import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvid
 
 import { getConvertItemToFeatureWithPOIColors } from './helper/convertItemToFeature';
 import createItemsDictionary from './helper/createItemsDistionary';
-import itemFilterFunction from './helper/filter';
+import itemFilterFunction, { traegertypMap } from './helper/filter';
 import { getPOIColors } from './helper/helper';
 import {
   getFeatureStyler,
@@ -26,6 +26,11 @@ if (typeof global === 'undefined') {
 
 function App() {
   const [poiColors, setPoiColors] = useState();
+
+  const filters = {};
+  traegertypMap.forEach((traeger) => {
+    filters[traeger.text] = true;
+  });
 
   useEffect(() => {
     getPOIColors(setPoiColors);
@@ -53,6 +58,14 @@ function App() {
         mapEPSGCode="25832"
         referenceSystem={MappingConstants.crs25832}
         additionalStylingInfo={{ poiColors }}
+        filterState={{
+          umfang_45: true,
+          umfang_35: true,
+          alter: 'ab3',
+          normal: true,
+          inklusion: true,
+          ...filters,
+        }}
       >
         <Stadtplankarte poiColors={poiColors} />
       </TopicMapContextProvider>
