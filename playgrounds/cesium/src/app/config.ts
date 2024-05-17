@@ -1,3 +1,5 @@
+const APP_BASE_PATH = import.meta.env.BASE_URL;
+
 export const WUPP3D = {
   url: 'https://wupp-3d-data.cismet.de/mesh/tileset.json',
   translation: {
@@ -7,7 +9,7 @@ export const WUPP3D = {
   },
 };
 
-const GEOJSON_BASE_PATH = './data/geojson/';
+const GEOJSON_BASE_PATH = `${APP_BASE_PATH}data/geojson/`;
 
 export const FOOTPRINT_GEOJSON_SOURCES = {
   VORONOI: {
