@@ -7,17 +7,19 @@ export const WUPP3D = {
   },
 };
 
+const GEOJSON_BASE_PATH = './data/geojson/';
+
 export const FOOTPRINT_GEOJSON_SOURCES = {
   VORONOI: {
-    url: 'data/buildings_voronoi_buffered_2m.json',
+    url: `${GEOJSON_BASE_PATH}buildings_voronoi_buffered_2m.json`,
     name: 'Voronoi 2m',
   },
   BUILDINGS: {
-    url: 'data/buildings.json',
+    url: `${GEOJSON_BASE_PATH}buildings.json`,
     name: 'Buildings',
   },
   BUFFERED: {
-    url: 'data/buildings_buffered_1m.json',
+    url: `${GEOJSON_BASE_PATH}buildings_buffered_1m.json`,
     name: 'Buffered 1m',
   },
 };
