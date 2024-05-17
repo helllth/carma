@@ -29,6 +29,8 @@ https://github.com/s3xysteak/vite-plugin-cesium-build/
 
 */
 
+const CESIUM_PATHNAME = '__cesium__'; // also set in config of cesium eventually share via env var?
+
 export default defineConfig({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/playgrounds/cesium',
@@ -55,7 +57,7 @@ export default defineConfig({
       targets: [
         {
           src: '../../node_modules/cesium/Build/Cesium/*', // dont use @cesium module folder
-          dest: '__cesium__', // also set in index.html or eventually in some env var
+          dest: CESIUM_PATHNAME, 
         },
       ],
       silent: false,
