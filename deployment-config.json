@@ -210,7 +210,7 @@
       },
       "projectPath": "./dist/apps/topicmaps/baederkarte"
     },
-    "cesium-playground": {
+    "cesium": {
       "deployment": {
         "manual": {
           "org": "carma-dev-playground-deployments",
