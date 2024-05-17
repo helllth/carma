@@ -23,10 +23,7 @@ export default defineConfig({
   },
 
   plugins: [
-    cesium({
-      cesiumBuildPath: '../../node_modules/cesium/Build/Cesium/',
-      cesiumBuildRootPath: '../../node_modules/cesium/Build',
-    }),
+    cesium(),
     react(),
     nxViteTsPaths(),
   ],
