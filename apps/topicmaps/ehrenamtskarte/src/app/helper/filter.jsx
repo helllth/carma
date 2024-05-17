@@ -4,9 +4,9 @@ import MultiToggleButton from '../MultiToggleButton';
 
 const itemFilterFunction = ({ filterState }) => {
   return (item) => {
-    let result = true;
-    //positive
-    if (filterState?.positiv && filterState?.negativ) {
+    let result = false;
+
+    if (filterState?.positiv.length > 0 || filterState?.negativ.length > 0) {
       for (let globalbereiche of item.globalbereiche) {
         result = result || filterState.positiv.indexOf(globalbereiche) !== -1;
         if (filterState.negativ.indexOf(globalbereiche) !== -1) {
@@ -20,9 +20,18 @@ const itemFilterFunction = ({ filterState }) => {
         }
       }
       for (let zielgruppen of item.zielgruppen) {
-        result = result || filterState.positiv.indexOf(zielgruppen) !== -1;
-        if (filterState.negativ.indexOf(zielgruppen) !== -1) {
-          return false;
+        if (
+          filterState.positiv.indexOf(zielgruppen) !== -1 &&
+          filterState.positiv.length > 0
+        ) {
+          return true;
+        }
+        if (filterState.negativ.length > 0) {
+          if (filterState.negativ.indexOf(zielgruppen) !== -1) {
+            return false;
+          } else {
+            result = true;
+          }
         }
       }
       return result;
