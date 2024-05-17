@@ -5,6 +5,7 @@ import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
 } from 'react-cismap/contexts/FeatureCollectionContextProvider';
+import './accordion.css';
 
 const FilterUI = () => {
   const { itemsDictionary, filterState } = useContext(FeatureCollectionContext);
