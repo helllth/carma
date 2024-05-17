@@ -67,14 +67,16 @@ export const useClickAction = (
 export const usePropertyKeysFromGeoJsonDataSource = (
   dataSource: GeoJsonDataSource | undefined | null
 ) => {
-  const [propertyKeys, setPropertyKeys] = useState(new Set());
+  const [propertyKeys, setPropertyKeys] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (dataSource?.entities) {
-      const keys = new Set();
+      const keys = new Set() as Set<string>;
       dataSource.entities.values.forEach((entity) => {
         entity.properties &&
-          entity.properties.propertyNames.forEach((key) => keys.add(key));
+          entity.properties.propertyNames.forEach((key: string) =>
+            keys.add(key)
+          );
       });
       setPropertyKeys(keys);
     }

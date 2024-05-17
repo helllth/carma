@@ -105,8 +105,13 @@ const DebugInfo = (props: DebugInfoProps) => {
             <pre>x {centerPosition.x}</pre>
             <pre>y {centerPosition.y}</pre>
             <pre>z {centerPosition.z}</pre>
-            <pre>lat {centerPosCarto?.latitude * toDegFactor}</pre>
-            <pre>lon {centerPosCarto?.longitude * toDegFactor}</pre>
+            {centerPosCarto && 
+              <>
+                <pre>lat {centerPosCarto.latitude * toDegFactor}</pre>
+                <pre>lon {centerPosCarto.longitude * toDegFactor}</pre>
+              </>
+            }
+
             <pre>h {centerPosCarto?.height}</pre>
 
             <em>
@@ -115,8 +120,12 @@ const DebugInfo = (props: DebugInfoProps) => {
             <pre>x {cameraPosition.x}</pre>
             <pre>y {cameraPosition.y}</pre>
             <pre>z {cameraPosition.z}</pre>
-            <pre>lat {cameraPosCarto?.latitude * toDegFactor}</pre>
-            <pre>lon {cameraPosCarto?.longitude * toDegFactor}</pre>
+            {cameraPosCarto && 
+              <>
+                <pre>lat {cameraPosCarto.latitude * toDegFactor}</pre>
+                <pre>lon {cameraPosCarto.longitude * toDegFactor}</pre>
+              </>
+            }
             <pre>h {cameraPosCarto?.height}</pre>
           </div>
         )}

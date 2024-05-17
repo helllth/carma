@@ -18,7 +18,7 @@ export const lockPosition = async (viewer: Cesium.Viewer) => {
     modelMatrix: transform,
     length: 100000.0,
   });
-  viewer.debugPrimitive = debugPrimitive;
+  
   viewer.scene.primitives.add(debugPrimitive);
 };
 

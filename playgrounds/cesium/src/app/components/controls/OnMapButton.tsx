@@ -14,7 +14,7 @@ type OnMapButtonProps = HTMLAttributes<HTMLAnchorElement> & {
   children?: ReactNode;
   title: string;
   ariaLabel?: string;
-  onClick: (event: MouseEvent) => void;
+  onClick?: (event: MouseEvent) => void;
 };
 
 const OnMapButton = (props: OnMapButtonProps) => {

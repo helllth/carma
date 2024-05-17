@@ -1,11 +1,16 @@
 import { faRocket, faVial, faVials } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { GeoJsonDataSource, JulianDate, Cesium3DTileset } from 'cesium';
+import {
+  GeoJsonDataSource,
+  JulianDate,
+  Cesium3DTileset,
+  Cartesian3,
+} from 'cesium';
 import { useCesium, CesiumComponentRef } from 'resium';
 import { unlockPosition } from '../../../lib/position';
 
 type ExperimentsProps = {
-  tilesetRef: CesiumComponentRef<Cesium3DTileset>;
+  tilesetRef: CesiumComponentRef<Cesium3DTileset> | null;
 };
 
 const Experiments = (props: ExperimentsProps) => {
@@ -40,9 +45,11 @@ const Experiments = (props: ExperimentsProps) => {
                   );
                   // Get the root tile of the tileset
                   console.log('xxx tilesetRef', tilesetRef);
-
-                  const ts = tilesetRef.current.cesiumElement;
-                  console.log('xxx tileset', ts, polygonGeometry);
+                  console.log(
+                    'xxx tileset',
+                    tilesetRef?.cesiumElement,
+                    polygonGeometry
+                  );
 
                   // Add the hole to the root tile using the addHoles function
                   // root.addHoles([polygonGeometry]);
@@ -71,7 +78,7 @@ const Experiments = (props: ExperimentsProps) => {
           title="Experimentalfunktion 3"
           onClick={() => {
             if (viewer) {
-              viewer.scene.camera.constrainedAxis = Cesium.Cartesian3.UNIT_Z;
+              viewer.scene.camera.constrainedAxis = Cartesian3.UNIT_Z;
             }
           }}
         >

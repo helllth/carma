@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode } from 'react';
 import { useCesium } from 'resium';
 
 type ZoomControlsProps = {
@@ -14,7 +14,7 @@ const MOVERATE_FACTOR = 0.1;
 const ZoomControls = (props: ZoomControlsProps) => {
   const { viewer } = useCesium();
 
-  const handleZoomIn = (event: Event) => {
+  const handleZoomIn = (event: MouseEvent) => {
     event.preventDefault();
     console.log('handleZoomIn', viewer);
     if (!viewer) return;
@@ -29,7 +29,7 @@ const ZoomControls = (props: ZoomControlsProps) => {
     camera.moveForward(moveRate);
   };
 
-  const handleZoomOut = (event: Event) => {
+  const handleZoomOut = (event: MouseEvent) => {
     event.preventDefault();
     if (!viewer) return;
     const scene = viewer.scene;
