@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useContext } from 'react';
-import { Select } from 'antd';
+import Select from 'react-select';
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
@@ -26,12 +26,19 @@ const FilterUI = () => {
             label: zielgruppe,
           };
         })}
-        mode="multiple"
+        isMulti
         allowClear
-        value={filterState.positiv}
+        value={filterState.positiv.map((zielgruppe) => {
+          return {
+            value: zielgruppe,
+            label: zielgruppe,
+          };
+        })}
         onChange={(value) => {
           const newFilterState = { ...filterState };
-          newFilterState.positiv = value;
+          newFilterState.positiv = value.map((zielgruppe) => {
+            return zielgruppe.value;
+          });
           setFilterState(newFilterState);
         }}
       />
@@ -45,12 +52,19 @@ const FilterUI = () => {
             label: zielgruppe,
           };
         })}
-        mode="multiple"
+        isMulti
         allowClear
-        value={filterState.negativ}
+        value={filterState.negativ.map((zielgruppe) => {
+          return {
+            value: zielgruppe,
+            label: zielgruppe,
+          };
+        })}
         onChange={(value) => {
           const newFilterState = { ...filterState };
-          newFilterState.negativ = value;
+          newFilterState.negativ = value.map((zielgruppe) => {
+            return zielgruppe.value;
+          });
           setFilterState(newFilterState);
         }}
       />
