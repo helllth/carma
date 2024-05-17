@@ -55,7 +55,7 @@ export default defineConfig({
       targets: [
         {
           src: '../../node_modules/cesium/Build/Cesium/*', // dont use @cesium module folder
-          dest: '/__cesium__', // also set in index.html or eventually in some env var
+          dest: '__cesium__', // also set in index.html or eventually in some env var
         },
       ],
       silent: false,
