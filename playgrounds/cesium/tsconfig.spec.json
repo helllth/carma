@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
     "outDir": "../../dist/out-tsc",
     "types": [
       "vitest/globals",
@@ -13,7 +14,7 @@
     ]
   },
   "include": [
-    "vite.config.ts",
+    "vite.config.tsm",
     "vitest.config.ts",
     "src/**/*.test.ts",
     "src/**/*.spec.ts",

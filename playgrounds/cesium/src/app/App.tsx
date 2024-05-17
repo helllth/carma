@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import {
   createBrowserRouter,
   createHashRouter,
@@ -13,6 +13,9 @@ import ViewTestViewer from './views/TestCustomViewer';
 import ViewTestTileset from './views/TestTileset';
 import ViewFull from './views/Full';
 import ViewMesh from './views/WithMesh';
+
+// Cesium Styles
+import 'cesium/Build/Cesium/Widgets/widgets.css';
 
 export const SimpleAppState = createContext({
   isAnimating: false,
