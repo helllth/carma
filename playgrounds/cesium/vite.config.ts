@@ -6,7 +6,6 @@ import cesium from 'vite-plugin-cesium';
 
 export default defineConfig({
   root: __dirname,
-  base: './',
   cacheDir: '../../node_modules/.vite/playgrounds/cesium',
 
   server: {
