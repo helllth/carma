@@ -209,6 +209,21 @@
         }
       },
       "projectPath": "./dist/apps/topicmaps/baederkarte"
+    },
+    "cesium-playground": {
+      "deployment": {
+        "manual": {
+          "org": "carma-dev-playground-deployments",
+          "prj": "cesium-playground"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-playground-deployments",
+            "prj": "cesium-playground"
+          }
+        }
+      },
+      "projectPath": "./dist/playgrounds/cesium-playground"
     }
   }
 }
