@@ -44,17 +44,15 @@ const EBikesPieChart = ({ visible = true }) => {
       piechartData.push([key, stats[key]]);
       piechartColor.push(colormodel[key]);
     }
-    console.log('xxx', piechartData);
-    console.log('xxx', piechartColor);
+
     return (
-      // <PieChart
-      //   data={piechartData}
-      //   donut={true}
-      //   title="Verteilung"
-      //   legend={false}
-      //   colors={piechartColor}
-      // />
-      <></>
+      <PieChart
+        data={piechartData}
+        donut={true}
+        title="Verteilung"
+        legend={false}
+        colors={piechartColor}
+      />
     );
   } else {
     return null;
