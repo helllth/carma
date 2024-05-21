@@ -12,6 +12,7 @@ import {
   getFeatureStyler,
   getPoiClusterIconCreatorFunction,
 } from '../helper/styler';
+import itemFilterFunction from '../helper/filter';
 
 export function App() {
   useEffect(() => {
@@ -31,6 +32,14 @@ export function App() {
       convertItemToFeature={convertItemToFeature}
       clusteringOptions={{
         iconCreateFunction: getPoiClusterIconCreatorFunction(35),
+      }}
+      itemFilterFunction={itemFilterFunction}
+      filterState={{
+        stationsart: ['Ladestation', 'Verleihstation'],
+        nur_online: true,
+        immer_offen: true,
+        gruener_strom: true,
+        ladebox_zu: true,
       }}
     >
       <Map />

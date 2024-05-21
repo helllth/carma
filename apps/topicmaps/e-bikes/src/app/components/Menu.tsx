@@ -1,23 +1,17 @@
 import { useContext } from 'react';
-import Icon from 'react-cismap/commons/Icon';
 import CustomizationContextProvider from 'react-cismap/contexts/CustomizationContextProvider';
 import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
-import ConfigurableDocBlocks from 'react-cismap/topicmaps/ConfigurableDocBlocks';
-import GenericHelpTextForMyLocation from 'react-cismap/topicmaps/docBlocks/GenericHelpTextForMyLocation';
 import ModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
 import Section from 'react-cismap/topicmaps/menu/Section';
-import LicenseLuftbildkarte from 'react-cismap/topicmaps/wuppertal/LicenseLuftbildkarte';
-import LicenseStadtplanTagNacht from 'react-cismap/topicmaps/wuppertal/LicenseStadtplanTagNacht';
 import DefaultSettingsPanel from 'react-cismap/topicmaps/menu/DefaultSettingsPanel';
 
-// import FilterUI from './FilterUI';
-// import MenuFooter from './MenuFooter';
 import Introduction from './Menu/Introduction';
 import HelpSection from './Menu/HelpSection';
+import FilterUI from './Menu/FilterUI';
 
 const Menu = () => {
-  const { filteredItems, shownFeatures, filterState, itemsDictionary } =
-    useContext(FeatureCollectionContext);
+  // @ts-ignore
+  const { filteredItems, shownFeatures } = useContext(FeatureCollectionContext);
 
   const getFilterHeader = () => {
     const count = filteredItems?.length || 0;
@@ -47,7 +41,7 @@ const Menu = () => {
             sectionKey="filter"
             sectionTitle={getFilterHeader()}
             sectionBsStyle="primary"
-            sectionContent={<></>}
+            sectionContent={<FilterUI />}
           />,
           <DefaultSettingsPanel key="settings" />,
           <HelpSection />,
