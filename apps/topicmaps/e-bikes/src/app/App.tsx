@@ -13,6 +13,7 @@ import {
   getPoiClusterIconCreatorFunction,
 } from '../helper/styler';
 import itemFilterFunction from '../helper/filter';
+import titleFactory from '../helper/titleFactory';
 
 export function App() {
   useEffect(() => {
@@ -29,6 +30,7 @@ export function App() {
       referenceSystem={MappingConstants.crs25832}
       getFeatureStyler={getFeatureStyler}
       featureTooltipFunction={(feature) => feature?.text}
+      titleFactory={titleFactory}
       convertItemToFeature={convertItemToFeature}
       clusteringOptions={{
         iconCreateFunction: getPoiClusterIconCreatorFunction(35),
