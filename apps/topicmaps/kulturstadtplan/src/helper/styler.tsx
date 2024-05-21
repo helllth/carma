@@ -12,6 +12,18 @@ export const getColorForProperties = (properties) => {
   return getColorFromMainlocationTypeName(mainlocationtype?.name);
 };
 
+export const getHeaderTextForProperties = (properties) => {
+  let mltName = properties?.mainlocationtype?.name;
+  let colorCandidate;
+  let lookup = getLookup();
+  colorCandidate = lookup[mltName];
+  if (colorCandidate) {
+    return mltName;
+  } else {
+    return lookup.default + ' (' + mltName + ')';
+  }
+};
+
 export const getColorFromMainlocationTypeName = (mltName) => {
   let colorCandidate;
   let lookup = getLookup();

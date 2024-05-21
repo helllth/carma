@@ -1,6 +1,6 @@
 import { addSVGToProps } from 'react-cismap/tools/svgHelper';
 import Color from 'color';
-import { getColorForProperties } from './styler';
+import { getColorForProperties, getHeaderTextForProperties } from './styler';
 
 const getSignature = (properties) => {
   if (properties.signatur) {
@@ -12,54 +12,50 @@ const getSignature = (properties) => {
 };
 
 const convertItemToFeature = async (itemIn) => {
-  console.log('xxx', itemIn);
   let clonedItem = JSON.parse(JSON.stringify(itemIn));
 
-  let ebike = await addSVGToProps(clonedItem, (i) => getSignature(i));
-  const headerColor = Color(getColorForProperties(ebike));
+  let item = await addSVGToProps(clonedItem, (i) => getSignature(i));
+  console.log('xxx', item);
+  const headerColor = Color(getColorForProperties(item));
 
-  const header = `${ebike.typ} ${
-    ebike.typ === 'Ladestation' ? 'für' : 'von'
-  } E-Fahrrädern ${
-    ebike.typ === 'Ladestation' && `(${ebike.online ? 'online' : 'offline'})`
-  }`;
+  const header = getHeaderTextForProperties(item);
 
   const info = {
     header: header,
-    title: ebike.standort,
-    additionalInfo: ebike.zusatzinfo,
-    subtitle: ebike.strasse + ' ' + ebike.hausnummer,
+    title: item.standort,
+    additionalInfo: item.zusatzinfo,
+    subtitle: item.strasse + ' ' + item.hausnummer,
   };
 
-  if (ebike?.betreiber) {
-    if (ebike.betreiber.email) {
-      ebike.email = ebike.betreiber.email;
+  if (item?.betreiber) {
+    if (item.betreiber.email) {
+      item.email = item.betreiber.email;
     }
 
-    if (ebike.betreiber.telefon) {
-      ebike.tel = ebike.betreiber.telefon;
+    if (item.betreiber.telefon) {
+      item.tel = item.betreiber.telefon;
     }
 
-    if (ebike.betreiber.homepage) {
-      ebike.url = ebike.betreiber.homepage;
+    if (item.betreiber.homepage) {
+      item.url = item.betreiber.homepage;
     }
   }
 
-  if (ebike.telefon) {
-    ebike.tel = ebike.telefon;
+  if (item.telefon) {
+    item.tel = item.telefon;
   }
 
-  if (ebike.homepage) {
-    ebike.url = ebike.homepage;
+  if (item.homepage) {
+    item.url = item.homepage;
   }
 
-  ebike.color = headerColor;
-  ebike.info = info;
-  const id = ebike.id;
+  item.color = headerColor;
+  item.info = info;
+  const id = item.id;
   const type = 'Feature';
   const selected = false;
-  const geometry = ebike.geojson;
-  const text = ebike.typ === 'Ladestation' ? ebike.standort : ebike.standort;
+  const geometry = item.geojson;
+  const text = item.typ === 'Ladestation' ? item.standort : item.standort;
 
   return {
     id,
@@ -73,7 +69,7 @@ const convertItemToFeature = async (itemIn) => {
         name: 'urn:ogc:def:crs:EPSG::25832',
       },
     },
-    properties: ebike,
+    properties: item,
   };
 };
 
