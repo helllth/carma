@@ -29,7 +29,7 @@ export function App() {
       mapEPSGCode="25832"
       referenceSystem={MappingConstants.crs25832}
       getFeatureStyler={getFeatureStyler}
-      // featureTooltipFunction={(feature) => feature?.text}
+      featureTooltipFunction={(feature) => feature?.text}
       // titleFactory={titleFactory}
       convertItemToFeature={convertItemToFeature}
       clusteringOptions={{

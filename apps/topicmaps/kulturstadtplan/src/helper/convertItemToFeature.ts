@@ -15,16 +15,15 @@ const convertItemToFeature = async (itemIn) => {
   let clonedItem = JSON.parse(JSON.stringify(itemIn));
 
   let item = await addSVGToProps(clonedItem, (i) => getSignature(i));
-  console.log('xxx', item);
   const headerColor = Color(getColorForProperties(item));
 
   const header = getHeaderTextForProperties(item);
 
   const info = {
     header: header,
-    title: item.standort,
-    additionalInfo: item.zusatzinfo,
-    subtitle: item.strasse + ' ' + item.hausnummer,
+    title: item.name,
+    additionalInfo: clonedItem.info,
+    subtitle: item.adresse,
   };
 
   if (item?.betreiber) {
@@ -49,13 +48,24 @@ const convertItemToFeature = async (itemIn) => {
     item.url = item.homepage;
   }
 
+  if (item.wup_live_url) {
+    item.genericLinks = [
+      {
+        url: item.wup_live_url,
+        tooltip: 'Programm anzeigen',
+        target: 'wupplive',
+        iconname: 'calendar',
+      },
+    ];
+  }
+
   item.color = headerColor;
   item.info = info;
   const id = item.id;
   const type = 'Feature';
   const selected = false;
   const geometry = item.geojson;
-  const text = item.typ === 'Ladestation' ? item.standort : item.standort;
+  const text = item.name;
 
   return {
     id,

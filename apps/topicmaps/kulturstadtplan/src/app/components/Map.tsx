@@ -37,16 +37,6 @@ const Map = () => {
     }
   }, [markerSymbolSize]);
 
-  useEffect(() => {
-    setFilterState({
-      nur_online: false,
-      oeffnungszeiten: '*',
-      stecker: undefined,
-      nur_gruener_strom: false,
-      nur_schnelllader: false,
-    });
-  }, []);
-
   return (
     <TopicMapComponent
       gazData={gazData}
@@ -66,24 +56,21 @@ const Map = () => {
         <GenericInfoBoxFromFeature
           pixelwidth={350}
           config={{
-            displaySecondaryInfoAction: true,
             city: 'Wuppertal',
             navigator: {
               noun: {
-                singular: 'Ladestation',
-                plural: 'Ladestationen',
+                singular: 'POI',
+                plural: 'POI',
               },
             },
-            noCurrentFeatureTitle: 'Keine Ladestationen gefunden',
+            noCurrentFeatureTitle: 'Keine POIs gefunden',
             noCurrentFeatureContent: (
               <span>
-                Für mehr Ladestationen Ansicht mit verkleinern oder mit dem
+                Für mehr POIs Ansicht mit verkleinern oder mit dem
                 untenstehenden Link auf das komplette Stadtgebiet zoomen.
               </span>
             ),
           }}
-          //   photoUrlManipulation={fotoKraemerUrlManipulation}
-          //   captionFactory={fotoKraemerCaptionFactory}
         />
       }
     >
