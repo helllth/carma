@@ -41,7 +41,7 @@ const Menu = () => {
             sectionKey="filter"
             sectionTitle={getFilterHeader()}
             sectionBsStyle="primary"
-            sectionContent={<></>}
+            sectionContent={<FilterUI />}
           />,
           <DefaultSettingsPanel key="settings" />,
           <HelpSection />,

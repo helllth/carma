@@ -24,6 +24,41 @@ export const getHeaderTextForProperties = (properties) => {
   }
 };
 
+const textConversionDictionary = [
+  { from: 'Milongas', to: 'Milongas (Tango Argentino)' },
+  { from: 'Veranstaltungsorte', to: 'Sonstige Veranstaltungsorte' },
+  { from: 'veranstaltungen', to: 'Veranstaltungsarten' },
+  { from: 'einrichtungen', to: 'Einrichtungskategorien' },
+];
+
+export const getAllEinrichtungen = () => {
+  let lookup = getLookup();
+  let einrichtungen: any = [];
+  Object.entries(lookup).forEach((entry) => {
+    if (entry[0] !== 'default') {
+      einrichtungen.push(entry[0]);
+    }
+  });
+  return einrichtungen;
+};
+
+export const textConversion = (input, direction = 'FORWARD') => {
+  if (direction === 'FORWARD') {
+    for (let rule of textConversionDictionary) {
+      if (rule.from === input) {
+        return rule.to;
+      }
+    }
+  } else {
+    for (let rule of textConversionDictionary) {
+      if (rule.to === input) {
+        return rule.from;
+      }
+    }
+  }
+  return input;
+};
+
 export const getColorFromMainlocationTypeName = (mltName) => {
   let colorCandidate;
   let lookup = getLookup();

@@ -14,6 +14,7 @@ import {
 } from '../helper/styler';
 import itemFilterFunction from '../helper/filter';
 import titleFactory from '../helper/titleFactory';
+import createItemsDictionary from '../helper/createDictionary';
 
 export function App() {
   useEffect(() => {
@@ -26,6 +27,7 @@ export function App() {
         'https://wupp-topicmaps-data.cismet.de/data/veranstaltungsorte.data.json'
       }
       referenceSystemDefinition={MappingConstants.proj4crs25832def}
+      createFeatureItemsDictionary={createItemsDictionary}
       mapEPSGCode="25832"
       referenceSystem={MappingConstants.crs25832}
       getFeatureStyler={getFeatureStyler}
