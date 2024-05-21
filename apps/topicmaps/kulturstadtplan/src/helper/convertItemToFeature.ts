@@ -3,23 +3,19 @@ import Color from 'color';
 import { getColorForProperties } from './styler';
 
 const getSignature = (properties) => {
-  if (properties.typ === 'Verleihstation') {
-    return 'pikto_e-bike_verleih.svg';
-  } else {
-    // return 'pikto_e-bike_verleih.svg';
-    return 'pikto_e-bike_laden.svg';
+  if (properties.signatur) {
+    return properties.signatur;
+  } else if (properties.mainlocationtype.signatur) {
+    return properties.mainlocationtype.signatur;
   }
+  return 'Platz.svg';
 };
 
 const convertItemToFeature = async (itemIn) => {
   console.log('xxx', itemIn);
   let clonedItem = JSON.parse(JSON.stringify(itemIn));
 
-  let ebike = await addSVGToProps(
-    clonedItem,
-    (i) => getSignature(i),
-    'https://wunda-geoportal.cismet.de/svgs/'
-  );
+  let ebike = await addSVGToProps(clonedItem, (i) => getSignature(i));
   const headerColor = Color(getColorForProperties(ebike));
 
   const header = `${ebike.typ} ${
