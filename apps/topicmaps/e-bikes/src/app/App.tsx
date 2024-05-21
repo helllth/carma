@@ -38,10 +38,10 @@ export function App() {
       itemFilterFunction={itemFilterFunction}
       filterState={{
         stationsart: ['Ladestation', 'Verleihstation'],
-        nur_online: true,
-        immer_offen: true,
-        gruener_strom: true,
-        ladebox_zu: true,
+        nur_online: false,
+        immer_offen: false,
+        gruener_strom: false,
+        ladebox_zu: false,
       }}
     >
       <Map />
