@@ -13,14 +13,10 @@ import Menu from './Menu';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
-  const {
-    // @ts-ignore
-    setSelectedFeatureByPredicate,
-    // @ts-ignore
-    setClusteringOptions,
-    // @ts-ignore
-    setFilterState,
-  } = useContext(FeatureCollectionDispatchContext);
+  // @ts-ignore
+  const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
+    FeatureCollectionDispatchContext
+  );
   // @ts-ignore
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   // @ts-ignore
@@ -37,16 +33,6 @@ const Map = () => {
       });
     }
   }, [markerSymbolSize]);
-
-  useEffect(() => {
-    setFilterState({
-      nur_online: false,
-      oeffnungszeiten: '*',
-      stecker: undefined,
-      nur_gruener_strom: false,
-      nur_schnelllader: false,
-    });
-  }, []);
 
   return (
     <TopicMapComponent
