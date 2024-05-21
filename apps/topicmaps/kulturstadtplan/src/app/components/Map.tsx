@@ -9,6 +9,7 @@ import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
 import { getGazData } from '../../helper/gazData';
 import { getPoiClusterIconCreatorFunction } from '../../helper/styler';
+import Menu from './Menu';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -40,7 +41,7 @@ const Map = () => {
   return (
     <TopicMapComponent
       gazData={gazData}
-      //   modalMenu={<Menu />}
+      modalMenu={<Menu />}
       locatorControl={true}
       gazetteerSearchPlaceholder="Ladestation | Stadtteil | Adresse | POI"
       gazetteerHitTrigger={(hits) => {
