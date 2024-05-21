@@ -9,7 +9,7 @@ import { ResponsiveTopicMapContext } from 'react-cismap/contexts/ResponsiveTopic
 import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
 
 import 'url-search-params-polyfill';
-import PieChart from './EBikesPieChart';
+import EBikesPieChart from './EBikesPieChart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBicycle,
@@ -34,7 +34,7 @@ const FilterUI = () => {
   let widePieChartPlaceholder: any = null;
   let narrowPieChartPlaceholder: any = null;
 
-  let pieChart = <PieChart />;
+  let pieChart = <EBikesPieChart />;
 
   if (width < 995) {
     narrowPieChartPlaceholder = (
@@ -420,11 +420,11 @@ const FilterUI = () => {
                 </Button>
               </p>
             </td>
-            {/* {widePieChartPlaceholder} */}
+            {widePieChartPlaceholder}
           </tr>
         </tbody>
       </table>
-      {/* {narrowPieChartPlaceholder} */}
+      {narrowPieChartPlaceholder}
     </div>
   );
 };
