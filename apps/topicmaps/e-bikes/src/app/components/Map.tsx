@@ -14,11 +14,16 @@ import Menu from './Menu';
 const Map = () => {
   const [gazData, setGazData] = useState([]);
   const {
+    // @ts-ignore
     setSelectedFeatureByPredicate,
+    // @ts-ignore
     setClusteringOptions,
+    // @ts-ignore
     setFilterState,
   } = useContext(FeatureCollectionDispatchContext);
+  // @ts-ignore
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
+  // @ts-ignore
   const { clusteringOptions } = useContext(FeatureCollectionContext);
   useEffect(() => {
     getGazData(setGazData);
