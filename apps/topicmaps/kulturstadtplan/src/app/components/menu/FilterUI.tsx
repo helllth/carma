@@ -67,6 +67,23 @@ const FilterUI = () => {
     setFilterState(newFilterState);
   };
 
+  const setAllFilter = (kind) => {
+    const newFilterState = JSON.parse(JSON.stringify(filterState));
+    const einrichtungen = getAllEinrichtungen().map(
+      (einrichtung) => einrichtung
+    );
+    const veranstaltungen = itemsDictionary?.veranstaltungsarten?.map(
+      (veranstaltung) => veranstaltung
+    );
+    if (kind === 'veranstaltung') {
+      newFilterState[kind] = veranstaltungen;
+    } else if (kind === 'einrichtung') {
+      newFilterState[kind] = einrichtungen;
+    }
+
+    setFilterState(newFilterState);
+  };
+
   return (
     <div>
       <table border={0} width="100%">
@@ -101,7 +118,9 @@ const FilterUI = () => {
                                         style={{
                                           margin: 4,
                                         }}
-                                        onClick={() => {}}
+                                        onClick={() => {
+                                          setAllFilter('einrichtung');
+                                        }}
                                         className="renderAsLink"
                                       >
                                         alle
@@ -184,7 +203,10 @@ const FilterUI = () => {
                                         style={{
                                           margin: 4,
                                         }}
-                                        onClick={() => {}}
+                                        onClick={() => {
+                                          setAllFilter('veranstaltung');
+                                        }}
+                                        className="renderAsLink"
                                       >
                                         alle
                                       </a>
@@ -197,6 +219,7 @@ const FilterUI = () => {
                                         onClick={() => {
                                           clearFilter('veranstaltung');
                                         }}
+                                        className="renderAsLink"
                                       >
                                         keine
                                       </a>
