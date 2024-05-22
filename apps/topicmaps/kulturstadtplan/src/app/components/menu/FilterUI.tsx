@@ -61,6 +61,12 @@ const FilterUI = () => {
     setFilterState(newFilterState);
   };
 
+  const clearFilter = (kind) => {
+    const newFilterState = { ...filterState };
+    newFilterState[kind] = [];
+    setFilterState(newFilterState);
+  };
+
   return (
     <div>
       <table border={0} width="100%">
@@ -96,6 +102,7 @@ const FilterUI = () => {
                                           margin: 4,
                                         }}
                                         onClick={() => {}}
+                                        className="renderAsLink"
                                       >
                                         alle
                                       </a>
@@ -105,7 +112,10 @@ const FilterUI = () => {
                                         style={{
                                           margin: 4,
                                         }}
-                                        onClick={() => {}}
+                                        onClick={() => {
+                                          clearFilter('einrichtung');
+                                        }}
+                                        className="renderAsLink"
                                       >
                                         keine
                                       </a>
@@ -184,7 +194,9 @@ const FilterUI = () => {
                                         style={{
                                           margin: 4,
                                         }}
-                                        onClick={() => {}}
+                                        onClick={() => {
+                                          clearFilter('veranstaltung');
+                                        }}
                                       >
                                         keine
                                       </a>
