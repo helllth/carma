@@ -229,20 +229,12 @@
       "deployment": {
         "manual": {
           "org": "carma-dev-playground-deployments",
-          "prj": "cesium-playground",
-          "livedev": {
-            "org": "carma-dev-playground-deployments",
-            "prj": "cesium-livedev"
-          }
+          "prj": "cesium-playground"
         },
         "auto": {
           "dev": {
             "org": "carma-dev-playground-deployments",
             "prj": "cesium-playground"
-          },
-          "livedev": {
-            "org": "carma-dev-playground-deployments",
-            "prj": "cesium-livedev"
           }
         }
       },
