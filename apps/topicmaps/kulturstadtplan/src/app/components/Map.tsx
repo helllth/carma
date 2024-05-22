@@ -62,7 +62,7 @@ const Map = () => {
       gazData={gazData}
       modalMenu={<Menu />}
       locatorControl={true}
-      gazetteerSearchPlaceholder="Ladestation | Stadtteil | Adresse | POI"
+      gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
       gazetteerHitTrigger={(hits) => {
         if ((Array.isArray(hits) && hits[0]?.more?.pid) || hits[0]?.more?.kid) {
           const gazId = hits[0]?.more?.pid || hits[0]?.more?.kid;
@@ -71,7 +71,7 @@ const Map = () => {
           );
         }
       }}
-      applicationMenuTooltipString="Filter | Einstellungen | Kompaktanleitung"
+      applicationMenuTooltipString="Mein Kulturstadtplan | Einstellungen | Kompaktanleitung"
       infoBox={
         <GenericInfoBoxFromFeature
           pixelwidth={350}
