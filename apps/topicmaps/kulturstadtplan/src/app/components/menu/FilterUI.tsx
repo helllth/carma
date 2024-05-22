@@ -59,10 +59,13 @@ const FilterUI = () => {
                           <h4>Filtern nach</h4>
                           <Tabs
                             id="controlled-tabs"
-                            activeKey={filterMode}
+                            activeKey={filterState.mode}
                             onSelect={(key) => {
                               if (key) {
                                 setFilderMode(key);
+                                const newFilterState = { ...filterState };
+                                newFilterState.mode = key;
+                                setFilterState(newFilterState);
                               }
                             }}
                           >
@@ -108,8 +111,45 @@ const FilterUI = () => {
                                         'filter.kulturstadtplan.kategorie.' +
                                         einrichtung
                                       }
-                                      onClick={(e) => {}}
-                                      checked={true}
+                                      onClick={(e) => {
+                                        const newFilterState = JSON.parse(
+                                          JSON.stringify(filterState)
+                                        );
+                                        if (e.target.checked) {
+                                          if (
+                                            newFilterState[
+                                              'einrichtung'
+                                            ].indexOf(einrichtung) === -1
+                                          ) {
+                                            newFilterState['einrichtung'].push(
+                                              einrichtung
+                                            );
+                                          } else {
+                                            if (
+                                              newFilterState[
+                                                'einrichtung'
+                                              ].indexOf(einrichtung) !== -1
+                                            ) {
+                                              let filterStateSet = new Set(
+                                                newFilterState['einrichtung']
+                                              );
+                                              filterStateSet.delete(
+                                                einrichtung
+                                              );
+                                              newFilterState['einrichtung'] =
+                                                Array.from(filterStateSet);
+                                            }
+                                          }
+                                        }
+
+                                        console.log('xxx', newFilterState);
+                                        setFilterState(newFilterState);
+                                      }}
+                                      checked={
+                                        filterState['einrichtung']?.indexOf(
+                                          einrichtung
+                                        ) !== -1
+                                      }
                                       inline
                                       label={
                                         <>

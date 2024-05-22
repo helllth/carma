@@ -89,6 +89,16 @@ export const getColorFromMainlocationTypeName = (mltName) => {
   //return "#A83F6A";
 };
 
+export const classifyMainlocationTypeName = (mltName) => {
+  let lookup = getLookup();
+
+  if (lookup[mltName] !== undefined) {
+    return mltName;
+  } else {
+    return lookup.default;
+  }
+};
+
 const getLookup = () => {
   let lookup: any = null;
   try {

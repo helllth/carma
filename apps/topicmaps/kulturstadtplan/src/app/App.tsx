@@ -37,8 +37,11 @@ export function App() {
       clusteringOptions={{
         iconCreateFunction: getPoiClusterIconCreatorFunction(35),
       }}
-      // itemFilterFunction={itemFilterFunction}
-      // filterState={{}}
+      itemFilterFunction={itemFilterFunction}
+      filterState={{
+        einrichtung: [],
+        mode: 'einrichtungen',
+      }}
     >
       <Map />
     </TopicMapContextProvider>

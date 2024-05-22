@@ -38,6 +38,12 @@ const Map = () => {
     }
   }, [markerSymbolSize]);
 
+  useEffect(() => {
+    setFilterState({
+      einrichtung: [],
+    });
+  }, []);
+
   return (
     <TopicMapComponent
       gazData={gazData}
