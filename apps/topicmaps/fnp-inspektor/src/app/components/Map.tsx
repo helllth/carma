@@ -306,6 +306,7 @@ const Map = () => {
           setSearchParams(newParams);
         }}
         ondblclick={doubleMapClick}
+        gazetteerSearchPlaceholder="ÄV | BPL | Stadtteil | Adresse | POI"
         gazetteerSearchControlProps={{
           tertiaryAction: aevSearchButtonHit,
           tertiaryActionIcon: faSearch,
