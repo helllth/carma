@@ -1,12 +1,10 @@
-import { useContext, useState } from 'react';
-import { Button, Form, Tabs, Tab } from 'react-bootstrap';
-
+import { useContext } from 'react';
+import { Form, Tabs, Tab } from 'react-bootstrap';
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
 } from 'react-cismap/contexts/FeatureCollectionContextProvider';
 import { ResponsiveTopicMapContext } from 'react-cismap/contexts/ResponsiveTopicMapContextProvider';
-import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
 
 import 'url-search-params-polyfill';
 import Icon from 'react-cismap/commons/Icon';
@@ -15,24 +13,22 @@ import {
   getColorFromMainlocationTypeName,
   textConversion,
 } from '../../../helper/styler';
+import KulturPieChart from './KulturPieChart';
 
 const FilterUI = () => {
-  const [filterMode, setFilderMode] = useState('einrichtungen');
   // @ts-ignore
   const { filterState, itemsDictionary } = useContext(FeatureCollectionContext);
   // @ts-ignore
   const { setFilterState } = useContext(FeatureCollectionDispatchContext);
   // @ts-ignore
   const { windowSize } = useContext(ResponsiveTopicMapContext);
-  // @ts-ignore
-  const { additionalStylingInfo } = useContext(TopicMapStylingContext);
 
   const width = windowSize?.width || 500;
 
   let widePieChartPlaceholder: any = null;
   let narrowPieChartPlaceholder: any = null;
 
-  let pieChart = <></>;
+  let pieChart = <KulturPieChart />;
 
   if (width < 995) {
     narrowPieChartPlaceholder = (
@@ -102,7 +98,6 @@ const FilterUI = () => {
                             activeKey={filterState.mode}
                             onSelect={(key) => {
                               if (key) {
-                                setFilderMode(key);
                                 const newFilterState = { ...filterState };
                                 newFilterState.mode = key;
                                 setFilterState(newFilterState);
@@ -161,6 +156,7 @@ const FilterUI = () => {
                                         setFilterValue(
                                           'einrichtung',
                                           einrichtung,
+                                          // @ts-ignore
                                           e.target.checked
                                         );
                                       }}
@@ -246,6 +242,7 @@ const FilterUI = () => {
                                           setFilterValue(
                                             'veranstaltung',
                                             art,
+                                            // @ts-ignore
                                             e.target.checked
                                           );
                                         }}
