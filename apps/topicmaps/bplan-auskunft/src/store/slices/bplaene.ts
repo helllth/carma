@@ -123,6 +123,40 @@ export function getPlanFeatureByGazObject(
   };
 }
 
+export function getPlanFeatureByTitle(title, done) {
+  return function (dispatch) {
+    let status: string | undefined = undefined;
+    let nr = title;
+    if (title.includes('(nicht rechtskräftig)')) {
+      status = 'nicht rechtskräftig';
+      nr = title.split(' (nicht rechtskräftig)')[0];
+    } else if (title.includes('(rechtskräftig)')) {
+      status = 'rechtskräftig';
+      nr = title.split(' (rechtskräftig)')[0];
+    }
+
+    dispatch(getPlanFeature(nr, status, done));
+  };
+}
+
+function getPlanFeature(nr, status, done) {
+  return function (dispatch, getState) {
+    const state = getState();
+
+    const hit = state.bplaene.data.find((elem, index) => {
+      if (status !== undefined) {
+        return elem.text === nr && elem.properties.status === status;
+      } else {
+        return elem.text === nr;
+      }
+    });
+
+    if (hit) {
+      done(hit);
+    }
+  };
+}
+
 function distance(p, q) {
   var dx = p.x - q.x;
   var dy = p.y - q.y;

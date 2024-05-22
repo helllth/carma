@@ -3,10 +3,11 @@ import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import { FeatureCollectionDisplayWithTooltipLabels } from 'react-cismap';
 import BPlanInfo from './BPlanInfo';
 import { bplanFeatureStyler, bplanLabeler } from '../../utils/styler';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getLoading,
+  getPlanFeatureByTitle,
   getPlanFeatures,
   loadBPlaene,
 } from '../../store/slices/bplaene';
@@ -17,6 +18,8 @@ import GazetteerSearchControl from 'react-cismap/GazetteerSearchControl';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Modal from './Modal';
 import { useSearchParams } from 'react-router-dom';
+import L from 'leaflet';
+import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 
 const Map = () => {
   const dispatch = useDispatch();
@@ -28,6 +31,8 @@ const Map = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   let refRoutedMap = useRef(null);
   const zoom = searchParams.get('zoom');
+  // @ts-ignore
+  const { routedMapRef } = useContext(TopicMapContext);
 
   const doubleMapClick = (event) => {
     const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
@@ -115,6 +120,34 @@ const Map = () => {
         teriaryActionDisabled: Number(zoom) < 14,
       }}
       gazetteerSearchPlaceholder="B-Plan-Nr. | Adresse | POI"
+      gazetteerHitTrigger={(hits) => {
+        if (
+          hits !== undefined &&
+          hits.length === 1 &&
+          hits[0].type === 'bplaene'
+        ) {
+          const gazObject = hits[0];
+
+          dispatch(
+            // @ts-ignore
+            getPlanFeatureByTitle(gazObject.string, (hit) => {
+              const tmpHit = { ...hit };
+              tmpHit.selected = true;
+              // @ts-ignore
+              setFeatures([tmpHit]);
+              setSelectedIndex(0);
+
+              const projectedFC = L.Proj.geoJson([tmpHit]);
+              const bounds = projectedFC.getBounds();
+              const map = routedMapRef?.leafletMap?.leafletElement;
+              if (map === undefined) {
+                return;
+              }
+              map.fitBounds(bounds);
+            })
+          );
+        }
+      }}
       gazData={gazData}
     >
       <FeatureCollectionDisplayWithTooltipLabels
