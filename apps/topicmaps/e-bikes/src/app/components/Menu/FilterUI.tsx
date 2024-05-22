@@ -404,15 +404,12 @@ const FilterUI = () => {
               <p>
                 <Button
                   onClick={() => {
-                    const newFilterState = {};
-
                     setFilterState({
-                      umfang_45: true,
-                      umfang_35: true,
-                      alter: 'ab3',
-                      normal: true,
-                      inklusion: true,
-                      ...newFilterState,
+                      stationsart: ['Ladestation', 'Verleihstation'],
+                      nur_online: false,
+                      immer_offen: false,
+                      gruener_strom: false,
+                      ladebox_zu: false,
                     });
                   }}
                 >
