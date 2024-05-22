@@ -44,6 +44,23 @@ const FilterUI = () => {
     widePieChartPlaceholder = pieChart;
   }
 
+  const setFilterValue = (kind, item, value) => {
+    const newFilterState = JSON.parse(JSON.stringify(filterState));
+
+    if (value) {
+      if (newFilterState[kind].indexOf(item) === -1) {
+        newFilterState[kind].push(item);
+      }
+    } else {
+      if (newFilterState[kind].indexOf(item) !== -1) {
+        let filterStateSet = new Set(newFilterState[kind]);
+        filterStateSet.delete(item);
+        newFilterState[kind] = Array.from(filterStateSet);
+      }
+    }
+    setFilterState(newFilterState);
+  };
+
   return (
     <div>
       <table border={0} width="100%">
@@ -112,35 +129,11 @@ const FilterUI = () => {
                                         einrichtung
                                       }
                                       onClick={(e) => {
-                                        const newFilterState = JSON.parse(
-                                          JSON.stringify(filterState)
+                                        setFilterValue(
+                                          'einrichtung',
+                                          einrichtung,
+                                          e.target.checked
                                         );
-                                        // @ts-ignore
-                                        if (e.target.checked) {
-                                          if (
-                                            newFilterState[
-                                              'einrichtung'
-                                            ].indexOf(einrichtung) === -1
-                                          ) {
-                                            newFilterState['einrichtung'].push(
-                                              einrichtung
-                                            );
-                                          }
-                                        } else {
-                                          if (
-                                            newFilterState[
-                                              'einrichtung'
-                                            ].indexOf(einrichtung) !== -1
-                                          ) {
-                                            let filterStateSet = new Set(
-                                              newFilterState['einrichtung']
-                                            );
-                                            filterStateSet.delete(einrichtung);
-                                            newFilterState['einrichtung'] =
-                                              Array.from(filterStateSet);
-                                          }
-                                        }
-                                        setFilterState(newFilterState);
                                       }}
                                       checked={
                                         filterState['einrichtung']?.indexOf(
@@ -214,8 +207,18 @@ const FilterUI = () => {
                                           'filter.kulturstadtplan.veranstaltungsart.' +
                                           art
                                         }
-                                        onClick={(e) => {}}
-                                        checked={true}
+                                        onClick={(e) => {
+                                          setFilterValue(
+                                            'veranstaltung',
+                                            art,
+                                            e.target.checked
+                                          );
+                                        }}
+                                        checked={
+                                          filterState['veranstaltung']?.indexOf(
+                                            art
+                                          ) !== -1
+                                        }
                                         inline
                                         label={<>{textConversion(art)}</>}
                                       />
