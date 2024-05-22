@@ -25,13 +25,22 @@ const FilterUI = () => {
             ...baseStyles,
             marginBottom: 8,
           }),
+          menuList: (baseStyles) => ({
+            ...baseStyles,
+            maxHeight: 156,
+          }),
         }}
-        options={zielgruppen.map((zielgruppe) => {
-          return {
-            value: zielgruppe,
-            label: zielgruppe,
-          };
-        })}
+        options={[
+          {
+            label: 'Zielgruppe',
+            options: zielgruppen.map((zielgruppe) => {
+              return {
+                value: zielgruppe,
+                label: zielgruppe,
+              };
+            }),
+          },
+        ]}
         isMulti
         allowClear
         value={filterState.positiv.map((zielgruppe) => {
@@ -51,12 +60,23 @@ const FilterUI = () => {
       <h4>Ich schlie&szlig;e aus:</h4>
       <Select
         placeholder="Kategorien auswählen ..."
-        options={zielgruppen.map((zielgruppe) => {
-          return {
-            value: zielgruppe,
-            label: zielgruppe,
-          };
-        })}
+        styles={{
+          menuList: (baseStyles) => ({
+            ...baseStyles,
+            maxHeight: 156,
+          }),
+        }}
+        options={[
+          {
+            label: 'Zielgruppe',
+            options: zielgruppen.map((zielgruppe) => {
+              return {
+                value: zielgruppe,
+                label: zielgruppe,
+              };
+            }),
+          },
+        ]}
         isMulti
         allowClear
         value={filterState.negativ.map((zielgruppe) => {
