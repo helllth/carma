@@ -4,17 +4,6 @@ import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvid
 import { md5FetchText } from 'react-cismap/tools/fetching';
 import HeavyRainHazardMap from '@cismet-dev/react-cismap-envirometrics-maps/HeavyRainHazardMap';
 import GenericModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
-import Datengrundlage from './help/Help10Datengrundlage';
-import Karteninhalt from './help//Help20Karteninhalt';
-import InKartePositionieren from './help/Help30InKartePositionieren';
-import MeinStandort from './help/Help40MeinStandort';
-import ZeitlicherVerlauf from './help/Help45ZeitlicherVerlauf';
-import WasserstandAbfragen from './help/Help50WasserstandAbfragen';
-import SimulierteSzenarien from './help/Help60SimulierteSzenarien';
-import Aussagekraft from './help/Help70AussagekraftDerSimulationen';
-import ModellfehlerMelden from './help//Help80ModellfehlerMelden';
-import Haftungsausschluss from './help/Help90HaftungsausschlussWupp';
-import { Help99Footer } from '@cismet-collab/rainhazardmaps-base-texts';
 import { getGazDataForTopicIds } from 'react-cismap/tools/gazetteerHelper';
 import { md5FetchJSON } from 'react-cismap/tools/fetching';
 import CrossTabCommunicationControl from 'react-cismap/CrossTabCommunicationControl';
@@ -22,11 +11,13 @@ import CrossTabCommunicationContextProvider from 'react-cismap/contexts/CrossTab
 import config from './config';
 import { getApplicationVersion } from './version';
 import NotesDisplay from './NotesDisplay';
+import { getCollabedHelpComponentConfig } from './collab-texts';
 
 function App() {
   const email = 'starkregen@stadt.wuppertal.de';
   const [gazData, setGazData] = useState([]);
   const [hinweisData, setHinweisData] = useState([]);
+  const version = getApplicationVersion();
 
   const getGazData = async (setData) => {
     const prefix = 'GazDataForStarkregengefahrenkarteByCismet';
@@ -119,53 +110,12 @@ function App() {
           applicationMenuTooltipString="Anleitung | Hintergrund"
           appMenu={
             <GenericModalApplicationMenu
-              menuIntroduction={
-                <span>
-                  Bitte wählen Sie eine der folgenden farbigen Schaltflächen, um
-                  sich weitere Informationen zu dem entsprechenden Thema
-                  anzeigen zu lassen:
-                </span>
-              }
-              menuIcon="info"
-              menuTitle="Kompaktanleitung und Hintergrundinformationen"
-              menuSections={[
-                <Datengrundlage key="Datengrundlage" />,
-                <Karteninhalt
-                  key="Karteninhalt"
-                  simulationsklammer={undefined}
-                />,
-                <InKartePositionieren key="InKartePositionieren" />,
-                <MeinStandort key="MeinStandort" />,
-                <ZeitlicherVerlauf key="ZeitlicherVerlauf" />,
-                <WasserstandAbfragen key="Wasserstand" />,
-                <SimulierteSzenarien key="SimulierteSzenarien" />,
-                <Aussagekraft key="Aussagekraft" />,
-                <ModellfehlerMelden key="ModellfehlerMelden" email={email} />,
-                <Haftungsausschluss key="Haftungsausschluss" />,
-              ]}
-              menuFooter={
-                <Help99Footer
-                  appName="Starkregengefahrenkarte Wuppertal"
-                  versionString={'#' + getApplicationVersion()}
-                  hintergrundkartenText="True Orthophoto 2022, Amtliche Basiskarte (ABK), Hillshade © Stadt Wuppertal | Stadtkarte 2.0 © RVR | WebAtlasDE © BKG"
-                  taglineModelling={
-                    <div>
-                      <b>Modellierung und Simulationsberechnung</b> (Version 2.1
-                      | 10/2022):{' '}
-                      <a
-                        target="_customer"
-                        href="https://www.wsw-online.de/wsw-energie-wasser/privatkunden/"
-                      >
-                        WSW Energie und Wasser AG
-                      </a>{' '}
-                      |{' '}
-                      <a target="_pecher" href="https://www.pecher.de/">
-                        Dr. Pecher AG (Erkrath)
-                      </a>
-                    </div>
-                  }
-                />
-              }
+              {...getCollabedHelpComponentConfig({
+                versionString: '#' + version,
+                reactCismapRHMVersion: '_',
+
+                email,
+              })}
             />
           }
           gazetteerSearchPlaceholder="Stadtteil | Adresse | POI | GEP"
