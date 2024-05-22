@@ -10,6 +10,11 @@ import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFrom
 import { getGazData } from '../../helper/gazData';
 import { getPoiClusterIconCreatorFunction } from '../../helper/styler';
 import Menu from './Menu';
+import SecondaryInfoModal from './SecondaryInfoModal';
+import {
+  UIContext,
+  UIDispatchContext,
+} from 'react-cismap/contexts/UIContextProvider';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -20,7 +25,13 @@ const Map = () => {
   // @ts-ignore
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   // @ts-ignore
-  const { clusteringOptions } = useContext(FeatureCollectionContext);
+  const { clusteringOptions, selectedFeature } = useContext(
+    FeatureCollectionContext
+  );
+  // @ts-ignore
+  const { secondaryInfoVisible } = useContext(UIContext);
+  // @ts-ignore
+  const { setSecondaryInfoVisible } = useContext(UIDispatchContext);
   useEffect(() => {
     getGazData(setGazData);
   }, []);
@@ -39,6 +50,7 @@ const Map = () => {
       gazData={gazData}
       modalMenu={<Menu />}
       locatorControl={true}
+      photoLightBox
       gazetteerSearchPlaceholder="Ladestation | Stadtteil | Adresse | POI"
       gazetteerHitTrigger={(hits) => {
         if ((Array.isArray(hits) && hits[0]?.more?.pid) || hits[0]?.more?.kid) {
@@ -69,11 +81,15 @@ const Map = () => {
               </span>
             ),
           }}
-          //   photoUrlManipulation={fotoKraemerUrlManipulation}
-          //   captionFactory={fotoKraemerCaptionFactory}
         />
       }
     >
+      {secondaryInfoVisible && (
+        <SecondaryInfoModal
+          feature={selectedFeature}
+          setOpen={setSecondaryInfoVisible}
+        />
+      )}
       <FeatureCollection></FeatureCollection>
     </TopicMapComponent>
   );
