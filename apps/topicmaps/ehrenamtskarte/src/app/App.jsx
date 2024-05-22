@@ -52,6 +52,10 @@ function App() {
         titleFactory={titleFactory}
         itemFilterFunction={itemFilterFunction}
         additionalStylingInfo={{ poiColors }}
+        filterState={{
+          positiv: [],
+          negativ: [],
+        }}
       >
         <Ehrenamtkarte bookmarks={bookmarks} setBookmarks={setBookmarks} />
       </TopicMapContextProvider>
