@@ -21,11 +21,15 @@ const convertItemToFeature = async (itemIn) => {
   );
   const headerColor = Color(getColorForProperties(ebike));
 
+  let onlineStatus = '';
+
+  if (ebike.online) {
+    onlineStatus = `(${ebike.online ? 'online' : 'offline'})`;
+  }
+
   const header = `${ebike.typ} ${
     ebike.typ === 'Ladestation' ? 'für' : 'von'
-  } E-Fahrrädern ${
-    ebike.typ === 'Ladestation' && `(${ebike.online ? 'online' : 'offline'})`
-  }`;
+  } E-Fahrrädern ${onlineStatus}`;
 
   const info = {
     header: header,
