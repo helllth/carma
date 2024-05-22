@@ -8,7 +8,10 @@ import FeatureCollection from 'react-cismap/FeatureCollection';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
 import { getGazData } from '../../helper/gazData';
-import { getPoiClusterIconCreatorFunction } from '../../helper/styler';
+import {
+  getAllEinrichtungen,
+  getPoiClusterIconCreatorFunction,
+} from '../../helper/styler';
 import Menu from './Menu';
 
 const Map = () => {
@@ -24,7 +27,9 @@ const Map = () => {
   // @ts-ignore
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   // @ts-ignore
-  const { clusteringOptions } = useContext(FeatureCollectionContext);
+  const { clusteringOptions, itemsDictionary } = useContext(
+    FeatureCollectionContext
+  );
   useEffect(() => {
     getGazData(setGazData);
   }, []);
@@ -39,8 +44,16 @@ const Map = () => {
   }, [markerSymbolSize]);
 
   useEffect(() => {
+    const einrichtungen = getAllEinrichtungen().map(
+      (einrichtung) => einrichtung
+    );
+    const veranstaltungen = itemsDictionary?.veranstaltungsarten?.map(
+      (veranstaltung) => veranstaltung
+    );
     setFilterState({
-      einrichtung: [],
+      einrichtung: einrichtungen,
+      veranstaltung: veranstaltungen,
+      mode: 'einrichtungen',
     });
   }, []);
 

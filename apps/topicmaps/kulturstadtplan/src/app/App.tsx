@@ -12,9 +12,10 @@ import {
   getFeatureStyler,
   getPoiClusterIconCreatorFunction,
 } from '../helper/styler';
-import itemFilterFunction from '../helper/filter';
+
 import titleFactory from '../helper/titleFactory';
 import createItemsDictionary from '../helper/createDictionary';
+import itemFilterFunction from '../helper/filter';
 
 export function App() {
   useEffect(() => {
@@ -40,6 +41,7 @@ export function App() {
       itemFilterFunction={itemFilterFunction}
       filterState={{
         einrichtung: [],
+        veranstaltung: [],
         mode: 'einrichtungen',
       }}
     >

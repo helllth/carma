@@ -115,6 +115,7 @@ const FilterUI = () => {
                                         const newFilterState = JSON.parse(
                                           JSON.stringify(filterState)
                                         );
+                                        // @ts-ignore
                                         if (e.target.checked) {
                                           if (
                                             newFilterState[
@@ -124,25 +125,21 @@ const FilterUI = () => {
                                             newFilterState['einrichtung'].push(
                                               einrichtung
                                             );
-                                          } else {
-                                            if (
-                                              newFilterState[
-                                                'einrichtung'
-                                              ].indexOf(einrichtung) !== -1
-                                            ) {
-                                              let filterStateSet = new Set(
-                                                newFilterState['einrichtung']
-                                              );
-                                              filterStateSet.delete(
-                                                einrichtung
-                                              );
-                                              newFilterState['einrichtung'] =
-                                                Array.from(filterStateSet);
-                                            }
+                                          }
+                                        } else {
+                                          if (
+                                            newFilterState[
+                                              'einrichtung'
+                                            ].indexOf(einrichtung) !== -1
+                                          ) {
+                                            let filterStateSet = new Set(
+                                              newFilterState['einrichtung']
+                                            );
+                                            filterStateSet.delete(einrichtung);
+                                            newFilterState['einrichtung'] =
+                                              Array.from(filterStateSet);
                                           }
                                         }
-
-                                        console.log('xxx', newFilterState);
                                         setFilterState(newFilterState);
                                       }}
                                       checked={
