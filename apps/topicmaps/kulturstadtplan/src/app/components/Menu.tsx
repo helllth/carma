@@ -32,7 +32,7 @@ const Menu = () => {
     <CustomizationContextProvider customizations={{}}>
       <ModalApplicationMenu
         menuIcon={'bars'}
-        menuTitle={'Filter, Merkliste und Kompaktanleitung'}
+        menuTitle={'Mein Kulturstadtplan, Einstellungen und Kompaktanleitung'}
         // menuFooter={<MenuFooter />}
         menuIntroduction={<Introduction />}
         menuSections={[
