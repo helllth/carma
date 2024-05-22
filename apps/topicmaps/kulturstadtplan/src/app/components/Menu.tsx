@@ -8,6 +8,7 @@ import DefaultSettingsPanel from 'react-cismap/topicmaps/menu/DefaultSettingsPan
 import Introduction from './menu/Introduction';
 import HelpSection from './menu/HelpSection';
 import FilterUI from './menu/FilterUI';
+import Footer from './menu/Footer';
 
 const Menu = () => {
   // @ts-ignore
@@ -33,7 +34,7 @@ const Menu = () => {
       <ModalApplicationMenu
         menuIcon={'bars'}
         menuTitle={'Mein Kulturstadtplan, Einstellungen und Kompaktanleitung'}
-        // menuFooter={<MenuFooter />}
+        menuFooter={<Footer />}
         menuIntroduction={<Introduction />}
         menuSections={[
           <Section
