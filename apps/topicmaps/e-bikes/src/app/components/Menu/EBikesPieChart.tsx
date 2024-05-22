@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
 import { getColorForProperties } from '../../../helper/styler';
 import { Doughnut } from 'react-chartjs-2';
+import 'chart.js/auto';
 
 const EBikesPieChart = ({ visible = true }) => {
   // @ts-ignore
