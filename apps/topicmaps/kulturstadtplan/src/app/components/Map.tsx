@@ -62,6 +62,7 @@ const Map = () => {
       gazData={gazData}
       modalMenu={<Menu />}
       locatorControl={true}
+      photoLightBox
       gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
       gazetteerHitTrigger={(hits) => {
         if ((Array.isArray(hits) && hits[0]?.more?.pid) || hits[0]?.more?.kid) {
