@@ -47,6 +47,7 @@ const { ScaleControl } = TransitiveReactLeaflet;
 
 const Map = () => {
   const searchMinZoom = 7;
+  let urlPrefix = window.location.origin + window.location.pathname;
   const [boundingBox, setBoundingBox] = useState(null);
   const features = useSelector(getFeatureCollection);
   const selectedFeatureIndex = useSelector(getSelectedFeatureIndex);
@@ -114,7 +115,7 @@ const Map = () => {
         FNP-Auszug)
         <div style={{ float: 'right', paddingRight: 10 }}>
           <a
-            href={'/#/rechtsplan?' + searchParams}
+            href={urlPrefix + '/#/rechtsplan?' + searchParams}
             onClick={() => {
               dispatch(setFeatureCollection([]));
             }}
@@ -148,7 +149,7 @@ const Map = () => {
         {aevVisible === true ? 'mit Änderungsverfahren (ÄV)' : ''}
         <div style={{ float: 'right', paddingRight: 10 }}>
           <a
-            href={'/#/arbeitskarte?' + searchParams}
+            href={urlPrefix + '/#/arbeitskarte?' + searchParams}
             onClick={() => {
               dispatch(setFeatureCollection([]));
             }}
