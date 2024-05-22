@@ -1,7 +1,10 @@
 // @ts-ignore
 import { useContext, useEffect, useRef, useState } from 'react';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import { FeatureCollectionDisplayWithTooltipLabels } from 'react-cismap';
+import {
+  FeatureCollectionDisplayWithTooltipLabels,
+  TransitiveReactLeaflet,
+} from 'react-cismap';
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -40,6 +43,7 @@ import Modal from './help/Modal';
 import { getGazData } from '../../utils/gazData';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import L from 'leaflet';
+const { ScaleControl } = TransitiveReactLeaflet;
 
 const Map = () => {
   const searchMinZoom = 7;
@@ -314,6 +318,13 @@ const Map = () => {
           teriaryActionDisabled: mapMode.mode === 'arbeitskarte',
         }}
       >
+        <ScaleControl
+          maxWidth={100}
+          metric={true}
+          imperial={false}
+          updateWhenIdle={false}
+          position="bottomleft"
+        />
         {mapMode.mode === 'rechtsplan' && <ShowAEVModeButton />}
         <FeatureCollectionDisplayWithTooltipLabels
           key={`map_` + JSON.stringify(features[0])}
