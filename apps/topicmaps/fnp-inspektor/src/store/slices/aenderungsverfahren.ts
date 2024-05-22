@@ -128,6 +128,26 @@ export function searchForAEVs({
       if (hit) {
         finalResults.push(hit);
       }
+    } else if (
+      gazObject !== undefined &&
+      gazObject[0] !== undefined &&
+      gazObject[0].type === 'bplaene'
+    ) {
+      let hit = state.aev.data.find((elem, index) => {
+        let bplanArr = [];
+        if (elem.properties.bplan_nr !== undefined) {
+          bplanArr = elem.properties.bplan_nr.split('+');
+        }
+        let found = false;
+        bplanArr.forEach((nr) => {
+          found = found || nr === gazObject[0].more.v;
+        });
+        return found;
+      });
+
+      if (hit) {
+        finalResults.push(hit);
+      }
     }
     dispatch(setFeatureCollection(finalResults));
     dispatch(setSelectedFeatureIndex(0));

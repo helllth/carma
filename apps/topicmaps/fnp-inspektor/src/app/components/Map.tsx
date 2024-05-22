@@ -317,6 +317,43 @@ const Map = () => {
           tertiaryActionTooltip: 'Änderungsverfahren Suchen',
           teriaryActionDisabled: mapMode.mode === 'arbeitskarte',
         }}
+        gazetteerHitTrigger={(hits) => {
+          if (mapMode.mode === 'rechtsplan') {
+            dispatch(
+              // @ts-ignore
+              searchForAEVs({
+                gazObject: hits,
+                done: (result) => {
+                  searchParams.set('aevVisible', 'true');
+                  setSearchParams(searchParams);
+                  const projectedFC = L.Proj.geoJson(result);
+                  const bounds = projectedFC.getBounds();
+                  const map = routedMapRef?.leafletMap?.leafletElement;
+                  if (map === undefined) {
+                    return;
+                  }
+                  map.fitBounds(bounds);
+                },
+              })
+            );
+          } else {
+            dispatch(
+              // @ts-ignore
+              searchForHauptnutzungen({
+                point: { x: hits[0].x, y: hits[0].y },
+                done: (result) => {
+                  const projectedFC = L.Proj.geoJson(result);
+                  const bounds = projectedFC.getBounds();
+                  const map = routedMapRef?.leafletMap?.leafletElement;
+                  if (map === undefined) {
+                    return;
+                  }
+                  map.fitBounds(bounds);
+                },
+              })
+            );
+          }
+        }}
       >
         <ScaleControl
           maxWidth={100}
