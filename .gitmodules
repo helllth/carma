@@ -2,3 +2,6 @@
 	path = envirometrics/wuppertal/floodingmap/collab-texts
 	url = https://github.com/cismet-collab/flooding-wupp-texts.git
 	branch = main
+[submodule "envirometrics/wuppertal/rainhazardmap/collab-texts"]
+	path = envirometrics/wuppertal/rainhazardmap/collab-texts
+	url = https://github.com/cismet-collab/rainhazardmap-wuppertal-texts.git
