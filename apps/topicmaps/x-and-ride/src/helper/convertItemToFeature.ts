@@ -20,13 +20,19 @@ const convertItemToFeature = async (itemIn) => {
   );
   const headerColor = Color(getColorForProperties(item));
 
-  const header = '';
+  let header = '';
+
+  if (item.schluessel === 'P') {
+    header = 'Park + Ride';
+  } else {
+    header = 'Bike + Ride';
+  }
 
   const info = {
     header: header,
     title: item.name,
-    additionalInfo: clonedItem.info,
-    subtitle: item.adresse,
+    additionalInfo: item.beschreibung,
+    subtitle: 'Plätze: ' + item.plaetze,
   };
 
   if (item?.betreiber) {
@@ -49,17 +55,6 @@ const convertItemToFeature = async (itemIn) => {
 
   if (item.homepage) {
     item.url = item.homepage;
-  }
-
-  if (item.wup_live_url) {
-    item.genericLinks = [
-      {
-        url: item.wup_live_url,
-        tooltip: 'Programm anzeigen',
-        target: 'wupplive',
-        iconname: 'calendar',
-      },
-    ];
   }
 
   item.color = headerColor;
