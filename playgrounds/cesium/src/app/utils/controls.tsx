@@ -1,13 +1,12 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { UIComponentContext } from '../components/UIProvider';
 import {
-  setSelectionTransparency,
   setShowTileset,
   setTilesetOpacity,
-  useSelectionTransparency,
   useShowTileset,
   useTilesetOpacity,
-} from '../store';
+} from '../store/slices/viewer';
+import { setSelectionTransparency, useSelectionTransparency } from '../store';
 import RangeInput from '../components/controls/ReduxRangeInput';
 import Switch from '../components/controls/ReduxSwitch';
 import { Select } from 'antd';
@@ -96,7 +95,7 @@ export function usePropertySelectionControl() {
   const dispatch = useDispatch();
   const action = setKey;
 
-//  const [localKey, setLocalKey] = useState(key);
+  //  const [localKey, setLocalKey] = useState(key);
 
   useEffect(() => {
     console.log('usePropertySelectionControl', key, defaultKey);

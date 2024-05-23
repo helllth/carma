@@ -1,22 +1,19 @@
 import React from 'react';
-import GeoJsonSelector from '../components/GeoJsonSelector';
-import { useViewerDataSources } from '../store';
+import TilesetSelector from '../components/TilesetSelector';
+import { useViewerDataSources } from '../store/slices/viewer';
 import {
   usePropertySelectionControl,
   useSelectionTransparencyControl,
 } from '../utils/controls';
 
 function View() {
-  const { footprintGeoJson, tileset } = useViewerDataSources();
+  const { tileset } = useViewerDataSources();
   //useSelectionTransparencyControl();
 
   useSelectionTransparencyControl();
   usePropertySelectionControl();
 
-  return (
-    footprintGeoJson &&
-    tileset && <GeoJsonSelector srcExtruded={footprintGeoJson.url} />
-  );
+  return tileset && <TilesetSelector src={"abc"} />;
 }
 
 export default View;

@@ -7,8 +7,12 @@ import OnMapButton from './OnMapButton';
 import { getCanvasCenter } from '../../lib/cesiumHelpers';
 import { DEFAULT_ROTATION_SPEED } from '../../config';
 import { Cartesian3, Color, Matrix4, Transforms, Viewer } from 'cesium';
-import { RootState, setIsAnimating, toggleIsAnimating } from '../../store';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  setIsAnimating,
+  toggleIsAnimating,
+  useViewerIsAnimating,
+} from '../../store/slices/viewer';
+import { useDispatch } from 'react-redux';
 type SpinningControlProps = {
   showCenterPoint?: boolean;
   children?: ReactNode;
@@ -20,7 +24,7 @@ const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
   const { viewer } = useCesium();
   const orbitPointRef = useRef<Cartesian3 | null>(null);
   const lastRenderTimeRef = useRef<number | null>(null);
-  const { isAnimating } = useSelector((state: RootState) => state.viewer);
+  const isAnimating = useViewerIsAnimating();
   const dispatch = useDispatch();
 
   const orbitListener = useCallback(() => {
@@ -65,11 +69,6 @@ const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
           },
           id: orbitCenterPointId,
         });
-    } else {
-      console.log('remove', orbitPointRef.current);
-      viewer.clock.onTick.removeEventListener(orbitListener);
-      showCenterPoint && viewer.entities.removeById(orbitCenterPointId);
-      setIsAnimating(false);
     }
     dispatch(toggleIsAnimating());
   };
@@ -79,6 +78,15 @@ const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
     if (!viewer) return;
     toggleOrbit(viewer);
   };
+
+  useEffect(() => {
+    if (!isAnimating && viewer) {
+      console.log('stop orbiting by state', orbitPointRef.current);
+      viewer.clock.onTick.removeEventListener(orbitListener);
+      showCenterPoint && viewer.entities.removeById(orbitCenterPointId);
+      //setIsAnimating(false);
+    }
+  }, [isAnimating, viewer, orbitListener, showCenterPoint]);
 
   return (
     <OnMapButton

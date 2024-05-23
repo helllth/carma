@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { setLocation } from '../store';
+import { setLocation } from '../store/slices/location';
 
 /*
  * This component is used to set the location in the store based on the hash in the URL.

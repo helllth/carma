@@ -20,8 +20,7 @@ import { useSelectionTransparency } from '../store';
 import { useSelectKey } from '../store/slices/buildings';
 
 interface GeoJsonSelectorProps {
-  srcExtruded: string;
-  srcClamped?: string;
+  src: string;
   debug?: boolean;
   renderPoint?: boolean;
   idProperty?: string;
@@ -50,8 +49,7 @@ const colorHash = new ColorHash({
 const colorLookup: Record<string, Color> = {};
 
 const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
-  srcExtruded,
-  srcClamped,
+  src,
   debug = false,
   idProperty = 'UUID',
   single = false,
@@ -59,7 +57,7 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
   const { viewer } = useCesium();
   const selectionRef = useRef<SelectionRef | null>(null);
 
-  srcClamped = srcClamped || srcExtruded;
+  const srcClamped = src;
 
   const [selectedEntity, setSelectedEntity] = useState<string | null>(null);
 
@@ -201,7 +199,7 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
     <>
       <ResiumGeoJsonDataSource
         name="footprint_extruded"
-        data={srcExtruded}
+        data={src}
         onLoad={handleOnLoadExtrudedFootprints}
         //onClick={(entity) => setSelectedEntity(entity)}
       />

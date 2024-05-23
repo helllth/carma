@@ -1,4 +1,5 @@
-import { WUPP3D, FOOTPRINT_GEOJSON_SOURCES } from '../../config';
+import React from 'react';
+import { FOOTPRINT_GEOJSON_SOURCES } from '../../config';
 import GeoJsonSelector from '../../components/GeoJsonSelector';
 import { useState } from 'react';
 import RadioSelector from '../../components/RadioSelector';

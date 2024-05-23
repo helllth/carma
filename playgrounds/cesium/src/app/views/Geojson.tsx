@@ -1,6 +1,6 @@
 import React from 'react';
 import GeoJsonSelector from '../components/GeoJsonSelector';
-import { useViewerDataSources } from '../store';
+import { useViewerDataSources } from '../store/slices/viewer';
 import {
   usePropertySelectionControl,
   useSelectionTransparencyControl,

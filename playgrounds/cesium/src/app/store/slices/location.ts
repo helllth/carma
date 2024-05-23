@@ -22,7 +22,7 @@ const paramsToHashset = (params: Record<string, string>) => {
   return '#' + result.toString();
 };
 
-export default createSlice({
+ const slice = createSlice({
   name: 'location',
   initialState: { hash: window.location.hash },
   reducers: {
@@ -32,3 +32,7 @@ export default createSlice({
     },
   },
 });
+
+export const { setLocation } = slice.actions;
+
+export default slice;

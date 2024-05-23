@@ -14,12 +14,14 @@ export const lockPosition = async (viewer: Cesium.Viewer) => {
     new Cesium.HeadingPitchRange(camera.heading, camera.pitch, cameraHeight)
   );
 
+  /*
   const debugPrimitive = new Cesium.DebugModelMatrixPrimitive({
     modelMatrix: transform,
     length: 100000.0,
   });
   
   viewer.scene.primitives.add(debugPrimitive);
+  */
 };
 
 export const unlockPosition = async (viewer) => {

@@ -28,7 +28,7 @@ import {
   useViewerDataSources,
   useViewerHome,
   useViewerHomeOffset,
-} from '../store';
+} from '../store/slices/viewer';
 import { UIComponentContext } from './UIProvider';
 
 type CustomViewerProps = {

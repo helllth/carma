@@ -1,18 +1,12 @@
 import React from 'react';
 import { Cesium3DTileset } from 'resium';
-import { Cartesian3, Cartographic, Cesium3DTileStyle, Color } from 'cesium';
-import { toDegFactor } from '../../lib/cesiumHelpers';
-import {
-  WUPP3D,
-  FOOTPRINT_GEOJSON_SOURCES,
-  WUPPERTAL,
-  CITYGML_TEST_TILESET,
-} from '../../config';
+import { Cesium3DTileStyle } from 'cesium';
+import { getTileSetInfo } from '../../lib/cesiumHelpers';
+import { FOOTPRINT_GEOJSON_SOURCES, CITYGML_TEST_TILESET } from '../../config';
 import GeoJsonSelector from '../../components/GeoJsonSelector';
 import { useState } from 'react';
 import RadioSelector from '../../components/RadioSelector';
 import { useTilesetControl } from '../../utils/controls';
-import { off } from 'process';
 
 const jsonOptions = Object.entries(FOOTPRINT_GEOJSON_SOURCES).map(
   ([key, { url, name }]) => ({
@@ -20,19 +14,6 @@ const jsonOptions = Object.entries(FOOTPRINT_GEOJSON_SOURCES).map(
     value: url,
   })
 );
-
-const getTileSetInfo = (tileset) => {
-  const { center } = tileset.root.boundingSphere;
-  const cartographic = Cartographic.fromCartesian(center);
-  const longitude = cartographic.longitude * toDegFactor;
-  const latitude = cartographic.latitude * toDegFactor;
-  const height = cartographic.height;
-
-  console.log(
-    `Longitude: ${longitude}, Latitude: ${latitude}, Height: ${height}, center: ${center}, ${tileset.basePath}}`
-  );
-};
-
 // needs own State to toggle visibility and not cause rerender of the whole app and reseting position
 const DebugTileset = ({
   url,
@@ -124,18 +105,6 @@ const DebugGeoJsonSelector = ({ initialSrc, debug, renderPoint }) => {
 };
 
 function View() {
-  const [footprintsSrc, setFootprintsSrc] = useState(
-    FOOTPRINT_GEOJSON_SOURCES.VORONOI.url
-  );
-
-  const geoJsonSelector = (
-    <GeoJsonSelector
-      srcExtruded={footprintsSrc}
-      debug={true}
-      renderPoint={false}
-    />
-  );
-
   useTilesetControl();
 
   return (

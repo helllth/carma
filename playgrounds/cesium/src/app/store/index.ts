@@ -1,17 +1,10 @@
-import {
-  configureStore,
-  createSelector,
-  createSlice,
-  PayloadAction,
-} from '@reduxjs/toolkit';
+import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import defaultState from '../config';
-import { Cartesian3, Color } from 'cesium';
 import { useSelector } from 'react-redux';
 import { LocationState } from './slices/location';
 
 import locationSlice from './slices/location';
 import viewerSlice, { ViewerState } from './slices/viewer';
-import { ColorRgbaArray } from '../..';
 import buildingsSlice, { BuildingsState } from './slices/buildings';
 
 export type RootState = {
@@ -21,7 +14,7 @@ export type RootState = {
   selectionTransparency: number;
 };
 
-// Transparency
+// Transparency Slice
 
 export const selectionTransparencySlice = createSlice({
   name: 'selectionTransparency',
@@ -31,6 +24,11 @@ export const selectionTransparencySlice = createSlice({
       action.payload,
   },
 });
+
+export const useSelectionTransparency = () =>
+  useSelector((state: RootState) => state.selectionTransparency);
+
+export const { setSelectionTransparency } = selectionTransparencySlice.actions;
 
 // EXPORTS
 
@@ -42,62 +40,5 @@ const store = configureStore({
     selectionTransparency: selectionTransparencySlice.reducer,
   },
 });
-
-// setters
-
-export const { setSelectionTransparency } = selectionTransparencySlice.actions;
-export const { setLocation } = locationSlice.actions;
-
-export const {
-  setIsAnimating,
-  toggleIsAnimating,
-  setShowTileset,
-  setTilesetOpacity,
-} = viewerSlice.actions;
-
-// selectors
-
-export const selectViewerDataSources = createSelector(
-  (state: RootState) => state.viewer.dataSources,
-  (dataSources = {}) => {
-    const { footprintGeoJson, tileset } = dataSources;
-    return { footprintGeoJson, tileset };
-  }
-);
-
-const selectViewerHome = createSelector(
-  (state: RootState) => state.viewer.homePosition,
-  (homePosition = { x: 0, y: 0, z: 0 }) => {
-    const { x, y, z } = homePosition;
-    return new Cartesian3(x, y, z);
-  }
-);
-
-const selectViewerHomeOffset = createSelector(
-  (state: RootState) => state.viewer.homeOffset,
-  (offset = { x: 0, y: 0, z: 0 }) => {
-    const { x, y, z } = offset;
-    return new Cartesian3(x, y, z);
-  }
-);
-
-const selectViewerSceneGlobalBaseColor = createSelector(
-  (state: RootState) => state.viewer.scene.globe.baseColor,
-  (baseColor: ColorRgbaArray = [1, 0, 0, 1]) => new Color(...baseColor)
-);
-
-// helper hooks reduce imports on use
-export const useViewerDataSources = () => useSelector(selectViewerDataSources);
-export const useViewerHome = () => useSelector(selectViewerHome);
-export const useViewerHomeOffset = () => useSelector(selectViewerHomeOffset);
-
-export const useSelectionTransparency = () =>
-  useSelector((state: RootState) => state.selectionTransparency);
-export const useShowTileset = () =>
-  useSelector((state: RootState) => state.viewer.showTileset);
-export const useTilesetOpacity = () =>
-  useSelector((state: RootState) => state.viewer.styling.tileset.opacity);
-export const useGlobeBaseColor = () =>
-  useSelector(selectViewerSceneGlobalBaseColor);
 
 export default store;

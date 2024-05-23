@@ -1,5 +1,5 @@
 import React from 'react';
-import { useViewerDataSources, useViewerHome } from '../../store';
+import { useViewerDataSources, useViewerHome } from '../../store/slices/viewer';
 import { Color } from 'cesium';
 import { Entity } from 'resium';
 import { useTilesetControl } from '../../utils/controls';

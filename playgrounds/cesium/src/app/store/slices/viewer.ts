@@ -1,8 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import defaultState from '../../config';
 import { Cartesian3, Color } from 'cesium';
 import { ColorRgbaArray } from '../../..';
 import { colorToArray } from '../../lib/cesiumHelpers';
+import { useSelector } from 'react-redux';
+import { RootState } from '..';
 
 type PlainCartesian3 = {
   x: number;
@@ -12,8 +14,8 @@ type PlainCartesian3 = {
 
 export interface ViewerState {
   isAnimating: boolean;
-  homePosition?: PlainCartesian3;
-  homeOffset?: PlainCartesian3;
+  homePosition: PlainCartesian3;
+  homeOffset: PlainCartesian3;
   showTileset: boolean; // tileset is the base 3D model equivalent to a basemap
   /*
   quality: {
@@ -32,19 +34,19 @@ export interface ViewerState {
       baseColor: ColorRgbaArray;
     };
   };
-  dataSources?: {
-    footprintGeoJson?: {
+  dataSources: {
+    footprintGeoJson: {
       url: string;
       name: string;
     };
-    tileset?: {
+    tileset: {
       url: string;
       translation: PlainCartesian3;
     };
   };
 }
 
-export default createSlice({
+const slice = createSlice({
   name: 'viewer',
   initialState: defaultState.viewer,
   reducers: {
@@ -78,3 +80,51 @@ export default createSlice({
     },
   },
 });
+
+export const {
+  setIsAnimating,
+  toggleIsAnimating,
+  setShowTileset,
+  setTilesetOpacity,
+} = slice.actions;
+
+// selectors
+
+const selectViewerIsAnimating = createSelector(
+  (state: RootState) => state.viewer.isAnimating,
+  (isAnimating) => isAnimating
+);
+
+const selectViewerDataSources = createSelector(
+  (state: RootState) => state.viewer.dataSources,
+  (dataSources) => dataSources
+);
+
+const selectViewerHome = createSelector(
+  (state: RootState) => state.viewer.homePosition,
+  ({ x, y, z }) => new Cartesian3(x, y, z)
+);
+
+const selectViewerHomeOffset = createSelector(
+  (state: RootState) => state.viewer.homeOffset,
+  ({ x, y, z }) => new Cartesian3(x, y, z)
+);
+
+const selectViewerSceneGlobalBaseColor = createSelector(
+  (state: RootState) => state.viewer.scene.globe.baseColor,
+  (baseColor) => new Color(...baseColor)
+);
+
+export const useViewerIsAnimating = () => useSelector(selectViewerIsAnimating);
+export const useViewerDataSources = () => useSelector(selectViewerDataSources);
+export const useViewerHome = () => useSelector(selectViewerHome);
+export const useViewerHomeOffset = () => useSelector(selectViewerHomeOffset);
+export const useGlobeBaseColor = () =>
+  useSelector(selectViewerSceneGlobalBaseColor);
+
+export const useShowTileset = () =>
+  useSelector(({ viewer }: RootState) => viewer.showTileset);
+export const useTilesetOpacity = () =>
+  useSelector(({ viewer }: RootState) => viewer.styling.tileset.opacity);
+
+export default slice;

@@ -3,16 +3,17 @@ import { useCesium } from 'resium';
 import OnMapButton from './OnMapButton';
 import { BoundingSphere, Cartesian3 } from 'cesium';
 import { faHouseUser } from '@fortawesome/free-solid-svg-icons';
-import { RootState, setIsAnimating } from '../../store';
-import { useSelector } from 'react-redux';
+import { setIsAnimating, useViewerHome } from '../../store/slices/viewer';
+import { useDispatch } from 'react-redux';
 
 type HomeProps = {
   children?: ReactNode;
 };
 
 const HomeControl = (props: HomeProps) => {
+  const dispatch = useDispatch();
   const { viewer } = useCesium();
-  const { homePosition } = useSelector((state: RootState) => state.viewer);
+  const homePosition = useViewerHome();
   const [homePos, setHomePos] = useState<Cartesian3 | null>(null);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const HomeControl = (props: HomeProps) => {
   const handleHomeClick = (e: MouseEvent) => {
     e.preventDefault();
     if (viewer && homePos) {
-      setIsAnimating(false);
+      dispatch(setIsAnimating(false));
       const boundingSphere = new BoundingSphere(homePos, 400);
       viewer.camera.flyToBoundingSphere(boundingSphere);
     }
