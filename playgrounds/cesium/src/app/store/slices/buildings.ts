@@ -1,8 +1,7 @@
 // Footprint
 
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import defaultState from '../../config';
-import exp from 'constants';
 import { RootState } from '..';
 import { useSelector } from 'react-redux';
 
@@ -31,8 +30,8 @@ export const buildingsSlice = createSlice({
       state.selection = action.payload;
     },
     setSelectionKey: (state: BuildingsState, action: PayloadAction<string>) => {
-        //console.log('REDUX reducer buildings selectionKey');
-        //console.log('REDUX selectionKey', action.payload);
+      //console.log('REDUX reducer buildings selectionKey');
+      //console.log('REDUX selectionKey', action.payload);
       state.selectionKey = action.payload;
     },
     setDefaultKey: (state: BuildingsState, action: PayloadAction<string>) => {
@@ -47,30 +46,15 @@ export const buildingsSlice = createSlice({
   },
 });
 
-export const selectKey = createSelector(
-  (state: RootState) => state.buildings.key,
-  (key) => key
-);
-export const selectKeys = createSelector(
-  (state: RootState) => state.buildings.keys,
-  (keys) => keys
-);
-export const selectSelection = createSelector(
-  (state: RootState) => state.buildings.selection,
-  (selection) => selection
-);
-export const selectSelectionKey = createSelector(
-  (state: RootState) => state.buildings.selectionKey,
-  (selectionKey) => selectionKey
-);
-export const selectDefaultKey = createSelector(
-  (state: RootState) => state.buildings.defaultKey,
-  (defaultKey) => defaultKey
-);
-export const selectIgnoredKeys = createSelector(
-  (state: RootState) => state.buildings.ignoredKeys,
-  (ignoredKeys) => ignoredKeys
-);
+export const selectKey = (state: RootState) => state.buildings.key;
+export const selectKeys = (state: RootState) => state.buildings.keys;
+export const selectSelection = (state: RootState) => state.buildings.selection;
+export const selectSelectionKey = (state: RootState) =>
+  state.buildings.selectionKey;
+export const selectDefaultKey = (state: RootState) =>
+  state.buildings.defaultKey;
+export const selectIgnoredKeys = (state: RootState) =>
+  state.buildings.ignoredKeys;
 
 export const useSelectKey = () => useSelector(selectKey);
 export const useSelectKeys = () => useSelector(selectKeys);

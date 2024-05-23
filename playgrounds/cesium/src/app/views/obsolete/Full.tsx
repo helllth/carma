@@ -5,7 +5,7 @@
 //import "leaflet-fullscreen-custom-container-fork/dist/leaflet.fullscreen.css";
 
 import 'leaflet/dist/leaflet.css';
-import Viewer from '../../components/CustomViewer';
+import Viewer from '../../components/CustomViewer/CustomViewer';
 import { Cesium3DTileset } from 'resium';
 import { Cartesian3, Matrix4 } from 'cesium';
 import { useLayoutEffect, useRef, useState } from 'react';

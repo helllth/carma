@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import { Cesium3DTileset } from 'resium';
 import { Cartesian3, Matrix4 } from 'cesium';
 import { useRef, useState } from 'react';
-import Viewer from '../../components/CustomViewer';
+import Viewer from '../../components/CustomViewer/CustomViewer';
 
 function View() {
   const [meshVisible] = useState(true);

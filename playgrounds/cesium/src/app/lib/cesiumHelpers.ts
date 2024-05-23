@@ -3,6 +3,7 @@ import {
   Cartesian3,
   Cartographic,
   Cesium3DTileset,
+  Cesium3DTileStyle,
   Color,
   Matrix4,
   Viewer,
@@ -57,3 +58,19 @@ export const getTileSetInfo = (tileset: Cesium3DTileset) => {
     `Longitude: ${longitude}, Latitude: ${latitude}, Height: ${height}, center: ${center}, ${tileset.basePath}}`
   );
 };
+
+export function create3DTileStyle(
+  styleDescription: Record<string, unknown | string>
+): Cesium3DTileStyle | undefined {
+  try {
+    return new Cesium3DTileStyle(styleDescription);
+  } catch (error) {
+    console.warn(
+      'Error in Tileset Style Creation from: ',
+      styleDescription,
+      error
+    );
+
+    return undefined;
+  }
+}

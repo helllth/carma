@@ -60,7 +60,7 @@ const slice = createSlice({
       state.showTileset = action.payload;
     },
     setTilesetOpacity: (state: ViewerState, action: PayloadAction<number>) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.styling.tileset.opacity = action.payload;
     },
     setGlobeBaseColor: (
@@ -90,15 +90,8 @@ export const {
 
 // selectors
 
-const selectViewerIsAnimating = createSelector(
-  (state: RootState) => state.viewer.isAnimating,
-  (isAnimating) => isAnimating
-);
-
-const selectViewerDataSources = createSelector(
-  (state: RootState) => state.viewer.dataSources,
-  (dataSources) => dataSources
-);
+const selectViewerIsAnimating = (state: RootState) => state.viewer.isAnimating;
+const selectViewerDataSources = (state: RootState) => state.viewer.dataSources;
 
 const selectViewerHome = createSelector(
   (state: RootState) => state.viewer.homePosition,

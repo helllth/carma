@@ -36,7 +36,6 @@ const DebugTileset = ({
           new Cesium3DTileStyle({
             show: 'true',
             color: "color('#ffffff')",
-            heightOffset: '100',
           })
         }
         show={show}

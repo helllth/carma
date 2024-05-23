@@ -15,7 +15,7 @@ import {
   Cartesian2,
 } from 'cesium';
 import ColorHash from 'color-hash';
-import { useClickAction, usePropertyKeysFromGeoJsonDataSource } from '../hooks';
+import { useClickActionFootprints, usePropertyKeysFromGeoJsonDataSource } from '../hooks';
 import { useSelectionTransparency } from '../store';
 import { useSelectKey } from '../store/slices/buildings';
 
@@ -130,7 +130,7 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
     return new ColorMaterialProperty(colorLookup[colorHexKey]);
   };
 
-  const clickData = useClickAction(viewer, idProperty, setSelectedEntity);
+  const clickData = useClickActionFootprints(viewer, idProperty, setSelectedEntity);
   usePropertyKeysFromGeoJsonDataSource(clampedFootprints);
 
   useEffect(() => {

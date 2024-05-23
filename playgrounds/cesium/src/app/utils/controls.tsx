@@ -22,7 +22,6 @@ export const uiTilesetOpacitySlider = (
   <div
     style={{
       padding: '0 15px',
-      width: '200px',
     }}
   >
     <RangeInput
@@ -34,37 +33,37 @@ export const uiTilesetOpacitySlider = (
 
 export const uiTilesetToggle = (
   <Switch
-    title={'Show Tileset'}
+    title={'Tileset anzeigen'}
     actionCreator={setShowTileset}
     valueHook={useShowTileset}
   />
 );
 
-const tilesetComponents = (
-  <>
-    {uiTilesetOpacitySlider}
-    {uiTilesetToggle}
-  </>
-);
-
 export function useTilesetControl() {
   const { addComponent, removeComponent } = useContext(UIComponentContext);
+  const showTileset = useShowTileset();
 
   useEffect(() => {
     console.log('useTilesetControl');
+    const tilesetComponents = (
+      <div style={{ width: '250px' }}>
+        {uiTilesetToggle}
+        {showTileset && uiTilesetOpacitySlider}
+      </div>
+    );
     addComponent('bottomLeft', tilesetComponents);
     return () => {
       removeComponent('bottomLeft', tilesetComponents);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [showTileset]);
 }
 
 export const uiSelectionTransparencySlider = (
   <div
     style={{
       padding: '0 15px',
-      width: '200px',
+      width: '250px',
     }}
   >
     <label>Transparenz nach Auswahl </label>

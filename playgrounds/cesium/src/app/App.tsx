@@ -8,7 +8,7 @@ import LocationProvider from './components/LocationProvider';
 import { Provider } from 'react-redux';
 import store from './store';
 import { viewerRoutes, otherRoutes } from './routes';
-import CustomViewer from './components/CustomViewer';
+import CustomViewer from './components/CustomViewer/CustomViewer';
 
 import { routeGenerator } from './utils/routeGenerator';
 

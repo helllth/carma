@@ -1,35 +1,16 @@
-import React, {
-  ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import {
-  Color,
-  HeadingPitchRange,
-  Viewer,
-  BoundingSphere,
-  Cesium3DTileStyle,
-} from 'cesium';
-import { Cesium3DTileset, Viewer as ResiumViewer } from 'resium';
-import Crosshair from './Crosshair';
-import OrbitControl from './controls/OrbitControl';
-import ControlContainer from './controls/ControlContainer';
-import HomeControl from './controls/HomeControl';
-import ZoomControls from './controls/ZoomControls';
-import LockCenterControl from './controls/LockCenterControl';
-import ControlGroup from './controls/ControlGroup';
-import DebugInfo from './controls/DebugInfo';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import { Color, HeadingPitchRange, Viewer, BoundingSphere } from 'cesium';
+import { Viewer as ResiumViewer } from 'resium';
+import Crosshair from '../Crosshair';
+
 import {
   useGlobeBaseColor,
   useShowTileset,
-  useTilesetOpacity,
-  useViewerDataSources,
   useViewerHome,
   useViewerHomeOffset,
-} from '../store/slices/viewer';
-import { UIComponentContext } from './UIProvider';
+} from '../../store/slices/viewer';
+import { BaseTileset } from './components/BaseTileset';
+import ControlsUI from './components/ControlsUI';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -60,19 +41,14 @@ function CustomViewer(props: CustomViewerProps) {
   const home = useViewerHome();
   const homeOffset = useViewerHomeOffset();
   const globeBaseColor = useGlobeBaseColor();
-  const { tileset } = useViewerDataSources();
-  const UI = useContext(UIComponentContext);
-  const tilesetOpacity = useTilesetOpacity();
   const showTileset = useShowTileset();
 
   const {
     children,
     className,
     showCrosshair = true,
-    //homeOrientation = new HeadingPitchRange(0, CMath.toRadians(-45), 500),
     showControls = true,
     showHome = true,
-    //showLockCenter = true,
     showOrbit = true,
     showDebug = true,
 
@@ -118,6 +94,8 @@ function CustomViewer(props: CustomViewerProps) {
     };
   }, [viewer]);
 
+  let style;
+
   return (
     <ResiumViewer
       ref={viewerRef}
@@ -147,57 +125,14 @@ function CustomViewer(props: CustomViewerProps) {
       navigationHelpButton={false}
       navigationInstructionsInitiallyVisible={false}
     >
-      {showTileset && tileset && (
-        <Cesium3DTileset
-          url={tileset.url}
-          style={
-            new Cesium3DTileStyle({
-              color: `color("white", ${tilesetOpacity})`,
-            })
-          }
-        />
-      )}
+      {showTileset && <BaseTileset />}
       {children}
       {showControls && (
-        <div className={'leaflet-control-container'}>
-          <ControlContainer position="topleft">
-            <ZoomControls />
-            {
-              //showHome && <button onClick={handleHomeClick}>Home</button>
-              showHome && home && (
-                <ControlGroup>
-                  <HomeControl />
-                </ControlGroup>
-              )
-            }
-            {showOrbit && (
-              <ControlGroup>
-                <OrbitControl />
-              </ControlGroup>
-            )}
-            <ControlGroup>
-              <LockCenterControl />
-            </ControlGroup>
-          </ControlContainer>
-          <ControlContainer position="bottomleft">
-            <ControlGroup useLeafletElements={false}>
-              {UI.components.bottomLeft}
-            </ControlGroup>
-          </ControlContainer>
-          {showDebug && (
-            <ControlContainer position="topright">
-              <ControlGroup
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-end',
-                }}
-              >
-                <DebugInfo />
-              </ControlGroup>
-            </ControlContainer>
-          )}
-        </div>
+        <ControlsUI
+          showDebug={showDebug}
+          showHome={showHome}
+          showOrbit={showOrbit}
+        />
       )}
       {showCrosshair && <Crosshair lineColor="white" />}
     </ResiumViewer>
