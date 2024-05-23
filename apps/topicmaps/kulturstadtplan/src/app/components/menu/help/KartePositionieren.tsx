@@ -1,6 +1,7 @@
 import Icon from 'react-cismap/commons/Icon';
 
 const KartePositionieren = () => {
+  let urlPrefix = window.location.origin + window.location.pathname;
   return (
     <>
       <p>
@@ -23,11 +24,11 @@ const KartePositionieren = () => {
         zugehörige Position zentriert. Bei Suchbegriffen mit Punktgeometrie
         (Adresse, Straße, POI) wird außerdem ein großer Maßstab (Zoomstufe 14)
         eingestellt und ein Marker{' '}
-        <img alt="Cluster" src="images/AdressMarker.jpg" /> auf der Zielposition
-        platziert. Bei Suchbegriffen mit Flächengeometrie (Stadtbezirk,
-        Quartier) wird der Maßstab so eingestellt, dass die Fläche vollständig
-        dargestellt werden kann. Zusätzlich wird der Bereich außerhalb dieser
-        Fläche abgedunkelt (Spotlight-Effekt).
+        <img alt="Cluster" src={urlPrefix + 'images/AdressMarker.jpg'} /> auf
+        der Zielposition platziert. Bei Suchbegriffen mit Flächengeometrie
+        (Stadtbezirk, Quartier) wird der Maßstab so eingestellt, dass die Fläche
+        vollständig dargestellt werden kann. Zusätzlich wird der Bereich
+        außerhalb dieser Fläche abgedunkelt (Spotlight-Effekt).
       </p>
       <p>
         Durch Anklicken des Werkzeugs <Icon name="times" /> links neben dem
