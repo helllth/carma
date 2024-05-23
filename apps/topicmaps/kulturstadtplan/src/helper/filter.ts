@@ -11,7 +11,7 @@ const itemFilterFunction = ({ filterState }) => {
       }
     } else if (filterState.mode === 'veranstaltungen') {
       for (let veranstaltungsart of item.more.veranstaltungsarten) {
-        if (filterState['veranstaltung'].indexOf(veranstaltungsart) !== -1) {
+        if (filterState['veranstaltung']?.indexOf(veranstaltungsart) !== -1) {
           result = true;
         }
       }

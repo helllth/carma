@@ -55,7 +55,7 @@ const Map = () => {
       veranstaltung: veranstaltungen,
       mode: 'einrichtungen',
     });
-  }, []);
+  }, [itemsDictionary]);
 
   return (
     <TopicMapComponent
