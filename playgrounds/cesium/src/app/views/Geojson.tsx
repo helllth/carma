@@ -1,34 +1,21 @@
-import { Cesium3DTileset } from 'resium';
-import { logTileSetInfoOnReady } from '../lib/cesiumHelpers';
+import React from 'react';
 import GeoJsonSelector from '../components/GeoJsonSelector';
-import { setSelectionTransparency, useViewerDataSources } from '../store';
-import RangeInput from '../components/controls/RangeInput';
+import { useViewerDataSources } from '../store';
+import {
+  usePropertySelectionControl,
+  useSelectionTransparencyControl,
+} from '../utils/controls';
 
 function View() {
   const { footprintGeoJson, tileset } = useViewerDataSources();
+  //useSelectionTransparencyControl();
+
+  useSelectionTransparencyControl();
+  usePropertySelectionControl();
+
   return (
     footprintGeoJson &&
-    tileset && (
-      <>
-        <Cesium3DTileset url={tileset.url} onReady={logTileSetInfoOnReady} />
-        <GeoJsonSelector srcExtruded={footprintGeoJson.url} />
-        <div
-          className="leaflet-bar leaflet-control leaflet-control-layers-expanded"
-          style={{
-            position: 'absolute',
-            bottom: '60px',
-            left: '10px',
-            zIndex: 1000,
-          }}
-        >
-          <RangeInput
-            title="Set the transparency of the buildings:"
-            valueSelector={(state) => state.selectionTransparency}
-            actionCreator={setSelectionTransparency}
-          />
-        </div>
-      </>
-    )
+    tileset && <GeoJsonSelector srcExtruded={footprintGeoJson.url} />
   );
 }
 

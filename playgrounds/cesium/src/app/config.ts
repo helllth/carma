@@ -1,5 +1,6 @@
-import { Cartesian3 } from 'cesium';
+import { Cartesian3, Color } from 'cesium';
 import { RootState } from './store';
+import { colorToArray } from './lib/cesiumHelpers';
 
 const APP_BASE_PATH = import.meta.env.BASE_URL;
 export const CESIUM_PATHNAME = '__cesium__';
@@ -14,6 +15,12 @@ export const WUPP3D = {
 };
 
 const GEOJSON_BASE_PATH = `${APP_BASE_PATH}data/geojson/`;
+const TILESET_BASE_PATH = `${APP_BASE_PATH}data/tiles/`;
+
+
+export const CITYGML_TEST_TILESET = {
+  url: `${TILESET_BASE_PATH}tileset.json`,
+};
 
 export const FOOTPRINT_GEOJSON_SOURCES = {
   VORONOI: {
@@ -51,9 +58,22 @@ const { x, y, z } = Cartesian3.fromDegrees(
   WUPPERTAL.ground
 );
 
-const homeOffset = { x: 0, y: 0, z: 10000 };
+// position relative to the home position
+const homeOffset = {
+  x: 0,
+  y: -50000, // southwards
+  z: 45000, // elevation
+};
 
 export const defaultState: RootState = {
+  buildings: {
+    key: null,
+    keys: [],
+    selection: null,
+    selectionKey: 'UUID',
+    defaultKey: 'GEB_FKT',
+    ignoredKeys: [],
+  },
   location: {
     hash: null,
   },
@@ -62,6 +82,17 @@ export const defaultState: RootState = {
     isAnimating: false,
     homeOffset: homeOffset,
     homePosition: { x, y, z },
+    showTileset: true,
+    styling: {
+      tileset: {
+        opacity: 1.0,
+      },
+    },
+    scene: {
+      globe: {
+        baseColor: colorToArray(Color.TEAL),
+      },
+    },
     dataSources: {
       footprintGeoJson: FOOTPRINT_GEOJSON_SOURCES.VORONOI,
       tileset: WUPP3D,

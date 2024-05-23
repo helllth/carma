@@ -5,14 +5,17 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import defaultState from '../config';
-import { Cartesian3 } from 'cesium';
+import { Cartesian3, Color } from 'cesium';
 import { useSelector } from 'react-redux';
 import { LocationState } from './slices/location';
 
 import locationSlice from './slices/location';
 import viewerSlice, { ViewerState } from './slices/viewer';
+import { ColorRgbaArray } from '../..';
+import buildingsSlice, { BuildingsState } from './slices/buildings';
 
 export type RootState = {
+  buildings: BuildingsState;
   location: LocationState;
   viewer: ViewerState;
   selectionTransparency: number;
@@ -33,6 +36,7 @@ export const selectionTransparencySlice = createSlice({
 
 const store = configureStore({
   reducer: {
+    buildings: buildingsSlice.reducer,
     location: locationSlice.reducer,
     viewer: viewerSlice.reducer,
     selectionTransparency: selectionTransparencySlice.reducer,
@@ -42,10 +46,17 @@ const store = configureStore({
 // setters
 
 export const { setSelectionTransparency } = selectionTransparencySlice.actions;
-
 export const { setLocation } = locationSlice.actions;
 
-export const { setIsAnimating, toggleIsAnimating } = viewerSlice.actions;
+export const {
+  setIsAnimating,
+  toggleIsAnimating,
+  setShowTileset,
+  setTilesetOpacity,
+} = viewerSlice.actions;
+
+// selectors
+
 export const selectViewerDataSources = createSelector(
   (state: RootState) => state.viewer.dataSources,
   (dataSources = {}) => {
@@ -70,6 +81,11 @@ const selectViewerHomeOffset = createSelector(
   }
 );
 
+const selectViewerSceneGlobalBaseColor = createSelector(
+  (state: RootState) => state.viewer.scene.globe.baseColor,
+  (baseColor: ColorRgbaArray = [1, 0, 0, 1]) => new Color(...baseColor)
+);
+
 // helper hooks reduce imports on use
 export const useViewerDataSources = () => useSelector(selectViewerDataSources);
 export const useViewerHome = () => useSelector(selectViewerHome);
@@ -77,5 +93,11 @@ export const useViewerHomeOffset = () => useSelector(selectViewerHomeOffset);
 
 export const useSelectionTransparency = () =>
   useSelector((state: RootState) => state.selectionTransparency);
+export const useShowTileset = () =>
+  useSelector((state: RootState) => state.viewer.showTileset);
+export const useTilesetOpacity = () =>
+  useSelector((state: RootState) => state.viewer.styling.tileset.opacity);
+export const useGlobeBaseColor = () =>
+  useSelector(selectViewerSceneGlobalBaseColor);
 
 export default store;

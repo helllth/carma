@@ -1,17 +1,18 @@
+import React from 'react';
 import { Cesium3DTileset } from 'resium';
 import { Cartesian3, Cartographic, Cesium3DTileStyle, Color } from 'cesium';
 import { toDegFactor } from '../../lib/cesiumHelpers';
-import CustomViewer from '../../components/CustomViewer';
-import { WUPP3D, FOOTPRINT_GEOJSON_SOURCES, WUPPERTAL } from '../../config';
+import {
+  WUPP3D,
+  FOOTPRINT_GEOJSON_SOURCES,
+  WUPPERTAL,
+  CITYGML_TEST_TILESET,
+} from '../../config';
 import GeoJsonSelector from '../../components/GeoJsonSelector';
-import { useRef, useEffect, useState, memo } from 'react';
+import { useState } from 'react';
 import RadioSelector from '../../components/RadioSelector';
-
-const home = Cartesian3.fromDegrees(
-  WUPPERTAL.position.lon,
-  WUPPERTAL.position.lat,
-  WUPPERTAL.ground
-);
+import { useTilesetControl } from '../../utils/controls';
+import { off } from 'process';
 
 const jsonOptions = Object.entries(FOOTPRINT_GEOJSON_SOURCES).map(
   ([key, { url, name }]) => ({
@@ -33,7 +34,15 @@ const getTileSetInfo = (tileset) => {
 };
 
 // needs own State to toggle visibility and not cause rerender of the whole app and reseting position
-const DebugTileset = ({ url, onReady, style }) => {
+const DebugTileset = ({
+  url,
+  onReady,
+  style,
+}: {
+  url: string;
+  onReady: (Cesium3DTileset) => void;
+  style?: Cesium3DTileStyle;
+}) => {
   const [show, setShow] = useState(true);
 
   return (
@@ -41,9 +50,16 @@ const DebugTileset = ({ url, onReady, style }) => {
       <Cesium3DTileset
         url={url}
         onReady={onReady}
+        style={
+          style ??
+          new Cesium3DTileStyle({
+            show: 'true',
+            color: "color('#ffffff')",
+            heightOffset: '100',
+          })
+        }
         show={show}
         // debugWireframe={true}
-        style={style}
       />
       <label
         className="leaflet-bar"
@@ -58,7 +74,7 @@ const DebugTileset = ({ url, onReady, style }) => {
         }}
       >
         <input type="checkbox" checked={show} onChange={() => setShow(!show)} />
-        Show Tileset
+        Show CityGML Tileset
       </label>
     </>
   );
@@ -71,7 +87,11 @@ const DebugGeoJsonSelector = ({ initialSrc, debug, renderPoint }) => {
   return (
     <>
       {show ? (
-        <GeoJsonSelector srcExtruded={src} debug={debug} renderPoint={renderPoint} />
+        <GeoJsonSelector
+          srcExtruded={src}
+          debug={debug}
+          renderPoint={renderPoint}
+        />
       ) : null}
       <div
         className="leaflet-bar"
@@ -108,18 +128,18 @@ function View() {
   );
 
   const geoJsonSelector = (
-    <GeoJsonSelector srcExtruded={footprintsSrc} debug={true} renderPoint={false} />
+    <GeoJsonSelector
+      srcExtruded={footprintsSrc}
+      debug={true}
+      renderPoint={false}
+    />
   );
 
-  const myStyle = new Cesium3DTileStyle({
-    color: "color('#FFFFFF', 0.4)", //white, alpha = 0.2
-    show: true,
-  });
+  useTilesetControl();
+
   return (
     <>
-      <Cesium3DTileset url="/data/tiles/tileset.json" />
-
-      <DebugTileset url={WUPP3D.url} onReady={getTileSetInfo} style={myStyle} />
+      <DebugTileset url={CITYGML_TEST_TILESET.url} onReady={getTileSetInfo} />
       <DebugGeoJsonSelector
         initialSrc={FOOTPRINT_GEOJSON_SOURCES.VORONOI.url}
         debug={true}

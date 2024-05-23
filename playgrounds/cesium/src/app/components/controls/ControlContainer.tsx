@@ -1,4 +1,5 @@
-type ControlContainerProps = {
+import React, { HTMLAttributes } from 'react';
+type ControlContainerProps = HTMLAttributes<HTMLDivElement> & {
   position: string;
   children: React.ReactNode;
 };
@@ -19,10 +20,12 @@ const getPosClass = (pos: string) => {
 };
 
 const ControlContainer = (props: ControlContainerProps) => {
-  const { position, children } = props;
+  const { position, children, ...otherProps } = props;
   const positionClassname = getPosClass(position);
   return (
-    <div className={` ${positionClassname}`}>{children}</div>
+    <div {...otherProps} className={` ${positionClassname}`}>
+      {children}
+    </div>
   );
 };
 export default ControlContainer;

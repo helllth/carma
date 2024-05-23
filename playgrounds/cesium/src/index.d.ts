@@ -8,3 +8,5 @@ export type TilesetConfig = {
   url: string;
   translation: Translation;
 };
+
+export type ColorRgbaArray = [number, number, number, number];

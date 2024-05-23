@@ -15,9 +15,9 @@ import {
   Cartesian2,
 } from 'cesium';
 import ColorHash from 'color-hash';
-import CompareCartesian3Table from './CompareCartesian3Table';
 import { useClickAction, usePropertyKeysFromGeoJsonDataSource } from '../hooks';
 import { useSelectionTransparency } from '../store';
+import { useSelectKey } from '../store/slices/buildings';
 
 interface GeoJsonSelectorProps {
   srcExtruded: string;
@@ -72,7 +72,8 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
     useState<CesiumGeoJsonDataSource | null>(null);
   const [clampedFootprints, setClampedFootprints] =
     useState<CesiumGeoJsonDataSource | null>(null);
-  const [selectedProperty, setSelectedProperty] = useState('GEB_FKT');
+
+  const selectKey = useSelectKey();
 
   const handleOnLoadExtrudedFootprints = (
     dataSource: CesiumGeoJsonDataSource
@@ -95,24 +96,26 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
     dataSource: CesiumGeoJsonDataSource
   ) => {
     dataSource && setClampedFootprints(dataSource);
-    dataSource.entities.values.forEach((entity) => {
-      if (entity.polygon !== undefined) {
-        entity.show = false;
-        entity.polygon.material = getColorMaterialProperty(
-          entity,
-          clampedFootprintAlpha
-        );
-      }
-    });
+    dataSource &&
+      dataSource.entities.values.forEach((entity) => {
+        if (entity.polygon !== undefined) {
+          entity.show = false;
+          entity.polygon.material = getColorMaterialProperty(
+            entity,
+            clampedFootprintAlpha
+          );
+        }
+      });
   };
 
   const getColorMaterialProperty = (
     entity: Entity,
     alpha: number
   ): ColorMaterialProperty => {
-    const str = entity.properties
-      ? entity.properties[selectedProperty].toString()
-      : 'default';
+    const str =
+      entity.properties && selectKey
+        ? entity.properties[selectKey].toString()
+        : 'default';
     const colorHexKey = colorHash.hex(str).substring(1); // remove # from the beginning
 
     // If the Color doesn't exist yet, create it
@@ -128,9 +131,10 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
   };
 
   const clickData = useClickAction(viewer, idProperty, setSelectedEntity);
-  const propertyKeys = usePropertyKeysFromGeoJsonDataSource(clampedFootprints);
+  usePropertyKeysFromGeoJsonDataSource(clampedFootprints);
 
   useEffect(() => {
+    console.log('HOOK color by key', selectKey);
     if (clampedFootprints) {
       clampedFootprints.entities.values.forEach((entity) => {
         if (entity.polygon !== undefined) {
@@ -144,7 +148,7 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clampedFootprintAlpha, selectedProperty]);
+  }, [clampedFootprintAlpha, selectKey]);
 
   useEffect(() => {
     if (clampedFootprints) {
@@ -191,6 +195,8 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEntity]);
 
+  console.log('selectedProperty');
+
   return (
     <>
       <ResiumGeoJsonDataSource
@@ -205,48 +211,6 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
         clampToGround={true}
         onLoad={handleOnLoadClampedFootprints}
       />
-      {!single && (
-        <div
-          className="leaflet-bar leaflet-control leaflet-control-layers-expanded"
-          style={{
-            position: 'absolute',
-            bottom: '10px',
-            left: '10px',
-            zIndex: 1000,
-          }}
-        >
-          {propertyKeys && (
-            <select
-              title="Select a property to color the buildings by:"
-              value={selectedProperty}
-              onChange={(event) => setSelectedProperty(event.target.value)}
-            >
-              {Array.from(propertyKeys).map((key) => (
-                <option key={key} value={key}>
-                  {key}
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
-      )}
-      {debug && (
-        <div
-          className="leaflet-bar leaflet-control leaflet-control-layers-expanded"
-          style={{
-            position: 'absolute',
-            bottom: '10px',
-            right: '10px',
-            zIndex: 1000,
-          }}
-        >
-          <CompareCartesian3Table
-            title="Click Position"
-            posA={selectionRef.current?.pickPos}
-            posAName="click"
-          />
-        </div>
-      )}
     </>
   );
 };

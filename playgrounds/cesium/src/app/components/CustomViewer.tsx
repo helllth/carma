@@ -1,12 +1,18 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {
-  Cartesian3,
   Color,
   HeadingPitchRange,
   Viewer,
   BoundingSphere,
+  Cesium3DTileStyle,
 } from 'cesium';
-import { Viewer as ResiumViewer } from 'resium';
+import { Cesium3DTileset, Viewer as ResiumViewer } from 'resium';
 import Crosshair from './Crosshair';
 import OrbitControl from './controls/OrbitControl';
 import ControlContainer from './controls/ControlContainer';
@@ -15,7 +21,15 @@ import ZoomControls from './controls/ZoomControls';
 import LockCenterControl from './controls/LockCenterControl';
 import ControlGroup from './controls/ControlGroup';
 import DebugInfo from './controls/DebugInfo';
-import { useViewerHome, useViewerHomeOffset } from '../store';
+import {
+  useGlobeBaseColor,
+  useShowTileset,
+  useTilesetOpacity,
+  useViewerDataSources,
+  useViewerHome,
+  useViewerHomeOffset,
+} from '../store';
+import { UIComponentContext } from './UIProvider';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -36,12 +50,6 @@ type CustomViewerProps = {
   infoBox?: boolean;
   selectionIndicator?: boolean;
 
-  // slots
-  topLeft?: ReactNode;
-  topRight?: ReactNode;
-  bottomLeft?: ReactNode;
-  bottomRight?: ReactNode;
-
   //disableZoomRestrictions?: boolean; // todo
   //minZoom?: number; // todo
 
@@ -51,12 +59,13 @@ type CustomViewerProps = {
 function CustomViewer(props: CustomViewerProps) {
   const home = useViewerHome();
   const homeOffset = useViewerHomeOffset();
+  const globeBaseColor = useGlobeBaseColor();
+  const { tileset } = useViewerDataSources();
+  const UI = useContext(UIComponentContext);
+  const tilesetOpacity = useTilesetOpacity();
+  const showTileset = useShowTileset();
 
   const {
-    topLeft,
-    topRight,
-    bottomLeft,
-    bottomRight,
     children,
     className,
     showCrosshair = true,
@@ -69,7 +78,8 @@ function CustomViewer(props: CustomViewerProps) {
 
     infoBox = false,
     selectionIndicator = false,
-    globeColor = Color.TEAL,
+
+    globeColor = globeBaseColor,
   } = props;
 
   const [viewer, setViewer] = useState<Viewer | null>(null);
@@ -84,45 +94,25 @@ function CustomViewer(props: CustomViewerProps) {
     if (viewer && home && homeOffset) {
       console.log('Setting home position', home, homeOffset);
       // Set the initial position of the camera a bit further away, to not show the globe at start
-      viewer.camera.lookAt(
-        home,
-        //homeOffset,
-        new Cartesian3(0, -5000, 5000)
-      );
-
-      viewer.camera.flyToBoundingSphere(new BoundingSphere(home, 500));
+      viewer.camera.lookAt(home, homeOffset);
+      viewer.camera.flyToBoundingSphere(new BoundingSphere(home, 500), {
+        duration: 2,
+      });
     }
   }, [viewer, home, homeOffset]);
 
   useEffect(() => {
     if (!viewer) return;
-
     // remove default imagery
     viewer.imageryLayers.removeAll();
     // set the globe color
     viewer.scene.globe.baseColor = globeColor;
-
     viewer.scene.screenSpaceCameraController.enableCollisionDetection = true;
-
     const moveEndListener = () => {
       console.log('moveEndListener');
-      if (viewer) {
-        /*
-        const position = getCanvasCenter(viewer);
-        const cartographicPosition = Cartographic.fromCartesian(position);
-        const height = cartographicPosition.height;
-        console.log(
-          'Height at screen center:',
-          height,
-          position,
-          cartographicPosition
-        );
-        */
-      }
     };
 
     viewer.camera.moveEnd.addEventListener(moveEndListener);
-
     return () => {
       viewer.camera.moveEnd.removeEventListener(moveEndListener);
     };
@@ -157,6 +147,16 @@ function CustomViewer(props: CustomViewerProps) {
       navigationHelpButton={false}
       navigationInstructionsInitiallyVisible={false}
     >
+      {showTileset && tileset && (
+        <Cesium3DTileset
+          url={tileset.url}
+          style={
+            new Cesium3DTileStyle({
+              color: `color("white", ${tilesetOpacity})`,
+            })
+          }
+        />
+      )}
       {children}
       {showControls && (
         <div className={'leaflet-control-container'}>
@@ -178,10 +178,13 @@ function CustomViewer(props: CustomViewerProps) {
             <ControlGroup>
               <LockCenterControl />
             </ControlGroup>
-            {topLeft}
           </ControlContainer>
-
-          {(topRight || showDebug) && (
+          <ControlContainer position="bottomleft">
+            <ControlGroup useLeafletElements={false}>
+              {UI.components.bottomLeft}
+            </ControlGroup>
+          </ControlContainer>
+          {showDebug && (
             <ControlContainer position="topright">
               <ControlGroup
                 style={{
@@ -192,18 +195,6 @@ function CustomViewer(props: CustomViewerProps) {
               >
                 <DebugInfo />
               </ControlGroup>
-
-              {topRight}
-            </ControlContainer>
-          )}
-          {bottomLeft && (
-            <ControlContainer position="bottomleft">
-              {bottomLeft}
-            </ControlContainer>
-          )}
-          {bottomRight && (
-            <ControlContainer position="bottomright">
-              {bottomRight}
             </ControlContainer>
           )}
         </div>

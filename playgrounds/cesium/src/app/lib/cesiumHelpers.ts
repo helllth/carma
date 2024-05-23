@@ -3,10 +3,11 @@ import {
   Cartesian3,
   Cartographic,
   Cesium3DTileset,
+  Color,
   Matrix4,
   Viewer,
 } from 'cesium';
-import { TilesetConfig } from '../..';
+import { ColorRgbaArray, TilesetConfig } from '../..';
 
 export const toDegFactor = 180 / Math.PI;
 
@@ -36,6 +37,22 @@ export const logTileSetInfoOnReady = (tileset: Cesium3DTileset) => {
   const latitude = cartographic.latitude * toDegFactor;
   const height = cartographic.height;
 
+  console.log(
+    `Longitude: ${longitude}, Latitude: ${latitude}, Height: ${height}, center: ${center}, ${tileset.basePath}}`
+  );
+};
+
+export const colorToArray = (color: Color): ColorRgbaArray => {
+  const { red, green, blue, alpha } = color;
+  return [red, green, blue, alpha];
+};
+
+export const getTileSetInfo = (tileset: Cesium3DTileset) => {
+  const { center } = tileset.root.boundingSphere;
+  const cartographic = Cartographic.fromCartesian(center);
+  const longitude = cartographic.longitude * toDegFactor;
+  const latitude = cartographic.latitude * toDegFactor;
+  const height = cartographic.height;
   console.log(
     `Longitude: ${longitude}, Latitude: ${latitude}, Height: ${height}, center: ${center}, ${tileset.basePath}}`
   );

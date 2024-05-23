@@ -23,9 +23,9 @@ export const viewerRoutes: RouteDescriptor[] = [
   ['/geojson', 'GeoJson', Geojson],
   //['/full', 'Full', Full],
   //['/mesh', 'Mesh', WithMesh],
+  /*
   [
-    '/test',
-    'Test',
+    '/test',    'Test',
     [
       ['/', 'Test Home', TestCustomViewer],
       ['/geojson', 'Test GeoJson', TestGeojson],
@@ -33,7 +33,12 @@ export const viewerRoutes: RouteDescriptor[] = [
       ['/viewer', 'Test Viewer', TestCustomViewer],
       ['/tileset', 'Test Tileset', TestTileset],
     ],
-  ],
+    ]
+    */
+  ['/test-geojson', '🎛️ GeoJson', TestGeojson],
+  ['/test-citygml', '🎛️ CityGML 🚧', TestGeojsonWithCityGML],
+  ['/test-viewer', '🎛️ Viewer', TestCustomViewer],
+  ['/test-tileset', '🎛️ Tileset', TestTileset],
 ];
 
 export const otherRoutes: RouteDescriptor[] = [

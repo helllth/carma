@@ -9,6 +9,9 @@ import {
   Cartesian3,
   Viewer,
 } from 'cesium';
+import { useSelectKeys } from './store/slices/buildings';
+import { setKeys } from './store/slices/buildings';
+import { useDispatch } from 'react-redux';
 
 export type ClickData = {
   id: string | null;
@@ -67,7 +70,9 @@ export const useClickAction = (
 export const usePropertyKeysFromGeoJsonDataSource = (
   dataSource: GeoJsonDataSource | undefined | null
 ) => {
-  const [propertyKeys, setPropertyKeys] = useState<Set<string>>(new Set());
+  const propertyKeys = useSelectKeys();
+  const dispatch = useDispatch();
+  console.log('hook usePropertyKeysFromGeoJsonDataSource');
 
   useEffect(() => {
     if (dataSource?.entities) {
@@ -78,8 +83,10 @@ export const usePropertyKeysFromGeoJsonDataSource = (
             keys.add(key)
           );
       });
-      setPropertyKeys(keys);
+      //console.log('setKeys', Array.from(keys));
+      dispatch(setKeys(Array.from(keys)));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataSource]);
   return propertyKeys;
 };
