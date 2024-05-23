@@ -28,7 +28,7 @@ export function App() {
               className="leaflet-bar"
               style={{
                 position: 'absolute',
-                bottom: 60,
+                top: 8,
                 left: '50%',
                 width: 800,
                 display: 'flex',

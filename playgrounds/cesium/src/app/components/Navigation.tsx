@@ -24,7 +24,7 @@ export function Navigation({ routes, ...props }) {
         }
   );
 
-  return <Menu {...props} mode="horizontal" theme="dark" items={items} />;
+  return <Menu {...props} mode="horizontal" items={items} />;
 }
 
 export default Navigation;
