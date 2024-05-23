@@ -1,6 +1,7 @@
 import Icon from 'react-cismap/commons/Icon';
 
 const Kartendarstellung = () => {
+  let urlPrefix = window.location.origin + window.location.pathname;
   return (
     <div>
       <p>
@@ -13,10 +14,18 @@ const Kartendarstellung = () => {
         mit der gleichen Hintergrundfarbe (Ocker) verwendet. Hierunter fallen
         zum einen Einrichtungen mit einem individuellen Profil, die
         unterschiedlichen Veranstaltungsarten Raum geben{' '}
-        <img alt="Cluster" height="20" src="images/kontakthof.png" />. Zum
-        anderen umfasst diese Kategorie alle POI, die nur in zweiter Linie
+        <img
+          alt="Cluster"
+          height="20"
+          src={urlPrefix + 'images/kontakthof.png'}
+        />
+        . Zum anderen umfasst diese Kategorie alle POI, die nur in zweiter Linie
         Veranstaltungsorte sind. So ist z. B. die Bergische Musikschule{' '}
-        <img alt="Cluster" height="20" src="images/bergische_musikschule.png" />{' '}
+        <img
+          alt="Cluster"
+          height="20"
+          src={urlPrefix + 'images/bergische_musikschule.png'}
+        />{' '}
         in erster Linie als Bildungseinrichtung eingestuft, in der aber auch
         Konzerte, Lesungen und Theateraufführungen stattfinden.
       </p>
@@ -27,7 +36,7 @@ const Kartendarstellung = () => {
         <img
           alt="Cluster"
           height="30"
-          src="images/veranstaltungsorte_zusammen.png"
+          src={urlPrefix + 'images/veranstaltungsorte_zusammen.png'}
         />
         . Vergrößern Sie ein paar Mal durch direktes Anklicken eines solchen
         Punktes oder mit <Icon name="plus" /> die Darstellung, so werden die
