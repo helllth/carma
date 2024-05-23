@@ -8,10 +8,7 @@ import FeatureCollection from 'react-cismap/FeatureCollection';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
 import { getGazData } from '../../helper/gazData';
-import {
-  getAllEinrichtungen,
-  getPoiClusterIconCreatorFunction,
-} from '../../helper/styler';
+import { getPoiClusterIconCreatorFunction } from '../../helper/styler';
 import Icon from 'react-cismap/commons/Icon';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
@@ -43,20 +40,6 @@ const Map = () => {
       });
     }
   }, [markerSymbolSize]);
-
-  useEffect(() => {
-    const einrichtungen = getAllEinrichtungen().map(
-      (einrichtung) => einrichtung
-    );
-    const veranstaltungen = itemsDictionary?.veranstaltungsarten?.map(
-      (veranstaltung) => veranstaltung
-    );
-    setFilterState({
-      einrichtung: einrichtungen,
-      veranstaltung: veranstaltungen,
-      mode: 'einrichtungen',
-    });
-  }, [itemsDictionary]);
 
   return (
     <TopicMapComponent
