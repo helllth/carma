@@ -13,6 +13,8 @@ import {
   getPoiClusterIconCreatorFunction,
 } from '../../helper/styler';
 import Menu from './Menu';
+import Icon from 'react-cismap/commons/Icon';
+import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -30,6 +32,10 @@ const Map = () => {
   const { clusteringOptions, itemsDictionary } = useContext(
     FeatureCollectionContext
   );
+  // @ts-ignore
+  const { setAppMenuActiveMenuSection, setAppMenuVisible } =
+    useContext(UIDispatchContext);
+
   useEffect(() => {
     getGazData(setGazData);
   }, []);
@@ -81,15 +87,32 @@ const Map = () => {
             navigator: {
               noun: {
                 singular: 'POI',
-                plural: 'POI',
+                plural: 'POIs',
               },
             },
-            noCurrentFeatureTitle: 'Keine POIs gefunden',
+            noFeatureTitle: 'Keine POI gefunden!',
             noCurrentFeatureContent: (
-              <span>
-                Für mehr POIs Ansicht mit verkleinern oder mit dem
-                untenstehenden Link auf das komplette Stadtgebiet zoomen.
-              </span>
+              <p>
+                Für mehr POI Ansicht mit <Icon name="minus-square" />{' '}
+                verkleinern. Um nach Themenfeldern zu filtern, das
+                <a
+                  onClick={() => {
+                    setAppMenuVisible(true);
+                    setAppMenuActiveMenuSection('filter');
+                  }}
+                  className="renderAsLink"
+                >
+                  {' '}
+                  Men&uuml;&nbsp;
+                  <Icon
+                    name="bars"
+                    style={{
+                      color: 'black',
+                    }}
+                  />{' '}
+                  &ouml;ffnen.
+                </a>
+              </p>
             ),
           }}
         />
