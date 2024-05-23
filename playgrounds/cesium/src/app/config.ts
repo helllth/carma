@@ -21,6 +21,10 @@ export const CITYGML_TEST_TILESET = {
   url: `${TILESET_BASE_PATH}tileset.json`,
 };
 
+export const TILESET_BASEMAP_DE = {
+  url: 'https://web3d.basemap.de/cesium/buildings-fly/root.json',
+};
+
 export const FOOTPRINT_GEOJSON_SOURCES = {
   VORONOI: {
     url: `${GEOJSON_BASE_PATH}buildings_voronoi_buffered_2m.json`,

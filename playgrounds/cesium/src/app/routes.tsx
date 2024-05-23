@@ -1,6 +1,7 @@
 import Geojson from './views/Geojson';
 import SingleGeojson from './views/SingleGeojsonSelector';
 import TilesetSelectionFromCityGml from './views/TilesetSelectionFromCityGml';
+import TilesetSelectionFromBaseMapDE from './views/TilesetSelectionBasemapDe';
 //import Full from './views/obsolete/Full';
 //import WithMesh from './views/obsolete/WithMesh';
 import TestCustomViewer from './views/tests/CustomViewer';
@@ -26,11 +27,13 @@ export const viewerRoutes: RouteDescriptor[] = [
   ['/', 'Home', SingleGeojson],
   ['/geojson', 'GeoJson', Geojson],
   ['/citygml', 'CityGML 🚧', TilesetSelectionFromCityGml],
+  ['/basemap-de', 'LOD2 BaseMap.de 🚧', TilesetSelectionFromBaseMapDE],
+
   //['/full', 'Full', Full],
   //['/mesh', 'Mesh', WithMesh],
-  /*
   [
-    '/test',    'Test',
+    '/test',
+    '⚙️ Test',
     [
       ['/', 'Test Home', TestCustomViewer],
       ['/geojson', 'Test GeoJson', TestGeojson],
@@ -38,12 +41,7 @@ export const viewerRoutes: RouteDescriptor[] = [
       ['/viewer', 'Test Viewer', TestCustomViewer],
       ['/tileset', 'Test Tileset', TestTileset],
     ],
-    ]
-    */
-  ['/test-geojson', '⚙️ GeoJson', TestGeojson],
-  ['/test-citygml', '⚙️ CityGML 🚧', TestGeojsonWithCityGML],
-  ['/test-viewer', '⚙️ Viewer', TestCustomViewer],
-  ['/test-tileset', '⚙️ Tileset', TestTileset],
+  ],
 ];
 
 export const otherRoutes: RouteDescriptor[] = [

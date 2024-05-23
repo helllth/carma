@@ -41,7 +41,7 @@ export interface ViewerState {
     };
     tileset: {
       url: string;
-      translation: PlainCartesian3;
+      translation?: PlainCartesian3;
     };
   };
 }

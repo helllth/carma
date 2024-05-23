@@ -4,12 +4,13 @@ import {
   useSelectionTransparencyControl,
   useTilesetControl,
 } from '../utils/controls';
-import { CITYGML_TEST_TILESET } from '../config';
+import { TILESET_BASEMAP_DE } from '../config';
 
 function View() {
   useSelectionTransparencyControl();
   useTilesetControl();
-  return <TilesetSelector uri={CITYGML_TEST_TILESET.url} />;
+
+  return <TilesetSelector uri={TILESET_BASEMAP_DE.url} />;
 }
 
 export default View;

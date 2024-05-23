@@ -26,6 +26,7 @@ const TilesetSelector: React.FC<TilesetSelectorProps> = ({
   single = false,
 }) => {
   const { viewer } = useCesium();
+
   const selectionTransparency = useSelectionTransparency();
   // const selectionRef = useRef<SelectionRef | null>(null);
   const [selectedFeature, setSelectedFeature] =

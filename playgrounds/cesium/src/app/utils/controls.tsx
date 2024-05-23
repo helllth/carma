@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { UIComponentContext } from '../components/UIProvider';
 import {
   setShowTileset,
@@ -8,8 +8,8 @@ import {
 } from '../store/slices/viewer';
 import { setSelectionTransparency, useSelectionTransparency } from '../store';
 import RangeInput from '../components/controls/ReduxRangeInput';
-import Switch from '../components/controls/ReduxSwitch';
-import { Select } from 'antd';
+import ReduxSwitch from '../components/controls/ReduxSwitch';
+import { Select, Switch } from 'antd';
 import {
   useSelectDefaultKey,
   useSelectKey,
@@ -32,7 +32,7 @@ export const uiTilesetOpacitySlider = (
 );
 
 export const uiTilesetToggle = (
-  <Switch
+  <ReduxSwitch
     title={'Tileset anzeigen'}
     actionCreator={setShowTileset}
     valueHook={useShowTileset}
@@ -94,8 +94,6 @@ export function usePropertySelectionControl() {
   const dispatch = useDispatch();
   const action = setKey;
 
-  //  const [localKey, setLocalKey] = useState(key);
-
   useEffect(() => {
     console.log('usePropertySelectionControl', key, defaultKey);
     if (!keys || keys.length === 0) return;
@@ -134,3 +132,4 @@ export function usePropertySelectionControl() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 }
+
