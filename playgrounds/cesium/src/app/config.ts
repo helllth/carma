@@ -17,7 +17,6 @@ export const WUPP3D = {
 const GEOJSON_BASE_PATH = `${APP_BASE_PATH}data/geojson/`;
 const TILESET_BASE_PATH = `${APP_BASE_PATH}data/tiles/`;
 
-
 export const CITYGML_TEST_TILESET = {
   url: `${TILESET_BASE_PATH}tileset.json`,
 };
@@ -64,6 +63,9 @@ const homeOffset = {
   y: -50000, // southwards
   z: 45000, // elevation
 };
+
+export const APP_DEFAULT_TITLE = '3D Viewer Prototype';
+export const APP_DEFAULT_SHORT_TITLE = '3DView';
 
 export const defaultState: RootState = {
   buildings: {
