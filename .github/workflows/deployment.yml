@@ -195,12 +195,22 @@ jobs:
         id: process_deploy_steps
         run: |
           config=$(cat deployment-config.json)
-          deploymentManual=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.repo)
-          baseUrl=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.base)
+
+          deploymentManual=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.repo // "null"')
+          baseUrl=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.base // "null"')
           orgDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.pages.org // "null"')
           prjDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.pages.prj // "null"')
-          projectPath=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].projectPath')
+          projectPath=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].projectPath // "null"')
           containerImage=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.container.image // "null"')
+
+          # Debugging
+          echo "deploymentManual: $deploymentManual"
+          echo "baseUrl: $baseUrl"
+          echo "orgDeploy: $orgDeploy"
+          echo "prjDeploy: $prjDeploy"
+          echo "projectPath: $projectPath"
+          echo "containerImage: $containerImage"
+
           srcPath=".${projectPath#./dist}/src"
           srcMD5="$(echo -n $(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum | cut -f 1 -d ' ')$(md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ') | md5sum | cut -f 1 -d ' ')"
           srcMD5short="${srcMD5:0:4}"
