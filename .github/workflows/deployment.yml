@@ -201,6 +201,7 @@ jobs:
           containerImage=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.container.image // "null"')
 
           # Debugging
+
           echo "deploymentManual: $deploymentManual"
           echo "baseUrl: $baseUrl"
           echo "orgDeploy: $orgDeploy"
