@@ -64,8 +64,18 @@ const FilterUI = () => {
                 <Form.Check
                   readOnly={true}
                   key={'filter.prbr.envzone.within'}
-                  onClick={(e) => {}}
-                  checked={true}
+                  onClick={(e) => {
+                    const newFilterState = { ...filterState };
+                    // @ts-ignore
+                    if (e.target.checked) {
+                      newFilterState.envZoneWithin = true;
+                    } else {
+                      newFilterState.envZoneWithin = false;
+                    }
+
+                    setFilterState(newFilterState);
+                  }}
+                  checked={filterState.envZoneWithin}
                   inline
                   label="innerhalb"
                 />
@@ -74,8 +84,18 @@ const FilterUI = () => {
                 <Form.Check
                   readOnly={true}
                   key={'filter.prbr.envzone.outside'}
-                  onClick={(e) => {}}
-                  checked={true}
+                  onClick={(e) => {
+                    const newFilterState = { ...filterState };
+                    // @ts-ignore
+                    if (e.target.checked) {
+                      newFilterState.envZoneOutside = true;
+                    } else {
+                      newFilterState.envZoneOutside = false;
+                    }
+
+                    setFilterState(newFilterState);
+                  }}
+                  checked={filterState.envZoneOutside}
                   inline
                   label="außerhalb"
                 />
@@ -106,8 +126,18 @@ const FilterUI = () => {
                 <Form.Check
                   readOnly={true}
                   key={'filter.prbr.pandr'}
-                  onClick={(e) => {}}
-                  checked={true}
+                  onClick={(e) => {
+                    const newFilterState = { ...filterState };
+                    // @ts-ignore
+                    if (e.target.checked) {
+                      newFilterState.pandr = true;
+                    } else {
+                      newFilterState.pandr = false;
+                    }
+
+                    setFilterState(newFilterState);
+                  }}
+                  checked={filterState.pandr}
                   inline
                   label="Park+Ride (P+R)"
                 />
@@ -116,8 +146,18 @@ const FilterUI = () => {
                 <Form.Check
                   readOnly={true}
                   key={'filter.prbr.bandr'}
-                  onClick={(e) => {}}
-                  checked={true}
+                  onClick={(e) => {
+                    const newFilterState = { ...filterState };
+                    // @ts-ignore
+                    if (e.target.checked) {
+                      newFilterState.bandr = true;
+                    } else {
+                      newFilterState.bandr = false;
+                    }
+
+                    setFilterState(newFilterState);
+                  }}
+                  checked={filterState.bandr}
                   inline
                   label="Bike+Ride (B+R)"
                 />
@@ -125,7 +165,16 @@ const FilterUI = () => {
               <br />
               <br />
               <p>
-                <Button onClick={() => {}}>
+                <Button
+                  onClick={() => {
+                    setFilterState({
+                      pandr: true,
+                      bandr: true,
+                      envZoneOutside: true,
+                      envZoneWithin: true,
+                    });
+                  }}
+                >
                   Filter zurücksetzen (alle Anlagen anzeigen)
                 </Button>
               </p>

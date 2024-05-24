@@ -40,7 +40,13 @@ export function App() {
       clusteringOptions={{
         iconCreateFunction: getPoiClusterIconCreatorFunction(35),
       }}
-      // itemFilterFunction={itemFilterFunction}
+      itemFilterFunction={itemFilterFunction}
+      filterState={{
+        pandr: true,
+        bandr: true,
+        envZoneOutside: true,
+        envZoneWithin: true,
+      }}
       additionalLayerConfiguration={{
         umweltzonen: {
           title: <span>Umweltzonen</span>,
