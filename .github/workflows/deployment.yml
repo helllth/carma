@@ -197,9 +197,10 @@ jobs:
           config=$(cat deployment-config.json)
           deploymentManual=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.repo)
           baseUrl=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.base)
-          orgDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.org)
-          prjDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.prj)
+          orgDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.pages.org // "null"')
+          prjDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.pages.prj // "null"')
           projectPath=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].projectPath')
+          containerImage=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.container.image // "null"')
           srcPath=".${projectPath#./dist}/src"
           srcMD5="$(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum; md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ')"
           srcMD5short="${srcMD5:0:4}"
@@ -215,6 +216,7 @@ jobs:
             deployment_project="${deploymentManual}"
           fi
 
+
           echo "PROJECT_NAME=${{ matrix.project }}" >> $GITHUB_ENV
           echo "EXTERNAL_REPO=${deployment_project}" >> $GITHUB_ENV
           echo "BASE_URL=${baseUrl}" >> $GITHUB_ENV
@@ -224,6 +226,7 @@ jobs:
           echo "SRC_MD5=${srcMD5}" >> $GITHUB_ENV
           echo "SRC_MD5_SHORT=${srcMD5short}" >> $GITHUB_ENV
           echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV
+          echo "CONTAINER_IMAGE=${containerImage}" >> $GITHUB_ENV
         shell: bash
       - name: Debug Outputs
         run: |
@@ -235,6 +238,7 @@ jobs:
           echo "EXTERNAL_REPO: $EXTERNAL_REPO"
           echo "SRC_PATH: $SRC_PATH"
           echo "SRC_MD5: $SRC_MD5"
+          echo "CONTAINER_IMAGE: $CONTAINER_IMAGE"
           echo -----------------------------------
       - name: Set version
         run: |
@@ -262,14 +266,26 @@ jobs:
           echo "NX_CLOUD_ACCESS_TOKEN=${{ secrets.NX_CLOUD_ACCESS_TOKEN }}" >> nx-cloud.env
       - name: Build project
         run: |
-          npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}" --emptyOutDir
+          npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}"
         shell: bash
       - name: Deploy using GH Pages action
+        if: env.EXTERNAL_REPO != 'null' && env.EXTERNAL_REPO != ''
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
           external_repository: ${{ env.EXTERNAL_REPO }}
           publish_dir: ${{ env.PROJECT_PATH }}
+      - name: Log in to Docker Hub
+        if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build container if container image is set
+        if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
+        run: |
+          INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ matrix.project }}:container
+        shell: bash
 
   single_build:
     runs-on: ubuntu-latest
@@ -299,13 +315,13 @@ jobs:
 
           deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.repo')
           baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.base')
-          orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.org')
-          prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.prj')
+          orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.pages.org // "null"')
+          prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.pages.prj // "null"')
           projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
           srcPath=".${projectPath#./dist}/src"
           srcMD5="$(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum; md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ')"
           srcMD5short="${srcMD5:0:4}"
-
+          containerImage=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.container.image // "null"')
           if [ "${baseUrl}" = "null" ]; then
             baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
           else
@@ -325,6 +341,8 @@ jobs:
           echo "SRC_MD5=${srcMD5}" >> $GITHUB_ENV
           echo "SRC_MD5_SHORT=${srcMD5short}" >> $GITHUB_ENV
           echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV
+          echo "CONTAINER_IMAGE=${containerImage}" >> $GITHUB_ENV
+
         shell: bash
       - name: Debug Outputs
         run: |
@@ -336,6 +354,7 @@ jobs:
           echo "EXTERNAL_REPO: $EXTERNAL_REPO"
           echo "SRC_PATH: $SRC_PATH"
           echo "SRC_MD5: $SRC_MD5"
+          echo "CONTAINER_IMAGE: $CONTAINER_IMAGE"
           echo -----------------------------------
       - name: Set version
         run: |
@@ -357,11 +376,23 @@ jobs:
           echo "NX_CLOUD_ACCESS_TOKEN=${{ secrets.NX_CLOUD_ACCESS_TOKEN }}" >> nx-cloud.env
       - name: Build project
         run: |
-          npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="${{ env.BASE_URL }}" --emptyOutDir
+          npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="${{ env.BASE_URL }}"
         shell: bash
       - name: Deploy
+        if: env.EXTERNAL_REPO != 'null' && env.EXTERNAL_REPO != ''
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
           external_repository: ${{ env.EXTERNAL_REPO }}
           publish_dir: ${{ env.PROJECT_PATH }}
+      - name: Log in to Docker Hub
+        if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build container if container image is set
+        if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
+        run: |
+          INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ github.event.inputs.project-name }}:container
+        shell: bash
