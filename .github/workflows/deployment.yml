@@ -197,6 +197,7 @@ jobs:
           project_name="${{ matrix.project }}"
           branch="${{ steps.extract_branch.outputs.branch }}"
 
+
           deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment[$branch].repo // "null"')
           baseUrl=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment[$branch].base // "null"')
           orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment[$branch].pages.org // "null"')
@@ -215,6 +216,9 @@ jobs:
           echo "prjDeploy: $prjDeploy"
           echo "projectPath: $projectPath"
           echo "containerImage: $containerImage"
+          echo "srcPath: $srcPath"  # Debugging
+          echo "srcMD5: $srcMD5"
+          echo "srcMD5short: $srcMD5short"
 
 
           if [ "${baseUrl}" = "null" ]; then
@@ -392,7 +396,7 @@ jobs:
           npx nx run ${{ github.event.inputs.project-name }}:build --configuration=production --base="${{ env.BASE_URL }}"
         shell: bash
       - name: Deploy
-        if: env.EXTERNAL_REPO != 'null' && env.EXTERNAL_REPO != ''
+        if: env.EXTERNAL_REPO != 'null' && env.EXTERNAL_REPO != '' && env.EXTERNAL_REPO != 'null/null'
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
