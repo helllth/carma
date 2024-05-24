@@ -303,7 +303,7 @@ jobs:
       - name: Build container if container image is set
         if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
         run: |
-          INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ matrix.project }}:container
+          INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ matrix.project }}:container
         shell: bash
 
   single_build:
@@ -411,5 +411,5 @@ jobs:
       - name: Build container if container image is set
         if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
         run: |
-          INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ github.event.inputs.project-name }}:container
+          INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ github.event.inputs.project-name }}:container
         shell: bash
