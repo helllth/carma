@@ -13,8 +13,6 @@ const getSignature = (properties) => {
 const convertItemToFeature = async (itemIn) => {
   let clonedItem = JSON.parse(JSON.stringify(itemIn));
 
-  console.log('xxx', clonedItem);
-
   let item = await addSVGToProps(
     clonedItem,
     (i) => getSignature(i),
