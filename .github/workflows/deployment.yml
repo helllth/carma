@@ -201,7 +201,7 @@ jobs:
           prjDeploy=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.prj)
           projectPath=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].projectPath')
           srcPath=".${projectPath#./dist}/src"
-          srcMD5="$(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum  | cut -f 1 -d ' ')"
+          srcMD5="$(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum; md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ')"
           srcMD5short="${srcMD5:0:4}"
 
           if [ "${baseUrl}" = "null" ]; then
@@ -303,7 +303,7 @@ jobs:
           prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.prj')
           projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
           srcPath=".${projectPath#./dist}/src"
-          srcMD5="$(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum  | cut -f 1 -d ' ')"
+          srcMD5="$(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum; md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ')"
           srcMD5short="${srcMD5:0:4}"
 
           if [ "${baseUrl}" = "null" ]; then
