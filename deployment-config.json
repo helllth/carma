@@ -30,6 +30,21 @@
       },
       "projectPath": "./dist/apps/topicmaps/kulturstadtplan"
     },
+    "x-and-ride": {
+      "deployment": {
+        "manual": {
+          "org": "carma-dev-deployments",
+          "prj": "topicmaps-xandride"
+        },
+        "auto": {
+          "dev": {
+            "org": "carma-dev-deployments",
+            "prj": "topicmaps-xandride"
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/x-and-ride"
+    },
     "bplan-auskunft": {
       "deployment": {
         "manual": {
