@@ -33,7 +33,7 @@ export function App() {
       referenceSystem={MappingConstants.crs25832}
       getFeatureStyler={getFeatureStyler}
       featureTooltipFunction={(feature) => feature?.text}
-      // titleFactory={titleFactory}
+      titleFactory={titleFactory}
       convertItemToFeature={convertItemToFeature}
       clusteringOptions={{
         iconCreateFunction: getPoiClusterIconCreatorFunction(35),
