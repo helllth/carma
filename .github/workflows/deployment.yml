@@ -309,7 +309,7 @@ jobs:
       - name: Get properties from json
         id: get_props_from_json
         run: |
-          config=$(cat deployment-config.json)export 
+          config=$(cat deployment-config.json) 
           project_name="${{ github.event.inputs.project-name }}"
           deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.repo')
           baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.base')
