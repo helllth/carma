@@ -14,7 +14,6 @@ import {
 } from '../helper/styler';
 
 import titleFactory from '../helper/titleFactory';
-import createItemsDictionary from '../helper/createDictionary';
 import itemFilterFunction from '../helper/filter';
 import { FeatureCollectionDisplayWithTooltipLabels } from 'react-cismap';
 import uwz from './components/UWZ';
@@ -30,7 +29,6 @@ export function App() {
         'https://wupp-topicmaps-data.cismet.de/data/prbr.data.json'
       }
       referenceSystemDefinition={MappingConstants.proj4crs25832def}
-      createFeatureItemsDictionary={createItemsDictionary}
       mapEPSGCode="25832"
       referenceSystem={MappingConstants.crs25832}
       getFeatureStyler={getFeatureStyler}
