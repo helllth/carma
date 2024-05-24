@@ -79,7 +79,6 @@ export const useClickActionFootprints = (
 export const useClickActionTileset = (
   viewer: Viewer | undefined,
   url: string,
-  idProperty: string = 'UUID',
   setSelectedFeature: (feature: Cesium3DTileFeature | null) => void,
   drillPickLimit = 5
 ) => {
@@ -87,6 +86,7 @@ export const useClickActionTileset = (
   //const url = useViewerDataSources().tileset.url;
 
   useEffect(() => {
+    console.log('HOOK: useClickActionTileset');
     if (!viewer?.scene || !viewer?.canvas) return;
     const { canvas, scene } = viewer;
 
@@ -100,7 +100,6 @@ export const useClickActionTileset = (
       const pickedObjects = scene.drillPick(position, drillPickLimit);
       let feature;
 
-      console.log('pickedObjects', pickedObjects);
       for (let i = 0; i < pickedObjects.length; i++) {
         if (
           pickedObjects[i] instanceof Cesium3DTileFeature &&

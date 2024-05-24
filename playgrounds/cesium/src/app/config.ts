@@ -1,6 +1,6 @@
-import { Cartesian3, Color } from 'cesium';
+import { Cartesian3, Color, ColorMaterialProperty } from 'cesium';
 import { RootState } from './store';
-import { colorToArray } from './lib/cesiumHelpers';
+import { colorToArray } from './utils/cesiumHelpers';
 
 const APP_BASE_PATH = import.meta.env.BASE_URL;
 export const CESIUM_PATHNAME = '__cesium__';
@@ -19,24 +19,35 @@ const TILESET_BASE_PATH = `${APP_BASE_PATH}data/tiles/`;
 
 export const CITYGML_TEST_TILESET = {
   url: `${TILESET_BASE_PATH}tileset.json`,
+  idProperty:
+    'http://repository.gdi-de.org/schemas/adv/citygml/fdv/art.htm#_9100',
 };
 
 export const TILESET_BASEMAP_DE = {
   url: 'https://web3d.basemap.de/cesium/buildings-fly/root.json',
 };
 
+export const DEFAULT_ID_PROPERTY = 'UUID';
+
+export const DEFAULT_SELECTION_HIGHLIGHT_MATERIAL = new ColorMaterialProperty(
+  Color.YELLOW.withAlpha(0.7)
+);
+
 export const FOOTPRINT_GEOJSON_SOURCES = {
   VORONOI: {
     url: `${GEOJSON_BASE_PATH}buildings_voronoi_buffered_2m.json`,
     name: 'Voronoi 2m',
+    idProperty: 'UUID',
   },
   BUILDINGS: {
     url: `${GEOJSON_BASE_PATH}buildings.json`,
     name: 'Buildings',
+    idProperty: 'UUID',
   },
   BUFFERED: {
     url: `${GEOJSON_BASE_PATH}buildings_buffered_1m.json`,
     name: 'Buffered 1m',
+    idProperty: 'UUID',
   },
 };
 

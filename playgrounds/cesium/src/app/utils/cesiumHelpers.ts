@@ -12,6 +12,11 @@ import { ColorRgbaArray, TilesetConfig } from '../..';
 
 export const toDegFactor = 180 / Math.PI;
 
+export const SELECTABLE_TRANSPARENT_3DTILESTYLE = create3DTileStyle({
+  color: `vec4(1.0, 0.0, 0.0, 0.01)`,
+  show: true,
+});
+
 export function getModelMatrix(config: TilesetConfig, heightOffset = 0) {
   const { x, y, z } = config.translation;
   const surface = Cartesian3.fromRadians(x, y, z);

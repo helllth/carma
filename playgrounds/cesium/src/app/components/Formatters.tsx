@@ -1,4 +1,4 @@
-import { toDegFactor } from '../lib/cesiumHelpers';
+import { toDegFactor } from '../utils/cesiumHelpers';
 
 interface HighlightOptions {
   digits?: number;

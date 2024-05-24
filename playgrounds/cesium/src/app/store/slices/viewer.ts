@@ -2,7 +2,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import defaultState from '../../config';
 import { Cartesian3, Color } from 'cesium';
 import { ColorRgbaArray } from '../../..';
-import { colorToArray } from '../../lib/cesiumHelpers';
+import { colorToArray } from '../../utils/cesiumHelpers';
 import { useSelector } from 'react-redux';
 import { RootState } from '..';
 
@@ -10,6 +10,19 @@ type PlainCartesian3 = {
   x: number;
   y: number;
   z: number;
+};
+
+export type TilesetConfig = {
+  url: string;
+  name?: string;
+  translation?: PlainCartesian3;
+  idProperty?: string;
+};
+
+export type GeoJsonConfig = {
+  url: string;
+  name?: string;
+  idProperty?: string;
 };
 
 export interface ViewerState {
@@ -35,14 +48,8 @@ export interface ViewerState {
     };
   };
   dataSources: {
-    footprintGeoJson: {
-      url: string;
-      name: string;
-    };
-    tileset: {
-      url: string;
-      translation?: PlainCartesian3;
-    };
+    footprintGeoJson: GeoJsonConfig;
+    tileset: TilesetConfig;
   };
 }
 

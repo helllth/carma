@@ -15,9 +15,13 @@ import {
   Cartesian2,
 } from 'cesium';
 import ColorHash from 'color-hash';
-import { useClickActionFootprints, usePropertyKeysFromGeoJsonDataSource } from '../hooks';
+import {
+  useClickActionFootprints,
+  usePropertyKeysFromGeoJsonDataSource,
+} from '../hooks';
 import { useSelectionTransparency } from '../store';
 import { useSelectKey } from '../store/slices/buildings';
+import { getColorMaterialProperty } from '../utils/selections';
 
 interface GeoJsonSelectorProps {
   srcExtruded: string;
@@ -102,35 +106,20 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
           entity.show = false;
           entity.polygon.material = getColorMaterialProperty(
             entity,
-            clampedFootprintAlpha
+            clampedFootprintAlpha,
+            selectKey,
+            colorLookup,
+            colorHash
           );
         }
       });
   };
 
-  const getColorMaterialProperty = (
-    entity: Entity,
-    alpha: number
-  ): ColorMaterialProperty => {
-    const str =
-      entity.properties && selectKey
-        ? entity.properties[selectKey].toString()
-        : 'default';
-    const colorHexKey = colorHash.hex(str).substring(1); // remove # from the beginning
-
-    // If the Color doesn't exist yet, create it
-    if (!colorLookup[colorHexKey]) {
-      const [r, g, b] = colorHash.rgb(str);
-      colorLookup[colorHexKey] = new Color(r / 255, g / 255, b / 255, alpha);
-      return new ColorMaterialProperty(colorLookup[colorHexKey]);
-    }
-
-    // Update the transparency of the color only
-    colorLookup[colorHexKey].alpha = alpha;
-    return new ColorMaterialProperty(colorLookup[colorHexKey]);
-  };
-
-  const clickData = useClickActionFootprints(viewer, idProperty, setSelectedEntity);
+  const clickData = useClickActionFootprints(
+    viewer,
+    idProperty,
+    setSelectedEntity
+  );
   usePropertyKeysFromGeoJsonDataSource(clampedFootprints);
 
   useEffect(() => {
@@ -140,7 +129,10 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
         if (entity.polygon !== undefined) {
           entity.polygon.material = getColorMaterialProperty(
             entity,
-            clampedFootprintAlpha
+            clampedFootprintAlpha,
+            selectKey,
+            colorLookup,
+            colorHash
           );
           //entity.polygon.classificationType = new ConstantProperty(ClassificationType.CESIUM_3D_TILE);
           //entity.shadows = ShadowMode.ENABLED;
@@ -169,7 +161,11 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
               entity?.properties &&
               entity.properties[idProperty].getValue() === selectedEntity
             ) {
-              console.log('entity', entity.id);
+              console.log(
+                'entity',
+                entity.id,
+                entity.properties.UUID?.getValue()
+              );
               entity.show = true;
               entity.polygon.material = new ColorMaterialProperty(
                 HIGHLIGHT_COLOR.withAlpha(HIGHLIGHT_COLOR_ALPHA)

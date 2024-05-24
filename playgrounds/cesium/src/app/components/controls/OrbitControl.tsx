@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useRef } from 'react';
 import { useCesium } from 'resium';
 import OnMapButton from './OnMapButton';
-import { getCanvasCenter } from '../../lib/cesiumHelpers';
+import { getCanvasCenter } from '../../utils/cesiumHelpers';
 import { DEFAULT_ROTATION_SPEED } from '../../config';
 import { Cartesian3, Color, Matrix4, Transforms, Viewer } from 'cesium';
 import {

@@ -4,7 +4,7 @@ import {
   useTilesetOpacity,
   useViewerDataSources,
 } from '../../../store/slices/viewer';
-import { create3DTileStyle } from '../../../lib/cesiumHelpers';
+import { create3DTileStyle } from '../../../utils/cesiumHelpers';
 
 export const BaseTileset = () => {
   const tileset = useViewerDataSources().tileset;

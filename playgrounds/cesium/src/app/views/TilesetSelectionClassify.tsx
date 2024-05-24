@@ -5,7 +5,7 @@ import {
   useTilesetControl,
 } from '../utils/controls';
 import { CITYGML_TEST_TILESET } from '../config';
-import { create3DTileStyle } from '../lib/cesiumHelpers';
+import { create3DTileStyle } from '../utils/cesiumHelpers';
 
 function View() {
   useSelectionTransparencyControl();
@@ -13,7 +13,7 @@ function View() {
   return (
     <TilesetSelector
       debug={true}
-      url={CITYGML_TEST_TILESET.url}
+      tileset={CITYGML_TEST_TILESET}
       isClassification
       style={create3DTileStyle({
         color: `vec4(1.0, 0.0, 0.0, 0.25)`,
