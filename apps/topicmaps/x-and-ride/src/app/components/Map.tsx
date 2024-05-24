@@ -10,24 +10,33 @@ import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFrom
 import { getGazData } from '../../helper/gazData';
 import { getPoiClusterIconCreatorFunction } from '../../helper/styler';
 import Icon from 'react-cismap/commons/Icon';
-import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
+import {
+  UIContext,
+  UIDispatchContext,
+} from 'react-cismap/contexts/UIContextProvider';
 import Menu from './Menu';
+import SecondaryInfoModal from './menu/SecondaryInfoModal';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
   // @ts-ignore
-  const { setClusteringOptions, setFilterState } = useContext(
-    FeatureCollectionDispatchContext
-  );
+  const { setClusteringOptions } = useContext(FeatureCollectionDispatchContext);
   // @ts-ignore
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   // @ts-ignore
-  const { clusteringOptions, itemsDictionary } = useContext(
+  const { clusteringOptions, selectedFeature } = useContext(
     FeatureCollectionContext
   );
   // @ts-ignore
-  const { setAppMenuActiveMenuSection, setAppMenuVisible } =
-    useContext(UIDispatchContext);
+  const { secondaryInfoVisible } = useContext(UIContext);
+  const {
+    // @ts-ignore
+    setAppMenuActiveMenuSection,
+    // @ts-ignore
+    setAppMenuVisible,
+    // @ts-ignore
+    setSecondaryInfoVisible,
+  } = useContext(UIDispatchContext);
 
   useEffect(() => {
     getGazData(setGazData);
@@ -54,6 +63,7 @@ const Map = () => {
         <GenericInfoBoxFromFeature
           pixelwidth={350}
           config={{
+            displaySecondaryInfoAction: true,
             city: 'Wuppertal',
             navigator: {
               noun: {
@@ -90,6 +100,12 @@ const Map = () => {
         />
       }
     >
+      {secondaryInfoVisible && (
+        <SecondaryInfoModal
+          feature={selectedFeature}
+          setOpen={setSecondaryInfoVisible}
+        />
+      )}
       <FeatureCollection></FeatureCollection>
     </TopicMapComponent>
   );
