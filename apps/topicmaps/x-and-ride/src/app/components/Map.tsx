@@ -11,6 +11,7 @@ import { getGazData } from '../../helper/gazData';
 import { getPoiClusterIconCreatorFunction } from '../../helper/styler';
 import Icon from 'react-cismap/commons/Icon';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
+import Menu from './Menu';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -44,7 +45,7 @@ const Map = () => {
   return (
     <TopicMapComponent
       gazData={gazData}
-      modalMenu={<></>}
+      modalMenu={<Menu />}
       locatorControl={true}
       photoLightBox
       gazetteerSearchPlaceholder="P+R | B+R | Stadtteil | Adresse | POI"
