@@ -46,7 +46,7 @@ const TilesetSelector: React.FC<TilesetSelectorProps> = ({
       console.log('selectedFeature is null');
     } else {
       selectedFeature.color = HIGHLIGHT_COLOR.withAlpha(selectionTransparency);
-      console.log('selectedFeature', clickData?.properties);
+      console.log('selectedFeature', clickData?.properties, selectedFeature);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFeature, clickData]);
@@ -54,6 +54,7 @@ const TilesetSelector: React.FC<TilesetSelectorProps> = ({
   return (
     <Cesium3DTileset
       url={url}
+      debugShowBoundingVolume={debug}
       classificationType={
         isClassification ? ClassificationType.CESIUM_3D_TILE : undefined
       }

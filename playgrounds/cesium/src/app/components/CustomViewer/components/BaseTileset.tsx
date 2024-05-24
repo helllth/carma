@@ -21,6 +21,7 @@ export const BaseTileset = () => {
       <Cesium3DTileset
         url={tileset.url}
         style={style}
+        enableCollision={true}
         preloadWhenHidden={true}
         onInitialTilesLoad={() =>
           console.log('CustomViewer: Base Tileset Ready')
