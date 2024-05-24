@@ -198,31 +198,44 @@ jobs:
           branch="${{ steps.extract_branch.outputs.branch }}"
 
 
-          deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment[$branch].repo // "null"')
-          baseUrl=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment[$branch].base // "null"')
-          orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment[$branch].pages.org // "null"')
-          prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment[$branch].pages.prj // "null"')
+          # Directly check the structure
+          echo "$config" | jq -r ".projects[\"$project_name\"]"
+          echo "$config" | jq -r ".projects[\"$project_name\"].deployment"
+          echo "$config" | jq -r ".projects[\"$project_name\"].deployment.auto"
+          echo "$config" | jq -r ".projects[\"$project_name\"].deployment.auto[\"$branch\"]"
+
+          # Ensure jq variables are passed correctly
+          deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment.auto[$branch].repo // "null"')
+          baseUrl=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment.auto[$branch].base // "null"')
+          orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment.auto[$branch].pages.org // "null"')
+          prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment.auto[$branch].pages.prj // "null"')
           projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath // "null"')
-          containerImage=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment[$branch].container.image // "null"')
-          srcPath=".${projectPath#./dist}/src"
-          srcMD5="$(echo -n $(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum | cut -f 1 -d ' ')$(md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ') | md5sum | cut -f 1 -d ' ')"
-          srcMD5short="${srcMD5:0:4}"
+          containerImage=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment.auto[$branch].container.image // "null"')
 
           # Debugging
-
           echo "deploymentManual: $deploymentManual"
           echo "baseUrl: $baseUrl"
           echo "orgDeploy: $orgDeploy"
           echo "prjDeploy: $prjDeploy"
           echo "projectPath: $projectPath"
           echo "containerImage: $containerImage"
+
+          srcPath=".${projectPath#./dist}/src"
           echo "srcPath: $srcPath"  # Debugging
+
+          srcMD5="$(echo -n $(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum | cut -f 1 -d ' ')$(md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ') | md5sum | cut -f 1 -d ' ')"
+          srcMD5short="${srcMD5:0:4}"
+
+          # Debugging
           echo "srcMD5: $srcMD5"
           echo "srcMD5short: $srcMD5short"
 
-
           if [ "${baseUrl}" = "null" ]; then
-            baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
+            if [ "${orgDeploy}" = "null" ]; then
+              baseUrl="/"
+            else
+              baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
+            fi
           else
             baseUrl="${baseUrl}"
           fi
@@ -303,7 +316,7 @@ jobs:
       - name: Build container if container image is set
         if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
         run: |
-          INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ matrix.project }}:container
+          INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}-latest" npx nx run ${{ matrix.project }}:container
         shell: bash
 
   single_build:
@@ -338,7 +351,11 @@ jobs:
           srcMD5="$(echo -n $(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum | cut -f 1 -d ' ')$(md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ') | md5sum | cut -f 1 -d ' ')"          srcMD5short="${srcMD5:0:4}"
           containerImage=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.container.image // "null"')
           if [ "${baseUrl}" = "null" ]; then
-            baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
+            if [ "${orgDeploy}" = "null" ]; then
+              baseUrl="/"
+            else
+              baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
+            fi
           else
             baseUrl="${baseUrl}"
           fi
