@@ -62,6 +62,16 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "container": {
+      "executor": "@nx-tools/nx-container:build",
+      "dependsOn": ["build"],
+      "options": {
+        "engine": "docker",
+        "platforms": ["linux/amd64", "linux/arm64"],
+        "push": true,
+        "tags": ["cismet/carma-ais-korschenbroich:latest"]
+      }
     }
   },
   "tags": []

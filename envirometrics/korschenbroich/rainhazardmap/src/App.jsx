@@ -75,7 +75,7 @@ function App() {
         config={config.config}
         homeZoom={17}
         homeCenter={[51.159716445861676, 6.578933000564575]}
-        modeSwitcherTitle="Starkregengefahrenkarte"
+        modeSwitcherTitle="AIS Starkregenvorsorge Korschenbroich"
         documentTitle="AIS Korschenbroich"
         gazData={gazData}
       >
