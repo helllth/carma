@@ -1,5 +1,5 @@
 {
-  "name": "XandRide",
+  "name": "x-and-ride",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/topicmaps/x-and-ride/src",
   "projectType": "application",
@@ -24,15 +24,15 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "XandRide:build"
+        "buildTarget": "x-and-ride:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "XandRide:build:development",
+          "buildTarget": "x-and-ride:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "XandRide:build:production",
+          "buildTarget": "x-and-ride:build:production",
           "hmr": false
         }
       }
@@ -41,14 +41,14 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "XandRide:build"
+        "buildTarget": "x-and-ride:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "XandRide:build:development"
+          "buildTarget": "x-and-ride:build:development"
         },
         "production": {
-          "buildTarget": "XandRide:build:production"
+          "buildTarget": "x-and-ride:build:production"
         }
       }
     },
