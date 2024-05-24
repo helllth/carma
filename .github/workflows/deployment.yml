@@ -194,7 +194,7 @@ jobs:
           config=$(cat deployment-config.json)
 
 
-          project_name="${{ github.event.inputs.project-name }}"
+          project_name="${{ matrix.project }}"
           branch="${{ steps.extract_branch.outputs.branch }}"
 
           deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment[$branch].repo // "null"')
