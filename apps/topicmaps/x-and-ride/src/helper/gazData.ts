@@ -12,6 +12,7 @@ export const getGazData = async (setGazData) => {
   sources.quartiere = await md5FetchText(prefix, host + '/data/quartiere.json');
   sources.pois = await md5FetchText(prefix, host + '/data/pois.json');
   sources.kitas = await md5FetchText(prefix, host + '/data/kitas.json');
+  sources.prbr = await md5FetchText(prefix, host + '/data/prbr.json');
 
   const gazData = getGazDataForTopicIds(sources, [
     'pois',
@@ -19,6 +20,7 @@ export const getGazData = async (setGazData) => {
     'bezirke',
     'quartiere',
     'adressen',
+    'prbr',
   ]);
 
   setGazData(gazData);
