@@ -10,7 +10,7 @@ function View() {
   useSelectionTransparencyControl();
   useTilesetControl();
 
-  return <TilesetSelector uri={TILESET_BASEMAP_DE.url} />;
+  return <TilesetSelector url={TILESET_BASEMAP_DE.url} />;
 }
 
 export default View;

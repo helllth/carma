@@ -100,6 +100,7 @@ export const useClickActionTileset = (
       const pickedObjects = scene.drillPick(position, drillPickLimit);
       let feature;
 
+      console.log('pickedObjects', pickedObjects);
       for (let i = 0; i < pickedObjects.length; i++) {
         if (
           pickedObjects[i] instanceof Cesium3DTileFeature &&

@@ -2,6 +2,7 @@ import Geojson from './views/Geojson';
 import SingleGeojson from './views/SingleGeojsonSelector';
 import TilesetSelectionFromCityGml from './views/TilesetSelectionFromCityGml';
 import TilesetSelectionFromBaseMapDE from './views/TilesetSelectionBasemapDe';
+import TilesetSelectionClassify from './views/TilesetSelectionClassify';
 //import Full from './views/obsolete/Full';
 //import WithMesh from './views/obsolete/WithMesh';
 import TestCustomViewer from './views/tests/CustomViewer';
@@ -26,8 +27,9 @@ export type RouteDescriptor = RouteItem | RoutePath;
 export const viewerRoutes: RouteDescriptor[] = [
   ['/', 'Home', SingleGeojson],
   ['/geojson', 'GeoJson', Geojson],
-  ['/citygml', 'CityGML 🚧', TilesetSelectionFromCityGml],
-  ['/basemap-de', 'LOD2 BaseMap.de 🚧', TilesetSelectionFromBaseMapDE],
+  ['/citygml', 'Tiles CityGML 🚧', TilesetSelectionFromCityGml],
+  ['/citygml-classify', 'Classify by CityGML 🚧', TilesetSelectionClassify],
+  ['/basemap-de', 'Tiles BaseMap.de 🚧', TilesetSelectionFromBaseMapDE],
 
   //['/full', 'Full', Full],
   //['/mesh', 'Mesh', WithMesh],

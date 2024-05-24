@@ -1,29 +1,31 @@
 import { Cesium3DTileset, useCesium } from 'resium';
 import { useState, useEffect } from 'react';
-import { Cesium3DTileFeature, Color, ColorMaterialProperty } from 'cesium';
+import {
+  Cesium3DTileFeature,
+  Cesium3DTileStyle,
+  ClassificationType,
+  Color,
+} from 'cesium';
 import { useClickActionTileset } from '../hooks';
 import { useSelectionTransparency } from '../store';
-import { useSelectKey } from '../store/slices/buildings';
 
 interface TilesetSelectorProps {
-  uri: string;
   debug?: boolean;
   idProperty?: string;
+  isClassification?: boolean;
   single?: boolean;
+  style?: Cesium3DTileStyle;
+  url: string;
 }
 
-//const DEFAULT_TILESET_ALPHA = 0.7;
 const HIGHLIGHT_COLOR = Color.YELLOW;
-
-const DEFAULT_EXTRUDED_MATERIAL = new ColorMaterialProperty(
-  Color.WHITE.withAlpha(1 / 256) // needs to result in non-zero texture value to be available for selection!
-);
-
 const TilesetSelector: React.FC<TilesetSelectorProps> = ({
-  uri,
+  url,
   debug = false,
   idProperty = 'UUID',
   single = false,
+  style,
+  isClassification = false,
 }) => {
   const { viewer } = useCesium();
 
@@ -31,10 +33,10 @@ const TilesetSelector: React.FC<TilesetSelectorProps> = ({
   // const selectionRef = useRef<SelectionRef | null>(null);
   const [selectedFeature, setSelectedFeature] =
     useState<Cesium3DTileFeature | null>(null);
-  const selectKey = useSelectKey();
+
   const clickData = useClickActionTileset(
     viewer,
-    uri,
+    url,
     idProperty,
     setSelectedFeature
   );
@@ -49,7 +51,16 @@ const TilesetSelector: React.FC<TilesetSelectorProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFeature, clickData]);
 
-  return <Cesium3DTileset url={uri} />;
+  return (
+    <Cesium3DTileset
+      url={url}
+      classificationType={
+        isClassification ? ClassificationType.CESIUM_3D_TILE : undefined
+      }
+      preloadWhenHidden={true}
+      style={style}
+    />
+  );
 };
 
 export default TilesetSelector;
