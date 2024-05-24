@@ -312,7 +312,7 @@ jobs:
         run: |
           config=$(cat deployment-config.json)
           project_name="${{ github.event.inputs.project-name }}"
-
+          echo $config
           deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.repo')
           baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.base')
           orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.pages.org // "null"')
