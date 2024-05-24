@@ -68,13 +68,12 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
               width="250"
             />
           )}
-          <div style={{ fontSize: '115%', padding: '10px', paddingTop: '0px' }}>
-            <div>{properties.beschreibung}</div>
-            <br />
-            <div>
+          <div style={{ padding: '10px', paddingTop: '0px' }}>
+            <div style={{ marginBottom: 10 }}>{properties.beschreibung}</div>
+
+            <div style={{ marginBottom: 10 }}>
               Anzahl {plaetze_label}: {properties.plaetze}
             </div>
-            <br />
 
             {properties.anbindung_schwebebahn === true && (
               <p>
@@ -119,8 +118,13 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
                       <b>Buslinien</b>
                     </div>
                   )}
-                  {properties.buslinien.map((linie) => {
-                    return <p style={{ marginBottom: 0 }}>{linie}</p>;
+                  {properties.buslinien.map((linie, i) => {
+                    return (
+                      <span style={{ marginBottom: 0 }}>
+                        {linie}
+                        {i !== properties.buslinien.length - 1 && ', '}
+                      </span>
+                    );
                   })}
                 </Card.Body>
               </Accordion.Collapse>
