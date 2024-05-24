@@ -7,6 +7,7 @@ import {
 import { ResponsiveTopicMapContext } from 'react-cismap/contexts/ResponsiveTopicMapContextProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusCircle, faParking } from '@fortawesome/free-solid-svg-icons';
+import XandRidePieChart from './XandRidePieChart';
 
 const FilterUI = () => {
   // @ts-ignore
@@ -21,7 +22,7 @@ const FilterUI = () => {
   let widePieChartPlaceholder: any = null;
   let narrowPieChartPlaceholder: any = null;
 
-  let pieChart = <></>;
+  let pieChart = <XandRidePieChart />;
 
   if (width < 995) {
     narrowPieChartPlaceholder = (
