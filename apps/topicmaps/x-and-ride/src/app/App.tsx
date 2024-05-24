@@ -16,6 +16,8 @@ import {
 import titleFactory from '../helper/titleFactory';
 import createItemsDictionary from '../helper/createDictionary';
 import itemFilterFunction from '../helper/filter';
+import { FeatureCollectionDisplayWithTooltipLabels } from 'react-cismap';
+import uwz from './components/UWZ';
 
 export function App() {
   useEffect(() => {
@@ -39,6 +41,43 @@ export function App() {
         iconCreateFunction: getPoiClusterIconCreatorFunction(35),
       }}
       // itemFilterFunction={itemFilterFunction}
+      additionalLayerConfiguration={{
+        umweltzonen: {
+          title: <span>Umweltzonen</span>,
+          initialActive: true,
+          layer: (
+            <FeatureCollectionDisplayWithTooltipLabels
+              key={'ds'}
+              featureCollection={uwz}
+              style={() => {
+                const style = {
+                  color: '#155317',
+                  weight: 3,
+                  opacity: 0.5,
+                  fillColor: '#155317',
+                  fillOpacity: 0.15,
+                };
+                return style;
+              }}
+              featureClickHandler={() => {}}
+              labeler={() => {
+                return (
+                  <h3
+                    style={{
+                      color: '#155317',
+                      opacity: 0.7,
+                      textShadow:
+                        '1px 1px 0px  #000000,-1px 1px 0px  #000000, 1px -1px 0px  #000000, -1px -1px 0px  #000000, 2px 2px 15px #000000',
+                    }}
+                  >
+                    Umweltzone
+                  </h3>
+                );
+              }}
+            />
+          ),
+        },
+      }}
     >
       <Map />
     </TopicMapContextProvider>
