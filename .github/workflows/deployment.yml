@@ -300,7 +300,7 @@ jobs:
           npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}"
         shell: bash
       - name: Deploy using GH Pages action
-        if: env.EXTERNAL_REPO != 'null' && env.EXTERNAL_REPO != ''
+        if: env.EXTERNAL_REPO != 'null' && env.EXTERNAL_REPO != '' && env.EXTERNAL_REPO != 'null/null'
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
