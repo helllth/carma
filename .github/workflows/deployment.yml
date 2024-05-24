@@ -202,9 +202,8 @@ jobs:
           projectPath=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].projectPath')
           containerImage=$(echo "$config" | jq -r '.projects["'"${{ matrix.project }}"'"].deployment.auto.'"${{ steps.extract_branch.outputs.branch }}"''.container.image // "null"')
           srcPath=".${projectPath#./dist}/src"
-          srcMD5="$(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum; md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ')"
+          srcMD5="$(echo -n $(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum | cut -f 1 -d ' ')$(md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ') | md5sum | cut -f 1 -d ' ')"
           srcMD5short="${srcMD5:0:4}"
-
           if [ "${baseUrl}" = "null" ]; then
             baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
           else
@@ -310,17 +309,15 @@ jobs:
       - name: Get properties from json
         id: get_props_from_json
         run: |
-          config=$(cat deployment-config.json)
+          config=$(cat deployment-config.json)export 
           project_name="${{ github.event.inputs.project-name }}"
-          echo $config
           deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.repo')
           baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.base')
           orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.pages.org // "null"')
           prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.pages.prj // "null"')
           projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
           srcPath=".${projectPath#./dist}/src"
-          srcMD5="$(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum; md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ')"
-          srcMD5short="${srcMD5:0:4}"
+          srcMD5="$(echo -n $(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum | cut -f 1 -d ' ')$(md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ') | md5sum | cut -f 1 -d ' ')"          srcMD5short="${srcMD5:0:4}"
           containerImage=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.container.image // "null"')
           if [ "${baseUrl}" = "null" ]; then
             baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
