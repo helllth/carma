@@ -15,12 +15,12 @@ export const getGazData = async (setGazData) => {
   sources.prbr = await md5FetchText(prefix, host + '/data/prbr.json');
 
   const gazData = getGazDataForTopicIds(sources, [
+    'prbr',
     'pois',
     'kitas',
     'bezirke',
     'quartiere',
     'adressen',
-    'prbr',
   ]);
 
   setGazData(gazData);
