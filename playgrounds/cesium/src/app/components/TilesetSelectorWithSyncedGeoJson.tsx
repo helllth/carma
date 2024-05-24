@@ -14,7 +14,7 @@ import {
   GeoJsonDataSource,
   MaterialProperty,
 } from 'cesium';
-import { useClickActionTileset } from '../hooks';
+import { useClickActionTileset } from './TilesetClassifier/hooks';
 import { useSelectionTransparency } from '../store';
 import ColorHash from 'color-hash';
 import { getColorMaterialProperty } from '../utils/selections';

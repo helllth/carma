@@ -1,5 +1,5 @@
 import React from 'react';
-import TilesetSelector from '../components/TilesetSelector';
+import TilesetSelector from '../components/TilesetSelectorWithSyncedGeoJson';
 import {
   useSelectionTransparencyControl,
   useTilesetControl,
