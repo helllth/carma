@@ -156,19 +156,15 @@
       "deployment": {
         "manual": {
           "pages": {
-            "pages": {
-              "org": "carma-dev-playground-deployments",
-              "prj": "techdemo"
-            }
+            "org": "carma-dev-playground-deployments",
+            "prj": "techdemo"
           }
         },
         "auto": {
           "dev": {
             "pages": {
-              "pages": {
-                "org": "carma-dev-playground-deployments",
-                "prj": "techdemo"
-              }
+              "org": "carma-dev-playground-deployments",
+              "prj": "techdemo"
             }
           }
         }

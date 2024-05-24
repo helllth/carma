@@ -199,10 +199,10 @@ jobs:
 
 
           # Directly check the structure
-          echo "$config" | jq -r ".projects[\"$project_name\"]"
-          echo "$config" | jq -r ".projects[\"$project_name\"].deployment"
-          echo "$config" | jq -r ".projects[\"$project_name\"].deployment.auto"
-          echo "$config" | jq -r ".projects[\"$project_name\"].deployment.auto[\"$branch\"]"
+          # echo "$config" | jq -r ".projects[\"$project_name\"]"
+          # echo "$config" | jq -r ".projects[\"$project_name\"].deployment"
+          # echo "$config" | jq -r ".projects[\"$project_name\"].deployment.auto"
+          # echo "$config" | jq -r ".projects[\"$project_name\"].deployment.auto[\"$branch\"]"
 
           # Ensure jq variables are passed correctly
           deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment.auto[$branch].repo // "null"')
@@ -212,13 +212,6 @@ jobs:
           projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath // "null"')
           containerImage=$(echo "$config" | jq -r --arg project "$project_name" --arg branch "$branch" '.projects[$project].deployment.auto[$branch].container.image // "null"')
 
-          # Debugging
-          echo "deploymentManual: $deploymentManual"
-          echo "baseUrl: $baseUrl"
-          echo "orgDeploy: $orgDeploy"
-          echo "prjDeploy: $prjDeploy"
-          echo "projectPath: $projectPath"
-          echo "containerImage: $containerImage"
 
           srcPath=".${projectPath#./dist}/src"
           echo "srcPath: $srcPath"  # Debugging
@@ -227,8 +220,14 @@ jobs:
           srcMD5short="${srcMD5:0:4}"
 
           # Debugging
-          echo "srcMD5: $srcMD5"
-          echo "srcMD5short: $srcMD5short"
+          # echo "deploymentManual: $deploymentManual"
+          # echo "baseUrl: $baseUrl"
+          # echo "orgDeploy: $orgDeploy"
+          # echo "prjDeploy: $prjDeploy"
+          # echo "projectPath: $projectPath"
+          # echo "containerImage: $containerImage"        
+          # echo "srcMD5: $srcMD5"
+          # echo "srcMD5short: $srcMD5short"
 
           if [ "${baseUrl}" = "null" ]; then
             if [ "${orgDeploy}" = "null" ]; then
