@@ -3,6 +3,8 @@ import { starkregenConstants } from '@cismet-dev/react-cismap-envirometrics-maps
 import citymapGrey from './assets/images/rain-hazard-map-bg/citymapGrey.png';
 import dtk from './assets/images/rain-hazard-map-bg/dtk.png';
 import ortho from './assets/images/rain-hazard-map-bg/ortho.png';
+import citymap from './assets/images/rain-hazard-map-bg/citymap.png';
+const year = new Date().getFullYear();
 
 const overridingBaseLayerConf = {
   namedStyles: {
@@ -60,6 +62,24 @@ const overridingBaseLayerConf = {
       opacity: 0.2,
       pane: 'backgroundvectorLayers',
     },
+    basemap_grey: {
+      type: 'vector',
+      style:
+        'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_gry.json',
+      attribution: '© basemap.de / BKG ' + year,
+    },
+    basemap_color: {
+      type: 'vector',
+      style:
+        'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_col.json',
+      attribution: '© basemap.de / BKG ' + year,
+    },
+    basemap_relief: {
+      type: 'vector',
+      style:
+        'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_top.json',
+      attribution: '© basemap.de / BKG ' + year,
+    },
   },
 };
 
@@ -71,7 +91,7 @@ const config = {
   minFeatureInfoZoom: 19,
   rasterfariURL: 'https://rasterfari-korschenbroich.cismet.de',
   modelWMS:
-    'https://starkregen-korschenbroich.cismet.de/geoserver/wms?SERVICE=WMS',
+    'https://starkregen-korschenbroich.cismet.de/ge_oserver/wms?SERVICE=WMS',
   timeSeriesAvailable: false,
   simulations: [
     {
@@ -111,15 +131,20 @@ const config = {
       src: citymapGrey,
       title: 'Stadtplan (grau)',
     },
-    {
-      layerkey: 'nrwDOP@60|rvr@30',
-      src: ortho,
-      title: 'Luftbildkarte',
-    },
+    // {
+    //   layerkey: 'nrwDOP@60|rvr@30',
+    //   src: ortho,
+    //   title: 'Luftbildkarte',
+    // },
     {
       layerkey: 'dtk@100',
       src: dtk,
-      title: 'DTK (schwarz-weiß)',
+      title: 'DTK (bunt)',
+    },
+    {
+      layerkey: 'basemap_color@70',
+      src: citymap,
+      title: 'Basiskarte (bunt)',
     },
   ],
   heightsLegend: [
