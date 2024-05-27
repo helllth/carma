@@ -1,52 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { MappingConstants } from 'react-cismap';
 import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
-import { md5FetchText } from 'react-cismap/tools/fetching';
 import HeavyRainHazardMap from '@cismet-dev/react-cismap-envirometrics-maps/HeavyRainHazardMap';
 import GenericModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
-import { getGazDataForTopicIds } from 'react-cismap/tools/gazetteerHelper';
 import { md5FetchJSON } from 'react-cismap/tools/fetching';
-import CrossTabCommunicationControl from 'react-cismap/CrossTabCommunicationControl';
-import CrossTabCommunicationContextProvider from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
 import config from './config';
 import { getApplicationVersion } from './version';
-import NotesDisplay from './NotesDisplay';
+// import NotesDisplay from './NotesDisplay';
 import { getCollabedHelpComponentConfig } from './collab-texts';
 
 function App() {
-  const email = 'starkregen@stadt.korschenbroich.de';
+  const email = 'yvonne.tuerks@korschenbroich.de';
   const [gazData, setGazData] = useState([]);
-  const [hinweisData, setHinweisData] = useState([]);
   const version = getApplicationVersion();
-
-  const getHinweisData = async (setHinweisData, url) => {
-    const prefix = 'HinweisDataForStarkregengefahrenkarteByCismet';
+  const getGazData = async (setGazData, url) => {
+    const prefix = 'GazDataForStarkregengefahrenkarteByCismet';
     const data = await md5FetchJSON(prefix, url);
-
-    const features = [];
-    let id = 1;
-    for (const d of data) {
-      features.push({
-        type: 'Feature',
-        id: id++,
-        properties: d,
-        geometry: d.geojson,
-        crs: {
-          type: 'name',
-          properties: {
-            name: 'urn:ogc:def:crs:EPSG::25832',
-          },
-        },
-      });
-    }
-    console.log('yy hinweisData', features);
-
-    setHinweisData(features || []);
+    setGazData(data || []);
   };
 
   useEffect(() => {
-    // getGazData(setGazData);
-    // getHinweisData(setHinweisData, config.config.hinweisDataUrl);
+    getGazData(setGazData, '/data/adressen_korschenbroich.json');
   }, []);
 
   return (
@@ -69,7 +43,6 @@ function App() {
             })}
           />
         }
-        gazetteerSearchPlaceholder="Stadtteil | Adresse | POI | GEP"
         emailaddress={email}
         initialState={config.initialState}
         config={config.config}
@@ -79,7 +52,7 @@ function App() {
         documentTitle="AIS Korschenbroich"
         gazData={gazData}
       >
-        <NotesDisplay hinweisData={hinweisData} />
+        {/* <NotesDisplay hinweisData={hinweisData} /> */}
       </HeavyRainHazardMap>
     </TopicMapContextProvider>
   );
