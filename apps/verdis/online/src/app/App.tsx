@@ -1,12 +1,8 @@
+import VerdisOnlineLanding from './components/VerdisOnlineLanding';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 export function App() {
-  return (
-    <div>
-      <h1>
-        <span> Hello there, </span>
-        Welcome verdis-online 👋
-      </h1>
-    </div>
-  );
+  return <VerdisOnlineLanding />;
 }
 
 export default App;
