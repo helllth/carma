@@ -7,12 +7,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getKassenzeichenbySTAC } from '../../store/slices/kassenzeichen';
 import { getLoginInProgress, getLoginInfoText } from '../../store/slices/auth';
 import { useNavigate } from 'react-router-dom';
+import { getConfData } from '../../store/slices/ui';
 
 const VerdisOnlineLanding = () => {
   const [stac, setStac] = useState('');
+  const [loginAlertVisible, setLoginAlertVisible] = useState(false);
+  const [connectionProblem, setConnectionProblem] = useState(false);
   const dispatch = useDispatch();
   const loginInProgress = useSelector(getLoginInProgress);
   const loginInfoText = useSelector(getLoginInfoText);
+  const confData = useSelector(getConfData);
   const navigate = useNavigate();
   let landingStyle = {
     backgroundColor: 'red',
@@ -55,15 +59,12 @@ const VerdisOnlineLanding = () => {
                     '?emailVerificationCode=' + verificationCode;
                 }
                 navigate('/meinkassenzeichen' + verificationCodeSuffix);
-                // this.props.routingActions.push(
-                //     "/meinkassenzeichen" + verificationCodeSuffix
-                // );
               }, 100);
             } else {
               setTimeout(() => {
-                // this.props.uiActions.setStacInput("");
-                // this.props.routingActions.push("/");
-                // this.setState({ loginAlertVisible: true });
+                setStac('');
+                navigate('/');
+                setLoginAlertVisible(true);
               }, 1000);
             }
           })
@@ -118,67 +119,56 @@ const VerdisOnlineLanding = () => {
       <div style={{ width: '100%', height: '100%', position: 'absolute' }}>
         <AlertContainer position="top-right">
           <div>
-            {/* {this.state.connectionProblem && (
-                                <Alert
-                                    type="danger"
-                                    headline="Verbindungsprobleme."
-                                    onDismiss={() => {
-                                        this.setState({ connectionAlertVisible: false });
-                                    }}
-                                >
-                                    Im Moment können wir keine Verbindung zu unseren Diensten
-                                    aufbauen.
-                                </Alert>
-                            )} */}
-            {/* {this.state.loginAlertVisible && (
-                                <Alert
-                                    type="danger"
-                                    timeout={10000}
-                                    headline="Anmeldeinformationen fehlerhaft oder abgelaufen."
-                                    onDismiss={() => {
-                                        this.setState({ loginAlertVisible: false });
-                                    }}
-                                >
-                                    Bitte überprüfen Sie den eingegeben Code und dessen
-                                    Gültigkeitsdauer. Bei Problemen mit der Anmeldung, wenden Sie
-                                    sich bitte an den untenstehende Kontakt.
-                                </Alert>
-                            )} */}
-            {/* {this.props.uiState.confData &&
-                                this.props.uiState.confData.messages &&
-                                this.props.uiState.confData.messages.map((message, index) => {
-                                    return (
-                                        <div key={message.key}>
-                                            {
-                                                <Alert
-                                                    key={"alert" + message.key}
-                                                    type={message.type}
-                                                    timeout={message.timeout}
-                                                    headline={message.headline}
-                                                >
-                                                    {message.content}
-                                                </Alert>
-                                            }
-                                        </div>
-                                    );
-                                })} */}
+            {connectionProblem && (
+              <Alert
+                type="danger"
+                headline="Verbindungsprobleme."
+                onDismiss={() => {
+                  setConnectionProblem(false);
+                }}
+              >
+                Im Moment können wir keine Verbindung zu unseren Diensten
+                aufbauen.
+              </Alert>
+            )}
+            {loginAlertVisible && (
+              <Alert
+                type="danger"
+                timeout={10000}
+                headline="Anmeldeinformationen fehlerhaft oder abgelaufen."
+                onDismiss={() => {
+                  setLoginAlertVisible(false);
+                }}
+              >
+                Bitte überprüfen Sie den eingegeben Code und dessen
+                Gültigkeitsdauer. Bei Problemen mit der Anmeldung, wenden Sie
+                sich bitte an den untenstehende Kontakt.
+              </Alert>
+            )}
+            {confData &&
+              confData.messages &&
+              confData.messages.map((message, index) => {
+                return (
+                  <div key={message.key}>
+                    {
+                      <Alert
+                        key={'alert' + message.key}
+                        type={message.type}
+                        timeout={message.timeout}
+                        headline={message.headline}
+                      >
+                        {message.content}
+                      </Alert>
+                    }
+                  </div>
+                );
+              })}
           </div>
         </AlertContainer>
       </div>
 
       <div style={landingStyle}>
         <Container>
-          {/* <div style={{ marginRight: -15, marginLeft: -15 }}>
-            <div
-              style={{
-                width: '100%',
-                float: 'left',
-                position: 'relative',
-                minHeight: 1,
-                paddingRight: 15,
-                paddingLeft: 15,
-              }}
-            > */}
           <Row className="show-grid">
             <Col xs={12} md={12}>
               <h1 style={{ color: 'white' }}>
@@ -257,16 +247,13 @@ const VerdisOnlineLanding = () => {
                               fontSize: '24px',
                               fontFamily: 'monospace',
                             }}
-                            // ref={input => {
-                            //     this.stacInput = input;
-                            // }}
                             placeholderChar=" "
                             type="text"
                             name="stac"
                             mask="AAAA-AAAA-AAAA"
                             value={stac}
                             onChange={handleStacInput}
-                            // disabled={this.state.connectionProblem}
+                            disabled={connectionProblem}
                           />
                         </FormGroup>
                       </Form>
@@ -302,8 +289,6 @@ const VerdisOnlineLanding = () => {
               </div>
             </Col>
           </Row>
-          {/* </div> */}
-          {/* </div> */}
         </Container>
       </div>
     </div>

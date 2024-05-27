@@ -88,6 +88,8 @@ export const login = (user, password, succesfulHandler) => {
 
 export const logout = () => {
   return function (dispatch) {
-    dispatch(setLoginInProgress({ user: null, password: null, status: false }));
+    dispatch(
+      setLoginInformation({ user: null, password: null, status: false })
+    );
   };
 };

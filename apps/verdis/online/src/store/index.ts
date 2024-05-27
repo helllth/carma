@@ -4,6 +4,7 @@ import { persistReducer } from 'redux-persist';
 import localForage from 'localforage';
 import authSlice from './slices/auth';
 import kassenzeichenReducer from './slices/kassenzeichen';
+import uiReducer from './slices/ui';
 
 console.log('store initializing ....');
 
@@ -76,6 +77,7 @@ export default configureStore({
   reducer: {
     auth: persistReducer(authConfig, authSlice.reducer),
     kassenzeichen: kassenzeichenReducer.reducer,
+    ui: uiReducer.reducer,
   },
   devTools: devToolsEnabled === true && inProduction === false,
   middleware,
