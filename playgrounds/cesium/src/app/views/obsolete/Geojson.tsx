@@ -1,10 +1,10 @@
 import React from 'react';
-import GeoJsonSelector from '../components/GeoJsonSelector';
-import { useViewerDataSources } from '../store/slices/viewer';
+import GeoJsonSelector from '../../components/obsolete/GeoJsonSelector';
+import { useViewerDataSources } from '../../store/slices/viewer';
 import {
   usePropertySelectionControl,
   useSelectionTransparencyControl,
-} from '../utils/controls';
+} from '../../utils/controls';
 
 function View() {
   const { footprintGeoJson, tileset } = useViewerDataSources();

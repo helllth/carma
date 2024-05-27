@@ -1,9 +1,9 @@
 import React from 'react';
-import { FOOTPRINT_GEOJSON_SOURCES } from '../../config';
-import GeoJsonSelector from '../../components/GeoJsonSelector';
+import { FOOTPRINT_GEOJSON_SOURCES } from '../../../config';
+import GeoJsonSelector from '../../../components/obsolete/GeoJsonSelector';
 import { useState } from 'react';
-import RadioSelector from '../../components/RadioSelector';
-import { useTilesetControl } from '../../utils/controls';
+import RadioSelector from '../../../components/UI/RadioSelector';
+import { useTilesetControl } from '../../../utils/controls';
 
 const jsonOptions = Object.entries(FOOTPRINT_GEOJSON_SOURCES).map(
   ([key, { url, name }]) => ({

@@ -3,9 +3,9 @@ import { Cesium3DTileset } from 'resium';
 import { Cesium3DTileStyle } from 'cesium';
 import { getTileSetInfo } from '../../utils/cesiumHelpers';
 import { FOOTPRINT_GEOJSON_SOURCES, CITYGML_TEST_TILESET } from '../../config';
-import GeoJsonSelector from '../../components/GeoJsonSelector';
+import GeoJsonSelector from '../../components/obsolete/GeoJsonSelector';
 import { useState } from 'react';
-import RadioSelector from '../../components/RadioSelector';
+import RadioSelector from '../../components/UI/RadioSelector';
 import { useTilesetControl } from '../../utils/controls';
 
 const jsonOptions = Object.entries(FOOTPRINT_GEOJSON_SOURCES).map(

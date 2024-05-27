@@ -5,13 +5,13 @@ import {
 } from '../utils/controls';
 import { CITYGML_TEST_TILESET } from '../config';
 import { create3DTileStyle } from '../utils/cesiumHelpers';
-import TilesetClassifier from '../components/TilesetClassifier';
+import ByTilesetClassifier from '../components/ByTilesetClassifier';
 
 function View() {
   useSelectionTransparencyControl();
   useTilesetControl();
   return (
-    <TilesetClassifier
+    <ByTilesetClassifier
       debug={true}
       tileset={CITYGML_TEST_TILESET}
       style={create3DTileStyle({

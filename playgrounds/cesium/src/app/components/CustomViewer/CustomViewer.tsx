@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Color, HeadingPitchRange, Viewer, BoundingSphere } from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
-import Crosshair from '../Crosshair';
+import Crosshair from '../UI/Crosshair';
 
 import {
   useGlobeBaseColor,
@@ -118,7 +118,7 @@ function CustomViewer(props: CustomViewerProps) {
       fullscreenButton={false}
       geocoder={false}
       homeButton={false}
-      infoBox={infoBox}
+      infoBox={false}
       sceneModePicker={false}
       selectionIndicator={selectionIndicator}
       timeline={false}

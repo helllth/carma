@@ -1,12 +1,14 @@
-import Geojson from './views/Geojson';
-import SingleGeojson from './views/SingleGeojsonSelector';
+import Geojson from './views/obsolete/Geojson';
+import ClassifyByGeoJson from './views/ClassifyByGeoJson';
+//import SingleGeojson from './views/obsolete/SingleGeojsonSelector';
 import TilesetSelectionFromCityGml from './views/TilesetSelectionFromCityGml';
 import TilesetSelectionFromBaseMapDE from './views/TilesetSelectionBasemapDe';
 import TilesetSelectionClassify from './views/TilesetSelectionClassify';
 //import Full from './views/obsolete/Full';
 //import WithMesh from './views/obsolete/WithMesh';
 import TestCustomViewer from './views/tests/CustomViewer';
-import TestGeojson from './views/tests/Geojson';
+import TestGeojson from './views/tests/obsolete/Geojson';
+import TestClassifyByGeoJson from './views/tests/ClassifyByGeoJson';
 import TestGeojsonWithCityGML from './views/tests/CityGml';
 import TestTileset from './views/tests/Tileset';
 
@@ -25,11 +27,17 @@ export type RouteDescriptor = RouteItem | RoutePath;
 // ⚙️ for debug or test views
 
 export const viewerRoutes: RouteDescriptor[] = [
-  ['/', 'Home', SingleGeojson],
-  ['/geojson', 'GeoJson', Geojson],
-  ['/citygml', 'Tiles CityGML 🚧', TilesetSelectionFromCityGml],
-  ['/citygml-classify', 'Classify by CityGML 🚧', TilesetSelectionClassify],
-  ['/basemap-de', 'Tiles BaseMap.de 🚧', TilesetSelectionFromBaseMapDE],
+  ['/', '', ClassifyByGeoJson],
+  ['/geojson-classify', 'Klassifizierung nach GeoJson', ClassifyByGeoJson],
+  [
+    '/tileset',
+    'Tileset 🚧',
+    [
+      ['/citygml', 'Tiles CityGML 🚧', TilesetSelectionFromCityGml],
+      ['/citygml-classify', 'Classify by CityGML 🚧', TilesetSelectionClassify],
+      ['/basemap-de', 'Tiles BaseMap.de 🚧', TilesetSelectionFromBaseMapDE],
+    ],
+  ],
 
   //['/full', 'Full', Full],
   //['/mesh', 'Mesh', WithMesh],
@@ -38,7 +46,8 @@ export const viewerRoutes: RouteDescriptor[] = [
     '⚙️ Test',
     [
       ['/', 'Test Home', TestCustomViewer],
-      ['/geojson', 'Test GeoJson', TestGeojson],
+      ['/geojson', 'GeoJson', TestClassifyByGeoJson],
+      ['/geojson-old', 'GeoJson(old)', TestGeojson],
       ['/citygml', 'Test GeoJson With CityGML', TestGeojsonWithCityGML],
       ['/viewer', 'Test Viewer', TestCustomViewer],
       ['/tileset', 'Test Tileset', TestTileset],

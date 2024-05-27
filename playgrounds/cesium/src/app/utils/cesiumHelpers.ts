@@ -5,6 +5,10 @@ import {
   Cesium3DTileset,
   Cesium3DTileStyle,
   Color,
+  ColorMaterialProperty,
+  defined,
+  Entity,
+  GroundPrimitive,
   Matrix4,
   Viewer,
 } from 'cesium';
@@ -16,6 +20,9 @@ export const SELECTABLE_TRANSPARENT_3DTILESTYLE = create3DTileStyle({
   color: `vec4(1.0, 0.0, 0.0, 0.01)`,
   show: true,
 });
+export const SELECTABLE_TRANSPARENT_MATERIAL = new ColorMaterialProperty(
+  Color.BLACK.withAlpha(1 / 255)
+);
 
 export function getModelMatrix(config: TilesetConfig, heightOffset = 0) {
   const { x, y, z } = config.translation;
@@ -78,4 +85,37 @@ export function create3DTileStyle(
 
     return undefined;
   }
+}
+
+// SCENE
+
+const GEOJSON_DRILL_LIMIT = 10;
+
+// get last ground primitive from picked objects
+// needed since default picker fails with ground primitives created from GeoJson
+function getLastGroundPrimitive(
+  pickedObjects: { primitive: unknown; id?: unknown }[]
+): Entity | null {
+  let lastGroundPrimitive: Entity | null = null;
+
+  pickedObjects.reverse().some((pickedObject) => {
+    if (defined(pickedObject)) {
+      if (pickedObject.primitive instanceof GroundPrimitive) {
+        lastGroundPrimitive = pickedObject.id as Entity;
+        return true;
+      }
+    }
+    return false;
+  });
+
+  return lastGroundPrimitive;
+}
+
+export function pickFromClampedGeojson(
+  viewer: Viewer,
+  position: Cartesian2,
+  limit: number = GEOJSON_DRILL_LIMIT
+): Entity | null {
+  const pickedObjects = viewer.scene.drillPick(position, limit);
+  return getLastGroundPrimitive(pickedObjects);
 }

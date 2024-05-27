@@ -9,7 +9,7 @@ import Viewer from '../../components/CustomViewer/CustomViewer';
 import { Cesium3DTileset } from 'resium';
 import { Cartesian3, Matrix4 } from 'cesium';
 import { useLayoutEffect, useRef, useState } from 'react';
-import Cross from '../../components/Crosshair';
+import Cross from '../../components/UI/Crosshair';
 import ControlContainer from '../../components/controls/ControlContainer';
 import OnMapButton from '../../components/controls/OnMapButton';
 import { faBars, faCube, faSquare } from '@fortawesome/free-solid-svg-icons';

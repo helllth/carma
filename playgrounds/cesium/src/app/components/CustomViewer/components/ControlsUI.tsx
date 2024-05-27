@@ -6,7 +6,7 @@ import HomeControl from '../../controls/HomeControl';
 import LockCenterControl from '../../controls/LockCenterControl';
 import OrbitControl from '../../controls/OrbitControl';
 import ZoomControls from '../../controls/ZoomControls';
-import { UIComponentContext } from '../../UIProvider';
+import { UIComponentContext } from '../../UI/UIProvider';
 import { useViewerHome } from '../../../store/slices/viewer';
 
 const ControlsUI = ({

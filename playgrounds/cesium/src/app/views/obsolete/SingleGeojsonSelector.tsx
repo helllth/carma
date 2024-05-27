@@ -1,6 +1,6 @@
 import React from 'react';
-import GeoJsonSelector from '../components/GeoJsonSelector';
-import { useViewerDataSources } from '../store/slices/viewer';
+import GeoJsonSelector from '../../components/obsolete/GeoJsonSelector';
+import { useViewerDataSources } from '../../store/slices/viewer';
 
 function View() {
   const { footprintGeoJson } = useViewerDataSources();

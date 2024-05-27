@@ -1,6 +1,6 @@
 import { Cartesian3, Cartographic } from 'cesium';
-import styles from './CompareCartesian3Table.module.css';
-import { highlightLocalDegrees, highlightLocalMeters } from './Formatters';
+import styles from '../UI/CompareCartesian3Table.module.css';
+import { highlightLocalDegrees, highlightLocalMeters } from '../Formatters';
 
 interface CompareCartesian3TableProps {
   posA?: Cartesian3;

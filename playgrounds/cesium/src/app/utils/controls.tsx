@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { UIComponentContext } from '../components/UIProvider';
+import { UIComponentContext } from '../components/UI/UIProvider';
 import {
   setShowTileset,
   setTilesetOpacity,

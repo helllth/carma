@@ -18,10 +18,10 @@ import ColorHash from 'color-hash';
 import {
   useClickActionFootprints,
   usePropertyKeysFromGeoJsonDataSource,
-} from '../hooks';
-import { useSelectionTransparency } from '../store';
-import { useSelectKey } from '../store/slices/buildings';
-import { getColorMaterialProperty } from '../utils/selections';
+} from '../../hooks';
+import { useSelectionTransparency } from '../../store';
+import { useSelectKey } from '../../store/slices/buildings';
+import { getColorMaterialProperty } from '../../utils/selections';
 
 interface GeoJsonSelectorProps {
   srcExtruded: string;

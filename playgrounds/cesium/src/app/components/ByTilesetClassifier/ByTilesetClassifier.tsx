@@ -12,7 +12,7 @@ import { useSelectionTransparency } from '../../store';
 
 import { TilesetConfig } from '../../store/slices/viewer';
 
-interface TilesetSelectorProps {
+interface ByTilesetClassifier {
   debug?: boolean;
   target?: string;
   style?: Cesium3DTileStyle;
@@ -21,7 +21,7 @@ interface TilesetSelectorProps {
 }
 
 const HIGHLIGHT_COLOR = Color.YELLOW;
-const TilesetClassifier: React.FC<TilesetSelectorProps> = ({
+const ByTilesetClassifier: React.FC<ByTilesetClassifier> = ({
   tileset,
   debug = false,
   classificationType = ClassificationType.CESIUM_3D_TILE,
@@ -61,4 +61,4 @@ const TilesetClassifier: React.FC<TilesetSelectorProps> = ({
   );
 };
 
-export default TilesetClassifier;
+export default ByTilesetClassifier;
