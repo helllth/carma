@@ -91,7 +91,7 @@ const config = {
   minFeatureInfoZoom: 19,
   rasterfariURL: 'https://rasterfari-korschenbroich.cismet.de',
   modelWMS:
-    'https://starkregen-korschenbroich.cismet.de/ge_oserver/wms?SERVICE=WMS',
+    'https://starkregen-korschenbroich.cismet.de/geoserver/wms?SERVICE=WMS',
   timeSeriesAvailable: false,
   simulations: [
     {
