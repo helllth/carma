@@ -64,9 +64,9 @@ const overridingBaseLayerConf = {
 };
 
 const config = {
-  upperleftX: 707070.773646602407098, //take a depth3857.tif and run gdalinfo on it get the pixelsize and upperleftcorner info from there
-  upperleftY: 6756402.341920492239296,
-  pixelsize: 1.612302542980673,
+  upperleftX: 721056.999954317114316, //take a depth3857.tif and run gdalinfo on it get the pixelsize and upperleftcorner info from there
+  upperleftY: 6662620.642159298062325,
+  pixelsize: 1.594196651186911,
   minAnimationZoom: 17,
   minFeatureInfoZoom: 19,
   rasterfariURL: 'https://rasterfari-korschenbroich.cismet.de',
@@ -87,7 +87,7 @@ const config = {
       title: 'Starkregen SRI 7 (38,7 - 39,5 l/m² in 1 h)',
       icon: 'bitbucket',
       subtitle:
-        'Simulation eines einstündigen Starkregens einer Belastung zwischen 38,7 und 39,5 Liter/m² Niederschlag (Starkregenindex SRI 7) für das hydrologische Einzugsgebiet der Stadt Xanten',
+        'Simulation eines einstündigen Starkregens einer Belastung zwischen 37,2 und 38,2 Liter/m² Niederschlag (Starkregenindex SRI 7) für das hydrologische Einzugsgebiet der Stadt Korschenbroich',
     },
     {
       depthLayer: 'starkregen:L_SRI11_depth3857',
@@ -102,7 +102,7 @@ const config = {
       title: 'Starkregen SRI 11 (90 l/m² in 1 h)',
       icon: 'bitbucket',
       subtitle:
-        'Simulation eines einstündigen Starkregens mit 90 Liter/m² Niederschlag (Starkregenindex SRI 11) für das hydrologische Einzugsgebiet der Stadt Xanten',
+        'Simulation eines einstündigen Starkregens mit 90 Liter/m² Niederschlag (Starkregenindex SRI 11) für das hydrologische Einzugsgebiet der Stadt Korschenbroich',
     },
   ],
   backgrounds: [
@@ -131,8 +131,8 @@ const config = {
   velocityLegend: [
     { title: '0.3 m/s', lt: 0.18, bg: '#BEC356' },
     { title: '0.5 m/s', lt: 0.4, bg: '#DA723E' },
-    { title: '1,3 m/s', lt: 0.9, bg: '#D64733' },
-    { title: '3 m/s', lt: 2.6, bg: '#8F251B' },
+    { title: '1,3 m/s', lt: 0.75, bg: '#D64733' },
+    { title: '2 m/s', lt: 1.5, bg: '#8F251B' },
   ],
   // getRoundedDepthValueStringForValue muss noch bzgl. Thhreshhold angepasst werden
   getRoundedDepthValueStringForValue: (featureValue) => {
@@ -146,8 +146,8 @@ const config = {
   },
   // getRoundedVelocityValueStringForValue muss noch bzgl. Thhreshhold angepasst werden
   getRoundedVelocityValueStringForValue: (featureValue) => {
-    if (featureValue > 3) {
-      return `> 3 m/s`;
+    if (featureValue > 2) {
+      return `> 2 m/s`;
     } else if (featureValue < 0.2) {
       return `< 0,2 m/s`;
     } else {
