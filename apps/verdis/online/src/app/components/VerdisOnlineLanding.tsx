@@ -2,8 +2,18 @@ import { Alert, AlertContainer } from 'react-bs-notifier';
 import { Form, FormGroup, Row, Col, Button, Container } from 'react-bootstrap';
 import Loadable from 'react-loading-overlay';
 import MaskedFormControl from 'react-bootstrap-maskedinput';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getKassenzeichenbySTAC } from '../../store/slices/kassenzeichen';
+import { getLoginInProgress, getLoginInfoText } from '../../store/slices/auth';
+import { useNavigate } from 'react-router-dom';
 
 const VerdisOnlineLanding = () => {
+  const [stac, setStac] = useState('');
+  const dispatch = useDispatch();
+  const loginInProgress = useSelector(getLoginInProgress);
+  const loginInfoText = useSelector(getLoginInfoText);
+  const navigate = useNavigate();
   let landingStyle = {
     backgroundColor: 'red',
     height: 1279,
@@ -20,6 +30,46 @@ const VerdisOnlineLanding = () => {
     paddingRight: 40,
     paddingBottom: 10,
     paddingTop: 10,
+  };
+
+  const handleStacInput = (e) => {
+    setStac(e.target.value);
+    handleStacChange(e.target.value);
+  };
+
+  const handleStacChange = (rawStac) => {
+    setStac(rawStac);
+    if (rawStac) {
+      console.log('xxx', rawStac);
+      let stac = rawStac.trim().replace(/[- ]/g, '');
+      if (stac.length === 12) {
+        dispatch(
+          // @ts-ignore
+          getKassenzeichenbySTAC(stac, (success) => {
+            if (success === true) {
+              setTimeout(() => {
+                const verificationCode = '';
+                let verificationCodeSuffix = '';
+                if (verificationCode) {
+                  verificationCodeSuffix =
+                    '?emailVerificationCode=' + verificationCode;
+                }
+                navigate('/meinkassenzeichen' + verificationCodeSuffix);
+                // this.props.routingActions.push(
+                //     "/meinkassenzeichen" + verificationCodeSuffix
+                // );
+              }, 100);
+            } else {
+              setTimeout(() => {
+                // this.props.uiActions.setStacInput("");
+                // this.props.routingActions.push("/");
+                // this.setState({ loginAlertVisible: true });
+              }, 1000);
+            }
+          })
+        );
+      }
+    }
   };
 
   return (
@@ -178,11 +228,7 @@ const VerdisOnlineLanding = () => {
                   top: 1279 - 200,
                 }}
               >
-                <Loadable
-                  // active={this.props.auth.loginInProgress}
-                  spinner
-                  // text={this.props.auth.loginInProgressTextInfo}
-                >
+                <Loadable active={loginInProgress} spinner text={loginInfoText}>
                   <div
                     style={{
                       ...panelStyle,
@@ -218,8 +264,8 @@ const VerdisOnlineLanding = () => {
                             type="text"
                             name="stac"
                             mask="AAAA-AAAA-AAAA"
-                            // value={this.props.uiState.stacInput}
-                            // onChange={this.handleSTACInput}
+                            value={stac}
+                            onChange={handleStacInput}
                             // disabled={this.state.connectionProblem}
                           />
                         </FormGroup>
