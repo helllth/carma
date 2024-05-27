@@ -335,6 +335,8 @@ jobs:
         with:
           fetch-depth: 0
           submodules: 'recursive' # Fetch all submodules recursively
+      - name: Update Submodules
+        run: git submodule update --remote --recursive
       - name: add cismet-dev registry secret to .npmrc
         shell: bash
         run: |
