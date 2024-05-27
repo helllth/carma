@@ -45,6 +45,8 @@ jobs:
         with:
           fetch-depth: 0
           submodules: 'recursive' # Fetch all submodules recursively
+      - name: Update Submodules
+        run: git submodule update --remote --recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -171,6 +173,8 @@ jobs:
         with:
           fetch-depth: 0
           submodules: 'recursive' # Fetch all submodules recursively
+      - name: Update Submodules
+        run: git submodule update --remote --recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 20
