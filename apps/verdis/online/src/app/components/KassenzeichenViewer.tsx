@@ -1,4 +1,4 @@
-import { Alert, AlertContainer } from 'react-bs-notifier';
+import { Alert } from 'react-bootstrap';
 import Navbar from './Navbar';
 import Waiting from './Waiting';
 import Map from './Map';
@@ -9,6 +9,7 @@ import KassenzeichenPanel from './KassenzeichenPanel';
 import KassenzeichenFlaechenChartPanel from './KassenzeichenFlaechenChartPanel';
 import {
   getCRsForFlaeche,
+  getOverlayTextForFlaeche,
   hasAttachment,
   kassenzeichenFlaechenSorter,
 } from '../../utils/kassenzeichenHelper';
@@ -37,6 +38,11 @@ const KassenzeichenViewer = () => {
     );
   };
 
+  let selectedFlaeche: any = null;
+  if (mapping.selectedIndex !== undefined && mapping.selectedIndex !== -1) {
+    selectedFlaeche = mapping.featureCollection[mapping.selectedIndex];
+  }
+
   const horizontalPanelHeight = 150;
   const horizontalPanelWidth = 200;
 
@@ -63,8 +69,9 @@ const KassenzeichenViewer = () => {
         }}
       >
         <Alert
-          bsStyle="danger"
-          onDismiss={() => {
+          variant="danger"
+          dismissible
+          onClose={() => {
             // this.props.uiStateActions.showChangeRequestsMenu(true);
           }}
         >
@@ -94,10 +101,11 @@ const KassenzeichenViewer = () => {
         }}
       >
         <Alert
-          bsStyle="danger"
-          onDismiss={() => {
+          variant="danger"
+          onClose={() => {
             // this.props.uiStateActions.showChangeRequestsMenu(true);
           }}
+          dismissible
         >
           {/* <h5>{nachweisPflichtText()}</h5> */}
         </Alert>
@@ -188,6 +196,44 @@ const KassenzeichenViewer = () => {
       <Map />
     </div>
   );
+
+  if (
+    selectedFlaeche !== undefined &&
+    selectedFlaeche !== null &&
+    selectedFlaeche.properties.type !== 'annotation' &&
+    uiState.infoElementsEnabled
+  ) {
+    flaechenInfoOverlay = (
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 20,
+          zIndex: 500,
+          width: uiState.width - verticalPanelWidth - 40,
+          opacity: 0.9,
+        }}
+      >
+        <Alert
+          variant="warning"
+          onClose={() => {
+            // this.props.uiStateActions.toggleInfoElements();
+          }}
+          dismissible
+        >
+          {getOverlayTextForFlaeche(
+            selectedFlaeche.properties,
+            undefined
+            // this.props.uiState.changeRequestsEditMode === true
+            //     ? getCRsForFlaeche(this.props.kassenzeichen, {
+            //           flaechenbezeichnung: selectedFlaeche.properties.bez
+            //       })
+            //     : undefined
+          )}
+        </Alert>
+      </div>
+    );
+  }
 
   return (
     <div>

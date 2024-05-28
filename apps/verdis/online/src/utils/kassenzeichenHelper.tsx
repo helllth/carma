@@ -1,3 +1,15 @@
+import AmKanalAngeschlossen from '../app/components/kurzinfos/anschlussgrad/AmKanalAngeschlossen';
+import DirekteinleitungInVerrohrtesGewaesser from '../app/components/kurzinfos/anschlussgrad/DirekteinleitungInVerrohrtesGewaesser';
+import DirekteinleitungOffenesGewaesser from '../app/components/kurzinfos/anschlussgrad/DirekteinleitungOffenesGewaesser';
+import Versickernd from '../app/components/kurzinfos/anschlussgrad/Versickernd';
+import VersickerungsanlageMitNotueberlauf from '../app/components/kurzinfos/anschlussgrad/VersickerungsanlageMitNotueberlauf';
+import Dachflaeche from '../app/components/kurzinfos/flaechenart/Dachflaeche';
+import Gruendachflaeche from '../app/components/kurzinfos/flaechenart/Gruendachflaeche';
+import Oekopflaster from '../app/components/kurzinfos/flaechenart/Oekopflaster';
+import StaedtStrassenflaeche from '../app/components/kurzinfos/flaechenart/StaedtStrassenflaeche';
+import StaedtStrassenflaecheOekopflaster from '../app/components/kurzinfos/flaechenart/StaedtStrassenflaecheOekopflaster';
+import VersiegelteFlaeche from '../app/components/kurzinfos/flaechenart/VersiegelteFlaeche';
+
 export const colorUnchanged = 'black';
 export const colorChanged = '#436F8C';
 export const colorNeededProof = '#B55959';
@@ -362,4 +374,82 @@ export const anschlussgradLookupByAbk = {
   'direkt OG': 3,
   'Va-Über': 4,
   'Bach verrohrt': 5,
+};
+
+export const getOverlayTextForFlaeche = (flaeche, flaechenCR) => {
+  let mergedFlaeche = getMergedFlaeche(flaeche, flaechenCR);
+  return (
+    <div>
+      {getInfoTextForFlaechenart(mergedFlaeche)}
+      <br />
+      {getInfoTextForAnschlussgrad(mergedFlaeche)}
+    </div>
+  );
+};
+
+export const getInfoTextForFlaechenart = (flaeche) => {
+  let flaechenart;
+  let switcher;
+  if (flaeche.flaechenart) {
+    switcher = flaeche.flaechenart;
+  } else {
+    switcher = flaeche.flaecheninfo.flaechenart.art;
+  }
+
+  switch (switcher) {
+    case 'Dachfläche':
+      flaechenart = <Dachflaeche />;
+      break;
+    case 'Gründach':
+      flaechenart = <Gruendachflaeche />;
+      break;
+    case 'versiegelte Fläche':
+      flaechenart = <VersiegelteFlaeche />;
+      break;
+    case 'städtische Straßenfläche':
+      flaechenart = <StaedtStrassenflaeche />;
+      break;
+    case 'leicht versiegelte Straßenfläche':
+      flaechenart = <StaedtStrassenflaecheOekopflaster />;
+      break;
+    case 'leicht versiegelte Fläche':
+      flaechenart = <Oekopflaster />;
+      break;
+    default:
+      throw new Error('unbekannte Flächenart: ' + switcher);
+  }
+
+  return flaechenart;
+};
+
+export const getInfoTextForAnschlussgrad = (flaeche) => {
+  let anschlussgrad;
+
+  let switcher;
+  if (flaeche.anschlussgrad) {
+    switcher = flaeche.anschlussgrad;
+  } else {
+    switcher = flaeche.flaecheninfo.anschlussgrad.grad_abkuerzung;
+  }
+  switch (switcher) {
+    case 'angeschl.':
+      anschlussgrad = <AmKanalAngeschlossen />;
+      break;
+    case 'vers.':
+      anschlussgrad = <Versickernd />;
+      break;
+    case 'direkt OG':
+      anschlussgrad = <DirekteinleitungOffenesGewaesser />;
+      break;
+    case 'Va-Über':
+      anschlussgrad = <VersickerungsanlageMitNotueberlauf />;
+      break;
+    case 'Bach verrohrt':
+      anschlussgrad = <DirekteinleitungInVerrohrtesGewaesser />;
+      break;
+    default:
+      throw new Error('unbekannte Anschlussgrad: ' + switcher);
+  }
+
+  return anschlussgrad;
 };
