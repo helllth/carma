@@ -3,8 +3,12 @@ import Navbar from './Navbar';
 import Waiting from './Waiting';
 import Map from './Map';
 import ContactPanel from './ContactPanel';
+import { useSelector } from 'react-redux';
+import { getKassenzeichen } from '../../store/slices/kassenzeichen';
+import KassenzeichenPanel from './KassenzeichenPanel';
 
 const KassenzeichenViewer = () => {
+  const kassenzeichen = useSelector(getKassenzeichen);
   let flaechenPanelRefs = {};
 
   const verticalPanelWidth = 280;
@@ -82,6 +86,15 @@ const KassenzeichenViewer = () => {
   let mapHeight = 50;
 
   let contactPanel = <div />;
+  let kassenzeichenPanel = <div />;
+
+  if (kassenzeichen.id !== -1) {
+    kassenzeichenPanel = (
+      <div>
+        <KassenzeichenPanel />
+      </div>
+    );
+  }
 
   contactPanel = <ContactPanel />;
 
@@ -95,9 +108,9 @@ const KassenzeichenViewer = () => {
         })}
       >
         {contactPanel}
-        {/* {kassenzeichenPanel}
-            {kassenzeichenHorizontalFlaechenChartsPanel}
-            {flComps} */}
+        {kassenzeichenPanel}
+        {/* {kassenzeichenHorizontalFlaechenChartsPanel} */}
+        {/* {flComps} */}
       </div>
       <Map />
     </div>
