@@ -150,10 +150,6 @@ const slice = createSlice({
     toggleContactElement(state, action) {
       state.contactElementEnabled = !state.contactElementEnabled;
     },
-    showSetting(state, action) {
-      state.settingsVisible = action.payload.visible;
-      state.applicationMenuVisible = action.payload.visible;
-    },
     showWaiting(state, action) {
       if (action.payload.visible && state.waitingVisible) {
         state.waitingUIAnimation = false;
@@ -169,13 +165,40 @@ const slice = createSlice({
         state.waitingType = WAITING_TYPE_MESSAGE;
       }
     },
+    showSettings(state, action) {
+      state.settingsVisible = action.payload.visible;
+      state.applicationMenuVisible = action.payload.visible;
+    },
+    showChangeRequests(state, action) {
+      state.changeRequestsMenuVisible = action.payload.visible;
+    },
   },
 });
 
 export default slice;
 
-export const {} = slice.actions;
+export const {
+  screenResize,
+  setError,
+  showSettings,
+  showWaiting,
+  toggleChartElements,
+  toggleContactElement,
+  toggleDetailElements,
+  toggleFilterElement,
+  toggleInfoElements,
+  toggleKanalElements,
+  showChangeRequests,
+} = slice.actions;
 
 export const getConfData = (state) => {
   return state.ui.confData;
+};
+
+export const getUiState = (state) => {
+  return state.ui;
+};
+
+export const getHeight = (state) => {
+  return state.ui.height;
 };

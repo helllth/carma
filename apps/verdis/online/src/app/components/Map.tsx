@@ -12,11 +12,13 @@ import {
 } from '../../store/slices/mapping';
 import 'react-cismap/topicMaps.css';
 import 'leaflet/dist/leaflet.css';
+import { getHeight } from '../../store/slices/ui';
 
 const Map = () => {
   const [urlParams, setUrlParams] = useSearchParams();
   const dispatch = useDispatch();
   const mapping = useSelector(getMapping);
+  const height = useSelector(getHeight);
   const annotationEditable = false;
 
   function paramsToObject(entries) {
@@ -29,8 +31,7 @@ const Map = () => {
   }
 
   const mapStyle = {
-    // height: this.props.height,
-    height: 1127,
+    height: height - 55,
     cursor: 'grab',
   };
 

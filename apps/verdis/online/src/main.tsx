@@ -11,6 +11,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import KassenzeichenViewer from './app/components/KassenzeichenViewer';
 import VerdisOnlineLanding from './app/components/VerdisOnlineLanding';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Layout from './app/components/Layout';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -41,7 +42,9 @@ root.render(
         referenceSystem={MappingConstants.crs25832}
       >
         <Provider store={store}>
-          <RouterProvider router={router} />
+          <Layout>
+            <RouterProvider router={router} />
+          </Layout>
         </Provider>
       </TopicMapContextProvider>
     </PersistGate>
