@@ -11,7 +11,18 @@ const KassenzeichenPanel = () => {
     width: '100%',
   };
   return (
-    <div onClick={() => {}} style={styleOverride}>
+    <div
+      onClick={() => {}}
+      style={{
+        ...styleOverride,
+        minHeight: 20,
+        backgroundColor: '#f5f5f5',
+        border: '1px solid #e3e3e3',
+        padding: 9,
+        borderRadius: 3,
+        height: 'auto',
+      }}
+    >
       <h4>Kassenzeichen</h4>
       <small>erfasst am {kassenzeichen.datum_erfassung}</small>
       <table style={{ width: '100%' }}>

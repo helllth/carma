@@ -78,7 +78,17 @@ const KassenzeichenFlaechenChartPanel = ({ orientation }: PanelProps) => {
 
   if (orientation === 'vertical') {
     return (
-      <div style={styleOverride}>
+      <div
+        style={{
+          ...styleOverride,
+          minHeight: 20,
+          backgroundColor: '#f5f5f5',
+          border: '1px solid #e3e3e3',
+          padding: 9,
+          borderRadius: 3,
+          height: 'auto',
+        }}
+      >
         <h4>
           Veranlagung: {Math.floor(total).toLocaleString('de-DE')} m&sup2;
         </h4>
