@@ -13,11 +13,12 @@ import {
   kassenzeichenFlaechenSorter,
 } from '../../utils/kassenzeichenHelper';
 import FlaechenPanel from './FlaechenPanel';
-import { getHeight } from '../../store/slices/ui';
+import { getHeight, getUiState } from '../../store/slices/ui';
 
 const KassenzeichenViewer = () => {
   const kassenzeichen = useSelector(getKassenzeichen);
   const height = useSelector(getHeight);
+  const uiState = useSelector(getUiState);
   let flaechenPanelRefs = {};
 
   const verticalPanelWidth = 280;
@@ -145,21 +146,26 @@ const KassenzeichenViewer = () => {
         <KassenzeichenPanel />
       </div>
     );
-    kassenzeichenHorizontalFlaechenChartsPanel = (
-      <KassenzeichenFlaechenChartPanel orientation="vertical" />
-    );
-    kassenzeichenVerticalFlaechenChartsPanel = (
-      // <Flexbox height={"" + horizontalPanelHeight} minWidth={"" + horizontalPanelWidth}>
-      <KassenzeichenFlaechenChartPanel orientation="horizontal" />
-      // </Flexbox>
-    );
+    if (uiState.chartElementsEnabled) {
+      kassenzeichenHorizontalFlaechenChartsPanel = (
+        <KassenzeichenFlaechenChartPanel orientation="vertical" />
+      );
+      kassenzeichenVerticalFlaechenChartsPanel = (
+        // <Flexbox height={"" + horizontalPanelHeight} minWidth={"" + horizontalPanelWidth}>
+        <KassenzeichenFlaechenChartPanel orientation="horizontal" />
+        // </Flexbox>
+      );
+    }
   }
 
-  contactPanel = <ContactPanel />;
+  if (uiState.contactElementEnabled && kassenzeichen.id !== -1) {
+    contactPanel = <ContactPanel />;
+  }
 
   verdisMapWithAdditionalComponents = (
     <div>
       <div
+        // @ts-ignore
         style={Object.assign({}, detailsStyle, {
           height: mapHeight + 'px',
           width: verticalPanelWidth + 'px',

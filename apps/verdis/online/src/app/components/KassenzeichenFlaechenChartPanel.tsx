@@ -103,6 +103,7 @@ const KassenzeichenFlaechenChartPanel = ({ orientation }: PanelProps) => {
           <Legend />
           <Tooltip
             formatter={(value) =>
+              // @ts-ignore
               Math.floor(value).toLocaleString('de-DE') + ' m²'
             }
           />
