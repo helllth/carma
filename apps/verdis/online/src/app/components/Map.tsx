@@ -15,7 +15,10 @@ import {
 import 'react-cismap/topicMaps.css';
 import 'leaflet/dist/leaflet.css';
 import { getHeight } from '../../store/slices/ui';
-import { createFlaechenStyler } from '../../utils/kassenzeichenMappingTools';
+import {
+  createFlaechenStyler,
+  getMarkerStyleFromFeatureConsideringSelection,
+} from '../../utils/kassenzeichenMappingTools';
 import { getKassenzeichen } from '../../store/slices/kassenzeichen';
 
 const Map = () => {
@@ -50,10 +53,12 @@ const Map = () => {
   const featureClick = (event, feature) => {
     if (isFlaecheSelected(feature.properties)) {
       dispatch(
+        // @ts-ignore
         fitFeatureBounds(mapping.featureCollection[mapping.selectedIndex], '')
       );
     } else {
       dispatch(
+        // @ts-ignore
         setSelectedFeatureIndexWithSelector((testFeature) => {
           return testFeature.properties.id === feature.properties.id;
         })
@@ -121,12 +126,12 @@ const Map = () => {
         boundingBox={mapping.boundingBox}
         clusteringEnabled={false}
         style={createFlaechenStyler(false, kassenzeichen)}
-        //labeler={flaechenLabeler}
         // hoverer={this.props.hoverer}
         featureClickHandler={featureClick}
         // mapRef={this.leafletRoutedMap}
+        // @ts-ignore
         showMarkerCollection={urlParams.get('zoom') >= 15}
-        // markerStyle={getMarkerStyleFromFeatureConsideringSelection}
+        markerStyle={getMarkerStyleFromFeatureConsideringSelection}
         snappingGuides={true}
       />
       {/* <CyclingBackgroundButton
