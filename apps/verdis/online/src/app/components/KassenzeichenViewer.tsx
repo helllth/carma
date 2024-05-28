@@ -13,9 +13,11 @@ import {
   kassenzeichenFlaechenSorter,
 } from '../../utils/kassenzeichenHelper';
 import FlaechenPanel from './FlaechenPanel';
+import { getHeight } from '../../store/slices/ui';
 
 const KassenzeichenViewer = () => {
   const kassenzeichen = useSelector(getKassenzeichen);
+  const height = useSelector(getHeight);
   let flaechenPanelRefs = {};
 
   const verticalPanelWidth = 280;
@@ -27,7 +29,7 @@ const KassenzeichenViewer = () => {
   const detailsStyle = {
     backgroundColor: '#EEE',
     padding: '5px 5px 5px 5px',
-    // overflow: 'auto',
+    overflow: 'auto',
   };
 
   let crDraftCounter = 0;
@@ -90,10 +92,8 @@ const KassenzeichenViewer = () => {
 
   let flaechenInfoOverlay;
   let verdisMapWithAdditionalComponents;
-  let mapHeight = 50;
+  let mapHeight = height - 50;
   let flaechen = [];
-
-  console.log('xxx', kassenzeichen);
 
   if (kassenzeichen.flaechen) {
     flaechen = kassenzeichen.flaechen
