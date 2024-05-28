@@ -13,12 +13,15 @@ import {
 import 'react-cismap/topicMaps.css';
 import 'leaflet/dist/leaflet.css';
 import { getHeight } from '../../store/slices/ui';
+import { createFlaechenStyler } from '../../utils/kassenzeichenMappingTools';
+import { getKassenzeichen } from '../../store/slices/kassenzeichen';
 
 const Map = () => {
   const [urlParams, setUrlParams] = useSearchParams();
   const dispatch = useDispatch();
   const mapping = useSelector(getMapping);
   const height = useSelector(getHeight);
+  const kassenzeichen = useSelector(getKassenzeichen);
   const annotationEditable = false;
 
   function paramsToObject(entries) {
@@ -89,7 +92,7 @@ const Map = () => {
         )}
         boundingBox={mapping.boundingBox}
         clusteringEnabled={false}
-        // style={this.props.featureCollectionStyle}
+        style={createFlaechenStyler(false, kassenzeichen)}
         //labeler={flaechenLabeler}
         // hoverer={this.props.hoverer}
         // featureClickHandler={this.featureClick}

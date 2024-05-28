@@ -1,13 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { DOMAIN, SERVICE, STAC_SERVICE } from '../../constants/cids';
 import { logout, setLoginInProgress, setStac } from './auth';
+import {
+  getAnnotationFeatureCollection,
+  getFlaechenFeatureCollection,
+} from '../../utils/kassenzeichenMappingTools';
+import {
+  fitAll,
+  setFeatureCollection,
+  setSelectedFeatureIndex,
+} from './mapping';
 
 const initialState = {
   id: -1,
 };
 
 const slice = createSlice({
-  name: 'auth',
+  name: 'kassenzeichen',
   initialState,
   reducers: {
     setKassenzeichen(state, action) {
@@ -23,6 +32,10 @@ const slice = createSlice({
 export default slice;
 
 export const { setKassenzeichen } = slice.actions;
+
+export const getKassenzeichen = (state) => {
+  return state.kassenzeichen;
+};
 
 export const searchByKassenzeichenId = (kassenzeichenId, fitBounds) => {
   return function (dispatch, getState) {
@@ -163,22 +176,21 @@ export const getKassenzeichenbySTAC = (stac, callback) => {
               dispatch(
                 setKassenzeichen({ kassenzeichenObject: kassenzeichenData })
               );
-              // const flaechenFC = getFlaechenFeatureCollection(kassenzeichenData);
-              // const annoFC = getAnnotationFeatureCollection(
-              //     kassenzeichenData.aenderungsanfrage
-              // );
+              const flaechenFC =
+                getFlaechenFeatureCollection(kassenzeichenData);
+              const annoFC = getAnnotationFeatureCollection(
+                kassenzeichenData.aenderungsanfrage
+              );
 
-              // dispatch(
-              //     MappingActions.setFeatureCollection([...flaechenFC, ...annoFC])
-              // );
+              dispatch(setFeatureCollection([...flaechenFC, ...annoFC]));
 
-              // dispatch(
-              // 	MappingActions.setFeatureCollection(
-              // 		getFlaechenFeatureCollection(kassenzeichenData)
-              // 	)
-              // );
-              // dispatch(MappingActions.setSelectedFeatureIndex(null));
-              // dispatch(MappingActions.fitAll());
+              dispatch(
+                setFeatureCollection(
+                  getFlaechenFeatureCollection(kassenzeichenData)
+                )
+              );
+              dispatch(setSelectedFeatureIndex(null));
+              dispatch(fitAll());
               dispatch(setStac(stac));
               // dispatch(
               //     getFEBByStac(
@@ -216,3 +228,64 @@ export const getKassenzeichenbySTAC = (stac, callback) => {
       });
   };
 };
+
+export function getNumberOfPendingChanges(cr) {
+  let crCounter = 0;
+  let crDraftCounter = 0;
+  if (cr !== undefined && cr !== null) {
+    if (cr.flaechen !== undefined && cr.flaechen != null) {
+      const changerequestBezeichnungsArray = Object.keys(cr.flaechen);
+      (changerequestBezeichnungsArray || []).forEach(
+        (flaechenbezeichnung, index) => {
+          const crf = cr.flaechen[flaechenbezeichnung];
+          if (crf.draft === true) {
+            if (crf.groesse !== undefined) {
+              crDraftCounter++;
+            }
+            if (crf.flaechenart !== undefined) {
+              crDraftCounter++;
+            }
+            if (crf.anschlussgrad !== undefined) {
+              crDraftCounter++;
+            }
+          } else {
+            if (crf.groesse !== undefined) {
+              crCounter++;
+            }
+            if (crf.flaechenart !== undefined) {
+              crCounter++;
+            }
+            if (crf.anschlussgrad !== undefined) {
+              crCounter++;
+            }
+          }
+        }
+      );
+    }
+    if (cr.nachrichten !== undefined && cr.nachrichten !== null) {
+      const changerequestMessagesArray = cr.nachrichten;
+      (changerequestMessagesArray || []).forEach((msg) => {
+        if (msg.draft === true) {
+          if (msg.nachricht !== undefined && msg.nachricht.trim() !== '') {
+            crDraftCounter++;
+          }
+          if (msg.anhang !== undefined && msg.anhang.length > 0) {
+            crDraftCounter += msg.anhang.length;
+          }
+        }
+      });
+    }
+
+    if (cr.geometrien !== undefined && cr.geometrien !== null) {
+      (Object.keys(cr.geometrien) || []).forEach((geomKey) => {
+        const geom = cr.geometrien[geomKey];
+
+        if (geom.properties.draft === true) {
+          crDraftCounter++;
+        }
+      });
+    }
+  }
+
+  return { crDraftCounter, crCounter };
+}
