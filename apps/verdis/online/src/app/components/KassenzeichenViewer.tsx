@@ -6,6 +6,13 @@ import ContactPanel from './ContactPanel';
 import { useSelector } from 'react-redux';
 import { getKassenzeichen } from '../../store/slices/kassenzeichen';
 import KassenzeichenPanel from './KassenzeichenPanel';
+import KassenzeichenFlaechenChartPanel from './KassenzeichenFlaechenChartPanel';
+import {
+  getCRsForFlaeche,
+  hasAttachment,
+  kassenzeichenFlaechenSorter,
+} from '../../utils/kassenzeichenHelper';
+import FlaechenPanel from './FlaechenPanel';
 
 const KassenzeichenViewer = () => {
   const kassenzeichen = useSelector(getKassenzeichen);
@@ -84,15 +91,67 @@ const KassenzeichenViewer = () => {
   let flaechenInfoOverlay;
   let verdisMapWithAdditionalComponents;
   let mapHeight = 50;
+  let flaechen = [];
+
+  console.log('xxx', kassenzeichen);
+
+  if (kassenzeichen.flaechen) {
+    flaechen = kassenzeichen.flaechen
+      .concat()
+      .sort(kassenzeichenFlaechenSorter);
+  }
 
   let contactPanel = <div />;
   let kassenzeichenPanel = <div />;
+  let kassenzeichenHorizontalFlaechenChartsPanel;
+  let kassenzeichenVerticalFlaechenChartsPanel;
+  let flComps: any = [];
+
+  flComps = flaechen.map(function (flaeche) {
+    // const sel = that.isFlaecheSelected(flaeche);
+    const sel = false;
+    const flaechenCR = getCRsForFlaeche(kassenzeichen, flaeche);
+    const hasAttachments = hasAttachment(kassenzeichen.aenderungsanfrage);
+    return (
+      // <Flexbox
+      //     key={"flex" + i++ + "." + flaeche.id}
+      //     height={"" + horizontalPanelHeight}
+      //     minWidth={"" + horizontalPanelWidth}
+      // >
+      <FlaechenPanel
+        // ref={c => {
+        //     that.flaechenPanelRefs[flaeche.id] = c;
+        // }}
+        // key={flaeche.id + "." + sel}
+        selected={sel}
+        // flaechenPanelClickHandler={that.flaechenPanelClick}
+        flaeche={flaeche}
+        // changerequest={flaechenCR}
+        // editmode={that.props.uiState.changeRequestsEditMode}
+        // proofNeeded={needsProofSingleFlaeche(flaechenCR) && !hasAttachments}
+        // display={
+        //     that.props.uiState.changeRequestsEditMode === true
+        //         ? "cr"
+        //         : "original"
+        // }
+      />
+      // </Flexbox>
+    );
+  });
 
   if (kassenzeichen.id !== -1) {
     kassenzeichenPanel = (
       <div>
         <KassenzeichenPanel />
       </div>
+    );
+    kassenzeichenHorizontalFlaechenChartsPanel = (
+      <KassenzeichenFlaechenChartPanel orientation="vertical" />
+    );
+    kassenzeichenVerticalFlaechenChartsPanel = (
+      // <Flexbox height={"" + horizontalPanelHeight} minWidth={"" + horizontalPanelWidth}>
+      <KassenzeichenFlaechenChartPanel orientation="horizontal" />
+      // </Flexbox>
     );
   }
 
@@ -109,8 +168,8 @@ const KassenzeichenViewer = () => {
       >
         {contactPanel}
         {kassenzeichenPanel}
-        {/* {kassenzeichenHorizontalFlaechenChartsPanel} */}
-        {/* {flComps} */}
+        {kassenzeichenHorizontalFlaechenChartsPanel}
+        {flComps}
       </div>
       <Map />
     </div>
