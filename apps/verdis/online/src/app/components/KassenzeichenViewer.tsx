@@ -2,6 +2,7 @@ import { Alert, AlertContainer } from 'react-bs-notifier';
 import Navbar from './Navbar';
 import Waiting from './Waiting';
 import Map from './Map';
+import ContactPanel from './ContactPanel';
 
 const KassenzeichenViewer = () => {
   let flaechenPanelRefs = {};
@@ -12,6 +13,11 @@ const KassenzeichenViewer = () => {
   const horizontalPanelWidth = 200;
 
   const switchToBottomWhenSmallerThan = 900;
+  const detailsStyle = {
+    backgroundColor: '#EEE',
+    padding: '5px 5px 5px 5px',
+    // overflow: 'auto',
+  };
 
   let crDraftCounter = 0;
 
@@ -76,6 +82,26 @@ const KassenzeichenViewer = () => {
   let mapHeight = 50;
 
   let contactPanel = <div />;
+
+  contactPanel = <ContactPanel />;
+
+  verdisMapWithAdditionalComponents = (
+    <div>
+      <div
+        style={Object.assign({}, detailsStyle, {
+          height: mapHeight + 'px',
+          width: verticalPanelWidth + 'px',
+          float: 'right',
+        })}
+      >
+        {contactPanel}
+        {/* {kassenzeichenPanel}
+            {kassenzeichenHorizontalFlaechenChartsPanel}
+            {flComps} */}
+      </div>
+      <Map />
+    </div>
+  );
 
   return (
     <div>
@@ -189,7 +215,6 @@ const KassenzeichenViewer = () => {
         }}
         deleteAnnotation={this.props.kassenzeichenActions.removeAnnotation}
       /> */}
-      <Map />
       {verdisMapWithAdditionalComponents}
       {flaechenInfoOverlay}
       {draftAlert}
