@@ -1,6 +1,7 @@
 import { Alert, AlertContainer } from 'react-bs-notifier';
 import Navbar from './Navbar';
 import Waiting from './Waiting';
+import Map from './Map';
 
 const KassenzeichenViewer = () => {
   let flaechenPanelRefs = {};
@@ -188,7 +189,7 @@ const KassenzeichenViewer = () => {
         }}
         deleteAnnotation={this.props.kassenzeichenActions.removeAnnotation}
       /> */}
-
+      <Map />
       {verdisMapWithAdditionalComponents}
       {flaechenInfoOverlay}
       {draftAlert}

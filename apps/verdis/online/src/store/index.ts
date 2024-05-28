@@ -5,6 +5,7 @@ import localForage from 'localforage';
 import authSlice from './slices/auth';
 import kassenzeichenReducer from './slices/kassenzeichen';
 import uiReducer from './slices/ui';
+import mappingReducer from './slices/mapping';
 
 console.log('store initializing ....');
 
@@ -78,6 +79,7 @@ export default configureStore({
     auth: persistReducer(authConfig, authSlice.reducer),
     kassenzeichen: kassenzeichenReducer.reducer,
     ui: uiReducer.reducer,
+    mapping: mappingReducer.reducer,
   },
   devTools: devToolsEnabled === true && inProduction === false,
   middleware,
