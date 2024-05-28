@@ -6,9 +6,11 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import {
+  fitFeatureBounds,
   getMapping,
   mapBoundsChanged,
   setAutoFit,
+  setSelectedFeatureIndexWithSelector,
 } from '../../store/slices/mapping';
 import 'react-cismap/topicMaps.css';
 import 'leaflet/dist/leaflet.css';
@@ -32,6 +34,32 @@ const Map = () => {
     }
     return result;
   }
+
+  const isFlaecheSelected = (flaeche) => {
+    return (
+      mapping.featureCollection !== 'undefined' &&
+      mapping.featureCollection.length > 0 &&
+      mapping.selectedIndex !== 'undefined' &&
+      mapping.featureCollection.length > mapping.selectedIndex &&
+      mapping.featureCollection[mapping.selectedIndex] &&
+      mapping.featureCollection[mapping.selectedIndex]?.properties.id ===
+        flaeche.id
+    );
+  };
+
+  const featureClick = (event, feature) => {
+    if (isFlaecheSelected(feature.properties)) {
+      dispatch(
+        fitFeatureBounds(mapping.featureCollection[mapping.selectedIndex], '')
+      );
+    } else {
+      dispatch(
+        setSelectedFeatureIndexWithSelector((testFeature) => {
+          return testFeature.properties.id === feature.properties.id;
+        })
+      );
+    }
+  };
 
   const mapStyle = {
     height: height - 55,
@@ -95,7 +123,7 @@ const Map = () => {
         style={createFlaechenStyler(false, kassenzeichen)}
         //labeler={flaechenLabeler}
         // hoverer={this.props.hoverer}
-        // featureClickHandler={this.featureClick}
+        featureClickHandler={featureClick}
         // mapRef={this.leafletRoutedMap}
         showMarkerCollection={urlParams.get('zoom') >= 15}
         // markerStyle={getMarkerStyleFromFeatureConsideringSelection}

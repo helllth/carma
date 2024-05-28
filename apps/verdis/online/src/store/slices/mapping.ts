@@ -46,11 +46,10 @@ const slice = createSlice({
     },
     setSelectedFeatureIndex(state, action) {
       let newState = JSON.parse(JSON.stringify(state));
-      console.log(newState.featureCollection);
       for (let feature of newState.featureCollection) {
         feature.selected = false;
       }
-      if (action.payload) {
+      if (action.payload !== undefined && action.payload !== null) {
         newState.featureCollection[action.payload].selected = true;
       }
       newState.selectedIndex = action.payload;
@@ -136,4 +135,16 @@ export function getLayerForFeatureId(routedmap, featureId) {
   });
 
   return l;
+}
+
+export function setSelectedFeatureIndexWithSelector(selector) {
+  return function (dispatch, getState) {
+    const featureCollection = getState().mapping.featureCollection;
+    for (let i = 0, l = featureCollection.length; i < l; i++) {
+      if (selector(featureCollection[i])) {
+        dispatch(setSelectedFeatureIndex(i));
+        break;
+      }
+    }
+  };
 }
