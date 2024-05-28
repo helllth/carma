@@ -14,14 +14,28 @@ import {
 } from '../../utils/kassenzeichenHelper';
 import FlaechenPanel from './FlaechenPanel';
 import { getHeight, getUiState } from '../../store/slices/ui';
+import { getMapping } from '../../store/slices/mapping';
 
 const KassenzeichenViewer = () => {
   const kassenzeichen = useSelector(getKassenzeichen);
   const height = useSelector(getHeight);
   const uiState = useSelector(getUiState);
+  const mapping = useSelector(getMapping);
   let flaechenPanelRefs = {};
 
   const verticalPanelWidth = 280;
+
+  const isFlaecheSelected = (flaeche) => {
+    return (
+      mapping.featureCollection !== 'undefined' &&
+      mapping.featureCollection.length > 0 &&
+      mapping.selectedIndex !== 'undefined' &&
+      mapping.featureCollection.length > mapping.selectedIndex &&
+      mapping.featureCollection[mapping.selectedIndex] &&
+      mapping.featureCollection[mapping.selectedIndex]?.properties.id ===
+        flaeche.id
+    );
+  };
 
   const horizontalPanelHeight = 150;
   const horizontalPanelWidth = 200;
@@ -110,15 +124,10 @@ const KassenzeichenViewer = () => {
 
   flComps = flaechen.map(function (flaeche) {
     // const sel = that.isFlaecheSelected(flaeche);
-    const sel = false;
+    const sel = isFlaecheSelected(flaeche);
     const flaechenCR = getCRsForFlaeche(kassenzeichen, flaeche);
     const hasAttachments = hasAttachment(kassenzeichen.aenderungsanfrage);
     return (
-      // <Flexbox
-      //     key={"flex" + i++ + "." + flaeche.id}
-      //     height={"" + horizontalPanelHeight}
-      //     minWidth={"" + horizontalPanelWidth}
-      // >
       <FlaechenPanel
         // ref={c => {
         //     that.flaechenPanelRefs[flaeche.id] = c;
@@ -136,7 +145,6 @@ const KassenzeichenViewer = () => {
         //         : "original"
         // }
       />
-      // </Flexbox>
     );
   });
 
