@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   useCesium,
   BillboardCollection,
@@ -19,16 +13,15 @@ import {
   ColorMaterialProperty,
   ConstantProperty,
   Matrix4,
-  ModelAnimationLoop,
   Quaternion,
   Transforms,
   VerticalOrigin,
 } from 'cesium';
-import { APP_BASE_PATH } from '../config';
 
 interface MarkerData {
   position: [number, number] | [number, number, number];
   image?: string;
+  scale?: number;
   model?: ModelAsset;
 }
 
@@ -45,7 +38,7 @@ interface MarkerContainerProps {
   markerData: MarkerData[];
 }
 
-type ModelAsset = {
+export type ModelAsset = {
   uri: string;
   scale: number;
   isCameraFacing?: boolean;
@@ -53,72 +46,6 @@ type ModelAsset = {
   fixedScale?: boolean;
   anchorOffset?: { x?: number; y?: number; z?: number };
   hasAnimation?: boolean;
-};
-
-//const svgIcon = faHouseUser.icon[4];
-//console.log('svgIcon', svgIcon);
-const pngUri = `${APP_BASE_PATH}data/img/behoerde.svg`;
-
-export const ASSETS = {
-  Marker: {
-    uri: `${APP_BASE_PATH}data/glb/map_pointer.glb`,
-    scale: 20,
-    anchorOffset: { z: 2 },
-  },
-  MarkerFacing: {
-    uri: `${APP_BASE_PATH}data/glb/map_pointer.glb`,
-    scale: 20,
-    isCameraFacing: true,
-    anchorOffset: { z: 2 },
-  },
-  MarkerRotating: {
-    uri: `${APP_BASE_PATH}data/glb/map_pointer.glb`,
-    scale: 20,
-    anchorOffset: { z: 2 },
-    rotation: true,
-  },
-  MarkerRotatingFast: {
-    uri: `${APP_BASE_PATH}data/glb/map_pointer.glb`,
-    scale: 20,
-    rotation: 2,
-    anchorOffset: { z: 2 },
-  },
-  MarkerRotatingSlow: {
-    uri: `${APP_BASE_PATH}data/glb/map_pointer.glb`,
-    scale: 20,
-    anchorOffset: { z: 2 },
-
-    rotation: 0.5,
-  },
-  MarkerRotatingCounter: {
-    uri: `${APP_BASE_PATH}data/glb/map_pointer.glb`,
-    scale: 20,
-    anchorOffset: { z: 2 },
-
-    rotation: -1,
-  },
-
-  MarkerRotatingFixed: {
-    uri: `${APP_BASE_PATH}data/glb/map_pointer.glb`,
-    scale: 20,
-    anchorOffset: { z: 2 },
-    rotation: true,
-    fixedScale: true,
-  },
-  MarkerFacingFixed: {
-    uri: `${APP_BASE_PATH}data/glb/map_pointer.glb`,
-    scale: 20,
-    anchorOffset: { z: 1 },
-    isCameraFacing: true,
-    fixedScale: true,
-  },
-
-  Wind: {
-    uri: `${APP_BASE_PATH}data/glb/game_ready_wind_turbine_animated.glb`,
-    scale: 85,
-    anchorOffset: { z: 0 },
-    hasAnimation: true,
-  },
 };
 
 const DEFAULT_MARKER3D_ROTATION_SPEED = 0.001;
@@ -248,7 +175,7 @@ const MarkerContainer: React.FC<MarkerContainerProps> = ({
                 const cameraHeading = viewer.camera.heading;
                 const rotationQuaternion = Quaternion.fromAxisAngle(
                   Cartesian3.UNIT_Z,
-                  -cameraHeading + Math.PI / 2
+                  -cameraHeading - Math.PI / 2
                 );
                 const rotationMatrix =
                   Matrix4.fromTranslationQuaternionRotationScale(
@@ -285,37 +212,37 @@ const MarkerContainer: React.FC<MarkerContainerProps> = ({
   // Use modelMatrix from entityDataRef in Model component
   const entities =
     entityData &&
-    markerData.map(({ position: [x, y, z = 0], model }, i) => {
+    markerData.map(({ position: [x, y, z = 0], model, image, scale }, i) => {
       const position = Cartesian3.fromDegrees(x, y, z);
       const lineTopPosition = Cartesian3.fromDegrees(x, y, z - 10);
       const groundPosition = Cartesian3.fromDegrees(x, y, 0);
       return (
         <Entity key={i} position={position}>
-          {allow3d && model ? (
-            entityData[i] && (
-              <Model
-                url={model.uri}
-                scale={model.scale}
-                modelMatrix={entityData[i].animatedModelMatrix}
-                //clampAnimations={false}
-              />
-            )
-          ) : (
-            <>
-              <BillboardGraphics
-                image={pngUri}
-                scale={0.5}
-                verticalOrigin={VerticalOrigin.BOTTOM}
-              />
-              <PolylineGraphics
-                width={4}
-                positions={
-                  new ConstantProperty([lineTopPosition, groundPosition])
-                }
-                material={new ColorMaterialProperty(Color.YELLOW)}
-              />
-            </>
-          )}
+          {allow3d && model
+            ? entityData[i] && (
+                <Model
+                  url={model.uri}
+                  scale={model.scale}
+                  modelMatrix={entityData[i].animatedModelMatrix}
+                  //clampAnimations={false}
+                />
+              )
+            : image && (
+                <>
+                  <BillboardGraphics
+                    image={image}
+                    scale={scale}
+                    verticalOrigin={VerticalOrigin.BOTTOM}
+                  />
+                  <PolylineGraphics
+                    width={4}
+                    positions={
+                      new ConstantProperty([lineTopPosition, groundPosition])
+                    }
+                    material={new ColorMaterialProperty(Color.YELLOW)}
+                  />
+                </>
+              )}
         </Entity>
       );
     });

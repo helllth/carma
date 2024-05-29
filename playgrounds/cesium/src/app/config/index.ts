@@ -1,10 +1,21 @@
 import { Cartesian3, Color, ColorMaterialProperty } from 'cesium';
-import { RootState } from './store';
-import { colorToArray } from './utils/cesiumHelpers';
+import { RootState } from '../store';
+import { colorToArray } from '../utils/cesiumHelpers';
+import { WUPPERTAL } from './locations.config';
+
+// APP SETUP
 
 export const APP_BASE_PATH = import.meta.env.BASE_URL;
+export const APP_DEFAULT_TITLE = '3D Viewer Prototype';
+export const APP_DEFAULT_SHORT_TITLE = '3DView';
 export const CESIUM_PATHNAME = '__cesium__';
 export const CESIUM_BASE_URL = `${APP_BASE_PATH}${CESIUM_PATHNAME}`;
+
+const GEOJSON_BASE_PATH = `${APP_BASE_PATH}data/geojson/`;
+const TILESET_BASE_PATH = `${APP_BASE_PATH}data/tiles/`;
+
+// DATA SOURCES
+
 export const WUPP3D = {
   url: 'https://wupp-3d-data.cismet.de/mesh/tileset.json',
   translation: {
@@ -13,25 +24,6 @@ export const WUPP3D = {
     z: 0,
   },
 };
-
-const GEOJSON_BASE_PATH = `${APP_BASE_PATH}data/geojson/`;
-const TILESET_BASE_PATH = `${APP_BASE_PATH}data/tiles/`;
-
-export const CITYGML_TEST_TILESET = {
-  url: `${TILESET_BASE_PATH}tileset.json`,
-  idProperty:
-    'http://repository.gdi-de.org/schemas/adv/citygml/fdv/art.htm#_9100',
-};
-
-export const TILESET_BASEMAP_DE = {
-  url: 'https://web3d.basemap.de/cesium/buildings-fly/root.json',
-};
-
-export const DEFAULT_ID_PROPERTY = 'UUID';
-
-export const DEFAULT_SELECTION_HIGHLIGHT_MATERIAL = new ColorMaterialProperty(
-  Color.YELLOW.withAlpha(0.7)
-);
 
 export const FOOTPRINT_GEOJSON_SOURCES = {
   VORONOI: {
@@ -51,14 +43,25 @@ export const FOOTPRINT_GEOJSON_SOURCES = {
   },
 };
 
-export const WUPPERTAL = {
-  name: 'Wuppertal',
-  position: {
-    lat: 51.27174,
-    lon: 7.20028,
-  },
-  ground: 155, // Willy Brandt Platz as Reference
+export const CITYGML_TEST_TILESET = {
+  url: `${TILESET_BASE_PATH}tileset.json`,
+  idProperty:
+    'http://repository.gdi-de.org/schemas/adv/citygml/fdv/art.htm#_9100',
 };
+
+export const TILESET_BASEMAP_DE = {
+  url: 'https://web3d.basemap.de/cesium/buildings-fly/root.json',
+};
+
+export const DEFAULT_ID_PROPERTY = 'UUID';
+
+// STYLING
+
+export const DEFAULT_SELECTION_HIGHLIGHT_MATERIAL = new ColorMaterialProperty(
+  Color.YELLOW.withAlpha(0.7)
+);
+
+// ANIMATIONS
 
 const fullRotationDuration = 60; // seconds
 export const DEFAULT_ROTATION_SPEED =
@@ -78,9 +81,6 @@ const homeOffset = {
   y: -50000, // southwards
   z: 45000, // elevation
 };
-
-export const APP_DEFAULT_TITLE = '3D Viewer Prototype';
-export const APP_DEFAULT_SHORT_TITLE = '3DView';
 
 export const defaultState: RootState = {
   buildings: {
