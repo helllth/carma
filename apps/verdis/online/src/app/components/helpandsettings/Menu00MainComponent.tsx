@@ -7,6 +7,8 @@ import Menu10Datengrundlagen from './Menu10Datengrundlagen';
 import Menu20MeinKassenzeichen from './Menu20MeinKassenzeichen';
 import Menu40Anleitung from './Menu40Anleitung';
 import Menu41Mailservice from './Menu41Mailservice';
+import Menu42Aenderungen from './Menu42Aenderungen';
+import Menu60Datenschutz from './Menu60Datenschutz';
 
 const ModalHelpAndInfo = () => {
   const uiState = useSelector(getUiState);
@@ -47,6 +49,20 @@ const ModalHelpAndInfo = () => {
           sectionTitle="Mailservice"
           sectionBsStyle="info"
           sectionContent={<Menu41Mailservice />}
+        />,
+        <Section
+          key="aenderungen"
+          sectionKey="aenderungen"
+          sectionTitle="Änderungen vornehmen und übermitteln"
+          sectionBsStyle="success"
+          sectionContent={<Menu42Aenderungen />}
+        />,
+        <Section
+          key="datenschutz"
+          sectionKey="datenschutz"
+          sectionTitle="Datenschutz"
+          sectionBsStyle="danger"
+          sectionContent={<Menu60Datenschutz />}
         />,
       ]}
     />
