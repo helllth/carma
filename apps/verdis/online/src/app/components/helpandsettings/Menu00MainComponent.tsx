@@ -5,6 +5,8 @@ import { getUiState, showSettings } from '../../../store/slices/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import Menu10Datengrundlagen from './Menu10Datengrundlagen';
 import Menu20MeinKassenzeichen from './Menu20MeinKassenzeichen';
+import Menu40Anleitung from './Menu40Anleitung';
+import Menu41Mailservice from './Menu41Mailservice';
 
 const ModalHelpAndInfo = () => {
   const uiState = useSelector(getUiState);
@@ -31,6 +33,20 @@ const ModalHelpAndInfo = () => {
           sectionTitle="Mein Kassenzeichen"
           sectionBsStyle="warning"
           sectionContent={<Menu20MeinKassenzeichen />}
+        />,
+        <Section
+          key="anleitung"
+          sectionKey="anleitung"
+          sectionTitle="Kurzanleitung"
+          sectionBsStyle="success"
+          sectionContent={<Menu40Anleitung />}
+        />,
+        <Section
+          key="mailservice"
+          sectionKey="mailservice"
+          sectionTitle="Mailservice"
+          sectionBsStyle="info"
+          sectionContent={<Menu41Mailservice />}
         />,
       ]}
     />
