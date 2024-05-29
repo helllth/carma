@@ -16,6 +16,7 @@ import {
 import FlaechenPanel from './FlaechenPanel';
 import { getHeight, getUiState } from '../../store/slices/ui';
 import { getMapping } from '../../store/slices/mapping';
+import HelpAndSettings from '../components/helpandsettings/Menu00MainComponent';
 
 const KassenzeichenViewer = () => {
   const kassenzeichen = useSelector(getKassenzeichen);
@@ -248,20 +249,7 @@ const KassenzeichenViewer = () => {
       //   this.props.uiState.waitingType
       // }
       />
-      {/* <HelpAndSettings
-        showApplicationMenu={this.props.uiStateActions.showApplicationMenu}
-        applicationMenuActiveKey={this.props.uiState.applicationMenuActiveKey}
-        setApplicationMenuActiveKey={
-          this.props.uiStateActions.setApplicationMenuActiveKey
-        }
-        applicationMenuVisible={this.props.uiState.applicationMenuVisible}
-        height={this.props.uiState.height}
-        selectedBackgroundIndex={this.props.mapping.selectedBackgroundIndex}
-        backgrounds={this.props.mapping.backgrounds}
-        setBackgroundIndex={
-          this.props.mappingActions.setSelectedBackgroundIndex
-        }
-      /> */}
+      <HelpAndSettings />
       {/* <ChangeRequests
         visible={
           this.props.uiState.changeRequestsMenuVisible === true &&

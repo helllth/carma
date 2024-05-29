@@ -127,8 +127,9 @@ const VerdisOnlineAppNavbar = () => {
             >
               <li role="presentation">
                 <a
-                  href="#"
+                  // href="#"
                   role="button"
+                  onClick={() => dispatch(showSettings({ visible: true }))}
                   style={{
                     color: '#9d9d9d',
                     backgroundColor: 'transparent',
