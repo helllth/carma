@@ -1,5 +1,6 @@
 import ModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
 import Section from 'react-cismap/topicmaps/menu/Section';
+import ConfigurableDocBlocks from 'react-cismap/topicmaps/ConfigurableDocBlocks';
 import Introduction from './Menu05Introduction';
 import { getUiState, showSettings } from '../../../store/slices/ui';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +10,7 @@ import Menu40Anleitung from './Menu40Anleitung';
 import Menu41Mailservice from './Menu41Mailservice';
 import Menu42Aenderungen from './Menu42Aenderungen';
 import Menu60Datenschutz from './Menu60Datenschutz';
+import Menu50FAQ from './Menu50FAQ';
 
 const ModalHelpAndInfo = () => {
   const uiState = useSelector(getUiState);
@@ -56,6 +58,13 @@ const ModalHelpAndInfo = () => {
           sectionTitle="Änderungen vornehmen und übermitteln"
           sectionBsStyle="success"
           sectionContent={<Menu42Aenderungen />}
+        />,
+        <Section
+          key="faq"
+          sectionKey="faq"
+          sectionTitle="Häufig gestellte Fragen"
+          sectionBsStyle="success"
+          sectionContent={<Menu50FAQ />}
         />,
         <Section
           key="datenschutz"
