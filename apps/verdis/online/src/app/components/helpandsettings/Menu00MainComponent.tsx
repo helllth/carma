@@ -11,6 +11,7 @@ import Menu41Mailservice from './Menu41Mailservice';
 import Menu42Aenderungen from './Menu42Aenderungen';
 import Menu60Datenschutz from './Menu60Datenschutz';
 import Menu50FAQ from './Menu50FAQ';
+import Menu30Kartenhintergruende from './Menu30Kartenhintergruende';
 
 const ModalHelpAndInfo = () => {
   const uiState = useSelector(getUiState);
@@ -37,6 +38,13 @@ const ModalHelpAndInfo = () => {
           sectionTitle="Mein Kassenzeichen"
           sectionBsStyle="warning"
           sectionContent={<Menu20MeinKassenzeichen />}
+        />,
+        <Section
+          key="kartenhintergruende"
+          sectionKey="kartenhintergruende"
+          sectionTitle="Hintergrundkarten"
+          sectionBsStyle="info"
+          sectionContent={<Menu30Kartenhintergruende />}
         />,
         <Section
           key="anleitung"
