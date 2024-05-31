@@ -17,6 +17,7 @@ import FlaechenPanel from './FlaechenPanel';
 import { getHeight, getUiState } from '../../store/slices/ui';
 import { getMapping } from '../../store/slices/mapping';
 import HelpAndSettings from '../components/helpandsettings/Menu00MainComponent';
+import ChangeRequests from '../components/changerequests/CR00MainComponent';
 
 const KassenzeichenViewer = () => {
   const kassenzeichen = useSelector(getKassenzeichen);
@@ -250,35 +251,7 @@ const KassenzeichenViewer = () => {
       // }
       />
       <HelpAndSettings />
-      {/* <ChangeRequests
-        visible={
-          this.props.uiState.changeRequestsMenuVisible === true &&
-          this.props.uiState.applicationMenuVisible === false
-        }
-        showChangeRequestMenu={this.props.uiStateActions.showChangeRequestsMenu}
-        height={mapHeight + 10}
-        kassenzeichen={this.props.kassenzeichen}
-        addMessage={this.props.kassenzeichenActions.addChangeRequestMessage}
-        changeEmail={this.props.kassenzeichenActions.requestEmailChange}
-        confirmEmail={this.props.kassenzeichenActions.completeEmailChange}
-        removeLastUserMessage={
-          this.props.kassenzeichenActions.removeLastChangeRequestMessage
-        }
-        uploadCRDoc={this.props.kassenzeichenActions.addCRDoc}
-        crEditMode={this.props.uiState.changeRequestsEditMode}
-        setCREditMode={this.props.uiStateActions.setChangeRequestInEditMode}
-        submit={this.props.kassenzeichenActions.submitCR}
-        cloudStorageStatus={this.props.uiState.cloudStorageStatus}
-        documents={documents}
-        showModalMenu={(activekey) => {
-          if (activekey !== undefined) {
-            this.props.uiStateActions.setApplicationMenuActiveKey(activekey);
-          }
-          this.props.uiStateActions.showApplicationMenu(true);
-        }}
-        localErrorMessages={this.props.uiState.localErrorMessages}
-        addLocalErrorMessage={this.props.uiStateActions.addLocalErrorMessage}
-      /> */}
+      <ChangeRequests />
       {/* <ChangeRequestEditView
         height={mapHeight + 10}
         visible={this.props.uiState.changeRequestEditViewVisible}

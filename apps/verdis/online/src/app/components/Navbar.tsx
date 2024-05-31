@@ -146,7 +146,10 @@ const VerdisOnlineAppNavbar = () => {
               </li>
               <li role="presentation">
                 <a
-                  href="#"
+                  // href="#"
+                  onClick={() =>
+                    dispatch(showChangeRequests({ visible: true }))
+                  }
                   role="button"
                   style={{
                     color: '#9d9d9d',
