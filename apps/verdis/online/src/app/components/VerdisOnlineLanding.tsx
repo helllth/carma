@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getKassenzeichenbySTAC } from '../../store/slices/kassenzeichen';
 import { getLoginInProgress, getLoginInfoText } from '../../store/slices/auth';
 import { useNavigate } from 'react-router-dom';
-import { getConfData } from '../../store/slices/ui';
+import { getConfData, getUiState } from '../../store/slices/ui';
 
 const VerdisOnlineLanding = () => {
   const [stac, setStac] = useState('');
@@ -18,9 +18,10 @@ const VerdisOnlineLanding = () => {
   const loginInfoText = useSelector(getLoginInfoText);
   const confData = useSelector(getConfData);
   const navigate = useNavigate();
+  const uiState = useSelector(getUiState);
   let landingStyle = {
     backgroundColor: 'red',
-    height: 1279,
+    height: uiState.height,
     width: '100%',
     background: "url('/images/" + 'background.jpg' + "')",
     backgroundSize: 'cover',
@@ -215,7 +216,7 @@ const VerdisOnlineLanding = () => {
               <div
                 style={{
                   position: 'fixed',
-                  top: 1279 - 200,
+                  top: uiState.height - 200,
                 }}
               >
                 <Loadable active={loginInProgress} spinner text={loginInfoText}>
@@ -268,7 +269,7 @@ const VerdisOnlineLanding = () => {
               <div
                 style={{
                   position: 'fixed',
-                  top: 1279 - 200,
+                  top: uiState.height - 200,
                 }}
               >
                 <h4 style={{ color: 'white' }}>Stadt Wuppertal</h4>

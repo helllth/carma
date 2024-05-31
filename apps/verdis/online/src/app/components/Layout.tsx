@@ -15,6 +15,8 @@ const Layout = ({ children }: LayoutProps) => {
       );
     };
 
+    handleResize();
+
     window.addEventListener('resize', handleResize);
 
     return () => {
