@@ -172,6 +172,9 @@ const slice = createSlice({
     showChangeRequests(state, action) {
       state.changeRequestsMenuVisible = action.payload.visible;
     },
+    setCREditMode(state, action) {
+      state.changeRequestsEditMode = action.payload;
+    },
   },
 });
 
@@ -189,6 +192,7 @@ export const {
   toggleInfoElements,
   toggleKanalElements,
   showChangeRequests,
+  setCREditMode,
 } = slice.actions;
 
 export const getConfData = (state) => {

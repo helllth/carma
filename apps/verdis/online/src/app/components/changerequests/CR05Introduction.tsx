@@ -1,4 +1,11 @@
+import Toggle from 'react-bootstrap-toggle';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUiState, setCREditMode } from '../../../store/slices/ui';
+import './toggle.css';
+
 const CR05Introduction = () => {
+  const uiState = useSelector(getUiState);
+  const dispatch = useDispatch();
   return (
     <>
       {' '}
@@ -11,17 +18,17 @@ const CR05Introduction = () => {
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
         <div style={{ fontSize: '20px' }}>
           <strong>Änderungsmodus: </strong>
-          {/* <Toggle
-                                onClick={() => {
-                                    setCREditMode(!crEditMode);
-                                }}
-                                on={"Ein"}
-                                off={"Aus"}
-                                offstyle="danger"
-                                onstyle="success"
-                                active={crEditMode}
-                                style={{ padding: 10 }}
-                            /> */}
+          <Toggle
+            onClick={() => {
+              dispatch(setCREditMode(!uiState.changeRequestsEditMode));
+            }}
+            on={'Ein'}
+            off={'Aus'}
+            offstyle="danger"
+            onstyle="success"
+            active={uiState.changeRequestsEditMode}
+            style={{ padding: 10 }}
+          />
         </div>
       </div>
     </>
