@@ -65,6 +65,10 @@ export const getMergedFlaeche = (flaecheOrFlaechenfeature, flaechenCR) => {
   }
 };
 
+export const getLinkForDoc = (doc) => {
+  return 'https://wuppertal.regengeld.de/anhang/' + doc.uuid + '_' + doc.name;
+};
+
 export const getCRsForFeature = (kassenzeichen, flaechenFeature) => {
   if (
     kassenzeichen.aenderungsanfrage !== undefined &&

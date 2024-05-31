@@ -3,10 +3,19 @@ import { getUiState, showChangeRequests } from '../../../store/slices/ui';
 import ModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
 import Section from 'react-cismap/topicmaps/menu/Section';
 import Introduction from './CR05Introduction';
+import { getKassenzeichen } from '../../../store/slices/kassenzeichen';
+import CRConversation from '../conversations/CRConversation';
+import { useState } from 'react';
 
-const CR00MainComponent = () => {
+const CR00MainComponent = ({ localErrorMessages = [] }) => {
   const uiState = useSelector(getUiState);
+  const kassenzeichen = useSelector(getKassenzeichen);
   const dispatch = useDispatch();
+  const [hideSystemMessages, setHideSystemMessages] = useState(false);
+
+  const crMessages =
+    (kassenzeichen.aenderungsanfrage || { nachrichten: [] }).nachrichten || [];
+  const messages = [...(crMessages || []), ...(localErrorMessages || [])];
   return (
     <ModalApplicationMenu
       menuIcon={'edit'}
@@ -21,7 +30,12 @@ const CR00MainComponent = () => {
           sectionKey="sectionKey0"
           sectionTitle="Ihre Kommunikation"
           sectionBsStyle="info"
-          sectionContent={<></>}
+          sectionContent={
+            <CRConversation
+              messages={messages}
+              hideSystemMessages={hideSystemMessages}
+            />
+          }
         />,
       ]}
     />

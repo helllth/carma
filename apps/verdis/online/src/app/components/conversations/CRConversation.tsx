@@ -1,3 +1,8 @@
+import Documents from './Documents';
+import Message from './InternalMessage';
+import SystemMessage from './SystemMessage';
+import InternalMessage from './InternalMessage';
+
 const CRConversation = ({
   messages = [],
   userMap = {
@@ -22,7 +27,109 @@ const CRConversation = ({
   });
   sMsgsWithWelcomeMessage.push(...sMsgs);
 
-  return <div>CRConversation</div>;
+  return (
+    <div>
+      {sMsgsWithWelcomeMessage.map((msg, index) => {
+        switch (msg.typ) {
+          case 'CLERK': {
+            if (msg.draft === true) {
+              return undefined;
+            }
+            let sender;
+            const mappedSender = userMap[msg.name];
+            if (mappedSender !== undefined) {
+              sender = mappedSender.name;
+            } else {
+              sender = msg.name;
+            }
+
+            return (
+              <Message
+                key={'CLERK.Message.' + index}
+                msg={msg.nachricht}
+                from={sender}
+              />
+            );
+          }
+          case 'CITIZEN': {
+            let background = '#FDC65399';
+
+            if (msg.draft === true) {
+              background = '#FDC65333';
+            }
+            return (
+              <div key={'CITIZEN.div.' + index}>
+                {msg.nachricht !== undefined && msg.nachricht.trim() !== '' && (
+                  <Message
+                    key={'CITIZEN.Message.' + index}
+                    msg={msg.nachricht}
+                    background={background}
+                    alignment="right"
+                  />
+                )}
+
+                {msg.anhang !== undefined &&
+                  msg.anhang.length !== undefined &&
+                  msg.anhang.length > 0 && (
+                    <Message
+                      key={'Attachment.Message'}
+                      msg={
+                        <div>
+                          <Documents
+                            docs={msg.anhang || []}
+                            readOnly={true}
+                            embedded={true}
+                            margin="2px"
+                          />
+                        </div>
+                      }
+                      background={background}
+                      alignment="right"
+                      margin={-1}
+                      padding={5}
+                      width={'fit-content'}
+                    />
+                  )}
+              </div>
+            );
+          }
+
+          case 'SYSTEM':
+            if (
+              hideSystemMessages === false &&
+              systemmessage(msg.nachrichtenParameter) !== undefined
+            ) {
+              return (
+                <SystemMessage
+                  key={'SYSTEM.SystemMessage.' + index}
+                  msg={systemmessage(msg.nachrichtenParameter)}
+                />
+              );
+            } else {
+              return undefined;
+            }
+          case 'LOCALERROR': {
+            return (
+              <InternalMessage
+                key={'SYSTEM.LOCALERROR.' + index}
+                msg={msg.nachricht}
+                alignment="center"
+                background="#fcf0f0"
+                color="#E73B2F"
+                margin={5}
+                padding={5}
+                fontSize={0.9}
+                width="65%"
+              />
+            );
+          }
+          default:
+            break;
+        }
+        return <div key={'FALLBACK.pure.' + index}>{msg.nachricht}</div>;
+      })}
+    </div>
+  );
 };
 
 const systemmessage = (sysMsgConf) => {
