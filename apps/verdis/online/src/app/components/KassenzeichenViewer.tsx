@@ -18,12 +18,21 @@ import { getHeight, getUiState } from '../../store/slices/ui';
 import { getMapping } from '../../store/slices/mapping';
 import HelpAndSettings from '../components/helpandsettings/Menu00MainComponent';
 import ChangeRequests from '../components/changerequests/CR00MainComponent';
+import { getStac } from '../../store/slices/auth';
+import { useNavigate } from 'react-router-dom';
 
 const KassenzeichenViewer = () => {
   const kassenzeichen = useSelector(getKassenzeichen);
   const height = useSelector(getHeight);
   const uiState = useSelector(getUiState);
   const mapping = useSelector(getMapping);
+  const stac = useSelector(getStac);
+  const navigate = useNavigate();
+
+  if (!stac) {
+    navigate('/');
+  }
+
   let flaechenPanelRefs = {};
 
   const verticalPanelWidth = 280;

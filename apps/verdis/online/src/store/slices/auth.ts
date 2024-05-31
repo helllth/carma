@@ -34,7 +34,7 @@ const slice = createSlice({
       }
     },
     setStac(state, action) {
-      state.stac = action.payload.stac;
+      state.stac = action.payload;
       state.loginInProgress = false;
       state.succesfullLogin = true;
     },
@@ -56,6 +56,10 @@ export const getLoginInProgress = (state) => {
 
 export const getLoginInfoText = (state) => {
   return state.auth.loginInProgressTextInfo;
+};
+
+export const getStac = (state) => {
+  return state.auth.stac;
 };
 
 export const login = (user, password, succesfulHandler) => {
