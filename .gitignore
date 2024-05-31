@@ -54,3 +54,5 @@ dispatch.*.event
 nx-cloud.env
 envirometrics/korschenbroich/rainhazardmap/public/data/adressen_korschenbroich.json
 envirometrics/korschenbroich/rainhazardmap/public/data/adressen_korschenbroich.json.md5
+
+.npmrc
