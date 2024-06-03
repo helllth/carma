@@ -3,7 +3,10 @@ import { getUiState, showChangeRequests } from '../../../store/slices/ui';
 import ModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
 import Section from 'react-cismap/topicmaps/menu/Section';
 import Introduction from './CR05Introduction';
-import { getKassenzeichen } from '../../../store/slices/kassenzeichen';
+import {
+  getKassenzeichen,
+  getNumberOfPendingChanges,
+} from '../../../store/slices/kassenzeichen';
 import CRConversation from '../conversations/CRConversation';
 import { useState } from 'react';
 import ConversationInput from '../conversations/ConversationInput';
@@ -17,6 +20,16 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
   const kassenzeichen = useSelector(getKassenzeichen);
   const dispatch = useDispatch();
   const [hideSystemMessages, setHideSystemMessages] = useState(false);
+
+  const draftHint = `Bitte beachten Sie, dass Änderungswünsche,
+	Anmerkungen und Ihre hochgeladenen Dokumente
+	erst für den Sachbearbeiter sichtbar werden,
+	wenn sie die Änderungen freigegeben/entsperrt
+	und eingereicht haben.`;
+
+  const { crDraftCounter } = getNumberOfPendingChanges(
+    kassenzeichen.aenderungsanfrage
+  );
 
   const crMessages =
     (kassenzeichen.aenderungsanfrage || { nachrichten: [] }).nachrichten || [];
@@ -52,11 +65,7 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
       menuSections={
         crEditMode
           ? [
-              <table
-                style={{ marginTop: 15, marginBottom: 10 }}
-                width="100%"
-                border="0"
-              >
+              <table style={{ marginTop: 15, marginBottom: 10 }} width="100%">
                 <tbody>
                   <tr>
                     <td>
@@ -130,12 +139,58 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
               <Section
                 key="sectionKey2"
                 sectionKey="sectionKey2"
+                sectionTitle={'Ihre Anmerkungen in der Karte'}
+                sectionBsStyle="success"
+                sectionContent={<></>}
+              />,
+              <Section
+                key="sectionKey2"
+                sectionKey="sectionKey2"
                 sectionTitle={
                   'Ihre Dokumente' +
                   (documents.length > 0 ? ' (' + documents.length + ')' : '')
                 }
                 sectionBsStyle="danger"
                 sectionContent={<CR20DocumentsPanel documents={documents} />}
+              />,
+              <table
+                style={{
+                  width: '100%',
+                }}
+              >
+                <tbody>
+                  <tr>
+                    <td
+                      style={{
+                        textAlign: 'left',
+                        verticalAlign: 'top',
+                        paddingRight: '30px',
+                      }}
+                    >
+                      <p>
+                        {crDraftCounter > 0 && <b>{draftHint}</b>}
+                        {!(crDraftCounter > 0) && <span>{draftHint}</span>}
+                      </p>
+                      <p>
+                        Sollten sich nach Abschluss der Bearbeitung Änderungen
+                        gegenüber der bisherigen Gebührenerhebung ergeben,
+                        erhalten Sie einen Änderungsbescheid durch das
+                        Steueramt. Eine Veranlagung findet ggf. rückwirkend
+                        statt. Maßgebend ist das Datum des Luftbilds, in dem die
+                        Änderung feststellbar ist, aber längsten das laufende
+                        und die 4 vorhergegangenen Jahre.
+                      </p>
+                    </td>
+                    <td />
+                  </tr>
+                </tbody>
+              </table>,
+              <Section
+                key="sectionKey3"
+                sectionKey="sectionKey3"
+                sectionTitle="eMail Benachrichtigungen aktivieren"
+                sectionBsStyle="info"
+                sectionContent={<></>}
               />,
             ]
           : [
