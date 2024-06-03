@@ -12,6 +12,7 @@ import Menu42Aenderungen from './Menu42Aenderungen';
 import Menu60Datenschutz from './Menu60Datenschutz';
 import Menu50FAQ from './Menu50FAQ';
 import Menu30Kartenhintergruende from './Menu30Kartenhintergruende';
+import Menu99Footer from './Menu99Footer';
 
 const ModalHelpAndInfo = () => {
   const uiState = useSelector(getUiState);
@@ -20,7 +21,7 @@ const ModalHelpAndInfo = () => {
     <ModalApplicationMenu
       menuIcon={'info'}
       menuTitle={'Kompaktanleitung und Hintergrundinformationen'}
-      // menuFooter={<MenuFooter />}
+      menuFooter={<Menu99Footer />}
       menuIntroduction={<Introduction />}
       visible={uiState.settingsVisible}
       setVisible={(value) => dispatch(showSettings({ visible: value }))}
