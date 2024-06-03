@@ -118,7 +118,7 @@ const LibModal = ({
       <div className="w-full h-full flex flex-col bg-[#f2f2f2]">
         <div className="sticky top-0 px-6 pt-6">
           <div className="flex justify-between items-center">
-            <h1 className="mb-0 text-2xl font-semibold">Wuppertal Layer</h1>
+            <h1 className="mb-0 text-2xl font-semibold">Ressourcen</h1>
             {/* <Button
               onClick={() => {
                 createBaseConfig(layers);
@@ -127,7 +127,7 @@ const LibModal = ({
               Create Base Config
             </Button> */}
             <Search
-              placeholder="Layer durchsuchen"
+              placeholder="Suchbegriff eingeben"
               className="w-[76%]"
               onSearch={(value) => {
                 if (value) {
