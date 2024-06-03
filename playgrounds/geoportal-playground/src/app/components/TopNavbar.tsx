@@ -55,6 +55,7 @@ const TopNavbar = () => {
       newAdditionalLayers[layer.name] = {
         title: layer.title,
         initialActive: true,
+        id: layer.name,
         url,
         layer: (
           //Here comes the main template for every additional layer added to the map

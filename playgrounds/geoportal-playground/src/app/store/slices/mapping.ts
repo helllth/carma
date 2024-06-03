@@ -5,6 +5,7 @@ type Layer = {
   title: string;
   initialActive: boolean;
   url: string;
+  id: string;
   layer: any;
 };
 
