@@ -7,6 +7,10 @@
   min-width: 30px;
 }
 
+.toggle.off .toggle-group {
+  left: -100%;
+}
+
 .btn {
   margin-bottom: 0 !important;
 }
@@ -61,15 +65,15 @@
 .toggle-handle {
   position: relative;
   margin: 0 auto;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
   height: 100%;
   width: 0;
-  border-width: 0 1px;
+  border-width: 0 1px !important;
 }
 
 .btn-default {
-  color: #333;
-  background-color: #fff;
-  border-color: #ccc;
+  color: #333 !important;
+  background-color: #fff !important;
+  border-color: #ccc !important;
 }
