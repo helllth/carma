@@ -27,6 +27,7 @@ import './switch.css';
 import { LayerLib } from '@cismet/layer-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { getThumbnails, setThumbnail } from '../store/slices/layers';
+import { appendLayer } from '../store/slices/mapping';
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,6 +72,7 @@ const TopNavbar = () => {
       };
     }
     try {
+      dispatch(appendLayer(newAdditionalLayers[layer.name]));
       setAdditionalLayerConfiguration(newAdditionalLayers);
       if (newAdditionalLayers[layer.name]) {
         activateAdditionalLayer(layer.name);
