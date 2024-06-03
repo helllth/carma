@@ -115,7 +115,10 @@ const LibModal = ({
       wrapClassName="h-full"
       className="h-[90%]"
     >
-      <div className="w-full h-full flex flex-col bg-[#f2f2f2]">
+      <div
+        className="w-full h-full flex flex-col bg-[#f2f2f2]"
+        style={{ maxHeight: 'calc(100vh - 200px)' }}
+      >
         <div className="sticky top-0 px-6 pt-6">
           <div className="flex justify-between items-center">
             <h1 className="mb-0 text-2xl font-semibold">Ressourcen</h1>
