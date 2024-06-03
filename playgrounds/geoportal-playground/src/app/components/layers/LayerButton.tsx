@@ -17,7 +17,7 @@ const LayerButton = ({ title, id }: LayerButtonProps) => {
       id,
     });
 
-  const style = { transition, transform: CSS.Transform.toString(transform) };
+  const style = { transition, transform: CSS.Translate.toString(transform) };
   return (
     <div
       ref={setNodeRef}
