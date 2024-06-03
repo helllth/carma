@@ -1,6 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '..';
 
-const initialState = {
+type Layer = {
+  title: string;
+  initialActive: boolean;
+  url: string;
+  layer: any;
+};
+
+interface MappingState {
+  layers: Layer[];
+}
+
+const initialState: MappingState = {
   layers: [],
 };
 
@@ -11,7 +23,7 @@ const slice = createSlice({
     setLayers(state, action) {
       state.layers = action.payload;
     },
-    appendLayer(state, action) {
+    appendLayer(state, action: PayloadAction<Layer>) {
       let currentLayers = state.layers;
       currentLayers.push(action.payload);
       state.layers = currentLayers;
@@ -24,6 +36,6 @@ export default slice;
 
 export const { setLayers, appendLayer, removeLayer } = slice.actions;
 
-export const getLayers = (state) => {
+export const getLayers = (state: RootState) => {
   return state.mapping.layers;
 };
