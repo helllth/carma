@@ -11,9 +11,9 @@ import { getGazData } from '../helper/helper';
 import { useSelector } from 'react-redux';
 // @ts-ignore
 import { getMode } from './../store/slices/ui';
-import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
-import ResponsiveInfoBox from 'react-cismap/topicmaps/ResponsiveInfoBox';
 import InfoBoxMeasurement from './map-measure/InfoBoxMeasurement';
+import { getLayers } from '../store/slices/mapping';
+import LayerButton from './layers/LayerButton';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -21,6 +21,7 @@ const Map = () => {
   const [width, setWidth] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const mode = useSelector(getMode);
+  const layers = useSelector(getLayers);
 
   function createWMSBbox(bbox) {
     // Extracting values from the object
@@ -63,6 +64,11 @@ const Map = () => {
         gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
         infoBox={<InfoBoxMeasurement />}
       >
+        <div className="absolute left-20 top-2.5 z-[999] flex gap-2">
+          {layers.map((layer) => (
+            <LayerButton title={layer.title} />
+          ))}
+        </div>
         {/* <StyledWMSTileLayer
           {...{
             type: 'wmts',
