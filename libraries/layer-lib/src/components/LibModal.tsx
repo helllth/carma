@@ -2,7 +2,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Input, Modal } from 'antd';
 import WMSCapabilities from 'wms-capabilities';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import {
   createBaseConfig,
   flattenLayer,
@@ -21,12 +21,21 @@ import './input.css';
 // @ts-ignore
 const parser = new WMSCapabilities();
 
+export type Layer = {
+  title: string;
+  initialActive: boolean;
+  url: string;
+  id: string;
+  layer: ReactNode;
+};
+
 export interface LibModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   setAdditionalLayers: any;
   setThumbnail: any;
   thumbnails: any;
+  activeLayers: Layer[];
 }
 
 const LibModal = ({
@@ -35,6 +44,7 @@ const LibModal = ({
   setAdditionalLayers,
   thumbnails,
   setThumbnail,
+  activeLayers,
 }: LibModalProps) => {
   const [layers, setLayers] = useState<any[]>([]);
   const [allLayers, setAllLayers] = useState<any[]>([]);
@@ -217,6 +227,7 @@ const LibModal = ({
                           layer={layer}
                           thumbnails={thumbnails}
                           setThumbnail={setThumbnail}
+                          activeLayers={activeLayers}
                           key={`${category.Title}_layer_${i}`}
                         />
                       ))}

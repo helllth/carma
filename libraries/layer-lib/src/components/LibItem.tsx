@@ -8,17 +8,17 @@ import {
   faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Spin } from 'antd';
-import { useContext, useEffect, useState } from 'react';
-// @ts-ignore
-import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
+import { Spin } from 'antd';
+import { useEffect, useState } from 'react';
 import { InfoOutlined } from '@ant-design/icons';
+import { Layer } from './LibModal';
 
 interface LayerItemProps {
   setAdditionalLayers: any;
   layer: any;
   thumbnails: any;
   setThumbnail: any;
+  activeLayers: Layer[];
 }
 
 const LibItem = ({
@@ -26,20 +26,16 @@ const LibItem = ({
   layer,
   thumbnails,
   setThumbnail,
+  activeLayers,
 }: LayerItemProps) => {
   const [hovered, setHovered] = useState(false);
   const [isFavourite, setIsFavourite] = useState(false);
   const [isActiveLayer, setIsActiveLayer] = useState(false);
   const [thumbUrl, setThumbUrl] = useState('');
-  // @ts-ignore
-  const { additionalLayerConfiguration } = useContext(TopicMapStylingContext);
   const title = layer.Title;
   const description = layer.Abstract;
   const tags = layer.tags.slice(1);
   const name = layer.Name;
-  const bbox = layer.BoundingBox;
-  const getMapUrl = layer.url;
-  const highlight = layer.highlight;
   const service = layer.service;
 
   const box = layer.pictureBoundingBox;
@@ -74,16 +70,11 @@ const LibItem = ({
 
   useEffect(() => {
     let setActive = false;
-    for (let keys in additionalLayerConfiguration) {
-      if (
-        keys === name &&
-        additionalLayerConfiguration[keys].url === service.url
-      ) {
-        setActive = true;
-      }
+    if (activeLayers.find((activeLayer) => activeLayer.id === name)) {
+      setActive = true;
     }
     setIsActiveLayer(setActive);
-  }, [additionalLayerConfiguration]);
+  }, [activeLayers]);
 
   useEffect(() => {
     const getImgUrl = async (response, url) => {

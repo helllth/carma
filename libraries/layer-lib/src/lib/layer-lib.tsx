@@ -8,6 +8,7 @@ export function LayerLib({
   setAdditionalLayers,
   thumbnails,
   setThumbnail,
+  activeLayers,
 }: LibModalProps) {
   return (
     <LibModal
@@ -16,6 +17,7 @@ export function LayerLib({
       setAdditionalLayers={setAdditionalLayers}
       thumbnails={thumbnails}
       setThumbnail={setThumbnail}
+      activeLayers={activeLayers}
     />
   );
 }

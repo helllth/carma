@@ -5,11 +5,9 @@ import {
   faBars,
   faLandmark,
   faLayerGroup,
-  faMap,
   faPrint,
   faRedo,
   faShareNodes,
-  faDrawPolygon,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
@@ -17,78 +15,71 @@ import { useContext, useState } from 'react';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 // @ts-ignore
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
-import {
-  TopicMapStylingContext,
-  TopicMapStylingDispatchContext,
-  // @ts-ignore
-} from 'react-cismap/contexts/TopicMapStylingContextProvider';
 
 import './switch.css';
 import { LayerLib } from '@cismet/layer-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { getThumbnails, setThumbnail } from '../store/slices/layers';
-import { appendLayer } from '../store/slices/mapping';
+import { appendLayer, getLayers, removeLayer } from '../store/slices/mapping';
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
-  // @ts-ignore
-  const { setAdditionalLayerConfiguration, activateAdditionalLayer } =
-    useContext(TopicMapStylingDispatchContext);
-  // @ts-ignore
-  const { additionalLayerConfiguration } = useContext(TopicMapStylingContext);
   const dispatch = useDispatch();
   const thumbnails = useSelector(getThumbnails);
+  const activeLayers = useSelector(getLayers);
 
   const [messageApi, contextHolder] = message.useMessage();
 
   const updateLayers = (layer: any) => {
     const url = layer.url;
-    let newAdditionalLayers;
-    let isRemoved = false;
-    newAdditionalLayers = { ...additionalLayerConfiguration };
-    if (newAdditionalLayers[layer.name]) {
-      delete newAdditionalLayers[layer.name];
-      isRemoved = true;
-    } else {
-      newAdditionalLayers[layer.name] = {
-        title: layer.title,
-        initialActive: true,
-        id: layer.name,
-        url,
-        layer: (
-          //Here comes the main template for every additional layer added to the map
-          <StyledWMSTileLayer
-            type="wms"
-            url={url}
-            maxZoom={26}
-            layers={layer.name}
-            format="image/png"
-            tiled={true}
-            transparent="true"
-            opacity={0.7}
-          />
-        ),
-      };
-    }
-    try {
-      dispatch(appendLayer(newAdditionalLayers[layer.name]));
-      setAdditionalLayerConfiguration(newAdditionalLayers);
-      if (newAdditionalLayers[layer.name]) {
-        activateAdditionalLayer(layer.name);
+
+    const newLayer = {
+      title: layer.title,
+      initialActive: true,
+      id: layer.name,
+      url,
+      layer: (
+        <StyledWMSTileLayer
+          type="wms"
+          url={url}
+          maxZoom={26}
+          layers={layer.name}
+          format="image/png"
+          tiled={true}
+          transparent="true"
+          opacity={0.7}
+        />
+      ),
+    };
+
+    if (activeLayers.find((activeLayer) => activeLayer.id === layer.name)) {
+      try {
+        dispatch(removeLayer(layer.name));
+        messageApi.open({
+          type: 'success',
+          content: `${layer.title} wurde erfolgreich entfernt.`,
+        });
+      } catch {
+        messageApi.open({
+          type: 'error',
+          content: `Es gab einen Fehler beim entfernen von ${layer.title}`,
+        });
       }
-      messageApi.open({
-        type: 'success',
-        content: `${layer.title} wurde erfolgreich ${
-          isRemoved ? 'entfernt' : 'hinzugefügt'
-        }.`,
-      });
-    } catch {
-      messageApi.open({
-        type: 'error',
-        content: `Es gab einen Fehler beim hinzufügen von ${layer.title}`,
-      });
+    } else {
+      try {
+        dispatch(appendLayer(newLayer));
+        messageApi.open({
+          type: 'success',
+          content: `${layer.title} wurde erfolgreich hinzugefügt.`,
+        });
+      } catch {
+        messageApi.open({
+          type: 'error',
+          content: `Es gab einen Fehler beim hinzufügen von ${layer.title}`,
+        });
+      }
     }
   };
 
@@ -103,6 +94,7 @@ const TopNavbar = () => {
           dispatch(setThumbnail(thumbnail));
         }}
         thumbnails={thumbnails}
+        activeLayers={activeLayers}
       />
 
       <div className="flex items-center gap-6">
