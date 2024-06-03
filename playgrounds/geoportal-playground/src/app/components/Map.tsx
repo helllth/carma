@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState, useContext } from 'react';
 // @ts-ignore
-import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
-// @ts-ignore
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-// @ts-ignore
-// @ts-ignore
-import FeatureCollection from 'react-cismap/FeatureCollection';
 // @ts-ignore
 import { getGazData } from '../helper/helper';
 import { useSelector } from 'react-redux';
@@ -13,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { getMode } from './../store/slices/ui';
 import InfoBoxMeasurement from './map-measure/InfoBoxMeasurement';
 import { getLayers } from '../store/slices/mapping';
-import LayerButton from './layers/LayerButton';
+import LayerWrapper from './layers/LayerWrapper';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -56,11 +51,7 @@ const Map = () => {
         gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
         infoBox={<InfoBoxMeasurement />}
       >
-        <div className="absolute left-20 top-2.5 z-[999] flex gap-2">
-          {layers.map((layer) => (
-            <LayerButton title={layer.title} id={layer.id} />
-          ))}
-        </div>
+        <LayerWrapper />
         {layers.map((layer) => layer.layer)}
       </TopicMapComponent>
     </div>

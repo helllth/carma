@@ -11,7 +11,7 @@ interface LayerButtonProps {
 const LayerButton = ({ title, id }: LayerButtonProps) => {
   const dispatch = useDispatch();
   return (
-    <div className="w-fit flex items-center gap-2 px-3 bg-white rounded-3xl h-8 z-[99999999] shadow-lg">
+    <div className="w-fit min-w-max flex items-center gap-2 px-3 bg-white rounded-3xl h-8 z-[99999999] shadow-lg">
       <span className="text-sm font-medium">{title}</span>
       <FontAwesomeIcon
         icon={faX}
