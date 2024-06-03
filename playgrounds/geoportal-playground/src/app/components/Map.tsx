@@ -23,14 +23,6 @@ const Map = () => {
   const mode = useSelector(getMode);
   const layers = useSelector(getLayers);
 
-  function createWMSBbox(bbox) {
-    // Extracting values from the object
-    const { left, top, right, bottom } = bbox;
-
-    // Constructing the bbox string for WMS request
-    return `width=1024&height=682&bbox=${left},${bottom},${right},${top}`;
-  }
-
   useEffect(() => {
     getGazData(setGazData);
   }, []);
@@ -69,18 +61,7 @@ const Map = () => {
             <LayerButton title={layer.title} id={layer.id} />
           ))}
         </div>
-        {/* <StyledWMSTileLayer
-          {...{
-            type: 'wmts',
-            url: 'https://geodaten.metropoleruhr.de/spw2/service',
-            layers: 'spw2_light_grundriss',
-            version: '1.3.0',
-            tileSize: 512,
-            transparent: true,
-            opacity: 0.3,
-          }}
-        ></StyledWMSTileLayer> */}
-        <FeatureCollection></FeatureCollection>
+        {layers.map((layer) => layer.layer)}
       </TopicMapComponent>
     </div>
   );
