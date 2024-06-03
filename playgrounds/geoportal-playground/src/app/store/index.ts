@@ -71,7 +71,7 @@ const measurementsConfig = {
   whitelist: ['shapes'],
 };
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     mapping: persistReducer(mappingConfig, mappingSlice.reducer),
     ui: persistReducer(uiConfig, uiSlice.reducer),
@@ -81,3 +81,10 @@ export default configureStore({
   devTools: devToolsEnabled === true && inProduction === false,
   middleware,
 });
+export default store;
+
+export type AppStore = typeof store;
+
+export type RootState = ReturnType<AppStore['getState']>;
+
+export type AppDispatch = AppStore['dispatch'];

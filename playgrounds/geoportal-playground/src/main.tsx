@@ -2,7 +2,6 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import App from './app/App';
 import { Provider } from 'react-redux';
-// @ts-ignore
 import store from './app/store';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
 import AlternativeUI from './app/AlternativeUI';
