@@ -66,7 +66,7 @@ const Map = () => {
       >
         <div className="absolute left-20 top-2.5 z-[999] flex gap-2">
           {layers.map((layer) => (
-            <LayerButton title={layer.title} />
+            <LayerButton title={layer.title} id={layer.id} />
           ))}
         </div>
         {/* <StyledWMSTileLayer

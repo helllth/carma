@@ -1,12 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
+import { ReactNode } from 'react';
 
 type Layer = {
   title: string;
   initialActive: boolean;
   url: string;
   id: string;
-  layer: any;
+  layer: ReactNode;
 };
 
 interface MappingState {
@@ -25,11 +26,14 @@ const slice = createSlice({
       state.layers = action.payload;
     },
     appendLayer(state, action: PayloadAction<Layer>) {
-      let currentLayers = state.layers;
-      currentLayers.push(action.payload);
-      state.layers = currentLayers;
+      let newLayers = state.layers;
+      newLayers.push(action.payload);
+      state.layers = newLayers;
     },
-    removeLayer(state, action) {},
+    removeLayer(state, action: PayloadAction<string>) {
+      const newLayers = state.layers.filter((obj) => obj.id !== action.payload);
+      state.layers = newLayers;
+    },
   },
 });
 
