@@ -261,7 +261,7 @@ export const serviceConfig = {
 
 export const baseConfig = {
   karten: {
-    Title: 'Karten',
+    Title: 'Basis',
     serviceName: 'wuppKarten',
     layers: [
       {
@@ -1286,20 +1286,11 @@ export const baseConfig = {
     ],
   },
   Verkehr: {
-    Title: 'Verkehr',
+    Title: 'Mobilität',
     serviceName: 'wuppVerkehr',
     layers: [
       {
         name: 'einstr',
-      },
-    ],
-  },
-  Inspire: {
-    Title: 'Inspire',
-    serviceName: 'wuppInspire',
-    layers: [
-      {
-        name: 'US.ChildCareService',
       },
     ],
   },
