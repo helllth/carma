@@ -2,6 +2,8 @@ import {
   MappingConstants,
   RoutedMap,
   FeatureCollectionDisplay,
+  NewMarkerControl,
+  NewPolyControl,
 } from 'react-cismap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
@@ -14,20 +16,28 @@ import {
 } from '../../store/slices/mapping';
 import 'react-cismap/topicMaps.css';
 import 'leaflet/dist/leaflet.css';
-import { getHeight } from '../../store/slices/ui';
+import { getHeight, getUiState } from '../../store/slices/ui';
 import {
   createFlaechenStyler,
   getMarkerStyleFromFeatureConsideringSelection,
 } from '../../utils/kassenzeichenMappingTools';
 import { getKassenzeichen } from '../../store/slices/kassenzeichen';
+import CyclingBackgroundButton from './CyclingBackgroundButton';
+import { ReactNode, useRef } from 'react';
 
-const Map = () => {
+interface MapProps {
+  children?: ReactNode;
+}
+
+const Map = ({ children }: MapProps) => {
   const [urlParams, setUrlParams] = useSearchParams();
+  let refRoutedMap = useRef(null);
   const dispatch = useDispatch();
   const mapping = useSelector(getMapping);
+  const uiState = useSelector(getUiState);
   const height = useSelector(getHeight);
   const kassenzeichen = useSelector(getKassenzeichen);
-  const annotationEditable = false;
+  const annotationEditable = uiState.changeRequestsEditMode;
 
   function paramsToObject(entries) {
     const result = {};
@@ -80,9 +90,7 @@ const Map = () => {
       key={'leafletRoutedMap0 + '}
       referenceSystem={MappingConstants.crs25832}
       referenceSystemDefinition={MappingConstants.proj4crs25832def}
-      // ref={(leafletMap) => {
-      //   this.leafletRoutedMap = leafletMap;
-      // }}
+      ref={refRoutedMap}
       layers=""
       style={mapStyle}
       // ondblclick={this.mapDblClick}
@@ -134,46 +142,37 @@ const Map = () => {
         markerStyle={getMarkerStyleFromFeatureConsideringSelection}
         snappingGuides={true}
       />
-      {/* <CyclingBackgroundButton
-        key={
-            "CyclingBackgroundButton." +
-            this.state.featuresInEditmode +
-            this.props.mapping.selectedBackgroundIndex
-        }
-        position="topleft"
-        backgrounds={this.props.mapping.backgrounds}
-        setSelectedBackgroundIndex={
-            this.props.mappingActions.setSelectedBackgroundIndex
-        }
-        currentBackgroundIndex={this.props.mapping.selectedBackgroundIndex}
-    />
-    {annotationEditable && (
+      <CyclingBackgroundButton
+        key={'CyclingBackgroundButton.'}
+        mapRef={refRoutedMap}
+      />
+      {annotationEditable && (
         <NewPolyControl
-            key={
-                "NewPolyControl + update when CyclingBackgroundButton." +
-                this.state.featuresInEditmode +
-                this.props.mapping.selectedBackgroundIndex
-            }
-            onSelect={() => {
-                this.setState({ featuresInEditmode: false });
-            }}
-            tooltip="Fläche anlegen"
+          key={
+            'NewPolyControl + update when CyclingBackgroundButton.'
+            // this.state.featuresInEditmode +
+            // this.props.mapping.selectedBackgroundIndex
+          }
+          // onSelect={() => {
+          //     this.setState({ featuresInEditmode: false });
+          // }}
+          tooltip="Fläche anlegen"
         />
-    )}
-    {annotationEditable && (
+      )}
+      {annotationEditable && (
         <NewMarkerControl
-            key={
-                "NewMarkerControl+ update when CyclingBackgroundButton." +
-                this.state.featuresInEditmode +
-                this.props.mapping.selectedBackgroundIndex
-            }
-            onSelect={() => {
-                this.setState({ featuresInEditmode: false });
-            }}
-            tooltip="Punkt anlegen"
+          key={
+            'NewMarkerControl+ update when CyclingBackgroundButton.'
+            // this.state.featuresInEditmode +
+            // this.props.mapping.selectedBackgroundIndex
+          }
+          // onSelect={() => {
+          //     this.setState({ featuresInEditmode: false });
+          // }}
+          tooltip="Punkt anlegen"
         />
-    )}
-    {annotationEditable && (
+      )}
+      {/* {annotationEditable && (
         <EditModeControlButton
             key={
                 "EditModeControlButton" +
@@ -197,8 +196,8 @@ const Map = () => {
                 } catch (skip) {}
             }}
         />
-    )}
-    {this.props.children} */}
+    )} */}
+      {children}
     </RoutedMap>
   );
 };

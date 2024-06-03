@@ -9,6 +9,8 @@ import { useState } from 'react';
 import ConversationInput from '../conversations/ConversationInput';
 import CR20DocumentsPanel from './CR20DocumentsPanel';
 import { Button } from 'react-bootstrap';
+import Toggle from 'react-bootstrap-toggle';
+import './toggle.css';
 
 const CR00MainComponent = ({ localErrorMessages = [] }) => {
   const uiState = useSelector(getUiState);
@@ -43,13 +45,60 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
     <ModalApplicationMenu
       menuIcon={'edit'}
       menuTitle={'Änderungswünsche und Kommentare'}
-      // menuFooter={<MenuFooter />}
+      // menuFooter={<></>}
       menuIntroduction={<Introduction />}
       visible={uiState.changeRequestsMenuVisible}
       setVisible={(value) => dispatch(showChangeRequests({ visible: value }))}
       menuSections={
         crEditMode
           ? [
+              <table
+                style={{ marginTop: 15, marginBottom: 10 }}
+                width="100%"
+                border="0"
+              >
+                <tbody>
+                  <tr>
+                    <td>
+                      <Button
+                        className="pull-left"
+                        id="cmdCloseModalApplicationMenu"
+                        variant="success"
+                        type="submit"
+                        onClick={() => {
+                          // showModalMenu("anleitung");
+                        }}
+                        //hier gehts weiter
+                        style={{ margin: 5 }}
+                      >
+                        Hilfe
+                      </Button>
+                    </td>
+                    <td>
+                      <div
+                        style={{
+                          verticalAlign: 'middle',
+                          textAlign: 'right',
+                        }}
+                      >
+                        Systemnachrichten einblenden:{' '}
+                        <Toggle
+                          onClick={() => {
+                            setHideSystemMessages(!hideSystemMessages);
+                          }}
+                          on={'Ein'}
+                          off={'Aus'}
+                          offstyle="danger"
+                          onstyle="success"
+                          size={'xs'}
+                          active={!hideSystemMessages}
+                          style={{ padding: 10 }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>,
               <Section
                 key="sectionKey0"
                 sectionKey="sectionKey0"
