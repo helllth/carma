@@ -150,9 +150,9 @@ const TopNavbar = () => {
 
       <div className="flex items-center gap-6">
         <Radio.Group value={'standard'}>
-          <Radio.Button value="standard">Standard</Radio.Button>
-          <Radio.Button value="hybrid">Hybrid</Radio.Button>
-          <Radio.Button value="satellit">Satellit</Radio.Button>
+          <Radio.Button value="standard">Amtlich</Radio.Button>
+          <Radio.Button value="hybrid">Topographisch</Radio.Button>
+          <Radio.Button value="satellit">Luftbild</Radio.Button>
         </Radio.Group>
 
         <Button
