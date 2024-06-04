@@ -1,4 +1,9 @@
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronLeft,
+  faChevronRight,
+  faInfo,
+  faX,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -57,7 +62,8 @@ const LayerButton = ({ title, id, opacity, index }: LayerButtonProps) => {
       </div>
       {showSettings && (
         <div className="bg-white absolute top-12 shadow-lg rounded-3xl w-96 h-10 flex items-center gap-2 p-2">
-          <label className="mb-0">Transparenz</label>
+          <FontAwesomeIcon icon={faChevronLeft} className="text-base" />
+          <label className="mb-0 text-md font-medium">Transparenz</label>
           <Slider
             onFocus={() => {
               routedMapRef?.leafletMap?.leafletElement.dragging.disable();
@@ -74,6 +80,8 @@ const LayerButton = ({ title, id, opacity, index }: LayerButtonProps) => {
             step={0.1}
             className="w-full"
           />
+          <FontAwesomeIcon icon={faInfo} className="text-base" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-base" />
         </div>
       )}
     </div>
