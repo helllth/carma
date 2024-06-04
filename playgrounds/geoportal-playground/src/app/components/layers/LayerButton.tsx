@@ -10,6 +10,8 @@ import {
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Slider } from 'antd';
+import { useContext } from 'react';
+import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 
 interface LayerButtonProps {
   title: string;
@@ -20,6 +22,8 @@ interface LayerButtonProps {
 
 const LayerButton = ({ title, id, opacity, index }: LayerButtonProps) => {
   const dispatch = useDispatch();
+  // @ts-ignore
+  const { routedMapRef } = useContext(TopicMapContext);
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -29,7 +33,7 @@ const LayerButton = ({ title, id, opacity, index }: LayerButtonProps) => {
 
   const style = { transform: CSS.Translate.toString(transform) };
   return (
-    <>
+    <div className="relative">
       <div
         ref={setNodeRef}
         onClick={() =>
@@ -38,7 +42,7 @@ const LayerButton = ({ title, id, opacity, index }: LayerButtonProps) => {
         style={style}
         {...listeners}
         {...attributes}
-        className="w-fit relative min-w-max flex items-center gap-2 px-3 bg-white rounded-3xl h-8 z-[99999999] shadow-lg"
+        className="w-fit min-w-max flex items-center gap-2 px-3 bg-white rounded-3xl h-8 z-[99999999] shadow-lg"
       >
         <span className="text-sm font-medium">{title}</span>
         <FontAwesomeIcon
@@ -50,23 +54,29 @@ const LayerButton = ({ title, id, opacity, index }: LayerButtonProps) => {
             dispatch(removeLayer(id));
           }}
         />
-        {showSettings && (
-          <div className="bg-white absolute top-12 shadow-lg rounded-3xl w-96 h-10 flex items-center gap-2 p-2">
-            <label className="mb-0">Transparenz</label>
-            <Slider
-              onChange={(value) =>
-                dispatch(changeOpacity({ id, opacity: value }))
-              }
-              value={opacity}
-              min={0}
-              max={1}
-              step={0.1}
-              className="w-full"
-            />
-          </div>
-        )}
       </div>
-    </>
+      {showSettings && (
+        <div className="bg-white absolute top-12 shadow-lg rounded-3xl w-96 h-10 flex items-center gap-2 p-2">
+          <label className="mb-0">Transparenz</label>
+          <Slider
+            onFocus={() => {
+              routedMapRef?.leafletMap?.leafletElement.dragging.disable();
+            }}
+            onChange={(value) => {
+              dispatch(changeOpacity({ id, opacity: value }));
+            }}
+            onChangeComplete={() => {
+              routedMapRef?.leafletMap?.leafletElement.dragging.enable();
+            }}
+            value={opacity}
+            min={0}
+            max={1}
+            step={0.1}
+            className="w-full"
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
