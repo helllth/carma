@@ -10,6 +10,8 @@ import {
   changeOpacity,
   getSelectedLayerIndex,
   removeLayer,
+  setNextSelectedLayerIndex,
+  setPreviousSelectedLayerIndex,
   setSelectedLayerIndex,
 } from '../../store/slices/mapping';
 import { useSortable } from '@dnd-kit/sortable';
@@ -62,7 +64,12 @@ const LayerButton = ({ title, id, opacity, index }: LayerButtonProps) => {
       </div>
       {showSettings && (
         <div className="bg-white absolute top-12 shadow-lg rounded-3xl w-96 h-10 flex items-center gap-2 p-2">
-          <FontAwesomeIcon icon={faChevronLeft} className="text-base" />
+          <FontAwesomeIcon
+            icon={faChevronLeft}
+            className="text-base"
+            role="button"
+            onClick={() => dispatch(setPreviousSelectedLayerIndex())}
+          />
           <label className="mb-0 text-md font-medium">Transparenz</label>
           <Slider
             onFocus={() => {
@@ -81,7 +88,12 @@ const LayerButton = ({ title, id, opacity, index }: LayerButtonProps) => {
             className="w-full"
           />
           <FontAwesomeIcon icon={faInfo} className="text-base" />
-          <FontAwesomeIcon icon={faChevronRight} className="text-base" />
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            className="text-base"
+            role="button"
+            onClick={() => dispatch(setNextSelectedLayerIndex())}
+          />
         </div>
       )}
     </div>

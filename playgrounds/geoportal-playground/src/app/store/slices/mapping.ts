@@ -44,6 +44,22 @@ const slice = createSlice({
     setSelectedLayerIndex(state, action) {
       state.selectedLayerIndex = action.payload;
     },
+    setNextSelectedLayerIndex(state) {
+      const newIndex = state.selectedLayerIndex + 1;
+      if (newIndex >= state.layers.length) {
+        state.selectedLayerIndex = 0;
+      } else {
+        state.selectedLayerIndex = newIndex;
+      }
+    },
+    setPreviousSelectedLayerIndex(state) {
+      const newIndex = state.selectedLayerIndex - 1;
+      if (newIndex < 0) {
+        state.selectedLayerIndex = state.layers.length - 1;
+      } else {
+        state.selectedLayerIndex = newIndex;
+      }
+    },
   },
 });
 
@@ -55,6 +71,8 @@ export const {
   removeLayer,
   changeOpacity,
   setSelectedLayerIndex,
+  setNextSelectedLayerIndex,
+  setPreviousSelectedLayerIndex,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
