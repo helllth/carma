@@ -58,7 +58,7 @@ const LayerWrapper = () => {
         ref={setNodeRef}
         style={style}
         id="buttonWrapper"
-        className="absolute flex items-center justify-center gap-2 w-[calc(100%-60px)] left-20 top-2.5 z-[999]"
+        className="absolute flex items-center justify-center gap-2 -ml-[268px] left-1/2 top-2.5 z-[999]"
       >
         <SortableContext
           items={layers}
