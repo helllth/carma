@@ -4,10 +4,12 @@ import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 
 interface MappingState {
   layers: Layer[];
+  selectedLayerIndex: number;
 }
 
 const initialState: MappingState = {
   layers: [],
+  selectedLayerIndex: -1,
 };
 
 const slice = createSlice({
@@ -39,14 +41,26 @@ const slice = createSlice({
       });
       state.layers = newLayers;
     },
+    setSelectedLayerIndex(state, action) {
+      state.selectedLayerIndex = action.payload;
+    },
   },
 });
 
 export default slice;
 
-export const { setLayers, appendLayer, removeLayer, changeOpacity } =
-  slice.actions;
+export const {
+  setLayers,
+  appendLayer,
+  removeLayer,
+  changeOpacity,
+  setSelectedLayerIndex,
+} = slice.actions;
 
 export const getLayers = (state: RootState) => {
   return state.mapping.layers;
+};
+
+export const getSelectedLayerIndex = (state: RootState) => {
+  return state.mapping.selectedLayerIndex;
 };
