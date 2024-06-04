@@ -39,6 +39,7 @@ const TopNavbar = () => {
       title: layer.title,
       initialActive: true,
       id: layer.name,
+      opacity: 0.7,
       url,
     };
 

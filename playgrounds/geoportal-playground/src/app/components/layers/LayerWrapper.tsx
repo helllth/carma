@@ -65,7 +65,11 @@ const LayerWrapper = () => {
           strategy={horizontalListSortingStrategy}
         >
           {layers.map((layer) => (
-            <LayerButton title={layer.title} id={layer.id} />
+            <LayerButton
+              title={layer.title}
+              id={layer.id}
+              opacity={layer.opacity}
+            />
           ))}
         </SortableContext>
       </div>

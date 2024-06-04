@@ -63,7 +63,7 @@ const Map = () => {
             format="image/png"
             tiled={true}
             transparent="true"
-            opacity={0.7}
+            opacity={layer.opacity || 0.7}
           />
         ))}
       </TopicMapComponent>

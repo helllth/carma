@@ -26,6 +26,7 @@ export type Layer = {
   initialActive: boolean;
   url: string;
   id: string;
+  opacity: number;
 };
 
 export interface LibModalProps {
