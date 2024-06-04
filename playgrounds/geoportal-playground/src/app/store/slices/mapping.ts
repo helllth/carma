@@ -26,12 +26,26 @@ const slice = createSlice({
       const newLayers = state.layers.filter((obj) => obj.id !== action.payload);
       state.layers = newLayers;
     },
+    changeOpacity(state, action) {
+      const newLayers = state.layers.map((obj) => {
+        if (obj.id === action.payload.id) {
+          return {
+            ...obj,
+            opacity: action.payload.opacity,
+          };
+        } else {
+          return obj;
+        }
+      });
+      state.layers = newLayers;
+    },
   },
 });
 
 export default slice;
 
-export const { setLayers, appendLayer, removeLayer } = slice.actions;
+export const { setLayers, appendLayer, removeLayer, changeOpacity } =
+  slice.actions;
 
 export const getLayers = (state: RootState) => {
   return state.mapping.layers;

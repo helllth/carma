@@ -1,7 +1,7 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch } from 'react-redux';
-import { removeLayer } from '../../store/slices/mapping';
+import { changeOpacity, removeLayer } from '../../store/slices/mapping';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
@@ -14,7 +14,6 @@ interface LayerButtonProps {
 }
 
 const LayerButton = ({ title, id, opacity }: LayerButtonProps) => {
-  console.log('opacity', opacity);
   const dispatch = useDispatch();
   const [openSettings, setOpenSettings] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -48,6 +47,9 @@ const LayerButton = ({ title, id, opacity }: LayerButtonProps) => {
         <div className="bg-white shadow-lg rounded-3xl w-96 h-10 flex items-center gap-2 p-2 text-center">
           <label className="mb-0">Transparenz</label>
           <Slider
+            onChange={(value) =>
+              dispatch(changeOpacity({ id, opacity: value }))
+            }
             value={opacity}
             min={0}
             max={1}
