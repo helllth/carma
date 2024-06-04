@@ -26,7 +26,6 @@ export type Layer = {
   initialActive: boolean;
   url: string;
   id: string;
-  layer: ReactNode;
 };
 
 export interface LibModalProps {

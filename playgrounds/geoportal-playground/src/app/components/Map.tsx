@@ -9,6 +9,8 @@ import { getMode } from './../store/slices/ui';
 import InfoBoxMeasurement from './map-measure/InfoBoxMeasurement';
 import { getLayers } from '../store/slices/mapping';
 import LayerWrapper from './layers/LayerWrapper';
+// @ts-ignore
+import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -52,7 +54,18 @@ const Map = () => {
         infoBox={<InfoBoxMeasurement />}
       >
         <LayerWrapper />
-        {layers.map((layer) => layer.layer)}
+        {layers.map((layer) => (
+          <StyledWMSTileLayer
+            type="wms"
+            url={layer.url}
+            maxZoom={26}
+            layers={layer.id}
+            format="image/png"
+            tiled={true}
+            transparent="true"
+            opacity={0.7}
+          />
+        ))}
       </TopicMapComponent>
     </div>
   );

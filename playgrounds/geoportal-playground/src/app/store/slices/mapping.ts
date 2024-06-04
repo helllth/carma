@@ -1,14 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { ReactNode } from 'react';
-
-type Layer = {
-  title: string;
-  initialActive: boolean;
-  url: string;
-  id: string;
-  layer: ReactNode;
-};
+import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 
 interface MappingState {
   layers: Layer[];

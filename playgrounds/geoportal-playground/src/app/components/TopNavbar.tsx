@@ -40,18 +40,6 @@ const TopNavbar = () => {
       initialActive: true,
       id: layer.name,
       url,
-      layer: (
-        <StyledWMSTileLayer
-          type="wms"
-          url={url}
-          maxZoom={26}
-          layers={layer.name}
-          format="image/png"
-          tiled={true}
-          transparent="true"
-          opacity={0.7}
-        />
-      ),
     };
 
     if (activeLayers.find((activeLayer) => activeLayer.id === layer.name)) {
