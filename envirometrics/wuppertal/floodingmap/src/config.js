@@ -75,14 +75,14 @@ const config = {
   ],
   backgrounds: [
     {
-      layerkey: 'hillshade|bplan_abkg@30|rvrGrundriss@20',
-      src: topoBG,
-      title: 'Top. Karte',
-    },
-    {
       layerkey: 'rvrGrundriss@100|trueOrtho2022@75|rvrSchriftNT@100',
       src: mixedBG,
       title: 'Luftbildkarte',
+    },
+    {
+      layerkey: 'hillshade|bplan_abkg@30|rvrGrundriss@20',
+      src: topoBG,
+      title: 'Top. Karte',
     },
     {
       layerkey: 'wupp-plan-live@40',
