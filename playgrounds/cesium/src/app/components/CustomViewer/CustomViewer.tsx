@@ -12,12 +12,10 @@ import Crosshair from '../UI/Crosshair';
 import SearchWrapper from './components/SearchWrapper';
 
 import {
-  toggleIsAnimating,
   useGlobeBaseColor,
   useShowTileset,
   useViewerHome,
   useViewerHomeOffset,
-  useViewerIsAnimating,
 } from '../../store/slices/viewer';
 import { BaseTileset } from './components/BaseTileset';
 import ControlsUI from './components/ControlsUI';
@@ -25,7 +23,6 @@ import { decodeSceneFromLocation, encodeScene } from './utils';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getCesiumViewerZoomLevel } from '../../utils/cesiumHelpers';
 import ResizableIframe from './components/ResizeIframe';
-import { useDispatch } from 'react-redux';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -58,7 +55,7 @@ function CustomViewer(props: CustomViewerProps) {
   const globeBaseColor = useGlobeBaseColor();
   const showTileset = useShowTileset();
   const [showLeaflet, setShowLeaflet] = useState(false);
-  const isAnimating = useViewerIsAnimating();
+  //const isAnimating = useViewerIsAnimating();
 
   const {
     children,
@@ -84,8 +81,9 @@ function CustomViewer(props: CustomViewerProps) {
   }, []);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const [initialHash, setInitialHash] = useState<string | null>(null);
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   const [iframeSrc, setIframeSrc] = useState('');
 
@@ -112,7 +110,7 @@ function CustomViewer(props: CustomViewerProps) {
             pitch: sceneCamera.pitch ?? -Math.PI / 2,
           },
         });
-        sceneCamera.isAnimating && dispatch(toggleIsAnimating());
+        //sceneCamera.isAnimating && dispatch(toggleIsAnimating());
       } else {
         viewer.camera.lookAt(home, homeOffset);
         viewer.camera.flyToBoundingSphere(new BoundingSphere(home, 500), {
@@ -120,7 +118,7 @@ function CustomViewer(props: CustomViewerProps) {
         });
       }
     }
-  }, [viewer, location.hash]);
+  }, [viewer]);
 
   useEffect(() => {
     if (!viewer) return;
@@ -132,14 +130,15 @@ function CustomViewer(props: CustomViewerProps) {
     const moveEndListener = async () => {
       if (viewer.camera.position) {
         const zoom = await getCesiumViewerZoomLevel(viewer);
-        console.log('zoom', zoom, isAnimating);
-        const scene = encodeScene(viewer.camera, zoom, isAnimating);
+        const sceneHash = encodeScene(viewer.camera, zoom);
 
         const currentHash = window.location.hash;
 
-        const hashRouterPart = currentHash.split('?')[0];
+        let hashRouterPart = currentHash.split('?')[0];
+        // remove redundant hash from hashrouter
+        hashRouterPart = hashRouterPart.replace('#/', '');
 
-        window.location.replace(`${hashRouterPart}?${scene}`);
+        navigate(`${hashRouterPart}?${sceneHash}`, { replace: true });
 
         const headingInDegrees = CeMath.toDegrees(viewer.camera.heading);
         const pitchInDegrees = CeMath.toDegrees(viewer.camera.pitch);
@@ -152,7 +151,7 @@ function CustomViewer(props: CustomViewerProps) {
           setShowLeaflet(true);
           //console.log('scene', scene);
           if (zoom !== Infinity) {
-            const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${scene}`;
+            const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${sceneHash}`;
             //console.info('view in leaflet:', `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${scene}`);
             setIframeSrc(leafletUrl);
           }
@@ -167,7 +166,7 @@ function CustomViewer(props: CustomViewerProps) {
     return () => {
       viewer.camera.moveEnd.removeEventListener(moveEndListener);
     };
-  }, [viewer, globeColor, isAnimating]);
+  }, [viewer, globeColor]);
 
   let style;
 
