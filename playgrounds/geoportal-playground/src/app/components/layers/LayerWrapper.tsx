@@ -88,6 +88,15 @@ const LayerWrapper = () => {
               opacity={layer.opacity}
               index={i}
               description={layer.description}
+              icon={
+                layer.title.includes('Orthofoto')
+                  ? 'ortho'
+                  : layer.title === 'Bäume'
+                  ? 'bäume'
+                  : layer.title.includes('gärten')
+                  ? 'gärten'
+                  : undefined
+              }
             />
           ))}
         </SortableContext>

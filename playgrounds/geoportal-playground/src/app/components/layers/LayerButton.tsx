@@ -4,6 +4,8 @@ import {
   faInfo,
   faX,
   faCircle,
+  faGlobe,
+  faMap,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +25,7 @@ import { Slider } from 'antd';
 import { useContext, useRef, useState } from 'react';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { cn } from '../../helper/helper';
+import { faSquare } from '@fortawesome/free-regular-svg-icons';
 // import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
@@ -31,7 +34,20 @@ interface LayerButtonProps {
   opacity: number;
   index: number;
   description?: string;
+  icon?: string;
 }
+
+const iconMap = {
+  bäume: faCircle,
+  gärten: faSquare,
+  ortho: faGlobe,
+};
+
+const iconColorMap = {
+  bäume: 'green',
+  gärten: 'purple',
+  ortho: 'black',
+};
 
 const LayerButton = ({
   title,
@@ -39,6 +55,7 @@ const LayerButton = ({
   opacity,
   index,
   description,
+  icon,
 }: LayerButtonProps) => {
   const dispatch = useDispatch();
   // @ts-ignore
@@ -71,6 +88,11 @@ const LayerButton = ({
             : 'bg-neutral-200'
         )}
       >
+        <FontAwesomeIcon
+          icon={icon ? iconMap[icon] : faMap}
+          className="text-base p-1"
+          style={{ color: iconColorMap[icon] }}
+        />
         <span className="text-sm font-medium">{title}</span>
         <FontAwesomeIcon
           icon={faX}
@@ -108,8 +130,9 @@ const LayerButton = ({
                   {title}:
                 </label>
                 <FontAwesomeIcon
-                  icon={faCircle}
-                  className="text-base text-green-600/90"
+                  icon={icon ? iconMap[icon] : faMap}
+                  className="text-base"
+                  style={{ color: iconColorMap[icon] }}
                 />
               </div>
               <div className="w-full flex items-center gap-2">
