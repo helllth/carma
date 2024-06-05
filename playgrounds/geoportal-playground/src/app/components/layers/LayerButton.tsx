@@ -21,7 +21,7 @@ import {
 } from '../../store/slices/mapping';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Slider } from 'antd';
+import { Slider, Tabs } from 'antd';
 import { useContext, useRef, useState } from 'react';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { cn } from '../../helper/helper';
@@ -69,6 +69,39 @@ const LayerButton = ({
     });
 
   const style = { transform: CSS.Translate.toString(transform) };
+
+  const tabItems = [
+    {
+      label: 'Informationen',
+      key: '1',
+    },
+    {
+      label: 'Technische Daten',
+      key: '2',
+      children: (
+        <p>
+          Die Datenmodellierung lehnt sich an die ISO19112 an und beinhaltet u.
+          a. die Mehrfachkategorisierung bei Auszeichnung einer Hauptkategorie,
+          die optionale Zuordnung mehrerer alternativer Namen sowie die
+          Zuordnung zu übergeordneten Themenfeldern (Lebenslagen). Die
+          Koordinaten der POI bezogen sich ursprünglich auf die Amtliche
+          Stadtkarte Wuppertal, eine leicht generalisierte Karte im Maßstab
+          1:15.000. In 06/2018 wurden die POI-Koordinaten für die Nutzung der
+          POI im Online-Stadtplan der Stadt Wuppertal, der mit dem Stadtplanwerk
+          2.0 (SPW2.0) des Regionalverbandes Ruhr eine nicht generalisierte
+          Kartengrundlage verwendet, überarbeitet. Dabei wurden vermittelnde
+          Positionen bestimmt, die bei beiden Karten eine korrekte Lagezuordnung
+          des POI zur Situationsdarstellung in der Hintergrundkarte ermöglichen.
+          Die laufende Aktualisierung der Daten erfolgt im Zusammenhang mit den
+          Kartenredaktionsarbeiten für die Fortführung des SPW2.0 im Bereich der
+          Stadt Wuppertal. Der Datensatz ist unter einer Open-Data-Lizenz (CC BY
+          4.0) verfügbar. Er umfasst jedoch Hyperlinks von Fotos, die u. U.
+          nicht unter diese Lizenz fallen. Eine Weitergabe oder Veröffentlichung
+          dieser Bilder ist mit dem jeweiligen Bildersteller zu vereinbaren.
+        </p>
+      ),
+    },
+  ];
   return (
     <div>
       <div
@@ -109,7 +142,7 @@ const LayerButton = ({
           <div
             className={cn(
               `bg-white rounded-3xl 2xl:w-1/2 w-full flex flex-col relative px-10 gap-2 py-2`,
-              showInfo ? 'h-56' : 'h-12'
+              showInfo ? 'min-h-72 h-fit' : 'h-12'
             )}
           >
             <FontAwesomeIcon
@@ -156,7 +189,7 @@ const LayerButton = ({
                   min={0}
                   max={1}
                   step={0.1}
-                  className="w-full"
+                  className="w-2/3"
                   id="opacity-slider"
                 />
               </div>
@@ -171,6 +204,7 @@ const LayerButton = ({
               <>
                 <h3>Informationen</h3>
                 {description && <p>{description}</p>}
+                <Tabs defaultActiveKey="1" items={tabItems} />
               </>
             )}
           </div>
