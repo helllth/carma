@@ -34,6 +34,7 @@ const LibItem = ({
   const [thumbUrl, setThumbUrl] = useState('');
   const title = layer.Title;
   const description = layer.Abstract;
+  const legendUrl = layer.Style.find((style) => style.LegendURL)?.LegendURL;
   const tags = layer.tags.slice(1);
   const name = layer.Name;
   const service = layer.service;
@@ -181,6 +182,7 @@ const LibItem = ({
                   title,
                   url: service.url,
                   description,
+                  legend: legendUrl,
                 });
               }}
             >

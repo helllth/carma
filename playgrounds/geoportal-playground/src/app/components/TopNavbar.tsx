@@ -13,8 +13,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
 // @ts-ignore
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
-// @ts-ignore
-import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 
 import './switch.css';
 import { LayerLib } from '@cismet/layer-lib';
@@ -42,6 +40,7 @@ const TopNavbar = () => {
       opacity: 0.7,
       url,
       description: layer.description,
+      legend: layer.legend,
     };
 
     if (activeLayers.find((activeLayer) => activeLayer.id === layer.name)) {

@@ -97,6 +97,7 @@ const LayerWrapper = () => {
                   ? 'gärten'
                   : undefined
               }
+              layer={layer}
             />
           ))}
         </SortableContext>

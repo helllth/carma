@@ -26,6 +26,8 @@ import { useContext, useRef, useState } from 'react';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { cn } from '../../helper/helper';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
+import { Layer } from 'libraries/layer-lib/src/components/LibModal';
+import './tabs.css';
 // import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
@@ -35,6 +37,7 @@ interface LayerButtonProps {
   index: number;
   description?: string;
   icon?: string;
+  layer: Layer;
 }
 
 const iconMap = {
@@ -56,6 +59,7 @@ const LayerButton = ({
   index,
   description,
   icon,
+  layer,
 }: LayerButtonProps) => {
   const dispatch = useDispatch();
   // @ts-ignore
@@ -103,12 +107,24 @@ const LayerButton = ({
     {
       label: 'Legende',
       key: '1',
+      children: (
+        <div className="h-full overflow-auto">
+          {layer.legend?.map((legend, i) => (
+            <img
+              key={`legend_${i}`}
+              src={legend.OnlineResource}
+              alt="Legende"
+              className="h-full"
+            />
+          ))}
+        </div>
+      ),
     },
     {
       label: 'Hintergrund',
       key: '2',
       children: (
-        <p className="pt-2">
+        <p>
           Die Datenmodellierung lehnt sich an die ISO19112 an und beinhaltet u.
           a. die Mehrfachkategorisierung bei Auszeichnung einer Hauptkategorie,
           die optionale Zuordnung mehrerer alternativer Namen sowie die
@@ -175,7 +191,7 @@ const LayerButton = ({
           <div
             className={cn(
               `bg-white rounded-3xl 2xl:w-1/2 w-full flex flex-col relative px-10 gap-2 py-2`,
-              showInfo ? 'min-h-96 h-fit' : 'h-12'
+              showInfo ? 'h-[600px]' : 'h-12'
             )}
           >
             <FontAwesomeIcon
@@ -192,14 +208,15 @@ const LayerButton = ({
             />
             <div className="flex items-center h-8 gap-6">
               <div className="w-1/4 min-w-max truncate flex items-center gap-2">
-                <label className="mb-0 text-sm font-medium" htmlFor="icon">
-                  {title}:
-                </label>
                 <FontAwesomeIcon
                   icon={icon ? iconMap[icon] : faMap}
                   className="text-base"
                   style={{ color: iconColorMap[icon] }}
+                  id="icon"
                 />
+                <label className="mb-0 text-sm font-medium pt-1" htmlFor="icon">
+                  {title}
+                </label>
               </div>
               <div className="w-full flex items-center gap-2">
                 <label
