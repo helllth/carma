@@ -83,6 +83,7 @@ function CustomViewer(props: CustomViewerProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [initialHash, setInitialHash] = useState<string | null>(null);
+  const [sceneHash, setSceneHash] = useState<string | null>(null);
   //const dispatch = useDispatch();
 
   const [iframeSrc, setIframeSrc] = useState('');
@@ -121,6 +122,15 @@ function CustomViewer(props: CustomViewerProps) {
   }, [viewer]);
 
   useEffect(() => {
+    console.log('HOOK: hashlocation or path changed');
+    if (sceneHash) {
+      const currentHash = location.pathname;
+      const hashRouterPart = currentHash.split('?')[0];
+      navigate(`${hashRouterPart}?${sceneHash}`, { replace: true });
+    }
+  }, [location.pathname, sceneHash]);
+
+  useEffect(() => {
     if (!viewer) return;
     // remove default imagery
     viewer.imageryLayers.removeAll();
@@ -130,15 +140,8 @@ function CustomViewer(props: CustomViewerProps) {
     const moveEndListener = async () => {
       if (viewer.camera.position) {
         const zoom = await getCesiumViewerZoomLevel(viewer);
-        const sceneHash = encodeScene(viewer.camera, zoom);
-
-        const currentHash = window.location.hash;
-
-        let hashRouterPart = currentHash.split('?')[0];
-        // remove redundant hash from hashrouter
-        hashRouterPart = hashRouterPart.replace('#/', '');
-
-        navigate(`${hashRouterPart}?${sceneHash}`, { replace: true });
+        const newSceneHash = encodeScene(viewer.camera, zoom);
+        setSceneHash(newSceneHash);
 
         const headingInDegrees = CeMath.toDegrees(viewer.camera.heading);
         const pitchInDegrees = CeMath.toDegrees(viewer.camera.pitch);
@@ -151,14 +154,13 @@ function CustomViewer(props: CustomViewerProps) {
           setShowLeaflet(true);
           //console.log('scene', scene);
           if (zoom !== Infinity) {
-            const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${sceneHash}`;
+            const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${newSceneHash}`;
             //console.info('view in leaflet:', `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${scene}`);
             setIframeSrc(leafletUrl);
           }
         } else {
           setShowLeaflet(false);
         }
-        //localStorage.setItem('viewerState', scene);
       }
     };
 
@@ -167,8 +169,6 @@ function CustomViewer(props: CustomViewerProps) {
       viewer.camera.moveEnd.removeEventListener(moveEndListener);
     };
   }, [viewer, globeColor]);
-
-  let style;
 
   return (
     <ResiumViewer
