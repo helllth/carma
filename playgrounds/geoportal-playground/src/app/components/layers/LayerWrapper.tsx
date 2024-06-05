@@ -15,6 +15,8 @@ import {
 } from '@dnd-kit/sortable';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { useContext } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMap } from '@fortawesome/free-solid-svg-icons';
 
 const LayerWrapper = () => {
   const dispatch = useDispatch();
@@ -60,6 +62,9 @@ const LayerWrapper = () => {
         id="buttonWrapper"
         className="absolute flex items-center justify-center gap-2 w-[calc(100%-60px)] left-20 pr-72 top-2.5 z-[999]"
       >
+        <div className="w-fit min-w-max flex items-center gap-2 px-3 bg-white rounded-3xl h-8 z-[99999999] shadow-lg">
+          <FontAwesomeIcon icon={faMap} />
+        </div>
         <SortableContext
           items={layers}
           strategy={horizontalListSortingStrategy}
