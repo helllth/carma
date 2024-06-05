@@ -1,5 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { getLayers, setLayers } from '../../store/slices/mapping';
+import {
+  getLayers,
+  getSelectedLayerIndex,
+  setLayers,
+} from '../../store/slices/mapping';
 import LayerButton from './LayerButton';
 import {
   DndContext,
@@ -17,12 +21,15 @@ import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
+import { cn } from '../../helper/helper';
+import './button.css';
 
 const LayerWrapper = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const { routedMapRef } = useContext(TopicMapContext);
   const layers = useSelector(getLayers);
+  const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const { isOver, setNodeRef } = useDroppable({
     id: 'droppable',
   });
@@ -62,7 +69,12 @@ const LayerWrapper = () => {
         id="buttonWrapper"
         className="absolute flex items-center justify-center gap-2 w-[calc(100%-60px)] left-20 pr-72 top-2.5 z-[999]"
       >
-        <div className="w-fit min-w-max flex items-center gap-2 px-3 bg-white rounded-3xl h-8 z-[99999999] shadow-lg">
+        <div
+          className={cn(
+            'w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow',
+            selectedLayerIndex === -1 ? 'bg-white' : 'bg-neutral-200'
+          )}
+        >
           <FontAwesomeIcon icon={faMap} />
         </div>
         <SortableContext

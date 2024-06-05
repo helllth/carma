@@ -60,7 +60,14 @@ const LayerButton = ({
         style={style}
         {...listeners}
         {...attributes}
-        className="w-fit min-w-max flex items-center gap-2 px-3 bg-white rounded-3xl h-8 z-[99999999] shadow-lg"
+        className={cn(
+          'w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow',
+          selectedLayerIndex === -1
+            ? 'bg-white'
+            : showSettings
+            ? 'bg-white'
+            : 'bg-neutral-200'
+        )}
       >
         <span className="text-sm font-medium">{title}</span>
         <FontAwesomeIcon
@@ -77,7 +84,7 @@ const LayerButton = ({
         <div className="absolute top-12 w-[calc(100%-60px)] left-20 pr-72 z-[999] flex justify-center items-center">
           <div
             className={cn(
-              `bg-white shadow-lg rounded-3xl w-1/2 flex flex-col gap-2 p-2`,
+              `bg-white rounded-3xl w-1/2 flex flex-col gap-2 p-2`,
               showInfo ? 'h-56' : 'h-10'
             )}
           >
