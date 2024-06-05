@@ -49,8 +49,6 @@ const LayerButton = ({
     });
 
   const style = { transform: CSS.Translate.toString(transform) };
-
-  console.log('buttonRef', 168 - buttonRef?.current?.offsetWidth / 2);
   return (
     <div className="relative" ref={buttonRef}>
       <div
