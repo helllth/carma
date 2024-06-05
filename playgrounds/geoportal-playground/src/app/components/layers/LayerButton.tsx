@@ -11,10 +11,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   changeOpacity,
+  getActiveTabKey,
   getSelectedLayerIndex,
   getShowInfo,
   getShowInfoText,
   removeLayer,
+  setActiveTabKey,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
   setSelectedLayerIndex,
@@ -68,6 +70,7 @@ const LayerButton = ({
   const { routedMapRef } = useContext(TopicMapContext);
   const showInfo = useSelector(getShowInfo);
   const showInfoText = useSelector(getShowInfoText);
+  const activeTabKey = useSelector(getActiveTabKey);
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -284,7 +287,12 @@ const LayerButton = ({
                   </div>
                 )}
                 <hr className="h-px my-0 bg-gray-300 border-0 w-full" />
-                <Tabs defaultActiveKey="1" items={tabItems} />
+                <Tabs
+                  animated={false}
+                  items={tabItems}
+                  activeKey={activeTabKey}
+                  onChange={(key) => dispatch(setActiveTabKey(key))}
+                />
               </>
             )}
           </div>
