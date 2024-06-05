@@ -1,3 +1,5 @@
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState, useEffect } from 'react';
 
 type ResizableIframeProps = {
@@ -90,10 +92,10 @@ const ResizableIframe = ({
           onClick={handleButtonClick}
           style={{
             position: 'absolute',
-            top: 30,
-            right: 10,
+            top: 10,
+            right: 45,
             zIndex: 101,
-            padding: '10px 20px',
+            padding: '5px 10px',
             backgroundColor: '#007BFF',
             color: '#fff',
             border: 'none',
@@ -101,15 +103,9 @@ const ResizableIframe = ({
             cursor: 'pointer',
           }}
         >
-          h: {iframeSrc.match(/h=([^&]*)/)![1]}
-          <br />
-          zoom: <b>{iframeSrc.match(/zoom=([^&]*)/)![1]}</b>
-          <br />
-          Für beste Überlappung <br />
-          nur ganzzahlige Zoom-Level <br />
-          mit Leaflet nutzen
-          <br />
-          Mit Klick ßßhier in neuem Tab öffnen
+          h: {iframeSrc.match(/h=([^&]*)/)![1]} zoom:{' '}
+          <b>{iframeSrc.match(/zoom=([^&]*)/)![1]}</b> im Kulturstadtplan{' '}
+          <FontAwesomeIcon icon={faExternalLinkAlt} />
         </button>
       </div>
       <div
