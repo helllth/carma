@@ -6,4 +6,5 @@
 
 .ant-tabs {
   height: 100%;
+  overflow: auto;
 }
