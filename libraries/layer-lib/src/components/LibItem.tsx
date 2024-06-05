@@ -164,6 +164,7 @@ const LibItem = ({
               name,
               title,
               url: service.url,
+              description,
             });
           }}
           icon={isActiveLayer ? faMinus : faPlus}
@@ -179,6 +180,7 @@ const LibItem = ({
                   name,
                   title,
                   url: service.url,
+                  description,
                 });
               }}
             >

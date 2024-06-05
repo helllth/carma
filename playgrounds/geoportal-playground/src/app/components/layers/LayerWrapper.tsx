@@ -70,6 +70,7 @@ const LayerWrapper = () => {
               id={layer.id}
               opacity={layer.opacity}
               index={i}
+              description={layer.description}
             />
           ))}
         </SortableContext>

@@ -27,6 +27,7 @@ export type Layer = {
   url: string;
   id: string;
   opacity: number;
+  description: string;
 };
 
 export interface LibModalProps {

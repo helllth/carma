@@ -41,6 +41,7 @@ const TopNavbar = () => {
       id: layer.name,
       opacity: 0.7,
       url,
+      description: layer.description,
     };
 
     if (activeLayers.find((activeLayer) => activeLayer.id === layer.name)) {
