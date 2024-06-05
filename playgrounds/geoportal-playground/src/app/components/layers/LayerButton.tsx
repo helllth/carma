@@ -193,6 +193,14 @@ const LayerButton = ({
               `bg-white rounded-3xl 2xl:w-1/2 w-full flex flex-col relative px-10 gap-2 py-2`,
               showInfo ? 'h-[600px]' : 'h-12'
             )}
+            onMouseEnter={() => {
+              routedMapRef?.leafletMap?.leafletElement.dragging.disable();
+              routedMapRef?.leafletMap?.leafletElement.scrollWheelZoom.disable();
+            }}
+            onMouseLeave={() => {
+              routedMapRef?.leafletMap?.leafletElement.dragging.enable();
+              routedMapRef?.leafletMap?.leafletElement.scrollWheelZoom.enable();
+            }}
           >
             <FontAwesomeIcon
               icon={faChevronLeft}
