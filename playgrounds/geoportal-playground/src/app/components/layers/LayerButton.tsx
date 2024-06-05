@@ -6,6 +6,7 @@ import {
   faCircle,
   faGlobe,
   faMap,
+  faLayerGroup,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
@@ -73,6 +74,7 @@ const LayerButton = ({
   const activeTabKey = useSelector(getActiveTabKey);
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
+  let urlPrefix = window.location.origin + window.location.pathname;
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id,
@@ -176,11 +178,22 @@ const LayerButton = ({
             : 'bg-neutral-200'
         )}
       >
-        <FontAwesomeIcon
-          icon={icon ? iconMap[icon] : faMap}
-          className="text-base p-1"
-          style={{ color: iconColorMap[icon] }}
-        />
+        {icon === 'ortho' ? (
+          <div style={{ height: 14, width: 14 }}>
+            <img
+              src={urlPrefix + 'images/ortho.png'}
+              alt="Ortho"
+              className="h-full"
+            />
+          </div>
+        ) : (
+          <FontAwesomeIcon
+            icon={icon ? iconMap[icon] : faLayerGroup}
+            className="text-base"
+            style={{ color: iconColorMap[icon] }}
+            id="icon"
+          />
+        )}
         <span className="text-sm font-medium">{title}</span>
         <FontAwesomeIcon
           icon={faX}
@@ -222,12 +235,22 @@ const LayerButton = ({
             />
             <div className="flex items-center h-8 gap-6">
               <div className="w-1/4 min-w-max truncate flex items-center gap-2">
-                <FontAwesomeIcon
-                  icon={icon ? iconMap[icon] : faMap}
-                  className="text-base"
-                  style={{ color: iconColorMap[icon] }}
-                  id="icon"
-                />
+                {icon === 'ortho' ? (
+                  <div style={{ height: 14, width: 14 }}>
+                    <img
+                      src={urlPrefix + 'images/ortho.png'}
+                      alt="Ortho"
+                      className="h-full"
+                    />
+                  </div>
+                ) : (
+                  <FontAwesomeIcon
+                    icon={icon ? iconMap[icon] : faLayerGroup}
+                    className="text-base"
+                    style={{ color: iconColorMap[icon] }}
+                    id="icon"
+                  />
+                )}
                 <label className="mb-0 text-sm font-medium pt-1" htmlFor="icon">
                   {title}
                 </label>
