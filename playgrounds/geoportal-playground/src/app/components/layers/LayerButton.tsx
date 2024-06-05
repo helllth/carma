@@ -101,14 +101,14 @@ const LayerButton = ({
 
   const tabItems = [
     {
-      label: 'Datensatz',
+      label: 'Legende',
       key: '1',
     },
     {
-      label: 'Technische Daten',
+      label: 'Hintergrund',
       key: '2',
       children: (
-        <p>
+        <p className="pt-2">
           Die Datenmodellierung lehnt sich an die ISO19112 an und beinhaltet u.
           a. die Mehrfachkategorisierung bei Auszeichnung einer Hauptkategorie,
           die optionale Zuordnung mehrerer alternativer Namen sowie die
@@ -129,6 +129,10 @@ const LayerButton = ({
           dieser Bilder ist mit dem jeweiligen Bildersteller zu vereinbaren.
         </p>
       ),
+    },
+    {
+      label: 'Technische Informationen',
+      key: '3',
     },
   ];
   return (
@@ -231,18 +235,21 @@ const LayerButton = ({
 
             {showInfo && (
               <>
-                <h4>Informationen</h4>
+                <h4 className="font-semibold">Informationen</h4>
+                {/* <hr className="h-px my-0 bg-gray-300 border-0 w-full" /> */}
                 {parsedDescription && (
                   <div>
-                    <h5>Inhalt</h5>
-                    <p>{parsedDescription.inhalt}</p>
-                    <h5>Sichtbarkeit</h5>
-                    <p>{parsedDescription.sichtbarkeit.slice(0, -1)}</p>
-                    <h5>Nutzung</h5>
-                    <p>{parsedDescription.nutzung}</p>
+                    <h5 className="font-semibold">Inhalt</h5>
+                    <p className="text-sm">{parsedDescription.inhalt}</p>
+                    <h5 className="font-semibold">Sichtbarkeit</h5>
+                    <p className="text-sm">
+                      {parsedDescription.sichtbarkeit.slice(0, -1)}
+                    </p>
+                    <h5 className="font-semibold">Nutzung</h5>
+                    <p className="text-sm">{parsedDescription.nutzung}</p>
                   </div>
                 )}
-                <hr className="h-px my-2 bg-gray-300 border-0 w-full" />
+                <hr className="h-px my-0 bg-gray-300 border-0 w-full" />
                 <Tabs defaultActiveKey="1" items={tabItems} />
               </>
             )}
