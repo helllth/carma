@@ -9,10 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   changeOpacity,
   getSelectedLayerIndex,
+  getShowInfo,
   removeLayer,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
   setSelectedLayerIndex,
+  setShowInfo,
 } from '../../store/slices/mapping';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -39,8 +41,7 @@ const LayerButton = ({
   const dispatch = useDispatch();
   // @ts-ignore
   const { routedMapRef } = useContext(TopicMapContext);
-  const buttonRef = useRef<HTMLDivElement>(null);
-  const [showInfo, setShowInfo] = useState(false);
+  const showInfo = useSelector(getShowInfo);
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -107,7 +108,7 @@ const LayerButton = ({
               <FontAwesomeIcon
                 icon={faInfo}
                 className="text-base"
-                onClick={() => setShowInfo(!showInfo)}
+                onClick={() => dispatch(setShowInfo(!showInfo))}
               />
               <FontAwesomeIcon
                 icon={faChevronRight}

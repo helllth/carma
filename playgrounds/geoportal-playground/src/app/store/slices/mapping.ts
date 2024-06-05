@@ -1,15 +1,18 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
+import exp from 'constants';
 
 interface MappingState {
   layers: Layer[];
   selectedLayerIndex: number;
+  showInfo: boolean;
 }
 
 const initialState: MappingState = {
   layers: [],
   selectedLayerIndex: -1,
+  showInfo: false,
 };
 
 const slice = createSlice({
@@ -60,6 +63,9 @@ const slice = createSlice({
         state.selectedLayerIndex = newIndex;
       }
     },
+    setShowInfo(state, action) {
+      state.showInfo = action.payload;
+    },
   },
 });
 
@@ -73,6 +79,7 @@ export const {
   setSelectedLayerIndex,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
+  setShowInfo,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -81,4 +88,8 @@ export const getLayers = (state: RootState) => {
 
 export const getSelectedLayerIndex = (state: RootState) => {
   return state.mapping.selectedLayerIndex;
+};
+
+export const getShowInfo = (state: RootState) => {
+  return state.mapping.showInfo;
 };
