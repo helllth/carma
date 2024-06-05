@@ -17,8 +17,9 @@ import {
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Slider } from 'antd';
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
+import { cn } from '../../helper/helper';
 
 interface LayerButtonProps {
   title: string;
@@ -38,6 +39,7 @@ const LayerButton = ({
   const dispatch = useDispatch();
   // @ts-ignore
   const { routedMapRef } = useContext(TopicMapContext);
+  const buttonRef = useRef<HTMLDivElement>(null);
   const [showInfo, setShowInfo] = useState(false);
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
@@ -47,8 +49,10 @@ const LayerButton = ({
     });
 
   const style = { transform: CSS.Translate.toString(transform) };
+
+  console.log('buttonRef', 168 - buttonRef?.current?.offsetWidth / 2);
   return (
-    <div className="relative">
+    <div className="relative" ref={buttonRef}>
       <div
         ref={setNodeRef}
         onClick={() =>
@@ -72,11 +76,13 @@ const LayerButton = ({
       </div>
       {showSettings && (
         <div
-          className={`bg-white absolute top-12 shadow-lg rounded-3xl w-96 ${
+          className={cn(
+            `bg-white absolute top-12 shadow-lg rounded-3xl w-96 flex flex-col gap-2 p-2`,
             showInfo ? 'h-56' : 'h-10'
-          } flex flex-col gap-2 p-2`}
+          )}
+          style={{ left: -(168 - buttonRef?.current?.offsetWidth / 2) }}
         >
-          <div className="flex items-center h-6 gap-2">
+          <div className="flex items-center h-6 gap-6">
             <FontAwesomeIcon
               icon={faChevronLeft}
               className="text-base"
