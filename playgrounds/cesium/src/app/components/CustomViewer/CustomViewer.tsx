@@ -199,7 +199,7 @@ function CustomViewer(props: CustomViewerProps) {
       navigationHelpButton={false}
       navigationInstructionsInitiallyVisible={false}
     >
-      {showTileset && <BaseTileset />}
+      <BaseTileset show={showTileset} />
       {children}
       {showControls && (
         <ControlsUI

@@ -11,6 +11,7 @@ import {
   Entity,
   GroundPrimitive,
   Matrix4,
+  Primitive,
   Scene,
   Viewer,
 } from 'cesium';
@@ -156,3 +157,29 @@ export const getCesiumViewerZoomLevel = async (
   );
   return webMercatorZoomEquivalent;
 };
+
+export function getPrimitiveById(viewer: Viewer, id: string) {
+  const primitives = viewer.scene.primitives;
+  const length = primitives.length;
+
+  for (let i = 0; i < length; ++i) {
+    const p = primitives.get(i);
+    if (p.id === id) {
+      return p;
+    }
+  }
+
+  return null;
+}
+
+export function getAllPrimitives(viewer: Viewer) {
+  const primitives = viewer.scene.primitives;
+  const length = primitives.length;
+
+  const primitiveArray: Primitive[] = [];
+  for (let i = 0; i < length; ++i) {
+    const p = primitives.get(i);
+    primitiveArray.push(p);
+  }
+  return primitiveArray;
+}

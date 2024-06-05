@@ -30,7 +30,7 @@ export function App() {
                 position: 'absolute',
                 top: 8,
                 left: '50%',
-                width: 800,
+                width: 'auto',
                 display: 'flex',
                 justifyContent: 'center',
                 transform: 'translate(-50%, 0)',

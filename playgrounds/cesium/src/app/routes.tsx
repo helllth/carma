@@ -4,6 +4,8 @@ import ClassifyByGeoJson from './views/ClassifyByGeoJson';
 import TilesetSelectionFromCityGml from './views/TilesetSelectionFromCityGml';
 import TilesetSelectionFromBaseMapDE from './views/TilesetSelectionBasemapDe';
 import TilesetSelectionClassify from './views/TilesetSelectionClassify';
+import PlanModelStyle from './views/PlanningModelStyle';
+
 //import Full from './views/obsolete/Full';
 //import WithMesh from './views/obsolete/WithMesh';
 import TestCustomViewer from './views/tests/CustomViewer';
@@ -29,6 +31,7 @@ export type RouteDescriptor = RouteItem | RoutePath;
 
 export const viewerRoutes: RouteDescriptor[] = [
   ['/', '', ClassifyByGeoJson],
+  ['/stadtmodell', '', PlanModelStyle],
   ['/geojson-classify', 'Klassifizierung nach GeoJson', ClassifyByGeoJson],
   [
     '/tileset',

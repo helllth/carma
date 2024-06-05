@@ -6,7 +6,7 @@ import {
 } from '../../../store/slices/viewer';
 import { create3DTileStyle } from '../../../utils/cesiumHelpers';
 
-export const BaseTileset = () => {
+export const BaseTileset = ({ show }: { show: boolean }) => {
   const tileset = useViewerDataSources().tileset;
 
   const tilesetOpacity = useTilesetOpacity();
@@ -19,6 +19,7 @@ export const BaseTileset = () => {
   return (
     tileset && (
       <Cesium3DTileset
+        show={show}
         url={tileset.url}
         style={style}
         enableCollision={true}

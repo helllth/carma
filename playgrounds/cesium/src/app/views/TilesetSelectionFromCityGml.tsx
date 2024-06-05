@@ -8,9 +8,9 @@ import { CITYGML_TEST_TILESET } from '../config';
 import { useViewerDataSources } from '../store/slices/viewer';
 
 function View() {
-  useSelectionTransparencyControl();
+  //useSelectionTransparencyControl();
   const footprints = useViewerDataSources().footprintGeoJson;
-  useTilesetControl();
+  //useTilesetControl();
   return (
     <TilesetSelector
       tileset={CITYGML_TEST_TILESET}
