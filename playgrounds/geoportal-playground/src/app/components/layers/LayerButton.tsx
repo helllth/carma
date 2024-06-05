@@ -157,6 +157,22 @@ const LayerButton = ({
     {
       label: 'Technische Informationen',
       key: '3',
+      children: (
+        <div className="flex flex-col gap-2">
+          <a
+            href="https://maps.wuppertal.de/karten?service=WMS&request=GetCapabilities&version=1.1.1"
+            target="_blank"
+          >
+            GetCapabilities
+          </a>
+          <a
+            href="https://offenedaten-wuppertal.de/dataset/interessante-orte-poi-wuppertal"
+            target="_blank"
+          >
+            Open Data
+          </a>
+        </div>
+      ),
     },
   ];
   return (
