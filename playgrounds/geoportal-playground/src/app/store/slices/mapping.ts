@@ -7,12 +7,14 @@ interface MappingState {
   layers: Layer[];
   selectedLayerIndex: number;
   showInfo: boolean;
+  showInfoText: boolean;
 }
 
 const initialState: MappingState = {
   layers: [],
   selectedLayerIndex: -1,
   showInfo: false,
+  showInfoText: false,
 };
 
 const slice = createSlice({
@@ -66,6 +68,9 @@ const slice = createSlice({
     setShowInfo(state, action) {
       state.showInfo = action.payload;
     },
+    setShowInfoText(state, action) {
+      state.showInfoText = action.payload;
+    },
   },
 });
 
@@ -80,6 +85,7 @@ export const {
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
   setShowInfo,
+  setShowInfoText,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -92,4 +98,8 @@ export const getSelectedLayerIndex = (state: RootState) => {
 
 export const getShowInfo = (state: RootState) => {
   return state.mapping.showInfo;
+};
+
+export const getShowInfoText = (state: RootState) => {
+  return state.mapping.showInfoText;
 };
