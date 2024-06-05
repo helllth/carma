@@ -26,6 +26,10 @@ export type Layer = {
   initialActive: boolean;
   url: string;
   id: string;
+  opacity: number;
+  description: string;
+  icon?: string;
+  legend?: { Format: string; OnlineResource: string; size: [number, number] }[];
 };
 
 export interface LibModalProps {
