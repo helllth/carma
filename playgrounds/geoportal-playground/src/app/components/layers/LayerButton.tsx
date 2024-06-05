@@ -3,6 +3,7 @@ import {
   faChevronRight,
   faInfo,
   faX,
+  faCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,6 +23,7 @@ import { Slider } from 'antd';
 import { useContext, useRef, useState } from 'react';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { cn } from '../../helper/helper';
+// import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
   title: string;
@@ -84,44 +86,61 @@ const LayerButton = ({
         <div className="absolute top-12 w-[calc(100%-60px)] left-20 pr-72 z-[999] flex justify-center items-center">
           <div
             className={cn(
-              `bg-white rounded-3xl w-1/2 flex flex-col gap-2 p-2`,
-              showInfo ? 'h-56' : 'h-10'
+              `bg-white rounded-3xl 2xl:w-1/2 w-full flex flex-col relative px-10 gap-2 py-2`,
+              showInfo ? 'h-56' : 'h-12'
             )}
           >
-            <div className="flex items-center h-6 gap-6">
-              <FontAwesomeIcon
-                icon={faChevronLeft}
-                className="text-base"
-                role="button"
-                onClick={() => dispatch(setPreviousSelectedLayerIndex())}
-              />
-              <label className="mb-0 text-md font-medium">Transparenz</label>
-              <Slider
-                onFocus={() => {
-                  routedMapRef?.leafletMap?.leafletElement.dragging.disable();
-                }}
-                onChange={(value) => {
-                  dispatch(changeOpacity({ id, opacity: value }));
-                }}
-                onChangeComplete={() => {
-                  routedMapRef?.leafletMap?.leafletElement.dragging.enable();
-                }}
-                value={opacity}
-                min={0}
-                max={1}
-                step={0.1}
-                className="w-full"
-              />
+            <FontAwesomeIcon
+              icon={faChevronLeft}
+              className="text-base absolute top-4 left-2.5"
+              role="button"
+              onClick={() => dispatch(setPreviousSelectedLayerIndex())}
+            />
+            <FontAwesomeIcon
+              icon={faChevronRight}
+              className="text-base absolute top-4 right-2.5"
+              role="button"
+              onClick={() => dispatch(setNextSelectedLayerIndex())}
+            />
+            <div className="flex items-center h-8 gap-6">
+              <div className="w-1/4 min-w-max truncate flex items-center gap-2">
+                <label className="mb-0 text-sm font-medium" htmlFor="icon">
+                  {title}:
+                </label>
+                <FontAwesomeIcon
+                  icon={faCircle}
+                  className="text-base text-green-600/90"
+                />
+              </div>
+              <div className="w-full flex items-center gap-2">
+                <label
+                  className="mb-0 text-sm font-medium"
+                  htmlFor="opacity-slider"
+                >
+                  Transparenz:
+                </label>
+                <Slider
+                  onFocus={() => {
+                    routedMapRef?.leafletMap?.leafletElement.dragging.disable();
+                  }}
+                  onChange={(value) => {
+                    dispatch(changeOpacity({ id, opacity: value }));
+                  }}
+                  onChangeComplete={() => {
+                    routedMapRef?.leafletMap?.leafletElement.dragging.enable();
+                  }}
+                  value={opacity}
+                  min={0}
+                  max={1}
+                  step={0.1}
+                  className="w-full"
+                  id="opacity-slider"
+                />
+              </div>
               <FontAwesomeIcon
                 icon={faInfo}
                 className="text-base"
                 onClick={() => dispatch(setShowInfo(!showInfo))}
-              />
-              <FontAwesomeIcon
-                icon={faChevronRight}
-                className="text-base"
-                role="button"
-                onClick={() => dispatch(setNextSelectedLayerIndex())}
               />
             </div>
 
