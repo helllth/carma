@@ -70,9 +70,38 @@ const LayerButton = ({
 
   const style = { transform: CSS.Translate.toString(transform) };
 
+  const parseDescription = (description: string) => {
+    const result = { inhalt: '', sichtbarkeit: '', nutzung: '' };
+    const keywords = ['Inhalt:', 'Sichtbarkeit:', 'Nutzung:'];
+
+    function extractTextAfterKeyword(input, keyword) {
+      const index = input.indexOf(keyword);
+      if (index !== -1) {
+        const startIndex = index + keyword.length;
+        let endIndex = input.length;
+        for (const nextKeyword of keywords) {
+          const nextIndex = input.indexOf(nextKeyword, startIndex);
+          if (nextIndex !== -1 && nextIndex < endIndex) {
+            endIndex = nextIndex;
+          }
+        }
+        return input.slice(startIndex, endIndex).trim();
+      }
+      return '';
+    }
+
+    result.inhalt = extractTextAfterKeyword(description, 'Inhalt:');
+    result.sichtbarkeit = extractTextAfterKeyword(description, 'Sichtbarkeit:');
+    result.nutzung = extractTextAfterKeyword(description, 'Nutzung:');
+
+    return result;
+  };
+
+  const parsedDescription = parseDescription(description);
+
   const tabItems = [
     {
-      label: 'Informationen',
+      label: 'Datensatz',
       key: '1',
     },
     {
@@ -142,7 +171,7 @@ const LayerButton = ({
           <div
             className={cn(
               `bg-white rounded-3xl 2xl:w-1/2 w-full flex flex-col relative px-10 gap-2 py-2`,
-              showInfo ? 'min-h-72 h-fit' : 'h-12'
+              showInfo ? 'min-h-96 h-fit' : 'h-12'
             )}
           >
             <FontAwesomeIcon
@@ -202,8 +231,18 @@ const LayerButton = ({
 
             {showInfo && (
               <>
-                <h3>Informationen</h3>
-                {description && <p>{description}</p>}
+                <h4>Informationen</h4>
+                {parsedDescription && (
+                  <div>
+                    <h5>Inhalt</h5>
+                    <p>{parsedDescription.inhalt}</p>
+                    <h5>Sichtbarkeit</h5>
+                    <p>{parsedDescription.sichtbarkeit.slice(0, -1)}</p>
+                    <h5>Nutzung</h5>
+                    <p>{parsedDescription.nutzung}</p>
+                  </div>
+                )}
+                <hr className="h-px my-2 bg-gray-300 border-0 w-full" />
                 <Tabs defaultActiveKey="1" items={tabItems} />
               </>
             )}
