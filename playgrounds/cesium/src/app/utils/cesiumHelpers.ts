@@ -1,4 +1,5 @@
 import {
+  Camera,
   Cartesian2,
   Cartesian3,
   Cartographic,
@@ -10,6 +11,7 @@ import {
   Entity,
   GroundPrimitive,
   Matrix4,
+  Scene,
   Viewer,
 } from 'cesium';
 import { ColorRgbaArray, TilesetConfig } from '../..';
@@ -119,3 +121,38 @@ export function pickFromClampedGeojson(
   const pickedObjects = viewer.scene.drillPick(position, limit);
   return getLastGroundPrimitive(pickedObjects);
 }
+
+export const getElevationAtPosition = async (
+  scene: Scene,
+  camera: Camera,
+  fallBackHeightOffset
+) => {
+  const [sample] = await scene.sampleHeightMostDetailed([
+    camera.positionCartographic,
+  ]);
+  return sample.height !== undefined ? sample.height : fallBackHeightOffset;
+};
+
+//const SCALE_AT_LATITUDE_51_27 = 1.593;
+const SCALE_AT_LATITUDE_51_27 = 0.95;
+const FUDGING_FACTOR_OFFSET = -0.0;
+const EARTH_CIRCUMFERENCE = 40075016.686;
+
+export const getCesiumViewerZoomLevel = async (
+  viewer: Viewer,
+  fallBackHeight = 160
+) => {
+  const ellipsoidalHeight = viewer.camera.positionCartographic.height;
+  const referenceElevation = await getElevationAtPosition(
+    viewer.scene,
+    viewer.camera,
+    fallBackHeight
+  );
+  // Calculate the vertical distance to the tileset
+  const verticalDistanceToTileset = ellipsoidalHeight - referenceElevation;
+  const webMercatorZoomEquivalent = Math.log2(
+    (EARTH_CIRCUMFERENCE / (verticalDistanceToTileset * 2 * Math.PI)) *
+      (SCALE_AT_LATITUDE_51_27 + FUDGING_FACTOR_OFFSET)
+  );
+  return webMercatorZoomEquivalent;
+};

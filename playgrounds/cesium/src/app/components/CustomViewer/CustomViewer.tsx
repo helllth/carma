@@ -1,17 +1,31 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { Color, HeadingPitchRange, Viewer, BoundingSphere } from 'cesium';
+import {
+  Color,
+  HeadingPitchRange,
+  Viewer,
+  BoundingSphere,
+  Cartesian3,
+  Math as CeMath,
+} from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
 import Crosshair from '../UI/Crosshair';
 import SearchWrapper from './components/SearchWrapper';
 
 import {
+  toggleIsAnimating,
   useGlobeBaseColor,
   useShowTileset,
   useViewerHome,
   useViewerHomeOffset,
+  useViewerIsAnimating,
 } from '../../store/slices/viewer';
 import { BaseTileset } from './components/BaseTileset';
 import ControlsUI from './components/ControlsUI';
+import { decodeSceneFromLocation, encodeScene } from './utils';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { getCesiumViewerZoomLevel } from '../../utils/cesiumHelpers';
+import ResizableIframe from './components/ResizeIframe';
+import { useDispatch } from 'react-redux';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -43,6 +57,8 @@ function CustomViewer(props: CustomViewerProps) {
   const homeOffset = useViewerHomeOffset();
   const globeBaseColor = useGlobeBaseColor();
   const showTileset = useShowTileset();
+  const [showLeaflet, setShowLeaflet] = useState(false);
+  const isAnimating = useViewerIsAnimating();
 
   const {
     children,
@@ -67,16 +83,44 @@ function CustomViewer(props: CustomViewerProps) {
     }
   }, []);
 
+  const location = useLocation();
+  const [initialHash, setInitialHash] = useState<string | null>(null);
+  const dispatch = useDispatch();
+
+  const [iframeSrc, setIframeSrc] = useState('');
+
   useEffect(() => {
-    if (viewer && home && homeOffset) {
-      console.log('Setting home position', home, homeOffset);
-      // Set the initial position of the camera a bit further away, to not show the globe at start
-      viewer.camera.lookAt(home, homeOffset);
-      viewer.camera.flyToBoundingSphere(new BoundingSphere(home, 500), {
-        duration: 2,
-      });
+    if (viewer && initialHash === null) {
+      let sceneCamera;
+      setInitialHash(window.location.hash ?? '');
+      if (window.location.hash) {
+        sceneCamera = decodeSceneFromLocation(
+          window.location.hash.split('?')[1]
+        );
+      }
+
+      //console.log('sceneCamera', sceneCamera);
+      if (sceneCamera && sceneCamera.longitude && sceneCamera.latitude) {
+        viewer.camera.setView({
+          destination: Cartesian3.fromRadians(
+            sceneCamera.longitude,
+            sceneCamera.latitude,
+            sceneCamera.height ?? 1000 // restore height if missing
+          ),
+          orientation: {
+            heading: sceneCamera.heading ?? 0,
+            pitch: sceneCamera.pitch ?? -Math.PI / 2,
+          },
+        });
+        sceneCamera.isAnimating && dispatch(toggleIsAnimating());
+      } else {
+        viewer.camera.lookAt(home, homeOffset);
+        viewer.camera.flyToBoundingSphere(new BoundingSphere(home, 500), {
+          duration: 2,
+        });
+      }
     }
-  }, [viewer, home, homeOffset]);
+  }, [viewer, location.hash]);
 
   useEffect(() => {
     if (!viewer) return;
@@ -85,15 +129,45 @@ function CustomViewer(props: CustomViewerProps) {
     // set the globe color
     viewer.scene.globe.baseColor = globeColor;
     viewer.scene.screenSpaceCameraController.enableCollisionDetection = true;
-    const moveEndListener = () => {
-      console.log('moveEndListener');
+    const moveEndListener = async () => {
+      if (viewer.camera.position) {
+        const zoom = await getCesiumViewerZoomLevel(viewer);
+        console.log('zoom', zoom, isAnimating);
+        const scene = encodeScene(viewer.camera, zoom, isAnimating);
+
+        const currentHash = window.location.hash;
+
+        const hashRouterPart = currentHash.split('?')[0];
+
+        window.location.replace(`${hashRouterPart}?${scene}`);
+
+        const headingInDegrees = CeMath.toDegrees(viewer.camera.heading);
+        const pitchInDegrees = CeMath.toDegrees(viewer.camera.pitch);
+        const tolerance = 5;
+        if (
+          (headingInDegrees % 360 >= 360 - tolerance ||
+            headingInDegrees % 360 <= tolerance) &&
+          pitchInDegrees <= tolerance - 90
+        ) {
+          setShowLeaflet(true);
+          //console.log('scene', scene);
+          if (zoom !== Infinity) {
+            const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${scene}`;
+            //console.info('view in leaflet:', `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${scene}`);
+            setIframeSrc(leafletUrl);
+          }
+        } else {
+          setShowLeaflet(false);
+        }
+        //localStorage.setItem('viewerState', scene);
+      }
     };
 
     viewer.camera.moveEnd.addEventListener(moveEndListener);
     return () => {
       viewer.camera.moveEnd.removeEventListener(moveEndListener);
     };
-  }, [viewer]);
+  }, [viewer, globeColor, isAnimating]);
 
   let style;
 
@@ -137,6 +211,7 @@ function CustomViewer(props: CustomViewerProps) {
         />
       )}
       {showCrosshair && <Crosshair lineColor="white" />}
+      {showLeaflet && iframeSrc && <ResizableIframe iframeSrc={iframeSrc} />}
     </ResiumViewer>
   );
 }

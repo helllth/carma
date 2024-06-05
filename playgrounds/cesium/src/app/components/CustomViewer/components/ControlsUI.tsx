@@ -8,6 +8,7 @@ import OrbitControl from '../../controls/OrbitControl';
 import ZoomControls from '../../controls/ZoomControls';
 import { UIComponentContext } from '../../UI/UIProvider';
 import { useViewerHome } from '../../../store/slices/viewer';
+import Compass from '../../controls/Compass';
 
 const ControlsUI = ({
   showHome = true,
@@ -34,6 +35,9 @@ const ControlsUI = ({
         )}
         <ControlGroup>
           <LockCenterControl />
+        </ControlGroup>
+        <ControlGroup>
+          <Compass />
         </ControlGroup>
       </ControlContainer>
       <ControlContainer position="bottomleft">
