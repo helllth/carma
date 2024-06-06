@@ -210,7 +210,7 @@ const LayerButton = ({
             id="icon"
           />
         )}
-        <span className="text-sm font-medium">{title}</span>
+        <span className="text-base">{title}</span>
         <FontAwesomeIcon
           icon={faX}
           className="p-1"
@@ -267,13 +267,16 @@ const LayerButton = ({
                     id="icon"
                   />
                 )}
-                <label className="mb-0 text-sm font-medium pt-1" htmlFor="icon">
+                <label
+                  className="mb-0 text-base font-medium pt-1"
+                  htmlFor="icon"
+                >
                   {title}
                 </label>
               </div>
               <div className="w-full flex items-center gap-2">
                 <label
-                  className="mb-0 text-sm font-medium"
+                  className="mb-0 text-base font-medium"
                   htmlFor="opacity-slider"
                 >
                   Transparenz:
