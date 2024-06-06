@@ -57,12 +57,15 @@ const LibModal = ({
 
   const flattenedLayers = allLayers.flatMap((obj) => obj.layers);
   const fuse = new Fuse(flattenedLayers, {
-    keys: ['Title'],
+    keys: [
+      { name: 'Title', weight: 2 },
+      { name: 'Abstract', weight: 1 },
+    ],
     shouldSort: false,
     includeMatches: true,
     useExtendedSearch: true,
-    distance: 10,
-    threshold: 0.2,
+    distance: 1000,
+    threshold: 0.3,
   });
 
   const getDataFromJson = (data: any) => {
