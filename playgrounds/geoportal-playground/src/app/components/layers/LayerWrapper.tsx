@@ -83,10 +83,7 @@ const LayerWrapper = () => {
         id="buttonWrapper"
         className="absolute w-[calc(100%-60px)] left-20 pr-[20px] top-2.5 z-[999]"
       >
-        <div
-          id="test"
-          className="relative w-full scroll-smooth overflow-auto flex items-center justify-center gap-2"
-        >
+        <div className="relative w-full">
           {showLeftScrollButton && (
             <div
               className={cn(
@@ -113,38 +110,43 @@ const LayerWrapper = () => {
               <FontAwesomeIcon icon={faChevronRight} />
             </div>
           )}
-          <LayerButton
-            icon="background"
-            layer={backgroundLayer}
-            index={-1}
-            id={backgroundLayer.id}
-            title=""
-            background
-          />
-          <SortableContext
-            items={layers}
-            strategy={horizontalListSortingStrategy}
+          <div
+            id="test"
+            className="w-full scroll-smooth overflow-x-hidden flex items-center gap-2"
           >
-            {layers.map((layer, i) => (
-              <LayerButton
-                title={layer.title}
-                id={layer.id}
-                opacity={layer.opacity}
-                index={i}
-                description={layer.description}
-                icon={
-                  layer.title.includes('Orthofoto')
-                    ? 'ortho'
-                    : layer.title === 'Bäume'
-                    ? 'bäume'
-                    : layer.title.includes('gärten')
-                    ? 'gärten'
-                    : undefined
-                }
-                layer={layer}
-              />
-            ))}
-          </SortableContext>
+            <LayerButton
+              icon="background"
+              layer={backgroundLayer}
+              index={-1}
+              id={backgroundLayer.id}
+              title=""
+              background
+            />
+            <SortableContext
+              items={layers}
+              strategy={horizontalListSortingStrategy}
+            >
+              {layers.map((layer, i) => (
+                <LayerButton
+                  title={layer.title}
+                  id={layer.id}
+                  opacity={layer.opacity}
+                  index={i}
+                  description={layer.description}
+                  icon={
+                    layer.title.includes('Orthofoto')
+                      ? 'ortho'
+                      : layer.title === 'Bäume'
+                      ? 'bäume'
+                      : layer.title.includes('gärten')
+                      ? 'gärten'
+                      : undefined
+                  }
+                  layer={layer}
+                />
+              ))}
+            </SortableContext>
+          </div>
         </div>
       </div>
     </DndContext>
