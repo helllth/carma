@@ -237,18 +237,18 @@ const LayerButton = ({
               routedMapRef?.leafletMap?.leafletElement.scrollWheelZoom.enable();
             }}
           >
-            <FontAwesomeIcon
-              icon={faChevronLeft}
-              className="text-base absolute top-4 left-2.5"
-              role="button"
+            <button
+              className="text-base rounded-full flex items-center justify-center p-2 hover:text-neutral-600 absolute top-2 left-1"
               onClick={() => dispatch(setPreviousSelectedLayerIndex())}
-            />
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              className="text-base absolute top-4 right-2.5"
-              role="button"
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </button>
+            <button
+              className="text-base rounded-full flex items-center justify-center p-2 hover:text-neutral-600 absolute top-2 right-1"
               onClick={() => dispatch(setNextSelectedLayerIndex())}
-            />
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </button>
             <div className="flex items-center h-8 gap-6">
               <div className="w-1/4 min-w-max truncate flex items-center gap-2">
                 {icon === 'ortho' ? (
