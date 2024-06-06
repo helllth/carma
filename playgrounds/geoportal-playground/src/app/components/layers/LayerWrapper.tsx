@@ -73,7 +73,7 @@ const LayerWrapper = () => {
       >
         <div
           className={cn(
-            'w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow',
+            'w-fit min-w-max flex items-center gap-2 px-3 rounded-[10px] h-8 z-[99999999] button-shadow',
             selectedLayerIndex === -1 ? 'bg-white' : 'bg-neutral-200'
           )}
         >
