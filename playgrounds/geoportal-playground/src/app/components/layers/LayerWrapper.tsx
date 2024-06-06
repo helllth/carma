@@ -49,7 +49,9 @@ const LayerWrapper = () => {
       const newLayers = arrayMove(layers, originalPos, newPos);
 
       dispatch(setLayers(newLayers));
-      dispatch(setSelectedLayerIndex(newPos));
+      if (selectedLayerIndex !== -1) {
+        dispatch(setSelectedLayerIndex(newPos));
+      }
     }
   };
 
