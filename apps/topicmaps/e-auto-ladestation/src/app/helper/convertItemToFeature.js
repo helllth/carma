@@ -20,7 +20,7 @@ const convertItemToFeature = async (itemIn, poiColors) => {
     header: `Ladestation für E-Autos (${item.online ? 'online' : 'offline'})`,
     title: itemIn.name,
     additionalInfo: itemIn.detailbeschreibung,
-    subtitle: itemIn.strasse + itemIn.hausnummer,
+    subtitle: itemIn.strasse + ' ' + itemIn.hausnummer,
   };
   item.info = info;
   if (item.foto) {
