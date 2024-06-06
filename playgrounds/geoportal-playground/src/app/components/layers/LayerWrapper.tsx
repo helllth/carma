@@ -3,6 +3,7 @@ import {
   getLayers,
   getSelectedLayerIndex,
   setLayers,
+  setSelectedLayerIndex,
 } from '../../store/slices/mapping';
 import LayerButton from './LayerButton';
 import {
@@ -48,6 +49,7 @@ const LayerWrapper = () => {
       const newLayers = arrayMove(layers, originalPos, newPos);
 
       dispatch(setLayers(newLayers));
+      dispatch(setSelectedLayerIndex(newPos));
     }
   };
 
