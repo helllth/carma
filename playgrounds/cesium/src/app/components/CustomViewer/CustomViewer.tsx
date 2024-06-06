@@ -13,7 +13,6 @@ import SearchWrapper from './components/SearchWrapper';
 
 import {
   useGlobeBaseColor,
-  useShowTileset,
   useViewerHome,
   useViewerHomeOffset,
 } from '../../store/slices/viewer';
@@ -53,7 +52,6 @@ function CustomViewer(props: CustomViewerProps) {
   const home = useViewerHome();
   const homeOffset = useViewerHomeOffset();
   const globeBaseColor = useGlobeBaseColor();
-  const showTileset = useShowTileset();
   const [showLeaflet, setShowLeaflet] = useState(false);
   //const isAnimating = useViewerIsAnimating();
 
@@ -199,7 +197,7 @@ function CustomViewer(props: CustomViewerProps) {
       navigationHelpButton={false}
       navigationInstructionsInitiallyVisible={false}
     >
-      <BaseTileset show={showTileset} />
+      <BaseTileset />
       {children}
       {showControls && (
         <ControlsUI

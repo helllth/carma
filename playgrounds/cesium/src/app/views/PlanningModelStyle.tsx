@@ -4,19 +4,33 @@ import {
   useSelectionTransparencyControl,
   useTilesetControl,
 } from '../utils/controls';
-import { CITYGML_TEST_TILESET } from '../config';
+import {
+  CITYGML_TEST_TILESET,
+  DEFAULT_SELECTION_HIGHLIGHT_MATERIAL,
+} from '../config';
 import {
   setShowTileset,
   useShowTileset,
   useViewerDataSources,
 } from '../store/slices/viewer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import {
+  Cesium3DTileset,
   CesiumTerrainProvider,
+  Color,
+  ColorBlendMode,
   EllipsoidTerrainProvider,
+  Model,
+  ScreenSpaceEventHandler,
+  ScreenSpaceEventType,
   WebMapServiceImageryProvider,
 } from 'cesium';
-import { Cesium3DTileset, ImageryLayer, useCesium } from 'resium';
+import {
+  Cesium3DTileset as Resium3DTileset,
+  ImageryLayer,
+  useCesium,
+  pick,
+} from 'resium';
 import { getAllPrimitives, getPrimitiveById } from '../utils/cesiumHelpers';
 
 const CityGMLTileset = {
@@ -76,6 +90,57 @@ function View() {
     };
   }, [viewer]);
 
+  //const [lastMaterial, setLastMaterial] = React.useState(null);
+
+  useEffect(() => {
+    if (!viewer) return;
+
+
+    let selectedObject; // Store the currently selected feature
+    let lastColor
+
+    const handler = new ScreenSpaceEventHandler(viewer.canvas);
+
+    handler.setInputAction((movement) => {
+      // If a feature was previously selected, revert its color
+      if (selectedObject) {
+        selectedObject.color = lastColor;
+        selectedObject.colorBlendMode = ColorBlendMode.HIGHLIGHT;
+        selectedObject.colorBlendAmount = 0.0;
+      }
+
+      const pickedObject = viewer.scene.pick(movement.position);
+      console.log('pickedFeature', pickedObject);
+      if (!pickedObject) return;
+
+      if (pickedObject.primitive instanceof Cesium3DTileset) {
+        console.log(
+          'pickedFeature is Model',
+          pickedObject.detail,
+          pickedObject.content,
+          pickedObject.primitive,
+          Object.keys(pickedObject)
+        );
+
+        const model = pickedObject.detail.model as Model;
+        console.log('pickedFeature', model);
+
+      
+        model.colorBlendMode =
+          ColorBlendMode.REPLACE; // HIGHLIGHT, MIX, REPLACE
+        model.colorBlendAmount = 1.0;
+        lastColor = model.color;
+        model.color = Color.YELLOW;
+
+        selectedObject = model;
+      }
+    }, ScreenSpaceEventType.LEFT_CLICK);
+
+    return () => {
+      handler.destroy();
+    };
+  }, [viewer]);
+
   //useTilesetControl();
   return (
     <>
@@ -83,7 +148,7 @@ function View() {
         //<TilesetSelector tileset={CityGMLTileset} clampByGeoJson={footprints} />
       }
       <ImageryLayer imageryProvider={provider} />
-      {<Cesium3DTileset url={CityGMLTileset.url} />}
+      {<Resium3DTileset url={CityGMLTileset.url} />}
       {
         //<Cesium3DTileset url={BaumkatasterTileset.url} />
       }
