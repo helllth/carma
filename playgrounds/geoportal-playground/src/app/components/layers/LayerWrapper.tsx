@@ -83,13 +83,19 @@ const LayerWrapper = () => {
         id="buttonWrapper"
         className="absolute w-[calc(100%-60px)] left-20 pr-[20px] top-2.5 z-[999]"
       >
-        <div className="relative w-full overflow-x-clip flex items-center justify-center gap-2 pr-64">
+        <div
+          id="test"
+          className="relative w-full scroll-smooth overflow-auto flex items-center justify-center gap-2"
+        >
           {showLeftScrollButton && (
             <div
               className={cn(
-                'absolute left-0 w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow',
-                selectedLayerIndex === -1 ? 'bg-white' : 'bg-neutral-200'
+                'absolute left-0 bg-white w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
               )}
+              role="button"
+              onClick={() => {
+                document.getElementById('test').scrollLeft -= 200;
+              }}
             >
               <FontAwesomeIcon icon={faChevronLeft} />
             </div>
@@ -97,9 +103,12 @@ const LayerWrapper = () => {
           {showRightScrollButton && (
             <div
               className={cn(
-                'absolute right-0 w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow',
-                selectedLayerIndex === -1 ? 'bg-white' : 'bg-neutral-200'
+                'absolute right-0 bg-white w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
               )}
+              role="button"
+              onClick={() => {
+                document.getElementById('test').scrollLeft += 200;
+              }}
             >
               <FontAwesomeIcon icon={faChevronRight} />
             </div>
