@@ -9,10 +9,15 @@ import {
   Cartesian3,
   Viewer,
   Cesium3DTileFeature,
+  Cesium3DTileset,
+  Model,
+  ColorBlendMode,
+  Color,
 } from 'cesium';
 import { useSelectKeys } from './store/slices/buildings';
 import { setKeys } from './store/slices/buildings';
 import { useDispatch } from 'react-redux';
+import { useCesium } from 'resium';
 
 export type ClickData = {
   id: string | null;
@@ -90,4 +95,44 @@ export const usePropertyKeysFromGeoJsonDataSource = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataSource]);
   return propertyKeys;
+};
+
+export const useGLTFTilesetClickHandler = () => {
+  const { viewer } = useCesium();
+
+  useEffect(() => {
+    if (!viewer) return;
+
+    let selectedObject; // Store the currently selected feature
+    let lastColor;
+
+    const handler = new ScreenSpaceEventHandler(viewer.canvas);
+
+    handler.setInputAction((movement) => {
+      // If a feature was previously selected, revert its color
+      if (selectedObject) {
+        selectedObject.color = lastColor;
+        selectedObject.colorBlendMode = ColorBlendMode.HIGHLIGHT;
+        selectedObject.colorBlendAmount = 0.0;
+      }
+
+      const pickedObject = viewer.scene.pick(movement.position);
+      if (!pickedObject) return;
+
+      if (pickedObject.primitive instanceof Cesium3DTileset) {
+        const model = pickedObject.detail.model as Model;
+
+        model.colorBlendMode = ColorBlendMode.REPLACE; // HIGHLIGHT, MIX, REPLACE
+        model.colorBlendAmount = 1.0;
+        lastColor = model.color;
+        model.color = Color.YELLOW;
+
+        selectedObject = model;
+      }
+    }, ScreenSpaceEventType.LEFT_CLICK);
+
+    return () => {
+      handler.destroy();
+    };
+  }, [viewer]);
 };
