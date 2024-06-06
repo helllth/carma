@@ -11,6 +11,8 @@ interface MappingState {
   layers: Layer[];
   selectedLayerIndex: number;
   backgroundLayer: BackgroundLayer;
+  showLeftScrollButton: boolean;
+  showRightScrollButton: boolean;
 }
 
 const initialState: MappingState = {
@@ -25,6 +27,8 @@ const initialState: MappingState = {
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX=%7Bz%7D&TILEROW=%7By%7D&TILECOL=%7Bx%7D',
     layers: 'amtlich@100',
   },
+  showLeftScrollButton: false,
+  showRightScrollButton: false,
 };
 
 const slice = createSlice({
@@ -78,6 +82,12 @@ const slice = createSlice({
     setBackgroundLayer(state, action: PayloadAction<BackgroundLayer>) {
       state.backgroundLayer = action.payload;
     },
+    setShowLeftScrollButton(state, action) {
+      state.showLeftScrollButton = action.payload;
+    },
+    setShowRightScrollButton(state, action) {
+      state.showRightScrollButton = action.payload;
+    },
   },
 });
 
@@ -92,6 +102,8 @@ export const {
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
   setBackgroundLayer,
+  setShowLeftScrollButton,
+  setShowRightScrollButton,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -104,4 +116,12 @@ export const getSelectedLayerIndex = (state: RootState) => {
 
 export const getBackgroundLayer = (state: RootState) => {
   return state.mapping.backgroundLayer;
+};
+
+export const getShowLeftScrollButton = (state: RootState) => {
+  return state.mapping.showLeftScrollButton;
+};
+
+export const getShowRightScrollButton = (state: RootState) => {
+  return state.mapping.showRightScrollButton;
 };

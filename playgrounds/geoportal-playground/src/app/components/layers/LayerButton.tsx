@@ -14,6 +14,8 @@ import {
 import SecondaryView from './SecondaryView';
 import { iconColorMap, iconMap } from './items';
 import './tabs.css';
+import { useInView } from 'react-intersection-observer';
+// import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
   title: string;
@@ -32,6 +34,7 @@ const LayerButton = ({
   layer,
   background,
 }: LayerButtonProps) => {
+  const { ref, inView } = useInView({ threshold: 1 });
   const dispatch = useDispatch();
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
