@@ -211,15 +211,15 @@ const LayerButton = ({
           />
         )}
         <span className="text-base">{title}</span>
-        <FontAwesomeIcon
-          icon={faX}
-          className="p-1"
-          role="button"
+        <button
+          className="p-1 hover:text-gray-500 text-gray-600"
           onClick={(e) => {
-            e.preventDefault();
+            e.stopPropagation();
             dispatch(removeLayer(id));
           }}
-        />
+        >
+          <FontAwesomeIcon icon={faX} />
+        </button>
       </div>
       {showSettings && (
         <div className="absolute top-12 w-[calc(100%-60px)] left-20 pr-72 z-[999] flex justify-center items-center">
