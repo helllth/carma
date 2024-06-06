@@ -11,6 +11,7 @@ import {
   Cesium3DTileset as Resium3DTileset,
   ImageryLayer,
   useCesium,
+  Cesium3DTileset,
 } from 'resium';
 import { useGLTFTilesetClickHandler } from '../hooks';
 
@@ -23,7 +24,7 @@ const BaumkatasterTileset = {
 };
 
 function View() {
-  //useSelectionTransparencyControl();
+  // useSelectionTransparencyControl();
   const dispatch = useDispatch();
   const { viewer } = useCesium();
 
@@ -69,7 +70,7 @@ function View() {
     };
   }, [viewer]);
 
-  // useGLTFTilesetClickHandler();
+  useGLTFTilesetClickHandler();
 
   //useTilesetControl();
   return (
@@ -80,7 +81,7 @@ function View() {
       <ImageryLayer imageryProvider={provider} />
       {<Resium3DTileset url={CityGMLTileset.url} />}
       {
-        //<Cesium3DTileset url={BaumkatasterTileset.url} />
+        //<Resium3DTileset url={BaumkatasterTileset.url} />
       }
     </>
   );

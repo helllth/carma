@@ -120,14 +120,15 @@ export const useGLTFTilesetClickHandler = () => {
       if (!pickedObject) return;
 
       if (pickedObject.primitive instanceof Cesium3DTileset) {
-        const model = pickedObject.detail.model as Model;
-
-        model.colorBlendMode = ColorBlendMode.REPLACE; // HIGHLIGHT, MIX, REPLACE
-        model.colorBlendAmount = 1.0;
-        lastColor = model.color;
-        model.color = Color.YELLOW;
-
-        selectedObject = model;
+        // console.log('Cesium3DTileset', pickedObject);
+        const { _batchId, _content } = pickedObject;
+        // console.log('Cesium3DTileFeature', _batchId);
+        const feature = _content.getFeature(_batchId);
+        if (feature instanceof Cesium3DTileFeature) {
+          lastColor = feature.color;
+          feature.color = Color.YELLOW;
+          selectedObject = feature;
+        }
       }
     }, ScreenSpaceEventType.LEFT_CLICK);
 
