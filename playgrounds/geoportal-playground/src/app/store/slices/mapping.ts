@@ -9,6 +9,8 @@ interface MappingState {
   showInfo: boolean;
   showInfoText: boolean;
   activeTabKey: string;
+  showLeftScrollButton: boolean;
+  showRightScrollButton: boolean;
 }
 
 const initialState: MappingState = {
@@ -17,6 +19,8 @@ const initialState: MappingState = {
   showInfo: false,
   showInfoText: false,
   activeTabKey: '1',
+  showLeftScrollButton: false,
+  showRightScrollButton: false,
 };
 
 const slice = createSlice({
@@ -76,6 +80,12 @@ const slice = createSlice({
     setActiveTabKey(state, action) {
       state.activeTabKey = action.payload;
     },
+    setShowLeftScrollButton(state, action) {
+      state.showLeftScrollButton = action.payload;
+    },
+    setShowRightScrollButton(state, action) {
+      state.showRightScrollButton = action.payload;
+    },
   },
 });
 
@@ -92,6 +102,8 @@ export const {
   setShowInfo,
   setShowInfoText,
   setActiveTabKey,
+  setShowLeftScrollButton,
+  setShowRightScrollButton,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -112,4 +124,12 @@ export const getShowInfoText = (state: RootState) => {
 
 export const getActiveTabKey = (state: RootState) => {
   return state.mapping.activeTabKey;
+};
+
+export const getShowLeftScrollButton = (state: RootState) => {
+  return state.mapping.showLeftScrollButton;
+};
+
+export const getShowRightScrollButton = (state: RootState) => {
+  return state.mapping.showRightScrollButton;
 };

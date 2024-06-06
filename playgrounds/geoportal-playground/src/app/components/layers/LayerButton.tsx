@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   changeOpacity,
   getActiveTabKey,
+  getLayers,
   getSelectedLayerIndex,
   getShowInfo,
   getShowInfoText,
@@ -23,16 +24,19 @@ import {
   setSelectedLayerIndex,
   setShowInfo,
   setShowInfoText,
+  setShowLeftScrollButton,
+  setShowRightScrollButton,
 } from '../../store/slices/mapping';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Slider, Tabs } from 'antd';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { cn } from '../../helper/helper';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import './tabs.css';
+import { useInView } from 'react-intersection-observer';
 // import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
@@ -66,6 +70,7 @@ const LayerButton = ({
   icon,
   layer,
 }: LayerButtonProps) => {
+  const { ref, inView } = useInView({ threshold: 1 });
   const dispatch = useDispatch();
   // @ts-ignore
   const { routedMapRef } = useContext(TopicMapContext);
@@ -73,6 +78,7 @@ const LayerButton = ({
   const showInfoText = useSelector(getShowInfoText);
   const activeTabKey = useSelector(getActiveTabKey);
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
+  const layersLength = useSelector(getLayers).length;
   const showSettings = index === selectedLayerIndex;
   let urlPrefix = window.location.origin + window.location.pathname;
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -175,8 +181,24 @@ const LayerButton = ({
       ),
     },
   ];
+
+  useEffect(() => {
+    if (!inView && index === 0) {
+      dispatch(setShowLeftScrollButton(true));
+    }
+    if (!inView && index === layersLength - 1) {
+      dispatch(setShowRightScrollButton(true));
+    }
+    if (inView && index === 0) {
+      dispatch(setShowLeftScrollButton(false));
+    }
+    if (inView && index === layersLength - 1) {
+      dispatch(setShowRightScrollButton(false));
+    }
+  }, [inView]);
+
   return (
-    <div>
+    <div ref={ref}>
       <div
         ref={setNodeRef}
         onClick={() =>
