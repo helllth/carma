@@ -1,4 +1,9 @@
-import { faCircle, faGlobe, faSquare } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircle,
+  faGlobe,
+  faMap,
+  faSquare,
+} from '@fortawesome/free-solid-svg-icons';
 
 export const tabItems = (legend) => {
   return [
@@ -71,6 +76,7 @@ export const iconMap = {
   bäume: faCircle,
   gärten: faSquare,
   ortho: faGlobe,
+  background: faMap,
 };
 
 export const iconColorMap = {

@@ -28,12 +28,13 @@ import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 interface SecondaryViewProps {
   icon: string;
   layer: Layer;
+  background?: boolean;
 }
 
 type Ref = HTMLDivElement;
 
 const SecondaryView = forwardRef<Ref, SecondaryViewProps>(
-  ({ icon, layer }, ref) => {
+  ({ icon, layer, background }, ref) => {
     // @ts-ignore
     const { routedMapRef } = useContext(TopicMapContext);
     const dispatch = useDispatch();
@@ -100,6 +101,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(
                 Transparenz:
               </label>
               <Slider
+                disabled={background}
                 onFocus={() => {
                   routedMapRef?.leafletMap?.leafletElement.dragging.disable();
                 }}

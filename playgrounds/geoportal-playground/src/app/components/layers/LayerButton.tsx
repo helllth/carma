@@ -21,9 +21,17 @@ interface LayerButtonProps {
   index: number;
   icon?: string;
   layer: Layer;
+  background?: boolean;
 }
 
-const LayerButton = ({ title, id, index, icon, layer }: LayerButtonProps) => {
+const LayerButton = ({
+  title,
+  id,
+  index,
+  icon,
+  layer,
+  background,
+}: LayerButtonProps) => {
   const dispatch = useDispatch();
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
@@ -90,19 +98,28 @@ const LayerButton = ({ title, id, index, icon, layer }: LayerButtonProps) => {
             id="icon"
           />
         )}
-        <span className="text-base">{title}</span>
-        <button
-          className="p-1 hover:text-gray-500 text-gray-600"
-          onClick={(e) => {
-            e.stopPropagation();
-            dispatch(removeLayer(id));
-          }}
-        >
-          <FontAwesomeIcon icon={faX} />
-        </button>
+        {!background && (
+          <>
+            <span className="text-base">{title}</span>
+            <button
+              className="p-1 hover:text-gray-500 text-gray-600"
+              onClick={(e) => {
+                e.stopPropagation();
+                dispatch(removeLayer(id));
+              }}
+            >
+              <FontAwesomeIcon icon={faX} />
+            </button>
+          </>
+        )}
       </div>
       {showSettings && (
-        <SecondaryView icon={icon} layer={layer} ref={infoRef} />
+        <SecondaryView
+          icon={icon}
+          layer={layer}
+          ref={infoRef}
+          background={background}
+        />
       )}
     </div>
   );
