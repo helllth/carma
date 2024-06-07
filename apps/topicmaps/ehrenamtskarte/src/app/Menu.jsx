@@ -487,18 +487,6 @@ const Menu = ({ bookmarks, setBookmarks }) => {
                                 Stelle können Sie die Info-Box dann wieder
                                 vollständig einblenden.
                               </p>
-                              <p>
-                                Zu einigen POI bieten wir Ihnen Fotos oder
-                                Fotoserien des bekannten Wuppertaler Fotographen
-                                Peter Krämer an. Sie finden dann ein
-                                Vorschaubild direkt über der Info-Box. Klicken
-                                Sie auf das Vorschaubild, um einen
-                                Bildbetrachter ("Leuchtkasten") mit dem
-                                Foto&nbsp;/&nbsp;der Fotoserie zu öffnen. Aus
-                                dem Bildbetrachter gelangen Sie über einen Link
-                                im Fußbereich auch zur Foto-Anwendung von Peter
-                                Krämer.
-                              </p>
                             </div>
                           ),
                         },
