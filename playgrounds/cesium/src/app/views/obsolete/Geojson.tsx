@@ -7,7 +7,7 @@ import {
 } from '../../utils/controls';
 
 function View() {
-  const { footprintGeoJson, tileset } = useViewerDataSources();
+  const { footprintGeoJson, tilesets } = useViewerDataSources();
   //useSelectionTransparencyControl();
 
   useSelectionTransparencyControl();
@@ -15,7 +15,7 @@ function View() {
 
   return (
     footprintGeoJson &&
-    tileset && <GeoJsonSelector srcExtruded={footprintGeoJson.url} />
+    tilesets.primary && <GeoJsonSelector srcExtruded={footprintGeoJson.url} />
   );
 }
 

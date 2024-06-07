@@ -1,10 +1,7 @@
 import React from 'react';
 import TilesetSelector from '../components/TilesetSelectorWithSyncedGeoJson';
-import {
-  useSelectionTransparencyControl,
-  useTilesetControl,
-} from '../utils/controls';
-import { CITYGML_TEST_TILESET } from '../config';
+//import {  useSelectionTransparencyControl,  useTilesetControl,} from '../utils/controls';
+import { CITYGML_TEST_TILESET } from '../config/dataSources.config';
 import { useViewerDataSources } from '../store/slices/viewer';
 
 function View() {

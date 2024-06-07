@@ -2,7 +2,10 @@ import React from 'react';
 import { Cesium3DTileset } from 'resium';
 import { Cesium3DTileStyle } from 'cesium';
 import { getTileSetInfo } from '../../utils/cesiumHelpers';
-import { FOOTPRINT_GEOJSON_SOURCES, CITYGML_TEST_TILESET } from '../../config';
+import {
+  FOOTPRINT_GEOJSON_SOURCES,
+  CITYGML_TEST_TILESET,
+} from '../../config/dataSources.config';
 import GeoJsonSelector from '../../components/obsolete/GeoJsonSelector';
 import { useState } from 'react';
 import RadioSelector from '../../components/UI/RadioSelector';

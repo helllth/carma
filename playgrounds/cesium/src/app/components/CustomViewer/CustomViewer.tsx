@@ -12,16 +12,21 @@ import Crosshair from '../UI/Crosshair';
 import SearchWrapper from './components/SearchWrapper';
 
 import {
+  setShowPrimaryTileset,
+  setShowSecondaryTileset,
   useGlobeBaseColor,
+  useShowSecondaryTileset,
   useViewerHome,
   useViewerHomeOffset,
 } from '../../store/slices/viewer';
-import { BaseTileset } from './components/BaseTileset';
+import { BaseTilesets } from './components/BaseTilesets';
 import ControlsUI from './components/ControlsUI';
 import { decodeSceneFromLocation, encodeScene } from './utils';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getCesiumViewerZoomLevel } from '../../utils/cesiumHelpers';
 import ResizableIframe from './components/ResizeIframe';
+import { setupSecondaryStyle } from './components/baseTileset.hook';
+import { useDispatch } from 'react-redux';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -52,6 +57,7 @@ function CustomViewer(props: CustomViewerProps) {
   const home = useViewerHome();
   const homeOffset = useViewerHomeOffset();
   const globeBaseColor = useGlobeBaseColor();
+  const isSecondaryStyle = useShowSecondaryTileset();
   const [showLeaflet, setShowLeaflet] = useState(false);
   //const isAnimating = useViewerIsAnimating();
 
@@ -82,31 +88,41 @@ function CustomViewer(props: CustomViewerProps) {
   const navigate = useNavigate();
   const [initialHash, setInitialHash] = useState<string | null>(null);
   const [sceneHash, setSceneHash] = useState<string | null>(null);
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [iframeSrc, setIframeSrc] = useState('');
 
   useEffect(() => {
     if (viewer && initialHash === null) {
-      let sceneCamera;
+      let sceneFromHashParams;
       setInitialHash(window.location.hash ?? '');
       if (window.location.hash) {
-        sceneCamera = decodeSceneFromLocation(
+        sceneFromHashParams = decodeSceneFromLocation(
           window.location.hash.split('?')[1]
         );
       }
+      const { longitude, latitude, height, heading, pitch, isSecondaryStyle } =
+        sceneFromHashParams;
+
+      if (isSecondaryStyle) {
+        if (isSecondaryStyle) {
+          setupSecondaryStyle(viewer);
+          dispatch(setShowPrimaryTileset(false));
+          dispatch(setShowSecondaryTileset(true));
+        }
+      }
 
       //console.log('sceneCamera', sceneCamera);
-      if (sceneCamera && sceneCamera.longitude && sceneCamera.latitude) {
+      if (sceneFromHashParams && longitude && latitude) {
         viewer.camera.setView({
           destination: Cartesian3.fromRadians(
-            sceneCamera.longitude,
-            sceneCamera.latitude,
-            sceneCamera.height ?? 1000 // restore height if missing
+            longitude,
+            latitude,
+            height ?? 1000 // restore height if missing
           ),
           orientation: {
-            heading: sceneCamera.heading ?? 0,
-            pitch: sceneCamera.pitch ?? -Math.PI / 2,
+            heading: heading ?? 0,
+            pitch: pitch ?? -Math.PI / 2,
           },
         });
         //sceneCamera.isAnimating && dispatch(toggleIsAnimating());
@@ -130,19 +146,30 @@ function CustomViewer(props: CustomViewerProps) {
 
   useEffect(() => {
     if (!viewer) return;
-    // remove default imagery
-    viewer.imageryLayers.removeAll();
     // set the globe color
-    viewer.scene.globe.baseColor = globeColor;
-    viewer.scene.screenSpaceCameraController.enableCollisionDetection = true;
-    const moveEndListener = async () => {
-      if (viewer.camera.position) {
-        const zoom = await getCesiumViewerZoomLevel(viewer);
-        const newSceneHash = encodeScene(viewer.camera, zoom);
-        setSceneHash(newSceneHash);
+    console.log('HOOK: init or globeColor changed');
+    const { scene } = viewer;
+    scene.globe.baseColor = globeColor;
+    viewer.imageryLayers.removeAll();
+    scene.screenSpaceCameraController.enableCollisionDetection = true;
+  }, [viewer, globeColor]);
 
-        const headingInDegrees = CeMath.toDegrees(viewer.camera.heading);
-        const pitchInDegrees = CeMath.toDegrees(viewer.camera.pitch);
+  useEffect(() => {
+    if (!viewer) return;
+    // remove default imagery
+    const { camera } = viewer;
+
+    const moveEndListener = async () => {
+      if (camera.position) {
+        const zoom = await getCesiumViewerZoomLevel(viewer);
+        const newSceneHash = encodeScene({
+          camera,
+          webMercatorZoomEquivalent: zoom,
+          isSecondaryStyle,
+        });
+        setSceneHash(newSceneHash);
+        const headingInDegrees = CeMath.toDegrees(camera.heading);
+        const pitchInDegrees = CeMath.toDegrees(camera.pitch);
         const tolerance = 5;
         if (
           (headingInDegrees % 360 >= 360 - tolerance ||
@@ -166,7 +193,7 @@ function CustomViewer(props: CustomViewerProps) {
     return () => {
       viewer.camera.moveEnd.removeEventListener(moveEndListener);
     };
-  }, [viewer, globeColor]);
+  }, [viewer, isSecondaryStyle]);
 
   return (
     <ResiumViewer
@@ -197,7 +224,7 @@ function CustomViewer(props: CustomViewerProps) {
       navigationHelpButton={false}
       navigationInstructionsInitiallyVisible={false}
     >
-      <BaseTileset />
+      <BaseTilesets />
       {children}
       {showControls && (
         <ControlsUI

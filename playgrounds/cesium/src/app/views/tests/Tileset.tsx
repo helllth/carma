@@ -5,14 +5,14 @@ import { Entity } from 'resium';
 import { useTilesetControl } from '../../utils/controls';
 
 function TestTileset() {
-  const { footprintGeoJson, tileset } = useViewerDataSources();
+  const { footprintGeoJson, tilesets } = useViewerDataSources();
   const home = useViewerHome();
 
   useTilesetControl();
 
   return (
     footprintGeoJson &&
-    tileset &&
+    tilesets &&
     home && (
       <Entity position={home} point={{ pixelSize: 15, color: Color.YELLOW }} />
     )

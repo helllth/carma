@@ -1,9 +1,9 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { UIComponentContext } from '../components/UI/UIProvider';
 import {
-  setShowTileset,
+  setShowPrimaryTileset,
   setTilesetOpacity,
-  useShowTileset,
+  useShowPrimaryTileset,
   useTilesetOpacity,
 } from '../store/slices/viewer';
 import { setSelectionTransparency, useSelectionTransparency } from '../store';
@@ -34,14 +34,14 @@ export const uiTilesetOpacitySlider = (
 export const uiTilesetToggle = (
   <ReduxSwitch
     title={'Tileset anzeigen'}
-    actionCreator={setShowTileset}
-    valueHook={useShowTileset}
+    actionCreator={setShowPrimaryTileset}
+    valueHook={useShowPrimaryTileset}
   />
 );
 
 export function useTilesetControl() {
   const { addComponent, removeComponent } = useContext(UIComponentContext);
-  const showTileset = useShowTileset();
+  const showTileset = useShowPrimaryTileset();
 
   useEffect(() => {
     console.log('useTilesetControl');
@@ -132,4 +132,3 @@ export function usePropertySelectionControl() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 }
-

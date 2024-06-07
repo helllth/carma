@@ -4,7 +4,7 @@ import {
   useSelectionTransparencyControl,
   useTilesetControl,
 } from '../utils/controls';
-import { TILESET_BASEMAP_DE } from '../config';
+import { TILESET_BASEMAP_DE } from '../config/dataSources.config';
 
 function View() {
   useSelectionTransparencyControl();

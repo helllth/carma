@@ -25,11 +25,25 @@ export type GeoJsonConfig = {
   idProperty?: string;
 };
 
+export type SceneStyleDescription = {
+  globe: {
+    baseColor: ColorRgbaArray;
+  };
+};
+
+export type SceneStyles = {
+  default: SceneStyleDescription;
+  primary?: Partial<SceneStyleDescription>;
+  secondary?: Partial<SceneStyleDescription>;
+};
+
 export interface ViewerState {
   isAnimating: boolean;
   homePosition: PlainCartesian3;
   homeOffset: PlainCartesian3;
-  showTileset: boolean; // tileset is the base 3D model equivalent to a basemap
+  showPrimaryTileset: boolean; // tileset is the base 3D model equivalent to a basemap
+  showSecondaryTileset: boolean; // tileset is the base 3D model equivalent to a basemap
+
   /*
   quality: {
     msaaSamples: number;
@@ -37,21 +51,26 @@ export interface ViewerState {
 
   }
   */
+  // TODO move to per tileset styling
   styling: {
     tileset: {
       opacity: number;
     };
   };
-  scene: {
-    globe: {
-      baseColor: ColorRgbaArray;
-    };
-  };
+  sceneStyles: SceneStyles;
   dataSources: {
     footprintGeoJson: GeoJsonConfig;
-    tileset: TilesetConfig;
+    tilesets: {
+      primary: TilesetConfig;
+      secondary: TilesetConfig;
+    };
+  };
+  terrainProvider: {
+    url: string;
   };
 }
+
+type ColorInput = ColorRgbaArray | Color;
 
 const slice = createSlice({
   name: 'viewer',
@@ -63,8 +82,17 @@ const slice = createSlice({
     toggleIsAnimating: (state: ViewerState) => {
       state.isAnimating = !state.isAnimating;
     },
-    setShowTileset: (state: ViewerState, action: PayloadAction<boolean>) => {
-      state.showTileset = action.payload;
+    setShowPrimaryTileset: (
+      state: ViewerState,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showPrimaryTileset = action.payload;
+    },
+    setShowSecondaryTileset: (
+      state: ViewerState,
+      action: PayloadAction<boolean>
+    ) => {
+      state.showSecondaryTileset = action.payload;
     },
     setTilesetOpacity: (state: ViewerState, action: PayloadAction<number>) => {
       // console.log(action.payload);
@@ -72,11 +100,19 @@ const slice = createSlice({
     },
     setGlobeBaseColor: (
       state: ViewerState,
-      action: PayloadAction<ColorRgbaArray | Color>
+      action: PayloadAction<{
+        style: keyof ViewerState['sceneStyles'];
+        color: ColorInput;
+      }>
     ) => {
-      state.scene.globe.baseColor = Array.isArray(action.payload)
-        ? action.payload
-        : colorToArray(action.payload);
+      const { style, color } = action.payload;
+
+      state.sceneStyles[style] = {
+        ...state.sceneStyles[style],
+        globe: {
+          baseColor: Array.isArray(color) ? color : colorToArray(color),
+        },
+      };
     },
     setHomePosition: (
       state: ViewerState,
@@ -91,7 +127,8 @@ const slice = createSlice({
 export const {
   setIsAnimating,
   toggleIsAnimating,
-  setShowTileset,
+  setShowPrimaryTileset,
+  setShowSecondaryTileset,
   setTilesetOpacity,
 } = slice.actions;
 
@@ -111,7 +148,7 @@ const selectViewerHomeOffset = createSelector(
 );
 
 const selectViewerSceneGlobalBaseColor = createSelector(
-  (state: RootState) => state.viewer.scene.globe.baseColor,
+  (state: RootState) => state.viewer.sceneStyles.default.globe.baseColor,
   (baseColor) => new Color(...baseColor)
 );
 
@@ -122,8 +159,10 @@ export const useViewerHomeOffset = () => useSelector(selectViewerHomeOffset);
 export const useGlobeBaseColor = () =>
   useSelector(selectViewerSceneGlobalBaseColor);
 
-export const useShowTileset = () =>
-  useSelector(({ viewer }: RootState) => viewer.showTileset);
+export const useShowPrimaryTileset = () =>
+  useSelector(({ viewer }: RootState) => viewer.showPrimaryTileset);
+export const useShowSecondaryTileset = () =>
+  useSelector(({ viewer }: RootState) => viewer.showSecondaryTileset);
 export const useTilesetOpacity = () =>
   useSelector(({ viewer }: RootState) => viewer.styling.tileset.opacity);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FOOTPRINT_GEOJSON_SOURCES } from '../../../config';
+import { FOOTPRINT_GEOJSON_SOURCES } from '../../../config/dataSources.config';
 import GeoJsonSelector from '../../../components/obsolete/GeoJsonSelector';
 import { useState } from 'react';
 import RadioSelector from '../../../components/UI/RadioSelector';
@@ -35,7 +35,7 @@ const DebugGeoJsonSelector = ({ initialSrc, debug, renderPoint }) => {
           position: 'absolute',
           backgroundColor: 'white',
           top: 70,
-          padding: "0 10px",
+          padding: '0 10px',
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 1000,

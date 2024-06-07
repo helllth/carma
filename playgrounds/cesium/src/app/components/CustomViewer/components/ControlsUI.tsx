@@ -9,6 +9,8 @@ import ZoomControls from '../../controls/ZoomControls';
 import { UIComponentContext } from '../../UI/UIProvider';
 import { useViewerHome } from '../../../store/slices/viewer';
 import Compass from '../../controls/Compass';
+import { Scene } from 'resium';
+import SceneStyleToggle from '../../controls/SceneStyleToggle';
 
 const ControlsUI = ({
   showHome = true,
@@ -38,6 +40,9 @@ const ControlsUI = ({
         </ControlGroup>
         <ControlGroup>
           <Compass />
+        </ControlGroup>
+        <ControlGroup>
+          <SceneStyleToggle />
         </ControlGroup>
       </ControlContainer>
       <ControlContainer position="bottomleft">

@@ -19,11 +19,9 @@ import { useSelectionTransparency } from '../store';
 import ColorHash from 'color-hash';
 import { getColorMaterialProperty } from '../utils/selections';
 import { GeoJsonConfig, TilesetConfig } from '../store/slices/viewer';
-import {
-  DEFAULT_ID_PROPERTY,
-  DEFAULT_SELECTION_HIGHLIGHT_MATERIAL,
-} from '../config';
+import { DEFAULT_SELECTION_HIGHLIGHT_MATERIAL } from '../config';
 import { SELECTABLE_TRANSPARENT_3DTILESTYLE } from '../utils/cesiumHelpers';
+import { DEFAULT_ID_PROPERTY } from '../config/dataSources.config';
 
 interface TilesetSelectorProps {
   debug?: boolean;

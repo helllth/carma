@@ -1,4 +1,4 @@
-import { APP_BASE_PATH } from '.';
+import { APP_BASE_PATH } from "./app.config";
 import { ModelAsset } from '../components/CesiumMarkerContainer';
 
 const BEHOERDE_SVG = `${APP_BASE_PATH}data/img/behoerde.svg`;

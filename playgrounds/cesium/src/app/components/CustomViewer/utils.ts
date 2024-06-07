@@ -58,18 +58,29 @@ const hashcodecs = {
         )
       ),
   },
-  isAnimationg: {
+  isAnimating: {
     key: 'anim',
+    decode: (value: string) => value === 'true' || value === '1',
+    encode: (value: boolean) => (value ? '1' : null),
+  },
+  isSecondaryStyle: {
+    key: 'm',
     decode: (value: string) => value === 'true' || value === '1',
     encode: (value: boolean) => (value ? '1' : null),
   },
 };
 
-export function encodeScene(
-  camera: Camera,
-  webMercatorZoomEquivalent?: number,
-  isAnimating?: boolean
-): string {
+export function encodeScene({
+  camera,
+  webMercatorZoomEquivalent,
+  isAnimating,
+  isSecondaryStyle,
+}: {
+  camera: Camera;
+  webMercatorZoomEquivalent?: number;
+  isAnimating?: boolean;
+  isSecondaryStyle?: boolean;
+}): string {
   const { x, y, z } = camera.position;
   const { longitude, latitude, height } = Cartographic.fromCartesian(
     new Cartesian3(x, y, z)
@@ -87,6 +98,7 @@ export function encodeScene(
     pitch,
     webMercatorZoomEquivalent,
     isAnimating,
+    isSecondaryStyle,
   ].reduce((acc, value, index) => {
     const codec = hashcodecs[Object.keys(hashcodecs)[index]];
     if (value !== undefined && value !== null) {

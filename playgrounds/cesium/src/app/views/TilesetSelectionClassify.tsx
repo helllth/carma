@@ -3,7 +3,7 @@ import {
   useSelectionTransparencyControl,
   useTilesetControl,
 } from '../utils/controls';
-import { CITYGML_TEST_TILESET } from '../config';
+import { CITYGML_TEST_TILESET } from '../config/dataSources.config';
 import { create3DTileStyle } from '../utils/cesiumHelpers';
 import ByTilesetClassifier from '../components/ByTilesetClassifier';
 

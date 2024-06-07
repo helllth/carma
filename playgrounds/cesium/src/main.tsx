@@ -1,7 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import App from './app/App';
-import { CESIUM_BASE_URL } from './app/config';
-
+import { CESIUM_BASE_URL } from './app/config/app.config';
 declare global {
   interface Window {
     CESIUM_BASE_URL: string;
