@@ -6,11 +6,20 @@ import exp from 'constants';
 interface MappingState {
   layers: Layer[];
   selectedLayerIndex: number;
+  backgroundLayer: Layer;
 }
 
 const initialState: MappingState = {
   layers: [],
   selectedLayerIndex: -1,
+  backgroundLayer: {
+    title: 'Amtlich',
+    initialActive: true,
+    id: 'stadtplan',
+    opacity: 1.0,
+    description: '',
+    url: '',
+  },
 };
 
 const slice = createSlice({
@@ -61,6 +70,9 @@ const slice = createSlice({
         state.selectedLayerIndex = newIndex;
       }
     },
+    setBackgroundLayer(state, action) {
+      state.backgroundLayer = action.payload;
+    },
   },
 });
 
@@ -74,6 +86,7 @@ export const {
   setSelectedLayerIndex,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
+  setBackgroundLayer,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -82,4 +95,8 @@ export const getLayers = (state: RootState) => {
 
 export const getSelectedLayerIndex = (state: RootState) => {
   return state.mapping.selectedLayerIndex;
+};
+
+export const getBackgroundLayer = (state: RootState) => {
+  return state.mapping.backgroundLayer;
 };
