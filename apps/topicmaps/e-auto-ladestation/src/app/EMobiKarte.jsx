@@ -11,8 +11,6 @@ import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import {
   fotoKraemerCaptionFactory,
   fotoKraemerUrlManipulation,
-  getGazData,
-  getPOIColors,
 } from './helper/helper';
 import Menu from './Menu';
 import { getPoiClusterIconCreatorFunction } from './helper/styler';
@@ -22,6 +20,7 @@ import {
   UIDispatchContext,
 } from 'react-cismap/contexts/UIContextProvider';
 import SecondaryInfoModal from './SecondaryInfoModal';
+import { getGazData } from './helper/gazData';
 
 const EMobiKarte = () => {
   const [gazData, setGazData] = useState([]);

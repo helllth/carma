@@ -1,24 +1,8 @@
 import React from 'react';
 import IconComp from 'react-cismap/commons/Icon';
-import {
-  fetchJSON,
-  md5FetchJSON,
-  md5FetchText,
-} from 'react-cismap/tools/fetching';
-import { getGazDataForTopicIds } from 'react-cismap/tools/gazetteerHelper';
+import { md5FetchJSON } from 'react-cismap/tools/fetching';
 
 import { host } from './constants';
-
-export const getGazData = async (setGazData) => {
-  const prefix = 'GazData';
-  const sources = {};
-
-  sources.kitas = await md5FetchText(prefix, host + '/data/kitas.json');
-
-  const gazData = getGazDataForTopicIds(sources, ['kitas']);
-
-  setGazData(gazData);
-};
 
 export const getConnectorImageUrl = (type) => {
   switch (type) {
