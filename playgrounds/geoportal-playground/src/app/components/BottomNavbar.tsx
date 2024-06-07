@@ -1,18 +1,10 @@
-import { useSelector } from 'react-redux';
-// @ts-ignore
 import { Radio, Switch } from 'antd';
-// @ts-ignore
-import { getMode } from './../store/slices/ui';
 import './switch.css';
 
 const BottomNavbar = () => {
-  const mode = useSelector(getMode);
-
   return (
     <div
-      className={`${
-        mode === 'map' && 'hidden'
-      } h-16 w-full flex items-center justify-between py-2 px-[12px] gap-6 relative`}
+      className={`h-16 w-full flex items-center justify-between py-2 px-[12px] gap-6 relative`}
     >
       <p className="mb-0 text-gray-400">Geoportal Wuppertal</p>
 

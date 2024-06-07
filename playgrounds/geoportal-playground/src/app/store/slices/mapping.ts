@@ -6,17 +6,11 @@ import exp from 'constants';
 interface MappingState {
   layers: Layer[];
   selectedLayerIndex: number;
-  showInfo: boolean;
-  showInfoText: boolean;
-  activeTabKey: string;
 }
 
 const initialState: MappingState = {
   layers: [],
   selectedLayerIndex: -1,
-  showInfo: false,
-  showInfoText: false,
-  activeTabKey: '1',
 };
 
 const slice = createSlice({
@@ -67,15 +61,6 @@ const slice = createSlice({
         state.selectedLayerIndex = newIndex;
       }
     },
-    setShowInfo(state, action) {
-      state.showInfo = action.payload;
-    },
-    setShowInfoText(state, action) {
-      state.showInfoText = action.payload;
-    },
-    setActiveTabKey(state, action) {
-      state.activeTabKey = action.payload;
-    },
   },
 });
 
@@ -89,9 +74,6 @@ export const {
   setSelectedLayerIndex,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
-  setShowInfo,
-  setShowInfoText,
-  setActiveTabKey,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -100,16 +82,4 @@ export const getLayers = (state: RootState) => {
 
 export const getSelectedLayerIndex = (state: RootState) => {
   return state.mapping.selectedLayerIndex;
-};
-
-export const getShowInfo = (state: RootState) => {
-  return state.mapping.showInfo;
-};
-
-export const getShowInfoText = (state: RootState) => {
-  return state.mapping.showInfoText;
-};
-
-export const getActiveTabKey = (state: RootState) => {
-  return state.mapping.activeTabKey;
 };

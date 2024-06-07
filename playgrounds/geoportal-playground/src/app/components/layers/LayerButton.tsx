@@ -11,17 +11,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   changeOpacity,
-  getActiveTabKey,
   getSelectedLayerIndex,
-  getShowInfo,
-  getShowInfoText,
   removeLayer,
-  setActiveTabKey,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
   setSelectedLayerIndex,
-  setShowInfo,
-  setShowInfoText,
 } from '../../store/slices/mapping';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -32,6 +26,14 @@ import { cn } from '../../helper/helper';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import './tabs.css';
+import {
+  getActiveTabKey,
+  getShowInfo,
+  getShowInfoText,
+  setActiveTabKey,
+  setShowInfo,
+  setShowInfoText,
+} from '../../store/slices/ui';
 
 interface LayerButtonProps {
   title: string;
