@@ -8,7 +8,7 @@ const FullScreenMode = () => {
         className="leaflet-control-fullscreen-button leaflet-bar-part"
         title="Vollbildmodus"
         onClick={() => {
-          console.log('Do fullscreen stuff, maybe do routing', viewer);
+          console.log('fullscreen handling not implemented', viewer);
         }}
       ></button>
     </div>

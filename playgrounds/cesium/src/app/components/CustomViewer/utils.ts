@@ -70,6 +70,23 @@ const hashcodecs = {
   },
 };
 
+type FlatDecodedSceneHash = {
+  [K in keyof typeof hashcodecs]?: ReturnType<(typeof hashcodecs)[K]['decode']>;
+};
+
+export type DecodedSceneHash = {
+  camera: {
+    longitude?: number | null;
+    latitude?: number | null;
+    height?: number | null;
+    heading?: number | null;
+    pitch?: number | null;
+  };
+  webMercatorZoomEquivalent?: number | null;
+  isAnimating?: boolean | null;
+  isSecondaryStyle?: boolean | null;
+};
+
 export function encodeScene({
   camera,
   webMercatorZoomEquivalent,
@@ -114,7 +131,7 @@ export function encodeScene({
   return urlStr;
 }
 
-export function decodeSceneFromLocation(location: string) {
+export function decodeSceneFromLocation(location: string): DecodedSceneHash {
   const params = new URLSearchParams(location);
   const decoded = Object.keys(hashcodecs).reduce((acc, key) => {
     const codec = hashcodecs[key];
@@ -122,7 +139,16 @@ export function decodeSceneFromLocation(location: string) {
     acc[key] =
       value !== null && value !== undefined ? codec.decode(value) : null;
     return acc;
-  }, {});
-  //console.log('decoded', decoded);
-  return { ...decoded };
+  }, {} as FlatDecodedSceneHash);
+  const camera = {
+    longitude: decoded.longitude,
+    latitude: decoded.latitude,
+    height: decoded.height,
+    heading: decoded.heading,
+    pitch: decoded.pitch,
+  };
+  return {
+    camera,
+    ...decoded,
+  };
 }

@@ -16,7 +16,7 @@ const ZoomControls = (props: ZoomControlsProps) => {
 
   const handleZoomIn = (event: MouseEvent) => {
     event.preventDefault();
-    console.log('handleZoomIn', viewer);
+    // console.log('handleZoomIn', viewer);
     if (!viewer) return;
     const scene = viewer.scene;
     const camera = viewer.camera;

@@ -44,7 +44,7 @@ export function useTilesetControl() {
   const showTileset = useShowPrimaryTileset();
 
   useEffect(() => {
-    console.log('useTilesetControl');
+    //console.log('useTilesetControl');
     const tilesetComponents = (
       <div style={{ width: '250px' }}>
         {uiTilesetToggle}
@@ -75,7 +75,7 @@ export const uiSelectionTransparencySlider = (
 );
 
 export function useSelectionTransparencyControl() {
-  console.log('useSelectionTransparencyControl');
+  //console.log('useSelectionTransparencyControl');
   const { addComponent, removeComponent } = useContext(UIComponentContext);
 
   useEffect(() => {
@@ -95,7 +95,7 @@ export function usePropertySelectionControl() {
   const action = setKey;
 
   useEffect(() => {
-    console.log('usePropertySelectionControl', key, defaultKey);
+    //console.log('usePropertySelectionControl', key, defaultKey);
     if (!keys || keys.length === 0) return;
     const keyOptions = Array.from(keys).map((key, i) => ({
       key: i,
@@ -116,7 +116,7 @@ export function usePropertySelectionControl() {
           defaultValue={defaultKey}
           options={keyOptions}
           onChange={(value) => {
-            console.log('selection', value);
+            //console.log('selection', value);
             dispatch(action(value));
             //setLocalKey(value);
           }}

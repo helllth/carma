@@ -32,7 +32,6 @@ const generateOptions = (results) => {
 };
 
 const mapDataToSearchResult = (data) => {
-  console.log('vvv', data);
   const splittedCategories = {};
 
   data.forEach((item) => {
@@ -145,7 +144,7 @@ export function SearchGazetteer({
   };
 
   const handleOnSelect = (option) => {
-    console.log('hhh', option);
+    console.log('Handle Selected Option', option);
     internalGazetteerHitTrigger([option.sData]);
     if (option.sData.type === 'bezirke' || option.sData.type === 'quartiere') {
       setGazetteerHit(null);
@@ -155,7 +154,7 @@ export function SearchGazetteer({
   };
 
   useEffect(() => {
-    console.log('gazData hook', gazData);
+    console.log('HOOK: gazData', gazData);
     if (!gazData) {
       console.info('no gazeteerdata defined, fetching gazData', sourcesConfig);
       const setDataCallback = (data) => {
@@ -180,7 +179,7 @@ export function SearchGazetteer({
   };
 
   const handleOnClose = () => {
-    console.log('On CLose', null);
+    //console.log('On CLose', null);
     setGazetteerHit(null);
     setValue('');
     setOptions([]);

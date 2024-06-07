@@ -28,7 +28,7 @@ const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
   const dispatch = useDispatch();
 
   const orbitListener = useCallback(() => {
-    console.log('orbiting');
+    console.log('CALLBACK: orbiting');
     const point = orbitPointRef.current;
     if (!viewer || !point) return;
 

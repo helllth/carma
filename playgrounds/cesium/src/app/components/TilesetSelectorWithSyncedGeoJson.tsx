@@ -104,11 +104,11 @@ const TilesetSelector: React.FC<TilesetSelectorProps> = ({
   useEffect(() => {
     console.log('HOOK: selectedFeature');
     if (selectedFeature === null) {
-      console.log('selectedFeature is null');
+      // console.log('selectedFeature is null');
     } else {
       if (clampByGeoJson) {
         const id = selectedFeature.getProperty(tilesetIdProperty);
-        console.log('clampByGeoJson', id, selectedFeature, tilesetIdProperty);
+        // console.log('clampByGeoJson', id, selectedFeature, tilesetIdProperty);
 
         const entity = footprintMap?.get(id);
         //setShowSelectionTileset(false);

@@ -21,7 +21,11 @@ import {
 } from '../../store/slices/viewer';
 import { BaseTilesets } from './components/BaseTilesets';
 import ControlsUI from './components/ControlsUI';
-import { decodeSceneFromLocation, encodeScene } from './utils';
+import {
+  DecodedSceneHash,
+  decodeSceneFromLocation,
+  encodeScene,
+} from './utils';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getCesiumViewerZoomLevel } from '../../utils/cesiumHelpers';
 import ResizableIframe from './components/ResizeIframe';
@@ -100,40 +104,42 @@ function CustomViewer(props: CustomViewerProps) {
         sceneFromHashParams = decodeSceneFromLocation(
           window.location.hash.split('?')[1]
         );
-      }
-      const { longitude, latitude, height, heading, pitch, isSecondaryStyle } =
-        sceneFromHashParams;
+        const { camera, isSecondaryStyle } = sceneFromHashParams ?? {};
+        const { latitude, longitude, height, heading, pitch } = camera;
 
-      if (isSecondaryStyle) {
         if (isSecondaryStyle) {
-          setupSecondaryStyle(viewer);
-          dispatch(setShowPrimaryTileset(false));
-          dispatch(setShowSecondaryTileset(true));
+          if (isSecondaryStyle) {
+            setupSecondaryStyle(viewer);
+            dispatch(setShowPrimaryTileset(false));
+            dispatch(setShowSecondaryTileset(true));
+          }
         }
-      }
 
-      //console.log('sceneCamera', sceneCamera);
-      if (sceneFromHashParams && longitude && latitude) {
-        viewer.camera.setView({
-          destination: Cartesian3.fromRadians(
-            longitude,
-            latitude,
-            height ?? 1000 // restore height if missing
-          ),
-          orientation: {
-            heading: heading ?? 0,
-            pitch: pitch ?? -Math.PI / 2,
-          },
-        });
-        //sceneCamera.isAnimating && dispatch(toggleIsAnimating());
+        //console.log('sceneCamera', sceneCamera);
+        if (sceneFromHashParams && longitude && latitude) {
+          //console.log('using hashed location', longitude, latitude, height);
+          viewer.camera.setView({
+            destination: Cartesian3.fromRadians(
+              longitude,
+              latitude,
+              height ?? 1000 // restore height if missing
+            ),
+            orientation: {
+              heading: heading ?? 0,
+              pitch: pitch ?? -Math.PI / 2,
+            },
+          });
+          //sceneCamera.isAnimating && dispatch(toggleIsAnimating());
+        }
       } else {
+        //console.log('no hash, using home');
         viewer.camera.lookAt(home, homeOffset);
         viewer.camera.flyToBoundingSphere(new BoundingSphere(home, 500), {
           duration: 2,
         });
       }
     }
-  }, [viewer]);
+  }, [viewer, dispatch, home, homeOffset, initialHash]);
 
   useEffect(() => {
     console.log('HOOK: hashlocation or path changed');
@@ -142,7 +148,7 @@ function CustomViewer(props: CustomViewerProps) {
       const hashRouterPart = currentHash.split('?')[0];
       navigate(`${hashRouterPart}?${sceneHash}`, { replace: true });
     }
-  }, [location.pathname, sceneHash]);
+  }, [location.pathname, sceneHash, navigate]);
 
   useEffect(() => {
     if (!viewer) return;

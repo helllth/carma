@@ -27,6 +27,8 @@ const provider = new WebMapServiceImageryProvider(
 );
 const imageryLayer = new ImageryLayer(provider);
 
+// TODO move combined common setup out of here
+
 const setupPrimaryStyle = (viewer: Viewer) => {
   (async () => {
     if (viewer.scene.terrainProvider instanceof CesiumTerrainProvider) {
@@ -48,7 +50,7 @@ const setupPrimaryStyle = (viewer: Viewer) => {
 export const setupSecondaryStyle = (viewer: Viewer) => {
   if (!viewer) return;
   (async () => {
-    console.log('setupSecondaryStyle', viewer.scene.terrainProvider);
+    // console.log('setupSecondaryStyle', viewer.scene.terrainProvider);
     if (!(viewer.scene.terrainProvider instanceof CesiumTerrainProvider)) {
       viewer.scene.terrainProvider = await wuppTerrainProvider;
     }
@@ -56,9 +58,9 @@ export const setupSecondaryStyle = (viewer: Viewer) => {
     viewer.scene.globe.show = false;
 
     if (imageryLayer.ready) {
-      console.log('Secondary Style Setup: add imagery layer');
+      // console.log('Secondary Style Setup: add imagery layer');
       if (!viewer.imageryLayers.contains(imageryLayer)) {
-        console.log('Secondary Style Setup: add imagery layer');
+        // console.log('Secondary Style Setup: add imagery layer');
         viewer.imageryLayers.add(imageryLayer);
       }
     }

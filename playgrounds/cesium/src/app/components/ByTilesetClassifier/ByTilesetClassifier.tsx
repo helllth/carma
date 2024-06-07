@@ -43,7 +43,7 @@ const ByTilesetClassifier: React.FC<ByTilesetClassifier> = ({
   useEffect(() => {
     console.log('HOOK: selectedFeature');
     if (selectedFeature === null) {
-      console.log('selectedFeature is null');
+      // console.log('selectedFeature is null');
     } else {
       selectedFeature.color = HIGHLIGHT_COLOR.withAlpha(selectionTransparency);
     }

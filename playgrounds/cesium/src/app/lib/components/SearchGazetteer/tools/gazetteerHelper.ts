@@ -68,7 +68,7 @@ const CesiumMapActions = {
           duration: 5,
           //easingFunction: EasingFunction.SINUSOIDAL_IN,
           complete: async () => {
-            console.log('done');
+            //console.log('done');
             const pos = await getPositionWithElevationAsync(
               scene,
               Cartographic.fromDegrees(lon, lat)

@@ -7,7 +7,7 @@ const noCacheInit = {
   headers: noCacheHeaders,
 };
 export const md5FetchJSON = async (prefix, uri) => {
-  console.log('uri to fetch', uri);
+  console.info('uri to fetch', uri);
 
   try {
     const md5 = await (await fetch(uri + '.md5', noCacheInit)).text();
@@ -18,7 +18,7 @@ export const md5FetchJSON = async (prefix, uri) => {
       );
 
       if (md5InCache !== null && md5InCache === md5) {
-        console.log('cache hit: ' + uri);
+        console.info('cache hit: ' + uri);
         const jsonStringInCache = (await localforage.getItem(
           '@' + prefix + '..' + uri
         )) as string;
@@ -26,7 +26,7 @@ export const md5FetchJSON = async (prefix, uri) => {
           resolve(JSON.parse(jsonStringInCache));
         });
       } else {
-        console.log('cache miss' + uri);
+        console.info('cache miss' + uri);
         const data = await (await fetch(uri)).json();
         await localforage.setItem(
           '@' + prefix + '..' + uri,

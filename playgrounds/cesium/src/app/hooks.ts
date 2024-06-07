@@ -78,7 +78,7 @@ export const usePropertyKeysFromGeoJsonDataSource = (
 ) => {
   const propertyKeys = useSelectKeys();
   const dispatch = useDispatch();
-  console.log('hook usePropertyKeysFromGeoJsonDataSource');
+  console.log('HOOK: usePropertyKeysFromGeoJsonDataSource');
 
   useEffect(() => {
     if (dataSource?.entities) {

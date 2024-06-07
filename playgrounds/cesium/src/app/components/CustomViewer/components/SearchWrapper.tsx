@@ -15,14 +15,14 @@ const SearchWrapper: React.FC<SearchWrapperProps> = ({ viewer }) => {
 
   const handleSetOverlayFeature = (feature: any) => {
     // Replace 'any' with the actual type of the feature
-    console.log('handleSetOverlayFeature', feature);
+    console.info('handleSetOverlayFeature is still to be implemented', feature);
   };
   return (
     <SearchGazetteer
       //gazData={[]}
       gazetteerHit={hit ?? undefined}
       setGazetteerHit={(hit) => {
-        console.log('gazatteer on hit', hit);
+        console.info('gazatteer on hit not implented', hit);
       }}
       cesiumRef={ctx}
       setOverlayFeature={handleSetOverlayFeature}

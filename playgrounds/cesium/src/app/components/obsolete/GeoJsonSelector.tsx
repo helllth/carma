@@ -123,7 +123,7 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
   usePropertyKeysFromGeoJsonDataSource(clampedFootprints);
 
   useEffect(() => {
-    console.log('HOOK color by key', selectKey);
+    console.log('HOOK: color by key', selectKey);
     if (clampedFootprints) {
       clampedFootprints.entities.values.forEach((entity) => {
         if (entity.polygon !== undefined) {
@@ -161,11 +161,7 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
               entity?.properties &&
               entity.properties[idProperty].getValue() === selectedEntity
             ) {
-              console.log(
-                'entity',
-                entity.id,
-                entity.properties.UUID?.getValue()
-              );
+              //console.log('entity',entity.id, entity.properties.UUID?.getValue());
               entity.show = true;
               entity.polygon.material = new ColorMaterialProperty(
                 HIGHLIGHT_COLOR.withAlpha(HIGHLIGHT_COLOR_ALPHA)
@@ -190,8 +186,6 @@ const GeoJsonSelector: React.FC<GeoJsonSelectorProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEntity]);
-
-  console.log('selectedProperty');
 
   return (
     <>

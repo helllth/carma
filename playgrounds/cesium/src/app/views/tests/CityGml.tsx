@@ -97,7 +97,7 @@ const DebugGeoJsonSelector = ({ initialSrc, debug, renderPoint }) => {
           options={jsonOptions}
           value={src}
           onChange={(value) => {
-            console.log('value', value);
+            //console.log('value', value);
             setSrc(value);
           }}
         />

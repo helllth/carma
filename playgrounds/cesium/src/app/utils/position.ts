@@ -69,7 +69,7 @@ export const getAll = async (viewer: Cesium.Viewer) => {
 
   const height = ellipsoid.cartesianToCartographic(center).height;
 
-  console.log('height', height);
+  //console.log('height', height);
 
   // Convert the position to cartographic coordinates to get the height
   const cartographicPosition = Cesium.Cartographic.fromCartesian(center);
