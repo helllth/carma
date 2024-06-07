@@ -5,7 +5,6 @@ import {
   faX,
   faCircle,
   faGlobe,
-  faMap,
   faLayerGroup,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,13 +26,12 @@ import {
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Slider, Tabs } from 'antd';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { cn } from '../../helper/helper';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import './tabs.css';
-// import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
   title: string;
@@ -79,6 +77,8 @@ const LayerButton = ({
     useSortable({
       id,
     });
+  const infoRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
 
   const style = { transform: CSS.Translate.toString(transform) };
 
@@ -175,13 +175,32 @@ const LayerButton = ({
       ),
     },
   ];
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        infoRef.current &&
+        !infoRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        dispatch(setSelectedLayerIndex(-1));
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+
   return (
-    <div>
+    <div ref={buttonRef}>
       <div
         ref={setNodeRef}
-        onClick={() =>
-          dispatch(setSelectedLayerIndex(showSettings ? -1 : index))
-        }
+        onClick={(e) => {
+          e.stopPropagation();
+          dispatch(setSelectedLayerIndex(showSettings ? -1 : index));
+        }}
         style={style}
         {...listeners}
         {...attributes}
@@ -224,6 +243,7 @@ const LayerButton = ({
       {showSettings && (
         <div className="absolute top-12 w-[calc(100%-60px)] left-20 pr-72 z-[999] flex justify-center items-center">
           <div
+            ref={infoRef}
             className={cn(
               `bg-white rounded-[10px] 2xl:w-1/2 w-full flex flex-col relative px-10 gap-2 py-2 transition-all duration-300`,
               showInfo ? 'h-[600px]' : 'h-12'
