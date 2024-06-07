@@ -18,22 +18,12 @@ import './tabs.css';
 interface LayerButtonProps {
   title: string;
   id: string;
-  opacity: number;
   index: number;
-  description?: string;
   icon?: string;
   layer: Layer;
 }
 
-const LayerButton = ({
-  title,
-  id,
-  opacity,
-  index,
-  description,
-  icon,
-  layer,
-}: LayerButtonProps) => {
+const LayerButton = ({ title, id, index, icon, layer }: LayerButtonProps) => {
   const dispatch = useDispatch();
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
@@ -112,15 +102,7 @@ const LayerButton = ({
         </button>
       </div>
       {showSettings && (
-        <SecondaryView
-          icon={icon}
-          title={title}
-          opacity={opacity}
-          id={id}
-          description={description}
-          legend={layer.legend}
-          ref={infoRef}
-        />
+        <SecondaryView icon={icon} layer={layer} ref={infoRef} />
       )}
     </div>
   );

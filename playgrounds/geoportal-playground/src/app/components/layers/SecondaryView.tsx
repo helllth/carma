@@ -23,20 +23,17 @@ import {
 } from '../../store/slices/ui';
 import Info from './Info';
 import { iconColorMap, iconMap } from './items';
+import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 
 interface SecondaryViewProps {
   icon: string;
-  title: string;
-  id: string;
-  description: string;
-  opacity: number;
-  legend: any;
+  layer: Layer;
 }
 
 type Ref = HTMLDivElement;
 
 const SecondaryView = forwardRef<Ref, SecondaryViewProps>(
-  ({ icon, title, id, description, opacity, legend }, ref) => {
+  ({ icon, layer }, ref) => {
     // @ts-ignore
     const { routedMapRef } = useContext(TopicMapContext);
     const dispatch = useDispatch();
@@ -92,7 +89,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(
                 />
               )}
               <label className="mb-0 text-base font-medium pt-1" htmlFor="icon">
-                {title}
+                {layer.title}
               </label>
             </div>
             <div className="w-full flex items-center gap-2">
@@ -107,12 +104,12 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(
                   routedMapRef?.leafletMap?.leafletElement.dragging.disable();
                 }}
                 onChange={(value) => {
-                  dispatch(changeOpacity({ id, opacity: value }));
+                  dispatch(changeOpacity({ id: layer.id, opacity: value }));
                 }}
                 onChangeComplete={() => {
                   routedMapRef?.leafletMap?.leafletElement.dragging.enable();
                 }}
-                value={opacity}
+                value={layer.opacity}
                 min={0}
                 max={1}
                 step={0.1}
@@ -133,7 +130,9 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(
             />
           </div>
 
-          {showInfoText && <Info description={description} legend={legend} />}
+          {showInfoText && (
+            <Info description={layer.description} legend={layer.legend} />
+          )}
         </div>
       </div>
     );
