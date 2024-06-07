@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useContext } from 'react';
 // @ts-ignore
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-// @ts-ignore
 import { getGazData } from '../helper/helper';
 import { useSelector } from 'react-redux';
 import InfoBoxMeasurement from './map-measure/InfoBoxMeasurement';
