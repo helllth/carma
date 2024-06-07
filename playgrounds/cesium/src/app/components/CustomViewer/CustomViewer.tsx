@@ -60,7 +60,7 @@ type CustomViewerProps = {
 function CustomViewer(props: CustomViewerProps) {
   const home = useViewerHome();
   const homeOffset = useViewerHomeOffset();
-  const globeBaseColor = useGlobeBaseColor();
+  const globeBaseColor = Color.WHITE; //useGlobeBaseColor();
   const isSecondaryStyle = useShowSecondaryTileset();
   const [showLeaflet, setShowLeaflet] = useState(false);
   //const isAnimating = useViewerIsAnimating();
