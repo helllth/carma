@@ -14,7 +14,7 @@ import {
   setShowSecondaryTileset,
 } from '../../../store/slices/viewer';
 import {
-  BASEMAP_METROPOLRUHR_WMS_GRUNDRISS,
+  BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
   WUPP_TERRAIN_PROVIDER,
 } from '../../../config/dataSources.config';
 
@@ -23,7 +23,7 @@ const wuppTerrainProvider = CesiumTerrainProvider.fromUrl(
   WUPP_TERRAIN_PROVIDER.url
 );
 const provider = new WebMapServiceImageryProvider(
-  BASEMAP_METROPOLRUHR_WMS_GRUNDRISS
+  BASEMAP_METROPOLRUHR_WMS_GRAUBLAU
 );
 const imageryLayer = new ImageryLayer(provider);
 
