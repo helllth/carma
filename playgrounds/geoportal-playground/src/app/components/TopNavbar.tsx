@@ -10,7 +10,7 @@ import {
   faShareNodes,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 // @ts-ignore
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 import {
@@ -90,6 +90,16 @@ const TopNavbar = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (
+      selectedBackground !== 'amtlich' ||
+      selectedBackground !== 'topographisch' ||
+      selectedBackground !== 'luftbild'
+    ) {
+      setSelectedBackground('amtlich');
+    }
+  }, []);
 
   return (
     <div className="h-16 w-full flex items-center relative justify-between py-2 px-[12px]">
