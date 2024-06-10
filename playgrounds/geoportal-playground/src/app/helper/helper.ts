@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge';
 
 export const getGazData = async (setGazData) => {
   const prefix = 'GazData';
-  const sources = {};
+  const sources: any = {};
 
   sources.adressen = await md5FetchText(
     prefix,
@@ -37,3 +37,30 @@ export const getGazData = async (setGazData) => {
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
+
+export const parseDescription = (description: string) => {
+  const result = { inhalt: '', sichtbarkeit: '', nutzung: '' };
+  const keywords = ['Inhalt:', 'Sichtbarkeit:', 'Nutzung:'];
+
+  function extractTextAfterKeyword(input, keyword) {
+    const index = input.indexOf(keyword);
+    if (index !== -1) {
+      const startIndex = index + keyword.length;
+      let endIndex = input.length;
+      for (const nextKeyword of keywords) {
+        const nextIndex = input.indexOf(nextKeyword, startIndex);
+        if (nextIndex !== -1 && nextIndex < endIndex) {
+          endIndex = nextIndex;
+        }
+      }
+      return input.slice(startIndex, endIndex).trim();
+    }
+    return '';
+  }
+
+  result.inhalt = extractTextAfterKeyword(description, 'Inhalt:');
+  result.sichtbarkeit = extractTextAfterKeyword(description, 'Sichtbarkeit:');
+  result.nutzung = extractTextAfterKeyword(description, 'Nutzung:');
+
+  return result;
+};

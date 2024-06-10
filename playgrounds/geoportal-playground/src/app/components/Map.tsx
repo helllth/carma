@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState, useContext } from 'react';
 // @ts-ignore
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-// @ts-ignore
 import { getGazData } from '../helper/helper';
 import { useSelector } from 'react-redux';
-// @ts-ignore
-import { getMode } from './../store/slices/ui';
 import InfoBoxMeasurement from './map-measure/InfoBoxMeasurement';
 import { getLayers } from '../store/slices/mapping';
 import LayerWrapper from './layers/LayerWrapper';
@@ -17,7 +14,6 @@ const Map = () => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const mode = useSelector(getMode);
   const layers = useSelector(getLayers);
 
   useEffect(() => {
@@ -37,7 +33,7 @@ const Map = () => {
     handleResize();
 
     return () => window.removeEventListener('resize', handleResize);
-  }, [mode]);
+  }, []);
 
   return (
     <div className="h-full w-full" ref={wrapperRef}>

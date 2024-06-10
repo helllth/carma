@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  getBackgroundLayer,
   getLayers,
   getSelectedLayerIndex,
   setLayers,
@@ -31,6 +32,7 @@ const LayerWrapper = () => {
   const { routedMapRef } = useContext(TopicMapContext);
   const layers = useSelector(getLayers);
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
+  const backgroundLayer = useSelector(getBackgroundLayer);
   const { isOver, setNodeRef } = useDroppable({
     id: 'droppable',
   });
@@ -73,14 +75,14 @@ const LayerWrapper = () => {
         id="buttonWrapper"
         className="absolute flex items-center justify-center gap-2 w-[calc(100%-60px)] left-20 pr-72 top-2.5 z-[999]"
       >
-        <div
-          className={cn(
-            'w-fit min-w-max flex items-center gap-2 px-3 rounded-[10px] h-8 z-[99999999] button-shadow',
-            selectedLayerIndex === -1 ? 'bg-white' : 'bg-neutral-200'
-          )}
-        >
-          <FontAwesomeIcon icon={faMap} />
-        </div>
+        <LayerButton
+          icon="background"
+          layer={backgroundLayer}
+          index={-1}
+          id={backgroundLayer.id}
+          title=""
+          background
+        />
         <SortableContext
           items={layers}
           strategy={horizontalListSortingStrategy}
@@ -89,9 +91,7 @@ const LayerWrapper = () => {
             <LayerButton
               title={layer.title}
               id={layer.id}
-              opacity={layer.opacity}
               index={i}
-              description={layer.description}
               icon={
                 layer.title.includes('Orthofoto')
                   ? 'ortho'

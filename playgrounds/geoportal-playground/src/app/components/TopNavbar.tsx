@@ -13,17 +13,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
 // @ts-ignore
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
+import {
+  TopicMapStylingContext,
+  TopicMapStylingDispatchContext,
+} from 'react-cismap/contexts/TopicMapStylingContextProvider';
 
 import './switch.css';
 import { LayerLib } from '@cismet/layer-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { getThumbnails, setThumbnail } from '../store/slices/layers';
-import { appendLayer, getLayers, removeLayer } from '../store/slices/mapping';
+import {
+  appendLayer,
+  getLayers,
+  removeLayer,
+  setBackgroundLayer,
+} from '../store/slices/mapping';
+
+const layerMap = {
+  amtlich: 'Amtlich',
+  luftbild: 'Luftbild',
+  topographisch: 'Topographisch',
+};
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
+  // @ts-ignore
+  const { setSelectedBackground } = useContext(TopicMapStylingDispatchContext);
+  // @ts-ignore
+  const { selectedBackground } = useContext(TopicMapStylingContext);
   const dispatch = useDispatch();
   const thumbnails = useSelector(getThumbnails);
   const activeLayers = useSelector(getLayers);
@@ -135,10 +154,25 @@ const TopNavbar = () => {
       </div>
 
       <div className="flex items-center gap-6">
-        <Radio.Group value={'standard'}>
-          <Radio.Button value="standard">Amtlich</Radio.Button>
-          <Radio.Button value="hybrid">Topographisch</Radio.Button>
-          <Radio.Button value="satellit">Luftbild</Radio.Button>
+        <Radio.Group
+          value={selectedBackground}
+          onChange={(e) => {
+            setSelectedBackground(e.target.value);
+            dispatch(
+              setBackgroundLayer({
+                id: e.target.value,
+                title: layerMap[e.target.value],
+                initialActive: true,
+                opacity: 1.0,
+                description: '',
+                url: '',
+              })
+            );
+          }}
+        >
+          <Radio.Button value="amtlich">Amtlich</Radio.Button>
+          <Radio.Button value="topographisch">Topographisch</Radio.Button>
+          <Radio.Button value="luftbild">Luftbild</Radio.Button>
         </Radio.Group>
 
         <Button

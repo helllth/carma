@@ -6,17 +6,20 @@ import exp from 'constants';
 interface MappingState {
   layers: Layer[];
   selectedLayerIndex: number;
-  showInfo: boolean;
-  showInfoText: boolean;
-  activeTabKey: string;
+  backgroundLayer: Layer;
 }
 
 const initialState: MappingState = {
   layers: [],
   selectedLayerIndex: -1,
-  showInfo: false,
-  showInfoText: false,
-  activeTabKey: '1',
+  backgroundLayer: {
+    title: 'Amtlich',
+    initialActive: true,
+    id: 'stadtplan',
+    opacity: 1.0,
+    description: '',
+    url: '',
+  },
 };
 
 const slice = createSlice({
@@ -54,27 +57,21 @@ const slice = createSlice({
     setNextSelectedLayerIndex(state) {
       const newIndex = state.selectedLayerIndex + 1;
       if (newIndex >= state.layers.length) {
-        state.selectedLayerIndex = 0;
+        state.selectedLayerIndex = -1;
       } else {
         state.selectedLayerIndex = newIndex;
       }
     },
     setPreviousSelectedLayerIndex(state) {
       const newIndex = state.selectedLayerIndex - 1;
-      if (newIndex < 0) {
+      if (newIndex < -1) {
         state.selectedLayerIndex = state.layers.length - 1;
       } else {
         state.selectedLayerIndex = newIndex;
       }
     },
-    setShowInfo(state, action) {
-      state.showInfo = action.payload;
-    },
-    setShowInfoText(state, action) {
-      state.showInfoText = action.payload;
-    },
-    setActiveTabKey(state, action) {
-      state.activeTabKey = action.payload;
+    setBackgroundLayer(state, action) {
+      state.backgroundLayer = action.payload;
     },
   },
 });
@@ -89,9 +86,7 @@ export const {
   setSelectedLayerIndex,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
-  setShowInfo,
-  setShowInfoText,
-  setActiveTabKey,
+  setBackgroundLayer,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -102,14 +97,6 @@ export const getSelectedLayerIndex = (state: RootState) => {
   return state.mapping.selectedLayerIndex;
 };
 
-export const getShowInfo = (state: RootState) => {
-  return state.mapping.showInfo;
-};
-
-export const getShowInfoText = (state: RootState) => {
-  return state.mapping.showInfoText;
-};
-
-export const getActiveTabKey = (state: RootState) => {
-  return state.mapping.activeTabKey;
+export const getBackgroundLayer = (state: RootState) => {
+  return state.mapping.backgroundLayer;
 };
