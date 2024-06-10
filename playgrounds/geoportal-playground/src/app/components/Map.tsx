@@ -4,10 +4,11 @@ import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import { getGazData } from '../helper/helper';
 import { useSelector } from 'react-redux';
 import InfoBoxMeasurement from './map-measure/InfoBoxMeasurement';
-import { getLayers } from '../store/slices/mapping';
+import { getBackgroundLayer, getLayers } from '../store/slices/mapping';
 import LayerWrapper from './layers/LayerWrapper';
 // @ts-ignore
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
+import CismapLayer from 'react-cismap/CismapLayer';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -15,6 +16,7 @@ const Map = () => {
   const [width, setWidth] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const layers = useSelector(getLayers);
+  const backgroundLayer = useSelector(getBackgroundLayer);
 
   useEffect(() => {
     getGazData(setGazData);
@@ -49,6 +51,13 @@ const Map = () => {
         gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
         infoBox={<InfoBoxMeasurement />}
       >
+        <CismapLayer
+          key={'Cismaplayer.' + backgroundLayer.id}
+          opacity={1}
+          url={backgroundLayer.url}
+          style={backgroundLayer.url}
+          type={backgroundLayer.layerType}
+        />
         <LayerWrapper />
         {layers.map((layer) => (
           <StyledWMSTileLayer

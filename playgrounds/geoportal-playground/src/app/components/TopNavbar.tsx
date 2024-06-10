@@ -10,39 +10,45 @@ import {
   faShareNodes,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 // @ts-ignore
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
-import {
-  TopicMapStylingContext,
-  TopicMapStylingDispatchContext,
-} from 'react-cismap/contexts/TopicMapStylingContextProvider';
 
-import './switch.css';
 import { LayerLib } from '@cismet/layer-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { getThumbnails, setThumbnail } from '../store/slices/layers';
 import {
   appendLayer,
+  getBackgroundLayer,
   getLayers,
   removeLayer,
   setBackgroundLayer,
 } from '../store/slices/mapping';
+import './switch.css';
 
 const layerMap = {
-  amtlich: 'Amtlich',
-  luftbild: 'Luftbild',
-  topographisch: 'Topographisch',
+  amtlich: {
+    title: 'Amtlich',
+    layerType: 'tiles',
+    url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
+  },
+  luftbild: {
+    title: 'Luftbild',
+    layerType: 'wmts',
+    url: 'https://maps.wuppertal.de/karten?service=WMS&request=GetMap&layers=R102%3Aluftbild2022',
+  },
+  topographisch: {
+    title: 'Topographisch',
+    layerType: 'vector',
+    url: 'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_top.json',
+  },
 };
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
-  // @ts-ignore
-  const { setSelectedBackground } = useContext(TopicMapStylingDispatchContext);
-  // @ts-ignore
-  const { selectedBackground } = useContext(TopicMapStylingContext);
+  const backgroundLayer = useSelector(getBackgroundLayer);
   const dispatch = useDispatch();
   const thumbnails = useSelector(getThumbnails);
   const activeLayers = useSelector(getLayers);
@@ -90,16 +96,6 @@ const TopNavbar = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (
-      selectedBackground !== 'amtlich' ||
-      selectedBackground !== 'topographisch' ||
-      selectedBackground !== 'luftbild'
-    ) {
-      setSelectedBackground('amtlich');
-    }
-  }, []);
 
   return (
     <div className="h-16 w-full flex items-center relative justify-between py-2 px-[12px]">
@@ -165,17 +161,18 @@ const TopNavbar = () => {
 
       <div className="flex items-center gap-6">
         <Radio.Group
-          value={selectedBackground}
+          value={backgroundLayer.id}
           onChange={(e) => {
-            setSelectedBackground(e.target.value);
+            // setSelectedBackground(e.target.value);
             dispatch(
               setBackgroundLayer({
                 id: e.target.value,
-                title: layerMap[e.target.value],
+                title: layerMap[e.target.value].title,
                 initialActive: true,
                 opacity: 1.0,
                 description: '',
-                url: '',
+                url: layerMap[e.target.value].url,
+                layerType: layerMap[e.target.value].layerType,
               })
             );
           }}
