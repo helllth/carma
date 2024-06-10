@@ -1,22 +1,22 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDebounce } from '@uidotdev/usehooks';
 import { Button, Input, Modal } from 'antd';
+import Fuse from 'fuse.js';
+import { useEffect, useState } from 'react';
+import { InView } from 'react-intersection-observer';
 import WMSCapabilities from 'wms-capabilities';
-import { ReactNode, useEffect, useState } from 'react';
+import { baseConfig as config, serviceConfig } from '../helper/config';
 import {
-  createBaseConfig,
   flattenLayer,
   getLayerStructure,
   mergeStructures,
 } from '../helper/layerHelper';
-const { Search } = Input;
-import './modal.css';
 import LayerTabs from './LayerTabs';
-import Fuse from 'fuse.js';
 import LibItem from './LibItem';
-import { baseConfig as config, serviceConfig } from '../helper/config';
-import { InView } from 'react-intersection-observer';
 import './input.css';
+import './modal.css';
+const { Search } = Input;
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -54,6 +54,42 @@ const LibModal = ({
   const services = serviceConfig;
   const [inViewCategory, setInViewCategory] = useState('');
   const [allCategoriesInView, setAllCategoriesInView] = useState<string[]>([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const debouncedSearchTerm = useDebounce(searchValue, 400);
+
+  const search = (value) => {
+    setIsSearching(true);
+    if (value) {
+      const results = fuse.search(value);
+      // have to use allLayers.map to create a deep copy so the allLayers state wont change here
+      const resultsWithCategories = allLayers.map((item) => {
+        return {
+          ...item,
+        };
+      });
+
+      resultsWithCategories.map((category) => {
+        const newLayers: any[] = [];
+
+        results.forEach((result) => {
+          if (category.Title === result.item.tags[0]) {
+            newLayers.push({
+              ...result.item,
+              highlight: result.matches,
+            });
+          }
+        });
+
+        category.layers = newLayers;
+      });
+
+      setLayers(resultsWithCategories);
+    } else {
+      setLayers(allLayers);
+    }
+    setIsSearching(false);
+  };
 
   const flattenedLayers = allLayers.flatMap((obj) => obj.layers);
   const fuse = new Fuse(flattenedLayers, {
@@ -119,6 +155,10 @@ const LibModal = ({
     }
   }, []);
 
+  useEffect(() => {
+    search(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
+
   return (
     <Modal
       open={open}
@@ -148,35 +188,12 @@ const LibModal = ({
             <Search
               placeholder="Suchbegriff eingeben"
               className="w-[76%]"
+              onChange={(e) => {
+                setSearchValue(e.target.value);
+              }}
+              loading={isSearching}
               onSearch={(value) => {
-                if (value) {
-                  const results = fuse.search(value);
-                  // have to use allLayers.map to create a deep copy so the allLayers state wont change here
-                  const resultsWithCategories = allLayers.map((item) => {
-                    return {
-                      ...item,
-                    };
-                  });
-
-                  resultsWithCategories.map((category) => {
-                    const newLayers: any[] = [];
-
-                    results.forEach((result) => {
-                      if (category.Title === result.item.tags[0]) {
-                        newLayers.push({
-                          ...result.item,
-                          highlight: result.matches,
-                        });
-                      }
-                    });
-
-                    category.layers = newLayers;
-                  });
-
-                  setLayers(resultsWithCategories);
-                } else {
-                  setLayers(allLayers);
-                }
+                search(value);
               }}
             />
             <Button type="text" onClick={() => setOpen(false)}>
