@@ -11,7 +11,7 @@ interface MappingState {
 
 const initialState: MappingState = {
   layers: [],
-  selectedLayerIndex: -1,
+  selectedLayerIndex: -2,
   backgroundLayer: {
     title: 'Amtlich',
     initialActive: true,
