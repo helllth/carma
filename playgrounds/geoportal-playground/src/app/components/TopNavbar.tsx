@@ -30,9 +30,9 @@ import {
 } from '../store/slices/mapping';
 
 const layerMap = {
-  'wupp-plan-live': 'Amtlich',
-  lbk: 'Luftbild',
-  basemap_color: 'Topographisch',
+  amtlich: 'Amtlich',
+  luftbild: 'Luftbild',
+  topographisch: 'Topographisch',
 };
 
 const TopNavbar = () => {
@@ -168,9 +168,9 @@ const TopNavbar = () => {
             );
           }}
         >
-          <Radio.Button value="wupp-plan-live">Amtlich</Radio.Button>
-          <Radio.Button value="basemap_color">Topographisch</Radio.Button>
-          <Radio.Button value="lbk">Luftbild</Radio.Button>
+          <Radio.Button value="amtlich">Amtlich</Radio.Button>
+          <Radio.Button value="topographisch">Topographisch</Radio.Button>
+          <Radio.Button value="luftbild">Luftbild</Radio.Button>
         </Radio.Group>
 
         <Button

@@ -10,13 +10,36 @@ import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvid
 import Map from './components/Map';
 import TopNavbar from './components/TopNavbar';
 import MapMeasurement from './components/map-measure/MapMeasurement';
+import { defaultLayerConf } from 'react-cismap/tools/layerFactory';
 if (typeof global === 'undefined') {
   window.global = window;
 }
 
 function App() {
+  const baseLayerConf = { ...defaultLayerConf };
+  const backgroundConfigurations = {
+    amtlich: {
+      layerkey: 'wupp-plan-live@90',
+      src: '/images/rain-hazard-map-bg/citymap.png',
+      title: 'Amtlich',
+    },
+    topographisch: {
+      layerkey: 'basemap_relief@40',
+      src: '/images/rain-hazard-map-bg/citymap.png',
+      title: 'Basemap.de (Relief)',
+    },
+    luftbild: {
+      layerkey: 'wupp-plan-live@100|trueOrtho2020@75|rvrSchrift@100',
+      src: '/images/rain-hazard-map-bg/citymap.png',
+      title: 'Luftbild',
+    },
+  };
+
   return (
-    <TopicMapContextProvider>
+    <TopicMapContextProvider
+      baseLayerConf={baseLayerConf}
+      backgroundConfigurations={backgroundConfigurations}
+    >
       <div className="flex flex-col h-screen w-full">
         <TopNavbar />
         <MapMeasurement />
