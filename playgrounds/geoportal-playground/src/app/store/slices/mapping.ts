@@ -57,14 +57,14 @@ const slice = createSlice({
     setNextSelectedLayerIndex(state) {
       const newIndex = state.selectedLayerIndex + 1;
       if (newIndex >= state.layers.length) {
-        state.selectedLayerIndex = 0;
+        state.selectedLayerIndex = -1;
       } else {
         state.selectedLayerIndex = newIndex;
       }
     },
     setPreviousSelectedLayerIndex(state) {
       const newIndex = state.selectedLayerIndex - 1;
-      if (newIndex < 0) {
+      if (newIndex < -1) {
         state.selectedLayerIndex = state.layers.length - 1;
       } else {
         state.selectedLayerIndex = newIndex;

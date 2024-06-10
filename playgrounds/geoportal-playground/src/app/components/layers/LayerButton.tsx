@@ -53,7 +53,7 @@ const LayerButton = ({
         buttonRef.current &&
         !buttonRef.current.contains(event.target as Node)
       ) {
-        dispatch(setSelectedLayerIndex(-1));
+        dispatch(setSelectedLayerIndex(-2));
       }
     };
     document.addEventListener('mousedown', handleOutsideClick);
@@ -68,14 +68,14 @@ const LayerButton = ({
         ref={setNodeRef}
         onClick={(e) => {
           e.stopPropagation();
-          dispatch(setSelectedLayerIndex(showSettings ? -1 : index));
+          dispatch(setSelectedLayerIndex(showSettings ? -2 : index));
         }}
         style={style}
         {...listeners}
         {...attributes}
         className={cn(
           'w-fit min-w-max flex items-center gap-2 px-3 rounded-[10px] h-8 z-[99999999] button-shadow',
-          selectedLayerIndex === -1
+          selectedLayerIndex === -2
             ? 'bg-white'
             : showSettings
             ? 'bg-white'

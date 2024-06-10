@@ -78,7 +78,7 @@ const LayerWrapper = () => {
         <LayerButton
           icon="background"
           layer={backgroundLayer}
-          index={20}
+          index={-1}
           id={backgroundLayer.id}
           title=""
           background
