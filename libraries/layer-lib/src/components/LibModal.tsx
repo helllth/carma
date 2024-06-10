@@ -56,7 +56,7 @@ const LibModal = ({
   const [allCategoriesInView, setAllCategoriesInView] = useState<string[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const debouncedSearchTerm = useDebounce(searchValue, 400);
+  const debouncedSearchTerm = useDebounce(searchValue, 300);
 
   const search = (value) => {
     setIsSearching(true);
@@ -189,6 +189,7 @@ const LibModal = ({
               placeholder="Suchbegriff eingeben"
               className="w-[76%]"
               onChange={(e) => {
+                setIsSearching(true);
                 setSearchValue(e.target.value);
               }}
               loading={isSearching}
