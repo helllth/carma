@@ -88,7 +88,9 @@ const TopNavbar = () => {
 
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2">
-          <p className="mb-0 font-semibold text-lg">Geoportal</p>
+          <p className="mb-0 font-semibold text-lg">
+            DigiTal Zwilling / Geoportal
+          </p>
         </div>
       </div>
 
