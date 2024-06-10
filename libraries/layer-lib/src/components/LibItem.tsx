@@ -114,7 +114,7 @@ const LibItem = ({
         }
       }
     }
-  }, []);
+  }, [name]);
 
   return (
     <div
