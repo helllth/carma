@@ -37,7 +37,9 @@ const LayerButton = ({
   layer,
   background,
 }: LayerButtonProps) => {
-  const { ref, inView } = useInView({ threshold: 1 });
+  const { ref, inView } = useInView({
+    threshold: 0.99,
+  });
   const dispatch = useDispatch();
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
@@ -70,13 +72,13 @@ const LayerButton = ({
   }, []);
 
   useEffect(() => {
-    if (!inView && index === 0) {
+    if (!inView && index === -1) {
       dispatch(setShowLeftScrollButton(true));
     }
     if (!inView && index === layersLength - 1) {
       dispatch(setShowRightScrollButton(true));
     }
-    if (inView && index === 0) {
+    if (inView && index === -1) {
       dispatch(setShowLeftScrollButton(false));
     }
     if (inView && index === layersLength - 1) {
@@ -90,6 +92,11 @@ const LayerButton = ({
         buttonRef.current = el;
         ref(el);
       }}
+      className={cn(
+        '',
+        index === -1 && 'ml-auto',
+        index === layersLength - 1 && 'mr-auto'
+      )}
     >
       <div
         ref={setNodeRef}
