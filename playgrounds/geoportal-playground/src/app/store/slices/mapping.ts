@@ -3,10 +3,14 @@ import { RootState } from '..';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import exp from 'constants';
 
+type BackgroundLayer = Layer & {
+  layers: string;
+};
+
 interface MappingState {
   layers: Layer[];
   selectedLayerIndex: number;
-  backgroundLayer: Layer;
+  backgroundLayer: BackgroundLayer;
 }
 
 const initialState: MappingState = {
@@ -18,7 +22,8 @@ const initialState: MappingState = {
     id: 'stadtplan',
     opacity: 1.0,
     description: '',
-    url: '',
+    url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX=%7Bz%7D&TILEROW=%7By%7D&TILECOL=%7Bx%7D',
+    layers: 'amtlich@100',
   },
 };
 
@@ -70,7 +75,7 @@ const slice = createSlice({
         state.selectedLayerIndex = newIndex;
       }
     },
-    setBackgroundLayer(state, action) {
+    setBackgroundLayer(state, action: PayloadAction<BackgroundLayer>) {
       state.backgroundLayer = action.payload;
     },
   },
