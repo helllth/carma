@@ -7,9 +7,12 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '../../helper/helper';
 import {
+  getLayers,
   getSelectedLayerIndex,
   removeLayer,
   setSelectedLayerIndex,
+  setShowLeftScrollButton,
+  setShowRightScrollButton,
 } from '../../store/slices/mapping';
 import SecondaryView from './SecondaryView';
 import { iconColorMap, iconMap } from './items';
@@ -38,6 +41,7 @@ const LayerButton = ({
   const dispatch = useDispatch();
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
+  const layersLength = useSelector(getLayers).length;
   let urlPrefix = window.location.origin + window.location.pathname;
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -65,8 +69,28 @@ const LayerButton = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (!inView && index === 0) {
+      dispatch(setShowLeftScrollButton(true));
+    }
+    if (!inView && index === layersLength - 1) {
+      dispatch(setShowRightScrollButton(true));
+    }
+    if (inView && index === 0) {
+      dispatch(setShowLeftScrollButton(false));
+    }
+    if (inView && index === layersLength - 1) {
+      dispatch(setShowRightScrollButton(false));
+    }
+  }, [inView]);
+
   return (
-    <div ref={buttonRef}>
+    <div
+      ref={(el) => {
+        buttonRef.current = el;
+        ref(el);
+      }}
+    >
       <div
         ref={setNodeRef}
         onClick={(e) => {

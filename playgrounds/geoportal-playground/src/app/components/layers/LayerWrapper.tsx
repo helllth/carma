@@ -81,13 +81,13 @@ const LayerWrapper = () => {
         ref={setNodeRef}
         style={style}
         id="buttonWrapper"
-        className="absolute w-[calc(100%-60px)] left-20 pr-[20px] top-2.5 z-[999]"
+        className="absolute w-full h-9 pl-20 pr-[20px] top-2.5 z-[999]"
       >
-        <div className="relative w-full">
+        <div className="relative w-full h-full">
           {showLeftScrollButton && (
             <div
               className={cn(
-                'absolute left-0 bg-white w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
+                'absolute left-0 top-0.5 bg-white w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
               )}
               role="button"
               onClick={() => {
@@ -100,7 +100,7 @@ const LayerWrapper = () => {
           {showRightScrollButton && (
             <div
               className={cn(
-                'absolute right-0 bg-white w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
+                'absolute right-0 top-0.5 bg-white w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
               )}
               role="button"
               onClick={() => {
@@ -112,7 +112,7 @@ const LayerWrapper = () => {
           )}
           <div
             id="test"
-            className="w-full scroll-smooth overflow-x-hidden flex items-center gap-2"
+            className="w-full scroll-smooth overflow-x-hidden flex items-center h-full gap-2"
           >
             <LayerButton
               icon="background"
