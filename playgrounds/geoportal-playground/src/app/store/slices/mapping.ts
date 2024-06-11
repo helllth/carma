@@ -19,7 +19,7 @@ const initialState: MappingState = {
   backgroundLayer: {
     title: 'Amtlich',
     initialActive: true,
-    id: 'stadtplan',
+    id: 'amtlich',
     opacity: 1.0,
     description: '',
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX=%7Bz%7D&TILEROW=%7By%7D&TILECOL=%7Bx%7D',
