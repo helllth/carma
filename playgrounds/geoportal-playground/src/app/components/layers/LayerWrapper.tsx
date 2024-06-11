@@ -91,7 +91,7 @@ const LayerWrapper = () => {
               )}
               role="button"
               onClick={() => {
-                document.getElementById('test').scrollLeft -= 300;
+                document.getElementById('scrollWrapper').scrollLeft -= 300;
               }}
             >
               <FontAwesomeIcon icon={faChevronLeft} />
@@ -104,14 +104,14 @@ const LayerWrapper = () => {
               )}
               role="button"
               onClick={() => {
-                document.getElementById('test').scrollLeft += 300;
+                document.getElementById('scrollWrapper').scrollLeft += 300;
               }}
             >
               <FontAwesomeIcon icon={faChevronRight} />
             </div>
           )}
           <div
-            id="test"
+            id="scrollWrapper"
             className="w-full scroll-smooth overflow-x-hidden flex items-center h-full gap-2"
           >
             <LayerButton
