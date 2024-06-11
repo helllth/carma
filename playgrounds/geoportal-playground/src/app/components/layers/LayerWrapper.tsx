@@ -91,7 +91,7 @@ const LayerWrapper = () => {
               )}
               role="button"
               onClick={() => {
-                document.getElementById('test').scrollLeft -= 200;
+                document.getElementById('test').scrollLeft -= 300;
               }}
             >
               <FontAwesomeIcon icon={faChevronLeft} />
@@ -104,7 +104,7 @@ const LayerWrapper = () => {
               )}
               role="button"
               onClick={() => {
-                document.getElementById('test').scrollLeft += 200;
+                document.getElementById('test').scrollLeft += 300;
               }}
             >
               <FontAwesomeIcon icon={faChevronRight} />
