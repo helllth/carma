@@ -130,9 +130,7 @@ const LayerWrapper = () => {
                 <LayerButton
                   title={layer.title}
                   id={layer.id}
-                  opacity={layer.opacity}
                   index={i}
-                  description={layer.description}
                   icon={
                     layer.title.includes('Orthofoto')
                       ? 'ortho'
