@@ -78,11 +78,12 @@ L.Control.MeasurePolygon = L.Control.extend({
     });
 
     L.drawLocal.draw.handlers.polygon.tooltip.start =
-      'Klicken, um mit dem Zeichnen der Form zu beginnen';
+      'Klicken Sie um die Messung zu starten';
     L.drawLocal.draw.handlers.polygon.tooltip.cont =
       'Klicken Sie, um mit dem Zeichnen der Form fortzufahren';
-    L.drawLocal.draw.handlers.polygon.tooltip.end =
-      'Klicken, um die Form zu beenden';
+    L.drawLocal.draw.handlers.polygon.tooltip.end = `Zum Beenden auf den letzten angelegt Punkt klicken.
+      Zum Messen einer Fläche auf den ersten angeleten.
+      Punkt klicken und die Fläche so schließen`;
 
     this._toggleMeasure(
       'img_plg_measure_polygon',
@@ -104,12 +105,18 @@ L.Control.MeasurePolygon = L.Control.extend({
 
     this.options.currenLine = this._measureHandler;
 
+    const tooltipContent = `
+  <div>
+    <div>Zum Beenden auf den letzten angelegten Punkt klicken.</div>
+    <div>Zum Messen einer Fläche auf den ersten angelegten Punkt klicken und die Fläche so schließen.</div>
+  </div>
+`;
+
     L.drawLocal.draw.handlers.polyline.tooltip.start =
-      'Klicken Sie, um die Linie zu zeichnen';
+      'Klicken Sie um die Messung zu starten';
     L.drawLocal.draw.handlers.polyline.tooltip.cont =
       'Klicken Sie, um mit dem Zeichnen der Linie fortzufahren';
-    L.drawLocal.draw.handlers.polyline.tooltip.end =
-      'Klicken Sie auf den letzten Punkt der Ziellinie';
+    L.drawLocal.draw.handlers.polyline.tooltip.end = tooltipContent;
 
     this._toggleMeasure(
       'img_plg_lines',
