@@ -366,6 +366,7 @@ L.Control.MeasurePolygon = L.Control.extend({
       const layers = event.layers;
       const latlngs = [];
       let index = 0;
+      let firsHovering = false;
 
       layers.eachLayer((layer) => {
         layer.customHandle = index++;
@@ -374,6 +375,15 @@ L.Control.MeasurePolygon = L.Control.extend({
             this.options.shapeMode = 'polygon';
             this.options.currenLine.completeShape();
           }
+        });
+        layer.on('mouseover', (e) => {
+          console.log('eee', latLng);
+          if (e.target.customHandle === 0 && firsHovering) {
+            //   L.drawLocal.draw.handlers.polyline.tooltip.end = `Punkt klicken und die Fläche so schließen.`;
+          }
+
+          firsHovering = true;
+          console.log('hover');
         });
 
         const latLng = layer.getLatLng();

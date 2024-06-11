@@ -8,8 +8,13 @@ const MeasurementTitle = ({
   setUpdateMeasurementStatus,
   tooltip,
 }) => {
+  console.log('xxx title', title);
   const [content, setContent] = useState(title.trim());
   const [oldContent, setOldContent] = useState(title);
+
+  useEffect(() => {
+    console.log('xxx content', content);
+  }, [content]);
 
   return (
     <div>
@@ -31,6 +36,7 @@ const MeasurementTitle = ({
         }}
         onFocus={(t) => {
           console.log('ccc focus');
+          console.log('xxx title on focus', title);
         }}
         contentEditable
         className="text-[14px] min-h-[20px] min-w-[10px]"
