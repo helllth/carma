@@ -16,7 +16,7 @@ if (typeof global === 'undefined') {
 
 function App() {
   return (
-    <TopicMapContextProvider>
+    <TopicMapContextProvider backgroundLayers="empty">
       <div className="flex flex-col h-screen w-full">
         <TopNavbar />
         <MapMeasurement />
