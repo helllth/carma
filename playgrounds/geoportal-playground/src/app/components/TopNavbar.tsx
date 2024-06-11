@@ -29,17 +29,17 @@ import './switch.css';
 const layerMap = {
   amtlich: {
     title: 'Amtlich',
-    layerType: 'tiles',
+    layers: 'amtlich@90',
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
   },
   luftbild: {
     title: 'Luftbild',
-    layerType: 'wmts',
+    layers: 'wupp-plan-live@100|trueOrtho2020@75|rvrSchrift@100',
     url: 'https://maps.wuppertal.de/karten?service=WMS&request=GetMap&layers=R102%3Aluftbild2022',
   },
   topographisch: {
     title: 'Topographisch',
-    layerType: 'vector',
+    layers: 'basemap_relief@40',
     url: 'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_top.json',
   },
 };
@@ -172,7 +172,7 @@ const TopNavbar = () => {
                 opacity: 1.0,
                 description: '',
                 url: layerMap[e.target.value].url,
-                layerType: layerMap[e.target.value].layerType,
+                layers: layerMap[e.target.value].layers,
               })
             );
           }}

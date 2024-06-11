@@ -8,7 +8,7 @@ import { getBackgroundLayer, getLayers } from '../store/slices/mapping';
 import LayerWrapper from './layers/LayerWrapper';
 // @ts-ignore
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
-import CismapLayer from 'react-cismap/CismapLayer';
+import getBackgroundLayers from '../helper/layer';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -51,13 +51,7 @@ const Map = () => {
         gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
         infoBox={<InfoBoxMeasurement />}
       >
-        <CismapLayer
-          key={'Cismaplayer.' + backgroundLayer.id}
-          opacity={1}
-          url={backgroundLayer.url}
-          style={backgroundLayer.url}
-          type={backgroundLayer.layerType}
-        />
+        {getBackgroundLayers({ layerString: backgroundLayer.layers })}
         <LayerWrapper />
         {layers.map((layer) => (
           <StyledWMSTileLayer

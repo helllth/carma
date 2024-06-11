@@ -4,7 +4,7 @@ import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import exp from 'constants';
 
 type BackgroundLayer = Layer & {
-  layerType: 'wms' | 'wmts' | 'wmts-nt' | 'tiles' | 'vector';
+  layers: string;
 };
 
 interface MappingState {
@@ -23,7 +23,7 @@ const initialState: MappingState = {
     opacity: 1.0,
     description: '',
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX=%7Bz%7D&TILEROW=%7By%7D&TILECOL=%7Bx%7D',
-    layerType: 'tiles',
+    layers: 'amtlich@100',
   },
 };
 
