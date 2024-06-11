@@ -193,7 +193,7 @@ const InfoBoxMeasurement = () => {
                 <MeasurementTitle
                   key={
                     visibleShapesData[currentMeasure].shapeId +
-                    visibleShapesData[currentMeasure]?.customTitle
+                    visibleShapesData[currentMeasure]?.area
                   }
                   order={getOrderOfShape(
                     visibleShapesData[currentMeasure].shapeId
@@ -201,7 +201,9 @@ const InfoBoxMeasurement = () => {
                   title={
                     visibleShapesData[currentMeasure]?.customTitle
                       ? visibleShapesData[currentMeasure]?.customTitle
-                      : `Linienzug`
+                      : addDefaultShapeNameToTitle(
+                          visibleShapesData[currentMeasure]
+                        )
                   }
                   shapeId={visibleShapesData[currentMeasure].shapeId}
                   setUpdateMeasurementStatus={setUpdateMeasurementStatus}
@@ -307,3 +309,15 @@ const InfoBoxMeasurement = () => {
 };
 
 export default InfoBoxMeasurement;
+
+function addDefaultShapeNameToTitle(shape) {
+  let newShape = 'Linienzug';
+  console.log('xxx area', shape.area);
+  console.log('xxx shape', shape);
+  if (shape.area) {
+    newShape = 'Polygon';
+  }
+  console.log('xxx', newShape);
+
+  return newShape;
+}
