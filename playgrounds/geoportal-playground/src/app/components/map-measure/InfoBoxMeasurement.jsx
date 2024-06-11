@@ -282,9 +282,9 @@ const InfoBoxMeasurement = () => {
           alwaysVisibleDiv={
             <div className="mt-2 w-[90%] p-2">
               <p className="text-[#212529] font-normal text-xs leading-normal">
-                {measurementsData.le !== 0
+                {measurementsData.length !== 0
                   ? 'Um alle Messungen zu sehen, klicken Sie auf den unten stehenden Link'
-                  : 'Aktuell sind keine Messungen vorhanden'}
+                  : 'Aktuell sind keine Messungen vorhanden. Neue Messungen können mit + angelegt werden.'}
               </p>
             </div>
           }
