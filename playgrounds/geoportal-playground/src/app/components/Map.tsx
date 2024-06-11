@@ -43,6 +43,7 @@ const Map = () => {
         locatorControl={true}
         mapStyle={{ width, height }}
         leafletMapProps={{ editable: true }}
+        minZoom={5}
         mappingBoundsChanged={(boundingbox) => {
           // console.log('xxx bbox', createWMSBbox(boundingbox));
         }}
