@@ -119,7 +119,7 @@ const TopNavbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-6 absolute left-1/2 -ml-60">
+      <div className="flex items-center gap-6 absolute left-1/2 -ml-[62px]">
         <Tooltip title="Refresh">
           <FontAwesomeIcon icon={faRedo} className="text-xl text-gray-300" />
         </Tooltip>

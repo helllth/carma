@@ -7,13 +7,18 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '../../helper/helper';
 import {
+  getLayers,
   getSelectedLayerIndex,
   removeLayer,
   setSelectedLayerIndex,
+  setShowLeftScrollButton,
+  setShowRightScrollButton,
 } from '../../store/slices/mapping';
 import SecondaryView from './SecondaryView';
 import { iconColorMap, iconMap } from './items';
 import './tabs.css';
+import { useInView } from 'react-intersection-observer';
+// import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
   title: string;
@@ -32,9 +37,13 @@ const LayerButton = ({
   layer,
   background,
 }: LayerButtonProps) => {
+  const { ref, inView } = useInView({
+    threshold: 0.99,
+  });
   const dispatch = useDispatch();
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showSettings = index === selectedLayerIndex;
+  const layersLength = useSelector(getLayers).length;
   let urlPrefix = window.location.origin + window.location.pathname;
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -62,8 +71,33 @@ const LayerButton = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (!inView && index === -1) {
+      dispatch(setShowLeftScrollButton(true));
+    }
+    if (!inView && index === layersLength - 1) {
+      dispatch(setShowRightScrollButton(true));
+    }
+    if (inView && index === -1) {
+      dispatch(setShowLeftScrollButton(false));
+    }
+    if (inView && index === layersLength - 1) {
+      dispatch(setShowRightScrollButton(false));
+    }
+  }, [inView]);
+
   return (
-    <div ref={buttonRef}>
+    <div
+      ref={(el) => {
+        buttonRef.current = el;
+        ref(el);
+      }}
+      className={cn(
+        '',
+        index === -1 && 'ml-auto',
+        index === layersLength - 1 && 'mr-auto'
+      )}
+    >
       <div
         ref={setNodeRef}
         onClick={(e) => {
