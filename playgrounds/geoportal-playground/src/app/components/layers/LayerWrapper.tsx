@@ -27,7 +27,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
-  faMap,
 } from '@fortawesome/free-solid-svg-icons';
 import { cn } from '../../helper/helper';
 import './button.css';
@@ -59,7 +58,7 @@ const LayerWrapper = () => {
       const newLayers = arrayMove(layers, originalPos, newPos);
 
       dispatch(setLayers(newLayers));
-      if (selectedLayerIndex !== -1) {
+      if (selectedLayerIndex !== -2) {
         dispatch(setSelectedLayerIndex(newPos));
       }
     }
@@ -91,7 +90,10 @@ const LayerWrapper = () => {
               )}
               role="button"
               onClick={() => {
-                document.getElementById('scrollWrapper').scrollLeft -= 300;
+                document.getElementById('scrollWrapper').scrollBy({
+                  left: -300,
+                  behavior: 'smooth',
+                });
               }}
             >
               <FontAwesomeIcon icon={faChevronLeft} />
@@ -104,7 +106,10 @@ const LayerWrapper = () => {
               )}
               role="button"
               onClick={() => {
-                document.getElementById('scrollWrapper').scrollLeft += 300;
+                document.getElementById('scrollWrapper').scrollBy({
+                  left: 300,
+                  behavior: 'smooth',
+                });
               }}
             >
               <FontAwesomeIcon icon={faChevronRight} />
@@ -112,7 +117,7 @@ const LayerWrapper = () => {
           )}
           <div
             id="scrollWrapper"
-            className="w-full scroll-smooth overflow-x-hidden flex items-center h-full gap-2"
+            className="w-full overflow-x-hidden flex items-center h-full gap-2"
           >
             <LayerButton
               icon="background"
