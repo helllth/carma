@@ -21,6 +21,7 @@ import {
   horizontalListSortingStrategy,
   arrayMove,
 } from '@dnd-kit/sortable';
+import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -75,6 +76,7 @@ const LayerWrapper = () => {
       onDragStart={() =>
         routedMapRef?.leafletMap?.leafletElement.dragging.disable()
       }
+      modifiers={[restrictToHorizontalAxis]}
     >
       <div
         ref={setNodeRef}
