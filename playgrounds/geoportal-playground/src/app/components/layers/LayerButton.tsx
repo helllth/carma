@@ -84,7 +84,10 @@ const LayerButton = ({
     if (inView && index === layersLength - 1) {
       dispatch(setShowRightScrollButton(false));
     }
-  }, [inView]);
+    if (!inView && selectedLayerIndex === index) {
+      document.getElementById(`layer-${id}`).scrollIntoView();
+    }
+  }, [inView, selectedLayerIndex]);
 
   return (
     <div
@@ -97,6 +100,7 @@ const LayerButton = ({
         index === -1 && 'ml-auto',
         index === layersLength - 1 && 'mr-auto'
       )}
+      id={`layer-${id}`}
     >
       <div
         ref={setNodeRef}
