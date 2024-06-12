@@ -287,22 +287,9 @@ L.Control.MeasurePolygon = L.Control.extend({
       this
     );
 
-    // L.DomEvent.on(
-    //   polygonIcon,
-    //   'click',
-    //   (event) => {
-    //     event.preventDefault();
-    //     this.drawingPolygons(map);
-    //   },
-    //   this
-    // );
-
     this._map = map;
 
     this._measureLayers = L.layerGroup().addTo(map);
-
-    // add initial shapes
-    // this.loadMeasurements(map);
 
     map.on('draw:created', (event) => {
       this.options.checkonedrawpoligon = false;
@@ -370,14 +357,17 @@ L.Control.MeasurePolygon = L.Control.extend({
           const latLngArray = coordinates.map((c) => [c.lat, c.lng]);
           latLngArray.push(latLngArray[0]);
           const area = this.calculateArea(latLngArray);
-          console.log('eee', L.drawLocal.draw.handlers.polyline.tooltip);
           if (e.target.customHandle === 0 && firsHovering) {
             this.options.cbUpdateAreaOfDrawingMeasurement(area);
             L.drawLocal.draw.handlers.polyline.tooltip.end = `Punkt klicken und die Fläche so schließen.`;
           }
-
           firsHovering = true;
-          console.log('hover');
+        });
+
+        layer.on('mouseout', (e) => {
+          if (e.target.customHandle === 0) {
+            this.options.cbUpdateAreaOfDrawingMeasurement(null);
+          }
         });
 
         const latLng = layer.getLatLng();
@@ -436,29 +426,11 @@ L.Control.MeasurePolygon = L.Control.extend({
 
   _UpdateAreaPerimetro: function (layer) {
     const latlngs = layer.getLatLngs()[0];
-    // const area = L.GeometryUtil.geodesicArea(latlngs);
-
-    // let perimeter = 0;
-    // for (let i = 0; i < latlngs.length - 1; i++) {
-    //   perimeter += latlngs[i].distanceTo(latlngs[i + 1]);
-    // }
-    // perimeter += latlngs[latlngs.length - 1].distanceTo(latlngs[0]);
-
-    // this._content.innerHTML = this.options.html_template;
 
     const options = {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     };
-    // let areaValue = `${area.toLocaleString('en-US', options)} m²`;
-    // let perimeterValue = `${perimeter.toLocaleString('en-US', options)} m`;
-
-    // Replace _p_area and _p_perimetro with the values
-    // let htmlContent = this.options.html_template;
-    // htmlContent = htmlContent.replace('_p_area', areaValue);
-    // htmlContent = htmlContent.replace('_p_perimetro', perimeterValue);
-
-    // this._content.innerHTML = htmlContent;
   },
 
   _UpdateDistance: function (layer) {
