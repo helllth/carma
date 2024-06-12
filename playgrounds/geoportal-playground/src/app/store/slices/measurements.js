@@ -114,8 +114,6 @@ export const getMeasurementMode = (state) => {
 
 export const updateTitle = (shapeId, customTitle) => {
   return function (dispatch, getState) {
-    console.log('rrr customTitle', customTitle);
-    console.log('rrr shapeId', shapeId);
     const state = getState();
     const shapeFromVisible = state.measurements.visibleShapes.filter(
       (s) => s.shapeId === shapeId

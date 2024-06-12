@@ -363,7 +363,11 @@ L.Control.MeasurePolygon = L.Control.extend({
           }
         });
         layer.on('mouseover', (e) => {
-          console.log('eee', latLng);
+          const coordinates = this._measureHandler._poly._latlngs;
+          const latLngArray = coordinates.map((c) => [c.lat, c.lng]);
+          latLngArray.push(latLngArray[0]);
+          const area = this.calculateArea(latLngArray);
+          console.log('eee', area);
           if (e.target.customHandle === 0 && firsHovering) {
             //   L.drawLocal.draw.handlers.polyline.tooltip.end = `Punkt klicken und die Fläche so schließen.`;
           }
