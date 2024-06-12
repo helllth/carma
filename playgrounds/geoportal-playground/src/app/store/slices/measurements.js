@@ -245,3 +245,19 @@ export const toggleMeasurementMode = () => {
     }
   };
 };
+
+export const updateAreaOfDrawingMeasurement = (newArea) => {
+  return function (dispatch, getState) {
+    const state = getState();
+    const shape = state.measurements.visibleShapes.map((s) => {
+      if (s.shapeId === 5555) {
+        return {
+          ...s,
+          area: newArea,
+        };
+      }
+      return s;
+    });
+    dispatch(setVisibleShapes(shape));
+  };
+};

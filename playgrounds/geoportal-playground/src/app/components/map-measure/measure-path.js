@@ -65,6 +65,9 @@ L.Control.MeasurePolygon = L.Control.extend({
     cbGetMeasurementModeHandler: function () {
       console.log('Callback function executed!');
     },
+    cbUpdateAreaOfDrawingMeasurement: function () {
+      console.log('Callback function executed!');
+    },
     visiblePolylines: [],
     localShapeStore: [],
     ifDrawing: false,
@@ -367,9 +370,10 @@ L.Control.MeasurePolygon = L.Control.extend({
           const latLngArray = coordinates.map((c) => [c.lat, c.lng]);
           latLngArray.push(latLngArray[0]);
           const area = this.calculateArea(latLngArray);
-          console.log('eee', area);
+          console.log('eee', L.drawLocal.draw.handlers.polyline.tooltip);
           if (e.target.customHandle === 0 && firsHovering) {
-            //   L.drawLocal.draw.handlers.polyline.tooltip.end = `Punkt klicken und die Fläche so schließen.`;
+            this.options.cbUpdateAreaOfDrawingMeasurement(area);
+            L.drawLocal.draw.handlers.polyline.tooltip.end = `Punkt klicken und die Fläche so schließen.`;
           }
 
           firsHovering = true;

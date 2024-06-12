@@ -37,6 +37,7 @@ import {
   setLastVisibleShapeActive,
   setDrawingWithLastActiveShape,
   setActiveShapeIfDrawCanseld,
+  updateAreaOfDrawingMeasurement,
 } from '../../store/slices/measurements';
 
 import { getMode, toggletModeMeasuremen } from '../../store/slices/ui';
@@ -86,6 +87,7 @@ const MapMeasurement = (props) => {
           saveLastActiveShapeIdBeforeDrawingHandler,
         cbChangeActiveCanceldShapeId: changeActiveCanceldShapeId,
         cbToggleMeasurementMode: toggleMeasurementModeHandler,
+        cbUpdateAreaOfDrawingMeasurement: updateAreaOfDrawingMeasurementHandler,
       };
 
       const measurePolygonControl = L.control.measurePolygon(customOptions);
@@ -215,7 +217,9 @@ const MapMeasurement = (props) => {
     dispatch(toggletModeMeasuremen());
   };
 
-  const getMeasurementModeHandler = () => {};
+  const updateAreaOfDrawingMeasurementHandler = (newArea) => {
+    dispatch(updateAreaOfDrawingMeasurement(newArea));
+  };
 
   return <div></div>;
 };
