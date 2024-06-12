@@ -1,26 +1,28 @@
-import React from "react";
-import { useContext, useEffect, useState } from "react";
+import React from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
-} from "react-cismap/contexts/FeatureCollectionContextProvider";
-import { LightBoxContext } from "react-cismap/contexts/LightBoxContextProvider";
+} from 'react-cismap/contexts/FeatureCollectionContextProvider';
+import { LightBoxContext } from 'react-cismap/contexts/LightBoxContextProvider';
 import {
   TopicMapStylingContext,
   TopicMapStylingDispatchContext,
-} from "react-cismap/contexts/TopicMapStylingContextProvider";
-import FeatureCollection from "react-cismap/FeatureCollection";
-import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
-import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+} from 'react-cismap/contexts/TopicMapStylingContextProvider';
+import FeatureCollection from 'react-cismap/FeatureCollection';
+import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
+import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 
 import {
   fotoKraemerCaptionFactory,
   fotoKraemerUrlManipulation,
   getGazData,
   getPOIColors,
-} from "./helper/helper";
-import { getPoiClusterIconCreatorFunction } from "./helper/styler";
-import Menu from "./Menu";
+  wuppMarketingCaptionFactory,
+} from './helper/helper';
+import { getPoiClusterIconCreatorFunction } from './helper/styler';
+import Menu from './Menu';
+import IconComp from 'react-cismap/commons/Icon';
 
 const Stadtplankarte = ({ poiColors }) => {
   const [gazData, setGazData] = useState([]);
@@ -68,14 +70,14 @@ const Stadtplankarte = ({ poiColors }) => {
           pixelwidth={350}
           config={{
             displaySecondaryInfoAction: false,
-            city: "Wuppertal",
+            city: 'Wuppertal',
             navigator: {
               noun: {
-                singular: "POI",
-                plural: "POIs",
+                singular: 'POI',
+                plural: 'POIs',
               },
             },
-            noCurrentFeatureTitle: "Keine POIs gefunden",
+            noCurrentFeatureTitle: 'Keine POIs gefunden',
             noCurrentFeatureContent: (
               <span>
                 Für mehr POI Ansicht mit verkleinern. Um nach Themenfeldern zu
@@ -83,8 +85,25 @@ const Stadtplankarte = ({ poiColors }) => {
               </span>
             ),
           }}
-          photoUrlManipulation={fotoKraemerUrlManipulation}
-          captionFactory={fotoKraemerCaptionFactory}
+          captionFactory={(linkUrl, feature) => {
+            const urheber =
+              feature?.properties?.urheber_foto || 'Stadt Wuppertal';
+            let link = 'https://www.wuppertal.de/service/impressum.php';
+
+            if (urheber === 'Stadt Wuppertal, Wuppertal Marketing GmbH') {
+              link =
+                'https://www.wuppertal.de/microsite/WMG/impressum_431218.php';
+            } else if (urheber === 'Stadt Wuppertal, Medienzentrum') {
+              link =
+                'https://www.wuppertal.de/kultur-bildung/schule/medienzentrum/index.php';
+            }
+
+            return (
+              <a href={link} target="_fotos">
+                <IconComp name="copyright" /> {urheber}
+              </a>
+            );
+          }}
         />
       }
     >
