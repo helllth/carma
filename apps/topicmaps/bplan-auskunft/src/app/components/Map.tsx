@@ -35,6 +35,7 @@ const Map = () => {
   const { routedMapRef } = useContext(TopicMapContext);
 
   const doubleMapClick = (event) => {
+    // @ts-ignore
     const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
       event.latlng.lng,
       event.latlng.lat,
@@ -137,6 +138,7 @@ const Map = () => {
               setFeatures([tmpHit]);
               setSelectedIndex(0);
 
+              // @ts-ignore
               const projectedFC = L.Proj.geoJson([tmpHit]);
               const bounds = projectedFC.getBounds();
               const map = routedMapRef?.leafletMap?.leafletElement;

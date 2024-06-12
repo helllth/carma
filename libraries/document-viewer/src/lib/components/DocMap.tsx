@@ -13,6 +13,7 @@ import 'leaflet/dist/leaflet.css';
 
 const { Rectangle } = TransitiveReactLeaflet;
 
+// @ts-ignore
 L.RasterCoords = Raster;
 
 interface DocMapsProps {
@@ -49,7 +50,7 @@ const DocMap = ({
     | undefined
   >();
   const { page } = useParams();
-  const leafletMapRef = useRef<L.Map>(null);
+  const leafletMapRef = useRef<any>(null);
   const [urlParams, setUrlParams] = useSearchParams();
 
   const WIDTH = 'WIDTH';
@@ -91,6 +92,7 @@ const DocMap = ({
         let layerBounds;
 
         if (leafletMapRef.current) {
+          // @ts-ignore
           const rc = new L.RasterCoords(
             leafletMapRef.current.leafletMap.leafletElement,
             dimensions
@@ -151,6 +153,7 @@ const DocMap = ({
       if (leafletSize.x / leafletSize.y < 1) {
         if (forDimension === WIDTH) {
           let targetDimensions = [dimensions[0], dimensions[1]];
+          // @ts-ignore
           const rc = new L.RasterCoords(
             leafletMapRef.current.leafletMap.leafletElement,
             targetDimensions
@@ -167,6 +170,7 @@ const DocMap = ({
             (dimensions[1] * leafletSize.x) / leafletSize.y,
             dimensions[1],
           ];
+          // @ts-ignore
           let rc = new L.RasterCoords(
             leafletMapRef.current.leafletMap.leafletElement,
             targetDimensions
@@ -184,6 +188,7 @@ const DocMap = ({
             dimensions[0],
             (dimensions[0] * leafletSize.y) / leafletSize.x,
           ];
+          // @ts-ignore
           let rc = new L.RasterCoords(
             leafletMapRef.current.leafletMap.leafletElement,
             targetDimensions
@@ -196,6 +201,7 @@ const DocMap = ({
           ];
         } else if (forDimension === HEIGHT) {
           let targetDimensions = [dimensions[0], dimensions[1]];
+          // @ts-ignore
           let rc = new L.RasterCoords(
             leafletMapRef.current.leafletMap.leafletElement,
             targetDimensions
@@ -209,6 +215,7 @@ const DocMap = ({
         }
       }
       if (leafletMapRef.current.leafletMap?.leafletElement) {
+        // @ts-ignore
         const rc = new L.RasterCoords(
           leafletMapRef.current.leafletMap.leafletElement,
           dimensions

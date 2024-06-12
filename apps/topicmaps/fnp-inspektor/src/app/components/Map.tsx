@@ -219,6 +219,7 @@ const Map = () => {
   }
 
   const doubleMapClick = (event) => {
+    // @ts-ignore
     const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
       event.latlng.lng,
       event.latlng.lat,
@@ -243,6 +244,7 @@ const Map = () => {
 
   const featureClick = (event) => {
     if (event.target.feature.selected) {
+      // @ts-ignore
       const projectedFC = L.Proj.geoJson(event.target.feature);
       const bounds = projectedFC.getBounds();
       const map = routedMapRef?.leafletMap?.leafletElement;
@@ -327,6 +329,7 @@ const Map = () => {
                 done: (result) => {
                   searchParams.set('aevVisible', 'true');
                   setSearchParams(searchParams);
+                  // @ts-ignore
                   const projectedFC = L.Proj.geoJson(result);
                   const bounds = projectedFC.getBounds();
                   const map = routedMapRef?.leafletMap?.leafletElement;
@@ -343,6 +346,7 @@ const Map = () => {
               searchForHauptnutzungen({
                 point: { x: hits[0].x, y: hits[0].y },
                 done: (result) => {
+                  // @ts-ignore
                   const projectedFC = L.Proj.geoJson(result);
                   const bounds = projectedFC.getBounds();
                   const map = routedMapRef?.leafletMap?.leafletElement;

@@ -222,6 +222,7 @@ const BPlanInfo = ({
             <td style={{ textAlign: 'center', verticalAlign: 'center' }}>
               <a
                 onClick={() => {
+                  // @ts-ignore
                   const projectedFC = L.Proj.geoJson(features);
                   const bounds = projectedFC.getBounds();
                   const map = routedMapRef?.leafletMap?.leafletElement;
