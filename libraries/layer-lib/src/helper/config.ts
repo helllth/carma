@@ -274,7 +274,7 @@ export const topicMapsConfig = {
       tags: ['E-Auto', 'Ladestationen', 'TopicMaps'],
       type: 'link',
       thumbnail:
-        'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/80/89/af/wuppertaler-schwebebahn.jpg?w=1200&h=-1&s=1',
+        'https://www.wuppertal.de/geoportal/emobil/autos/fotos/fertighauswelt.jpg',
 
       link: {
         name: 'wuppEmobi',
