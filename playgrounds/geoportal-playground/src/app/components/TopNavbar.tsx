@@ -163,8 +163,8 @@ const TopNavbar = () => {
           <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
         </Tooltip>
         <Tooltip title="Teilen">
-          <FontAwesomeIcon
-            icon={faShareNodes}
+          <button
+            className="hover:text-gray-600 text-xl"
             onClick={() => {
               const newConfig = {
                 backgroundLayer: backgroundLayer,
@@ -173,14 +173,26 @@ const TopNavbar = () => {
               const jsonString = JSON.stringify(newConfig);
               const compressed =
                 LZString.compressToEncodedURIComponent(jsonString);
-              copyToClipboard(
-                window.location.origin +
-                  window.location.pathname +
-                  `#/?data=${compressed}`
-              );
+              try {
+                copyToClipboard(
+                  window.location.origin +
+                    window.location.pathname +
+                    `#/?data=${compressed}`
+                );
+                messageApi.open({
+                  type: 'success',
+                  content: `Link wurde in die Zwischenablage kopiert.`,
+                });
+              } catch {
+                messageApi.open({
+                  type: 'error',
+                  content: `Es gab einen Fehler beim kopieren des Links`,
+                });
+              }
             }}
-            className="text-xl text-gray-300"
-          />
+          >
+            <FontAwesomeIcon icon={faShareNodes} />
+          </button>
         </Tooltip>
         {/* <Tooltip title="Messungen">
           <FontAwesomeIcon
