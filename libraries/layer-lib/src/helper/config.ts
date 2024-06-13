@@ -257,6 +257,44 @@ export const serviceConfig = {
     url: 'https://maps.wuppertal.de/gebiet',
     name: 'gebiet',
   },
+  wuppTopicMaps: {
+    type: 'topicmaps',
+    name: 'topicmaps',
+  },
+};
+
+export const topicMapsConfig = {
+  Title: 'Topic Maps',
+  serviceName: 'wuppTopicMaps',
+  layers: [
+    {
+      name: 'emobi',
+      Title: 'Ladestationen E-Autos',
+      Abstract: `Interaktive Kartenanwendung für die E-Auto-Ladestationen in Wuppertal.`,
+      tags: ['E-Auto', 'Ladestationen', 'Topic Maps'],
+      type: 'link',
+      thumbnail:
+        'https://www.wuppertal.de/geoportal/emobil/autos/fotos/fertighauswelt.jpg',
+
+      link: {
+        name: 'wuppEmobi',
+        url: 'https://wunda-geoportal.cismet.de/#/elektromobilitaet?title',
+      },
+    },
+    {
+      name: 'kitas',
+      Title: 'Kita-Finder',
+      Abstract: `Interaktive Kartenanwendung für die Recherche nach Kindertageseinrichtungen (Kitas) in Wuppertal - Spezialisierung des Online-Stadtplans Wuppertal mit spezifischen Filter- und Darstellungsoptionen.`,
+      tags: ['Kitas', 'Topic Maps'],
+      type: 'link',
+      thumbnail:
+        'https://images.unsplash.com/photo-1567746455504-cb3213f8f5b8?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      link: {
+        name: 'wuppKita',
+        url: 'https://wunda-geoportal.cismet.de/#/kitas',
+      },
+    },
+  ],
 };
 
 export const baseConfig = {
@@ -1305,5 +1343,8 @@ export const baseConfig = {
         ],
       },
     ],
+  },
+  TopicMaps: {
+    ...topicMapsConfig,
   },
 };

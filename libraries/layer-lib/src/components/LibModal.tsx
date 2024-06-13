@@ -128,30 +128,43 @@ const LibModal = ({
   useEffect(() => {
     let newLayers: any[] = [];
     for (let key in services) {
-      fetch(
-        `${services[key].url}?service=WMS&request=GetCapabilities&version=1.1.1`
-      )
-        .then((response) => {
-          return response.text();
-        })
-        .then((text) => {
-          const result = parser.toJSON(text);
-          if (result) {
-            if (config) {
-              const tmpLayer = getLayerStructure(
-                config,
-                result,
-                services[key].name
-              );
-              const mergedLayer = mergeStructures(tmpLayer, newLayers);
-              newLayers = mergedLayer;
-              setLayers(newLayers);
-              setAllLayers(newLayers);
-            } else {
-              getDataFromJson(result);
+      if (services[key].url) {
+        fetch(
+          `${services[key].url}?service=WMS&request=GetCapabilities&version=1.1.1`
+        )
+          .then((response) => {
+            return response.text();
+          })
+          .then((text) => {
+            const result = parser.toJSON(text);
+            if (result) {
+              if (config) {
+                const tmpLayer = getLayerStructure({
+                  config,
+                  wms: result,
+                  serviceName: services[key].name,
+                });
+                const mergedLayer = mergeStructures(tmpLayer, newLayers);
+                newLayers = mergedLayer;
+                setLayers(newLayers);
+                setAllLayers(newLayers);
+              } else {
+                getDataFromJson(result);
+              }
             }
-          }
-        });
+          });
+      } else {
+        if (services[key].type === 'topicmaps') {
+          const tmpLayer = getLayerStructure({
+            config,
+            serviceName: services[key].name,
+          });
+          const mergedLayer = mergeStructures(tmpLayer, newLayers);
+          newLayers = mergedLayer;
+          setLayers(newLayers);
+          setAllLayers(newLayers);
+        }
+      }
     }
   }, []);
 

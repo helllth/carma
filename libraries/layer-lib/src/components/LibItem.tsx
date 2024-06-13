@@ -3,6 +3,7 @@ import {
   faCircleInfo,
   faCircleMinus,
   faCirclePlus,
+  faExternalLinkAlt,
   faMinus,
   faPlus,
   faStar,
@@ -34,8 +35,7 @@ const LibItem = ({
   const [thumbUrl, setThumbUrl] = useState('');
   const title = layer.Title;
   const description = layer.Abstract;
-  const legendUrl = layer.Style.find((style) => style.LegendURL)?.LegendURL;
-  const tags = layer.tags.slice(1);
+  const tags = layer.type === 'link' ? layer.tags : layer.tags.slice(1);
   const name = layer.Name;
   const service = layer.service;
 
@@ -68,6 +68,16 @@ const LibItem = ({
   const [isLoading, setIsLoading] = useState(true);
 
   const hightlightTextIndexes = undefined;
+
+  const handleLayerClick = () => {
+    setAdditionalLayers({
+      name,
+      title,
+      url: service.url,
+      description,
+      legend: layer.Style.find((style) => style.LegendURL)?.LegendURL,
+    });
+  };
 
   useEffect(() => {
     let setActive = false;
@@ -159,51 +169,62 @@ const LibItem = ({
           />
           // <StarOutlined className="absolute right-1 top-1 text-3xl text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.9)]" />
         )}
-        <FontAwesomeIcon
-          onClick={() => {
-            setAdditionalLayers({
-              name,
-              title,
-              url: service.url,
-              description,
-            });
-          }}
-          icon={isActiveLayer ? faMinus : faPlus}
-          className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
-        />
+        {layer.type === 'link' ? (
+          <a
+            className="absolute left-1 top-1 text-3xl cursor-pointer z-50 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
+            href={layer.link.url}
+            target="topicMaps"
+          >
+            <FontAwesomeIcon icon={faExternalLinkAlt} />
+          </a>
+        ) : (
+          <FontAwesomeIcon
+            onClick={handleLayerClick}
+            icon={isActiveLayer ? faMinus : faPlus}
+            className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
+          />
+        )}
         <InfoOutlined className="absolute right-1 bottom-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50" />
         {hovered && (
           <div className="flex flex-col items-center gap-2 absolute top-0 w-full h-full justify-center p-8 px-10">
-            <button
-              className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
-              onClick={() => {
-                setAdditionalLayers({
-                  name,
-                  title,
-                  url: service.url,
-                  description,
-                  legend: legendUrl,
-                });
-              }}
-            >
-              {isActiveLayer ? (
+            {layer.type === 'link' ? (
+              <a
+                className="w-36 bg-gray-100 hover:no-underline text-black hover:text-neutral-600 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
+                href={layer.link.url}
+                target="topicMaps"
+              >
                 <>
                   <FontAwesomeIcon
-                    icon={faCircleMinus}
+                    icon={faExternalLinkAlt}
                     className="text-lg mr-2"
-                  />{' '}
-                  Entfernen
+                  />
+                  Öffnen
                 </>
-              ) : (
-                <>
-                  <FontAwesomeIcon
-                    icon={faCirclePlus}
-                    className="text-lg mr-2"
-                  />{' '}
-                  Hinzufügen
-                </>
-              )}
-            </button>
+              </a>
+            ) : (
+              <button
+                className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
+                onClick={handleLayerClick}
+              >
+                {isActiveLayer ? (
+                  <>
+                    <FontAwesomeIcon
+                      icon={faCircleMinus}
+                      className="text-lg mr-2"
+                    />{' '}
+                    Entfernen
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon
+                      icon={faCirclePlus}
+                      className="text-lg mr-2"
+                    />{' '}
+                    Hinzufügen
+                  </>
+                )}
+              </button>
+            )}
             <button
               disabled
               className="w-36 flex text-center items-center px-2 bg-gray-100 hover:bg-gray-50 rounded-md py-2 cursor-not-allowed"
