@@ -7,11 +7,7 @@ import {
 import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
 import FeatureCollection from 'react-cismap/FeatureCollection';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import {
-  fotoKraemerCaptionFactory,
-  fotoKraemerUrlManipulation,
-  getGazData,
-} from './helper/helper';
+import { getGazData } from './helper/helper';
 import Menu from './Menu';
 import { getPoiClusterIconCreatorFunction } from './helper/styler';
 import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
@@ -71,8 +67,6 @@ const Baederkarte = () => {
               </span>
             ),
           }}
-          photoUrlManipulation={fotoKraemerUrlManipulation}
-          captionFactory={fotoKraemerCaptionFactory}
         />
       }
     >

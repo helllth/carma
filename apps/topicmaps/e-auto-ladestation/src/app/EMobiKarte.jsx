@@ -8,10 +8,7 @@ import { LightBoxContext } from 'react-cismap/contexts/LightBoxContextProvider';
 import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
 import FeatureCollection from 'react-cismap/FeatureCollection';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import {
-  fotoKraemerCaptionFactory,
-  fotoKraemerUrlManipulation,
-} from './helper/helper';
+
 import Menu from './Menu';
 import { getPoiClusterIconCreatorFunction } from './helper/styler';
 import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
@@ -92,8 +89,6 @@ const EMobiKarte = () => {
               </span>
             ),
           }}
-          photoUrlManipulation={fotoKraemerUrlManipulation}
-          captionFactory={fotoKraemerCaptionFactory}
         />
       }
     >

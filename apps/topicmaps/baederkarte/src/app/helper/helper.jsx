@@ -115,23 +115,3 @@ export const getPOIColors = async (setPoiColors) => {
     setPoiColors(data);
   });
 };
-
-export const fotoKraemerUrlManipulation = (input) => {
-  if (input !== undefined || input === '') {
-    const ret = input.replace(
-      /https*:\/\/.*fotokraemer-wuppertal\.de/,
-      'https://wunda-geoportal-fotos.cismet.de/'
-    );
-    // console.log('converted url from ', input);
-    // console.log('converted url to ', ret);
-    return ret;
-  } else {
-    return undefined;
-  }
-};
-
-export const fotoKraemerCaptionFactory = (linkUrl) => (
-  <a href={linkUrl} target="_fotos">
-    <IconComp name="copyright" /> Peter Kr&auml;mer - Fotografie
-  </a>
-);

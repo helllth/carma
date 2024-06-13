@@ -5,21 +5,12 @@ import {
   FeatureCollectionDispatchContext,
 } from 'react-cismap/contexts/FeatureCollectionContextProvider';
 import { LightBoxContext } from 'react-cismap/contexts/LightBoxContextProvider';
-import {
-  TopicMapStylingContext,
-  TopicMapStylingDispatchContext,
-} from 'react-cismap/contexts/TopicMapStylingContextProvider';
+import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
 import FeatureCollection from 'react-cismap/FeatureCollection';
 import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 
-import {
-  fotoKraemerCaptionFactory,
-  fotoKraemerUrlManipulation,
-  getGazData,
-  getPOIColors,
-  wuppMarketingCaptionFactory,
-} from './helper/helper';
+import { getGazData } from './helper/helper';
 import { getPoiClusterIconCreatorFunction } from './helper/styler';
 import Menu from './Menu';
 import IconComp from 'react-cismap/commons/Icon';
