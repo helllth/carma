@@ -69,6 +69,16 @@ const LibItem = ({
 
   const hightlightTextIndexes = undefined;
 
+  const handleLayerClick = () => {
+    setAdditionalLayers({
+      name,
+      title,
+      url: service.url,
+      description,
+      legend: layer.Style.find((style) => style.LegendURL)?.LegendURL,
+    });
+  };
+
   useEffect(() => {
     let setActive = false;
     if (activeLayers.find((activeLayer) => activeLayer.id === name)) {
@@ -169,19 +179,45 @@ const LibItem = ({
           </a>
         ) : (
           <FontAwesomeIcon
-            onClick={() => {
-              setAdditionalLayers({
-                name,
-                title,
-                url: service.url,
-                description,
-              });
-            }}
+            onClick={handleLayerClick}
             icon={isActiveLayer ? faMinus : faPlus}
             className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
           />
         )}
         <InfoOutlined className="absolute right-1 bottom-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50" />
+        {hovered && (
+          <div className="flex flex-col items-center gap-2 absolute top-0 w-full h-full justify-center p-8 px-10">
+            <button
+              className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
+              onClick={handleLayerClick}
+            >
+              {isActiveLayer ? (
+                <>
+                  <FontAwesomeIcon
+                    icon={faCircleMinus}
+                    className="text-lg mr-2"
+                  />{' '}
+                  Entfernen
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon
+                    icon={faCirclePlus}
+                    className="text-lg mr-2"
+                  />{' '}
+                  Hinzufügen
+                </>
+              )}
+            </button>
+            <button
+              disabled
+              className="w-36 flex text-center items-center px-2 bg-gray-100 hover:bg-gray-50 rounded-md py-2 cursor-not-allowed"
+            >
+              <FontAwesomeIcon icon={faCircleInfo} className="mr-2 text-lg" />
+              Informationen
+            </button>
+          </div>
+        )}
       </div>
       <div className="flex flex-col gap-2 p-4">
         <h3 className="text-lg truncate">
