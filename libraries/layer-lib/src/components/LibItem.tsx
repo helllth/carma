@@ -3,6 +3,7 @@ import {
   faCircleInfo,
   faCircleMinus,
   faCirclePlus,
+  faExternalLinkAlt,
   faMinus,
   faPlus,
   faStar,
@@ -158,18 +159,28 @@ const LibItem = ({
           />
           // <StarOutlined className="absolute right-1 top-1 text-3xl text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.9)]" />
         )}
-        <FontAwesomeIcon
-          onClick={() => {
-            setAdditionalLayers({
-              name,
-              title,
-              url: service.url,
-              description,
-            });
-          }}
-          icon={isActiveLayer ? faMinus : faPlus}
-          className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
-        />
+        {layer.type === 'link' ? (
+          <a
+            className="absolute left-1 top-1 text-3xl cursor-pointer z-50 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
+            href={layer.link.url}
+            target="_blank"
+          >
+            <FontAwesomeIcon icon={faExternalLinkAlt} />
+          </a>
+        ) : (
+          <FontAwesomeIcon
+            onClick={() => {
+              setAdditionalLayers({
+                name,
+                title,
+                url: service.url,
+                description,
+              });
+            }}
+            icon={isActiveLayer ? faMinus : faPlus}
+            className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
+          />
+        )}
         <InfoOutlined className="absolute right-1 bottom-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50" />
       </div>
       <div className="flex flex-col gap-2 p-4">
