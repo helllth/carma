@@ -20,7 +20,6 @@ const initialState: MappingState = {
   selectedLayerIndex: -2,
   backgroundLayer: {
     title: 'Amtlich',
-    initialActive: true,
     id: 'amtlich',
     opacity: 1.0,
     description: '',

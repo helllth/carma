@@ -23,7 +23,6 @@ const parser = new WMSCapabilities();
 
 export type Layer = {
   title: string;
-  initialActive: boolean;
   url: string;
   id: string;
   opacity: number;
