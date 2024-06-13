@@ -27,6 +27,7 @@ import {
 } from '../store/slices/mapping';
 import './switch.css';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
+import LZString from 'lz-string';
 
 const layerMap = {
   amtlich: {
@@ -180,14 +181,19 @@ const TopNavbar = () => {
                 backgroundLayer: backgroundLayer,
                 layers: activeLayers,
               };
-              setConfig(JSON.stringify(newConfig));
+              const jsonString = JSON.stringify(newConfig);
+              const compressed =
+                LZString.compressToEncodedURIComponent(jsonString);
+              setConfig(compressed);
             }}
           >
             Save
           </Button>
           <Button
             onClick={() => {
-              const newConfig = JSON.parse(config);
+              const newConfig = JSON.parse(
+                LZString.decompressFromEncodedURIComponent(config)
+              );
               dispatch(setLayers(newConfig.layers));
               dispatch(setBackgroundLayer(newConfig.backgroundLayer));
             }}
