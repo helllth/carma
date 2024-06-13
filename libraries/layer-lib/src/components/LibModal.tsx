@@ -172,8 +172,6 @@ const LibModal = ({
     search(debouncedSearchTerm);
   }, [debouncedSearchTerm]);
 
-  console.log(layers);
-
   return (
     <Modal
       open={open}
