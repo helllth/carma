@@ -54,11 +54,15 @@ export const createBaseConfig = (layers) => {
   return null;
 };
 
-export const getLayerStructure = (
+export const getLayerStructure = ({
   config,
-  wms: WMSCapabilitiesJSON,
-  serviceName: string
-) => {
+  wms,
+  serviceName,
+}: {
+  config: any;
+  wms?: WMSCapabilitiesJSON;
+  serviceName: string;
+}) => {
   const structure: any[] = [];
   const services = serviceConfig;
   for (let category in config) {
@@ -78,14 +82,21 @@ export const getLayerStructure = (
         service = services[categoryConfig.serviceName];
       }
       if (service.name === serviceName) {
-        let foundLayer = findLayerAndAddTags(
-          wms.Capability.Layer,
-          layer.name,
-          []
-        );
+        let foundLayer;
+        if (wms) {
+          foundLayer = findLayerAndAddTags(
+            wms.Capability.Layer,
+            layer.name,
+            []
+          );
+        } else {
+          foundLayer = layer;
+        }
         if (foundLayer) {
-          foundLayer['url'] =
-            wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
+          if (wms) {
+            foundLayer['url'] =
+              wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
+          }
           let tags = foundLayer.tags;
           tags[0] = categoryObject.Title;
           foundLayer = { ...foundLayer, ...layer, tags, service };

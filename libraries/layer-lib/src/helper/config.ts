@@ -257,6 +257,44 @@ export const serviceConfig = {
     url: 'https://maps.wuppertal.de/gebiet',
     name: 'gebiet',
   },
+  wuppTopicMaps: {
+    type: 'topicmaps',
+    name: 'topicmaps',
+  },
+};
+
+export const topicMapsConfig = {
+  Title: 'Topic Maps',
+  serviceName: 'wuppTopicMaps',
+  layers: [
+    {
+      name: 'emobi',
+      Title: 'Ladestationen E-Autos',
+      Abstract: `Interaktive Kartenanwendung für die E-Auto-Ladestationen in Wuppertal.`,
+      tags: ['E-Auto', 'Ladestationen', 'TopicMaps'],
+      type: 'link',
+      thumbnail:
+        'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/80/89/af/wuppertaler-schwebebahn.jpg?w=1200&h=-1&s=1',
+
+      link: {
+        name: 'wuppEmobi',
+        url: 'https://wunda-geoportal.cismet.de/#/elektromobilitaet?title',
+      },
+    },
+    {
+      name: 'kitas',
+      Title: 'Kita-Finder',
+      Abstract: `Interaktive Kartenanwendung für die Recherche nach Kindertageseinrichtungen (Kitas) in Wuppertal - Spezialisierung des Online-Stadtplans Wuppertal mit spezifischen Filter- und Darstellungsoptionen.`,
+      tags: ['Kitas', 'TopicMaps'],
+      type: 'link',
+      thumbnail:
+        'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/80/89/af/wuppertaler-schwebebahn.jpg?w=1200&h=-1&s=1',
+      link: {
+        name: 'wuppKita',
+        url: 'https://wunda-geoportal.cismet.de/#/kitas',
+      },
+    },
+  ],
 };
 
 export const baseConfig = {
@@ -1305,5 +1343,8 @@ export const baseConfig = {
         ],
       },
     ],
+  },
+  TopicMaps: {
+    ...topicMapsConfig,
   },
 };
