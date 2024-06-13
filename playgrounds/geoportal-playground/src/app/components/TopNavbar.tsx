@@ -23,8 +23,10 @@ import {
   getLayers,
   removeLayer,
   setBackgroundLayer,
+  setLayers,
 } from '../store/slices/mapping';
 import './switch.css';
+import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 
 const layerMap = {
   amtlich: {
@@ -46,6 +48,18 @@ const layerMap = {
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const baseConfig = {
+    layers: [],
+    backgroundLayer: {
+      title: 'Amtlich',
+      id: 'amtlich',
+      opacity: 1.0,
+      description: '',
+      url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX=%7Bz%7D&TILEROW=%7By%7D&TILECOL=%7Bx%7D',
+      layers: 'amtlich@100',
+    },
+  };
+  const [config, setConfig] = useState(JSON.stringify(baseConfig));
   // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
   const backgroundLayer = useSelector(getBackgroundLayer);
@@ -58,9 +72,8 @@ const TopNavbar = () => {
   const updateLayers = (layer: any) => {
     const url = layer.url;
 
-    const newLayer = {
+    const newLayer: Layer = {
       title: layer.title,
-      initialActive: true,
       id: layer.name,
       opacity: 0.7,
       url,
@@ -160,6 +173,28 @@ const TopNavbar = () => {
       </div>
 
       <div className="flex items-center gap-6">
+        <div>
+          <Button
+            onClick={() => {
+              const newConfig = {
+                backgroundLayer: backgroundLayer,
+                layers: activeLayers,
+              };
+              setConfig(JSON.stringify(newConfig));
+            }}
+          >
+            Save
+          </Button>
+          <Button
+            onClick={() => {
+              const newConfig = JSON.parse(config);
+              dispatch(setLayers(newConfig.layers));
+              dispatch(setBackgroundLayer(newConfig.backgroundLayer));
+            }}
+          >
+            Load
+          </Button>
+        </div>
         <Radio.Group
           value={backgroundLayer.id}
           onChange={(e) => {
@@ -168,7 +203,6 @@ const TopNavbar = () => {
               setBackgroundLayer({
                 id: e.target.value,
                 title: layerMap[e.target.value].title,
-                initialActive: true,
                 opacity: 1.0,
                 description: '',
                 url: layerMap[e.target.value].url,
