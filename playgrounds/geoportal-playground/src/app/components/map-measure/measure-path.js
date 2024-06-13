@@ -236,6 +236,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     );
 
     modeBtn.id = 'draw_shape';
+    modeBtn.title = 'Flächen- und Umfangsmessungen';
 
     modeBtn.innerHTML = this.options.mode_btn;
 
@@ -246,7 +247,8 @@ L.Control.MeasurePolygon = L.Control.extend({
     </div>
   `;
     lineIcon.href = '#';
-    // lineIcon.title = 'Flächen- und Umfangsmessungen';
+    lineIcon.title =
+      'Drücken die Taste, um den Messmodus ein- oder auszuschalten.';
     // this.ui_icon = icon;
 
     // const polygonContainer = L.DomUtil.create(
