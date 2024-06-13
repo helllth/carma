@@ -288,7 +288,7 @@ export const topicMapsConfig = {
       tags: ['Kitas', 'Topic Maps'],
       type: 'link',
       thumbnail:
-        'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/80/89/af/wuppertaler-schwebebahn.jpg?w=1200&h=-1&s=1',
+        'https://images.unsplash.com/photo-1567746455504-cb3213f8f5b8?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       link: {
         name: 'wuppKita',
         url: 'https://wunda-geoportal.cismet.de/#/kitas',
