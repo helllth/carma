@@ -367,6 +367,14 @@ L.Control.MeasurePolygon = L.Control.extend({
 
         layer.on('mouseout', (e) => {
           if (e.target.customHandle === 0) {
+            const tooltipContent = `
+            <div>
+              <div>Zum Beenden auf den letzten angelegten Punkt klicken.</div>
+              <div>Zum Messen einer Fläche auf den ersten angelegten Punkt klicken und die Fläche so schließen.</div>
+            </div>
+          `;
+            L.drawLocal.draw.handlers.polyline.tooltip.end = tooltipContent;
+
             this.options.cbUpdateAreaOfDrawingMeasurement(null);
           }
         });
