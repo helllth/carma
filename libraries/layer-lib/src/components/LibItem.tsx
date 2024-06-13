@@ -35,7 +35,7 @@ const LibItem = ({
   const [thumbUrl, setThumbUrl] = useState('');
   const title = layer.Title;
   const description = layer.Abstract;
-  const tags = layer.tags.slice(1);
+  const tags = layer.type === 'link' ? layer.tags : layer.tags.slice(1);
   const name = layer.Name;
   const service = layer.service;
 
@@ -163,7 +163,7 @@ const LibItem = ({
           <a
             className="absolute left-1 top-1 text-3xl cursor-pointer z-50 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
             href={layer.link.url}
-            target="_blank"
+            target="topicMaps"
           >
             <FontAwesomeIcon icon={faExternalLinkAlt} />
           </a>
