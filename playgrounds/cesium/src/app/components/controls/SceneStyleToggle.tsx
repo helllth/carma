@@ -27,7 +27,14 @@ export const SceneStyleToggle = (props: SceneStyleToggleProps) => {
   }, [initialStyle]);
 
   return (
-    <OnMapButton title="Toggle Terrain" onClick={handleToggle}>
+    <OnMapButton
+      title={
+        isPrimaryStyle
+          ? 'Wechsel zur vereinfachten Ansicht'
+          : 'Wechsel zur realistischen Ansicht'
+      }
+      onClick={handleToggle}
+    >
       <FontAwesomeIcon
         icon={isPrimaryStyle ? faCubes : faTreeCity}
       ></FontAwesomeIcon>
