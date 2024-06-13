@@ -28,6 +28,8 @@ import {
 import './switch.css';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import LZString from 'lz-string';
+import { useLocation } from 'react-router-dom';
+import { useCopyToClipboard } from '@uidotdev/usehooks';
 
 const layerMap = {
   amtlich: {
@@ -67,6 +69,7 @@ const TopNavbar = () => {
   const dispatch = useDispatch();
   const thumbnails = useSelector(getThumbnails);
   const activeLayers = useSelector(getLayers);
+  const [copiedText, copyToClipboard] = useCopyToClipboard();
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -162,6 +165,20 @@ const TopNavbar = () => {
         <Tooltip title="Teilen">
           <FontAwesomeIcon
             icon={faShareNodes}
+            onClick={() => {
+              const newConfig = {
+                backgroundLayer: backgroundLayer,
+                layers: activeLayers,
+              };
+              const jsonString = JSON.stringify(newConfig);
+              const compressed =
+                LZString.compressToEncodedURIComponent(jsonString);
+              copyToClipboard(
+                window.location.origin +
+                  window.location.pathname +
+                  `#/?data=${compressed}`
+              );
+            }}
             className="text-xl text-gray-300"
           />
         </Tooltip>
