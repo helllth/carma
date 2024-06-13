@@ -247,8 +247,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     </div>
   `;
     lineIcon.href = '#';
-    lineIcon.title =
-      'Drücken die Taste, um den Messmodus ein- oder auszuschalten.';
+    lineIcon.title = 'Messmodus';
     // this.ui_icon = icon;
 
     // const polygonContainer = L.DomUtil.create(
@@ -361,7 +360,7 @@ L.Control.MeasurePolygon = L.Control.extend({
           const area = this.calculateArea(latLngArray);
           if (e.target.customHandle === 0 && firsHovering) {
             this.options.cbUpdateAreaOfDrawingMeasurement(area);
-            L.drawLocal.draw.handlers.polyline.tooltip.end = `Punkt klicken und die Fläche so schließen.`;
+            L.drawLocal.draw.handlers.polyline.tooltip.end = `Punkt klicken um die Fläche zu schließen`;
           }
           firsHovering = true;
         });
