@@ -19,6 +19,10 @@ const router = createHashRouter([
     path: '/alternative',
     element: <AlternativeUI />,
   },
+  {
+    path: '/publish',
+    element: <App published={true} />,
+  },
 ]);
 
 const originalWarn = console.warn.bind(console);

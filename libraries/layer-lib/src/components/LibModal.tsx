@@ -23,11 +23,11 @@ const parser = new WMSCapabilities();
 
 export type Layer = {
   title: string;
-  initialActive: boolean;
   url: string;
   id: string;
   opacity: number;
   description: string;
+  visible: boolean;
   icon?: string;
   legend?: { Format: string; OnlineResource: string; size: [number, number] }[];
 };

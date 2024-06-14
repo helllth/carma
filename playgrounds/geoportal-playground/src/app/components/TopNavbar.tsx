@@ -1,4 +1,4 @@
-import { Button, Radio, Tooltip, message } from 'antd';
+import { Button, Popover, Radio, Tooltip, message } from 'antd';
 // @ts-ignore
 import {
   faB,
@@ -8,6 +8,8 @@ import {
   faPrint,
   faRedo,
   faShareNodes,
+  faEye,
+  faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
@@ -15,6 +17,7 @@ import { useContext, useState } from 'react';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
 import { LayerLib } from '@cismet/layer-lib';
+import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { getThumbnails, setThumbnail } from '../store/slices/layers';
 import {
@@ -24,7 +27,9 @@ import {
   removeLayer,
   setBackgroundLayer,
 } from '../store/slices/mapping';
+import Share from './Share';
 import './switch.css';
+import { getShowLayerButtons, setShowLayerButtons } from '../store/slices/ui';
 
 const layerMap = {
   amtlich: {
@@ -52,19 +57,20 @@ const TopNavbar = () => {
   const dispatch = useDispatch();
   const thumbnails = useSelector(getThumbnails);
   const activeLayers = useSelector(getLayers);
+  const showLayerButtons = useSelector(getShowLayerButtons);
 
   const [messageApi, contextHolder] = message.useMessage();
 
   const updateLayers = (layer: any) => {
     const url = layer.url;
 
-    const newLayer = {
+    const newLayer: Layer = {
       title: layer.title,
-      initialActive: true,
       id: layer.name,
       opacity: 0.7,
       url,
       description: layer.description,
+      visible: true,
       legend: layer.legend,
     };
 
@@ -145,18 +151,27 @@ const TopNavbar = () => {
         <Tooltip title="Drucken">
           <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
         </Tooltip>
-        <Tooltip title="Teilen">
-          <FontAwesomeIcon
-            icon={faShareNodes}
-            className="text-xl text-gray-300"
-          />
+        <Tooltip
+          title={`Layer Buttons ${
+            showLayerButtons ? 'ausblenden' : 'anzeigen'
+          }`}
+        >
+          <button
+            className="text-xl hover:text-gray-600"
+            onClick={() => {
+              dispatch(setShowLayerButtons(!showLayerButtons));
+            }}
+          >
+            <FontAwesomeIcon icon={showLayerButtons ? faEye : faEyeSlash} />
+          </button>
         </Tooltip>
-        {/* <Tooltip title="Messungen">
-          <FontAwesomeIcon
-            icon={faDrawPolygon}
-            className="text-xl text-gray-300"
-          />
-        </Tooltip> */}
+        <Tooltip title="Teilen">
+          <Popover trigger="click" placement="bottom" content={<Share />}>
+            <button className="hover:text-gray-600 text-xl">
+              <FontAwesomeIcon icon={faShareNodes} />
+            </button>
+          </Popover>
+        </Tooltip>
       </div>
 
       <div className="flex items-center gap-6">
@@ -168,9 +183,9 @@ const TopNavbar = () => {
               setBackgroundLayer({
                 id: e.target.value,
                 title: layerMap[e.target.value].title,
-                initialActive: true,
                 opacity: 1.0,
                 description: '',
+                visible: true,
                 url: layerMap[e.target.value].url,
                 layers: layerMap[e.target.value].layers,
               })

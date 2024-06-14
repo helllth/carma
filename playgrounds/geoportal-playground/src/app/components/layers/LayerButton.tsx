@@ -1,12 +1,18 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { faLayerGroup, faX } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEye,
+  faEyeSlash,
+  faLayerGroup,
+  faX,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '../../helper/helper';
 import {
+  changeVisibility,
   getLayers,
   getSelectedLayerIndex,
   removeLayer,
@@ -18,6 +24,7 @@ import SecondaryView from './SecondaryView';
 import { iconColorMap, iconMap } from './items';
 import './tabs.css';
 import { useInView } from 'react-intersection-observer';
+import { getShowLayerHideButtons } from '../../store/slices/ui';
 // import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
@@ -42,6 +49,7 @@ const LayerButton = ({
   });
   const dispatch = useDispatch();
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
+  const showLayerHideButtons = useSelector(getShowLayerHideButtons);
   const showSettings = index === selectedLayerIndex;
   const layersLength = useSelector(getLayers).length;
   let urlPrefix = window.location.origin + window.location.pathname;
@@ -140,13 +148,29 @@ const LayerButton = ({
           <>
             <span className="text-base">{title}</span>
             <button
-              className="p-1 hover:text-gray-500 text-gray-600"
+              className="hover:text-gray-500 text-gray-600 flex items-center justify-center"
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(removeLayer(id));
+                if (showLayerHideButtons) {
+                  if (layer.visible) {
+                    dispatch(changeVisibility({ id, visible: false }));
+                  } else {
+                    dispatch(changeVisibility({ id, visible: true }));
+                  }
+                } else {
+                  dispatch(removeLayer(id));
+                }
               }}
             >
-              <FontAwesomeIcon icon={faX} />
+              <FontAwesomeIcon
+                icon={
+                  showLayerHideButtons
+                    ? layer.visible
+                      ? faEye
+                      : faEyeSlash
+                    : faX
+                }
+              />
             </button>
           </>
         )}

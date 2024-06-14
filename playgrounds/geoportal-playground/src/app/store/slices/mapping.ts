@@ -1,9 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
-import exp from 'constants';
 
-type BackgroundLayer = Layer & {
+export type BackgroundLayer = Layer & {
   layers: string;
 };
 
@@ -13,6 +12,10 @@ interface MappingState {
   backgroundLayer: BackgroundLayer;
   showLeftScrollButton: boolean;
   showRightScrollButton: boolean;
+  showFullscreenButton: boolean;
+  showLocatorButton: boolean;
+  showMeasurementButton: boolean;
+  showHamburgerMenu: boolean;
 }
 
 const initialState: MappingState = {
@@ -20,15 +23,19 @@ const initialState: MappingState = {
   selectedLayerIndex: -2,
   backgroundLayer: {
     title: 'Amtlich',
-    initialActive: true,
     id: 'amtlich',
     opacity: 1.0,
     description: '',
+    visible: true,
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX=%7Bz%7D&TILEROW=%7By%7D&TILECOL=%7Bx%7D',
     layers: 'amtlich@100',
   },
   showLeftScrollButton: false,
   showRightScrollButton: false,
+  showFullscreenButton: true,
+  showLocatorButton: true,
+  showMeasurementButton: true,
+  showHamburgerMenu: false,
 };
 
 const slice = createSlice({
@@ -53,6 +60,22 @@ const slice = createSlice({
           return {
             ...obj,
             opacity: action.payload.opacity,
+          };
+        } else {
+          return obj;
+        }
+      });
+      state.layers = newLayers;
+    },
+    changeVisibility(
+      state,
+      action: PayloadAction<{ id: string; visible: boolean }>
+    ) {
+      const newLayers = state.layers.map((obj) => {
+        if (obj.id === action.payload.id) {
+          return {
+            ...obj,
+            visible: action.payload.visible,
           };
         } else {
           return obj;
@@ -88,6 +111,18 @@ const slice = createSlice({
     setShowRightScrollButton(state, action) {
       state.showRightScrollButton = action.payload;
     },
+    setShowFullscreenButton(state, action: PayloadAction<boolean>) {
+      state.showFullscreenButton = action.payload;
+    },
+    setShowLocatorButton(state, action: PayloadAction<boolean>) {
+      state.showLocatorButton = action.payload;
+    },
+    setShowMeasurementButton(state, action: PayloadAction<boolean>) {
+      state.showMeasurementButton = action.payload;
+    },
+    setShowHamburgerMenu(state, action: PayloadAction<boolean>) {
+      state.showHamburgerMenu = action.payload;
+    },
   },
 });
 
@@ -98,12 +133,17 @@ export const {
   appendLayer,
   removeLayer,
   changeOpacity,
+  changeVisibility,
   setSelectedLayerIndex,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
   setBackgroundLayer,
   setShowLeftScrollButton,
   setShowRightScrollButton,
+  setShowFullscreenButton,
+  setShowLocatorButton,
+  setShowMeasurementButton,
+  setShowHamburgerMenu,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -124,4 +164,20 @@ export const getShowLeftScrollButton = (state: RootState) => {
 
 export const getShowRightScrollButton = (state: RootState) => {
   return state.mapping.showRightScrollButton;
+};
+
+export const getShowFullscreenButton = (state: RootState) => {
+  return state.mapping.showFullscreenButton;
+};
+
+export const getShowLocatorButton = (state: RootState) => {
+  return state.mapping.showLocatorButton;
+};
+
+export const getShowMeasurementButton = (state: RootState) => {
+  return state.mapping.showMeasurementButton;
+};
+
+export const getShowHamburgerMenu = (state: RootState) => {
+  return state.mapping.showHamburgerMenu;
 };
