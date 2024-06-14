@@ -9,7 +9,7 @@ import LayerWrapper from './layers/LayerWrapper';
 // @ts-ignore
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 import getBackgroundLayers from '../helper/layer';
-import { getMode } from '../store/slices/ui';
+import { getMode, getShowLayerButtons } from '../store/slices/ui';
 import { useSearchParams } from 'react-router-dom';
 
 const Map = () => {
@@ -20,6 +20,7 @@ const Map = () => {
   const layers = useSelector(getLayers);
   const backgroundLayer = useSelector(getBackgroundLayer);
   const mode = useSelector(getMode);
+  const showLayerButtons = useSelector(getShowLayerButtons);
   const [urlParams, setUrlParams] = useSearchParams();
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const Map = () => {
         }
       >
         {getBackgroundLayers({ layerString: backgroundLayer.layers })}
-        <LayerWrapper />
+        {showLayerButtons && <LayerWrapper />}
         {layers.map((layer) => (
           <StyledWMSTileLayer
             type="wms"

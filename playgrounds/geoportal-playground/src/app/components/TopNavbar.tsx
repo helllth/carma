@@ -8,6 +8,8 @@ import {
   faPrint,
   faRedo,
   faShareNodes,
+  faEye,
+  faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
@@ -27,6 +29,7 @@ import {
 } from '../store/slices/mapping';
 import Share from './Share';
 import './switch.css';
+import { getShowLayerButtons, setShowLayerButtons } from '../store/slices/ui';
 
 const layerMap = {
   amtlich: {
@@ -54,6 +57,7 @@ const TopNavbar = () => {
   const dispatch = useDispatch();
   const thumbnails = useSelector(getThumbnails);
   const activeLayers = useSelector(getLayers);
+  const showLayerButtons = useSelector(getShowLayerButtons);
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -146,19 +150,27 @@ const TopNavbar = () => {
         <Tooltip title="Drucken">
           <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
         </Tooltip>
-        {/* <Tooltip title="Teilen"> */}
-        <Popover trigger="click" placement="bottom" content={<Share />}>
-          <button className="hover:text-gray-600 text-xl">
-            <FontAwesomeIcon icon={faShareNodes} />
+        <Tooltip
+          title={`Layer Buttons ${
+            showLayerButtons ? 'ausblenden' : 'anzeigen'
+          }`}
+        >
+          <button
+            className="text-xl hover:text-gray-600"
+            onClick={() => {
+              dispatch(setShowLayerButtons(!showLayerButtons));
+            }}
+          >
+            <FontAwesomeIcon icon={showLayerButtons ? faEye : faEyeSlash} />
           </button>
-        </Popover>
-        {/* </Tooltip> */}
-        {/* <Tooltip title="Messungen">
-          <FontAwesomeIcon
-            icon={faDrawPolygon}
-            className="text-xl text-gray-300"
-          />
-        </Tooltip> */}
+        </Tooltip>
+        <Tooltip title="Teilen">
+          <Popover trigger="click" placement="bottom" content={<Share />}>
+            <button className="hover:text-gray-600 text-xl">
+              <FontAwesomeIcon icon={faShareNodes} />
+            </button>
+          </Popover>
+        </Tooltip>
       </div>
 
       <div className="flex items-center gap-6">

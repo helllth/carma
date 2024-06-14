@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 
 interface UIState {
@@ -6,6 +6,7 @@ interface UIState {
   showInfoText: boolean;
   activeTabKey: string;
   mode: string;
+  showLayerButtons: boolean;
 }
 
 const initialState: UIState = {
@@ -13,6 +14,7 @@ const initialState: UIState = {
   showInfoText: false,
   activeTabKey: '1',
   mode: 'default',
+  showLayerButtons: true,
 };
 
 const slice = createSlice({
@@ -31,13 +33,21 @@ const slice = createSlice({
     setMode(state, action) {
       state.mode = action.payload;
     },
+    setShowLayerButtons(state, action: PayloadAction<boolean>) {
+      state.showLayerButtons = action.payload;
+    },
   },
 });
 
 export default slice;
 
-export const { setShowInfo, setShowInfoText, setActiveTabKey, setMode } =
-  slice.actions;
+export const {
+  setShowInfo,
+  setShowInfoText,
+  setActiveTabKey,
+  setMode,
+  setShowLayerButtons,
+} = slice.actions;
 
 export const getShowInfo = (state: RootState) => {
   return state.ui.showInfo;
@@ -53,6 +63,10 @@ export const getActiveTabKey = (state: RootState) => {
 
 export const getMode = (state: RootState) => {
   return state.ui.mode;
+};
+
+export const getShowLayerButtons = (state: RootState) => {
+  return state.ui.showLayerButtons;
 };
 
 export const toggletModeMeasuremen = () => {
