@@ -82,7 +82,7 @@ const LayerWrapper = () => {
         ref={setNodeRef}
         style={style}
         id="buttonWrapper"
-        className="absolute w-full h-9 pl-28 pr-[20px] top-2.5 z-[999]"
+        className="absolute w-full h-9 pl-20 pr-[20px] top-2.5 z-[999]"
       >
         <div className="relative w-[calc(100%-40px)] mx-auto h-full">
           {showLeftScrollButton && (

@@ -129,13 +129,6 @@ const TopNavbar = () => {
         <Tooltip title="Refresh">
           <FontAwesomeIcon icon={faRedo} className="text-xl text-gray-300" />
         </Tooltip>
-        <Tooltip title="Legende">
-          <FontAwesomeIcon
-            icon={faLandmark}
-            className="text-xl text-gray-300"
-          />
-        </Tooltip>
-        {/* <FontAwesomeIcon icon={faMap} className="text-xl" /> */}
         <Tooltip title="Layer">
           <FontAwesomeIcon
             icon={faLayerGroup}
