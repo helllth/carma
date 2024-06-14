@@ -15,7 +15,11 @@ import { useContext, useState } from 'react';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
 import { LayerLib } from '@cismet/layer-lib';
+import { useCopyToClipboard } from '@uidotdev/usehooks';
+import { Layer } from 'libraries/layer-lib/src/components/LibModal';
+import LZString from 'lz-string';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { getThumbnails, setThumbnail } from '../store/slices/layers';
 import {
   appendLayer,
@@ -23,13 +27,8 @@ import {
   getLayers,
   removeLayer,
   setBackgroundLayer,
-  setLayers,
 } from '../store/slices/mapping';
 import './switch.css';
-import { Layer } from 'libraries/layer-lib/src/components/LibModal';
-import LZString from 'lz-string';
-import { useLocation } from 'react-router-dom';
-import { useCopyToClipboard } from '@uidotdev/usehooks';
 
 const layerMap = {
   amtlich: {
@@ -70,6 +69,7 @@ const TopNavbar = () => {
   const thumbnails = useSelector(getThumbnails);
   const activeLayers = useSelector(getLayers);
   const [copiedText, copyToClipboard] = useCopyToClipboard();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -174,11 +174,13 @@ const TopNavbar = () => {
               const compressed =
                 LZString.compressToEncodedURIComponent(jsonString);
               try {
-                copyToClipboard(
-                  window.location.origin +
-                    window.location.pathname +
-                    `#/?data=${compressed}`
-                );
+                const baseUrl =
+                  window.location.origin + window.location.pathname;
+                const queryString = new URLSearchParams(
+                  searchParams
+                ).toString();
+                const url = `${baseUrl}#/?data=${compressed}&${queryString}`;
+                copyToClipboard(url);
                 messageApi.open({
                   type: 'success',
                   content: `Link wurde in die Zwischenablage kopiert.`,
