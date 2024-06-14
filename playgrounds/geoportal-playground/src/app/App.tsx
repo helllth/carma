@@ -10,17 +10,19 @@ import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvid
 import Map from './components/Map';
 import TopNavbar from './components/TopNavbar';
 import MapMeasurement from './components/map-measure/MapMeasurement';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import LZString from 'lz-string';
 import { useDispatch } from 'react-redux';
 import { setBackgroundLayer, setLayers } from './store/slices/mapping';
+import { setShowLayerHideButtons } from './store/slices/ui';
 if (typeof global === 'undefined') {
   window.global = window;
 }
 
 function App() {
   let [searchParams, setSearchParams] = useSearchParams();
+  const [allowUiChanges, setAllowUiChanges] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,6 +37,31 @@ function App() {
       setSearchParams(searchParams);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.shiftKey) {
+        dispatch(setShowLayerHideButtons(true));
+      }
+    };
+
+    const onKeyUp = () => {
+      if (allowUiChanges) {
+        dispatch(setShowLayerHideButtons(false));
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+
+    document.addEventListener('keyup', onKeyUp);
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+
+      document.removeEventListener('keyup', onKeyUp);
+    };
+  }, []);
+
   return (
     <TopicMapContextProvider>
       <div className="flex flex-col h-screen w-full">

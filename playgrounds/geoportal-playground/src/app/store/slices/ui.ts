@@ -7,6 +7,7 @@ interface UIState {
   activeTabKey: string;
   mode: string;
   showLayerButtons: boolean;
+  showLayerHideButtons: boolean;
 }
 
 const initialState: UIState = {
@@ -15,6 +16,7 @@ const initialState: UIState = {
   activeTabKey: '1',
   mode: 'default',
   showLayerButtons: true,
+  showLayerHideButtons: false,
 };
 
 const slice = createSlice({
@@ -36,6 +38,9 @@ const slice = createSlice({
     setShowLayerButtons(state, action: PayloadAction<boolean>) {
       state.showLayerButtons = action.payload;
     },
+    setShowLayerHideButtons(state, action: PayloadAction<boolean>) {
+      state.showLayerHideButtons = action.payload;
+    },
   },
 });
 
@@ -47,6 +52,7 @@ export const {
   setActiveTabKey,
   setMode,
   setShowLayerButtons,
+  setShowLayerHideButtons,
 } = slice.actions;
 
 export const getShowInfo = (state: RootState) => {
@@ -67,6 +73,10 @@ export const getMode = (state: RootState) => {
 
 export const getShowLayerButtons = (state: RootState) => {
   return state.ui.showLayerButtons;
+};
+
+export const getShowLayerHideButtons = (state: RootState) => {
+  return state.ui.showLayerHideButtons;
 };
 
 export const toggletModeMeasuremen = () => {
