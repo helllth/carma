@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useContext } from 'react';
 // @ts-ignore
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import { getGazData } from '../helper/helper';
+import { getGazData, paramsToObject } from '../helper/helper';
 import { useSelector } from 'react-redux';
 import InfoBoxMeasurement from './map-measure/InfoBoxMeasurement';
 import { getBackgroundLayer, getLayers } from '../store/slices/mapping';
@@ -10,6 +10,7 @@ import LayerWrapper from './layers/LayerWrapper';
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 import getBackgroundLayers from '../helper/layer';
 import { getMode } from '../store/slices/ui';
+import { useSearchParams } from 'react-router-dom';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -19,6 +20,7 @@ const Map = () => {
   const layers = useSelector(getLayers);
   const backgroundLayer = useSelector(getBackgroundLayer);
   const mode = useSelector(getMode);
+  const [urlParams, setUrlParams] = useSearchParams();
 
   useEffect(() => {
     getGazData(setGazData);
@@ -51,6 +53,10 @@ const Map = () => {
         backgroundlayers="empty"
         mappingBoundsChanged={(boundingbox) => {
           // console.log('xxx bbox', createWMSBbox(boundingbox));
+        }}
+        locationChangedHandler={(location) => {
+          const newParams = { ...paramsToObject(urlParams), ...location };
+          setUrlParams(newParams);
         }}
         gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
         infoBox={
