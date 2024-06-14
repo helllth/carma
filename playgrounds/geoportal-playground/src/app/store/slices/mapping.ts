@@ -12,6 +12,10 @@ interface MappingState {
   backgroundLayer: BackgroundLayer;
   showLeftScrollButton: boolean;
   showRightScrollButton: boolean;
+  showFullscreenButton: boolean;
+  showLocatorButton: boolean;
+  showMeasurementButton: boolean;
+  showHamburgerMenu: boolean;
 }
 
 const initialState: MappingState = {
@@ -28,6 +32,10 @@ const initialState: MappingState = {
   },
   showLeftScrollButton: false,
   showRightScrollButton: false,
+  showFullscreenButton: true,
+  showLocatorButton: true,
+  showMeasurementButton: true,
+  showHamburgerMenu: false,
 };
 
 const slice = createSlice({
@@ -103,6 +111,18 @@ const slice = createSlice({
     setShowRightScrollButton(state, action) {
       state.showRightScrollButton = action.payload;
     },
+    setShowFullscreenButton(state, action: PayloadAction<boolean>) {
+      state.showFullscreenButton = action.payload;
+    },
+    setShowLocatorButton(state, action: PayloadAction<boolean>) {
+      state.showLocatorButton = action.payload;
+    },
+    setShowMeasurementButton(state, action: PayloadAction<boolean>) {
+      state.showMeasurementButton = action.payload;
+    },
+    setShowHamburgerMenu(state, action: PayloadAction<boolean>) {
+      state.showHamburgerMenu = action.payload;
+    },
   },
 });
 
@@ -120,6 +140,10 @@ export const {
   setBackgroundLayer,
   setShowLeftScrollButton,
   setShowRightScrollButton,
+  setShowFullscreenButton,
+  setShowLocatorButton,
+  setShowMeasurementButton,
+  setShowHamburgerMenu,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -140,4 +164,20 @@ export const getShowLeftScrollButton = (state: RootState) => {
 
 export const getShowRightScrollButton = (state: RootState) => {
   return state.mapping.showRightScrollButton;
+};
+
+export const getShowFullscreenButton = (state: RootState) => {
+  return state.mapping.showFullscreenButton;
+};
+
+export const getShowLocatorButton = (state: RootState) => {
+  return state.mapping.showLocatorButton;
+};
+
+export const getShowMeasurementButton = (state: RootState) => {
+  return state.mapping.showMeasurementButton;
+};
+
+export const getShowHamburgerMenu = (state: RootState) => {
+  return state.mapping.showHamburgerMenu;
 };

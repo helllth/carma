@@ -1,16 +1,22 @@
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import { getGazData, paramsToObject } from '../helper/helper';
 import { useSelector } from 'react-redux';
-import InfoBoxMeasurement from './map-measure/InfoBoxMeasurement';
-import { getBackgroundLayer, getLayers } from '../store/slices/mapping';
+import { getGazData, paramsToObject } from '../helper/helper';
+import {
+  getBackgroundLayer,
+  getLayers,
+  getShowFullscreenButton,
+  getShowHamburgerMenu,
+  getShowLocatorButton,
+} from '../store/slices/mapping';
 import LayerWrapper from './layers/LayerWrapper';
+import InfoBoxMeasurement from './map-measure/InfoBoxMeasurement';
 // @ts-ignore
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
+import { useSearchParams } from 'react-router-dom';
 import getBackgroundLayers from '../helper/layer';
 import { getMode, getShowLayerButtons } from '../store/slices/ui';
-import { useSearchParams } from 'react-router-dom';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -21,6 +27,9 @@ const Map = () => {
   const backgroundLayer = useSelector(getBackgroundLayer);
   const mode = useSelector(getMode);
   const showLayerButtons = useSelector(getShowLayerButtons);
+  const showFullscreenButton = useSelector(getShowFullscreenButton);
+  const showLocatorButton = useSelector(getShowLocatorButton);
+  const showHamburgerMenu = useSelector(getShowHamburgerMenu);
   const [urlParams, setUrlParams] = useSearchParams();
 
   useEffect(() => {
@@ -46,8 +55,9 @@ const Map = () => {
     <div className="h-full w-full" ref={wrapperRef}>
       <TopicMapComponent
         gazData={gazData}
-        hamburgerMenu={false}
-        locatorControl={true}
+        hamburgerMenu={showHamburgerMenu}
+        locatorControl={showLocatorButton}
+        fullScreenControl={showFullscreenButton}
         mapStyle={{ width, height }}
         leafletMapProps={{ editable: true }}
         minZoom={5}

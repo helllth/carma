@@ -13,7 +13,7 @@ export type Settings = {
   showLayerButtons: boolean;
   showLayerHideButtons: boolean;
   showFullscreen: boolean;
-  showNavigator: boolean;
+  showLocator: boolean;
   showMeasurement: boolean;
   showHamburgerMenu?: boolean;
 };
@@ -29,7 +29,7 @@ const Share = () => {
     showLayerButtons: true,
     showLayerHideButtons: true,
     showFullscreen: true,
-    showNavigator: true,
+    showLocator: true,
     showMeasurement: true,
     showHamburgerMenu: true,
   });
@@ -74,9 +74,9 @@ const Share = () => {
         Fullscreen Button anzeigen
       </Checkbox>
       <Checkbox
-        checked={settings.showNavigator}
+        checked={settings.showLocator}
         onChange={(e) =>
-          setSettings({ ...settings, showNavigator: e.target.checked })
+          setSettings({ ...settings, showLocator: e.target.checked })
         }
       >
         Navigator Button anzeigen

@@ -13,11 +13,16 @@ import MapMeasurement from './components/map-measure/MapMeasurement';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import LZString from 'lz-string';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   BackgroundLayer,
+  getShowMeasurementButton,
   setBackgroundLayer,
   setLayers,
+  setShowFullscreenButton,
+  setShowHamburgerMenu,
+  setShowLocatorButton,
+  setShowMeasurementButton,
 } from './store/slices/mapping';
 import {
   setShowLayerButtons,
@@ -38,6 +43,7 @@ type Config = {
 function App({ published }: { published?: boolean }) {
   let [searchParams, setSearchParams] = useSearchParams();
   const [allowUiChanges, setAllowUiChanges] = useState(true);
+  const showMeasurementButton = useSelector(getShowMeasurementButton);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -50,11 +56,14 @@ function App({ published }: { published?: boolean }) {
       dispatch(setBackgroundLayer(newConfig.backgroundLayer));
       if (newConfig.settings) {
         dispatch(setShowLayerButtons(newConfig.settings.showLayerButtons));
-        if (newConfig.settings.showLayerHideButtons) {
+        dispatch(setShowFullscreenButton(newConfig.settings.showFullscreen));
+        dispatch(setShowLocatorButton(newConfig.settings.showLocator));
+        dispatch(setShowMeasurementButton(newConfig.settings.showMeasurement));
+        dispatch(setShowHamburgerMenu(newConfig.settings.showHamburgerMenu));
+
+        if (newConfig.settings.showLayerHideButtons || published) {
           setAllowUiChanges(false);
-          dispatch(
-            setShowLayerHideButtons(newConfig.settings.showLayerHideButtons)
-          );
+          dispatch(setShowLayerHideButtons(true));
         }
       }
       searchParams.delete('data');
@@ -90,7 +99,7 @@ function App({ published }: { published?: boolean }) {
     <TopicMapContextProvider>
       <div className="flex flex-col h-screen w-full">
         {!published && <TopNavbar />}
-        <MapMeasurement />
+        {showMeasurementButton && <MapMeasurement />}
         <Map />
       </div>
     </TopicMapContextProvider>
