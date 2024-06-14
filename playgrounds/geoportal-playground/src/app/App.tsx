@@ -24,6 +24,7 @@ import {
   setShowLayerHideButtons,
 } from './store/slices/ui';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
+import { Settings } from './components/Share';
 if (typeof global === 'undefined') {
   window.global = window;
 }
@@ -31,13 +32,10 @@ if (typeof global === 'undefined') {
 type Config = {
   layers: Layer[];
   backgroundLayer: BackgroundLayer;
-  settings?: {
-    showLayerButtons: boolean;
-    showLayerHideButtons: boolean;
-  };
+  settings?: Settings;
 };
 
-function App() {
+function App({ published }: { published?: boolean }) {
   let [searchParams, setSearchParams] = useSearchParams();
   const [allowUiChanges, setAllowUiChanges] = useState(true);
   const dispatch = useDispatch();
@@ -45,7 +43,7 @@ function App() {
   useEffect(() => {
     if (searchParams.get('data')) {
       const data = searchParams.get('data');
-      const newConfig = JSON.parse(
+      const newConfig: Config = JSON.parse(
         LZString.decompressFromEncodedURIComponent(data)
       );
       dispatch(setLayers(newConfig.layers));
@@ -91,7 +89,7 @@ function App() {
   return (
     <TopicMapContextProvider>
       <div className="flex flex-col h-screen w-full">
-        <TopNavbar />
+        {!published && <TopNavbar />}
         <MapMeasurement />
         <Map />
       </div>
