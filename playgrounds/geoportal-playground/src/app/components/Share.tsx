@@ -42,6 +42,7 @@ const Share = () => {
         onChange={(e) =>
           setSettings({ ...settings, layerButtonsDeletable: e.target.checked })
         }
+        disabled={!settings.showLayerButtons}
       >
         Layer Buttons entfernbar
       </Checkbox>
