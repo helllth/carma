@@ -10,6 +10,7 @@ import PlanModelStyle from './views/obsolete/PlanningModelStyle';
 //import WithMesh from './views/obsolete/WithMesh';
 import TestCustomViewer from './views/tests/CustomViewer';
 import TestGeojson from './views/tests/obsolete/Geojson';
+import TestExtrudeGeoJson from './views/tests/ExtrudeGeoJson';
 import TestClassifyByGeoJson from './views/tests/ClassifyByGeoJson';
 import TestGeojsonWithCityGML from './views/tests/CityGml';
 import TestTileset from './views/tests/Tileset';
@@ -52,6 +53,7 @@ export const viewerRoutes: RouteDescriptor[] = [
     [
       ['/', 'Test Home', TestCustomViewer],
       ['/geojson', 'GeoJson', TestClassifyByGeoJson],
+      ['/extrude', 'Extrude GeoJson', TestExtrudeGeoJson],
       ['/geojson-old', 'GeoJson(old)', TestGeojson],
       ['/citygml', 'Test GeoJson With CityGML', TestGeojsonWithCityGML],
       ['/poi', 'POI Markers', TestMarkers],
