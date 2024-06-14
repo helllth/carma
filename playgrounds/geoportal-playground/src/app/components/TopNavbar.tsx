@@ -203,33 +203,6 @@ const TopNavbar = () => {
       </div>
 
       <div className="flex items-center gap-6">
-        <div>
-          <Button
-            onClick={() => {
-              const newConfig = {
-                backgroundLayer: backgroundLayer,
-                layers: activeLayers,
-              };
-              const jsonString = JSON.stringify(newConfig);
-              const compressed =
-                LZString.compressToEncodedURIComponent(jsonString);
-              setConfig(compressed);
-            }}
-          >
-            Save
-          </Button>
-          <Button
-            onClick={() => {
-              const newConfig = JSON.parse(
-                LZString.decompressFromEncodedURIComponent(config)
-              );
-              dispatch(setLayers(newConfig.layers));
-              dispatch(setBackgroundLayer(newConfig.backgroundLayer));
-            }}
-          >
-            Load
-          </Button>
-        </div>
         <Radio.Group
           value={backgroundLayer.id}
           onChange={(e) => {
