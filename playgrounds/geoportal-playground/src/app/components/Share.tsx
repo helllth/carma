@@ -6,6 +6,17 @@ import { useCopyToClipboard } from '@uidotdev/usehooks';
 import { useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import './popover.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareNodes } from '@fortawesome/free-solid-svg-icons';
+
+export type Settings = {
+  showLayerButtons: boolean;
+  showLayerHideButtons: boolean;
+  showFullscreen: boolean;
+  showNavigator: boolean;
+  showMeasurement: boolean;
+  showHamburgerMenu?: boolean;
+};
 
 const Share = () => {
   const backgroundLayer = useSelector(getBackgroundLayer);
@@ -14,21 +25,29 @@ const Share = () => {
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const [messageApi, contextHolder] = message.useMessage();
   const [mode, setMode] = useState('');
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<Settings>({
     showLayerButtons: true,
     showLayerHideButtons: true,
+    showFullscreen: true,
+    showNavigator: true,
+    showMeasurement: true,
+    showHamburgerMenu: true,
   });
+
   return (
     <div className="p-2 flex flex-col gap-3">
       {contextHolder}
-      <h4>Teilen</h4>
+      <div className="flex items-center gap-2">
+        <FontAwesomeIcon icon={faShareNodes} className="text-xl" />
+        <h4 className="mb-0">Teilen als</h4>
+      </div>
       <Radio.Group value={mode} onChange={(e) => setMode(e.target.value)}>
         <div className="flex items-center gap-1">
-          <h5 className="mb-0 pr-2">Modus:</h5>
-          <Radio value={''}>Geoportal</Radio>
-          <Radio value={'context'}>Publish</Radio>
+          <Radio value={''}>Geoportal Konfiguration</Radio>
+          <Radio value={'publish/'}>Map Publishing</Radio>
         </div>
       </Radio.Group>
+      <hr className="my-2" />
       <Checkbox
         checked={settings.showLayerButtons}
         onChange={(e) =>
@@ -42,10 +61,44 @@ const Share = () => {
         onChange={(e) =>
           setSettings({ ...settings, showLayerHideButtons: !e.target.checked })
         }
-        disabled={!settings.showLayerButtons}
+        disabled={!settings.showLayerButtons || mode === 'publish/'}
       >
-        Layer Buttons entfernbar
+        Layer entfernbar
       </Checkbox>
+      <Checkbox
+        checked={settings.showFullscreen}
+        onChange={(e) =>
+          setSettings({ ...settings, showFullscreen: e.target.checked })
+        }
+      >
+        Fullscreen Button anzeigen
+      </Checkbox>
+      <Checkbox
+        checked={settings.showNavigator}
+        onChange={(e) =>
+          setSettings({ ...settings, showNavigator: e.target.checked })
+        }
+      >
+        Navigator Button anzeigen
+      </Checkbox>
+      <Checkbox
+        checked={settings.showMeasurement}
+        onChange={(e) =>
+          setSettings({ ...settings, showMeasurement: e.target.checked })
+        }
+      >
+        Measurement Button anzeigen
+      </Checkbox>
+      {mode === 'publish/' && (
+        <Checkbox
+          checked={settings.showHamburgerMenu}
+          onChange={(e) =>
+            setSettings({ ...settings, showHamburgerMenu: e.target.checked })
+          }
+        >
+          Hamburger Menu anzeigen
+        </Checkbox>
+      )}
       <Button
         onClick={() => {
           const newConfig = {
@@ -58,7 +111,7 @@ const Share = () => {
           try {
             const baseUrl = window.location.origin + window.location.pathname;
             const queryString = new URLSearchParams(searchParams).toString();
-            const url = `${baseUrl}#/?data=${compressed}&${queryString}`;
+            const url = `${baseUrl}#/${mode}?data=${compressed}&${queryString}`;
             copyToClipboard(url);
             messageApi.open({
               type: 'success',
