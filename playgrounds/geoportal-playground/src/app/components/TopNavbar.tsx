@@ -127,7 +127,14 @@ const TopNavbar = () => {
 
       <div className="flex items-center gap-6 absolute left-1/2 -ml-[62px]">
         <Tooltip title="Refresh">
-          <FontAwesomeIcon icon={faRedo} className="text-xl text-gray-300" />
+          <button
+            onClick={() => {
+              window.location.reload();
+            }}
+            className="text-xl hover:text-gray-600"
+          >
+            <FontAwesomeIcon icon={faRedo} />
+          </button>
         </Tooltip>
         <Tooltip title="Layer">
           <FontAwesomeIcon
