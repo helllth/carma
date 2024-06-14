@@ -271,7 +271,7 @@ export const topicMapsConfig = {
       name: 'emobi',
       Title: 'Ladestationen E-Autos',
       Abstract: `Interaktive Kartenanwendung für die E-Auto-Ladestationen in Wuppertal.`,
-      tags: ['E-Auto', 'Ladestationen', 'Topic Maps'],
+      tags: ['Topic Maps', 'E-Auto', 'Ladestationen'],
       type: 'link',
       thumbnail:
         'https://www.wuppertal.de/geoportal/emobil/autos/fotos/fertighauswelt.jpg',
@@ -285,7 +285,7 @@ export const topicMapsConfig = {
       name: 'kitas',
       Title: 'Kita-Finder',
       Abstract: `Interaktive Kartenanwendung für die Recherche nach Kindertageseinrichtungen (Kitas) in Wuppertal - Spezialisierung des Online-Stadtplans Wuppertal mit spezifischen Filter- und Darstellungsoptionen.`,
-      tags: ['Kitas', 'Topic Maps'],
+      tags: ['Topic Maps', 'Kitas'],
       type: 'link',
       thumbnail:
         'https://images.unsplash.com/photo-1567746455504-cb3213f8f5b8?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
