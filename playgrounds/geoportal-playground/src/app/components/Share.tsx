@@ -47,48 +47,58 @@ const Share = () => {
           <Radio value={'publish/'}>Map Publishing</Radio>
         </div>
       </Radio.Group>
-      <hr className="my-2" />
-      <Checkbox
-        checked={settings.showLayerButtons}
-        onChange={(e) =>
-          setSettings({ ...settings, showLayerButtons: e.target.checked })
-        }
-      >
-        Layer Buttons anzeigen
-      </Checkbox>
-      <Checkbox
-        checked={!settings.showLayerHideButtons}
-        onChange={(e) =>
-          setSettings({ ...settings, showLayerHideButtons: !e.target.checked })
-        }
-        disabled={!settings.showLayerButtons || mode === 'publish/'}
-      >
-        Layer entfernbar
-      </Checkbox>
-      <Checkbox
-        checked={settings.showFullscreen}
-        onChange={(e) =>
-          setSettings({ ...settings, showFullscreen: e.target.checked })
-        }
-      >
-        Fullscreen Button anzeigen
-      </Checkbox>
-      <Checkbox
-        checked={settings.showLocator}
-        onChange={(e) =>
-          setSettings({ ...settings, showLocator: e.target.checked })
-        }
-      >
-        Navigator Button anzeigen
-      </Checkbox>
-      <Checkbox
-        checked={settings.showMeasurement}
-        onChange={(e) =>
-          setSettings({ ...settings, showMeasurement: e.target.checked })
-        }
-      >
-        Measurement Button anzeigen
-      </Checkbox>
+      <hr className="my-0" />
+      <h5 className="-mb-1 text-lg">Einstellungen:</h5>
+      <h5 className="mb-0">Layer</h5>
+      <div className="flex items-center gap-2">
+        <Checkbox
+          checked={settings.showLayerButtons}
+          onChange={(e) =>
+            setSettings({ ...settings, showLayerButtons: e.target.checked })
+          }
+        >
+          Layer Buttons anzeigen
+        </Checkbox>
+        <Checkbox
+          checked={!settings.showLayerHideButtons}
+          onChange={(e) =>
+            setSettings({
+              ...settings,
+              showLayerHideButtons: !e.target.checked,
+            })
+          }
+          disabled={!settings.showLayerButtons || mode === 'publish/'}
+        >
+          Layer entfernbar
+        </Checkbox>
+      </div>
+      <h5 className="mb-0">Karte</h5>
+      <div className="flex items-center gap-2">
+        <Checkbox
+          checked={settings.showFullscreen}
+          onChange={(e) =>
+            setSettings({ ...settings, showFullscreen: e.target.checked })
+          }
+        >
+          Fullscreen
+        </Checkbox>
+        <Checkbox
+          checked={settings.showLocator}
+          onChange={(e) =>
+            setSettings({ ...settings, showLocator: e.target.checked })
+          }
+        >
+          Navigator
+        </Checkbox>
+        <Checkbox
+          checked={settings.showMeasurement}
+          onChange={(e) =>
+            setSettings({ ...settings, showMeasurement: e.target.checked })
+          }
+        >
+          Messung
+        </Checkbox>
+      </div>
       {mode === 'publish/' && (
         <Checkbox
           checked={settings.showHamburgerMenu}
@@ -96,7 +106,7 @@ const Share = () => {
             setSettings({ ...settings, showHamburgerMenu: e.target.checked })
           }
         >
-          Hamburger Menu anzeigen
+          Hamburger Menu
         </Checkbox>
       )}
       <Button
