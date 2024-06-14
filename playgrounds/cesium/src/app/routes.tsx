@@ -16,6 +16,7 @@ import TestTileset from './views/tests/Tileset';
 import TestMarkers from './views/tests/Markers';
 
 import ViewResium from './views/tests/Resium';
+import ViewTopicMap from './views/tests/TopicMap';
 import ViewTailwind from './views/tests/Tailwind';
 
 import { ComponentType } from 'react';
@@ -67,6 +68,7 @@ export const otherRoutes: RouteDescriptor[] = [
     [
       ['/resium', 'Resium', ViewResium],
       ['/tailwind', 'Tailwind', ViewTailwind],
+      ['/topicMapWithBaseLayer', 'TopicMapWithBaseLayer', ViewTopicMap],
     ],
   ],
 ];
