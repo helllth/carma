@@ -14,11 +14,28 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import LZString from 'lz-string';
 import { useDispatch } from 'react-redux';
-import { setBackgroundLayer, setLayers } from './store/slices/mapping';
-import { setShowLayerHideButtons } from './store/slices/ui';
+import {
+  BackgroundLayer,
+  setBackgroundLayer,
+  setLayers,
+} from './store/slices/mapping';
+import {
+  setShowLayerButtons,
+  setShowLayerHideButtons,
+} from './store/slices/ui';
+import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 if (typeof global === 'undefined') {
   window.global = window;
 }
+
+type Config = {
+  layers: Layer[];
+  backgroundLayer: BackgroundLayer;
+  settings?: {
+    showLayerButtons: boolean;
+    showLayerHideButtons: boolean;
+  };
+};
 
 function App() {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -33,6 +50,15 @@ function App() {
       );
       dispatch(setLayers(newConfig.layers));
       dispatch(setBackgroundLayer(newConfig.backgroundLayer));
+      if (newConfig.settings) {
+        dispatch(setShowLayerButtons(newConfig.settings.showLayerButtons));
+        if (newConfig.settings.showLayerHideButtons) {
+          setAllowUiChanges(false);
+          dispatch(
+            setShowLayerHideButtons(newConfig.settings.showLayerHideButtons)
+          );
+        }
+      }
       searchParams.delete('data');
       setSearchParams(searchParams);
     }
@@ -60,7 +86,7 @@ function App() {
 
       document.removeEventListener('keyup', onKeyUp);
     };
-  }, []);
+  }, [allowUiChanges]);
 
   return (
     <TopicMapContextProvider>

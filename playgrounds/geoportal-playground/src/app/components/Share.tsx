@@ -16,7 +16,7 @@ const Share = () => {
   const [mode, setMode] = useState('');
   const [settings, setSettings] = useState({
     showLayerButtons: true,
-    layerButtonsDeletable: true,
+    showLayerHideButtons: true,
   });
   return (
     <div className="p-2 flex flex-col gap-3">
@@ -38,9 +38,9 @@ const Share = () => {
         Layer Buttons anzeigen
       </Checkbox>
       <Checkbox
-        checked={settings.layerButtonsDeletable}
+        checked={!settings.showLayerHideButtons}
         onChange={(e) =>
-          setSettings({ ...settings, layerButtonsDeletable: e.target.checked })
+          setSettings({ ...settings, showLayerHideButtons: !e.target.checked })
         }
         disabled={!settings.showLayerButtons}
       >
@@ -51,6 +51,7 @@ const Share = () => {
           const newConfig = {
             backgroundLayer: backgroundLayer,
             layers: activeLayers,
+            settings,
           };
           const jsonString = JSON.stringify(newConfig);
           const compressed = LZString.compressToEncodedURIComponent(jsonString);

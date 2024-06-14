@@ -1,9 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
-import exp from 'constants';
 
-type BackgroundLayer = Layer & {
+export type BackgroundLayer = Layer & {
   layers: string;
 };
 
