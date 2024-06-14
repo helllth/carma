@@ -1,4 +1,4 @@
-import { Button, Radio, Tooltip, message } from 'antd';
+import { Button, Popover, Radio, Tooltip, message } from 'antd';
 // @ts-ignore
 import {
   faB,
@@ -15,11 +15,8 @@ import { useContext, useState } from 'react';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
 import { LayerLib } from '@cismet/layer-lib';
-import { useCopyToClipboard } from '@uidotdev/usehooks';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
-import LZString from 'lz-string';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
 import { getThumbnails, setThumbnail } from '../store/slices/layers';
 import {
   appendLayer,
@@ -28,6 +25,7 @@ import {
   removeLayer,
   setBackgroundLayer,
 } from '../store/slices/mapping';
+import Share from './Share';
 import './switch.css';
 
 const layerMap = {
@@ -50,26 +48,12 @@ const layerMap = {
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const baseConfig = {
-    layers: [],
-    backgroundLayer: {
-      title: 'Amtlich',
-      id: 'amtlich',
-      opacity: 1.0,
-      description: '',
-      url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX=%7Bz%7D&TILEROW=%7By%7D&TILECOL=%7Bx%7D',
-      layers: 'amtlich@100',
-    },
-  };
-  const [config, setConfig] = useState(JSON.stringify(baseConfig));
   // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
   const backgroundLayer = useSelector(getBackgroundLayer);
   const dispatch = useDispatch();
   const thumbnails = useSelector(getThumbnails);
   const activeLayers = useSelector(getLayers);
-  const [copiedText, copyToClipboard] = useCopyToClipboard();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -162,40 +146,13 @@ const TopNavbar = () => {
         <Tooltip title="Drucken">
           <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
         </Tooltip>
-        <Tooltip title="Teilen">
-          <button
-            className="hover:text-gray-600 text-xl"
-            onClick={() => {
-              const newConfig = {
-                backgroundLayer: backgroundLayer,
-                layers: activeLayers,
-              };
-              const jsonString = JSON.stringify(newConfig);
-              const compressed =
-                LZString.compressToEncodedURIComponent(jsonString);
-              try {
-                const baseUrl =
-                  window.location.origin + window.location.pathname;
-                const queryString = new URLSearchParams(
-                  searchParams
-                ).toString();
-                const url = `${baseUrl}#/?data=${compressed}&${queryString}`;
-                copyToClipboard(url);
-                messageApi.open({
-                  type: 'success',
-                  content: `Link wurde in die Zwischenablage kopiert.`,
-                });
-              } catch {
-                messageApi.open({
-                  type: 'error',
-                  content: `Es gab einen Fehler beim kopieren des Links`,
-                });
-              }
-            }}
-          >
+        {/* <Tooltip title="Teilen"> */}
+        <Popover trigger="click" placement="bottom" content={<Share />}>
+          <button className="hover:text-gray-600 text-xl">
             <FontAwesomeIcon icon={faShareNodes} />
           </button>
-        </Tooltip>
+        </Popover>
+        {/* </Tooltip> */}
         {/* <Tooltip title="Messungen">
           <FontAwesomeIcon
             icon={faDrawPolygon}
