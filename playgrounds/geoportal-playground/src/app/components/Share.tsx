@@ -30,7 +30,7 @@ const Share = () => {
         </div>
       </Radio.Group>
       <Checkbox
-        value={settings.showLayerButtons}
+        checked={settings.showLayerButtons}
         onChange={(e) =>
           setSettings({ ...settings, showLayerButtons: e.target.checked })
         }
@@ -38,7 +38,7 @@ const Share = () => {
         Layer Buttons anzeigen
       </Checkbox>
       <Checkbox
-        value={settings.layerButtonsDeletable}
+        checked={settings.layerButtonsDeletable}
         onChange={(e) =>
           setSettings({ ...settings, layerButtonsDeletable: e.target.checked })
         }
