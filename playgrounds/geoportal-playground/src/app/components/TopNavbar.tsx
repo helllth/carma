@@ -70,6 +70,7 @@ const TopNavbar = () => {
       opacity: 0.7,
       url,
       description: layer.description,
+      visible: true,
       legend: layer.legend,
     };
 
@@ -184,6 +185,7 @@ const TopNavbar = () => {
                 title: layerMap[e.target.value].title,
                 opacity: 1.0,
                 description: '',
+                visible: true,
                 url: layerMap[e.target.value].url,
                 layers: layerMap[e.target.value].layers,
               })

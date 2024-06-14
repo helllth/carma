@@ -70,18 +70,22 @@ const Map = () => {
       >
         {getBackgroundLayers({ layerString: backgroundLayer.layers })}
         {showLayerButtons && <LayerWrapper />}
-        {layers.map((layer) => (
-          <StyledWMSTileLayer
-            type="wms"
-            url={layer.url}
-            maxZoom={26}
-            layers={layer.id}
-            format="image/png"
-            tiled={true}
-            transparent="true"
-            opacity={layer.opacity.toFixed(1) || 0.7}
-          />
-        ))}
+        {layers.map((layer) => {
+          if (layer.visible) {
+            return (
+              <StyledWMSTileLayer
+                type="wms"
+                url={layer.url}
+                maxZoom={26}
+                layers={layer.id}
+                format="image/png"
+                tiled={true}
+                transparent="true"
+                opacity={layer.opacity.toFixed(1) || 0.7}
+              />
+            );
+          }
+        })}
       </TopicMapComponent>
     </div>
   );

@@ -27,6 +27,7 @@ export type Layer = {
   id: string;
   opacity: number;
   description: string;
+  visible: boolean;
   icon?: string;
   legend?: { Format: string; OnlineResource: string; size: [number, number] }[];
 };

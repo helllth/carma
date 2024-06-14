@@ -1,12 +1,18 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { faEye, faLayerGroup, faX } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEye,
+  faEyeSlash,
+  faLayerGroup,
+  faX,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '../../helper/helper';
 import {
+  changeVisibility,
   getLayers,
   getSelectedLayerIndex,
   removeLayer,
@@ -145,10 +151,26 @@ const LayerButton = ({
               className="hover:text-gray-500 text-gray-600 flex items-center justify-center"
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(removeLayer(id));
+                if (showLayerHideButtons) {
+                  if (layer.visible) {
+                    dispatch(changeVisibility({ id, visible: false }));
+                  } else {
+                    dispatch(changeVisibility({ id, visible: true }));
+                  }
+                } else {
+                  dispatch(removeLayer(id));
+                }
               }}
             >
-              <FontAwesomeIcon icon={showLayerHideButtons ? faEye : faX} />
+              <FontAwesomeIcon
+                icon={
+                  showLayerHideButtons
+                    ? layer.visible
+                      ? faEye
+                      : faEyeSlash
+                    : faX
+                }
+              />
             </button>
           </>
         )}

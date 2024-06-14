@@ -23,6 +23,7 @@ const initialState: MappingState = {
     id: 'amtlich',
     opacity: 1.0,
     description: '',
+    visible: true,
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX=%7Bz%7D&TILEROW=%7By%7D&TILECOL=%7Bx%7D',
     layers: 'amtlich@100',
   },
@@ -52,6 +53,22 @@ const slice = createSlice({
           return {
             ...obj,
             opacity: action.payload.opacity,
+          };
+        } else {
+          return obj;
+        }
+      });
+      state.layers = newLayers;
+    },
+    changeVisibility(
+      state,
+      action: PayloadAction<{ id: string; visible: boolean }>
+    ) {
+      const newLayers = state.layers.map((obj) => {
+        if (obj.id === action.payload.id) {
+          return {
+            ...obj,
+            visible: action.payload.visible,
           };
         } else {
           return obj;
@@ -97,6 +114,7 @@ export const {
   appendLayer,
   removeLayer,
   changeOpacity,
+  changeVisibility,
   setSelectedLayerIndex,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
