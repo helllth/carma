@@ -30,6 +30,8 @@ import {
 } from './store/slices/ui';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import { Settings } from './components/Share';
+import CrossTabCommunicationContextProvider from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
+
 if (typeof global === 'undefined') {
   window.global = window;
 }
@@ -41,12 +43,17 @@ type Config = {
 };
 
 function App({ published }: { published?: boolean }) {
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [syncToken, setSyncToken] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [allowUiChanges, setAllowUiChanges] = useState(true);
   const showMeasurementButton = useSelector(getShowMeasurementButton);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (searchParams.get('sync')) {
+      setSyncToken(searchParams.get('sync'));
+    }
+
     if (searchParams.get('data')) {
       const data = searchParams.get('data');
       const newConfig: Config = JSON.parse(
@@ -85,7 +92,6 @@ function App({ published }: { published?: boolean }) {
     };
 
     document.addEventListener('keydown', onKeyDown);
-
     document.addEventListener('keyup', onKeyUp);
 
     return () => {
@@ -95,7 +101,7 @@ function App({ published }: { published?: boolean }) {
     };
   }, [allowUiChanges]);
 
-  return (
+  const content = (
     <TopicMapContextProvider>
       <div className="flex flex-col h-screen w-full">
         {!published && <TopNavbar />}
@@ -103,6 +109,14 @@ function App({ published }: { published?: boolean }) {
         <Map />
       </div>
     </TopicMapContextProvider>
+  );
+
+  return syncToken ? (
+    <CrossTabCommunicationContextProvider role="sync" token={syncToken}>
+      {content}
+    </CrossTabCommunicationContextProvider>
+  ) : (
+    content
   );
 }
 
