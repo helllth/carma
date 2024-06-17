@@ -50,7 +50,7 @@ const Share = () => {
       </Radio.Group>
       <hr className="my-0" />
       <h5 className="-mb-1 text-lg">Einstellungen:</h5>
-      <div className="flex items-center gap2">
+      {/* <div className="flex items-center gap2">
         <label htmlFor="customAppKey" className="mb-0 w-1/4">
           App Key:
         </label>
@@ -60,7 +60,7 @@ const Share = () => {
           value={customAppKey}
           onChange={(e) => setCustomAppKey(e.target.value)}
         />
-      </div>
+      </div> */}
       <h5 className="mb-0">Layer</h5>
       <div className="flex items-center gap-2">
         <Checkbox
