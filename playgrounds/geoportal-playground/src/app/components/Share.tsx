@@ -1,4 +1,4 @@
-import { Button, Checkbox, Radio, message } from 'antd';
+import { Button, Checkbox, Input, Radio, message } from 'antd';
 import { useSelector } from 'react-redux';
 import { getBackgroundLayer, getLayers } from '../store/slices/mapping';
 import LZString from 'lz-string';
@@ -25,6 +25,7 @@ const Share = () => {
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const [messageApi, contextHolder] = message.useMessage();
   const [mode, setMode] = useState('');
+  const [customAppKey, setCustomAppKey] = useState('');
   const [settings, setSettings] = useState<Settings>({
     showLayerButtons: true,
     showLayerHideButtons: true,
@@ -49,6 +50,17 @@ const Share = () => {
       </Radio.Group>
       <hr className="my-0" />
       <h5 className="-mb-1 text-lg">Einstellungen:</h5>
+      <div className="flex items-center gap2">
+        <label htmlFor="customAppKey" className="mb-0 w-1/4">
+          App Key:
+        </label>
+        <Input
+          id="customAppKey"
+          type="text"
+          value={customAppKey}
+          onChange={(e) => setCustomAppKey(e.target.value)}
+        />
+      </div>
       <h5 className="mb-0">Layer</h5>
       <div className="flex items-center gap-2">
         <Checkbox
@@ -121,7 +133,9 @@ const Share = () => {
           try {
             const baseUrl = window.location.origin + window.location.pathname;
             const queryString = new URLSearchParams(searchParams).toString();
-            const url = `${baseUrl}#/${mode}?data=${compressed}&${queryString}`;
+            const url = `${baseUrl}#/${mode}?data=${compressed}&${queryString}${
+              customAppKey ? `&appKey=${customAppKey}` : ''
+            }`;
             copyToClipboard(url);
             messageApi.open({
               type: 'success',
