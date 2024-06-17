@@ -68,6 +68,7 @@ const Share = () => {
           onChange={(e) =>
             setSettings({ ...settings, showLayerButtons: e.target.checked })
           }
+          disabled={mode === ''}
         >
           Layer Buttons anzeigen
         </Checkbox>
@@ -79,7 +80,7 @@ const Share = () => {
               showLayerHideButtons: !e.target.checked,
             })
           }
-          disabled={!settings.showLayerButtons || mode === 'publish/'}
+          disabled={!settings.showLayerButtons || mode === ''}
         >
           Layer entfernbar
         </Checkbox>
@@ -91,6 +92,7 @@ const Share = () => {
           onChange={(e) =>
             setSettings({ ...settings, showFullscreen: e.target.checked })
           }
+          disabled={mode === ''}
         >
           Fullscreen
         </Checkbox>
@@ -99,6 +101,7 @@ const Share = () => {
           onChange={(e) =>
             setSettings({ ...settings, showLocator: e.target.checked })
           }
+          disabled={mode === ''}
         >
           Navigator
         </Checkbox>
@@ -107,26 +110,28 @@ const Share = () => {
           onChange={(e) =>
             setSettings({ ...settings, showMeasurement: e.target.checked })
           }
+          disabled={mode === ''}
         >
           Messung
         </Checkbox>
       </div>
-      {mode === 'publish/' && (
-        <Checkbox
-          checked={settings.showHamburgerMenu}
-          onChange={(e) =>
-            setSettings({ ...settings, showHamburgerMenu: e.target.checked })
-          }
-        >
-          Hamburger Menu
-        </Checkbox>
-      )}
+
+      <Checkbox
+        checked={settings.showHamburgerMenu}
+        onChange={(e) =>
+          setSettings({ ...settings, showHamburgerMenu: e.target.checked })
+        }
+        disabled={mode === ''}
+      >
+        Hamburger Menu
+      </Checkbox>
+
       <Button
         onClick={() => {
           const newConfig = {
             backgroundLayer: backgroundLayer,
             layers: activeLayers,
-            settings,
+            settings: mode === 'publish/' ? settings : undefined,
           };
           const jsonString = JSON.stringify(newConfig);
           const compressed = LZString.compressToEncodedURIComponent(jsonString);
