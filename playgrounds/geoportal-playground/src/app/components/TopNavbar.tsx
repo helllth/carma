@@ -24,13 +24,16 @@ import { getThumbnails, setThumbnail } from '../store/slices/layers';
 import {
   appendLayer,
   getBackgroundLayer,
+  getFocusMode,
   getLayers,
   removeLayer,
   setBackgroundLayer,
+  setFocusMode,
 } from '../store/slices/mapping';
 import Share from './Share';
 import './switch.css';
 import { getShowLayerButtons, setShowLayerButtons } from '../store/slices/ui';
+import { cn } from '../helper/helper';
 
 const layerMap = {
   amtlich: {
@@ -59,6 +62,7 @@ const TopNavbar = () => {
   const thumbnails = useSelector(getThumbnails);
   const activeLayers = useSelector(getLayers);
   const showLayerButtons = useSelector(getShowLayerButtons);
+  const focusMode = useSelector(getFocusMode);
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -147,7 +151,14 @@ const TopNavbar = () => {
           />
         </Tooltip>
         <Tooltip title="Fokus">
-          <FontAwesomeIcon icon={faF} className="text-xl text-gray-300" />
+          <button
+            className={cn('text-xl', focusMode ? 'text-blue-500' : '')}
+            onClick={() => {
+              dispatch(setFocusMode(!focusMode));
+            }}
+          >
+            <FontAwesomeIcon icon={faF} />
+          </button>
         </Tooltip>
         <Tooltip title="Drucken">
           <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
