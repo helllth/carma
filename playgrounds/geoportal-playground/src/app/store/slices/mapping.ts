@@ -16,7 +16,7 @@ interface MappingState {
   showLocatorButton: boolean;
   showMeasurementButton: boolean;
   showHamburgerMenu: boolean;
-  paleMode: boolean;
+  focusMode: boolean;
 }
 
 const initialState: MappingState = {
@@ -37,7 +37,7 @@ const initialState: MappingState = {
   showLocatorButton: true,
   showMeasurementButton: true,
   showHamburgerMenu: false,
-  paleMode: false,
+  focusMode: false,
 };
 
 const slice = createSlice({
@@ -125,8 +125,8 @@ const slice = createSlice({
     setShowHamburgerMenu(state, action: PayloadAction<boolean>) {
       state.showHamburgerMenu = action.payload;
     },
-    setPaleMode(state, action: PayloadAction<boolean>) {
-      state.paleMode = action.payload;
+    setFocusMode(state, action: PayloadAction<boolean>) {
+      state.focusMode = action.payload;
     },
   },
 });
@@ -149,7 +149,7 @@ export const {
   setShowLocatorButton,
   setShowMeasurementButton,
   setShowHamburgerMenu,
-  setPaleMode,
+  setFocusMode,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -188,6 +188,6 @@ export const getShowHamburgerMenu = (state: RootState) => {
   return state.mapping.showHamburgerMenu;
 };
 
-export const getPaleMode = (state: RootState) => {
-  return state.mapping.paleMode;
+export const getFocusMode = (state: RootState) => {
+  return state.mapping.focusMode;
 };
