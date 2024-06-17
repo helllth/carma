@@ -1,4 +1,4 @@
-import ClassifyByGeoJson from './views/ClassifyByGeoJson';
+import ClassifyByGeoJson from './views/ByGeoJsonClassifier';
 
 import TilesetSelectionFromCityGml from './views/TilesetSelectionFromCityGml';
 import TilesetSelectionFromBaseMapDE from './views/TilesetSelectionBasemapDe';

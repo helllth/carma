@@ -18,6 +18,7 @@ import { useSelectKeys } from './store/slices/buildings';
 import { setKeys } from './store/slices/buildings';
 import { useDispatch } from 'react-redux';
 import { useCesium } from 'resium';
+import { useShowSecondaryTileset } from './store/slices/viewer';
 
 export type ClickData = {
   id: string | null;
@@ -97,11 +98,13 @@ export const usePropertyKeysFromGeoJsonDataSource = (
   return propertyKeys;
 };
 
-export const useGLTFTilesetClickHandler = () => {
+export const useSecondaryStyleTilesetClickHandler = () => {
   const { viewer } = useCesium();
+  const isSecondaryStyle = useShowSecondaryTileset();
 
   useEffect(() => {
-    if (!viewer) return;
+    if (!viewer || !isSecondaryStyle) return;
+    console.log('HOOK: useGLTFTilesetClickHandler');
 
     let selectedObject; // Store the currently selected feature
     let lastColor;
@@ -122,7 +125,7 @@ export const useGLTFTilesetClickHandler = () => {
       if (pickedObject.primitive instanceof Cesium3DTileset) {
         // console.log('Cesium3DTileset', pickedObject);
         const { _batchId, _content } = pickedObject;
-        // console.log('Cesium3DTileFeature', _batchId);
+        console.log('Cesium3DTileFeature', _batchId);
         const feature = _content.getFeature(_batchId);
         if (feature instanceof Cesium3DTileFeature) {
           lastColor = feature.color;
@@ -135,5 +138,5 @@ export const useGLTFTilesetClickHandler = () => {
     return () => {
       handler.destroy();
     };
-  }, [viewer]);
+  }, [viewer, isSecondaryStyle]);
 };

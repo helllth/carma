@@ -12,7 +12,10 @@ import {
   GeoJsonDataSource,
 } from 'cesium';
 
-import { GeoJsonConfig } from '../../store/slices/viewer';
+import {
+  GeoJsonConfig,
+  useShowPrimaryTileset,
+} from '../../store/slices/viewer';
 import { useSelectAndHighlightGeoJsonEntity } from './hooks';
 import { SELECTABLE_TRANSPARENT_MATERIAL } from '../../utils/cesiumHelpers';
 
@@ -37,10 +40,13 @@ const ByGeoJsonClassifier: React.FC<ByGeoJsonClassifier> = ({
 }) => {
   const { viewer } = useCesium();
 
+  const isPrimaryStyle = useShowPrimaryTileset() === true;
+
   const classificationTypeProperty = new ConstantProperty(classificationType);
 
   useSelectAndHighlightGeoJsonEntity(viewer, {
     highlightMaterial: HIGHLIGHT_MATERIAL,
+    isPrimaryStyle,
   });
 
   const handleOnLoad = (dataSource: GeoJsonDataSource) => {
@@ -53,15 +59,16 @@ const ByGeoJsonClassifier: React.FC<ByGeoJsonClassifier> = ({
         // entity.polygon.height = undefined;
         // entity.polygon.height = undefined; // if you want to use the classificationType make sure height his is undefined or the area is extruded with extrusionHeight, otherwise this wont work
         entity.polygon.classificationType = classificationTypeProperty;
-          entity.polygon.material = debug ? new ColorMaterialProperty(
-            Color.fromRandom({ alpha: 0.5 })
-          ) : SELECTABLE_TRANSPARENT_MATERIAL;
+        entity.polygon.material = debug
+          ? new ColorMaterialProperty(Color.fromRandom({ alpha: 0.5 }))
+          : SELECTABLE_TRANSPARENT_MATERIAL;
       }
     });
   };
 
   return (
     <ResiumGeoJsonDataSource
+      show={isPrimaryStyle}
       data={geojson.url}
       clampToGround={true} // IMPORTANT, sets the entitity polygon height to undefined for classification to work
       onLoad={handleOnLoad}

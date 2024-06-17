@@ -75,6 +75,7 @@ export const useSceneStyleToggle = (style?: keyof SceneStyles) => {
 
   // TODO initial style set by parameter
   const [isPrimaryStyle, setIsPrimaryStyle] = useState(true);
+  console.log('HOOK: useSceneStyleToggle', style); 
 
   useEffect(() => {
     if (!viewer) return;

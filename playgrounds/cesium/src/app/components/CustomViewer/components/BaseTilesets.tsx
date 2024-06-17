@@ -8,7 +8,7 @@ import {
 } from '../../../store/slices/viewer';
 import { create3DTileStyle } from '../../../utils/cesiumHelpers';
 import { Cesium3DTileset } from 'cesium';
-import { useGLTFTilesetClickHandler } from '../../../hooks';
+import { useSecondaryStyleTilesetClickHandler } from '../../../hooks';
 
 export const BaseTilesets = () => {
   const tilesets = useViewerDataSources().tilesets;
@@ -38,7 +38,7 @@ export const BaseTilesets = () => {
     }
   }, [showPrimary, tsA, showSecondary, tsB]);
 
-  useGLTFTilesetClickHandler();
+  useSecondaryStyleTilesetClickHandler();
 
   // TODO add the alternative planning style tileset here too for instant switching after first load
 

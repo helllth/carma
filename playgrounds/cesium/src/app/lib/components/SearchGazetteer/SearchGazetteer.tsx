@@ -191,16 +191,19 @@ export function SearchGazetteer({
   return (
     <form
       style={{
+        display: 'flex',
         //marginTop: '20px',
         width: pixelwidth,
       }}
     >
-      <Button icon={<CloseOutlined />} onClick={handleOnClose} />
+      <Button 
+      icon={<CloseOutlined />} onClick={handleOnClose} />
       {!showCategories ? (
         <>
           <AutoComplete
             options={options}
             style={inputStyle}
+            popupMatchSelectWidth={500}
             onSearch={(value) => handleSearchAutoComplete(value)}
             onChange={(value) => setValue(value)}
             placeholder="Stadtteil | Adresse | POI ... "

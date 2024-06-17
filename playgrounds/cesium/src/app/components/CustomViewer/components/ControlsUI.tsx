@@ -52,8 +52,8 @@ const ControlsUI = ({
               <div key={index}>{component}</div>
             )) // Workaround to prevent missing key warning
           }
+          {searchComponent}
         </ControlGroup>
-        <ControlGroup>{searchComponent}</ControlGroup>
       </ControlContainer>
       {showDebug && (
         <ControlContainer position="topright">

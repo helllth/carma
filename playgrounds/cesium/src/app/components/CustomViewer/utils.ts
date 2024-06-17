@@ -1,5 +1,8 @@
 import { Camera, Cartesian3, Cartographic, Scene, Viewer } from 'cesium';
-import { toDegFactor } from '../../utils/cesiumHelpers';
+import {
+  getCesiumViewerZoomLevel,
+  toDegFactor,
+} from '../../utils/cesiumHelpers';
 
 // 5 DEGREES OF FREEDOM CAMERA encoding/decoding
 // lon, lat, height, heading, pitch
@@ -87,18 +90,19 @@ export type DecodedSceneHash = {
   isSecondaryStyle?: boolean | null;
 };
 
-export function encodeScene({
-  camera,
-  webMercatorZoomEquivalent,
+export async function encodeScene({
+  viewer,
   isAnimating,
   isSecondaryStyle,
 }: {
-  camera: Camera;
-  webMercatorZoomEquivalent?: number;
+  viewer: Viewer;
   isAnimating?: boolean;
   isSecondaryStyle?: boolean;
-}): string {
+}): Promise<string> {
+  const { camera } = viewer;
   const { x, y, z } = camera.position;
+  const zoom = await getCesiumViewerZoomLevel(viewer);
+
   const { longitude, latitude, height } = Cartographic.fromCartesian(
     new Cartesian3(x, y, z)
   );
@@ -113,7 +117,7 @@ export function encodeScene({
     height,
     heading,
     pitch,
-    webMercatorZoomEquivalent,
+    zoom,
     isAnimating,
     isSecondaryStyle,
   ].reduce((acc, value, index) => {
@@ -152,3 +156,31 @@ export function decodeSceneFromLocation(location: string): DecodedSceneHash {
     ...decoded,
   };
 }
+
+export const replaceHashRoutedHistory = async (
+  viewer: Viewer,
+  routedPath: string,
+  isSecondaryStyle: boolean
+) => {
+  // this is method is used to avoid triggering rerenders from the HashRouter when updating the hash
+
+  console.log('replaceHashRoutedHistory sceneHash');
+  const sceneHash = await encodeScene({
+    viewer,
+    isSecondaryStyle,
+  });
+  if (sceneHash) {
+    const state = `#${routedPath}?${sceneHash}`;
+    // console.log('updateSceneHash newState', state);
+    // this is a workaround to avoid triggering rerenders from the HashRouter
+    // navigate would cause rerenders
+    // navigate(`${hashRouterPart}?${sceneHash}`, { replace: true });
+    // see https://github.com/remix-run/react-router/discussions/9851#discussioncomment-9459061
+    window.history.replaceState(null, '', state);
+    return {
+      pathHash: routedPath,
+      sceneHash,
+      state,
+    };
+  }
+};

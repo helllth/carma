@@ -23,10 +23,10 @@ const DebugInfo = (props: DebugInfoProps) => {
     null
   );
 
-  useEffect(() => {
+  useEffect(() => { 
+    console.log('HOOK: DEBUG cameraChangedHandler');
     if (viewer && isExpanded) {
       const cameraChangedHandler = () => {
-        console.log('cameraChangedHandler');
         setCameraPosition(Cartesian3.clone(viewer.camera.position));
         setCameraPosCarto(
           Cartographic.clone(viewer.camera.positionCartographic)

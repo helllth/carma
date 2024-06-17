@@ -1,36 +1,26 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import {
-  Color,
-  HeadingPitchRange,
-  Viewer,
-  BoundingSphere,
-  Cartesian3,
-  Math as CeMath,
-} from 'cesium';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { Color, HeadingPitchRange, Viewer } from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
 import Crosshair from '../UI/Crosshair';
 import SearchWrapper from './components/SearchWrapper';
 
 import {
-  setShowPrimaryTileset,
-  setShowSecondaryTileset,
-  useGlobeBaseColor,
   useShowSecondaryTileset,
   useViewerHome,
   useViewerHomeOffset,
 } from '../../store/slices/viewer';
 import { BaseTilesets } from './components/BaseTilesets';
 import ControlsUI from './components/ControlsUI';
-import {
-  DecodedSceneHash,
-  decodeSceneFromLocation,
-  encodeScene,
-} from './utils';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { getCesiumViewerZoomLevel } from '../../utils/cesiumHelpers';
+import { replaceHashRoutedHistory } from './utils';
 import ResizableIframe from './components/ResizeIframe';
-import { setupSecondaryStyle } from './components/baseTileset.hook';
-import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import useInitializeViewer from './hooks';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -62,7 +52,6 @@ function CustomViewer(props: CustomViewerProps) {
   const homeOffset = useViewerHomeOffset();
   const globeBaseColor = Color.WHITE; //useGlobeBaseColor();
   const isSecondaryStyle = useShowSecondaryTileset();
-  const [showLeaflet, setShowLeaflet] = useState(false);
   //const isAnimating = useViewerIsAnimating();
 
   const {
@@ -73,7 +62,6 @@ function CustomViewer(props: CustomViewerProps) {
     showHome = true,
     showOrbit = true,
     showDebug = true,
-
     infoBox = false,
     selectionIndicator = false,
 
@@ -88,72 +76,35 @@ function CustomViewer(props: CustomViewerProps) {
     }
   }, []);
 
+  const iframeSrcRef = useRef<string | null>(null);
   const location = useLocation();
-  const navigate = useNavigate();
-  const [initialHash, setInitialHash] = useState<string | null>(null);
-  const [sceneHash, setSceneHash] = useState<string | null>(null);
-  const dispatch = useDispatch();
-
-  const [iframeSrc, setIframeSrc] = useState('');
 
   useEffect(() => {
-    if (viewer && initialHash === null) {
-      let sceneFromHashParams;
-      setInitialHash(window.location.hash ?? '');
-      if (window.location.hash) {
-        sceneFromHashParams = decodeSceneFromLocation(
-          window.location.hash.split('?')[1]
+    console.log('HOOK: hashRoute changed', location.pathname);
+    viewer &&
+      replaceHashRoutedHistory(viewer, location.pathname, isSecondaryStyle);
+  }, [location.pathname, viewer, isSecondaryStyle]);
+
+  useInitializeViewer(viewer, home, homeOffset);
+
+  useEffect(() => {
+    if (viewer) {
+      console.log('HOOK: update Hash, style changed', isSecondaryStyle);
+      (async () => {
+        await replaceHashRoutedHistory(
+          viewer,
+          location.pathname,
+          isSecondaryStyle
         );
-        const { camera, isSecondaryStyle } = sceneFromHashParams ?? {};
-        const { latitude, longitude, height, heading, pitch } = camera;
-
-        if (isSecondaryStyle) {
-          if (isSecondaryStyle) {
-            setupSecondaryStyle(viewer);
-            dispatch(setShowPrimaryTileset(false));
-            dispatch(setShowSecondaryTileset(true));
-          }
-        }
-
-        //console.log('sceneCamera', sceneCamera);
-        if (sceneFromHashParams && longitude && latitude) {
-          //console.log('using hashed location', longitude, latitude, height);
-          viewer.camera.setView({
-            destination: Cartesian3.fromRadians(
-              longitude,
-              latitude,
-              height ?? 1000 // restore height if missing
-            ),
-            orientation: {
-              heading: heading ?? 0,
-              pitch: pitch ?? -Math.PI / 2,
-            },
-          });
-          //sceneCamera.isAnimating && dispatch(toggleIsAnimating());
-        }
-      } else {
-        //console.log('no hash, using home');
-        viewer.camera.lookAt(home, homeOffset);
-        viewer.camera.flyToBoundingSphere(new BoundingSphere(home, 500), {
-          duration: 2,
-        });
-      }
+      })();
     }
-  }, [viewer, dispatch, home, homeOffset, initialHash]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewer, location.pathname, isSecondaryStyle]);
 
   useEffect(() => {
-    console.log('HOOK: hashlocation or path changed');
-    if (sceneHash) {
-      const currentHash = location.pathname;
-      const hashRouterPart = currentHash.split('?')[0];
-      navigate(`${hashRouterPart}?${sceneHash}`, { replace: true });
-    }
-  }, [location.pathname, sceneHash, navigate]);
-
-  useEffect(() => {
+    console.log('HOOK: init or globeColor changed');
     if (!viewer) return;
     // set the globe color
-    console.log('HOOK: init or globeColor changed');
     const { scene } = viewer;
     scene.globe.baseColor = globeColor;
     viewer.imageryLayers.removeAll();
@@ -161,37 +112,39 @@ function CustomViewer(props: CustomViewerProps) {
   }, [viewer, globeColor]);
 
   useEffect(() => {
+    console.log('HOOK: viewer changed', isSecondaryStyle);
     if (!viewer) return;
     // remove default imagery
-    const { camera } = viewer;
 
     const moveEndListener = async () => {
-      if (camera.position) {
+      if (viewer.camera.position) {
+        console.log('LISTENER: moveEndListener', isSecondaryStyle);
+        await replaceHashRoutedHistory(
+          viewer,
+          location.pathname,
+          isSecondaryStyle
+        );
+        // TODO REMOVE THIS LEAFLET IFRAME PART AND REPLACE with syncing with Topicmaps
+        /*
         const zoom = await getCesiumViewerZoomLevel(viewer);
-        const newSceneHash = encodeScene({
-          camera,
-          webMercatorZoomEquivalent: zoom,
-          isSecondaryStyle,
-        });
-        setSceneHash(newSceneHash);
-        const headingInDegrees = CeMath.toDegrees(camera.heading);
-        const pitchInDegrees = CeMath.toDegrees(camera.pitch);
+        const headingInDegrees = CeMath.toDegrees(viewer.camera.heading);
+        const pitchInDegrees = CeMath.toDegrees(viewer.camera.pitch);
         const tolerance = 5;
         if (
           (headingInDegrees % 360 >= 360 - tolerance ||
             headingInDegrees % 360 <= tolerance) &&
           pitchInDegrees <= tolerance - 90
         ) {
-          setShowLeaflet(true);
           //console.log('scene', scene);
           if (zoom !== Infinity) {
-            const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${newSceneHash}`;
+            const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${sceneHashRef.current}`;
             //console.info('view in leaflet:', `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${scene}`);
-            setIframeSrc(leafletUrl);
+            iframeSrcRef.current = leafletUrl;
           }
         } else {
-          setShowLeaflet(false);
+          iframeSrcRef.current = null;
         }
+        */
       }
     };
 
@@ -199,7 +152,10 @@ function CustomViewer(props: CustomViewerProps) {
     return () => {
       viewer.camera.moveEnd.removeEventListener(moveEndListener);
     };
-  }, [viewer, isSecondaryStyle]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewer, location.pathname, isSecondaryStyle]);
+
+  console.log('RENDER: CustomViewer');
 
   return (
     <ResiumViewer
@@ -241,7 +197,10 @@ function CustomViewer(props: CustomViewerProps) {
         />
       )}
       {showCrosshair && <Crosshair lineColor="white" />}
-      {showLeaflet && iframeSrc && <ResizableIframe iframeSrc={iframeSrc} />}
+      {
+        // TODO Remove this iframe
+        <ResizableIframe iframeSrcRef={iframeSrcRef} />
+      }
     </ResiumViewer>
   );
 }

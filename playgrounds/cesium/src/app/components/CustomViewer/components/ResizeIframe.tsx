@@ -1,15 +1,17 @@
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, MutableRefObject } from 'react';
 
 type ResizableIframeProps = {
-  iframeSrc: string;
+  iframeSrcRef: MutableRefObject<string | null>;
   minLeft?: number;
   minRight?: number;
 };
 
+// TODO Remove this and replace component with topicmap
+
 const ResizableIframe = ({
-  iframeSrc,
+  iframeSrcRef,
   minLeft = 5,
   minRight = 1.5,
 }: ResizableIframeProps) => {
@@ -44,10 +46,17 @@ const ResizableIframe = ({
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging]);
 
+  const src = iframeSrcRef.current;
+
+  if (src === null) {
+    return null;
+  }
+
   const handleButtonClick = () => {
-    window.open(iframeSrc, '_blank');
+    window.open(src, '_blank');
   };
 
   return (
@@ -71,7 +80,7 @@ const ResizableIframe = ({
         }}
       >
         <iframe
-          key={iframeSrc} // only needed if iframe becomes unresponsive
+          key={src} // only needed if iframe becomes unresponsive
           style={{
             position: 'absolute',
             top: 0,
@@ -84,7 +93,7 @@ const ResizableIframe = ({
             pointerEvents: isDragging ? 'none' : 'auto', // Change this line
           }}
           title="leafletSynced"
-          src={iframeSrc}
+          src={src}
           width="100%"
           height="100%"
         />
@@ -103,8 +112,8 @@ const ResizableIframe = ({
             cursor: 'pointer',
           }}
         >
-          h: {iframeSrc.match(/h=([^&]*)/)![1]} zoom:{' '}
-          <b>{iframeSrc.match(/zoom=([^&]*)/)![1]}</b> im Kulturstadtplan{' '}
+          h: {src.match(/h=([^&]*)/)![1]} zoom:{' '}
+          <b>{src.match(/zoom=([^&]*)/)![1]}</b> im Kulturstadtplan{' '}
           <FontAwesomeIcon icon={faExternalLinkAlt} />
         </button>
       </div>

@@ -24,7 +24,7 @@ export const SceneStyleToggle = (props: SceneStyleToggleProps) => {
     console.log('HOOK: SceneStyleToggle: initialStyle', initialStyle);
     toggleSceneStyle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialStyle]);
+  }, []);
 
   return (
     <OnMapButton
