@@ -139,7 +139,7 @@ const Share = () => {
             const baseUrl = window.location.origin + window.location.pathname;
             const queryString = new URLSearchParams(searchParams).toString();
             const url = `${baseUrl}#/${mode}?data=${compressed}&${queryString}${
-              customAppKey ? `&appKey=${customAppKey}` : ''
+              customAppKey ? `&appKey=${encodeURIComponent(customAppKey)}` : ''
             }`;
             copyToClipboard(url);
             messageApi.open({
