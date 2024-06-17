@@ -33,6 +33,7 @@ import {
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import { Settings } from './components/Share';
 import CrossTabCommunicationContextProvider from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
+import HomeButton from './components/HomeButton';
 
 if (typeof global === 'undefined') {
   window.global = window;
@@ -110,6 +111,7 @@ function App({ published }: { published?: boolean }) {
     <TopicMapContextProvider>
       <div className="flex flex-col h-screen w-full">
         {!published && <TopNavbar />}
+        <HomeButton />
         {showMeasurementButton && <MapMeasurement />}
         <Map />
       </div>
