@@ -59,7 +59,14 @@ const uiConfig = {
 const mappingConfig = {
   key: '@' + (customAppKey || APP_KEY) + '.' + STORAGE_PREFIX + '.app.mapping',
   storage: localForage,
-  whitelist: ['layers', 'backgroundLayer'],
+  whitelist: [
+    'layers',
+    'backgroundLayer',
+    'showFullscreenButton',
+    'showLocatorButton',
+    'showMeasurementButton',
+    'showHamburgerMenu',
+  ],
 };
 
 const layersConfig = {

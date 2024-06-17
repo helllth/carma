@@ -73,6 +73,9 @@ function App({ published }: { published?: boolean }) {
         if (newConfig.settings.showLayerHideButtons || published) {
           dispatch(setAllowUiChanges(false));
           dispatch(setShowLayerHideButtons(true));
+        } else {
+          dispatch(setAllowUiChanges(true));
+          dispatch(setShowLayerHideButtons(false));
         }
       }
       searchParams.delete('data');
