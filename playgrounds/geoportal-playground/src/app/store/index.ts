@@ -53,7 +53,7 @@ if (stateLoggingEnabled === true) {
 const uiConfig = {
   key: '@' + (customAppKey || APP_KEY) + '.' + STORAGE_PREFIX + '.app.config',
   storage: localForage,
-  whitelist: ['allowUiChanges', 'showLayerHideButtons'],
+  whitelist: ['allowUiChanges', 'showLayerHideButtons', 'showLayerButtons'],
 };
 
 const mappingConfig = {
