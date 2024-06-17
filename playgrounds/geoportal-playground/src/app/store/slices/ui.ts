@@ -8,6 +8,7 @@ interface UIState {
   mode: string;
   showLayerButtons: boolean;
   showLayerHideButtons: boolean;
+  allowUiChanges: boolean;
 }
 
 const initialState: UIState = {
@@ -17,6 +18,7 @@ const initialState: UIState = {
   mode: 'default',
   showLayerButtons: true,
   showLayerHideButtons: false,
+  allowUiChanges: true,
 };
 
 const slice = createSlice({
@@ -41,6 +43,9 @@ const slice = createSlice({
     setShowLayerHideButtons(state, action: PayloadAction<boolean>) {
       state.showLayerHideButtons = action.payload;
     },
+    setAllowUiChanges(state, action: PayloadAction<boolean>) {
+      state.allowUiChanges = action.payload;
+    },
   },
 });
 
@@ -53,6 +58,7 @@ export const {
   setMode,
   setShowLayerButtons,
   setShowLayerHideButtons,
+  setAllowUiChanges,
 } = slice.actions;
 
 export const getShowInfo = (state: RootState) => {
@@ -77,6 +83,10 @@ export const getShowLayerButtons = (state: RootState) => {
 
 export const getShowLayerHideButtons = (state: RootState) => {
   return state.ui.showLayerHideButtons;
+};
+
+export const getAllowUiChanges = (state: RootState) => {
+  return state.ui.allowUiChanges;
 };
 
 export const toggletModeMeasuremen = () => {

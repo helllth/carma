@@ -1,4 +1,4 @@
-import { Button, Checkbox, Radio, message } from 'antd';
+import { Button, Checkbox, Input, Radio, message } from 'antd';
 import { useSelector } from 'react-redux';
 import { getBackgroundLayer, getLayers } from '../store/slices/mapping';
 import LZString from 'lz-string';
@@ -25,6 +25,7 @@ const Share = () => {
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const [messageApi, contextHolder] = message.useMessage();
   const [mode, setMode] = useState('');
+  const [customAppKey, setCustomAppKey] = useState('');
   const [settings, setSettings] = useState<Settings>({
     showLayerButtons: true,
     showLayerHideButtons: true,
@@ -49,6 +50,17 @@ const Share = () => {
       </Radio.Group>
       <hr className="my-0" />
       <h5 className="-mb-1 text-lg">Einstellungen:</h5>
+      <div className="flex items-center gap2">
+        <label htmlFor="customAppKey" className="mb-0 w-1/4">
+          App Key:
+        </label>
+        <Input
+          id="customAppKey"
+          type="text"
+          value={customAppKey}
+          onChange={(e) => setCustomAppKey(e.target.value)}
+        />
+      </div>
       <h5 className="mb-0">Layer</h5>
       <div className="flex items-center gap-2">
         <Checkbox
@@ -56,6 +68,7 @@ const Share = () => {
           onChange={(e) =>
             setSettings({ ...settings, showLayerButtons: e.target.checked })
           }
+          disabled={mode === ''}
         >
           Layer Buttons anzeigen
         </Checkbox>
@@ -67,7 +80,7 @@ const Share = () => {
               showLayerHideButtons: !e.target.checked,
             })
           }
-          disabled={!settings.showLayerButtons || mode === 'publish/'}
+          disabled={!settings.showLayerButtons || mode === ''}
         >
           Layer entfernbar
         </Checkbox>
@@ -79,6 +92,7 @@ const Share = () => {
           onChange={(e) =>
             setSettings({ ...settings, showFullscreen: e.target.checked })
           }
+          disabled={mode === ''}
         >
           Fullscreen
         </Checkbox>
@@ -87,6 +101,7 @@ const Share = () => {
           onChange={(e) =>
             setSettings({ ...settings, showLocator: e.target.checked })
           }
+          disabled={mode === ''}
         >
           Navigator
         </Checkbox>
@@ -95,33 +110,37 @@ const Share = () => {
           onChange={(e) =>
             setSettings({ ...settings, showMeasurement: e.target.checked })
           }
+          disabled={mode === ''}
         >
           Messung
         </Checkbox>
       </div>
-      {mode === 'publish/' && (
-        <Checkbox
-          checked={settings.showHamburgerMenu}
-          onChange={(e) =>
-            setSettings({ ...settings, showHamburgerMenu: e.target.checked })
-          }
-        >
-          Hamburger Menu
-        </Checkbox>
-      )}
+
+      <Checkbox
+        checked={settings.showHamburgerMenu}
+        onChange={(e) =>
+          setSettings({ ...settings, showHamburgerMenu: e.target.checked })
+        }
+        disabled={mode === ''}
+      >
+        Hamburger Menu
+      </Checkbox>
+
       <Button
         onClick={() => {
           const newConfig = {
             backgroundLayer: backgroundLayer,
             layers: activeLayers,
-            settings,
+            settings: mode === 'publish/' ? settings : undefined,
           };
           const jsonString = JSON.stringify(newConfig);
           const compressed = LZString.compressToEncodedURIComponent(jsonString);
           try {
             const baseUrl = window.location.origin + window.location.pathname;
             const queryString = new URLSearchParams(searchParams).toString();
-            const url = `${baseUrl}#/${mode}?data=${compressed}&${queryString}`;
+            const url = `${baseUrl}#/${mode}?data=${compressed}&${queryString}${
+              customAppKey ? `&appKey=${encodeURIComponent(customAppKey)}` : ''
+            }`;
             copyToClipboard(url);
             messageApi.open({
               type: 'success',
