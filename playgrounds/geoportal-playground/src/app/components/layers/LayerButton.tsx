@@ -122,7 +122,9 @@ const LayerButton = ({
         className={cn(
           'w-fit min-w-max flex items-center gap-2 px-3 rounded-[10px] h-8 z-[99999999] button-shadow',
           selectedLayerIndex === -2
-            ? 'bg-white'
+            ? layer.visible
+              ? 'bg-white'
+              : 'bg-neutral-200/70'
             : showSettings
             ? 'bg-white'
             : 'bg-neutral-200'
