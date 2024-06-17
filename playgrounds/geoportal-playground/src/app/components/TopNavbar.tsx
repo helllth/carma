@@ -10,6 +10,7 @@ import {
   faShareNodes,
   faEye,
   faEyeSlash,
+  faF,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
@@ -145,8 +146,8 @@ const TopNavbar = () => {
             className="cursor-pointer text-xl"
           />
         </Tooltip>
-        <Tooltip title="Blass">
-          <FontAwesomeIcon icon={faB} className="text-xl text-gray-300" />
+        <Tooltip title="Fokus">
+          <FontAwesomeIcon icon={faF} className="text-xl text-gray-300" />
         </Tooltip>
         <Tooltip title="Drucken">
           <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
