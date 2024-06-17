@@ -1,8 +1,8 @@
 import React from 'react';
-import { useViewerDataSources, useViewerHome } from '../../store/slices/viewer';
+import { useViewerDataSources, useViewerHome } from '../../../store/slices/viewer';
 import { Color } from 'cesium';
 import { Entity } from 'resium';
-import { useTilesetControl } from '../../utils/controls';
+import { useTilesetControl } from '../../../utils/controls';
 
 function TestTileset() {
   const { footprintGeoJson, tilesets } = useViewerDataSources();

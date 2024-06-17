@@ -1,24 +1,24 @@
-import Geojson from './views/obsolete/Geojson';
 import ClassifyByGeoJson from './views/ClassifyByGeoJson';
-//import SingleGeojson from './views/obsolete/SingleGeojsonSelector';
+
 import TilesetSelectionFromCityGml from './views/TilesetSelectionFromCityGml';
 import TilesetSelectionFromBaseMapDE from './views/TilesetSelectionBasemapDe';
 import TilesetSelectionClassify from './views/TilesetSelectionClassify';
-import PlanModelStyle from './views/obsolete/PlanningModelStyle';
 
-//import Full from './views/obsolete/Full';
-//import WithMesh from './views/obsolete/WithMesh';
-import TestCustomViewer from './views/tests/CustomViewer';
-import TestGeojson from './views/tests/obsolete/Geojson';
+import ObsoletePlanModelStyle from './views/obsolete/PlanningModelStyle';
+
 import TestExtrudeGeoJson from './views/tests/ExtrudeGeoJson';
-import TestClassifyByGeoJson from './views/tests/ClassifyByGeoJson';
-import TestGeojsonWithCityGML from './views/tests/CityGml';
-import TestTileset from './views/tests/Tileset';
 import TestMarkers from './views/tests/Markers';
+import TestGeojsonWithCityGML from './views/tests/CityGml';
 
-import ViewResium from './views/tests/Resium';
-import ViewTopicMap from './views/tests/TopicMap';
-import ViewTailwind from './views/tests/Tailwind';
+import TestObsoleteGeojson from './views/tests/obsolete/Geojson';
+import TestObsoleteTileset from './views/tests/obsolete/Tileset';
+
+import TestComponentCustomViewer from './views/tests/components/CustomViewer';
+import TestComponentByGeoJsonClassifier from './views/tests/components/ByGeoJsonClassifier';
+
+import StandaloneResium from './views/tests/standalone/Resium';
+import StandaloneTopicMap from './views/tests/standalone/TopicMap';
+import StandaloneTailwind from './views/tests/standalone/Tailwind';
 
 import { ComponentType } from 'react';
 
@@ -29,48 +29,68 @@ export type RoutePath = [string, string, RouteItem[] | RoutePath[]];
 export type RouteDescriptor = RouteItem | RoutePath;
 
 // views or features 🚧 under heavy construction
+// (obsolete or unmaintained)
 // ⚙️ for debug or test views
 
 export const viewerRoutes: RouteDescriptor[] = [
   ['/', '', ClassifyByGeoJson],
-  //['/stadtmodell', '', PlanModelStyle],
-  ['/geojson-classify', 'Klassifizierung nach GeoJson', ClassifyByGeoJson],
-  [
-    '/tileset',
-    'Tileset 🚧',
-    [
-      ['/citygml', 'Tiles CityGML 🚧', TilesetSelectionFromCityGml],
-      ['/citygml-classify', 'Classify by CityGML 🚧', TilesetSelectionClassify],
-      ['/basemap-de', 'Tiles BaseMap.de 🚧', TilesetSelectionFromBaseMapDE],
-    ],
-  ],
-
-  //['/full', 'Full', Full],
-  //['/mesh', 'Mesh', WithMesh],
+  ['/geojson-classify', 'Gebäude Auswahl', ClassifyByGeoJson],
+  ['/extrude', 'Extrusion', TestExtrudeGeoJson],
+  ['/poi', 'Marker', TestMarkers],
   [
     '/test',
     '⚙️ Test',
     [
-      ['/', 'Test Home', TestCustomViewer],
-      ['/geojson', 'GeoJson', TestClassifyByGeoJson],
-      ['/extrude', 'Extrude GeoJson', TestExtrudeGeoJson],
-      ['/geojson-old', 'GeoJson(old)', TestGeojson],
-      ['/citygml', 'Test GeoJson With CityGML', TestGeojsonWithCityGML],
-      ['/poi', 'POI Markers', TestMarkers],
-      ['/viewer', 'Test Viewer', TestCustomViewer],
-      ['/tileset', 'Test Tileset', TestTileset],
+      [
+        '/citygml',
+        'FeatureTest GeoJson Vergleich mit CityGML 🚧',
+        TestGeojsonWithCityGML,
+      ],
+      //['/geojson-old', '(GeoJson Vergleich 🚧)', TestObsoleteGeojson],
+      // ['/stadtmodell', 'Stil Vorauswahl 🚧', ObsoletePlanModelStyle],
+      //['/tileset', '(FeatureTest Tileset 🚧)', TestObsoleteTileset],
+      [
+        '/geojson',
+        'ComponentTest GeoJSON Overlay',
+        TestComponentByGeoJsonClassifier,
+      ],
+      ['/viewer', 'ComponentTest Viewer', TestComponentCustomViewer],
     ],
   ],
+  /*
+  // TODO: defunct with the Tilesets visibile by default
+  [
+    '/tileset',
+    '⚙️ Tileset',
+    [
+      ['/citygml', 'Auswahl in CityGML 🚧', TilesetSelectionFromCityGml],
+      [
+        '/citygml-classify',
+        'Klassifiziertes CityGML 🚧',
+        TilesetSelectionClassify,
+      ],
+      [
+        '/basemap-de',
+        'Auswahl in BaseMap.de 🚧',
+        TilesetSelectionFromBaseMapDE,
+      ],
+    ],
+  ],
+  */
 ];
 
 export const otherRoutes: RouteDescriptor[] = [
   [
     '/testapp',
-    'No Viewer',
+    '⚙️ Standalone',
     [
-      ['/resium', 'Resium', ViewResium],
-      ['/tailwind', 'Tailwind', ViewTailwind],
-      ['/topicMapWithBaseLayer', 'TopicMapWithBaseLayer', ViewTopicMap],
+      ['/resium', 'Standalone Test Resium', StandaloneResium],
+      ['/tailwind', 'Standalone Test Tailwind', StandaloneTailwind],
+      [
+        '/topicMapWithBaseLayer',
+        'Standalone Test TopicMapWithBaseLayer',
+        StandaloneTopicMap,
+      ],
     ],
   ],
 ];
