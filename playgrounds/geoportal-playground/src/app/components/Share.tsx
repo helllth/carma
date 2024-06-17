@@ -83,7 +83,7 @@ const Share = () => {
         >
           Layer Buttons anzeigen
         </Checkbox>
-        <Checkbox
+        {/* <Checkbox
           checked={!settings.showLayerHideButtons}
           onChange={(e) =>
             setSettings({
@@ -94,7 +94,7 @@ const Share = () => {
           disabled={!settings.showLayerButtons || mode === ''}
         >
           Layer entfernbar
-        </Checkbox>
+        </Checkbox> */}
       </div>
       <h5 className="mb-0">Karte</h5>
       <div className="flex items-center gap-2">
