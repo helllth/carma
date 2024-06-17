@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { getGazData, paramsToObject } from '../helper/helper';
 import {
   getBackgroundLayer,
+  getFocusMode,
   getLayers,
   getShowFullscreenButton,
   getShowHamburgerMenu,
@@ -13,6 +14,7 @@ import {
 import LayerWrapper from './layers/LayerWrapper';
 import InfoBoxMeasurement from './map-measure/InfoBoxMeasurement';
 // @ts-ignore
+import PaleOverlay from 'react-cismap/PaleOverlay';
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 import { useSearchParams } from 'react-router-dom';
 import getBackgroundLayers from '../helper/layer';
@@ -30,6 +32,7 @@ const Map = () => {
   const showFullscreenButton = useSelector(getShowFullscreenButton);
   const showLocatorButton = useSelector(getShowLocatorButton);
   const showHamburgerMenu = useSelector(getShowHamburgerMenu);
+  const focusMode = useSelector(getFocusMode);
   const [urlParams, setUrlParams] = useSearchParams();
 
   useEffect(() => {
@@ -79,11 +82,13 @@ const Map = () => {
         }
       >
         {getBackgroundLayers({ layerString: backgroundLayer.layers })}
+        {focusMode && <PaleOverlay />}
         {showLayerButtons && <LayerWrapper />}
         {layers.map((layer) => {
           if (layer.visible) {
             return (
               <StyledWMSTileLayer
+                key={`${layer.id}_${focusMode}`}
                 type="wms"
                 url={layer.url}
                 maxZoom={26}
@@ -91,6 +96,7 @@ const Map = () => {
                 format="image/png"
                 tiled={true}
                 transparent="true"
+                pane="additionalLayers1"
                 opacity={layer.opacity.toFixed(1) || 0.7}
               />
             );
