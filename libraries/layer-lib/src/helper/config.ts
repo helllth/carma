@@ -261,6 +261,25 @@ export const serviceConfig = {
     type: 'topicmaps',
     name: 'topicmaps',
   },
+  wuppVector: {
+    name: 'wuppVector',
+  },
+};
+
+export const vectorConfig = {
+  Title: 'Vector Karten',
+  serviceName: 'wuppVector',
+  layers: [
+    {
+      Name: 'vecKanal',
+      name: 'kanal',
+      Title: 'Kanäle',
+      Abstract: '',
+      tags: ['Vector Karten'],
+      layerType: 'vector',
+      style: 'https://omt.map-hosting.de/styles/kanal/style.json',
+    },
+  ],
 };
 
 export const topicMapsConfig = {
@@ -1346,5 +1365,8 @@ export const baseConfig = {
   },
   TopicMaps: {
     ...topicMapsConfig,
+  },
+  VectorMaps: {
+    ...vectorConfig,
   },
 };

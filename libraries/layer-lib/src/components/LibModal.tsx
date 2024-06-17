@@ -29,6 +29,7 @@ export type Layer = {
   description: string;
   visible: boolean;
   icon?: string;
+  type?: 'wmts' | 'wmts-nt' | 'tiles' | 'vector';
   legend?: { Format: string; OnlineResource: string; size: [number, number] }[];
 };
 
@@ -155,6 +156,15 @@ const LibModal = ({
           });
       } else {
         if (services[key].type === 'topicmaps') {
+          const tmpLayer = getLayerStructure({
+            config,
+            serviceName: services[key].name,
+          });
+          const mergedLayer = mergeStructures(tmpLayer, newLayers);
+          newLayers = mergedLayer;
+          setLayers(newLayers);
+          setAllLayers(newLayers);
+        } else {
           const tmpLayer = getLayerStructure({
             config,
             serviceName: services[key].name,
