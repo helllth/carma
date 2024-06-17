@@ -34,7 +34,7 @@ export type RouteDescriptor = RouteItem | RoutePath;
 
 export const viewerRoutes: RouteDescriptor[] = [
   ['/', '', ClassifyByGeoJson],
-  ['/geojson-classify', 'Gebäude Auswahl', ClassifyByGeoJson],
+  ['/geojson-classify', 'Gebäudeauswahl', ClassifyByGeoJson],
   ['/extrude', 'Extrusion', TestExtrudeGeoJson],
   ['/poi', 'Marker', TestMarkers],
   [

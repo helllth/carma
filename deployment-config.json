@@ -342,6 +342,25 @@
       },
       "projectPath": "./dist/playgrounds/cesium"
     },
+    "vector": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-playground-deployments",
+            "prj": "vector"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-playground-deployments",
+              "prj": "vector"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/playgrounds/vector"
+    },
     "rainhazardmap-korschenbroich": {
       "deployment": {
         "manual": {
