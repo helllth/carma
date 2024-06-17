@@ -54,12 +54,15 @@ const getGazData = async (setGazData) => {
 
 function App() {
   const [syncToken, setSyncToken] = useState(null);
-
+  const [layers, setLayers] = useState('');
   useEffect(() => {
     const params = queryString.parse(window.location.hash);
 
     if (params.sync) {
       setSyncToken(params.sync);
+    }
+    if (params.layers) {
+      setLayers(params.layers);
     }
   }, []);
   const [gazData, setGazData] = useState([]);
@@ -106,6 +109,34 @@ function App() {
     },
     { title: 'Luftbildkarte', mode: 'default', layerKey: 'lbk' },
   ];
+
+  // const layersConfig = [
+  //   {
+  //     title: 'Kanal',
+  //     type: 'vector',
+  //     style: 'https://omt.map-hosting.de/styles/kanal/style.json',
+  //     pane: 'additionalLayers1',
+  //   },
+  //   {
+  //     title: 'Bäume',
+  //     type: 'vector',
+  //     style: 'https://omt.map-hosting.de/styles/baeume/style.json',
+  //     pane: 'additionalLayers1',
+  //   },
+  //   {
+  //     title: 'POIs',
+  //     type: 'vector',
+  //     style: 'https://omt.map-hosting.de/styles/pois/style.json',
+  //     pane: 'additionalLayers1',
+  //   },
+  //   {
+  //     title: 'Solar',
+  //     type: 'vector',
+  //     style: 'https://omt.map-hosting.de/styles/solar/style.json',
+  //     pane: 'additionalLayers1',
+  //   },
+  // ];
+
   const content = (
     <TopicMapContextProvider
       appKey="VectorPlaygroundWuppertal.TopicMap"
@@ -115,34 +146,42 @@ function App() {
       referenceSystemDefinition={MappingConstants.proj4crs3857def}
     >
       <TopicMapComponent maxZoom={22} gazData={gazData} locatorControl={true}>
-        {/* <CismapLayer
-          {...{
-            type: 'vector',
-            style: 'https://omt.map-hosting.de/styles/kanal/style.json',
-            pane: 'additionalLayers1',
-          }}
-        /> */}
-        {/* <CismapLayer
-          {...{
-            type: 'vector',
-            style: 'https://omt.map-hosting.de/styles/baeume/style.json',
-            pane: 'additionalLayers1',
-          }}
-        /> */}
-        {/* <CismapLayer
-          {...{
-            type: 'vector',
-            style: 'https://omt.map-hosting.de/styles/pois/style.json',
-            pane: 'additionalLayers1',
-          }}
-        /> */}
-        <CismapLayer
-          {...{
-            type: 'vector',
-            style: 'https://omt.map-hosting.de/styles/solar/style.json',
-            pane: 'additionalLayers1',
-          }}
-        />
+        {layers.includes('kanal') && (
+          <CismapLayer
+            {...{
+              type: 'vector',
+              style: 'https://omt.map-hosting.de/styles/kanal/style.json',
+              pane: 'additionalLayers1',
+            }}
+          />
+        )}
+        {layers.includes('baeume') && (
+          <CismapLayer
+            {...{
+              type: 'vector',
+              style: 'https://omt.map-hosting.de/styles/baeume/style.json',
+              pane: 'additionalLayers2',
+            }}
+          />
+        )}
+        {layers.includes('pois') && (
+          <CismapLayer
+            {...{
+              type: 'vector',
+              style: 'https://omt.map-hosting.de/styles/pois/style.json',
+              pane: 'additionalLayers3',
+            }}
+          />
+        )}
+        {layers.includes('solar') && (
+          <CismapLayer
+            {...{
+              type: 'vector',
+              style: 'https://omt.map-hosting.de/styles/solar/style.json',
+              pane: 'additionalLayers4',
+            }}
+          />
+        )}
       </TopicMapComponent>
     </TopicMapContextProvider>
   );
