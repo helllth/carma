@@ -18,6 +18,17 @@ export type Settings = {
   showHamburgerMenu?: boolean;
 };
 
+function generateRandomString(length) {
+  let characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  let charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 const Share = () => {
   const backgroundLayer = useSelector(getBackgroundLayer);
   const activeLayers = useSelector(getLayers);
@@ -139,7 +150,7 @@ const Share = () => {
             const baseUrl = window.location.origin + window.location.pathname;
             const queryString = new URLSearchParams(searchParams).toString();
             const url = `${baseUrl}#/${mode}?data=${compressed}&${queryString}${
-              customAppKey ? `&appKey=${encodeURIComponent(customAppKey)}` : ''
+              mode === 'publish/' ? `&appKey=${generateRandomString(5)}` : ''
             }`;
             copyToClipboard(url);
             messageApi.open({
