@@ -25,6 +25,8 @@ import {
   setShowMeasurementButton,
 } from './store/slices/mapping';
 import {
+  getAllowUiChanges,
+  setAllowUiChanges,
   setShowLayerButtons,
   setShowLayerHideButtons,
 } from './store/slices/ui';
@@ -45,7 +47,7 @@ type Config = {
 function App({ published }: { published?: boolean }) {
   const [syncToken, setSyncToken] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [allowUiChanges, setAllowUiChanges] = useState(true);
+  const allowUiChanges = useSelector(getAllowUiChanges);
   const showMeasurementButton = useSelector(getShowMeasurementButton);
   const dispatch = useDispatch();
 
@@ -69,7 +71,7 @@ function App({ published }: { published?: boolean }) {
         dispatch(setShowHamburgerMenu(newConfig.settings.showHamburgerMenu));
 
         if (newConfig.settings.showLayerHideButtons || published) {
-          setAllowUiChanges(false);
+          dispatch(setAllowUiChanges(false));
           dispatch(setShowLayerHideButtons(true));
         }
       }
@@ -85,7 +87,7 @@ function App({ published }: { published?: boolean }) {
       }
     };
 
-    const onKeyUp = () => {
+    const onKeyUp = (e: KeyboardEvent) => {
       if (allowUiChanges) {
         dispatch(setShowLayerHideButtons(false));
       }
