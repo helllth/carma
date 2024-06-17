@@ -43,7 +43,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(
     const urlPrefix = window.location.origin + window.location.pathname;
 
     return (
-      <div className="absolute top-12 w-[calc(100%-60px)] left-20 pr-72 z-[999] flex justify-center items-center">
+      <div className="absolute top-12 w-[calc(100%-60px)] left-28 z-[999] flex justify-center items-center">
         <div
           ref={ref}
           className={cn(
