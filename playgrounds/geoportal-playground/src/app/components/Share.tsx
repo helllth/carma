@@ -142,7 +142,17 @@ const Share = () => {
           const newConfig = {
             backgroundLayer: backgroundLayer,
             layers: activeLayers,
-            settings: mode === 'publish/' ? settings : undefined,
+            settings:
+              mode === 'publish/'
+                ? settings
+                : {
+                    showLayerButtons: true,
+                    showLayerHideButtons: false,
+                    showFullscreen: true,
+                    showLocator: true,
+                    showMeasurement: true,
+                    showHamburgerMenu: true,
+                  },
           };
           const jsonString = JSON.stringify(newConfig);
           const compressed = LZString.compressToEncodedURIComponent(jsonString);
