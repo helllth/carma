@@ -84,11 +84,11 @@ const Map = () => {
         {getBackgroundLayers({ layerString: backgroundLayer.layers })}
         {focusMode && <PaleOverlay />}
         {showLayerButtons && <LayerWrapper />}
-        {layers.map((layer) => {
+        {layers.map((layer, i) => {
           if (layer.visible) {
             return (
               <StyledWMSTileLayer
-                key={`${layer.id}_${focusMode}`}
+                key={`${focusMode}_${i}`}
                 type="wms"
                 url={layer.url}
                 maxZoom={26}
