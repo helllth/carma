@@ -151,7 +151,7 @@ const Share = () => {
                     showFullscreen: true,
                     showLocator: true,
                     showMeasurement: true,
-                    showHamburgerMenu: true,
+                    showHamburgerMenu: false,
                   },
           };
           const jsonString = JSON.stringify(newConfig);
