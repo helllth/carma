@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode, useEffect } from 'react';
+import React, { MouseEvent, ReactNode } from 'react';
 import { faCubes, faTreeCity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import OnMapButton from './OnMapButton';
@@ -18,13 +18,6 @@ export const SceneStyleToggle = (props: SceneStyleToggleProps) => {
     e.preventDefault();
     toggleSceneStyle();
   };
-
-  useEffect(() => {
-    // set the initial style
-    console.log('HOOK: SceneStyleToggle: initialStyle', initialStyle);
-    toggleSceneStyle();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <OnMapButton

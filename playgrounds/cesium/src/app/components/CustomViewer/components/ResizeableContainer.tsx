@@ -1,20 +1,18 @@
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState, useEffect, MutableRefObject } from 'react';
+import React, { useState, useEffect } from 'react';
 
-type ResizableIframeProps = {
-  iframeSrcRef: MutableRefObject<string | null>;
+type ResizeableContainer = {
   minLeft?: number;
   minRight?: number;
+  children?: React.ReactNode;
 };
 
 // TODO Remove this and replace component with topicmap
 
-const ResizableIframe = ({
-  iframeSrcRef,
+export const ResizeableContainer = ({
   minLeft = 5,
   minRight = 1.5,
-}: ResizableIframeProps) => {
+  children,
+}: ResizeableContainer) => {
   const [iframePadding, setIframePadding] = useState(100 - minRight);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -49,16 +47,6 @@ const ResizableIframe = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging]);
 
-  const src = iframeSrcRef.current;
-
-  if (src === null) {
-    return null;
-  }
-
-  const handleButtonClick = () => {
-    window.open(src, '_blank');
-  };
-
   return (
     <div
       style={{
@@ -79,43 +67,7 @@ const ResizableIframe = ({
           width: '100vw',
         }}
       >
-        <iframe
-          key={src} // only needed if iframe becomes unresponsive
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            width: '100%',
-            overflow: 'hidden',
-            padding: 0,
-            margin: 0,
-            pointerEvents: isDragging ? 'none' : 'auto', // Change this line
-          }}
-          title="leafletSynced"
-          src={src}
-          width="100%"
-          height="100%"
-        />
-        <button
-          onClick={handleButtonClick}
-          style={{
-            position: 'absolute',
-            top: 10,
-            right: 45,
-            zIndex: 101,
-            padding: '5px 10px',
-            backgroundColor: '#007BFF',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-        >
-          h: {src.match(/h=([^&]*)/)![1]} zoom:{' '}
-          <b>{src.match(/zoom=([^&]*)/)![1]}</b> im Kulturstadtplan{' '}
-          <FontAwesomeIcon icon={faExternalLinkAlt} />
-        </button>
+        {children}
       </div>
       <div
         onMouseDown={handleMouseDown}
@@ -134,4 +86,4 @@ const ResizableIframe = ({
   );
 };
 
-export default ResizableIframe;
+export default ResizeableContainer;

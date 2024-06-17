@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Color, HeadingPitchRange, Viewer } from 'cesium';
+import { Color, HeadingPitchRange, Viewer, Math as CeMath } from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
 import Crosshair from '../UI/Crosshair';
 import SearchWrapper from './components/SearchWrapper';
@@ -18,9 +18,10 @@ import {
 import { BaseTilesets } from './components/BaseTilesets';
 import ControlsUI from './components/ControlsUI';
 import { replaceHashRoutedHistory } from './utils';
-import ResizableIframe from './components/ResizeIframe';
+import { ResizeableContainer } from './components/ResizeableContainer';
 import { useLocation } from 'react-router-dom';
 import useInitializeViewer from './hooks';
+import { getCesiumViewerZoomLevel } from '../../utils/cesiumHelpers';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -76,7 +77,6 @@ function CustomViewer(props: CustomViewerProps) {
     }
   }, []);
 
-  const iframeSrcRef = useRef<string | null>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -119,32 +119,26 @@ function CustomViewer(props: CustomViewerProps) {
     const moveEndListener = async () => {
       if (viewer.camera.position) {
         console.log('LISTENER: moveEndListener', isSecondaryStyle);
-        await replaceHashRoutedHistory(
+        const stateObj = await replaceHashRoutedHistory(
           viewer,
           location.pathname,
           isSecondaryStyle
         );
-        // TODO REMOVE THIS LEAFLET IFRAME PART AND REPLACE with syncing with Topicmaps
         /*
-        const zoom = await getCesiumViewerZoomLevel(viewer);
         const headingInDegrees = CeMath.toDegrees(viewer.camera.heading);
         const pitchInDegrees = CeMath.toDegrees(viewer.camera.pitch);
         const tolerance = 5;
+
         if (
           (headingInDegrees % 360 >= 360 - tolerance ||
             headingInDegrees % 360 <= tolerance) &&
           pitchInDegrees <= tolerance - 90
         ) {
-          //console.log('scene', scene);
-          if (zoom !== Infinity) {
-            const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${sceneHashRef.current}`;
-            //console.info('view in leaflet:', `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${scene}`);
-            iframeSrcRef.current = leafletUrl;
-          }
-        } else {
-          iframeSrcRef.current = null;
-        }
-        */
+         */
+        //console.log('scene', scene);
+        const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${stateObj?.sceneHash}`;
+        console.info('view in leaflet:', leafletUrl);
+        //}
       }
     };
 
@@ -197,10 +191,11 @@ function CustomViewer(props: CustomViewerProps) {
         />
       )}
       {showCrosshair && <Crosshair lineColor="white" />}
-      {
-        // TODO Remove this iframe
-        <ResizableIframe iframeSrcRef={iframeSrcRef} />
-      }
+      {/*
+      <ResizeableContainer>
+        <div></div>
+      </ResizeableContainer>
+      */}
     </ResiumViewer>
   );
 }
