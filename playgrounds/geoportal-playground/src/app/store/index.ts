@@ -10,6 +10,8 @@ import { APP_KEY, STORAGE_PREFIX } from '../helper/constants';
 
 console.log('store initializing ....');
 
+const customAppKey = new URLSearchParams(window.location.hash).get('appKey');
+
 const devToolsEnabled =
   new URLSearchParams(window.location.search).get('devToolsEnabled') === 'true';
 console.log('devToolsEnabled:', devToolsEnabled);
@@ -49,13 +51,13 @@ if (stateLoggingEnabled === true) {
 }
 
 const uiConfig = {
-  key: '@' + APP_KEY + '.' + STORAGE_PREFIX + '.app.config',
+  key: '@' + (customAppKey || APP_KEY) + '.' + STORAGE_PREFIX + '.app.config',
   storage: localForage,
-  whitelist: [],
+  whitelist: ['allowUiChanges', 'showLayerHideButtons'],
 };
 
 const mappingConfig = {
-  key: '@' + APP_KEY + '.' + STORAGE_PREFIX + '.app.mapping',
+  key: '@' + (customAppKey || APP_KEY) + '.' + STORAGE_PREFIX + '.app.mapping',
   storage: localForage,
   whitelist: ['layers', 'backgroundLayer'],
 };
