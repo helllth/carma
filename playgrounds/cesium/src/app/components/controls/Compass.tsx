@@ -10,6 +10,8 @@ import {
   defined,
   Cartesian2,
 } from 'cesium';
+import { get } from 'http';
+import { getCanvasCenter } from '../../utils/cesiumHelpers';
 
 type CompassProps = {
   children?: ReactNode;
@@ -31,9 +33,10 @@ export const Compass = (props: CompassProps) => {
       const horizonTest = viewer.camera.pickEllipsoid(windowPosition);
       let destination = viewer.camera.position;
       if (defined(horizonTest)) {
-        const scenePick = viewer.scene.pickPosition(windowPosition);
-        const distance = Cartesian3.distance(scenePick, viewer.camera.position);
-        const cartographic = Cartographic.fromCartesian(scenePick);
+        console.log('scene center below horizon');
+        const pos = getCanvasCenter(viewer);
+        const distance = Cartesian3.distance(pos, viewer.camera.position);
+        const cartographic = Cartographic.fromCartesian(pos);
         const longitude = CeMath.toDegrees(cartographic.longitude);
         const latitude = CeMath.toDegrees(cartographic.latitude);
         destination = Cartesian3.fromDegrees(
@@ -42,6 +45,7 @@ export const Compass = (props: CompassProps) => {
           cartographic.height + Math.max(distance, MIN_TOP_DOWN_DISTANCE)
         );
       } else {
+        console.info('scene above horizon, using camera position as reference');
         // use camera position if horizon is not visible
         // bump up the camera a bit if too close too ground
         const cartographic = Cartographic.fromCartesian(viewer.camera.position);

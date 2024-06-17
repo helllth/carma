@@ -36,7 +36,7 @@ const setupPrimaryStyle = (viewer: Viewer) => {
     } else {
       viewer.scene.terrainProvider = await wuppTerrainProvider;
     }
-    //viewer.scene.globe.depthTestAgainstTerrain = true;
+    // viewer.scene.globe.depthTestAgainstTerrain = false;
     viewer.scene.globe.show = false;
 
     if (imageryLayer) {
@@ -54,7 +54,8 @@ export const setupSecondaryStyle = (viewer: Viewer) => {
     if (!(viewer.scene.terrainProvider instanceof CesiumTerrainProvider)) {
       viewer.scene.terrainProvider = await wuppTerrainProvider;
     }
-    //viewer.scene.globe.depthTestAgainstTerrain = true;
+    // DEPTH TEST is quite slow, only use if really necessary
+    // viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.scene.globe.show = false;
 
     if (imageryLayer.ready) {
@@ -66,7 +67,6 @@ export const setupSecondaryStyle = (viewer: Viewer) => {
     }
     viewer.scene.globe.show = true;
   })();
-  //viewer.scene.globe.depthTestAgainstTerrain = false;
 };
 
 export const useSceneStyleToggle = (style?: keyof SceneStyles) => {
@@ -75,7 +75,7 @@ export const useSceneStyleToggle = (style?: keyof SceneStyles) => {
 
   // TODO initial style set by parameter
   const [isPrimaryStyle, setIsPrimaryStyle] = useState(true);
-  console.log('HOOK: useSceneStyleToggle', style); 
+  console.log('HOOK: useSceneStyleToggle', style);
 
   useEffect(() => {
     if (!viewer) return;

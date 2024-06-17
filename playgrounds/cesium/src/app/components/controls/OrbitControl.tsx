@@ -83,6 +83,7 @@ const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
     if (!isAnimating && viewer) {
       console.log('stop orbiting by state', orbitPointRef.current);
       viewer.clock.onTick.removeEventListener(orbitListener);
+      viewer.camera.constrainedAxis = undefined;
       showCenterPoint && viewer.entities.removeById(orbitCenterPointId);
       //setIsAnimating(false);
     }

@@ -41,8 +41,13 @@ export function getCanvasCenter(viewer: Viewer) {
     viewer.canvas.clientWidth / 2,
     viewer.canvas.clientHeight / 2
   );
+  viewer.scene.pickTranslucentDepth = true;
+  const depthTestPrev = viewer.scene.globe.depthTestAgainstTerrain;
+  viewer.scene.globe.depthTestAgainstTerrain = true;
 
-  return viewer.scene.pickPosition(windowPosition);
+  const pos = viewer.scene.pickPosition(windowPosition);
+  viewer.scene.globe.depthTestAgainstTerrain = depthTestPrev;
+  return pos;
 }
 
 // use with onReady event of Cesium3DTileset
