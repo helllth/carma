@@ -19,6 +19,7 @@ import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 import { useSearchParams } from 'react-router-dom';
 import getBackgroundLayers from '../helper/layer';
 import { getMode, getShowLayerButtons } from '../store/slices/ui';
+import CismapLayer from 'react-cismap/CismapLayer';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -87,9 +88,8 @@ const Map = () => {
         {layers.map((layer) => {
           if (layer.visible) {
             return (
-              <StyledWMSTileLayer
+              <CismapLayer
                 key={`${layer.id}_${focusMode}`}
-                type="wms"
                 url={layer.url}
                 maxZoom={26}
                 layers={layer.id}
@@ -98,6 +98,7 @@ const Map = () => {
                 transparent="true"
                 pane="additionalLayers1"
                 opacity={layer.opacity.toFixed(1) || 0.7}
+                type={layer.type || 'wmts'}
               />
             );
           }
