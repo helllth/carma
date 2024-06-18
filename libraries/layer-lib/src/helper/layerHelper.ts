@@ -56,21 +56,17 @@ export const createBaseConfig = (layers) => {
 };
 
 const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
-  if (layer) {
-    let item: Item = {
-      title: layer.Title,
-      description: layer.Abstract,
-      tags: layer.tags,
-      id: serviceName + ':' + layer.Name,
-      type: 'layer',
-      layerType: 'wmts',
-      props: { ...layer },
-    };
+  let item: Item = {
+    title: layer.Title,
+    description: layer.Abstract,
+    tags: layer.tags,
+    id: serviceName + ':' + layer.Name,
+    type: 'layer',
+    layerType: 'wmts',
+    props: { ...layer },
+  };
 
-    return item;
-  }
-
-  return {};
+  return item;
 };
 
 export const getLayerStructure = ({
@@ -114,6 +110,7 @@ export const getLayerStructure = ({
         }
         if (foundLayer) {
           if (wms) {
+            // @ts-ignore
             foundLayer.props['url'] =
               wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
           }

@@ -37,10 +37,13 @@ const LibItem = ({
   const title = layer.title;
   const description = layer.description;
   const tags = layer.type === 'link' ? layer.tags : layer.tags.slice(1);
+
+  // @ts-ignore
   const name = layer.name;
+  // @ts-ignore
   const service = layer.service;
 
-  const box = layer.pictureBoundingBox;
+  const box = layer.pictureBoundingBox || [];
 
   const thumbnail = thumbnails?.find(
     (element) => element.name === name + '_' + service.name

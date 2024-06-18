@@ -34,6 +34,7 @@ export type Item = {
   description: string;
   tags: string[];
   thumbnail?: string;
+  pictureBoundingBox?: [number, number, number, number];
   id: string;
 } & (tmpLayer | Link | Feature);
 
