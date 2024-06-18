@@ -68,15 +68,42 @@ const TopNavbar = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const updateLayers = (layer: Item) => {
-    const newLayer = {
-      title: layer.title,
-      id: layer.id,
-      opacity: 0.7,
-      description: layer.description,
-      visible: true,
-      type: layer.layerType,
-      props: layer.props,
-    };
+    let newLayer: Layer;
+
+    if (layer.type === 'layer') {
+      switch (layer.layerType) {
+        case 'wmts': {
+          newLayer = {
+            title: layer.title,
+            id: layer.id,
+            layerType: 'wmts',
+            opacity: 0.7,
+            description: layer.description,
+            visible: true,
+            props: {
+              url: layer.props.url,
+              legend: layer.props.Style[0].LegendURL,
+              name: layer.props.Name,
+            },
+          };
+          break;
+        }
+        case 'vector': {
+          newLayer = {
+            title: layer.title,
+            id: layer.id,
+            layerType: 'vector',
+            opacity: 0.7,
+            description: layer.description,
+            visible: true,
+            props: {
+              style: layer.props.style,
+            },
+          };
+          break;
+        }
+      }
+    }
 
     if (activeLayers.find((activeLayer) => activeLayer.id === layer.id)) {
       try {
@@ -196,8 +223,12 @@ const TopNavbar = () => {
                 title: layerMap[e.target.value].title,
                 opacity: 1.0,
                 description: '',
+                layerType: 'wmts',
                 visible: true,
-                url: layerMap[e.target.value].url,
+                props: {
+                  name: '',
+                  url: layerMap[e.target.value].url,
+                },
                 layers: layerMap[e.target.value].layers,
               })
             );

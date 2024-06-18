@@ -87,14 +87,14 @@ const Map = () => {
         {showLayerButtons && <LayerWrapper />}
         {layers.map((layer) => {
           if (layer.visible) {
-            switch (layer.type) {
+            switch (layer.layerType) {
               case 'wmts':
                 return (
                   <CismapLayer
                     key={`${layer.id}_${focusMode}`}
                     url={layer.props.url}
                     maxZoom={26}
-                    layers={layer.props.Name}
+                    layers={layer.props.name}
                     format="image/png"
                     tiled={true}
                     transparent="true"
