@@ -85,13 +85,13 @@ const Map = () => {
         {getBackgroundLayers({ layerString: backgroundLayer.layers })}
         {focusMode && <PaleOverlay />}
         {showLayerButtons && <LayerWrapper />}
-        {layers.map((layer) => {
+        {layers.map((layer, i) => {
           if (layer.visible) {
             switch (layer.layerType) {
               case 'wmts':
                 return (
                   <CismapLayer
-                    key={`${layer.id}_${focusMode}`}
+                    key={`${focusMode}_${i}`}
                     url={layer.props.url}
                     maxZoom={26}
                     layers={layer.props.name}
@@ -106,12 +106,12 @@ const Map = () => {
               case 'vector':
                 return (
                   <CismapLayer
-                    key={`${layer.id}_${focusMode}`}
+                    key={`${focusMode}_${i}`}
                     style={layer.props.style}
                     maxZoom={26}
                     pane="additionalLayers1"
                     opacity={layer.opacity.toFixed(1) || 0.7}
-                    type={'vector'}
+                    type="vector"
                   />
                 );
             }
