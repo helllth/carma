@@ -13,10 +13,11 @@ import { Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { InfoOutlined } from '@ant-design/icons';
 import { Layer } from './LibModal';
+import { Item } from '../helper/types';
 
 interface LayerItemProps {
   setAdditionalLayers: any;
-  layer: any;
+  layer: Item;
   thumbnails: any;
   setThumbnail: any;
   activeLayers: Layer[];
@@ -33,10 +34,10 @@ const LibItem = ({
   const [isFavourite, setIsFavourite] = useState(false);
   const [isActiveLayer, setIsActiveLayer] = useState(false);
   const [thumbUrl, setThumbUrl] = useState('');
-  const title = layer.Title;
-  const description = layer.Abstract;
+  const title = layer.title;
+  const description = layer.description;
   const tags = layer.type === 'link' ? layer.tags : layer.tags.slice(1);
-  const name = layer.Name;
+  const name = layer.name;
   const service = layer.service;
 
   const box = layer.pictureBoundingBox;
@@ -70,18 +71,12 @@ const LibItem = ({
   const hightlightTextIndexes = undefined;
 
   const handleLayerClick = () => {
-    setAdditionalLayers({
-      name,
-      title,
-      url: service.url,
-      description,
-      legend: layer.Style.find((style) => style.LegendURL)?.LegendURL,
-    });
+    setAdditionalLayers(layer);
   };
 
   useEffect(() => {
     let setActive = false;
-    if (activeLayers.find((activeLayer) => activeLayer.id === name)) {
+    if (activeLayers.find((activeLayer) => activeLayer.id === layer.id)) {
       setActive = true;
     }
     setIsActiveLayer(setActive);
@@ -172,7 +167,7 @@ const LibItem = ({
         {layer.type === 'link' ? (
           <a
             className="absolute left-1 top-1 text-3xl cursor-pointer z-50 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
-            href={layer.link.url}
+            href={layer.url}
             target="topicMaps"
           >
             <FontAwesomeIcon icon={faExternalLinkAlt} />
@@ -190,7 +185,7 @@ const LibItem = ({
             {layer.type === 'link' ? (
               <a
                 className="w-36 bg-gray-100 hover:no-underline text-black hover:text-neutral-600 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
-                href={layer.link.url}
+                href={layer.url}
                 target="topicMaps"
               >
                 <>

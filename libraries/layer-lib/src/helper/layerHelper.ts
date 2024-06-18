@@ -1,5 +1,6 @@
 import { Layer, WMSCapabilitiesJSON } from 'wms-capabilities';
 import { serviceConfig } from './config';
+import { Item, XMLLayer } from './types';
 
 export const flattenLayer = (
   layer: any,
@@ -54,6 +55,24 @@ export const createBaseConfig = (layers) => {
   return null;
 };
 
+const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
+  if (layer) {
+    let item: Item = {
+      title: layer.Title,
+      description: layer.Abstract,
+      tags: layer.tags,
+      id: serviceName + ':' + layer.Name,
+      type: 'layer',
+      layerType: 'wmts',
+      props: { ...layer },
+    };
+
+    return item;
+  }
+
+  return {};
+};
+
 export const getLayerStructure = ({
   config,
   wms,
@@ -67,7 +86,7 @@ export const getLayerStructure = ({
   const services = serviceConfig;
   for (let category in config) {
     const categoryConfig = config[category];
-    const layers: any[] = [];
+    const layers: Item[] = [];
     let categoryObject = {
       Title: categoryConfig.Title || category,
       layers,
@@ -82,24 +101,26 @@ export const getLayerStructure = ({
         service = services[categoryConfig.serviceName];
       }
       if (service.name === serviceName) {
-        let foundLayer;
+        let foundLayer: Item;
         if (wms) {
-          foundLayer = findLayerAndAddTags(
+          const wmsLayer = findLayerAndAddTags(
             wms.Capability.Layer,
             layer.name,
             []
           );
+          foundLayer = wmsLayerToGenericItem(wmsLayer, serviceName);
         } else {
           foundLayer = layer;
         }
         if (foundLayer) {
           if (wms) {
-            foundLayer['url'] =
+            foundLayer.props['url'] =
               wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
           }
           let tags = foundLayer.tags;
           tags[0] = categoryObject.Title;
           foundLayer = { ...foundLayer, ...layer, tags, service };
+
           layers.push(foundLayer);
         }
       }
