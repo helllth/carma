@@ -44,7 +44,6 @@ export default function getBackgroundLayers({
       }
     }
     let mergedOptions = objectAssign({}, namedStyleOptions, options);
-    // const layerGetter = Layers.get(layerAndNamedStyleArray[0]);
     const layerGetter = createLayerFactoryFunction(
       layerAndNamedStyleArray[0],
       layerConfig
@@ -107,7 +106,6 @@ const createLayerFactoryFunction = (key, _conf = defaultLayerConf) => {
     case 'wmts':
       return (options) => {
         let params = { ...conf.defaults.wms, ...conf.namedLayers[key] };
-        // console.log('params for ' + key, params);
         return (
           <CismapLayer
             key={key + JSON.stringify(options)}
@@ -122,7 +120,6 @@ const createLayerFactoryFunction = (key, _conf = defaultLayerConf) => {
     case 'wmts-nt':
       return (options) => {
         let params = { ...conf.defaults.wms, ...conf.namedLayers[key] };
-        // console.log('params for ' + key, params);
         return (
           <CismapLayer
             key={key + JSON.stringify(options)}
@@ -135,7 +132,6 @@ const createLayerFactoryFunction = (key, _conf = defaultLayerConf) => {
     case 'tiles':
       return (options) => {
         let params = { ...conf.defaults.wms, ...conf.namedLayers[key] };
-        // console.log('params for ' + key, params);
 
         return (
           <CismapLayer
@@ -149,9 +145,7 @@ const createLayerFactoryFunction = (key, _conf = defaultLayerConf) => {
       };
     case 'vector':
       return (options) => {
-        // let params = { ...conf.defaults.vector, ...conf.namedLayers[key], ...options }; // the way it should be to tarnsport e.g. opacity
         let params = { ...conf.defaults.vector, ...conf.namedLayers[key] };
-        // console.log("params for " + key, params);
 
         return (
           <CismapLayer
@@ -159,8 +153,6 @@ const createLayerFactoryFunction = (key, _conf = defaultLayerConf) => {
             {...params}
             opacity={options.opacity}
             type="vector"
-
-            // cssFilter={options["css-filter"]}
           />
         );
       };
