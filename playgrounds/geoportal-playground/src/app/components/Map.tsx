@@ -87,20 +87,34 @@ const Map = () => {
         {showLayerButtons && <LayerWrapper />}
         {layers.map((layer) => {
           if (layer.visible) {
-            return (
-              <CismapLayer
-                key={`${layer.id}_${focusMode}`}
-                url={layer.url}
-                maxZoom={26}
-                layers={layer.id}
-                format="image/png"
-                tiled={true}
-                transparent="true"
-                pane="additionalLayers1"
-                opacity={layer.opacity.toFixed(1) || 0.7}
-                type={layer.type || 'wmts'}
-              />
-            );
+            switch (layer.type) {
+              case 'wmts':
+                return (
+                  <CismapLayer
+                    key={`${layer.id}_${focusMode}`}
+                    url={layer.props.url}
+                    maxZoom={26}
+                    layers={layer.props.Name}
+                    format="image/png"
+                    tiled={true}
+                    transparent="true"
+                    pane="additionalLayers1"
+                    opacity={layer.opacity.toFixed(1) || 0.7}
+                    type={'wmts'}
+                  />
+                );
+              case 'vector':
+                return (
+                  <CismapLayer
+                    key={`${layer.id}_${focusMode}`}
+                    style={layer.props.style}
+                    maxZoom={26}
+                    pane="additionalLayers1"
+                    opacity={layer.opacity.toFixed(1) || 0.7}
+                    type={'vector'}
+                  />
+                );
+            }
           }
         })}
       </TopicMapComponent>
