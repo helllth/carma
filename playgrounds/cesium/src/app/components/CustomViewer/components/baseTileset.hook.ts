@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useCesium } from 'resium';
 import {
   CesiumTerrainProvider,
+  Color,
   EllipsoidTerrainProvider,
   ImageryLayer,
   Viewer,
@@ -31,15 +32,17 @@ const imageryLayer = new ImageryLayer(provider);
 
 const setupPrimaryStyle = (viewer: Viewer) => {
   (async () => {
+    viewer.scene.globe.baseColor = Color.DARKGRAY;
+
     if (viewer.scene.terrainProvider instanceof CesiumTerrainProvider) {
       //viewer.scene.terrainProvider = ellipsoidTerrainProvider;
     } else {
       viewer.scene.terrainProvider = await wuppTerrainProvider;
     }
     // viewer.scene.globe.depthTestAgainstTerrain = false;
-    viewer.scene.globe.show = false;
 
     if (imageryLayer) {
+      imageryLayer.show = false;
       if (!viewer.imageryLayers.contains(imageryLayer)) {
         viewer.imageryLayers.add(imageryLayer);
       }
@@ -50,22 +53,25 @@ const setupPrimaryStyle = (viewer: Viewer) => {
 export const setupSecondaryStyle = (viewer: Viewer) => {
   if (!viewer) return;
   (async () => {
+    viewer.scene.globe.baseColor = Color.WHITE;
+
     // console.log('setupSecondaryStyle', viewer.scene.terrainProvider);
     if (!(viewer.scene.terrainProvider instanceof CesiumTerrainProvider)) {
       viewer.scene.terrainProvider = await wuppTerrainProvider;
     }
     // DEPTH TEST is quite slow, only use if really necessary
     // viewer.scene.globe.depthTestAgainstTerrain = true;
-    viewer.scene.globe.show = false;
+    // viewer.scene.globe.show = false;
 
     if (imageryLayer.ready) {
+      imageryLayer.show = true;
       // console.log('Secondary Style Setup: add imagery layer');
       if (!viewer.imageryLayers.contains(imageryLayer)) {
         // console.log('Secondary Style Setup: add imagery layer');
         viewer.imageryLayers.add(imageryLayer);
       }
     }
-    viewer.scene.globe.show = true;
+    // viewer.scene.globe.show = true;
   })();
 };
 

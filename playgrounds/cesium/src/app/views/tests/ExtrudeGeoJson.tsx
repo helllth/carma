@@ -13,8 +13,9 @@ import {
 //const CP_TRUE = new ConstantProperty(true);
 const CP_FALSE = new ConstantProperty(false);
 const HEIGHT = new ConstantProperty(0);
-const HEIGHT_REF = new ConstantProperty(HeightReference.RELATIVE_TO_GROUND);
 const EXTRUDED_HEIGHT = new ConstantProperty(50);
+
+const HEIGHT_REF = new ConstantProperty(HeightReference.RELATIVE_TO_GROUND);
 const EXTRUDED_HEIGHT_REF = new ConstantProperty(
   HeightReference.RELATIVE_TO_GROUND
 );

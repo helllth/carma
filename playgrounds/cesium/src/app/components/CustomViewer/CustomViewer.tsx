@@ -179,6 +179,7 @@ function CustomViewer(props: CustomViewerProps) {
       timeline={false}
       navigationHelpButton={false}
       navigationInstructionsInitiallyVisible={false}
+      skyBox={false}
     >
       <BaseTilesets />
       {children}
