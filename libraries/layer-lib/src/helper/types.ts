@@ -3,12 +3,12 @@ type Link = {
   url: string;
 };
 
-type wmsProps = {
+export type wmsProps = {
   layerType: 'wmts' | 'wmts-nt';
   props: XMLLayer;
 };
 
-type vectorProps = {
+export type vectorProps = {
   layerType: 'vector';
   props: {
     style: string;
@@ -62,7 +62,7 @@ export type XMLLayer = {
     LegendURL: {
       format: string;
       OnlineResource: string;
-      size: number[];
+      size: [number, number];
     }[];
   }[];
   Title: string;
