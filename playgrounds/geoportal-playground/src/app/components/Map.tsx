@@ -83,8 +83,7 @@ const Map = () => {
         }
       >
         {getBackgroundLayers({ layerString: backgroundLayer.layers })}
-        {focusMode && <PaleOverlay />}
-        {showLayerButtons && <LayerWrapper />}
+        {focusMode && <PaleOverlay />};{showLayerButtons && <LayerWrapper />}
         {layers.map((layer, i) => {
           if (layer.visible) {
             switch (layer.layerType) {
@@ -106,11 +105,11 @@ const Map = () => {
               case 'vector':
                 return (
                   <CismapLayer
-                    key={`${focusMode}_${i}_${layer.id}`}
+                    key={`${focusMode}_${i}_${layer.id}_${layer.opacity}`}
                     style={layer.props.style}
                     maxZoom={26}
                     pane={`additionalLayers${i}`}
-                    opacity={layer.opacity.toFixed(1) || 0.7}
+                    opacity={layer.opacity || 0.7}
                     type="vector"
                   />
                 );
