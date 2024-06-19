@@ -65,7 +65,7 @@ function CustomViewer(props: CustomViewerProps) {
     showControls = true,
     showHome = true,
     showOrbit = true,
-    showDebug = true,
+    showDebug = false,
     infoBox = false,
     selectionIndicator = false,
 
@@ -237,7 +237,7 @@ function CustomViewer(props: CustomViewerProps) {
         />
       )}
       {showCrosshair && <Crosshair lineColor="white" />}
-      <ResizeableContainer enableDragging={isMode2d}>
+      <ResizeableContainer enableDragging={showDebug} start={showDebug ? 5 : 0}>
         <TopicMap />
       </ResizeableContainer>
     </ResiumViewer>

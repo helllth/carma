@@ -60,7 +60,7 @@ const mapDataToSearchResult = (data) => {
   return prepareOptions;
 };
 
-type SearchGazetterProps = {
+type SearchGazetteerProps = {
   gazData?: any;
   setGazetteerHit: (hit: any) => void;
   gazetteerHit: any;
@@ -89,7 +89,7 @@ export function SearchGazetteer({
   pixelwidth = 300,
   marker3dStyle,
   ifShowCategories: standardSearch = false,
-}: SearchGazetterProps) {
+}: SearchGazetteerProps) {
   const [options, setOptions] = useState([]);
   const [data, setData] = useState([]);
 

@@ -7,7 +7,7 @@ import LockCenterControl from '../../controls/LockCenterControl';
 import OrbitControl from '../../controls/OrbitControl';
 import ZoomControls from '../../controls/ZoomControls';
 import { UIComponentContext } from '../../UI/UIProvider';
-import { useViewerHome } from '../../../store/slices/viewer';
+import { useViewerHome, useViewerIsMode2d } from '../../../store/slices/viewer';
 import Compass from '../../controls/Compass';
 import { Scene } from 'resium';
 import SceneStyleToggle from '../../controls/SceneStyleToggle';
@@ -21,27 +21,37 @@ const ControlsUI = ({
 }) => {
   const UI = useContext(UIComponentContext);
   const home = useViewerHome();
+  const isMode2d = useViewerIsMode2d();
 
   return (
     <div className={'leaflet-control-container'}>
       <ControlContainer position="topleft">
-        <ZoomControls />
-        {showHome && home && (
+        <div
+          style={{
+            //opacity: isMode2d ? 0 : 1,
+            animation: isMode2d ? 'fadeout 1s' : 'fadein 1s',
+            animationFillMode: 'forwards',
+            visibility: isMode2d ? 'hidden' : 'visible',
+          }}
+        >
+          <ZoomControls />
+          {showHome && home && (
+            <ControlGroup>
+              <HomeControl />
+            </ControlGroup>
+          )}
+          {showOrbit && (
+            <ControlGroup>
+              <OrbitControl />
+            </ControlGroup>
+          )}
           <ControlGroup>
-            <HomeControl />
+            <LockCenterControl />
           </ControlGroup>
-        )}
-        {showOrbit && (
           <ControlGroup>
-            <OrbitControl />
+            <Compass />
           </ControlGroup>
-        )}
-        <ControlGroup>
-          <LockCenterControl />
-        </ControlGroup>
-        <ControlGroup>
-          <Compass />
-        </ControlGroup>
+        </div>
         <ControlGroup>
           <MapTypeSwitcher />
           <SceneStyleToggle />
@@ -54,7 +64,7 @@ const ControlsUI = ({
               <div key={index}>{component}</div>
             )) // Workaround to prevent missing key warning
           }
-          {searchComponent}
+          {!isMode2d && searchComponent}
         </ControlGroup>
       </ControlContainer>
       {showDebug && (
@@ -66,7 +76,7 @@ const ControlsUI = ({
               alignItems: 'flex-end',
             }}
           >
-            <DebugInfo />
+           <DebugInfo />
           </ControlGroup>
         </ControlContainer>
       )}

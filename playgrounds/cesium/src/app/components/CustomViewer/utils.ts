@@ -206,7 +206,11 @@ export const replaceHashRoutedHistory = (
   }
 };
 
-export const setLeafletView = async (viewer: Viewer, leafletElement) => {
+export const setLeafletView = async (
+  viewer: Viewer,
+  leafletElement,
+  { duration, animate } = { duration: 0, animate: false }
+) => {
   if (!viewer) return;
   const zoom = await cesiumViewerToLeafletZoom(viewer);
   if (zoom === Infinity || zoom === undefined || zoom === null) {
@@ -216,5 +220,6 @@ export const setLeafletView = async (viewer: Viewer, leafletElement) => {
   // TODO add simple method to get lat, lng from cesium camera in degrees
   const { hashParams } = encodeScene(viewer);
   const { lat, lng } = hashParams;
-  leafletElement && leafletElement.setView([lat, lng], zoom);
+  leafletElement &&
+    leafletElement.setView([lat, lng], zoom, { duration, animate });
 };

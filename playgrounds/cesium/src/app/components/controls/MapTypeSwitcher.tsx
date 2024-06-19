@@ -131,14 +131,17 @@ export const MapTypeSwitcher = (props: Props) => {
               },
               duration: prevDuration,
             });
-          }, 500);
+          }, 200);
         }
       }
     }
   };
 
   return (
-    <OnMapButton title="Einnorden" onClick={handleSwitchMapMode}>
+    <OnMapButton
+      title={isMode2d ? 'zur 3D Ansicht wechseln' : 'zur 2D Ansicht wechseln'}
+      onClick={handleSwitchMapMode}
+    >
       {isMode2d ? '3D' : '2D'}
     </OnMapButton>
   );
