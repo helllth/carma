@@ -91,7 +91,7 @@ const Map = () => {
               case 'wmts':
                 return (
                   <CismapLayer
-                    key={`${focusMode}_${i}`}
+                    key={`${focusMode}_${i}_${layer.id}`}
                     url={layer.props.url}
                     maxZoom={26}
                     layers={layer.props.name}
@@ -106,15 +106,17 @@ const Map = () => {
               case 'vector':
                 return (
                   <CismapLayer
-                    key={`${focusMode}_${i}`}
+                    key={`${focusMode}_${i}_${layer.id}`}
                     style={layer.props.style}
                     maxZoom={26}
-                    pane="additionalLayers1"
+                    pane={`additionalLayers${i}`}
                     opacity={layer.opacity.toFixed(1) || 0.7}
                     type="vector"
                   />
                 );
             }
+          } else {
+            return <></>;
           }
         })}
       </TopicMapComponent>
