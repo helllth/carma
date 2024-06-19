@@ -158,26 +158,10 @@ function CustomViewer(props: CustomViewerProps) {
         // let TopicMap/leaflet handle the view change in 2d Mode
         !isMode2d && replaceHashRoutedHistory(encodedScene, location.pathname);
 
-        if (isUserAction) {
+        if (isUserAction && showDebug) {
+          // TODO: this will mess with url state, as TopicMap also updates the hash
           setLeafletView(viewer, leafletElement);
         }
-        //setLocation(...vars);
-
-        /*
-        const headingInDegrees = CeMath.toDegrees(viewer.camera.heading);
-        const pitchInDegrees = CeMath.toDegrees(viewer.camera.pitch);
-        const tolerance = 5;
-
-        if (
-          (headingInDegrees % 360 >= 360 - tolerance ||
-            headingInDegrees % 360 <= tolerance) &&
-          pitchInDegrees <= tolerance - 90
-        ) {
-         */
-        //console.log('scene', scene);
-        //const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${encodedScene.hash}`;
-        //console.info('view in leaflet:', isUserAction, leafletUrl);
-        //}
       }
     };
 

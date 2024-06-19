@@ -60,10 +60,11 @@ export const TopicMap = () => {
     <div
       ref={componentRef}
       style={{
-        animation: isMode2d ? 'fadein 1s' : 'fadeout 1s',
+        //animation: isMode2d ? 'fadein 1s' : 'fadeout 1s',
         //animationFillMode: 'both',
-        pointerEvents: 'auto',
-        visibility: isMode2d ? 'visible' : 'hidden',
+        pointerEvents: isMode2d ? 'auto' : 'none',
+        opacity: isMode2d ? 1 : 0,
+        transition: 'opacity 1s',
       }}
       //className={isMode2d ? 'fade-in' : 'fade-out'}
     >
