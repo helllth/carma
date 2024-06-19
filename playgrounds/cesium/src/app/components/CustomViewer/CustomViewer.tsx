@@ -1,11 +1,11 @@
 import React, {
   ReactNode,
   useCallback,
+  useContext,
   useEffect,
-  useRef,
   useState,
 } from 'react';
-import { Color, HeadingPitchRange, Viewer, Math as CeMath } from 'cesium';
+import { Color, HeadingPitchRange, Viewer } from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
 import Crosshair from '../UI/Crosshair';
 import SearchWrapper from './components/SearchWrapper';
@@ -14,14 +14,16 @@ import {
   useShowSecondaryTileset,
   useViewerHome,
   useViewerHomeOffset,
+  useViewerIsMode2d,
 } from '../../store/slices/viewer';
 import { BaseTilesets } from './components/BaseTilesets';
 import ControlsUI from './components/ControlsUI';
-import { replaceHashRoutedHistory } from './utils';
+import { encodeScene, replaceHashRoutedHistory, setLeafletView } from './utils';
 import { ResizeableContainer } from './components/ResizeableContainer';
 import { useLocation } from 'react-router-dom';
 import useInitializeViewer from './hooks';
-import { getCesiumViewerZoomLevel } from '../../utils/cesiumHelpers';
+import TopicMap from './components/TopicMap';
+import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -53,6 +55,7 @@ function CustomViewer(props: CustomViewerProps) {
   const homeOffset = useViewerHomeOffset();
   const globeBaseColor = Color.WHITE; //useGlobeBaseColor();
   const isSecondaryStyle = useShowSecondaryTileset();
+  const isMode2d = useViewerIsMode2d();
   //const isAnimating = useViewerIsAnimating();
 
   const {
@@ -70,6 +73,43 @@ function CustomViewer(props: CustomViewerProps) {
   } = props;
 
   const [viewer, setViewer] = useState<Viewer | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const topicMapContext: any = useContext(TopicMapContext);
+  const leafletElement =
+    topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
+
+  const [isUserAction, setIsUserAction] = useState(false);
+
+  useEffect(() => {
+    if (!viewer) return;
+
+    const canvas = viewer.canvas;
+
+    // Ensure the canvas can receive focus
+    canvas.setAttribute('tabindex', '0');
+
+    // Event handlers
+    const handleFocus = () => setIsUserAction(true);
+    const handleBlur = () => setIsUserAction(false);
+    const handleMouseDown = () => {
+      canvas.focus();
+      setIsUserAction(true);
+    };
+
+    // Add event listeners
+    canvas.addEventListener('focus', handleFocus);
+    canvas.addEventListener('blur', handleBlur);
+    canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mousemove', handleMouseDown); // Track mouse move as interaction
+
+    // Cleanup event listeners on unmount
+    return () => {
+      canvas.removeEventListener('focus', handleFocus);
+      canvas.removeEventListener('blur', handleBlur);
+      canvas.removeEventListener('mousedown', handleMouseDown);
+      canvas.removeEventListener('mousemove', handleMouseDown);
+    };
+  }, [viewer]);
 
   const viewerRef = useCallback((node) => {
     if (node !== null) {
@@ -79,24 +119,18 @@ function CustomViewer(props: CustomViewerProps) {
 
   const location = useLocation();
 
-  useEffect(() => {
-    console.log('HOOK: hashRoute changed', location.pathname);
-    viewer &&
-      replaceHashRoutedHistory(viewer, location.pathname, isSecondaryStyle);
-  }, [location.pathname, viewer, isSecondaryStyle]);
-
   useInitializeViewer(viewer, home, homeOffset);
 
   useEffect(() => {
     if (viewer) {
-      console.log('HOOK: update Hash, style changed', isSecondaryStyle);
-      (async () => {
-        await replaceHashRoutedHistory(
-          viewer,
-          location.pathname,
-          isSecondaryStyle
-        );
-      })();
+      console.log(
+        'HOOK: update Hash, route or style changed',
+        isSecondaryStyle
+      );
+      replaceHashRoutedHistory(
+        encodeScene(viewer, { isSecondaryStyle }),
+        location.pathname
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewer, location.pathname, isSecondaryStyle]);
@@ -119,11 +153,16 @@ function CustomViewer(props: CustomViewerProps) {
     const moveEndListener = async () => {
       if (viewer.camera.position) {
         console.log('LISTENER: moveEndListener', isSecondaryStyle);
-        const stateObj = await replaceHashRoutedHistory(
-          viewer,
-          location.pathname,
-          isSecondaryStyle
-        );
+        const encodedScene = encodeScene(viewer, { isSecondaryStyle });
+
+        // let TopicMap/leaflet handle the view change in 2d Mode
+        !isMode2d && replaceHashRoutedHistory(encodedScene, location.pathname);
+
+        if (isUserAction) {
+          setLeafletView(viewer, leafletElement);
+        }
+        //setLocation(...vars);
+
         /*
         const headingInDegrees = CeMath.toDegrees(viewer.camera.heading);
         const pitchInDegrees = CeMath.toDegrees(viewer.camera.pitch);
@@ -136,8 +175,8 @@ function CustomViewer(props: CustomViewerProps) {
         ) {
          */
         //console.log('scene', scene);
-        const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${stateObj?.sceneHash}`;
-        console.info('view in leaflet:', leafletUrl);
+        //const leafletUrl = `https://carma-dev-deployments.github.io/topicmaps-kulturstadtplan/#/?${encodedScene.hash}`;
+        //console.info('view in leaflet:', isUserAction, leafletUrl);
         //}
       }
     };
@@ -147,7 +186,13 @@ function CustomViewer(props: CustomViewerProps) {
       viewer.camera.moveEnd.removeEventListener(moveEndListener);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewer, location.pathname, isSecondaryStyle]);
+  }, [
+    viewer,
+    location.pathname,
+    isSecondaryStyle,
+    leafletElement,
+    isUserAction,
+  ]);
 
   console.log('RENDER: CustomViewer');
 
@@ -192,11 +237,9 @@ function CustomViewer(props: CustomViewerProps) {
         />
       )}
       {showCrosshair && <Crosshair lineColor="white" />}
-      {/*
-      <ResizeableContainer>
-        <div></div>
+      <ResizeableContainer enableDragging={isMode2d}>
+        <TopicMap />
       </ResizeableContainer>
-      */}
     </ResiumViewer>
   );
 }
