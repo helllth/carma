@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useCesium } from 'resium';
 import { lockPosition, unlockPosition } from '../../utils/position';
 import OnMapButton from './OnMapButton';
+import { DebugModelMatrixPrimitive, Viewer } from 'cesium';
 
 type LockCenterControlProps = {
   children?: ReactNode;
@@ -21,7 +22,9 @@ const LockCenterControl = (props: LockCenterControlProps) => {
       setLockCenter(true);
       viewer && lockPosition(viewer);
     } else {
-      unlockPosition(viewer);
+      unlockPosition(
+        viewer as Viewer & { debugPrimitive?: DebugModelMatrixPrimitive }
+      );
       setLockCenter(false);
     }
   };

@@ -1,4 +1,4 @@
-import { Color, ColorMaterialProperty } from 'cesium';
+import { Color, ColorMaterialProperty, Math as CeMath } from 'cesium';
 import { defaultState } from './store.config';
 
 export const APP_DEFAULT_TITLE = '3D Viewer Prototype';
@@ -14,6 +14,6 @@ export const DEFAULT_SELECTION_HIGHLIGHT_MATERIAL = new ColorMaterialProperty(
 
 const fullRotationDuration = 60; // seconds
 export const DEFAULT_ROTATION_SPEED =
-  (2 * Math.PI) / (fullRotationDuration * 1000); // rad per millisecond
+  CeMath.TWO_PI / (fullRotationDuration * 1000); // rad per millisecond
 
 export default defaultState;

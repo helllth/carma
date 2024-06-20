@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Viewer, BoundingSphere, Cartesian3, PerspectiveFrustum } from 'cesium';
+import {
+  Viewer,
+  BoundingSphere,
+  Cartesian3,
+  PerspectiveFrustum,
+  Math as CeMath,
+} from 'cesium';
 import { useDispatch } from 'react-redux';
 import {
   setShowPrimaryTileset,
@@ -33,11 +39,10 @@ const useInitializeViewer = (
       const { camera, isSecondaryStyle } = sceneFromHashParams;
       const { latitude, longitude, height, heading, pitch } = camera;
 
-      /* TODO enable syncing of leaflet view with dynamic fov
+      // TODO enable syncing of leaflet view with dynamic fov
       if (viewer.camera.frustum instanceof PerspectiveFrustum) {
-        viewer.camera.frustum.fov = 1.2;
+      //viewer.camera.frustum.fov = 0.1;
       }
-      */
 
       // TODO enable 2D Mode if zoom value is present in hash on startup
 
@@ -57,7 +62,7 @@ const useInitializeViewer = (
           ),
           orientation: {
             heading: heading ?? 0,
-            pitch: pitch ?? -Math.PI / 2,
+            pitch: pitch ?? -CeMath.PI_OVER_TWO,
           },
         });
 

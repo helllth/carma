@@ -1,5 +1,4 @@
-import { toDegFactor } from '../utils/cesiumHelpers';
-
+import { Math as CeMath } from 'cesium';
 interface HighlightOptions {
   digits?: number;
   fixed?: number;
@@ -38,7 +37,7 @@ export const highlightLocalDegrees = (
   { digits = 4, fixed = 5 }: HighlightOptions = {}
 ) => {
   // higlight last fractional digits
-  const [integerPart, decimalPart] = (num * toDegFactor)
+  const [integerPart, decimalPart] = CeMath.toDegrees(num)
     .toFixed(fixed)
     .split('.');
   const start = decimalPart.slice(0, fixed - digits);

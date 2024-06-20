@@ -2,10 +2,9 @@ import { useCesium } from 'resium';
 import OnMapButton from './OnMapButton';
 import { getAll } from '../../utils/position';
 import { faInfo, faX } from '@fortawesome/free-solid-svg-icons';
-import { Cartesian3, Cartographic, Viewer } from 'cesium';
+import { Cartesian3, Cartographic, Math as CeMath } from 'cesium';
 import { MouseEvent, useEffect, useState } from 'react';
-import { getCanvasCenter, toDegFactor } from '../../utils/cesiumHelpers';
-import { get } from 'http';
+import { getCanvasCenter } from '../../utils/cesiumHelpers';
 
 type DebugInfoProps = {
   children?: React.ReactNode;
@@ -23,7 +22,7 @@ const DebugInfo = (props: DebugInfoProps) => {
     null
   );
 
-  useEffect(() => { 
+  useEffect(() => {
     console.log('HOOK: DEBUG cameraChangedHandler');
     if (viewer && isExpanded) {
       const cameraChangedHandler = () => {
@@ -105,12 +104,12 @@ const DebugInfo = (props: DebugInfoProps) => {
             <pre>x {centerPosition.x}</pre>
             <pre>y {centerPosition.y}</pre>
             <pre>z {centerPosition.z}</pre>
-            {centerPosCarto && 
+            {centerPosCarto && (
               <>
-                <pre>lat {centerPosCarto.latitude * toDegFactor}</pre>
-                <pre>lon {centerPosCarto.longitude * toDegFactor}</pre>
+                <pre>lat {CeMath.toDegrees(centerPosCarto.latitude)}</pre>
+                <pre>lon {CeMath.toDegrees(centerPosCarto.longitude)}</pre>
               </>
-            }
+            )}
 
             <pre>h {centerPosCarto?.height}</pre>
 
@@ -120,12 +119,12 @@ const DebugInfo = (props: DebugInfoProps) => {
             <pre>x {cameraPosition.x}</pre>
             <pre>y {cameraPosition.y}</pre>
             <pre>z {cameraPosition.z}</pre>
-            {cameraPosCarto && 
+            {cameraPosCarto && (
               <>
-                <pre>lat {cameraPosCarto.latitude * toDegFactor}</pre>
-                <pre>lon {cameraPosCarto.longitude * toDegFactor}</pre>
+                <pre>lat {CeMath.toDegrees(cameraPosCarto.latitude)}</pre>
+                <pre>lon {CeMath.toDegrees(cameraPosCarto.longitude)}</pre>
               </>
-            }
+            )}
             <pre>h {cameraPosCarto?.height}</pre>
           </div>
         )}

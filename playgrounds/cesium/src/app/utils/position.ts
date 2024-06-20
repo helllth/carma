@@ -1,8 +1,17 @@
-import * as Cesium from 'cesium';
+import {
+  Transforms,
+  Math as CeMath,
+  Cartographic,
+  Cartesian2,
+  Matrix4,
+  Viewer,
+  HeadingPitchRange,
+  DebugModelMatrixPrimitive,
+} from 'cesium';
 
-export const lockPosition = async (viewer: Cesium.Viewer) => {
+export const lockPosition = async (viewer: Viewer) => {
   const { center, camera, cameraHeight } = await getAll(viewer);
-  const transform = Cesium.Transforms.eastNorthUpToFixedFrame(center);
+  const transform = Transforms.eastNorthUpToFixedFrame(center);
   // viewer.scene.camera.lookAtTransform(
   //   transform,
   //   new Cesium.HeadingPitchRange(0, -Math.PI / 4, cameraHeight - 150)
@@ -11,7 +20,7 @@ export const lockPosition = async (viewer: Cesium.Viewer) => {
   viewer.scene.camera.lookAt(
     center,
     // new Cesium.HeadingPitchRange(0, -Math.PI / 4, cameraHeight)
-    new Cesium.HeadingPitchRange(camera.heading, camera.pitch, cameraHeight)
+    new HeadingPitchRange(camera.heading, camera.pitch, cameraHeight)
   );
 
   /*
@@ -24,20 +33,22 @@ export const lockPosition = async (viewer: Cesium.Viewer) => {
   */
 };
 
-export const unlockPosition = async (viewer) => {
-  viewer.scene.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+export const unlockPosition = async (
+  viewer: Viewer & { debugPrimitive?: DebugModelMatrixPrimitive }
+) => {
+  viewer.scene.camera.lookAtTransform(Matrix4.IDENTITY);
   if (viewer.debugPrimitive) {
     viewer.scene.primitives.remove(viewer.debugPrimitive);
     viewer.debugPrimitive = undefined;
   }
 };
 
-export const getAll = async (viewer: Cesium.Viewer) => {
+export const getAll = async (viewer: Viewer) => {
   const camera = viewer.camera;
 
   const ellipsoid = viewer.scene.mapProjection.ellipsoid;
 
-  const windowPosition = new Cesium.Cartesian2(
+  const windowPosition = new Cartesian2(
     viewer.container.clientWidth / 2,
     viewer.container.clientHeight / 2
   );
@@ -72,10 +83,10 @@ export const getAll = async (viewer: Cesium.Viewer) => {
   //console.log('height', height);
 
   // Convert the position to cartographic coordinates to get the height
-  const cartographicPosition = Cesium.Cartographic.fromCartesian(center);
+  const cartographicPosition = Cartographic.fromCartesian(center);
 
-  const lat = cartographicPosition.latitude * (180 / Math.PI);
-  const lng = cartographicPosition.longitude * (180 / Math.PI);
+  const lat = CeMath.toDegrees(cartographicPosition.latitude);
+  const lng = CeMath.toDegrees(cartographicPosition.longitude);
 
   return {
     camera,

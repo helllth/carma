@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { Color, HeadingPitchRange, Viewer } from 'cesium';
+import { Color, HeadingPitchRange, Viewer, Math as CeMath } from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
 import Crosshair from '../UI/Crosshair';
 import SearchWrapper from './components/SearchWrapper';
@@ -158,9 +158,25 @@ function CustomViewer(props: CustomViewerProps) {
         // let TopicMap/leaflet handle the view change in 2d Mode
         !isMode2d && replaceHashRoutedHistory(encodedScene, location.pathname);
 
-        if (isUserAction && showDebug) {
+        if (isUserAction) {
+          // remove roll from camera orientation
+          const rollDeviation =
+            Math.abs(CeMath.TWO_PI - viewer.camera.roll) % CeMath.TWO_PI;
+          console.log('LISTENER: flyTo', rollDeviation, viewer.camera.roll);
+          if (rollDeviation > 0.02) {
+            const duration = Math.min(rollDeviation, 1);
+            viewer.camera.flyTo({
+              destination: viewer.camera.position,
+              orientation: {
+                heading: viewer.camera.heading,
+                pitch: viewer.camera.pitch,
+                roll: 0,
+              },
+              duration,
+            });
+          }
           // TODO: this will mess with url state, as TopicMap also updates the hash
-          setLeafletView(viewer, leafletElement);
+          showDebug && setLeafletView(viewer, leafletElement);
         }
       }
     };

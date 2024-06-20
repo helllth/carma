@@ -16,10 +16,11 @@ import {
   Scene,
   Viewer,
   Math as CeMath,
+  PerspectiveFrustum,
 } from 'cesium';
 import { ColorRgbaArray, TilesetConfig } from '../..';
 
-export const toDegFactor = 180 / Math.PI;
+// Math
 
 export const SELECTABLE_TRANSPARENT_3DTILESTYLE = create3DTileStyle({
   color: `vec4(1.0, 0.0, 0.0, 0.01)`,
@@ -56,8 +57,8 @@ export function getCanvasCenter(viewer: Viewer) {
 export const logTileSetInfoOnReady = (tileset: Cesium3DTileset) => {
   const { center } = tileset.root.boundingSphere;
   const cartographic = Cartographic.fromCartesian(center);
-  const longitude = cartographic.longitude * toDegFactor;
-  const latitude = cartographic.latitude * toDegFactor;
+  const longitude = CeMath.toDegrees(cartographic.longitude);
+  const latitude = CeMath.toDegrees(cartographic.latitude);
   const height = cartographic.height;
 
   console.log(
@@ -73,8 +74,8 @@ export const colorToArray = (color: Color): ColorRgbaArray => {
 export const getTileSetInfo = (tileset: Cesium3DTileset) => {
   const { center } = tileset.root.boundingSphere;
   const cartographic = Cartographic.fromCartesian(center);
-  const longitude = cartographic.longitude * toDegFactor;
-  const latitude = cartographic.latitude * toDegFactor;
+  const longitude = CeMath.toDegrees(cartographic.longitude);
+  const latitude = CeMath.toDegrees(cartographic.latitude);
   const height = cartographic.height;
   console.log(
     `Longitude: ${longitude}, Latitude: ${latitude}, Height: ${height}, center: ${center}, ${tileset.basePath}}`
@@ -186,8 +187,9 @@ export function getAllPrimitives(viewer: Viewer) {
 export const EARTH_CIRCUMFERENCE = 40075016.686;
 
 const WEB_MERCATOR_MAX_LATITUDE = 85.051129;
-export const WEB_MERCATOR_MAX_LATITUDE_RAD =
-  WEB_MERCATOR_MAX_LATITUDE * (Math.PI / 180);
+export const WEB_MERCATOR_MAX_LATITUDE_RAD = CeMath.toRadians(
+  WEB_MERCATOR_MAX_LATITUDE
+);
 
 export const getMercatorScaleFactorAtLatitude = (latitude: number): number => {
   if (latitude > WEB_MERCATOR_MAX_LATITUDE_RAD) {
@@ -213,26 +215,35 @@ export const getElevationFromZoom = (zoom: number, latitude: number) => {
   const scale = getMercatorScaleFactorAtLatitude(latitude);
   return EARTH_CIRCUMFERENCE / (Math.pow(2, zoom) * scale);
 };
-/*
-const FOV = 1.2; // in radians
-
-const TOP_DOWN_PLANAR_VIEW_DIAMETER_BY_FOV = Math.tan(FOV / 2) * 2; // Complete Top-Down FOV radius
-const TOP_DOWN_HOROPTER_ARC_LENGTH_BY_FOV = FOV;
-const SCALE_AT_CENTER = 1 / TOP_DOWN_HOROPTER_ARC_LENGTH_BY_FOV;
-const SCALE_AVG = 1 / TOP_DOWN_PLANAR_VIEW_DIAMETER_BY_FOV;
-
-const CONSTANT_FACTOR = 8; // TODO Find a better Reason for thsi constant
-const FOV_ZOOM_OFFSET = Math.log2(SCALE_AT_CENTER * CONSTANT_FACTOR);
-*/
-
-const FOV_ZOOM_OFFSET = 2.94; // empirically determined
-
-// TODO calculate offset value by FOV
-// TODO the visual error is still different for different zoom levels/elevations
-
-// TODO needs also to evaluate the render resolution of cesium to match styles for raster tiles
 
 // CESIUM TO WEB MAPS
+
+const getFieldOfViewZoomOffset = (
+  camera: Camera,
+  CONSTANT_SCALE_FACTOR = 8.42 // Empirically determined for best visual results
+
+  // for not tan compensation at larger fov
+  // const scale = 1 / fov;
+  // 7.65 for fov 1.04
+  // 8.4 for fov 0.05
+) => {
+  if (camera.frustum instanceof PerspectiveFrustum) {
+    const fov = camera.frustum.fov;
+    //console.log('fov', fov);
+    const scaleTan = 1 / (Math.tan(fov / 2) * 2); // overall view scale
+    const scaleCenter = 1 / fov; // scale at center
+
+    // average between center and tangent scale for better visual appearance for larger fov
+    // for small fov the difference is negligible
+    const centerWeight = 0.25;
+    const scale = scaleCenter * centerWeight + scaleTan * (1 - centerWeight);
+
+    //const scale = 1 / fov;
+    return Math.log2(scale * CONSTANT_SCALE_FACTOR);
+  }
+  console.warn('camera frustum is not a PerspectiveFrustum');
+  return null;
+};
 
 export const getCameraHeightAboveTerrain = async (
   viewer: Viewer
@@ -257,7 +268,7 @@ export const getCameraHeightAboveTerrain = async (
   }
 };
 
-export const cesiumViewerToLeafletZoom = async (viewer: Viewer) => {
+export const cesiumCameraElevationToLeafletZoom = async (viewer: Viewer) => {
   const cameraHeightAboveTerrain = await getCameraHeightAboveTerrain(viewer);
   console.log('zoom camera height above Terrain', cameraHeightAboveTerrain);
   const zoomEquivalent = getZoomFromElevation(
@@ -268,7 +279,12 @@ export const cesiumViewerToLeafletZoom = async (viewer: Viewer) => {
   // adjust zoom based on device pixel ratio
   const dpr = window.devicePixelRatio;
   const dprZOffset = Math.log2(dpr);
-  const zCompensated = zoomEquivalent - dprZOffset + FOV_ZOOM_OFFSET;
+  const fovOffset = getFieldOfViewZoomOffset(viewer.camera);
+  if (fovOffset === null) {
+    console.warn('fov offset is null');
+    return null;
+  }
+  const zCompensated = zoomEquivalent - dprZOffset + fovOffset;
   // console.log('leaflet zoom ', zoom, dpr, dprZOffset, zCompensated);
 
   return zCompensated;
@@ -277,13 +293,19 @@ export const cesiumViewerToLeafletZoom = async (viewer: Viewer) => {
 // WEB MAPS TO CESIUM
 
 export const leafletToCesiumElevation = (
+  viewer: Viewer,
   zoom: number,
   latDeg = 0,
   dpr = window.devicePixelRatio
 ) => {
   // adjust zoom based on device pixel ratio and fixed offset
   const dprZOffset = Math.log2(dpr);
-  const zCompensated = zoom + dprZOffset - FOV_ZOOM_OFFSET;
+  const fovOffset = getFieldOfViewZoomOffset(viewer.camera);
+  if (fovOffset === null) {
+    console.warn('fov offset is null');
+    return null;
+  }
+  const zCompensated = zoom + dprZOffset - fovOffset;
 
   const latRad = CeMath.toRadians(latDeg);
   const elevation = getElevationFromZoom(zCompensated, latRad);

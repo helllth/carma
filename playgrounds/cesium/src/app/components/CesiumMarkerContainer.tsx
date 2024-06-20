@@ -16,6 +16,7 @@ import {
   Quaternion,
   Transforms,
   VerticalOrigin,
+  Math as CeMath
 } from 'cesium';
 
 interface MarkerData {
@@ -175,7 +176,7 @@ const MarkerContainer: React.FC<MarkerContainerProps> = ({
                 const cameraHeading = viewer.camera.heading;
                 const rotationQuaternion = Quaternion.fromAxisAngle(
                   Cartesian3.UNIT_Z,
-                  -cameraHeading - Math.PI / 2
+                  -cameraHeading - CeMath.PI_OVER_TWO
                 );
                 const rotationMatrix =
                   Matrix4.fromTranslationQuaternionRotationScale(

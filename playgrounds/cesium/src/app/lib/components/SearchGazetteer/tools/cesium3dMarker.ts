@@ -7,6 +7,7 @@ import {
   Entity,
   Model,
   Cartographic,
+  Math as CeMath,
 } from 'cesium';
 import { ModelAsset } from '../types';
 
@@ -118,7 +119,7 @@ const updateMarker = (viewer: Viewer) => {
         const cameraHeading = viewer.camera.heading;
         const rotationQuaternion = Quaternion.fromAxisAngle(
           Cartesian3.UNIT_Z,
-          -cameraHeading - Math.PI / 2
+          -cameraHeading - CeMath.PI_OVER_TWO
         );
         const rotationMatrix = Matrix4.fromTranslationQuaternionRotationScale(
           translation,

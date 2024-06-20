@@ -1,8 +1,6 @@
-import { Camera, Cartesian3, Cartographic, Scene, Viewer } from 'cesium';
-import {
-  cesiumViewerToLeafletZoom,
-  toDegFactor,
-} from '../../utils/cesiumHelpers';
+import { Cartesian3, Cartographic, Viewer, Math as CeMath } from 'cesium';
+import { cesiumCameraElevationToLeafletZoom } from '../../utils/cesiumHelpers';
+import L from 'leaflet';
 
 // 5 DEGREES OF FREEDOM CAMERA encoding/decoding
 // lon, lat, height, heading, pitch
@@ -20,19 +18,20 @@ const FRACTIONAL_ZOOM_DIGITS = 3;
 const MINZOOM = 6;
 const MAXZOOM = 20;
 
+const formatRadians = (value: number, fixed = DEGREE_DIGITS) =>
+  parseFloat(CeMath.toDegrees(value).toFixed(fixed)); // parse float removes trailing zeros for shorter urls
+
 const hashcodecs = {
   // parsefloat removes trailing zeros for shorter urls
   longitude: {
     key: 'lng',
-    decode: (value: string) => Number(value) / toDegFactor,
-    encode: (value: number) =>
-      parseFloat((value * toDegFactor).toFixed(DEGREE_DIGITS)),
+    decode: (value: string) => CeMath.toRadians(Number(value)),
+    encode: (value: number) => formatRadians(value),
   },
   latitude: {
     key: 'lat',
-    decode: (value: string) => Number(value) / toDegFactor,
-    encode: (value: number) =>
-      parseFloat((value * toDegFactor).toFixed(DEGREE_DIGITS)),
+    decode: (value: string) => CeMath.toRadians(Number(value)),
+    encode: (value: number) => formatRadians(value),
   },
   height: {
     key: 'h',
@@ -41,15 +40,13 @@ const hashcodecs = {
   },
   heading: {
     key: 'heading',
-    decode: (value: string) => Number(value) / toDegFactor,
-    encode: (value: number) =>
-      parseFloat((value * toDegFactor).toFixed(CAMERA_DEGREE_DIGITS)) % 360,
+    decode: (value: string) => CeMath.toRadians(Number(value)),
+    encode: (value: number) => formatRadians(value, CAMERA_DEGREE_DIGITS) % 360,
   },
   pitch: {
     key: 'pitch',
-    decode: (value: string) => Number(value) / toDegFactor,
-    encode: (value: number) =>
-      parseFloat(((value * toDegFactor) % 360).toFixed(CAMERA_DEGREE_DIGITS)),
+    decode: (value: string) => CeMath.toRadians(Number(value)),
+    encode: (value: number) => formatRadians(value, CAMERA_DEGREE_DIGITS) % 360,
   },
   zoom: {
     key: 'zoom',
@@ -211,15 +208,25 @@ export const setLeafletView = async (
   leafletElement,
   { duration, animate } = { duration: 0, animate: false }
 ) => {
-  if (!viewer) return;
-  const zoom = await cesiumViewerToLeafletZoom(viewer);
+  if (!viewer || !leafletElement) return;
+  let zoom = await cesiumCameraElevationToLeafletZoom(viewer);
   if (zoom === Infinity || zoom === undefined || zoom === null) {
     console.warn('zoom is infinity, skipping');
     return;
   }
+  const MAX_2D_ZOOM = 25;
+  const MIN_2D_ZOOM = 9;
+  if (zoom > MAX_2D_ZOOM) {
+    console.warn('zoom is above max 2d zoom, clamping', MAX_2D_ZOOM, zoom);
+    zoom = MAX_2D_ZOOM;
+  } else if (zoom < MIN_2D_ZOOM) {
+    console.warn('zoom is below min 2d zoom, clamping', MIN_2D_ZOOM, zoom);
+    zoom = MIN_2D_ZOOM;
+  }
+
   // TODO add simple method to get lat, lng from cesium camera in degrees
   const { hashParams } = encodeScene(viewer);
   const { lat, lng } = hashParams;
-  leafletElement &&
-    leafletElement.setView([lat, lng], zoom, { duration, animate });
+  L.setOptions(leafletElement, { zoomSnap: 1 / 128 }); // TODO fix zoom snapping in TopicMap Component
+  leafletElement.setView([lat, lng], zoom, { duration, animate });
 };

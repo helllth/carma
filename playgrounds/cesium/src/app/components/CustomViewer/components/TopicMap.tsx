@@ -42,11 +42,27 @@ export const TopicMap = () => {
     }
     if (viewer) {
       const { lat, lng, zoom } = event;
-      const elevation = leafletToCesiumElevation(
+      let elevation = leafletToCesiumElevation(
+        viewer,
         zoom,
         lat,
         window.devicePixelRatio
       );
+      if (elevation === null) {
+        console.warn('Elevation is null');
+        return;
+      }
+
+      const MIN_RELATIVE_ELEVATION = 50;
+      if (elevation < MIN_RELATIVE_ELEVATION) {
+        console.info(
+          'Elevation below minimum',
+          MIN_RELATIVE_ELEVATION,
+          elevation
+        );
+        elevation = MIN_RELATIVE_ELEVATION;
+      }
+
       viewer.camera.flyTo({
         destination: Cartesian3.fromDegrees(lng, lat, elevation),
         duration: 0.25,
@@ -73,8 +89,8 @@ export const TopicMap = () => {
         backgroundlayers="empty"
         hamburgerMenu={false}
         fullScreenControlEnabled={false}
-        zoomSnap={0.01}
-        zoomDelta={0.01}
+        zoomSnap={1 / 64}
+        zoomDelta={1 / 4}
         locationChangedHandler={handleLeafletLocationChange}
       >
         <StyledWMSTileLayer
