@@ -4,7 +4,7 @@ import { getAll } from '../../utils/position';
 import { faInfo, faX } from '@fortawesome/free-solid-svg-icons';
 import { Cartesian3, Cartographic, Math as CeMath } from 'cesium';
 import { MouseEvent, useEffect, useState } from 'react';
-import { getCanvasCenter } from '../../utils/cesiumHelpers';
+import { pickViewerCanvasCenter } from '../../utils/cesiumHelpers';
 
 type DebugInfoProps = {
   children?: React.ReactNode;
@@ -30,7 +30,7 @@ const DebugInfo = (props: DebugInfoProps) => {
         setCameraPosCarto(
           Cartographic.clone(viewer.camera.positionCartographic)
         );
-        const centerPos = getCanvasCenter(viewer);
+        const centerPos = pickViewerCanvasCenter(viewer);
         setCenterPosition(centerPos);
         setCenterPosCarto(Cartographic.fromCartesian(centerPos));
       };

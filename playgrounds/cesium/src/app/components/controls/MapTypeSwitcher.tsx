@@ -9,8 +9,8 @@ import {
   Cartesian2,
 } from 'cesium';
 import {
-  getCanvasCenter,
   getTopDownCameraDeviationAngle,
+  pickViewerCanvasCenter,
 } from '../../utils/cesiumHelpers';
 import { useDispatch } from 'react-redux';
 import { useViewerIsMode2d, setIsMode2d } from '../../store/slices/viewer';
@@ -55,7 +55,7 @@ export const MapTypeSwitcher = (props: Props) => {
         let destination = viewer.camera.position;
         if (defined(horizonTest)) {
           console.log('scene center below horizon');
-          const pos = getCanvasCenter(viewer);
+          const pos = pickViewerCanvasCenter(viewer);
           const distance = Cartesian3.distance(pos, viewer.camera.position);
           const cartographic = Cartographic.fromCartesian(pos);
           const longitude = CeMath.toDegrees(cartographic.longitude);

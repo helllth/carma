@@ -12,15 +12,12 @@ import {
   GroundPrimitive,
   Matrix4,
   Primitive,
-  sampleTerrainMostDetailed,
   Scene,
   Viewer,
   Math as CeMath,
-  PerspectiveFrustum,
   BoundingSphere,
 } from 'cesium';
 import { ColorRgbaArray, TilesetConfig } from '../..';
-import TilesetSelector from '../components/TilesetSelectorWithSyncedGeoJson';
 
 // Math
 
@@ -39,20 +36,6 @@ export function getModelMatrix(config: TilesetConfig, heightOffset = 0) {
   const translation = Cartesian3.subtract(offset, surface, new Cartesian3());
   const modelMatrix = Matrix4.fromTranslation(translation);
   return modelMatrix;
-}
-
-export function getCanvasCenter(viewer: Viewer) {
-  const windowPosition = new Cartesian2(
-    viewer.canvas.clientWidth / 2,
-    viewer.canvas.clientHeight / 2
-  );
-  viewer.scene.pickTranslucentDepth = true;
-  const depthTestPrev = viewer.scene.globe.depthTestAgainstTerrain;
-  viewer.scene.globe.depthTestAgainstTerrain = true;
-
-  const pos = viewer.scene.pickPosition(windowPosition);
-  viewer.scene.globe.depthTestAgainstTerrain = depthTestPrev;
-  return pos;
 }
 
 // use with onReady event of Cesium3DTileset
@@ -115,6 +98,52 @@ export const getTopDownCameraDeviationAngle = (viewer: Viewer) => {
 };
 
 // SCENE
+
+// PICKERS HELPERS
+
+const getWindowPositions = (viewer: Viewer, [x, y] = [0.5, 0.5]) => {
+  return new Cartesian2(
+    viewer.canvas.clientWidth * x,
+    viewer.canvas.clientHeight * y
+  );
+};
+
+const CENTER_POSITION: [number, number] = [0.5, 0.5];
+
+/* Helper function to pick positions on the viewer canvas in unit coordinates*/
+
+export const pickViewerCanvasPositions = (
+  viewer: Viewer,
+  positions: [number, number][] = [CENTER_POSITION],
+  {
+    depthTestAgainstTerrain = true,
+    pickTranslucentDepth = true,
+  }: {
+    depthTestAgainstTerrain?: boolean;
+    pickTranslucentDepth?: boolean;
+  } = {}
+) => {
+  // store previous settings
+  const prev = {
+    depthTestAgainstTerrain: viewer.scene.globe.depthTestAgainstTerrain,
+    pickTranslucentDepth: viewer.scene.pickTranslucentDepth,
+  };
+  // apply overrides
+  viewer.scene.pickTranslucentDepth = pickTranslucentDepth;
+  viewer.scene.globe.depthTestAgainstTerrain = depthTestAgainstTerrain;
+  const pickedPositions = positions.map((position) =>
+    viewer.scene.pickPosition(getWindowPositions(viewer, position))
+  );
+
+  // restore previous settings
+  Object.assign(viewer.scene.globe, prev);
+
+  return pickedPositions;
+};
+
+// helper shorthand
+export const pickViewerCanvasCenter = (viewer: Viewer) =>
+  pickViewerCanvasPositions(viewer, [CENTER_POSITION])[0];
 
 const GEOJSON_DRILL_LIMIT = 10;
 
@@ -235,25 +264,22 @@ export const getPixelResolutionFromZoomAtLatitude = (
 
 const getScenePixelSize = (viewer: Viewer, centerWeight = 0.5) => {
   const { camera, canvas, scene } = viewer;
-  const center = new Cartesian2(
-    canvas.clientWidth / 2,
-    canvas.clientHeight / 2
-  );
 
   // sample two position to get better approximation for full view extent
 
-  const topLeft = new Cartesian2(1, 1);
-  const groundCenterPickPos = scene.pickPosition(center);
-  const groundTopLeftPickPos = scene.pickPosition(topLeft);
+  const [groundCenter, topLeft] = pickViewerCanvasPositions(viewer, [
+    CENTER_POSITION,
+    [0.05, 0.05],
+  ]);
 
   const pixelSizeCenter = camera.getPixelSize(
-    new BoundingSphere(groundCenterPickPos, 1),
+    new BoundingSphere(groundCenter, 1),
     scene.drawingBufferWidth,
     scene.drawingBufferHeight
   );
 
   const pixelSizeCorner = camera.getPixelSize(
-    new BoundingSphere(groundTopLeftPickPos, 1),
+    new BoundingSphere(topLeft, 1),
     scene.drawingBufferWidth,
     scene.drawingBufferHeight
   );
@@ -320,9 +346,7 @@ export const leafletToCesiumCamera = (
 
   console.log('leafletToCesium', currentPixelResolution, targetPixelResolution);
   // Get the ground position directly under the camera
-  const groundCenterPickPos = scene.pickPosition(
-    new Cartesian2(scene.canvas.clientWidth / 2, scene.canvas.clientHeight / 2)
-  );
+  const groundCenterPickPos = pickViewerCanvasCenter(viewer);
 
   if (!groundCenterPickPos) {
     console.warn('No ground position found under the camera.');

@@ -10,7 +10,7 @@ import {
   defined,
   Cartesian2,
 } from 'cesium';
-import { getCanvasCenter } from '../../utils/cesiumHelpers';
+import { pickViewerCanvasCenter } from '../../utils/cesiumHelpers';
 
 type CompassProps = {
   children?: ReactNode;
@@ -33,7 +33,8 @@ export const Compass = (props: CompassProps) => {
       let destination = viewer.camera.position;
       if (defined(horizonTest)) {
         console.log('scene center below horizon');
-        const pos = getCanvasCenter(viewer);
+        //const pos = getCanvasCenter(viewer);
+        const pos = pickViewerCanvasCenter(viewer);
         const distance = Cartesian3.distance(pos, viewer.camera.position);
         const cartographic = Cartographic.fromCartesian(pos);
         const longitude = CeMath.toDegrees(cartographic.longitude);
