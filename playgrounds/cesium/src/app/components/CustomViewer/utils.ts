@@ -209,7 +209,6 @@ export const setLeafletView = async (
   { duration, animate } = { duration: 0, animate: false }
 ) => {
   if (!viewer || !leafletElement) return;
-  //let zoom = await cesiumCameraElevationToLeafletZoom(viewer);
   let zoom = cesiumTopDownCameraToLeafletZoom(viewer);
   if (zoom === Infinity || zoom === undefined || zoom === null) {
     console.warn('zoom is infinity, skipping');

@@ -147,7 +147,7 @@ export function pickFromClampedGeojson(
   return getLastGroundPrimitive(pickedObjects);
 }
 
-export const getElevationAtPosition = async (
+export const getHeightAtPosition = async (
   scene: Scene,
   camera: Camera,
   fallBackHeightOffset
@@ -318,6 +318,7 @@ export const leafletToCesiumCamera = (
     ),
   });
 
+  console.log('leafletToCesium', currentPixelResolution, targetPixelResolution);
   // Get the ground position directly under the camera
   const groundCenterPickPos = scene.pickPosition(
     new Cartesian2(scene.canvas.clientWidth / 2, scene.canvas.clientHeight / 2)
@@ -327,7 +328,7 @@ export const leafletToCesiumCamera = (
     console.warn('No ground position found under the camera.');
     return camera.positionCartographic.height; // Return current height if ground position not found
   }
-
+  const cameraPositionAtStart = camera.position.clone();
   // Calculate the ground height at the camera's position
   const groundPositionCartographic =
     Cartographic.fromCartesian(groundCenterPickPos);
@@ -343,11 +344,23 @@ export const leafletToCesiumCamera = (
   // Iterative adjustment to match the target resolution
   while (Math.abs(currentPixelResolution - targetPixelResolution) > epsilon) {
     if (iterations >= maxIterations) {
+      console.warn(
+        'Maximum height finding iterations reached with no result, restoring last Cesium camera position.'
+      );
+      camera.setView({
+        destination: cameraPositionAtStart,
+      });
       return false;
     }
     const adjustmentFactor = targetPixelResolution / currentPixelResolution;
     cameraHeightAboveGround *= adjustmentFactor;
-    camera.positionCartographic.height = groundHeight + cameraHeightAboveGround;
+    camera.setView({
+      destination: Cartesian3.fromRadians(
+        lngRad,
+        latRad,
+        cameraHeightAboveGround + groundHeight
+      ),
+    });
     currentPixelResolution = getScenePixelSize(viewer);
     iterations++;
   }

@@ -21,7 +21,7 @@ export const getHeadingPitchRangeFromZoom = (
   return new HeadingPitchRange(heading, pitch, range);
 };
 
-export const getPositionWithElevationAsync = async (
+export const getPositionWithHeightAsync = async (
   scene: Scene,
   position: Cartographic
 ) => {

@@ -20,7 +20,7 @@ import {
 import {
   distanceFromZoomLevel,
   getHeadingPitchRangeFromZoom,
-  getPositionWithElevationAsync,
+  getPositionWithHeightAsync,
 } from './cesium';
 import { addMarker, removeMarker } from './cesium3dMarker';
 
@@ -69,12 +69,12 @@ const CesiumMapActions = {
           //easingFunction: EasingFunction.SINUSOIDAL_IN,
           complete: async () => {
             //console.log('done');
-            const pos = await getPositionWithElevationAsync(
+            const pos = await getPositionWithHeightAsync(
               scene,
               Cartographic.fromDegrees(lon, lat)
             );
 
-            const targetWithElevation = Cartesian3.fromRadians(
+            const targetWithHeight = Cartesian3.fromRadians(
               pos.longitude,
               pos.latitude,
               pos.height
@@ -83,7 +83,7 @@ const CesiumMapActions = {
             const hprEnd = getHeadingPitchRangeFromZoom(zoom, 0, -45);
 
             scene.camera.flyToBoundingSphere(
-              new BoundingSphere(targetWithElevation),
+              new BoundingSphere(targetWithHeight),
               {
                 offset: hprEnd,
                 duration: 3,
@@ -187,14 +187,12 @@ export const builtInGazetteerHitTrigger = (
         //console.log('lookAt', mapElement, pos, zoom);
         // add marker entity to map
         removeMarker(mapElement);
-        const posElevation = await getPositionWithElevationAsync(
+        const posHeight = await getPositionWithHeightAsync(
           mapElement.scene,
           Cartographic.fromDegrees(pos.lon, pos.lat)
         );
 
-        console.log('posElevation', posElevation);
-
-        marker3dStyle && addMarker(mapElement, posElevation, marker3dStyle);
+        marker3dStyle && addMarker(mapElement, posHeight, marker3dStyle);
         cAction.lookAt(mapElement.scene, pos, zoom);
       } else if (mapElement instanceof L.Map) {
         lAction.panTo(mapElement, pos);
