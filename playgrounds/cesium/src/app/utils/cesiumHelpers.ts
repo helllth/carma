@@ -17,8 +17,10 @@ import {
   Viewer,
   Math as CeMath,
   PerspectiveFrustum,
+  BoundingSphere,
 } from 'cesium';
 import { ColorRgbaArray, TilesetConfig } from '../..';
+import TilesetSelector from '../components/TilesetSelectorWithSyncedGeoJson';
 
 // Math
 
@@ -185,6 +187,7 @@ export function getAllPrimitives(viewer: Viewer) {
 // GEO
 
 export const EARTH_CIRCUMFERENCE = 40075016.686;
+export const DEFAULT_LEAFLET_TILESIZE = 256;
 
 const WEB_MERCATOR_MAX_LATITUDE = 85.051129;
 export const WEB_MERCATOR_MAX_LATITUDE_RAD = CeMath.toRadians(
@@ -206,109 +209,148 @@ export const getMercatorScaleFactorAtLatitude = (latitude: number): number => {
   return 1 / Math.cos(latitude);
 };
 
-export const getZoomFromElevation = (elevation: number, latitude: number) => {
-  const scale = getMercatorScaleFactorAtLatitude(latitude);
-  return Math.log2(EARTH_CIRCUMFERENCE / (elevation * scale));
+export const getZoomFromPixelResolutionAtLatitude = (
+  meterResolution: number,
+  latitude: number = 0,
+  { tileSize = DEFAULT_LEAFLET_TILESIZE }: { tileSize?: number } = {}
+) => {
+  const scaleFactor = getMercatorScaleFactorAtLatitude(latitude);
+  const zoom = Math.log2(
+    EARTH_CIRCUMFERENCE / (scaleFactor * meterResolution * tileSize)
+  );
+  console.log('zoom', zoom, scaleFactor, meterResolution, latitude);
+  return zoom;
 };
 
-export const getElevationFromZoom = (zoom: number, latitude: number) => {
+export const getPixelResolutionFromZoomAtLatitude = (
+  zoom: number,
+  latitude: number = 0,
+  { tileSize = DEFAULT_LEAFLET_TILESIZE }: { tileSize?: number } = {}
+) => {
   const scale = getMercatorScaleFactorAtLatitude(latitude);
-  return EARTH_CIRCUMFERENCE / (Math.pow(2, zoom) * scale);
+  return EARTH_CIRCUMFERENCE / (scale * Math.pow(2, zoom) * tileSize);
 };
 
 // CESIUM TO WEB MAPS
 
-const getFieldOfViewZoomOffset = (
-  camera: Camera,
-  CONSTANT_SCALE_FACTOR = 8.42 // Empirically determined for best visual results
-
-  // for not tan compensation at larger fov
-  // const scale = 1 / fov;
-  // 7.65 for fov 1.04
-  // 8.4 for fov 0.05
-) => {
-  if (camera.frustum instanceof PerspectiveFrustum) {
-    const fov = camera.frustum.fov;
-    //console.log('fov', fov);
-    const scaleTan = 1 / (Math.tan(fov / 2) * 2); // overall view scale
-    const scaleCenter = 1 / fov; // scale at center
-
-    // average between center and tangent scale for better visual appearance for larger fov
-    // for small fov the difference is negligible
-    const centerWeight = 0.25;
-    const scale = scaleCenter * centerWeight + scaleTan * (1 - centerWeight);
-
-    //const scale = 1 / fov;
-    return Math.log2(scale * CONSTANT_SCALE_FACTOR);
-  }
-  console.warn('camera frustum is not a PerspectiveFrustum');
-  return null;
-};
-
-export const getCameraHeightAboveTerrain = async (
-  viewer: Viewer
-): Promise<number> => {
-  const LOCAL_FALLBACK_HEIGHT = 150;
-  const cameraPosition = viewer.camera.positionCartographic;
-  const cameraHeight = cameraPosition.height;
-  const terrainProvider = viewer.terrainProvider;
-
-  const [sample] = await sampleTerrainMostDetailed(
-    terrainProvider,
-    [cameraPosition],
-    true
+const getScenePixelSize = (viewer: Viewer, centerWeight = 0.5) => {
+  const { camera, canvas, scene } = viewer;
+  const center = new Cartesian2(
+    canvas.clientWidth / 2,
+    canvas.clientHeight / 2
   );
-  if (sample) {
-    const relativeHeight = cameraHeight - sample.height;
-    // console.log('zoom sampled', cameraHeight, sample.height, relativeHeight);
-    return relativeHeight;
-  } else {
-    console.warn('zoom fallback height');
-    return cameraPosition.height - LOCAL_FALLBACK_HEIGHT;
-  }
+
+  // sample two position to get better approximation for full view extent
+
+  const topLeft = new Cartesian2(1, 1);
+  const groundCenterPickPos = scene.pickPosition(center);
+  const groundTopLeftPickPos = scene.pickPosition(topLeft);
+
+  const pixelSizeCenter = camera.getPixelSize(
+    new BoundingSphere(groundCenterPickPos, 1),
+    scene.drawingBufferWidth,
+    scene.drawingBufferHeight
+  );
+
+  const pixelSizeCorner = camera.getPixelSize(
+    new BoundingSphere(groundTopLeftPickPos, 1),
+    scene.drawingBufferWidth,
+    scene.drawingBufferHeight
+  );
+
+  const pixelSize = pixelSizeCorner
+    ? pixelSizeCenter * centerWeight + pixelSizeCorner * (1 - centerWeight)
+    : pixelSizeCenter;
+
+  /*
+  console.log('zoom cesium dpr', viewer.resolutionScale);
+  console.log('zoom dpr', window.devicePixelRatio);
+  console.log('zoom px total', pixelSize);
+  console.log('zoom px centr', pixelSizeCenter);
+  console.log('zoom px tpLft', pixelSizeCorner);
+  console.log('zoom px ratio', pixelSizeCenter / pixelSizeCorner);
+  console.log('zoom camera position', camera.positionCartographic.height);
+  console.log(
+    'zoom ground position',
+    Cartographic.fromCartesian(groundCenterPickPos).height
+  );
+  */
+
+  return pixelSize;
 };
 
-export const cesiumCameraElevationToLeafletZoom = async (viewer: Viewer) => {
-  const cameraHeightAboveTerrain = await getCameraHeightAboveTerrain(viewer);
-  console.log('zoom camera height above Terrain', cameraHeightAboveTerrain);
-  const zoomEquivalent = getZoomFromElevation(
-    cameraHeightAboveTerrain,
+export const cesiumTopDownCameraToLeafletZoom = (
+  viewer: Viewer,
+  { centerWeight = 0.5 }: { centerWeight?: number } = {}
+) => {
+  const pixelSize = getScenePixelSize(viewer, centerWeight);
+  const zoom = getZoomFromPixelResolutionAtLatitude(
+    pixelSize,
     viewer.camera.positionCartographic.latitude
   );
-
-  // adjust zoom based on device pixel ratio
-  const dpr = window.devicePixelRatio;
-  const dprZOffset = Math.log2(dpr);
-  const fovOffset = getFieldOfViewZoomOffset(viewer.camera);
-  if (fovOffset === null) {
-    console.warn('fov offset is null');
-    return null;
-  }
-  const zCompensated = zoomEquivalent - dprZOffset + fovOffset;
-  // console.log('leaflet zoom ', zoom, dpr, dprZOffset, zCompensated);
-
-  return zCompensated;
+  return zoom;
 };
 
 // WEB MAPS TO CESIUM
 
-export const leafletToCesiumElevation = (
+export const leafletToCesiumCamera = (
   viewer: Viewer,
-  zoom: number,
-  latDeg = 0,
-  dpr = window.devicePixelRatio
+  { lat, lng, zoom }: { lat: number; lng: number; zoom: number },
+  { epsilon = 0.02, limit = 5 }: { epsilon?: number; limit?: number } = {}
 ) => {
-  // adjust zoom based on device pixel ratio and fixed offset
-  const dprZOffset = Math.log2(dpr);
-  const fovOffset = getFieldOfViewZoomOffset(viewer.camera);
-  if (fovOffset === null) {
-    console.warn('fov offset is null');
-    return null;
-  }
-  const zCompensated = zoom + dprZOffset - fovOffset;
+  const lngRad = CeMath.toRadians(lng);
+  const latRad = CeMath.toRadians(lat);
 
-  const latRad = CeMath.toRadians(latDeg);
-  const elevation = getElevationFromZoom(zCompensated, latRad);
-  // console.log('leaf2elev zoom', dprZOffset, zoom, elevation, latDeg, latRad);
-  return elevation;
+  const targetPixelResolution = getPixelResolutionFromZoomAtLatitude(
+    zoom,
+    latRad
+  );
+
+  let currentPixelResolution = getScenePixelSize(viewer);
+  const { camera, scene } = viewer;
+
+  // move to new position
+  camera.setView({
+    destination: Cartesian3.fromRadians(
+      lngRad,
+      latRad,
+      camera.positionCartographic.height
+    ),
+  });
+
+  // Get the ground position directly under the camera
+  const groundCenterPickPos = scene.pickPosition(
+    new Cartesian2(scene.canvas.clientWidth / 2, scene.canvas.clientHeight / 2)
+  );
+
+  if (!groundCenterPickPos) {
+    console.warn('No ground position found under the camera.');
+    return camera.positionCartographic.height; // Return current height if ground position not found
+  }
+
+  // Calculate the ground height at the camera's position
+  const groundPositionCartographic =
+    Cartographic.fromCartesian(groundCenterPickPos);
+  const groundHeight = groundPositionCartographic.height;
+
+  // Calculate initial camera height above the ground
+  let cameraHeightAboveGround =
+    camera.positionCartographic.height - groundHeight;
+
+  const maxIterations = limit;
+  let iterations = 0;
+
+  // Iterative adjustment to match the target resolution
+  while (Math.abs(currentPixelResolution - targetPixelResolution) > epsilon) {
+    if (iterations >= maxIterations) {
+      return false;
+    }
+    const adjustmentFactor = targetPixelResolution / currentPixelResolution;
+    cameraHeightAboveGround *= adjustmentFactor;
+    camera.positionCartographic.height = groundHeight + cameraHeightAboveGround;
+    currentPixelResolution = getScenePixelSize(viewer);
+    iterations++;
+  }
+  //console.log('zoom iterations', iterations);
+  return true; // Return true if camera position found within max iterations
 };

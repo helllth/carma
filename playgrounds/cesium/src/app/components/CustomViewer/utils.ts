@@ -1,5 +1,5 @@
 import { Cartesian3, Cartographic, Viewer, Math as CeMath } from 'cesium';
-import { cesiumCameraElevationToLeafletZoom } from '../../utils/cesiumHelpers';
+import { cesiumTopDownCameraToLeafletZoom } from '../../utils/cesiumHelpers';
 import L from 'leaflet';
 
 // 5 DEGREES OF FREEDOM CAMERA encoding/decoding
@@ -209,7 +209,8 @@ export const setLeafletView = async (
   { duration, animate } = { duration: 0, animate: false }
 ) => {
   if (!viewer || !leafletElement) return;
-  let zoom = await cesiumCameraElevationToLeafletZoom(viewer);
+  //let zoom = await cesiumCameraElevationToLeafletZoom(viewer);
+  let zoom = cesiumTopDownCameraToLeafletZoom(viewer);
   if (zoom === Infinity || zoom === undefined || zoom === null) {
     console.warn('zoom is infinity, skipping');
     return;
@@ -227,6 +228,6 @@ export const setLeafletView = async (
   // TODO add simple method to get lat, lng from cesium camera in degrees
   const { hashParams } = encodeScene(viewer);
   const { lat, lng } = hashParams;
-  L.setOptions(leafletElement, { zoomSnap: 1 / 128 }); // TODO fix zoom snapping in TopicMap Component
+  L.setOptions(leafletElement, { zoomSnap: 1/64, zoomDelta: 1/4 }); // TODO fix zoom snapping in TopicMap Component
   leafletElement.setView([lat, lng], zoom, { duration, animate });
 };
