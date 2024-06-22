@@ -6,9 +6,11 @@ import {
   Cartographic,
   Math as CeMath,
   defined,
-  Cartesian2,
+  HeadingPitchRange,
 } from 'cesium';
 import {
+  cesiumCenterPixelSizeToLeafletZoom,
+  getCameraHeightAboveGround,
   getTopDownCameraDeviationAngle,
   pickViewerCanvasCenter,
 } from '../../utils/cesiumHelpers';
@@ -18,14 +20,14 @@ import { setLeafletView } from '../CustomViewer/utils';
 
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { CameraPositionAndOrientation } from '../../..';
+import { animateInterpolateHeadingPitchRange } from '../../utils/cesiumAnimations';
 
 type Props = {
+  zoomSnap?: 0 | 1 | 0.5 | 0.25 | 0.125 | 0.0625 | 0.03125 | 0.015625;
   children?: ReactNode;
 };
 
-const MIN_TOP_DOWN_DISTANCE = 50;
-
-export const MapTypeSwitcher = (props: Props) => {
+export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
   const { viewer } = useCesium();
   const dispatch = useDispatch();
   const isMode2d = useViewerIsMode2d();
@@ -34,6 +36,7 @@ export const MapTypeSwitcher = (props: Props) => {
     useState<CameraPositionAndOrientation | null>(null);
   const [prevCamera2dPosition, setPrevCamera2dPosition] =
     useState<Cartesian3 | null>(null);
+  const [prevHPR, setPrevHPR] = useState<HeadingPitchRange | null>(null);
   const [prevDuration, setPrevDuration] = useState<number>(0);
   // TODO provide mapFramework context via props for UI?
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,70 +50,131 @@ export const MapTypeSwitcher = (props: Props) => {
       if (!isMode2d) {
         // Like Compass control
         // TODO consolidate this logic into a shared helper function
-        const windowPosition = new Cartesian2(
-          viewer.canvas.clientWidth / 2,
-          viewer.canvas.clientHeight / 2
-        );
-        const horizonTest = viewer.camera.pickEllipsoid(windowPosition);
-        let destination = viewer.camera.position;
-        if (defined(horizonTest)) {
-          console.log('scene center below horizon');
+        const groundPos = pickViewerCanvasCenter(viewer);
+        let latitude: number, longitude: number;
+        let height = viewer.camera.positionCartographic.height;
+        let distance = height;
+        const hasGroundPos = defined(groundPos);
+        if (hasGroundPos) {
+          /*
+          viewer.entities.removeById('groundPoint');
+          viewer.entities.add({
+            id: 'groundPoint',
+            position: groundPos,
+            point: {
+              pixelSize: 40,
+              color: Color.RED,
+            },
+          });
+          */
           const pos = pickViewerCanvasCenter(viewer);
-          const distance = Cartesian3.distance(pos, viewer.camera.position);
           const cartographic = Cartographic.fromCartesian(pos);
-          const longitude = CeMath.toDegrees(cartographic.longitude);
-          const latitude = CeMath.toDegrees(cartographic.latitude);
-          destination = Cartesian3.fromDegrees(
-            longitude,
-            latitude,
-            cartographic.height + Math.max(distance, MIN_TOP_DOWN_DISTANCE)
-          );
+          longitude = CeMath.toDegrees(cartographic.longitude);
+          latitude = CeMath.toDegrees(cartographic.latitude);
+          distance = Cartesian3.distance(pos, viewer.camera.position);
+          height = cartographic.height + distance;
         } else {
           console.info(
             'scene above horizon, using camera position as reference'
           );
           // use camera position if horizon is not visible
-          // bump up the camera a bit if too close too ground
           const cartographic = Cartographic.fromCartesian(
             viewer.camera.position
           );
-          const longitude = CeMath.toDegrees(cartographic.longitude);
-          const latitude = CeMath.toDegrees(cartographic.latitude);
-          destination = Cartesian3.fromDegrees(
-            longitude,
-            latitude,
-            cartographic.height + MIN_TOP_DOWN_DISTANCE
-          );
+          longitude = CeMath.toDegrees(cartographic.longitude);
+          latitude = CeMath.toDegrees(cartographic.latitude);
         }
-
-        const duration = getTopDownCameraDeviationAngle(viewer) * 2;
-        setPrevDuration(duration);
-        console.log('animation duration', duration);
 
         // evaluate angles for animation duration
 
-        setPrevCamera3d({
-          position: viewer.camera.position.clone(),
-          direction: viewer.camera.direction.clone(),
-          up: viewer.camera.up.clone(),
-        });
+        // don't store camera position if pitch is near nadir
+        if (Math.abs(viewer.camera.pitch + Math.PI / 2) > 0.05) {
+          console.log(
+            'last camera pitch',
+            viewer.camera.pitch,
+            viewer.camera.pitch + Math.PI / 2
+          );
+          setPrevCamera3d({
+            position: viewer.camera.position.clone(),
+            direction: viewer.camera.direction.clone(),
+            up: viewer.camera.up.clone(),
+          });
+        } else {
+          setPrevCamera3d(null);
+        }
 
         // move the leaflet view to start position of animation to already allow fetching tiles if close
-        setLeafletView(viewer, leaflet);
+        //setLeafletView(viewer, leaflet);
 
-        viewer.camera.flyTo({
-          destination,
-          // TOP DOWN by default
-          duration,
-          complete: () => {
-            setLeafletView(viewer, leaflet);
-            setPrevCamera2dPosition(viewer.camera.position.clone());
-            dispatch(setIsMode2d(true));
-          },
-        });
+        let zoomDiff = 0;
+
+        if (zoomSnap) {
+          // Move the cesium camera to the next integer zoom level of leaflet before transitioning
+          const currentZoom = cesiumCenterPixelSizeToLeafletZoom(viewer);
+
+          // go to the next integer zoom level
+          // smaller values is further away
+          const targetZoom =
+            currentZoom % 1 < 0.75 // prefer zooming out
+              ? Math.floor(currentZoom)
+              : Math.ceil(currentZoom);
+          zoomDiff = currentZoom - targetZoom;
+          const heightFactor = Math.pow(2, zoomDiff);
+          //const { groundHeight } = getCameraHeightAboveGround(viewer);
+
+          distance = distance * heightFactor;
+          //height = groundHeight + distance;
+        }
+
+        const duration =
+          getTopDownCameraDeviationAngle(viewer) * 2 + zoomDiff * 1;
+        setPrevDuration(duration);
+
+        const onComplete = () => {
+          setLeafletView(viewer, leaflet, { animate: false, zoomSnap });
+          setPrevCamera2dPosition(viewer.camera.position.clone());
+          // trigger the visual transition
+          dispatch(setIsMode2d(true));
+        };
+
+        console.log('duration', distance);
+
+        if (hasGroundPos) {
+          // rotate around the groundpositiob at center
+          setPrevHPR(
+            animateInterpolateHeadingPitchRange(
+              viewer,
+              groundPos,
+              new HeadingPitchRange(0, -Math.PI / 2, distance),
+              {
+                duration: duration * 1000,
+                onComplete,
+              }
+            )
+          );
+        } else {
+          console.info('rotate around camera position not implemented yet');
+          /*
+          // TODO implement this
+          // rotate around the camera position
+          animateInterpolateHeadingPitchRange(
+            viewer,
+            viewer.camera.position,
+            new HeadingPitchRange(
+              0,
+              -Math.PI / 2,
+              height - viewer.camera.positionCartographic.height
+            ),
+            {
+              duration: duration * 1000,
+              onComplete,
+            }
+          );
+          */
+        }
       } else {
         dispatch(setIsMode2d(false));
-        if (prevCamera2dPosition && prevCamera3d) {
+        if (prevCamera2dPosition) {
           if (
             Cartesian3.equals(viewer.camera.position, prevCamera2dPosition) !==
             true
@@ -122,16 +186,29 @@ export const MapTypeSwitcher = (props: Props) => {
           }
 
           // wait until the css transition is done
-          setTimeout(() => {
-            viewer.camera.flyTo({
-              destination: prevCamera3d.position,
-              orientation: {
-                direction: prevCamera3d.direction,
-                up: prevCamera3d.up,
-              },
-              duration: prevDuration,
-            });
-          }, 200);
+          prevCamera3d &&
+            setTimeout(() => {
+              /*
+              viewer.camera.flyTo({
+                destination: prevCamera3d.position,
+                orientation: {
+                  direction: prevCamera3d.direction,
+                  up: prevCamera3d.up,
+                },
+                duration: prevDuration,
+              });
+            }, 200);
+            */
+              prevHPR &&
+                animateInterpolateHeadingPitchRange(
+                  viewer,
+                  pickViewerCanvasCenter(viewer),
+                  prevHPR,
+                  {
+                    duration: prevDuration * 1000,
+                  }
+                );
+            }, 200);
         }
       }
     }

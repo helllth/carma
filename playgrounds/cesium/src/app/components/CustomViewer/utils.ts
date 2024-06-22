@@ -1,5 +1,5 @@
 import { Cartesian3, Cartographic, Viewer, Math as CeMath } from 'cesium';
-import { cesiumTopDownCameraToLeafletZoom } from '../../utils/cesiumHelpers';
+import { cesiumCenterPixelSizeToLeafletZoom } from '../../utils/cesiumHelpers';
 import L from 'leaflet';
 
 // 5 DEGREES OF FREEDOM CAMERA encoding/decoding
@@ -206,10 +206,14 @@ export const replaceHashRoutedHistory = (
 export const setLeafletView = async (
   viewer: Viewer,
   leafletElement,
-  { duration, animate } = { duration: 0, animate: false }
+  {
+    duration = 0,
+    animate = false,
+    zoomSnap = 1,
+  }: { duration?: number; animate?: boolean; zoomSnap?: number } = {}
 ) => {
   if (!viewer || !leafletElement) return;
-  let zoom = cesiumTopDownCameraToLeafletZoom(viewer);
+  let zoom = cesiumCenterPixelSizeToLeafletZoom(viewer);
   if (zoom === Infinity || zoom === undefined || zoom === null) {
     console.warn('zoom is infinity, skipping');
     return;
@@ -227,6 +231,6 @@ export const setLeafletView = async (
   // TODO add simple method to get lat, lng from cesium camera in degrees
   const { hashParams } = encodeScene(viewer);
   const { lat, lng } = hashParams;
-  L.setOptions(leafletElement, { zoomSnap: 1/64, zoomDelta: 1/4 }); // TODO fix zoom snapping in TopicMap Component
+  L.setOptions(leafletElement, { zoomSnap }); // TODO fix zoom snapping in TopicMap Component
   leafletElement.setView([lat, lng], zoom, { duration, animate });
 };

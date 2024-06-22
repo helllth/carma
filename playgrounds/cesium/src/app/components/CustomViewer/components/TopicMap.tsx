@@ -83,8 +83,8 @@ export const TopicMap = () => {
         backgroundlayers="empty"
         hamburgerMenu={false}
         fullScreenControlEnabled={false}
-        zoomSnap={1 / 64} // TODO fix zoom snapping in TopicMap Component
-        zoomDelta={1 / 4}
+        zoomSnap={1} // TODO fix zoom snapping in TopicMap Component
+        zoomDelta={1}
         locationChangedHandler={handleLeafletLocationChange}
       >
         <StyledWMSTileLayer

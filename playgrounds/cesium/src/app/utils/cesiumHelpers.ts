@@ -18,6 +18,7 @@ import {
   BoundingSphere,
 } from 'cesium';
 import { ColorRgbaArray, TilesetConfig } from '../..';
+import { get } from 'http';
 
 // Math
 
@@ -95,6 +96,25 @@ export const getTopDownCameraDeviationAngle = (viewer: Viewer) => {
     TOP_DOWN_DIRECTION
   );
   return Math.abs(internalAngle);
+};
+
+export const getCameraHeightAboveGround = (viewer: Viewer) => {
+  const groundCenterPickPos = pickViewerCanvasCenter(viewer);
+
+  let cameraHeightAboveGround: number;
+  const groundPositionCartographic =
+    Cartographic.fromCartesian(groundCenterPickPos);
+  const groundHeight = groundPositionCartographic.height;
+
+  if (defined(groundCenterPickPos)) {
+    cameraHeightAboveGround =
+      viewer.camera.positionCartographic.height - groundHeight;
+  } else {
+    console.warn('No ground position found under the camera.');
+
+    cameraHeightAboveGround = viewer.camera.positionCartographic.height;
+  }
+  return { cameraHeightAboveGround, groundHeight };
 };
 
 // SCENE
@@ -305,7 +325,7 @@ const getScenePixelSize = (viewer: Viewer, centerWeight = 0.5) => {
   return pixelSize;
 };
 
-export const cesiumTopDownCameraToLeafletZoom = (
+export const cesiumCenterPixelSizeToLeafletZoom = (
   viewer: Viewer,
   { centerWeight = 0.5 }: { centerWeight?: number } = {}
 ) => {
@@ -333,7 +353,7 @@ export const leafletToCesiumCamera = (
   );
 
   let currentPixelResolution = getScenePixelSize(viewer);
-  const { camera, scene } = viewer;
+  const { camera } = viewer;
 
   // move to new position
   camera.setView({
@@ -346,22 +366,10 @@ export const leafletToCesiumCamera = (
 
   console.log('leafletToCesium', currentPixelResolution, targetPixelResolution);
   // Get the ground position directly under the camera
-  const groundCenterPickPos = pickViewerCanvasCenter(viewer);
 
-  if (!groundCenterPickPos) {
-    console.warn('No ground position found under the camera.');
-    return camera.positionCartographic.height; // Return current height if ground position not found
-  }
   const cameraPositionAtStart = camera.position.clone();
-  // Calculate the ground height at the camera's position
-  const groundPositionCartographic =
-    Cartographic.fromCartesian(groundCenterPickPos);
-  const groundHeight = groundPositionCartographic.height;
-
-  // Calculate initial camera height above the ground
-  let cameraHeightAboveGround =
-    camera.positionCartographic.height - groundHeight;
-
+  let { cameraHeightAboveGround, groundHeight } =
+    getCameraHeightAboveGround(viewer);
   const maxIterations = limit;
   let iterations = 0;
 
