@@ -36,7 +36,7 @@ import { getShowLayerButtons, setShowLayerButtons } from '../store/slices/ui';
 import { cn } from '../helper/helper';
 import { Item } from 'libraries/layer-lib/src/helper/types';
 
-const layerMap = {
+export const layerMap = {
   amtlich: {
     title: 'Amtlich',
     layers: 'amtlichBasiskarte@90',
