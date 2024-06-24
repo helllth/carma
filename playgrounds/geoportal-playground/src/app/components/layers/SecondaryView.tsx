@@ -14,6 +14,7 @@ import {
   changeOpacity,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
+  setSelectedLayerIndex,
 } from '../../store/slices/mapping';
 import {
   getShowInfo,
@@ -43,9 +44,17 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(
     const urlPrefix = window.location.origin + window.location.pathname;
 
     return (
-      <div className="absolute top-12 w-[calc(100%-60px)] left-28 z-[999] flex justify-center items-center">
+      <div
+        onClick={() => {
+          dispatch(setSelectedLayerIndex(-2));
+        }}
+        className="absolute top-12 w-[calc(100%-60px)] left-28 flex justify-center items-center"
+      >
         <div
           ref={ref}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
           className={cn(
             `bg-white rounded-[10px] 2xl:w-1/2 w-full flex flex-col relative px-10 gap-2 py-2 transition-all duration-300`,
             showInfo ? 'h-[600px]' : 'h-12'
