@@ -293,7 +293,7 @@ export const vectorConfig: Config = {
       type: 'layer',
       layerType: 'vector',
       thumbnail:
-        'https://images.unsplash.com/photo-1618901882511-e7adb73a1ee0?q=80&w=2664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1503785640985-f62e3aeee448?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       props: {
         style: 'https://omt.map-hosting.de/styles/baeume/style.json',
       },
@@ -319,7 +319,7 @@ export const vectorConfig: Config = {
       type: 'layer',
       layerType: 'vector',
       thumbnail:
-        'https://images.unsplash.com/photo-1618901882511-e7adb73a1ee0?q=80&w=2664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1625301840055-7c1b7198cfc0?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       props: {
         style: 'https://omt.map-hosting.de/styles/solar/style.json',
       },
