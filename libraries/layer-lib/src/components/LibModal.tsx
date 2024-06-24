@@ -16,6 +16,7 @@ import LayerTabs from './LayerTabs';
 import LibItem from './LibItem';
 import './input.css';
 import './modal.css';
+import { vectorProps, wmsProps } from '../helper/types';
 const { Search } = Input;
 
 // @ts-ignore
@@ -23,14 +24,29 @@ const parser = new WMSCapabilities();
 
 export type Layer = {
   title: string;
-  url: string;
+  // url: string;
   id: string;
   opacity: number;
   description: string;
   visible: boolean;
   icon?: string;
-  legend?: { Format: string; OnlineResource: string; size: [number, number] }[];
-};
+  // type?: 'wmts' | 'wmts-nt' | 'tiles' | 'vector';
+  // legend?: { Format: string; OnlineResource: string; size: [number, number] }[];
+} & (
+  | {
+      layerType: 'wmts' | 'wmts-nt';
+      props: {
+        url: string;
+        name: string;
+        legend?: {
+          format: string;
+          OnlineResource: string;
+          size: [number, number];
+        }[];
+      };
+    }
+  | vectorProps
+);
 
 export interface LibModalProps {
   open: boolean;
@@ -155,6 +171,15 @@ const LibModal = ({
           });
       } else {
         if (services[key].type === 'topicmaps') {
+          const tmpLayer = getLayerStructure({
+            config,
+            serviceName: services[key].name,
+          });
+          const mergedLayer = mergeStructures(tmpLayer, newLayers);
+          newLayers = mergedLayer;
+          setLayers(newLayers);
+          setAllLayers(newLayers);
+        } else {
           const tmpLayer = getLayerStructure({
             config,
             serviceName: services[key].name,

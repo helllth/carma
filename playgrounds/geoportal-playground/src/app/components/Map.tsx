@@ -19,6 +19,7 @@ import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
 import { useSearchParams } from 'react-router-dom';
 import getBackgroundLayers from '../helper/layer';
 import { getMode, getShowLayerButtons } from '../store/slices/ui';
+import CismapLayer from 'react-cismap/CismapLayer';
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -86,20 +87,36 @@ const Map = () => {
         {showLayerButtons && <LayerWrapper />}
         {layers.map((layer, i) => {
           if (layer.visible) {
-            return (
-              <StyledWMSTileLayer
-                key={`${focusMode}_${i}`}
-                type="wms"
-                url={layer.url}
-                maxZoom={26}
-                layers={layer.id}
-                format="image/png"
-                tiled={true}
-                transparent="true"
-                pane="additionalLayers1"
-                opacity={layer.opacity.toFixed(1) || 0.7}
-              />
-            );
+            switch (layer.layerType) {
+              case 'wmts':
+                return (
+                  <CismapLayer
+                    key={`${focusMode}_${i}_${layer.id}`}
+                    url={layer.props.url}
+                    maxZoom={26}
+                    layers={layer.props.name}
+                    format="image/png"
+                    tiled={true}
+                    transparent="true"
+                    pane="additionalLayers1"
+                    opacity={layer.opacity.toFixed(1) || 0.7}
+                    type={'wmts'}
+                  />
+                );
+              case 'vector':
+                return (
+                  <CismapLayer
+                    key={`${focusMode}_${i}_${layer.id}_${layer.opacity}`}
+                    style={layer.props.style}
+                    maxZoom={26}
+                    pane={`additionalLayers${i}`}
+                    opacity={layer.opacity || 0.7}
+                    type="vector"
+                  />
+                );
+            }
+          } else {
+            return <></>;
           }
         })}
       </TopicMapComponent>

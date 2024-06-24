@@ -133,7 +133,10 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(
           </div>
 
           {showInfoText && (
-            <Info description={layer.description} legend={layer.legend} />
+            <Info
+              description={layer.description}
+              legend={layer.layerType === 'wmts' ? layer.props.legend : []}
+            />
           )}
         </div>
       </div>
