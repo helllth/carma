@@ -306,7 +306,7 @@ export const vectorConfig: Config = {
       type: 'layer',
       layerType: 'vector',
       thumbnail:
-        'https://images.unsplash.com/photo-1618901882511-e7adb73a1ee0?q=80&w=2664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1610562084360-0b617911f71f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       props: {
         style: 'https://omt.map-hosting.de/styles/pois/style.json',
       },
