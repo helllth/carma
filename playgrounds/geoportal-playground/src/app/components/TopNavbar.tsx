@@ -39,7 +39,7 @@ import { Item } from 'libraries/layer-lib/src/helper/types';
 const layerMap = {
   amtlich: {
     title: 'Amtlich',
-    layers: 'amtlich@90',
+    layers: 'amtlichBasiskarte@90',
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
   },
   luftbild: {
@@ -104,6 +104,8 @@ const TopNavbar = () => {
         }
       }
     }
+
+    console.log('xxx', newLayer);
 
     if (activeLayers.find((activeLayer) => activeLayer.id === layer.id)) {
       try {

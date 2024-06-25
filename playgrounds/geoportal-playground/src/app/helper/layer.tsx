@@ -214,5 +214,11 @@ export const defaultLayerConf = {
       style:
         'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_top.json',
     },
+    amtlichBasiskarte: {
+      type: 'wmts',
+      url: 'https://maps.wuppertal.de/karten',
+      layers: 'abkf',
+      transparent: true,
+    },
   },
 };
