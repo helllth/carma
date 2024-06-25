@@ -64,7 +64,9 @@ export const statisticsExtractor = (kassenzeichen, aenderungsAnfrage) => {
 
 export const sumsExtractor = (kassenzeichen) => {
   const data = kassenzeichen?.flaechenArray?.map((flaeche) => ({
-    size: flaeche?.flaecheObject?.flaecheninfoObject?.groesse_korrektur,
+    size:
+      flaeche?.flaecheObject?.anteil ||
+      flaeche?.flaecheObject?.flaecheninfoObject?.groesse_korrektur,
     type: flaeche?.flaecheObject?.flaecheninfoObject?.flaechenartObject
       ?.art_abkuerzung,
     connection:
