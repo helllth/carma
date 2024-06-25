@@ -377,6 +377,24 @@
         },
         "projectPath": "./dist/envirometrics/korschenbroich/rainhazardmap"
       }
-    }
+    },
+    "map-control-playground": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-playground-deployments",
+            "prj": "map-control-playground"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-playground-deployments",
+              "prj": "map-control-playground"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/playgrounds/map-control-playground"
   }
 }
