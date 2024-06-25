@@ -15,6 +15,7 @@ import {
   changeVisibility,
   getLayers,
   getSelectedLayerIndex,
+  getShowLeftScrollButton,
   removeLayer,
   setSelectedLayerIndex,
   setShowLeftScrollButton,
@@ -50,6 +51,7 @@ const LayerButton = ({
   const dispatch = useDispatch();
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showLayerHideButtons = useSelector(getShowLayerHideButtons);
+  const showLeftScrollButton = useSelector(getShowLeftScrollButton);
   const showSettings = index === selectedLayerIndex;
   const layersLength = useSelector(getLayers).length;
   let urlPrefix = window.location.origin + window.location.pathname;
@@ -80,13 +82,13 @@ const LayerButton = ({
   }, []);
 
   useEffect(() => {
-    if (!inView && index === -1) {
+    if (!inView && index === 0) {
       dispatch(setShowLeftScrollButton(true));
     }
     if (!inView && index === layersLength - 1) {
       dispatch(setShowRightScrollButton(true));
     }
-    if (inView && index === -1) {
+    if (inView && index === 0) {
       dispatch(setShowLeftScrollButton(false));
     }
     if (inView && index === layersLength - 1) {
@@ -106,7 +108,8 @@ const LayerButton = ({
       className={cn(
         '',
         index === -1 && 'ml-auto',
-        index === layersLength - 1 && 'mr-auto'
+        index === layersLength - 1 && 'mr-auto',
+        showLeftScrollButton && index === -1 && 'pr-4'
       )}
       id={`layer-${id}`}
     >
