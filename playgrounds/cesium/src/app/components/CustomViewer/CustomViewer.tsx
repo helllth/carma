@@ -23,7 +23,10 @@ import { ResizeableContainer } from './components/ResizeableContainer';
 import { useLocation } from 'react-router-dom';
 import useInitializeViewer from './hooks';
 import TopicMap from './components/TopicMap';
-import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
+import {
+  TopicMapContext,
+  TopicMapContextProvider,
+} from 'react-cismap/contexts/TopicMapContextProvider';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -74,9 +77,8 @@ function CustomViewer(props: CustomViewerProps) {
 
   const [viewer, setViewer] = useState<Viewer | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const topicMapContext: any = useContext(TopicMapContext);
-  const leafletElement =
-    topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
+  // const topicMapContext: any = useContext(TopicMapContext);
+  // const leafletElement =    topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
 
   const [isUserAction, setIsUserAction] = useState(false);
 
@@ -176,7 +178,7 @@ function CustomViewer(props: CustomViewerProps) {
             });
           }
           // TODO: this will mess with url state, as TopicMap also updates the hash
-          showDebug && setLeafletView(viewer, leafletElement);
+          //showDebug && setLeafletView(viewer, leafletElement);
         }
       }
     };
@@ -190,7 +192,7 @@ function CustomViewer(props: CustomViewerProps) {
     viewer,
     location.pathname,
     isSecondaryStyle,
-    leafletElement,
+    //leafletElement,
     isUserAction,
   ]);
 
@@ -228,18 +230,23 @@ function CustomViewer(props: CustomViewerProps) {
     >
       <BaseTilesets />
       {children}
-      {showControls && (
-        <ControlsUI
-          showDebug={showDebug}
-          showHome={showHome}
-          showOrbit={showOrbit}
-          searchComponent={<SearchWrapper />}
-        />
-      )}
-      {showCrosshair && <Crosshair lineColor="white" />}
-      <ResizeableContainer enableDragging={showDebug} start={showDebug ? 5 : 0}>
-        <TopicMap />
-      </ResizeableContainer>
+      <TopicMapContextProvider>
+        {showControls && (
+          <ControlsUI
+            showDebug={showDebug}
+            showHome={showHome}
+            showOrbit={showOrbit}
+            searchComponent={<SearchWrapper />}
+          />
+        )}
+        {showCrosshair && <Crosshair lineColor="white" />}
+        <ResizeableContainer
+          enableDragging={showDebug}
+          start={showDebug ? 5 : 0}
+        >
+          <TopicMap />
+        </ResizeableContainer>{' '}
+      </TopicMapContextProvider>
     </ResiumViewer>
   );
 }

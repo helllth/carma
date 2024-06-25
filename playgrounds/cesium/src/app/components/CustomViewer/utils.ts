@@ -213,9 +213,9 @@ export const setLeafletView = async (
   }: { duration?: number; animate?: boolean; zoomSnap?: number } = {}
 ) => {
   if (!viewer || !leafletElement) return;
-  let zoom = cesiumCenterPixelSizeToLeafletZoom(viewer);
-  if (zoom === Infinity || zoom === undefined || zoom === null) {
-    console.warn('zoom is infinity, skipping');
+  let zoom = cesiumCenterPixelSizeToLeafletZoom(viewer).value;
+  if (zoom === null) {
+    console.warn('zoom is null, skipping');
     return;
   }
   const MAX_2D_ZOOM = 25;

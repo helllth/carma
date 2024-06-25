@@ -16,3 +16,8 @@ export type CameraPositionAndOrientation = {
   up: Cartesian3;
   direction: Cartesian3;
 };
+
+export interface NumericResult {
+  value: number | null;
+  error?: string;
+}

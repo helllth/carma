@@ -17,8 +17,7 @@ import {
   Math as CeMath,
   BoundingSphere,
 } from 'cesium';
-import { ColorRgbaArray, TilesetConfig } from '../..';
-import { get } from 'http';
+import { ColorRgbaArray, NumericResult, TilesetConfig } from '../..';
 
 // Math
 
@@ -282,59 +281,129 @@ export const getPixelResolutionFromZoomAtLatitude = (
 
 // CESIUM TO WEB MAPS
 
-const getScenePixelSize = (viewer: Viewer, centerWeight = 0.5) => {
-  const { camera, canvas, scene } = viewer;
+enum PICKMODE {
+  CENTER,
+  RING,
+}
+
+const generatePostionsForRing = (n = 8, radius = 0.1, center = [0.5, 0.5]) => {
+  const positions: [number, number][] = [];
+  const [cx, cy] = center;
+  for (let i = 0; i < n; i++) {
+    const angle = (i / n) * Math.PI * 2;
+    const x = cx + Math.cos(angle) * radius;
+    const y = cy + Math.sin(angle) * radius;
+    positions.push([x, y]);
+  }
+  return positions;
+};
+
+const sampleRingPixelSize = (
+  viewer: Viewer,
+  samples: number,
+  radius: number
+) => {
+  const positionCoords = generatePostionsForRing(samples, radius);
+  const positions = pickViewerCanvasPositions(viewer, positionCoords);
+  const pixelSizes = positions.map(
+    (position) =>
+      defined(position) &&
+      viewer.camera.getPixelSize(
+        new BoundingSphere(position, 1),
+        viewer.scene.drawingBufferWidth,
+        viewer.scene.drawingBufferHeight
+      )
+  );
+  const validPixelSizes = pixelSizes.filter(
+    (pixelSize): pixelSize is number =>
+      typeof pixelSize === 'number' &&
+      pixelSize !== 0 &&
+      pixelSize !== Infinity &&
+      !isNaN(pixelSize)
+  );
+  const sortedPixelSizes = validPixelSizes.sort(
+    (a: number, b: number) => a - b
+  );
+  // Drop the extremes
+  const drop = Math.floor(sortedPixelSizes.length / 4);
+  const trimmedPixelSizes = sortedPixelSizes.slice(drop, -drop);
+  // Calculate the average of the middle values
+  const sum = trimmedPixelSizes.reduce((a, b) => a + b, 0);
+  const avg = sum / trimmedPixelSizes.length;
+  //console.log('pixel sizes', sortedPixelSizes, trimmedPixelSizes, avg);
+  return avg;
+};
+
+const getScenePixelSize = (
+  viewer: Viewer,
+  mode = PICKMODE.CENTER,
+  { samples = 10, radius = 0.2 }: { samples?: number; radius?: number } = {} // radius for unit screen coordinates, should be less than 0.5 with center at 0.5,0.5
+): NumericResult => {
+  const { camera, scene } = viewer;
 
   // sample two position to get better approximation for full view extent
+  if (radius >= 0.5) {
+    console.warn(
+      'radius is greater than 0.5, clamping applied',
+      radius,
+      samples
+    );
+    radius = 0.5;
+  }
 
-  const [groundCenter, topLeft] = pickViewerCanvasPositions(viewer, [
-    CENTER_POSITION,
-    [0.05, 0.05],
-  ]);
+  let result: NumericResult = { value: null };
 
-  const pixelSizeCenter = camera.getPixelSize(
-    new BoundingSphere(groundCenter, 1),
-    scene.drawingBufferWidth,
-    scene.drawingBufferHeight
-  );
+  switch (mode) {
+    case PICKMODE.RING: {
+      if (radius > 0) {
+        result.value = sampleRingPixelSize(viewer, samples, radius);
+        break;
+      }
+      // intentional fallthrough for no radius
+    }
 
-  const pixelSizeCorner = camera.getPixelSize(
-    new BoundingSphere(topLeft, 1),
-    scene.drawingBufferWidth,
-    scene.drawingBufferHeight
-  );
+    // eslint-disable-next-line no-fallthrough
+    case PICKMODE.CENTER:
+    default: {
+      const groundCenterPickPos = pickViewerCanvasCenter(viewer);
+      if (defined(groundCenterPickPos)) {
+        result.value = camera.getPixelSize(
+          new BoundingSphere(groundCenterPickPos, 1),
+          scene.drawingBufferWidth,
+          scene.drawingBufferHeight
+        );
+      }
+    }
+  }
 
-  const pixelSize = pixelSizeCorner
-    ? pixelSizeCenter * centerWeight + pixelSizeCorner * (1 - centerWeight)
-    : pixelSizeCenter;
-
-  /*
-  console.log('zoom cesium dpr', viewer.resolutionScale);
-  console.log('zoom dpr', window.devicePixelRatio);
-  console.log('zoom px total', pixelSize);
-  console.log('zoom px centr', pixelSizeCenter);
-  console.log('zoom px tpLft', pixelSizeCorner);
-  console.log('zoom px ratio', pixelSizeCenter / pixelSizeCorner);
-  console.log('zoom camera position', camera.positionCartographic.height);
-  console.log(
-    'zoom ground position',
-    Cartographic.fromCartesian(groundCenterPickPos).height
-  );
-  */
-
-  return pixelSize;
+  if (result.value === 0 || result.value === Infinity) {
+    result = {
+      value: null,
+      error: 'No pixel size found for camera position',
+    };
+  }
+  return result;
 };
 
 export const cesiumCenterPixelSizeToLeafletZoom = (
-  viewer: Viewer,
-  { centerWeight = 0.5 }: { centerWeight?: number } = {}
-) => {
-  const pixelSize = getScenePixelSize(viewer, centerWeight);
+  viewer: Viewer
+): NumericResult => {
+  const pixelSize = getScenePixelSize(viewer, PICKMODE.RING);
+  if (pixelSize.value === null) {
+    console.warn('No pixel size found for camera position.', pixelSize.error);
+    return { value: null, error: 'No pixel size found for camera position' };
+  }
   const zoom = getZoomFromPixelResolutionAtLatitude(
-    pixelSize,
+    pixelSize.value,
     viewer.camera.positionCartographic.latitude
   );
-  return zoom;
+
+  if (zoom === Infinity) {
+    console.warn('zoom is infinity, skipping');
+    return { value: null, error: 'Zoom is infinity' };
+  }
+
+  return { value: zoom };
 };
 
 // WEB MAPS TO CESIUM
@@ -352,7 +421,13 @@ export const leafletToCesiumCamera = (
     latRad
   );
 
-  let currentPixelResolution = getScenePixelSize(viewer);
+  let currentPixelResolution = getScenePixelSize(viewer).value;
+
+  if (currentPixelResolution === null) {
+    console.warn('No pixel size found for camera position.');
+    return false;
+  }
+
   const { camera } = viewer;
 
   // move to new position
@@ -393,7 +468,11 @@ export const leafletToCesiumCamera = (
         cameraHeightAboveGround + groundHeight
       ),
     });
-    currentPixelResolution = getScenePixelSize(viewer);
+    const newResolution = getScenePixelSize(viewer).value;
+    if (newResolution === null) {
+      return false;
+    }
+    currentPixelResolution = newResolution;
     iterations++;
   }
   //console.log('zoom iterations', iterations);

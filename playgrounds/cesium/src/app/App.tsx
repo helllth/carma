@@ -9,7 +9,6 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { viewerRoutes, otherRoutes } from './routes';
 import CustomViewer from './components/CustomViewer/CustomViewer';
-import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
 
 import { routeGenerator } from './utils/routeGenerator';
 
@@ -43,11 +42,9 @@ export function App() {
               <Route
                 path="/*"
                 element={
-                  <TopicMapContextProvider>
-                    <CustomViewer>
-                      <Routes>{...ViewerRoutes}</Routes>
-                    </CustomViewer>
-                  </TopicMapContextProvider>
+                  <CustomViewer>
+                    <Routes>{...ViewerRoutes}</Routes>
+                  </CustomViewer>
                 }
               />
               {...OtherRoutes}

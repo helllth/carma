@@ -12,6 +12,8 @@ export const DEFAULT_SELECTION_HIGHLIGHT_MATERIAL = new ColorMaterialProperty(
 
 // ANIMATIONS
 
+export const DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION = 1000; // milliseconds
+
 const fullRotationDuration = 60; // seconds
 export const DEFAULT_ROTATION_SPEED =
   CeMath.TWO_PI / (fullRotationDuration * 1000); // rad per millisecond

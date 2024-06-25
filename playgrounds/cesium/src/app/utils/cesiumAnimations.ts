@@ -21,11 +21,13 @@ export function animateInterpolateHeadingPitchRange(
   destination: Cartesian3,
   hpr: HeadingPitchRange = new HeadingPitchRange(0, -Math.PI / 2, 0),
   {
+    delay = 0,
     duration = 1000,
     onComplete,
     easing = EasingFunction.CUBIC_IN_OUT,
   }: {
     duration?: number;
+    delay?: number; // ms
     onComplete?: () => void;
     easing?: (time: number) => number;
   } = {}
@@ -47,11 +49,13 @@ export function animateInterpolateHeadingPitchRange(
   }
 
   // Animation start time
-  const startTime = performance.now();
+  const startTime = performance.now() + delay; // delay the animation for other animations to finish
+  let frameIndex = 0;
 
   const animate = (time: number) => {
     const elapsed = time - startTime;
     const t = Math.min(elapsed / duration, 1); // normalize to [0, 1]
+    //console.log('animate', duration, elapsed, t, frameIndex);
 
     // Interpolate heading and pitch over time
     const currentHeading = CeMath.lerp(initialHeading, heading, easing(t));
@@ -74,9 +78,10 @@ export function animateInterpolateHeadingPitchRange(
       viewer.camera.lookAtTransform(Matrix4.IDENTITY);
       onComplete?.();
     }
+    frameIndex++;
   };
 
-  // Start the animation
   requestAnimationFrame(animate);
+
   return new HeadingPitchRange(initialHeading, initialPitch, initialRange);
 }

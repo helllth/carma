@@ -8,6 +8,7 @@ import {
   useShowPrimaryTileset,
   useViewerIsMode2d,
 } from '../../../store/slices/viewer';
+import { DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION } from '../../../config';
 
 export const TopicMap = () => {
   const { viewer } = useCesium();
@@ -70,12 +71,11 @@ export const TopicMap = () => {
     <div
       ref={componentRef}
       style={{
-        //animation: isMode2d ? 'fadein 1s' : 'fadeout 1s',
-        //animationFillMode: 'both',
-        pointerEvents: isMode2d ? 'auto' : 'none',
         opacity: isMode2d ? 1 : 0,
-        transition: 'opacity 1s',
+        transition: `opacity ${DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION}ms ease-in-out`,
+        pointerEvents: isMode2d ? 'auto' : 'none',
       }}
+
       //className={isMode2d ? 'fade-in' : 'fade-out'}
     >
       <TopicMapComponent
