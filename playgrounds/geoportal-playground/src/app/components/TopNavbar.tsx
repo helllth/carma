@@ -105,8 +105,6 @@ const TopNavbar = () => {
       }
     }
 
-    console.log('xxx', newLayer);
-
     if (activeLayers.find((activeLayer) => activeLayer.id === layer.id)) {
       try {
         dispatch(removeLayer(layer.id));
