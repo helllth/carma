@@ -110,8 +110,8 @@ const LibModal = ({
   const flattenedLayers = allLayers.flatMap((obj) => obj.layers);
   const fuse = new Fuse(flattenedLayers, {
     keys: [
-      { name: 'Title', weight: 2 },
-      { name: 'Abstract', weight: 1 },
+      { name: 'title', weight: 2 },
+      { name: 'description', weight: 1 },
     ],
     shouldSort: false,
     includeMatches: true,
