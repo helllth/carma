@@ -30,7 +30,6 @@ const buildLayoutControlsChildren = (children: ReactNode) => {
         const {
           position,
           order = 0,
-          id,
           fullCollapseWidth,
           bottomLeftWidth,
           bottomRightWidth,
@@ -41,7 +40,6 @@ const buildLayoutControlsChildren = (children: ReactNode) => {
         allPositions[position]?.push({
           ...child.props,
           order,
-          id,
           fullCollapseWidth,
         });
         if (bottomLeftWidth) {
@@ -104,7 +102,7 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
   ifStorybook = true,
 }) => {
   const [windowWidth, setWindowWidth] = useState(0);
-  const [layoutHeight, setLayoutHeight] = useState(null);
+  const [layoutHeight, setLayoutHeight] = useState<number | null>(null);
   const [screenSizeWatcher, setScreenSizeWatcher] = useState('');
   const {
     allPositions,
@@ -135,7 +133,7 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
   }, []);
 
   useEffect(() => {
-    if (containerRef) {
+    if (containerRef.current) {
       // if (!mainComponent) {
       //   throw new Error('ControlLayout requires a Main component as a child.');
       // }
@@ -183,7 +181,7 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
     >
       <div
         className={`${styles['controls-container']} ${
-          layoutWidth <= bottomCollapsBrake
+          layoutWidth && layoutWidth <= bottomCollapsBrake
             ? styles['controls-container__mobile']
             : ''
         }`}
@@ -201,15 +199,18 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
                         debugMode ? styles['debug-mode'] : ''
                       } ${
                         component.fullCollapseWidth &&
+                        layoutWidth &&
                         layoutWidth <= bottomCollapsBrake
                           ? styles['full-collapse-width']
                           : ''
                       } ${
-                        layoutWidth <= bottomCollapsBrake
+                        layoutWidth && layoutWidth <= bottomCollapsBrake
                           ? styles[position + '__mobile']
                           : ''
                       } ${
-                        idx === 0 && layoutWidth <= bottomCollapsBrake
+                        idx === 0 &&
+                        layoutWidth &&
+                        layoutWidth <= bottomCollapsBrake
                           ? styles[position + '__first']
                           : ''
                       }`}

@@ -14,10 +14,10 @@ const ControlCenterStyler: React.FC<ControlCenterStylerProps> = ({
     width: '100%',
     maxWidth: '100%',
     height: '100%',
-    textAlign: 'center',
+    textAlign: 'center' as 'center',
     padding: '5px 4px',
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as 'column',
     alignItems: 'center',
     justifyContent: 'space-evenly',
   };
