@@ -39,7 +39,7 @@ import { Item } from 'libraries/layer-lib/src/helper/types';
 const layerMap = {
   amtlich: {
     title: 'Amtlich',
-    layers: 'amtlich@90',
+    layers: 'amtlichBasiskarte@90',
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
   },
   luftbild: {
@@ -47,10 +47,10 @@ const layerMap = {
     layers: 'wupp-plan-live@100|trueOrtho2020@75|rvrSchrift@100',
     url: 'https://maps.wuppertal.de/karten?service=WMS&request=GetMap&layers=R102%3Aluftbild2022',
   },
-  topographisch: {
-    title: 'Topographisch',
-    layers: 'basemap_relief@40',
-    url: 'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_top.json',
+  stadtplan: {
+    title: 'Stadtplan',
+    layers: 'amtlich@90',
+    url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
   },
 };
 
@@ -104,6 +104,8 @@ const TopNavbar = () => {
         }
       }
     }
+
+    console.log('xxx', newLayer);
 
     if (activeLayers.find((activeLayer) => activeLayer.id === layer.id)) {
       try {
@@ -235,7 +237,7 @@ const TopNavbar = () => {
           }}
         >
           <Radio.Button value="amtlich">Amtlich</Radio.Button>
-          <Radio.Button value="topographisch">Topographisch</Radio.Button>
+          <Radio.Button value="stadtplan">Stadtplan</Radio.Button>
           <Radio.Button value="luftbild">Luftbild</Radio.Button>
         </Radio.Group>
 
