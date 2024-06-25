@@ -141,6 +141,14 @@ const LibModal = ({
     });
   };
 
+  const getNumberOfLayers = (layers) => {
+    let numberOfLayers = 0;
+    layers.forEach((category) => {
+      numberOfLayers += category.layers.length;
+    });
+    return numberOfLayers;
+  };
+
   useEffect(() => {
     let newLayers: any[] = [];
     for (let key in services) {
@@ -211,8 +219,12 @@ const LibModal = ({
     >
       <div
         className="w-full h-full flex flex-col bg-[#f2f2f2]"
-        style={{ maxHeight: 'calc(100vh - 200px)' }}
+        style={{
+          maxHeight: 'calc(100vh - 200px)',
+          minHeight: 'calc(100vh - 200px)',
+        }}
       >
+        {/* <div className='h-full w-full flex flex-col'></div> */}
         <div className="sticky top-0 px-6 pt-6">
           <div className="flex justify-between items-center">
             <h1 className="mb-0 text-2xl font-semibold">Ressourcen</h1>
@@ -241,7 +253,11 @@ const LibModal = ({
           </div>
           {layers.length > 0 && (
             <>
-              <LayerTabs layers={layers} activeId={inViewCategory} />
+              <LayerTabs
+                layers={layers}
+                activeId={inViewCategory}
+                numberOfItems={getNumberOfLayers(layers)}
+              />
               <hr className="h-px bg-gray-300 border-0 mt-0 mb-2" />
             </>
           )}
@@ -298,6 +314,11 @@ const LibModal = ({
                 )}
               </>
             ))}
+            {getNumberOfLayers(layers) === 0 && (
+              <h1 className="text-2xl font-normal">
+                Keine Ressourcen gefunden
+              </h1>
+            )}
           </div>
         </div>
       </div>

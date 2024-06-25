@@ -3,9 +3,10 @@ import { Badge, Tabs } from 'antd';
 interface LayerTabsProps {
   layers: any[];
   activeId: string;
+  numberOfItems: number;
 }
 
-const LayerTabs = ({ layers, activeId }: LayerTabsProps) => {
+const LayerTabs = ({ layers, activeId, numberOfItems }: LayerTabsProps) => {
   return (
     <>
       <Tabs
@@ -25,7 +26,7 @@ const LayerTabs = ({ layers, activeId }: LayerTabsProps) => {
             disabled: layer.layers.length === 0,
           };
         })}
-        activeKey={activeId}
+        activeKey={numberOfItems > 0 ? activeId : ''}
         onTabClick={(key) => {
           document.getElementById(key)?.scrollIntoView({ behavior: 'smooth' });
         }}
