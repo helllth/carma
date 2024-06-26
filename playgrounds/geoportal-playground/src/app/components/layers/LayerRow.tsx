@@ -36,10 +36,13 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
   const style = { transform: CSS.Translate.toString(transform) };
 
   return (
-    <div style={style} className="w-full flex items-center gap-2">
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="w-full flex items-center gap-2 px-1"
+    >
       <div className="lg:max-w-80 max-w-44 w-full flex items-center gap-2">
         <button
-          ref={setNodeRef}
           {...listeners}
           {...attributes}
           className="flex items-center justify-center !cursor-grab"

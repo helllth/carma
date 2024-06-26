@@ -40,16 +40,45 @@ export const layerMap = {
   amtlich: {
     title: 'Amtlich',
     layers: 'amtlichBasiskarte@90',
+    description: ``,
+
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
   },
   luftbild: {
     title: 'Luftbild',
     layers: 'wupp-plan-live@100|trueOrtho2020@75|rvrSchrift@100',
+    description: `Kartendienst (WMS) der Stadt Wuppertal. Datengrundlage
+            <strong>True Orthophoto aus Bildflug vom 16.03.2022</strong>, hergestellt durch Aerowest
+            GmbH/Dortmund, Bodenauflösung 5 cm.
+            (True Orthophoto: Aus Luftbildern mit hoher Längs- und Querüberdeckung
+            in einem automatisierten Bildverarbeitungsprozess
+            berechnetes Bild in Parallelprojektion, also ohne Gebäudeverkippung und sichttote Bereiche.) © Stadt Wuppertal (
+            <a href="https://www.wuppertal.de/geoportal/Nutzungsbedingungen/NB-GDIKOM-C_Geodaten.pdf">
+              NB-GDIKOM C
+            </a>
+            ). (2) Kartendienste (WMS) des Regionalverbandes Ruhr (RVR). Datengrundlagen:
+            <strong>Stadtkarte 2.0</strong> und Kartenschrift aus der Stadtkarte 2.0. Details s. Hintergrundkarte Stadtplan).`,
     url: 'https://maps.wuppertal.de/karten?service=WMS&request=GetMap&layers=R102%3Aluftbild2022',
   },
   stadtplan: {
     title: 'Stadtplan',
     layers: 'amtlich@90',
+    description: `Kartendienst (WMS) des Regionalverbandes Ruhr (RVR). Datengrundlage:
+            <strong>Stadtkarte 2.0</strong>. Wöchentlich in einem automatischen Prozess
+            aktualisierte Zusammenführung des Straßennetzes der OpenStreetMap
+            mit Amtlichen Geobasisdaten des Landes NRW aus den Fachverfahren
+            ALKIS (Gebäude, Flächennutzungen) und ATKIS (Gewässer). © RVR und
+            Kooperationspartner (
+            <a href="https://www.govdata.de/dl-de/by-2-0">
+              Datenlizenz Deutschland - Namensnennung - Version 2.0
+            </a>
+            ). Lizenzen der Ausgangsprodukte:
+            <a href="https://www.govdata.de/dl-de/zero-2-0">
+              Datenlizenz Deutschland - Zero - Version 2.0
+            </a>
+            (Amtliche Geobasisdaten) und
+            <a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL</a>
+            (OpenStreetMap contributors).`,
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
   },
 };
@@ -235,7 +264,6 @@ const TopNavbar = () => {
               );
             }}
           >
-            <Radio.Button value="amtlich">Amtlich</Radio.Button>
             <Radio.Button value="stadtplan">Stadtplan</Radio.Button>
             <Radio.Button value="luftbild">Luftbild</Radio.Button>
           </Radio.Group>

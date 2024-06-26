@@ -73,7 +73,7 @@ const Info = ({ description, legend }: InfoProps) => {
                   id: e.target.value,
                   title: layerMap[e.target.value].title,
                   opacity: 1.0,
-                  description: '',
+                  description: layerMap[e.target.value].description,
                   layerType: 'wmts',
                   visible: true,
                   props: {
@@ -85,22 +85,14 @@ const Info = ({ description, legend }: InfoProps) => {
               );
             }}
           >
-            <Radio value="amtlich">Amtlich</Radio>
             <Radio value="stadtplan">Stadtplan</Radio>
             <Radio value="luftbild">Luftbild</Radio>
           </Radio.Group>
           <h5 className="font-semibold">Inhalt</h5>
-          <p className="text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod
-            suscipit sodales. Suspendisse eu odio quis ante suscipit imperdiet
-            sed in arcu. Nam dictum lorem quis diam posuere, vel vehicula lacus
-            pellentesque. Nunc nibh purus, sodales a faucibus a, gravida luctus
-            ligula. Sed fermentum cursus posuere. Vestibulum ornare vitae justo
-            in interdum. Vestibulum at velit non ante feugiat vulputate.
-            Maecenas sed fringilla eros. Suspendisse efficitur augue accumsan
-            nulla vulputate, ac consequat dolor congue. Morbi rutrum sit amet
-            risus et sollicitudin.
-          </p>
+          <div
+            className="text-sm"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         </div>
       )}
       <hr className="h-px my-0 bg-gray-300 border-0 w-full" />
