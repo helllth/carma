@@ -252,7 +252,7 @@ const TopNavbar = () => {
                   id: e.target.value,
                   title: layerMap[e.target.value].title,
                   opacity: 1.0,
-                  description: '',
+                  description: layerMap[e.target.value].description,
                   layerType: 'wmts',
                   visible: true,
                   props: {
