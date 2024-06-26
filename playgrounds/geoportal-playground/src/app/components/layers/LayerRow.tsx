@@ -4,6 +4,8 @@ import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Slider } from 'antd';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
+import { useDispatch } from 'react-redux';
+import { changeOpacity } from '../../store/slices/mapping';
 
 interface LayerRowProps {
   layer: Layer;
@@ -11,6 +13,7 @@ interface LayerRowProps {
 }
 
 const LayerRow = ({ layer, id }: LayerRowProps) => {
+  const dispatch = useDispatch();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id,
@@ -35,6 +38,9 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
         min={0}
         max={1}
         step={0.1}
+        onChange={(value) => {
+          dispatch(changeOpacity({ id: layer.id, opacity: value }));
+        }}
         className="w-full"
         value={layer.opacity}
       />
