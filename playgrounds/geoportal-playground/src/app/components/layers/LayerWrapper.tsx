@@ -143,6 +143,7 @@ const LayerWrapper = () => {
                     <LayerButton
                       title={layer.title}
                       id={layer.id}
+                      key={layer.id}
                       index={i}
                       icon={
                         layer.title.includes('Orthofoto')
