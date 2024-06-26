@@ -31,6 +31,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { cn } from '../../helper/helper';
 import './button.css';
+import SecondaryView from './SecondaryView';
 
 const LayerWrapper = () => {
   const dispatch = useDispatch();
@@ -70,96 +71,100 @@ const LayerWrapper = () => {
   );
 
   return (
-    <DndContext
-      onDragEnd={handleDragEnd}
-      sensors={sensors}
-      onDragStart={() =>
-        routedMapRef?.leafletMap?.leafletElement.dragging.disable()
-      }
-      modifiers={[restrictToHorizontalAxis]}
-    >
-      <div
-        ref={setNodeRef}
-        style={style}
-        id="buttonWrapper"
-        className="absolute w-full h-9 pl-20 pr-[20px] top-2.5 z-[999]"
-        onClick={() => {
-          dispatch(setSelectedLayerIndex(-2));
-        }}
+    <>
+      <DndContext
+        onDragEnd={handleDragEnd}
+        sensors={sensors}
+        onDragStart={() =>
+          routedMapRef?.leafletMap?.leafletElement.dragging.disable()
+        }
+        modifiers={[restrictToHorizontalAxis]}
       >
-        <div className="relative w-[calc(100%-40px)] mx-auto h-full">
-          {showLeftScrollButton && (
-            <div
-              className={cn(
-                'absolute left-14 top-0.5 bg-neutral-100 w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
-              )}
-              role="button"
-              onClick={() => {
-                document.getElementById('scrollWrapper').scrollBy({
-                  left: -300,
-                  behavior: 'smooth',
-                });
-              }}
-            >
-              <FontAwesomeIcon icon={faChevronLeft} />
-            </div>
-          )}
-          {showRightScrollButton && (
-            <div
-              className={cn(
-                'absolute -right-7 top-0.5 bg-neutral-100 w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
-              )}
-              role="button"
-              onClick={() => {
-                document.getElementById('scrollWrapper').scrollBy({
-                  left: 300,
-                  behavior: 'smooth',
-                });
-              }}
-            >
-              <FontAwesomeIcon icon={faChevronRight} />
-            </div>
-          )}
-          <div className="w-full flex justify-center items-center h-full gap-2">
-            <LayerButton
-              icon="background"
-              layer={backgroundLayer}
-              index={-1}
-              id={backgroundLayer.id}
-              title=""
-              background
-            />
-            <div
-              id="scrollWrapper"
-              className="overflow-x-hidden flex items-center h-full gap-2"
-            >
-              <SortableContext
-                items={layers}
-                strategy={horizontalListSortingStrategy}
+        <div
+          ref={setNodeRef}
+          style={style}
+          id="buttonWrapper"
+          className="absolute w-full h-9 pl-20 pr-[20px] top-2.5 z-[999]"
+          onClick={() => {
+            dispatch(setSelectedLayerIndex(-2));
+          }}
+        >
+          <div className="relative w-[calc(100%-40px)] mx-auto h-full">
+            {showLeftScrollButton && (
+              <div
+                className={cn(
+                  'absolute left-14 top-0.5 bg-neutral-100 w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
+                )}
+                role="button"
+                onClick={() => {
+                  document.getElementById('scrollWrapper').scrollBy({
+                    left: -300,
+                    behavior: 'smooth',
+                  });
+                }}
               >
-                {layers.map((layer, i) => (
-                  <LayerButton
-                    title={layer.title}
-                    id={layer.id}
-                    index={i}
-                    icon={
-                      layer.title.includes('Orthofoto')
-                        ? 'ortho'
-                        : layer.title === 'Bäume'
-                        ? 'bäume'
-                        : layer.title.includes('gärten')
-                        ? 'gärten'
-                        : undefined
-                    }
-                    layer={layer}
-                  />
-                ))}
-              </SortableContext>
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </div>
+            )}
+            {showRightScrollButton && (
+              <div
+                className={cn(
+                  'absolute -right-7 top-0.5 bg-neutral-100 w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
+                )}
+                role="button"
+                onClick={() => {
+                  document.getElementById('scrollWrapper').scrollBy({
+                    left: 300,
+                    behavior: 'smooth',
+                  });
+                }}
+              >
+                <FontAwesomeIcon icon={faChevronRight} />
+              </div>
+            )}
+            <div className="w-full flex justify-center items-center h-full gap-2">
+              <LayerButton
+                icon="background"
+                layer={backgroundLayer}
+                index={-1}
+                id={backgroundLayer.id}
+                title=""
+                background
+              />
+              <div
+                id="scrollWrapper"
+                className="overflow-x-hidden flex items-center h-full gap-2"
+              >
+                <SortableContext
+                  items={layers}
+                  strategy={horizontalListSortingStrategy}
+                >
+                  {layers.map((layer, i) => (
+                    <LayerButton
+                      title={layer.title}
+                      id={layer.id}
+                      index={i}
+                      icon={
+                        layer.title.includes('Orthofoto')
+                          ? 'ortho'
+                          : layer.title === 'Bäume'
+                          ? 'bäume'
+                          : layer.title.includes('gärten')
+                          ? 'gärten'
+                          : undefined
+                      }
+                      layer={layer}
+                    />
+                  ))}
+                </SortableContext>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </DndContext>
+      </DndContext>
+
+      {selectedLayerIndex !== -2 && <SecondaryView />}
+    </>
   );
 };
 

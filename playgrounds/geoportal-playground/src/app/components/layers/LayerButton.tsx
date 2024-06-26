@@ -180,14 +180,6 @@ const LayerButton = ({
           </>
         )}
       </div>
-      {showSettings && (
-        <SecondaryView
-          icon={icon}
-          layer={layer}
-          ref={infoRef}
-          background={background}
-        />
-      )}
     </div>
   );
 };
