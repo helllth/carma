@@ -112,7 +112,7 @@ const Info = ({ description, legend }: InfoProps) => {
                       {layers.map((layer, i) => (
                         <LayerRow
                           key={`layer.${i}`}
-                          title={layer.title}
+                          layer={layer}
                           id={layer.id}
                         />
                       ))}

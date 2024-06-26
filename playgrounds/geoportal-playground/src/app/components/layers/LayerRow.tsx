@@ -3,13 +3,14 @@ import { CSS } from '@dnd-kit/utilities';
 import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Slider } from 'antd';
+import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 
 interface LayerRowProps {
-  title: string;
+  layer: Layer;
   id: string;
 }
 
-const LayerRow = ({ title, id }: LayerRowProps) => {
+const LayerRow = ({ layer, id }: LayerRowProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id,
@@ -31,9 +32,15 @@ const LayerRow = ({ title, id }: LayerRowProps) => {
         >
           <FontAwesomeIcon icon={faGripVertical} />
         </button>
-        <p className="mb-0 text-lg truncate">{title}</p>
+        <p className="mb-0 text-lg truncate">{layer.title}</p>
       </div>
-      <Slider min={0} max={1} step={0.1} className="w-full" />
+      <Slider
+        min={0}
+        max={1}
+        step={0.1}
+        className="w-full"
+        value={layer.opacity}
+      />
     </div>
   );
 };
