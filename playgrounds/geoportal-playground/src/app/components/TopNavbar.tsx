@@ -213,31 +213,33 @@ const TopNavbar = () => {
       </div>
 
       <div className="flex items-center gap-6">
-        <Radio.Group
-          value={backgroundLayer.id}
-          onChange={(e) => {
-            // setSelectedBackground(e.target.value);
-            dispatch(
-              setBackgroundLayer({
-                id: e.target.value,
-                title: layerMap[e.target.value].title,
-                opacity: 1.0,
-                description: '',
-                layerType: 'wmts',
-                visible: true,
-                props: {
-                  name: '',
-                  url: layerMap[e.target.value].url,
-                },
-                layers: layerMap[e.target.value].layers,
-              })
-            );
-          }}
-        >
-          <Radio.Button value="amtlich">Amtlich</Radio.Button>
-          <Radio.Button value="stadtplan">Stadtplan</Radio.Button>
-          <Radio.Button value="luftbild">Luftbild</Radio.Button>
-        </Radio.Group>
+        <div className="lg:flex hidden">
+          <Radio.Group
+            value={backgroundLayer.id}
+            onChange={(e) => {
+              // setSelectedBackground(e.target.value);
+              dispatch(
+                setBackgroundLayer({
+                  id: e.target.value,
+                  title: layerMap[e.target.value].title,
+                  opacity: 1.0,
+                  description: '',
+                  layerType: 'wmts',
+                  visible: true,
+                  props: {
+                    name: '',
+                    url: layerMap[e.target.value].url,
+                  },
+                  layers: layerMap[e.target.value].layers,
+                })
+              );
+            }}
+          >
+            <Radio.Button value="amtlich">Amtlich</Radio.Button>
+            <Radio.Button value="stadtplan">Stadtplan</Radio.Button>
+            <Radio.Button value="luftbild">Luftbild</Radio.Button>
+          </Radio.Group>
+        </div>
 
         <Button
           onClick={() => {

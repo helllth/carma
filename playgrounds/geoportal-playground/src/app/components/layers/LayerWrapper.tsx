@@ -133,7 +133,7 @@ const LayerWrapper = () => {
               />
               <div
                 id="scrollWrapper"
-                className="overflow-x-hidden flex items-center h-full gap-2"
+                className="overflow-x-hidden sm:flex hidden items-center h-full gap-2"
               >
                 <SortableContext
                   items={layers}
