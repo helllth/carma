@@ -86,7 +86,7 @@ const Info = ({ description, legend }: InfoProps) => {
             }}
           >
             <Radio value="amtlich">Amtlich</Radio>
-            <Radio value="topographisch">Topographisch</Radio>
+            <Radio value="stadtplan">Stadtplan</Radio>
             <Radio value="luftbild">Luftbild</Radio>
           </Radio.Group>
         </div>
