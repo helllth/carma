@@ -11,11 +11,7 @@ import {
   setShowPrimaryTileset,
   setShowSecondaryTileset,
 } from '../../store/slices/viewer';
-import {
-  decodeSceneFromLocation,
-  encodeScene,
-  replaceHashRoutedHistory,
-} from './utils';
+import { decodeSceneFromLocation } from './utils';
 import { setupSecondaryStyle } from './components/baseTileset.hook';
 import { useLocation } from 'react-router-dom';
 
@@ -41,7 +37,7 @@ const useInitializeViewer = (
 
       // TODO enable syncing of leaflet view with dynamic fov
       if (viewer.camera.frustum instanceof PerspectiveFrustum) {
-      //viewer.camera.frustum.fov = 0.1;
+        //viewer.camera.frustum.fov = 0.1;
       }
 
       // TODO enable 2D Mode if zoom value is present in hash on startup
@@ -54,6 +50,7 @@ const useInitializeViewer = (
       }
 
       if (sceneFromHashParams && longitude && latitude) {
+        console.log('HOOK: init Viewer set camera from hash');
         viewer.camera.setView({
           destination: Cartesian3.fromRadians(
             longitude,
@@ -75,7 +72,7 @@ const useInitializeViewer = (
         })();
         */
       } else {
-        console.log('no hash, using home');
+        console.log('HOOK: initViewer no hash, using home');
         viewer.camera.lookAt(home, homeOffset);
         viewer.camera.flyToBoundingSphere(new BoundingSphere(home, 500), {
           duration: 2,

@@ -1,10 +1,4 @@
-import React, {
-  ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Color, HeadingPitchRange, Viewer, Math as CeMath } from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
 import Crosshair from '../UI/Crosshair';
@@ -18,15 +12,12 @@ import {
 } from '../../store/slices/viewer';
 import { BaseTilesets } from './components/BaseTilesets';
 import ControlsUI from './components/ControlsUI';
-import { encodeScene, replaceHashRoutedHistory, setLeafletView } from './utils';
+import { encodeScene, replaceHashRoutedHistory } from './utils';
 import { ResizeableContainer } from './components/ResizeableContainer';
 import { useLocation } from 'react-router-dom';
 import useInitializeViewer from './hooks';
 import TopicMap from './components/TopicMap';
-import {
-  TopicMapContext,
-  TopicMapContextProvider,
-} from 'react-cismap/contexts/TopicMapContextProvider';
+import { TopicMapContextProvider } from 'react-cismap/contexts/TopicMapContextProvider';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -160,12 +151,12 @@ function CustomViewer(props: CustomViewerProps) {
         // let TopicMap/leaflet handle the view change in 2d Mode
         !isMode2d && replaceHashRoutedHistory(encodedScene, location.pathname);
 
-        if (isUserAction) {
+        if (isUserAction && !isMode2d) {
           // remove roll from camera orientation
           const rollDeviation =
             Math.abs(CeMath.TWO_PI - viewer.camera.roll) % CeMath.TWO_PI;
-          console.log('LISTENER: flyTo', rollDeviation, viewer.camera.roll);
           if (rollDeviation > 0.02) {
+            console.log('LISTENER HOOK: flyTo reset roll', rollDeviation);
             const duration = Math.min(rollDeviation, 1);
             viewer.camera.flyTo({
               destination: viewer.camera.position,

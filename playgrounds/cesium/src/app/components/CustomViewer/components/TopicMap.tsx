@@ -28,10 +28,12 @@ export const TopicMap = () => {
 
       node.addEventListener('focusin', handleFocus);
       node.addEventListener('focusout', handleBlur);
+      node.addEventListener('wheel', handleFocus, true);
 
       return () => {
         node.removeEventListener('focusin', handleFocus);
         node.removeEventListener('focusout', handleBlur);
+        node.removeEventListener('wheel', handleFocus);
       };
     }
   }, []);

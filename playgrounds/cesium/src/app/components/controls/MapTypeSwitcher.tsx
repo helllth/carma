@@ -40,6 +40,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
     useState<Cartesian3 | null>(null);
   const [prevHPR, setPrevHPR] = useState<HeadingPitchRange | null>(null);
   const [prevDuration, setPrevDuration] = useState<number>(0);
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   // TODO provide mapFramework context via props for UI?
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const topicMapContext: any = useContext(TopicMapContext);
@@ -131,12 +132,13 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
       setPrevCamera2dPosition(viewer.camera.position.clone());
       // trigger the visual transition
       dispatch(setIsMode2d(true));
+      setIsTransitioning(false);
     };
 
     console.log('duration', distance);
 
     if (hasGroundPos) {
-      // rotate around the groundpositiob at center
+      // rotate around the groundposition at center
       setPrevHPR(
         animateInterpolateHeadingPitchRange(
           viewer,
@@ -150,6 +152,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
       );
     } else {
       console.info('rotate around camera position not implemented yet');
+      setIsTransitioning(false);
       /*
            // TODO implement this
            // rotate around the camera position
@@ -174,6 +177,8 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
     e.preventDefault();
 
     if (viewer) {
+      setIsTransitioning(true);
+
       if (isMode2d) {
         dispatch(setIsMode2d(false));
 
@@ -183,8 +188,9 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
             true
         ) {
           console.log(
-            'camera position changed, skipping 2d to 3d transition animation'
+            'camera position unchanged, skipping 2d to 3d transition animation'
           );
+          setIsTransitioning(false);
           return;
         }
 
@@ -197,6 +203,9 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
             {
               delay: DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION, // allow the css transition to finish
               duration: prevDuration * 1000,
+              onComplete: () => {
+                setIsTransitioning(false);
+              },
             }
           );
       } else {
@@ -209,6 +218,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
     <OnMapButton
       title={isMode2d ? 'zur 3D Ansicht wechseln' : 'zur 2D Ansicht wechseln'}
       onClick={handleSwitchMapMode}
+      disabled={isTransitioning}
     >
       {isMode2d ? '3D' : '2D'}
     </OnMapButton>

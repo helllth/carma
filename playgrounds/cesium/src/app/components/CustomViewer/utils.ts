@@ -5,10 +5,9 @@ import L from 'leaflet';
 // 5 DEGREES OF FREEDOM CAMERA encoding/decoding
 // lon, lat, height, heading, pitch
 // does not always map to a point on the ground so there is no way to encode only the position on the ground at center
-// to allow for syncing with leaflet with a non-orthographic projection we need to also encode the zoom level as a separate parameter
-// zoom is determined as a vertical distance from the terrain or tileset in meters
 // the camera height is the ellipsoidal height of the camera position, so it works well even if the terrain is not loaded
-// the zoom level is only written out for out-linking with leaflet, it is not used for cesium directly
+
+// Zoom is not encoded in the camera position, but can be passed as a separate parameter, only used as reference for leaflet/slippy map zoom level
 
 // TODO implement zoom level to camera height conversion with terrain height for reverse use case.
 

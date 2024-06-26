@@ -430,6 +430,8 @@ export const leafletToCesiumCamera = (
 
   const { camera } = viewer;
 
+  console.log('leafletToCesium', currentPixelResolution, targetPixelResolution);
+
   // move to new position
   camera.setView({
     destination: Cartesian3.fromRadians(
@@ -439,7 +441,6 @@ export const leafletToCesiumCamera = (
     ),
   });
 
-  console.log('leafletToCesium', currentPixelResolution, targetPixelResolution);
   // Get the ground position directly under the camera
 
   const cameraPositionAtStart = camera.position.clone();

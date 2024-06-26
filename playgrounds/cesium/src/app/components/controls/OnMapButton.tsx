@@ -14,11 +14,20 @@ type OnMapButtonProps = HTMLAttributes<HTMLAnchorElement> & {
   children?: ReactNode;
   title: string;
   ariaLabel?: string;
+  disabled?: boolean;
   onClick?: (event: MouseEvent) => void;
 };
 
 const OnMapButton = (props: OnMapButtonProps) => {
-  const { icon, children, title, ariaLabel, onClick, ...anchorProps } = props;
+  const {
+    icon,
+    disabled,
+    children,
+    title,
+    ariaLabel,
+    onClick,
+    ...anchorProps
+  } = props;
   return (
     <a
       {...anchorProps}
@@ -27,8 +36,8 @@ const OnMapButton = (props: OnMapButtonProps) => {
       title={title}
       role="button"
       aria-label={ariaLabel ?? title}
-      aria-disabled="false"
-      onClick={onClick}
+      aria-disabled={disabled === true ? 'true' : 'false'}
+      onClick={disabled === true ? undefined : onClick}
     >
       {icon && <FontAwesomeIcon icon={icon} />}
       {children}
