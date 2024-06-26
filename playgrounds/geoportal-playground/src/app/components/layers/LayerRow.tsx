@@ -1,11 +1,15 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEye,
+  faEyeSlash,
+  faGripVertical,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Slider } from 'antd';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import { useDispatch } from 'react-redux';
-import { changeOpacity } from '../../store/slices/mapping';
+import { changeOpacity, changeVisibility } from '../../store/slices/mapping';
 
 interface LayerRowProps {
   layer: Layer;
@@ -44,6 +48,18 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
         className="w-full"
         value={layer.opacity}
       />
+      <button
+        className="hover:text-gray-500 text-gray-600 flex items-center justify-center"
+        onClick={(e) => {
+          if (layer.visible) {
+            dispatch(changeVisibility({ id, visible: false }));
+          } else {
+            dispatch(changeVisibility({ id, visible: true }));
+          }
+        }}
+      >
+        <FontAwesomeIcon icon={layer.visible ? faEye : faEyeSlash} />
+      </button>
     </div>
   );
 };
