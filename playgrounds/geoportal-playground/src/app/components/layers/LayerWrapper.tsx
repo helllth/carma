@@ -120,10 +120,7 @@ const LayerWrapper = () => {
               <FontAwesomeIcon icon={faChevronRight} />
             </div>
           )}
-          <div
-            id="scrollWrapper"
-            className="w-full overflow-x-hidden flex items-center h-full gap-2"
-          >
+          <div className="w-full flex justify-center items-center h-full gap-2">
             <LayerButton
               icon="background"
               layer={backgroundLayer}
@@ -132,33 +129,33 @@ const LayerWrapper = () => {
               title=""
               background
             />
-            {/* <div
+            <div
               id="scrollWrapper"
-              className="overflow-x-hidden w-full flex items-center h-full gap-2"
-            > */}
-            <SortableContext
-              items={layers}
-              strategy={horizontalListSortingStrategy}
+              className="overflow-x-hidden flex items-center h-full gap-2"
             >
-              {layers.map((layer, i) => (
-                <LayerButton
-                  title={layer.title}
-                  id={layer.id}
-                  index={i}
-                  icon={
-                    layer.title.includes('Orthofoto')
-                      ? 'ortho'
-                      : layer.title === 'Bäume'
-                      ? 'bäume'
-                      : layer.title.includes('gärten')
-                      ? 'gärten'
-                      : undefined
-                  }
-                  layer={layer}
-                />
-              ))}
-            </SortableContext>
-            {/* </div> */}
+              <SortableContext
+                items={layers}
+                strategy={horizontalListSortingStrategy}
+              >
+                {layers.map((layer, i) => (
+                  <LayerButton
+                    title={layer.title}
+                    id={layer.id}
+                    index={i}
+                    icon={
+                      layer.title.includes('Orthofoto')
+                        ? 'ortho'
+                        : layer.title === 'Bäume'
+                        ? 'bäume'
+                        : layer.title.includes('gärten')
+                        ? 'gärten'
+                        : undefined
+                    }
+                    layer={layer}
+                  />
+                ))}
+              </SortableContext>
+            </div>
           </div>
         </div>
       </div>

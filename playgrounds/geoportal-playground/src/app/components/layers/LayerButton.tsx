@@ -107,8 +107,8 @@ const LayerButton = ({
       }}
       className={cn(
         '',
-        index === -1 && 'ml-auto',
-        index === layersLength - 1 && 'mr-auto',
+        // index === -1 && 'ml-auto',
+        // index === layersLength - 1 && 'mr-auto',
         showLeftScrollButton && index === -1 && 'pr-4'
       )}
       id={`layer-${id}`}
