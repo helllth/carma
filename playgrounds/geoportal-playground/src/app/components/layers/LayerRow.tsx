@@ -19,15 +19,12 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
   const style = { transform: CSS.Translate.toString(transform) };
 
   return (
-    <div
-      style={style}
-      {...listeners}
-      {...attributes}
-      className="w-full flex items-center gap-2"
-    >
+    <div style={style} className="w-full flex items-center gap-2">
       <div className="max-w-80 w-full flex items-center gap-2">
         <button
           ref={setNodeRef}
+          {...listeners}
+          {...attributes}
           className="flex items-center justify-center !cursor-grab"
         >
           <FontAwesomeIcon icon={faGripVertical} />
