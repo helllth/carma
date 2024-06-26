@@ -6,7 +6,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Slider } from 'antd';
-import { forwardRef, useContext } from 'react';
+import { forwardRef, useContext, useEffect, useRef } from 'react';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '../../helper/helper';
@@ -35,6 +35,7 @@ interface SecondaryViewProps {}
 const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
   // @ts-ignore
   const { routedMapRef } = useContext(TopicMapContext);
+  const infoRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const showInfo = useSelector(getShowInfo);
   const showInfoText = useSelector(getShowInfoText);
@@ -53,6 +54,18 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
     : undefined;
   const background = selectedLayerIndex === -1;
 
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
+        dispatch(setSelectedLayerIndex(-2));
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+
   return (
     <div
       onClick={() => {
@@ -62,7 +75,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
     >
       <div className="w-full flex items-center justify-center">
         <div
-          ref={ref}
+          ref={infoRef}
           onClick={(e) => {
             e.stopPropagation();
           }}

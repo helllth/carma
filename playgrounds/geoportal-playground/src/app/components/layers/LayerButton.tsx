@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import { useEffect, useRef } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '../../helper/helper';
 import {
@@ -21,11 +22,9 @@ import {
   setShowLeftScrollButton,
   setShowRightScrollButton,
 } from '../../store/slices/mapping';
-import SecondaryView from './SecondaryView';
+import { getShowLayerHideButtons } from '../../store/slices/ui';
 import { iconColorMap, iconMap } from './items';
 import './tabs.css';
-import { useInView } from 'react-intersection-observer';
-import { getShowLayerHideButtons } from '../../store/slices/ui';
 // import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
@@ -59,27 +58,9 @@ const LayerButton = ({
     useSortable({
       id,
     });
-  const infoRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
 
   const style = { transform: CSS.Translate.toString(transform) };
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        infoRef.current &&
-        !infoRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
-        dispatch(setSelectedLayerIndex(-2));
-      }
-    };
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, []);
 
   useEffect(() => {
     if (!inView && index === 0) {
