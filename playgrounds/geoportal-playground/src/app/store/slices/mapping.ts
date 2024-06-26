@@ -23,10 +23,25 @@ const initialState: MappingState = {
   layers: [],
   selectedLayerIndex: -2,
   backgroundLayer: {
-    title: 'Amtlich',
-    id: 'amtlich',
+    title: 'Stadtplan',
+    id: 'stadtplan',
     opacity: 1.0,
-    description: '',
+    description: `Kartendienst (WMS) des Regionalverbandes Ruhr (RVR). Datengrundlage:
+            <strong>Stadtkarte 2.0</strong>. Wöchentlich in einem automatischen Prozess
+            aktualisierte Zusammenführung des Straßennetzes der OpenStreetMap
+            mit Amtlichen Geobasisdaten des Landes NRW aus den Fachverfahren
+            ALKIS (Gebäude, Flächennutzungen) und ATKIS (Gewässer). © RVR und
+            Kooperationspartner (
+            <a href="https://www.govdata.de/dl-de/by-2-0">
+              Datenlizenz Deutschland - Namensnennung - Version 2.0
+            </a>
+            ). Lizenzen der Ausgangsprodukte:
+            <a href="https://www.govdata.de/dl-de/zero-2-0">
+              Datenlizenz Deutschland - Zero - Version 2.0
+            </a>
+            (Amtliche Geobasisdaten) und
+            <a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL</a>
+            (OpenStreetMap contributors).`,
     visible: true,
     layerType: 'wmts',
     props: {
