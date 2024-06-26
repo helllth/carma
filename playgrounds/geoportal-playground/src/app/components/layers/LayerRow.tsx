@@ -4,12 +4,14 @@ import {
   faEye,
   faEyeSlash,
   faGripVertical,
+  faLayerGroup,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Slider } from 'antd';
 import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import { useDispatch } from 'react-redux';
 import { changeOpacity, changeVisibility } from '../../store/slices/mapping';
+import { iconColorMap, iconMap } from './items';
 
 interface LayerRowProps {
   layer: Layer;
@@ -18,6 +20,14 @@ interface LayerRowProps {
 
 const LayerRow = ({ layer, id }: LayerRowProps) => {
   const dispatch = useDispatch();
+  const urlPrefix = window.location.origin + window.location.pathname;
+  const icon = layer.title.includes('Orthofoto')
+    ? 'ortho'
+    : layer.title === 'Bäume'
+    ? 'bäume'
+    : layer.title.includes('gärten')
+    ? 'gärten'
+    : undefined;
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id,
@@ -36,6 +46,22 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
         >
           <FontAwesomeIcon icon={faGripVertical} />
         </button>
+        {icon === 'ortho' ? (
+          <div style={{ height: 14, width: 14 }}>
+            <img
+              src={urlPrefix + 'images/ortho.png'}
+              alt="Ortho"
+              className="h-full"
+            />
+          </div>
+        ) : (
+          <FontAwesomeIcon
+            icon={icon ? iconMap[icon] : faLayerGroup}
+            className="text-base"
+            style={{ color: iconColorMap[icon] }}
+            id="icon"
+          />
+        )}
         <p className="mb-0 text-lg truncate">{layer.title}</p>
       </div>
       <Slider
