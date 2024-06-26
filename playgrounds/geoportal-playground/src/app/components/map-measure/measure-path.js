@@ -447,6 +447,10 @@ L.Control.MeasurePolygon = L.Control.extend({
     const isLine = layer.toGeoJSON().geometry.type === 'LineString';
     const latlngs = isLine ? layer.getLatLngs() : layer.getLatLngs()[0];
 
+    if (!isLine) {
+      latlngs.push(latlngs[0]);
+    }
+
     for (let i = 0; i < latlngs.length - 1; i++) {
       const point1 = latlngs[i];
       const point2 = latlngs[i + 1];
@@ -454,6 +458,10 @@ L.Control.MeasurePolygon = L.Control.extend({
       const distance = point1.distanceTo(point2);
 
       totalDistance += distance;
+    }
+
+    if (!isLine) {
+      latlngs.pop(latlngs[latlngs.length - 1]);
     }
 
     const formatPerimeter = (perimeter) => {
