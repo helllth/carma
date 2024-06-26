@@ -54,7 +54,7 @@ const LayerButton = ({
   const showLeftScrollButton = useSelector(getShowLeftScrollButton);
   const showSettings = index === selectedLayerIndex;
   const layersLength = useSelector(getLayers).length;
-  let urlPrefix = window.location.origin + window.location.pathname;
+  const urlPrefix = window.location.origin + window.location.pathname;
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id,
@@ -149,6 +149,7 @@ const LayerButton = ({
             id="icon"
           />
         )}
+        <span className="text-base sm:hidden">{layersLength} Layer</span>
         {!background && (
           <>
             <span className="text-base">{title}</span>
@@ -180,14 +181,6 @@ const LayerButton = ({
           </>
         )}
       </div>
-      {showSettings && (
-        <SecondaryView
-          icon={icon}
-          layer={layer}
-          ref={infoRef}
-          background={background}
-        />
-      )}
     </div>
   );
 };

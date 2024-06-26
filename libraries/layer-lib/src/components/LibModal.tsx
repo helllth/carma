@@ -265,7 +265,7 @@ const LibModal = ({
         <div className="overflow-auto pt-0.5">
           <div className="px-6">
             {layers.map((category, i) => (
-              <>
+              <div key={category.Title}>
                 {category.layers.length > 0 && (
                   <InView
                     rootMargin="20px 0px 20px 0px"
@@ -312,7 +312,7 @@ const LibModal = ({
                     </div>
                   </InView>
                 )}
-              </>
+              </div>
             ))}
             {getNumberOfLayers(layers) === 0 && (
               <h1 className="text-2xl font-normal">
