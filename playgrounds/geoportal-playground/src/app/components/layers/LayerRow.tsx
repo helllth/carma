@@ -27,7 +27,7 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
 
   return (
     <div style={style} className="w-full flex items-center gap-2">
-      <div className="max-w-80 w-full flex items-center gap-2">
+      <div className="lg:max-w-80 max-w-44 w-full flex items-center gap-2">
         <button
           ref={setNodeRef}
           {...listeners}
