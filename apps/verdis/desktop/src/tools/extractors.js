@@ -62,6 +62,10 @@ export const statisticsExtractor = (kassenzeichen, aenderungsAnfrage) => {
   ];
 };
 
+const extractNumber = (typeKey) => {
+  return parseInt(typeKey.split('-')[0]);
+};
+
 export const sumsExtractor = (kassenzeichen) => {
   const data = kassenzeichen?.flaechenArray?.map((flaeche) => ({
     size:
@@ -79,11 +83,28 @@ export const sumsExtractor = (kassenzeichen) => {
 
   data?.forEach((obj) => {
     const { type, connection, size } = obj;
+    let typeKey = '';
 
-    if (!typeSizeMap.has(type)) {
-      typeSizeMap.set(type, 0);
+    if (type === 'VF') {
+      if (connection === 'vers.') {
+        typeKey = '999-Rest';
+      } else {
+        typeKey = '720-VF';
+      }
     }
-    typeSizeMap.set(type, typeSizeMap.get(type) + size);
+
+    if (type === 'DF') {
+      typeKey = '710-DF';
+    }
+
+    if (!typeKey) {
+      typeKey = '999-Rest';
+    }
+
+    if (!typeSizeMap.has(typeKey)) {
+      typeSizeMap.set(typeKey, 0);
+    }
+    typeSizeMap.set(typeKey, typeSizeMap.get(typeKey) + size);
 
     if (!connectionSizeMap.has(connection)) {
       connectionSizeMap.set(connection, 0);
@@ -91,7 +112,11 @@ export const sumsExtractor = (kassenzeichen) => {
     connectionSizeMap.set(connection, connectionSizeMap.get(connection) + size);
   });
 
-  const types = Array.from(typeSizeMap, ([type, size]) => ({ type, size }));
+  const types = Array.from(typeSizeMap, ([type, size]) => ({
+    type,
+    size,
+  })).sort((a, b) => extractNumber(a.type) - extractNumber(b.type));
+
   const connections = Array.from(connectionSizeMap, ([type, size]) => ({
     type,
     size,
