@@ -45,6 +45,7 @@ const initialState = {
   isLoadingKassenzeichenWithPoint: false,
   isLoadingBuchungsblatt: false,
   isLoadingKassenzeichenForBuchungsblatt: false,
+  isLoadingCrossReferences: false,
   buchungsblattError: false,
   virtualCity: '',
   febBlob: null,
@@ -158,6 +159,10 @@ const slice = createSlice({
     },
     setCrossReferences(state, action) {
       state.crossReferences = action.payload;
+      return state;
+    },
+    setIsLoadingCrossReferences(state, action) {
+      state.isLoadingCrossReferences = action.payload;
       return state;
     },
     addSearch(state, action) {
@@ -545,6 +550,8 @@ export const searchForCrossReferences = (flaechenId, kassenzeichennummer) => {
     const jwt = getState().auth.jwt;
     const state = getState();
 
+    dispatch(setIsLoadingCrossReferences(true));
+
     fetch(ENDPOINT, {
       method: 'POST',
       headers: {
@@ -574,12 +581,14 @@ export const searchForCrossReferences = (flaechenId, kassenzeichennummer) => {
           }
           dispatch(setCrossReferences(newCrossReferences));
         }
+        dispatch(setIsLoadingCrossReferences(false));
       })
       .catch((error) => {
         console.error(
           'There was a problem with the fetch operation:',
           error.message
         );
+        dispatch(setIsLoadingCrossReferences(false));
       });
   };
 };
@@ -725,6 +734,7 @@ export const {
   addSearch,
   storeFebBlob,
   setCrossReferences,
+  setIsLoadingCrossReferences,
 } = slice.actions;
 
 slice.actions.searchForKassenzeichen = searchForKassenzeichen;
@@ -823,4 +833,8 @@ export const getIsLoadingKassenzeichenForBuchungsblatt = (state) => {
 
 export const getCrossReferences = (state) => {
   return state.search.crossReferences;
+};
+
+export const getIsLoadingCrossReferences = (state) => {
+  return state.search.isLoadingCrossReferences;
 };

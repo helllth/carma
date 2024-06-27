@@ -3,9 +3,12 @@ import CustomCard from '../ui/Card';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getCrossReferences,
+  getIsLoadingCrossReferences,
   getKassenzeichen,
   setIsLoading,
 } from '../../store/slices/search';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const mockExtractor = (input) => {
   return [
@@ -34,13 +37,18 @@ const CrossReferences = ({
   const data = extractor(dataIn);
   const kassenzeichen = useSelector(getKassenzeichen);
   const crossReferences = useSelector(getCrossReferences);
+  const isLoadingCrossReferences = useSelector(getIsLoadingCrossReferences);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   return (
     <CustomCard style={{ ...style, width, height }} title="Querverweise">
       <div className="flex flex-col gap-1 items-center justify-center text-sm">
+        {isLoadingCrossReferences && (
+          <FontAwesomeIcon icon={faSpinner} className="fa-spin opacity-50" />
+        )}
         {crossReferences?.length > 0 &&
+          !isLoadingCrossReferences &&
           crossReferences.map((row, i) => {
             const bez = row.flaechenArray[0].flaecheObject.flaechenbezeichnung;
 
