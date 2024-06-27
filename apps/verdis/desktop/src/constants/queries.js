@@ -33,6 +33,18 @@ query MyQuery($grundbuchblattnummer: String) {
   }
 }`;
 
+queries.crossReferences = `
+query MyQuery($flaechenId: Int) {
+  kassenzeichen(where: {flaechenArray: {flaecheObject: {flaecheninfoObject: {id: {_eq: $flaechenId}}}}}) {
+    kassenzeichennummer8
+    flaechenArray {
+      flaecheObject {
+        flaechenbezeichnung
+      }
+    }
+  }
+}`;
+
 queries.kassenzeichenForBuchungsblatt = `
 query MyQuery($intersectionGeom: geometry) {
   kassenzeichen(order_by: {kassenzeichennummer8: asc}, where: {kassenzeichen_geometrienArray: {kassenzeichen_geometrieObject: {geom: {geo_field: {_st_intersects: $intersectionGeom}}}}}) {

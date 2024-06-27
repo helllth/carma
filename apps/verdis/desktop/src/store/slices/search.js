@@ -4,6 +4,7 @@ import {
   WUNDA_ENDPOINT,
   alkisLandParcelQuery,
   buchungsblattQuery,
+  crossReferencesQuery,
   flurStueckQuery,
   geoFieldsQuery,
   kassenzeichenForBuchungsblattQuery,
@@ -51,6 +52,7 @@ const initialState = {
   buchungsblatt: null,
   kassenzeichenForBuchungsblatt: [],
   alkisLandparcel: [],
+  crossReferences: [],
 };
 
 const slice = createSlice({
@@ -152,6 +154,10 @@ const slice = createSlice({
     },
     setErrorMessage(state, action) {
       state.errorMessage = action.payload;
+      return state;
+    },
+    setCrossReferences(state, action) {
+      state.crossReferences = action.payload;
       return state;
     },
     addSearch(state, action) {
@@ -533,6 +539,48 @@ const updateQueryParams = (newKassenzeichen) => {
     }
   }
 };
+
+export const searchForCrossReferences = (flaechenId) => {
+  return async (dispatch, getState) => {
+    const jwt = getState().auth.jwt;
+    const state = getState();
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
+        query: crossReferencesQuery,
+        variables: { flaechenId },
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((result) => {
+        const currentCrossReferences = state.search.crossReferences;
+        if (result.data.kassenzeichen.length > 0) {
+          const newCrossReferences = [
+            ...currentCrossReferences,
+            ...result.data.kassenzeichen,
+          ];
+          dispatch(setCrossReferences(newCrossReferences));
+        }
+      })
+      .catch((error) => {
+        console.error(
+          'There was a problem with the fetch operation:',
+          error.message
+        );
+      });
+  };
+};
+
 export const searchForKassenzeichen = (
   kassenzeichen,
   urlParams,
@@ -562,6 +610,8 @@ export const searchForKassenzeichen = (
     }
     dispatch(setIsLoading(true));
 
+    dispatch(setCrossReferences([]));
+
     fetch(ENDPOINT, {
       method: 'POST',
       headers: {
@@ -584,6 +634,17 @@ export const searchForKassenzeichen = (
         const data = result?.data;
         if (data?.kassenzeichen?.length > 0) {
           dispatch(storeKassenzeichen(data.kassenzeichen[0]));
+          console.log('xxx', data.kassenzeichen[0]);
+
+          for (const flaeche of data.kassenzeichen[0].flaechenArray || []) {
+            if (flaeche.flaecheObject.anteil) {
+              dispatch(
+                searchForCrossReferences(
+                  flaeche.flaecheObject.flaecheninfoObject.id
+                )
+              );
+            }
+          }
           dispatch(storeAenderungsAnfrage(data.aenderungsanfrage));
 
           dispatch(addSearch(trimmedQuery));
@@ -660,6 +721,7 @@ export const {
   setErrorMessage,
   addSearch,
   storeFebBlob,
+  setCrossReferences,
 } = slice.actions;
 
 slice.actions.searchForKassenzeichen = searchForKassenzeichen;
@@ -754,4 +816,8 @@ export const getIsLoadingBuchungsblatt = (state) => {
 
 export const getIsLoadingKassenzeichenForBuchungsblatt = (state) => {
   return state.search.isLoadingKassenzeichenForBuchungsblatt;
+};
+
+export const getCrossReferences = (state) => {
+  return state.search.crossReferences;
 };
