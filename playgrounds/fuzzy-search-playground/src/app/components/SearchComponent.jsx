@@ -245,7 +245,10 @@ function SearchComponent({
       <Button
         icon={
           cleanBtnDisable ? (
-            <FontAwesomeIcon icon={faLocationDot} />
+            <FontAwesomeIcon
+              icon={faLocationDot}
+              style={{ fontSize: '16px' }}
+            />
           ) : (
             <IconComp name="close" />
           )
