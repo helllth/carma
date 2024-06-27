@@ -180,6 +180,7 @@ export const areasDetailsExtractor = (kassenzeichen) => {
       anschlussgrad: flaecheInfo?.anschlussgradObject?.grad_abkuerzung,
       anschlussgradKomplett: flaecheInfo?.anschlussgradObject?.grad,
       anteil: flaeche?.anteil,
+      crossReference: flaeche?.anteil ? true : false,
       bemerkung: flaeche?.bemerkung,
       datumErfassung: flaeche?.datum_erfassung,
       datumVeranlagung: flaeche?.datum_veranlagung,
