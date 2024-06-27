@@ -540,7 +540,7 @@ const updateQueryParams = (newKassenzeichen) => {
   }
 };
 
-export const searchForCrossReferences = (flaechenId) => {
+export const searchForCrossReferences = (flaechenId, kassenzeichennummer) => {
   return async (dispatch, getState) => {
     const jwt = getState().auth.jwt;
     const state = getState();
@@ -565,10 +565,13 @@ export const searchForCrossReferences = (flaechenId) => {
       .then((result) => {
         const currentCrossReferences = state.search.crossReferences;
         if (result.data.kassenzeichen.length > 0) {
-          const newCrossReferences = [
-            ...currentCrossReferences,
-            ...result.data.kassenzeichen,
-          ];
+          let newCrossReferences = [...currentCrossReferences];
+
+          for (const kassenzeichen of result.data.kassenzeichen) {
+            if (kassenzeichen.kassenzeichennummer8 !== kassenzeichennummer) {
+              newCrossReferences.push(kassenzeichen);
+            }
+          }
           dispatch(setCrossReferences(newCrossReferences));
         }
       })
@@ -634,13 +637,13 @@ export const searchForKassenzeichen = (
         const data = result?.data;
         if (data?.kassenzeichen?.length > 0) {
           dispatch(storeKassenzeichen(data.kassenzeichen[0]));
-          console.log('xxx', data.kassenzeichen[0]);
 
           for (const flaeche of data.kassenzeichen[0].flaechenArray || []) {
             if (flaeche.flaecheObject.anteil) {
               dispatch(
                 searchForCrossReferences(
-                  flaeche.flaecheObject.flaecheninfoObject.id
+                  flaeche.flaecheObject.flaecheninfoObject.id,
+                  data.kassenzeichen[0].kassenzeichennummer8
                 )
               );
             }
