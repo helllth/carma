@@ -27,7 +27,7 @@
   border-bottom-right-radius: 0;
   /* display: inline-block; */
   font-weight: 400;
-  opacity: 0.65;
+  opacity: 0.75;
 }
 
 .clear-fuzzy-button__active {
@@ -43,7 +43,9 @@
   );
 }
 
-.ant-btn-default:disabled {
+.fuzzy-search-container .ant-btn-default:disabled {
   border-color: rgba(255, 255, 255, 0) !important;
   color: #495057 !important;
+  opacity: 0.85 !important;
+  border: '4px solid red' !important;
 }

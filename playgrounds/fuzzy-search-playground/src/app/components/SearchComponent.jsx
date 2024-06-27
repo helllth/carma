@@ -178,17 +178,20 @@ function SearchComponent({
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
   const handleSearchAutoComplete = (value) => {
     if (allGazeteerData.length > 0) {
-      const searchParams = new URLSearchParams(window.location.hash);
+      const hash = window.location.hash;
+      const queryString = hash.includes('?') ? hash.split('?')[1] : '';
+      const searchParams = new URLSearchParams(queryString);
+      const distance = searchParams.get('distance');
+      const threshold = searchParams.get('threshold');
       const fuseAddressesOptions = {
-        distance: parseInt(searchParams.get('distance')) || 100,
-        threshold: parseFloat(searchParams.get('threshold')) || 0.5,
+        distance: distance !== null ? parseInt(distance) : 100,
+        threshold: threshold !== null ? parseFloat(threshold) : 0.5,
         useExtendedSearch: true,
         keys: ['xSearchData'],
       };
       const fuse = new Fuse(allGazeteerData, fuseAddressesOptions);
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuse.search(removeStopWords);
-
       if (!showCategories) {
         setOptions(generateOptions(result));
       } else {
