@@ -54,6 +54,7 @@ const initialState = {
   kassenzeichenForBuchungsblatt: [],
   alkisLandparcel: [],
   crossReferences: [],
+  crossReferencesPerArea: {},
 };
 
 const slice = createSlice({
@@ -159,6 +160,10 @@ const slice = createSlice({
     },
     setCrossReferences(state, action) {
       state.crossReferences = action.payload;
+      return state;
+    },
+    setCrossReferencesPerArea(state, action) {
+      state.crossReferencesPerArea = action.payload;
       return state;
     },
     setIsLoadingCrossReferences(state, action) {
@@ -570,6 +575,7 @@ export const searchForCrossReferences = (flaechenId, kassenzeichennummer) => {
         return response.json();
       })
       .then((result) => {
+        let crossReferences = [];
         const currentCrossReferences = state.search.crossReferences;
         if (result.data.kassenzeichen.length > 0) {
           let newCrossReferences = [...currentCrossReferences];
@@ -577,11 +583,18 @@ export const searchForCrossReferences = (flaechenId, kassenzeichennummer) => {
           for (const kassenzeichen of result.data.kassenzeichen) {
             if (kassenzeichen.kassenzeichennummer8 !== kassenzeichennummer) {
               newCrossReferences.push(kassenzeichen);
+              crossReferences.push(kassenzeichen);
             }
           }
           dispatch(setCrossReferences(newCrossReferences));
         }
         dispatch(setIsLoadingCrossReferences(false));
+        dispatch(
+          setCrossReferencesPerArea({
+            ...state.search.crossReferencesPerArea,
+            [flaechenId]: crossReferences,
+          })
+        );
       })
       .catch((error) => {
         console.error(
@@ -623,6 +636,7 @@ export const searchForKassenzeichen = (
     dispatch(setIsLoading(true));
 
     dispatch(setCrossReferences([]));
+    dispatch(setCrossReferencesPerArea({}));
 
     fetch(ENDPOINT, {
       method: 'POST',
@@ -735,6 +749,7 @@ export const {
   storeFebBlob,
   setCrossReferences,
   setIsLoadingCrossReferences,
+  setCrossReferencesPerArea,
 } = slice.actions;
 
 slice.actions.searchForKassenzeichen = searchForKassenzeichen;
@@ -837,4 +852,8 @@ export const getCrossReferences = (state) => {
 
 export const getIsLoadingCrossReferences = (state) => {
   return state.search.isLoadingCrossReferences;
+};
+
+export const getCrossReferencesPerArea = (state) => {
+  return state.search.crossReferencesPerArea;
 };

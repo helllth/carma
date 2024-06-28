@@ -1,7 +1,11 @@
 import { Input, Select } from 'antd';
 import CustomCard from '../ui/Card';
 import { useSelector } from 'react-redux';
-import { getFlaechenId, getKassenzeichen } from '../../store/slices/search';
+import {
+  getCrossReferencesPerArea,
+  getFlaechenId,
+  getKassenzeichen,
+} from '../../store/slices/search';
 import TextArea from 'antd/es/input/TextArea';
 import { formatDate } from '../../tools/helper';
 import { useEffect, useState } from 'react';
@@ -29,8 +33,9 @@ const Details = ({
   style,
 }) => {
   const kassenzeichen = useSelector(getKassenzeichen);
+  const crossReferencesPerArea = useSelector(getCrossReferencesPerArea);
   const selectedId = useSelector(getFlaechenId);
-  const flaechen = extractor(kassenzeichen);
+  const flaechen = extractor(kassenzeichen, crossReferencesPerArea);
   const [flaeche, setFlaeche] = useState({});
 
   useEffect(() => {
@@ -98,7 +103,28 @@ const Details = ({
           title="Querverweise"
           size="small"
           customInput={
-            <TextArea className="w-full" value={flaeche?.bemerkung} />
+            <div className="w-full border border-solid border-[#d9d9d9] rounded-[4px] h-28 overflow-y-auto flex flex-col gap-1 items-center justify-center text-sm">
+              {flaeche?.crossReferences?.length > 0 &&
+                flaeche?.crossReferences.map((row, i) => {
+                  return (
+                    <div
+                      key={`crossReferences_${i}`}
+                      className="flex w-full justify-center items-center py-1 hover:bg-zinc-100 cursor-pointer"
+                      onClick={() => {
+                        dispatch(setIsLoading(true));
+                        navigate(
+                          `/versiegelteFlaechen?kassenzeichen=${row.kassenzeichennummer8}&bez=${flaeche?.name}`
+                        );
+                      }}
+                      typeof="button"
+                    >
+                      <span className="text-black underline">
+                        {row.kassenzeichennummer8}:{flaeche?.name}
+                      </span>
+                    </div>
+                  );
+                })}
+            </div>
           }
         />
       </div>
