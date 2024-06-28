@@ -238,6 +238,7 @@ const LibModal = ({
             <Search
               placeholder="Suchbegriff eingeben"
               className="w-[76%]"
+              allowClear
               onChange={(e) => {
                 setIsSearching(true);
                 setSearchValue(e.target.value);
