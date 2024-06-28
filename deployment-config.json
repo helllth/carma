@@ -396,6 +396,25 @@
         }
       },
       "projectPath": "./dist/playgrounds/map-control-playground"
+    },
+    "verdis-desktop": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "verdis-desktop"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "verdis-desktop"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/apps/verdis/desktop"
     }
   }
 }
