@@ -4,6 +4,7 @@ import {
   WUNDA_ENDPOINT,
   alkisLandParcelQuery,
   buchungsblattQuery,
+  crossReferencesQuery,
   flurStueckQuery,
   geoFieldsQuery,
   kassenzeichenForBuchungsblattQuery,
@@ -44,6 +45,7 @@ const initialState = {
   isLoadingKassenzeichenWithPoint: false,
   isLoadingBuchungsblatt: false,
   isLoadingKassenzeichenForBuchungsblatt: false,
+  isLoadingCrossReferences: false,
   buchungsblattError: false,
   virtualCity: '',
   febBlob: null,
@@ -51,6 +53,8 @@ const initialState = {
   buchungsblatt: null,
   kassenzeichenForBuchungsblatt: [],
   alkisLandparcel: [],
+  crossReferences: [],
+  crossReferencesPerArea: {},
 };
 
 const slice = createSlice({
@@ -152,6 +156,18 @@ const slice = createSlice({
     },
     setErrorMessage(state, action) {
       state.errorMessage = action.payload;
+      return state;
+    },
+    setCrossReferences(state, action) {
+      state.crossReferences = action.payload;
+      return state;
+    },
+    setCrossReferencesPerArea(state, action) {
+      state.crossReferencesPerArea = action.payload;
+      return state;
+    },
+    setIsLoadingCrossReferences(state, action) {
+      state.isLoadingCrossReferences = action.payload;
       return state;
     },
     addSearch(state, action) {
@@ -533,6 +549,63 @@ const updateQueryParams = (newKassenzeichen) => {
     }
   }
 };
+
+export const searchForCrossReferences = (flaechenId, kassenzeichennummer) => {
+  return async (dispatch, getState) => {
+    const jwt = getState().auth.jwt;
+    const state = getState();
+
+    dispatch(setIsLoadingCrossReferences(true));
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
+        query: crossReferencesQuery,
+        variables: { flaechenId },
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((result) => {
+        let crossReferences = [];
+        const currentCrossReferences = state.search.crossReferences;
+        if (result.data.kassenzeichen.length > 0) {
+          let newCrossReferences = [...currentCrossReferences];
+
+          for (const kassenzeichen of result.data.kassenzeichen) {
+            if (kassenzeichen.kassenzeichennummer8 !== kassenzeichennummer) {
+              newCrossReferences.push(kassenzeichen);
+              crossReferences.push(kassenzeichen);
+            }
+          }
+          dispatch(setCrossReferences(newCrossReferences));
+        }
+        dispatch(setIsLoadingCrossReferences(false));
+        dispatch(
+          setCrossReferencesPerArea({
+            ...state.search.crossReferencesPerArea,
+            [flaechenId]: crossReferences,
+          })
+        );
+      })
+      .catch((error) => {
+        console.error(
+          'There was a problem with the fetch operation:',
+          error.message
+        );
+        dispatch(setIsLoadingCrossReferences(false));
+      });
+  };
+};
+
 export const searchForKassenzeichen = (
   kassenzeichen,
   urlParams,
@@ -562,6 +635,9 @@ export const searchForKassenzeichen = (
     }
     dispatch(setIsLoading(true));
 
+    dispatch(setCrossReferences([]));
+    dispatch(setCrossReferencesPerArea({}));
+
     fetch(ENDPOINT, {
       method: 'POST',
       headers: {
@@ -584,6 +660,17 @@ export const searchForKassenzeichen = (
         const data = result?.data;
         if (data?.kassenzeichen?.length > 0) {
           dispatch(storeKassenzeichen(data.kassenzeichen[0]));
+
+          for (const flaeche of data.kassenzeichen[0].flaechenArray || []) {
+            if (flaeche.flaecheObject.anteil) {
+              dispatch(
+                searchForCrossReferences(
+                  flaeche.flaecheObject.flaecheninfoObject.id,
+                  data.kassenzeichen[0].kassenzeichennummer8
+                )
+              );
+            }
+          }
           dispatch(storeAenderungsAnfrage(data.aenderungsanfrage));
 
           dispatch(addSearch(trimmedQuery));
@@ -660,6 +747,9 @@ export const {
   setErrorMessage,
   addSearch,
   storeFebBlob,
+  setCrossReferences,
+  setIsLoadingCrossReferences,
+  setCrossReferencesPerArea,
 } = slice.actions;
 
 slice.actions.searchForKassenzeichen = searchForKassenzeichen;
@@ -754,4 +844,16 @@ export const getIsLoadingBuchungsblatt = (state) => {
 
 export const getIsLoadingKassenzeichenForBuchungsblatt = (state) => {
   return state.search.isLoadingKassenzeichenForBuchungsblatt;
+};
+
+export const getCrossReferences = (state) => {
+  return state.search.crossReferences;
+};
+
+export const getIsLoadingCrossReferences = (state) => {
+  return state.search.isLoadingCrossReferences;
+};
+
+export const getCrossReferencesPerArea = (state) => {
+  return state.search.crossReferencesPerArea;
 };

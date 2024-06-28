@@ -26,6 +26,8 @@ import FeatureMapLayer from '../components/commons/FeatureMapLayer';
 import { useFitBoundsIfUnlocked } from '../hooks/useFitBoundsIfUnlocked';
 import { useSearchParams } from 'react-router-dom';
 import { convertLatLngToXY } from '../tools/mappingTools';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserGroup } from '@fortawesome/free-solid-svg-icons';
 
 const Page = ({
   width = '100%',
@@ -73,6 +75,16 @@ const Page = ({
             style={cardStyleTable}
             title="Flächen"
             columns={[
+              {
+                title: '',
+                dataIndex: 'crossReference',
+                key: 'crossReference',
+                render: (crossReference) => (
+                  <div className="flex gap-2 items-center">
+                    {crossReference && <FontAwesomeIcon icon={faUserGroup} />}
+                  </div>
+                ),
+              },
               {
                 title: 'Bezeichnung',
                 dataIndex: 'name',

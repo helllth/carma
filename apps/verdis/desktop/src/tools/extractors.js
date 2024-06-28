@@ -168,10 +168,18 @@ export const summaryExtractor = (kassenzeichen) => {
   return resultArray;
 };
 
-export const areasDetailsExtractor = (kassenzeichen) => {
+export const areasDetailsExtractor = (
+  kassenzeichen,
+  crossReferencesPerArea
+) => {
   const data = kassenzeichen?.flaechenArray?.map((row) => {
     const flaeche = row?.flaecheObject;
     const flaecheInfo = flaeche?.flaecheninfoObject;
+    let crossReferences = [];
+
+    if (crossReferencesPerArea) {
+      crossReferences = crossReferencesPerArea[flaecheInfo?.id];
+    }
     return {
       name: flaeche?.flaechenbezeichnung,
       groesseGrafik: flaecheInfo?.groesse_aus_grafik,
@@ -180,6 +188,8 @@ export const areasDetailsExtractor = (kassenzeichen) => {
       anschlussgrad: flaecheInfo?.anschlussgradObject?.grad_abkuerzung,
       anschlussgradKomplett: flaecheInfo?.anschlussgradObject?.grad,
       anteil: flaeche?.anteil,
+      crossReference: flaeche?.anteil ? true : false,
+      crossReferences: crossReferences,
       bemerkung: flaeche?.bemerkung,
       datumErfassung: flaeche?.datum_erfassung,
       datumVeranlagung: flaeche?.datum_veranlagung,
