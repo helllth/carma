@@ -12,6 +12,7 @@ import { compare } from '../tools/helper';
 import SubNav from '../components/sealedSurfaces/SubNav';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  getFlaeche,
   getFlaechenId,
   getKassenzeichen,
   searchForKassenzeichenWithPoint,
@@ -33,6 +34,8 @@ import { useEffect } from 'react';
 import { useFitBoundsIfUnlocked } from '../hooks/useFitBoundsIfUnlocked';
 import { useSearchParams } from 'react-router-dom';
 import { convertLatLngToXY } from '../tools/mappingTools';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserGroup } from '@fortawesome/free-solid-svg-icons';
 
 const Page = ({
   width = '100%',
@@ -85,6 +88,16 @@ const Page = ({
               style={cardStyleArea}
               title="Flächen"
               columns={[
+                {
+                  title: '',
+                  dataIndex: 'crossReference',
+                  key: 'crossReference',
+                  render: (crossReference) => (
+                    <div className="flex gap-2 items-center w-0">
+                      {crossReference && <FontAwesomeIcon icon={faUserGroup} />}
+                    </div>
+                  ),
+                },
                 {
                   title: 'Bez.',
                   dataIndex: 'name',
