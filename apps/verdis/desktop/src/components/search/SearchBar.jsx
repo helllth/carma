@@ -28,11 +28,11 @@ const SearchBar = () => {
   const kassenzeichen = useSelector(getKassenzeichen);
   const errorMessage = useSelector(getErrorMessage);
   const kassenzeichenNummer = kassenzeichen?.kassenzeichennummer8;
+  const urlKassenzeichen = urlParams.get('kassenzeichen');
   useEffect(() => {
     // if (isLoading) {
     //   return;
     // }
-    const urlKassenzeichen = urlParams.get('kassenzeichen');
     if (
       urlKassenzeichen &&
       !isEqual(urlKassenzeichen, kassenzeichenNummer?.toString())
@@ -40,7 +40,7 @@ const SearchBar = () => {
       dispatch(searchForKassenzeichen(urlKassenzeichen));
       setInpuValue(urlKassenzeichen);
     }
-  }, [urlParams]);
+  }, [urlKassenzeichen]);
 
   useEffect(() => {
     dispatch(getflurstuecke());
