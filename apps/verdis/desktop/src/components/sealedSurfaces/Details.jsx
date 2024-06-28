@@ -1,14 +1,16 @@
 import { Input, Select } from 'antd';
 import CustomCard from '../ui/Card';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getCrossReferencesPerArea,
   getFlaechenId,
   getKassenzeichen,
+  setIsLoading,
 } from '../../store/slices/search';
 import TextArea from 'antd/es/input/TextArea';
 import { formatDate } from '../../tools/helper';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const DetailsRow = ({ title, value, width, customInput }) => {
   return (
@@ -37,6 +39,8 @@ const Details = ({
   const selectedId = useSelector(getFlaechenId);
   const flaechen = extractor(kassenzeichen, crossReferencesPerArea);
   const [flaeche, setFlaeche] = useState({});
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (flaechen) {
