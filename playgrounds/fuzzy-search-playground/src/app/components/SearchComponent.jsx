@@ -170,28 +170,30 @@ function SearchComponent({
       _gazetteerHitTrigger
     );
   };
-
+  const [fuseInstance, setFuseInstance] = useState(null);
   const [searchResult, setSearchResult] = useState([]);
   const [allGazeteerData, setAllGazeteerData] = useState([]);
   const [value, setValue] = useState('');
-
+  const [searchParams, setSearchParams] = useState(null);
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
   const handleSearchAutoComplete = (value) => {
-    if (allGazeteerData.length > 0) {
+    if (allGazeteerData.length > 0 && fuseInstance) {
       const hash = window.location.hash;
       const queryString = hash.includes('?') ? hash.split('?')[1] : '';
       const searchParams = new URLSearchParams(queryString);
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
-      const fuseAddressesOptions = {
-        distance: distance !== null ? parseInt(distance) : 100,
-        threshold: threshold !== null ? parseFloat(threshold) : 0.5,
-        useExtendedSearch: true,
-        keys: ['xSearchData'],
-      };
-      const fuse = new Fuse(allGazeteerData, fuseAddressesOptions);
+      if (
+        distance !== fuseInstance.options.distance ||
+        threshold !== fuseInstance.options.threshold
+      ) {
+        fuseInstance.options.distance = parseFloat(distance);
+        fuseInstance.options.threshold = parseFloat(threshold);
+      }
       const removeStopWords = removeStopwords(value, stopwords);
-      const result = fuse.search(removeStopWords);
+      const result = fuseInstance.search(removeStopWords);
+      console.log('xxx threshold', fuseInstance.options.threshold);
+      console.log('xxx distance', fuseInstance.options.distance);
       if (!showCategories) {
         setOptions(generateOptions(result));
       } else {
@@ -225,7 +227,26 @@ function SearchComponent({
     }
   }, [gazData]);
 
-  useEffect(() => {}, [showCategories]);
+  useEffect(() => {
+    if (!fuseInstance && allGazeteerData.length > 0) {
+      const hash = window.location.hash;
+      const queryString = hash.includes('?') ? hash.split('?')[1] : '';
+      const searchParams = new URLSearchParams(queryString);
+      const distance = searchParams.get('distance');
+      const threshold = searchParams.get('threshold');
+      const fuseAddressesOptions = {
+        distance: distance !== null ? parseInt(distance) : 100,
+        threshold: threshold !== null ? parseFloat(threshold) : 0.5,
+        useExtendedSearch: true,
+        keys: ['xSearchData'],
+        includeScore: true,
+      };
+
+      const fuse = new Fuse(allGazeteerData, fuseAddressesOptions);
+
+      setFuseInstance(fuse);
+    }
+  }, [allGazeteerData, fuseInstance]);
 
   const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
