@@ -192,7 +192,7 @@ function SearchComponent({
       }
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
-      result.sort(customSort);
+      // result.sort(customSort);
       console.log('xxx result', result);
       if (!showCategories) {
         setOptions(generateOptions(result));
