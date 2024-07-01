@@ -192,8 +192,8 @@ function SearchComponent({
       }
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
-      console.log('xxx threshold', fuseInstance.options.threshold);
-      console.log('xxx distance', fuseInstance.options.distance);
+      result.sort(customSort);
+      console.log('xxx result', result);
       if (!showCategories) {
         setOptions(generateOptions(result));
       } else {
@@ -351,4 +351,26 @@ function prepareGazData(data) {
   });
 
   return modifiedData;
+}
+
+function customSort(a, b) {
+  const newA = a.item.xSearchData;
+  const newB = b.item.xSearchData;
+
+  const numA = newA.match(/\d+/) ? parseInt(newA.match(/\d+/)[0]) : null;
+  const numB = newB.match(/\d+/) ? parseInt(newB.match(/\d+/)[0]) : null;
+
+  if (numA !== null && numB !== null) {
+    if (numA !== numB) {
+      return numA - numB;
+    } else {
+      return newA.localeCompare(newB);
+    }
+  } else if (numA !== null) {
+    return 1;
+  } else if (numB !== null) {
+    return -1;
+  } else {
+    return newA.localeCompare(newB);
+  }
 }
