@@ -223,7 +223,6 @@ function SearchComponent({
 
   useEffect(() => {
     if (gazData) {
-      console.log('xxx gazdata', gazData);
       const allModifiedData = prepareGazData(gazData);
       setAllGazeteerData(allModifiedData);
     }
@@ -346,7 +345,6 @@ function prepareGazData(data) {
   const modifiedData = data.map((item) => {
     const searchData = item?.string;
     const stringWithoutStopWords = removeStopwords(searchData, stopwords);
-    console.log('xxx joinNunber', joinNumberLetter(stringWithoutStopWords));
     const address = {
       ...item,
       xSearchData: joinNumberLetter(stringWithoutStopWords),
