@@ -49,7 +49,7 @@ const renderItem = (address) => {
   };
 };
 
-function buildAddressWithIconUI(addresObj, showScore = false) {
+function buildAddressWithIconUI(addresObj, showScore = false, score) {
   let icon;
   if (addresObj.glyph === 'pie-chart') {
     icon = 'chart-pie';
@@ -64,7 +64,7 @@ function buildAddressWithIconUI(addresObj, showScore = false) {
       </span>
       <span>
         {showScore
-          ? joinNumberLetter(addresObj.string) + '00000000'
+          ? joinNumberLetter(addresObj.string) + ' ' + score
           : joinNumberLetter(addresObj.string)}
       </span>
     </div>
@@ -75,7 +75,11 @@ function buildAddressWithIconUI(addresObj, showScore = false) {
 
 const generateOptions = (results, showScore = false) => {
   return results.map((result, idx) => {
-    const streetLabel = buildAddressWithIconUI(result.item, showScore);
+    const streetLabel = buildAddressWithIconUI(
+      result.item,
+      showScore,
+      result.score.toFixed(3)
+    );
     return {
       key: result.item.sorter,
       label: <div>{streetLabel}</div>,
@@ -209,6 +213,7 @@ function SearchComponent({
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
       // result.sort(customSort);
+      console.log('xxx results', result);
       if (!showCategories) {
         setOptions(generateOptions(result, showTestScore));
       } else {
@@ -249,11 +254,11 @@ function SearchComponent({
       const searchParams = new URLSearchParams(queryString);
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
-      const score = searchParams.get('score');
+      // const score = searchParams.get('score');
 
-      if (score && score === 'true') {
-        setShowScore(true);
-      }
+      // if (score && score === 'true') {
+      //   setShowScore(true);
+      // }
 
       const fuseAddressesOptions = {
         distance: !isNaN(parseInt(distance)) ? parseInt(distance) : 100,
@@ -269,9 +274,9 @@ function SearchComponent({
     }
   }, [allGazeteerData, fuseInstance]);
 
-  useEffect(() => {
-    console.log('xx score', showScore);
-  }, [showScore]);
+  // useEffect(() => {
+  //   console.log('xx score', showScore);
+  // }, [showScore]);
 
   const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
