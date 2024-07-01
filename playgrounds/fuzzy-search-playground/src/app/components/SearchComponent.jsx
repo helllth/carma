@@ -37,12 +37,14 @@ const renderTitle = (category) => {
   return <span>{title}</span>;
 };
 
+const joinNumberLetter = (name) => name.replace(/(\d+)\s([a-zA-Z])/g, '$1$2');
+
 const renderItem = (address) => {
   const addressLabel = buildAddressWithIconUI(address);
   return {
     key: address.sorter,
     value: address.string,
-    label: addressLabel,
+    label: joinNumberLetter(addressLabel),
     sData: address,
   };
 };
@@ -60,7 +62,7 @@ function buildAddressWithIconUI(addresObj) {
         <i className={icon && 'fas ' + 'fa-' + icon}></i>
         {'  '}
       </span>
-      <span>{addresObj.string}</span>
+      <span>{joinNumberLetter(addresObj.string)}</span>
     </div>
   );
 
@@ -193,7 +195,6 @@ function SearchComponent({
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
       // result.sort(customSort);
-      console.log('xxx result', result);
       if (!showCategories) {
         setOptions(generateOptions(result));
       } else {
@@ -222,6 +223,7 @@ function SearchComponent({
 
   useEffect(() => {
     if (gazData) {
+      console.log('xxx gazdata', gazData);
       const allModifiedData = prepareGazData(gazData);
       setAllGazeteerData(allModifiedData);
     }
@@ -343,9 +345,11 @@ function removeStopwords(text, stopwords) {
 function prepareGazData(data) {
   const modifiedData = data.map((item) => {
     const searchData = item?.string;
+    const stringWithoutStopWords = removeStopwords(searchData, stopwords);
+    console.log('xxx joinNunber', joinNumberLetter(stringWithoutStopWords));
     const address = {
       ...item,
-      xSearchData: removeStopwords(searchData, stopwords),
+      xSearchData: joinNumberLetter(stringWithoutStopWords),
     };
     return address;
   });
