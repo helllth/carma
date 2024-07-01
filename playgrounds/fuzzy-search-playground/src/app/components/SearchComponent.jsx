@@ -186,12 +186,15 @@ function SearchComponent({
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
       if (
-        distance !== fuseInstance.options.distance ||
+        distance !== fuseInstance.options.distance &&
+        distance &&
+        threshold &&
         threshold !== fuseInstance.options.threshold
       ) {
         fuseInstance.options.distance = parseFloat(distance);
         fuseInstance.options.threshold = parseFloat(threshold);
       }
+      console.log('xxx fuseInstance.options', fuseInstance.options);
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
       // result.sort(customSort);
@@ -236,8 +239,8 @@ function SearchComponent({
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
       const fuseAddressesOptions = {
-        distance: distance !== null ? parseInt(distance) : 100,
-        threshold: threshold !== null ? parseFloat(threshold) : 0.5,
+        distance: !isNaN(parseInt(distance)) ? parseInt(distance) : 100,
+        threshold: !isNaN(parseFloat(threshold)) ? parseFloat(threshold) : 0.5,
         useExtendedSearch: true,
         keys: ['xSearchData'],
         includeScore: true,
