@@ -49,7 +49,7 @@ const renderItem = (address) => {
   };
 };
 
-function buildAddressWithIconUI(addresObj) {
+function buildAddressWithIconUI(addresObj, showScore = false) {
   let icon;
   if (addresObj.glyph === 'pie-chart') {
     icon = 'chart-pie';
@@ -62,16 +62,20 @@ function buildAddressWithIconUI(addresObj) {
         <i className={icon && 'fas ' + 'fa-' + icon}></i>
         {'  '}
       </span>
-      <span>{joinNumberLetter(addresObj.string)}</span>
+      <span>
+        {showScore
+          ? joinNumberLetter(addresObj.string) + '00000000'
+          : joinNumberLetter(addresObj.string)}
+      </span>
     </div>
   );
 
   return streetLabel;
 }
 
-const generateOptions = (results) => {
+const generateOptions = (results, showScore = false) => {
   return results.map((result, idx) => {
-    const streetLabel = buildAddressWithIconUI(result.item);
+    const streetLabel = buildAddressWithIconUI(result.item, showScore);
     return {
       key: result.item.sorter,
       label: <div>{streetLabel}</div>,
@@ -178,14 +182,22 @@ function SearchComponent({
   const [value, setValue] = useState('');
   const [searchParams, setSearchParams] = useState(null);
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
+  const [showScore, setShowScore] = useState(false);
   const handleSearchAutoComplete = (value) => {
+    let showTestScore = null;
     if (allGazeteerData.length > 0 && fuseInstance) {
       const hash = window.location.hash;
       const queryString = hash.includes('?') ? hash.split('?')[1] : '';
       const searchParams = new URLSearchParams(queryString);
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
+      const score = searchParams.get('score');
 
+      if (score && score === 'true') {
+        showTestScore = true;
+      } else {
+        showTestScore = false;
+      }
       if (distance !== fuseInstance.options.distance && distance) {
         fuseInstance.options.distance = parseFloat(distance);
       }
@@ -198,7 +210,7 @@ function SearchComponent({
       const result = fuseInstance.search(removeStopWords);
       // result.sort(customSort);
       if (!showCategories) {
-        setOptions(generateOptions(result));
+        setOptions(generateOptions(result, showTestScore));
       } else {
         const groupedResults = mapDataToSearchResult(result);
         setSearchResult(groupedResults);
@@ -237,6 +249,12 @@ function SearchComponent({
       const searchParams = new URLSearchParams(queryString);
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
+      const score = searchParams.get('score');
+
+      if (score && score === 'true') {
+        setShowScore(true);
+      }
+
       const fuseAddressesOptions = {
         distance: !isNaN(parseInt(distance)) ? parseInt(distance) : 100,
         threshold: !isNaN(parseFloat(threshold)) ? parseFloat(threshold) : 0.5,
@@ -250,6 +268,10 @@ function SearchComponent({
       setFuseInstance(fuse);
     }
   }, [allGazeteerData, fuseInstance]);
+
+  useEffect(() => {
+    console.log('xx score', showScore);
+  }, [showScore]);
 
   const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
