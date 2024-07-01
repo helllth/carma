@@ -185,13 +185,12 @@ function SearchComponent({
       const searchParams = new URLSearchParams(queryString);
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
-      if (
-        distance !== fuseInstance.options.distance &&
-        distance &&
-        threshold &&
-        threshold !== fuseInstance.options.threshold
-      ) {
+
+      if (distance !== fuseInstance.options.distance && distance) {
         fuseInstance.options.distance = parseFloat(distance);
+      }
+
+      if (threshold && threshold !== fuseInstance.options.threshold) {
         fuseInstance.options.threshold = parseFloat(threshold);
       }
       console.log('xxx fuseInstance.options', fuseInstance.options);
