@@ -63,9 +63,14 @@ function buildAddressWithIconUI(addresObj, showScore = false, score) {
         {'  '}
       </span>
       <span>
-        {showScore
-          ? joinNumberLetter(addresObj.string) + ' ' + score
-          : joinNumberLetter(addresObj.string)}
+        {showScore ? (
+          <span>
+            <span>{joinNumberLetter(addresObj.string)}</span>
+            <span style={{ color: 'gray' }}> ({score})</span>
+          </span>
+        ) : (
+          joinNumberLetter(addresObj.string)
+        )}
       </span>
     </div>
   );
@@ -78,7 +83,7 @@ const generateOptions = (results, showScore = false) => {
     const streetLabel = buildAddressWithIconUI(
       result.item,
       showScore,
-      result.score.toFixed(3)
+      result.score
     );
     return {
       key: result.item.sorter,
@@ -187,6 +192,7 @@ function SearchComponent({
   const [searchParams, setSearchParams] = useState(null);
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
   const [showScore, setShowScore] = useState(false);
+
   const handleSearchAutoComplete = (value) => {
     let showTestScore = null;
     if (allGazeteerData.length > 0 && fuseInstance) {
@@ -212,10 +218,17 @@ function SearchComponent({
       console.log('xxx fuseInstance.options', fuseInstance.options);
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
-      // result.sort(customSort);
-      console.log('xxx results', result);
+
+      const resultWithRoundScore = result.map((r) => {
+        return {
+          ...r,
+          score: r.score.toFixed(1),
+        };
+      });
+      resultWithRoundScore.sort(customSort);
+      console.log('xxx results', resultWithRoundScore);
       if (!showCategories) {
-        setOptions(generateOptions(result, showTestScore));
+        setOptions(generateOptions(resultWithRoundScore, showTestScore));
       } else {
         const groupedResults = mapDataToSearchResult(result);
         setSearchResult(groupedResults);
@@ -360,7 +373,6 @@ export default SearchComponent;
 function removeStopwords(text, stopwords) {
   const words = text.split(' ');
   const placeholderWords = words.map((word) => {
-    // Check if the word is in the stopwords array (case insensitive)
     if (stopwords.includes(word.toLowerCase())) {
       // Replace each character in the word with an underscore
       return '_'.repeat(word.length);
@@ -385,6 +397,26 @@ function prepareGazData(data) {
 }
 
 function customSort(a, b) {
+  // const newA = a.item.xSearchData;
+  // const newB = b.item.xSearchData;
+
+  console.log('xxx custom sort', a, b);
+
+  if (a.item.score !== b.item.score) {
+    return a.item.score - b.item.score;
+  }
+  if (a.item.type !== b.item.type) {
+    return a.item.type.localeCompare(b.item.type);
+  }
+
+  if (!a.item.sorter || !a.item.sorter) {
+    return a.item.xSearchData.localeCompare(a.item.xSearchData);
+  } else {
+    return a.item.sorter - b.item.sorter;
+  }
+}
+
+function customSortDigit(a, b) {
   const newA = a.item.xSearchData;
   const newB = b.item.xSearchData;
 
