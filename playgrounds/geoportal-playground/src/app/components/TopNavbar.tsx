@@ -179,10 +179,12 @@ const TopNavbar = () => {
         }}
         thumbnails={thumbnails}
         activeLayers={activeLayers}
-        customCategories={{
-          Title: 'Meine Zusammenstellungen',
-          layers: savedLayerConfigs,
-        }}
+        customCategories={[
+          {
+            Title: 'Meine Zusammenstellungen',
+            layers: savedLayerConfigs,
+          },
+        ]}
       />
 
       <div className="flex items-center gap-6">

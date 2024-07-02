@@ -55,7 +55,7 @@ export interface LibModalProps {
   setThumbnail: any;
   thumbnails: any;
   activeLayers: Layer[];
-  customCategories?: any;
+  customCategories?: any[];
 }
 
 const LibModal = ({
@@ -171,9 +171,10 @@ const LibModal = ({
                   serviceName: services[key].name,
                 });
                 const mergedLayer = mergeStructures(tmpLayer, newLayers);
+
                 newLayers = mergedLayer;
-                setLayers(newLayers);
-                setAllLayers(newLayers);
+                setLayers([...customCategories, ...newLayers]);
+                setAllLayers([...customCategories, ...newLayers]);
               } else {
                 getDataFromJson(result);
               }
@@ -187,8 +188,8 @@ const LibModal = ({
           });
           const mergedLayer = mergeStructures(tmpLayer, newLayers);
           newLayers = mergedLayer;
-          setLayers(newLayers);
-          setAllLayers(newLayers);
+          setLayers([...customCategories, ...newLayers]);
+          setAllLayers([...customCategories, ...newLayers]);
         } else {
           const tmpLayer = getLayerStructure({
             config,
@@ -196,8 +197,8 @@ const LibModal = ({
           });
           const mergedLayer = mergeStructures(tmpLayer, newLayers);
           newLayers = mergedLayer;
-          setLayers(newLayers);
-          setAllLayers(newLayers);
+          setLayers([...customCategories, ...newLayers]);
+          setAllLayers([...customCategories, ...newLayers]);
         }
       }
     }
@@ -206,6 +207,21 @@ const LibModal = ({
   useEffect(() => {
     search(debouncedSearchTerm);
   }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    let updatedLayers = layers.map((category) => {
+      const title = category.Title;
+
+      customCategories.forEach((customCategory) => {
+        if (customCategory.Title === title) {
+          category.layers = customCategory.layers;
+        }
+      });
+      return category;
+    });
+    setLayers(updatedLayers);
+    setAllLayers(updatedLayers);
+  }, [customCategories]);
 
   return (
     <Modal

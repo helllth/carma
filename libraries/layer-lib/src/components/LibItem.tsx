@@ -36,7 +36,7 @@ const LibItem = ({
   const [thumbUrl, setThumbUrl] = useState('');
   const title = layer.title;
   const description = layer.description;
-  const tags = layer.type === 'link' ? layer.tags : layer.tags.slice(1);
+  const tags = layer.type === 'link' ? layer.tags : layer?.tags?.slice(1);
 
   // @ts-ignore
   const name = layer.name;
@@ -46,11 +46,11 @@ const LibItem = ({
   const box = layer.pictureBoundingBox || [];
 
   const thumbnail = thumbnails?.find(
-    (element) => element.name === name + '_' + service.name
+    (element) => element?.name === name + '_' + service?.name
   );
 
   const url = `${
-    service.url
+    service?.url
   }?service=WMS&request=GetMap&layers=${encodeURIComponent(
     name
   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=800903.8186576363,6669199.149176236,802126.8111101991,6670013.681258901`;
