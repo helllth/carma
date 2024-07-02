@@ -46,7 +46,7 @@ export const layerMap = {
   },
   luftbild: {
     title: 'Luftbild',
-    layers: 'wupp-plan-live@100|trueOrtho2020@75|rvrSchrift@100',
+    layers: 'rvrGrundriss@100|trueOrtho2022@75|rvrSchriftNT@100',
     description: `Kartendienst (WMS) der Stadt Wuppertal. Datengrundlage
             <strong>True Orthophoto aus Bildflug vom 16.03.2022</strong>, hergestellt durch Aerowest
             GmbH/Dortmund, Bodenauflösung 5 cm.
