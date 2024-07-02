@@ -9,6 +9,7 @@ export function LayerLib({
   thumbnails,
   setThumbnail,
   activeLayers,
+  customCategories,
 }: LibModalProps) {
   return (
     <LibModal
@@ -18,6 +19,7 @@ export function LayerLib({
       thumbnails={thumbnails}
       setThumbnail={setThumbnail}
       activeLayers={activeLayers}
+      customCategories={customCategories}
     />
   );
 }

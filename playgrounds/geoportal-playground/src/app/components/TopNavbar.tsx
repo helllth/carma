@@ -27,6 +27,7 @@ import {
   getBackgroundLayer,
   getFocusMode,
   getLayers,
+  getSavedLayerConfigs,
   removeLayer,
   setBackgroundLayer,
   setFocusMode,
@@ -95,6 +96,7 @@ const TopNavbar = () => {
   const activeLayers = useSelector(getLayers);
   const showLayerButtons = useSelector(getShowLayerButtons);
   const focusMode = useSelector(getFocusMode);
+  const savedLayerConfigs = useSelector(getSavedLayerConfigs);
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -177,6 +179,10 @@ const TopNavbar = () => {
         }}
         thumbnails={thumbnails}
         activeLayers={activeLayers}
+        customCategories={{
+          Title: 'Meine Zusammenstellungen',
+          layers: savedLayerConfigs,
+        }}
       />
 
       <div className="flex items-center gap-6">

@@ -55,6 +55,7 @@ export interface LibModalProps {
   setThumbnail: any;
   thumbnails: any;
   activeLayers: Layer[];
+  customCategories?: any;
 }
 
 const LibModal = ({
@@ -64,6 +65,7 @@ const LibModal = ({
   thumbnails,
   setThumbnail,
   activeLayers,
+  customCategories,
 }: LibModalProps) => {
   const [layers, setLayers] = useState<any[]>([]);
   const [allLayers, setAllLayers] = useState<any[]>([]);
