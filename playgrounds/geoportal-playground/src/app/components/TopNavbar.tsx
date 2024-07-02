@@ -11,6 +11,7 @@ import {
   faEye,
   faEyeSlash,
   faF,
+  faFileExport,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
@@ -35,6 +36,7 @@ import './switch.css';
 import { getShowLayerButtons, setShowLayerButtons } from '../store/slices/ui';
 import { cn } from '../helper/helper';
 import { Item } from 'libraries/layer-lib/src/helper/types';
+import Save from './Save';
 
 export const layerMap = {
   amtlich: {
@@ -236,6 +238,13 @@ const TopNavbar = () => {
           <Popover trigger="click" placement="bottom" content={<Share />}>
             <button className="hover:text-gray-600 text-xl">
               <FontAwesomeIcon icon={faShareNodes} />
+            </button>
+          </Popover>
+        </Tooltip>
+        <Tooltip title="Speichern">
+          <Popover trigger="click" placement="bottom" content={<Save />}>
+            <button className="hover:text-gray-600 text-xl">
+              <FontAwesomeIcon icon={faFileExport} />
             </button>
           </Popover>
         </Tooltip>

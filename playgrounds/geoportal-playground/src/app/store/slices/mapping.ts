@@ -8,6 +8,12 @@ export type BackgroundLayer = Layer & {
 
 interface MappingState {
   layers: Layer[];
+  savedLayerConfigs: {
+    name: string;
+    description: string;
+    thumbnail?: string;
+    layers: Layer[];
+  }[];
   selectedLayerIndex: number;
   backgroundLayer: BackgroundLayer;
   showLeftScrollButton: boolean;
@@ -21,6 +27,7 @@ interface MappingState {
 
 const initialState: MappingState = {
   layers: [],
+  savedLayerConfigs: [],
   selectedLayerIndex: -2,
   backgroundLayer: {
     title: 'Stadtplan',
@@ -173,6 +180,10 @@ export const {
 
 export const getLayers = (state: RootState) => {
   return state.mapping.layers;
+};
+
+export const getSavedLayerConfigs = (state: RootState) => {
+  return state.mapping.savedLayerConfigs;
 };
 
 export const getSelectedLayerIndex = (state: RootState) => {
