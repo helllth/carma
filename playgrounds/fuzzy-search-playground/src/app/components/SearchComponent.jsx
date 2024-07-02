@@ -207,10 +207,8 @@ function SearchComponent({
 
       if (sort && sort === 'true') {
         showSortedResults = true;
-        console.log('xxx show sort true');
       } else {
         showSortedResults = false;
-        console.log('xxx show sort false');
       }
       if (score && score === 'true') {
         ifShowScore = true;
@@ -224,7 +222,7 @@ function SearchComponent({
       if (threshold && threshold !== fuseInstance.options.threshold) {
         fuseInstance.options.threshold = parseFloat(threshold);
       }
-      // console.log('xxx fuseInstance.options', fuseInstance.options);
+
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
 
@@ -238,6 +236,7 @@ function SearchComponent({
         resultWithRoundScore.sort(customSort);
       }
       console.log('xxx result', resultWithRoundScore);
+      console.log(limitSearchResult(resultWithRoundScore, 3));
       if (!showCategories) {
         setOptions(generateOptions(resultWithRoundScore, ifShowScore));
       } else {
@@ -278,11 +277,6 @@ function SearchComponent({
       const searchParams = new URLSearchParams(queryString);
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
-      // const score = searchParams.get('score');
-
-      // if (score && score === 'true') {
-      //   setShowScore(true);
-      // }
 
       const fuseAddressesOptions = {
         distance: !isNaN(parseInt(distance)) ? parseInt(distance) : 100,
@@ -297,10 +291,6 @@ function SearchComponent({
       setFuseInstance(fuse);
     }
   }, [allGazeteerData, fuseInstance]);
-
-  // useEffect(() => {
-  //   console.log('xx score', showScore);
-  // }, [showScore]);
 
   const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
@@ -423,6 +413,23 @@ function customSort(a, b) {
   } else {
     return a.item.sorter - b.item.sorter;
   }
+}
+
+function limitSearchResult(searchRes, limit) {
+  let limitedScore = searchRes[0].score;
+  let countOfCategories = 1;
+  searchRes.forEach((r) => {
+    if (r.score > limitedScore && countOfCategories < limit) {
+      limitedScore = r.score;
+      countOfCategories += 1;
+    }
+  });
+
+  console.log('xxx countOfCategories', countOfCategories);
+  console.log('xxx firstScore', limitedScore);
+
+  const limitedresalts = searchRes.filter((r) => r.score <= limitedScore);
+  console.log('xxx limitedresalts', limitedresalts);
 }
 
 function customSortDigit(a, b) {
