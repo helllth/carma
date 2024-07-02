@@ -1,34 +1,50 @@
-import { faShareNodes } from '@fortawesome/free-solid-svg-icons';
+import { faFileExport } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Input, message } from 'antd';
+import { Button, Input } from 'antd';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { appendSavedLayerConfig, getLayers } from '../store/slices/mapping';
 import './popover.css';
 
-export type Settings = {
-  showLayerButtons: boolean;
-  showLayerHideButtons: boolean;
-  showFullscreen: boolean;
-  showLocator: boolean;
-  showMeasurement: boolean;
-  showHamburgerMenu?: boolean;
-};
-
 const Save = () => {
-  const [messageApi, contextHolder] = message.useMessage();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const dispatch = useDispatch();
+  const layers = useSelector(getLayers);
 
   return (
     <div className="p-2 flex flex-col gap-3">
-      {contextHolder}
       <div className="flex items-center gap-2">
-        <FontAwesomeIcon icon={faShareNodes} className="text-xl" />
+        <FontAwesomeIcon icon={faFileExport} className="text-xl" />
         <h4 className="mb-0">Speichern</h4>
       </div>
       <hr className="my-0" />
       <h5 className="-mb-1 text-lg">Einstellungen:</h5>
 
-      <Input placeholder="Name" />
-      <Input placeholder="Beschreibung" />
+      <Input
+        placeholder="Name"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <Input
+        placeholder="Beschreibung"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
 
-      <Button onClick={() => {}}>Konfiguration Speichern</Button>
+      <Button
+        onClick={() => {
+          const config = {
+            title,
+            description,
+            type: 'collection',
+            layers,
+          };
+          dispatch(appendSavedLayerConfig(config));
+        }}
+      >
+        Konfiguration Speichern
+      </Button>
     </div>
   );
 };
