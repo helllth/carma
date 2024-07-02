@@ -49,7 +49,7 @@ const renderItem = (address) => {
   };
 };
 
-function buildAddressWithIconUI(addresObj) {
+function buildAddressWithIconUI(addresObj, showScore = false, score) {
   let icon;
   if (addresObj.glyph === 'pie-chart') {
     icon = 'chart-pie';
@@ -62,16 +62,29 @@ function buildAddressWithIconUI(addresObj) {
         <i className={icon && 'fas ' + 'fa-' + icon}></i>
         {'  '}
       </span>
-      <span>{joinNumberLetter(addresObj.string)}</span>
+      <span>
+        {showScore ? (
+          <span>
+            <span>{joinNumberLetter(addresObj.string)}</span>
+            <span style={{ color: 'gray' }}> ({score})</span>
+          </span>
+        ) : (
+          joinNumberLetter(addresObj.string)
+        )}
+      </span>
     </div>
   );
 
   return streetLabel;
 }
 
-const generateOptions = (results) => {
+const generateOptions = (results, showScore = false) => {
   return results.map((result, idx) => {
-    const streetLabel = buildAddressWithIconUI(result.item);
+    const streetLabel = buildAddressWithIconUI(
+      result.item,
+      showScore,
+      result.score
+    );
     return {
       key: result.item.sorter,
       label: <div>{streetLabel}</div>,
@@ -178,28 +191,55 @@ function SearchComponent({
   const [value, setValue] = useState('');
   const [searchParams, setSearchParams] = useState(null);
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
+  const [showScore, setShowScore] = useState(false);
+
   const handleSearchAutoComplete = (value) => {
+    let ifShowScore = null;
+    let showSortedResults = null;
     if (allGazeteerData.length > 0 && fuseInstance) {
       const hash = window.location.hash;
       const queryString = hash.includes('?') ? hash.split('?')[1] : '';
       const searchParams = new URLSearchParams(queryString);
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
-      if (
-        distance !== fuseInstance.options.distance &&
-        distance &&
-        threshold &&
-        threshold !== fuseInstance.options.threshold
-      ) {
+      const score = searchParams.get('score');
+      const sort = searchParams.get('sort');
+
+      if (sort && sort === 'true') {
+        showSortedResults = true;
+        console.log('xxx show sort true');
+      } else {
+        showSortedResults = false;
+        console.log('xxx show sort false');
+      }
+      if (score && score === 'true') {
+        ifShowScore = true;
+      } else {
+        ifShowScore = false;
+      }
+      if (distance !== fuseInstance.options.distance && distance) {
         fuseInstance.options.distance = parseFloat(distance);
+      }
+
+      if (threshold && threshold !== fuseInstance.options.threshold) {
         fuseInstance.options.threshold = parseFloat(threshold);
       }
-      console.log('xxx fuseInstance.options', fuseInstance.options);
+      // console.log('xxx fuseInstance.options', fuseInstance.options);
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
-      // result.sort(customSort);
+
+      const resultWithRoundScore = result.map((r) => {
+        return {
+          ...r,
+          score: r.score.toFixed(1),
+        };
+      });
+      if (showSortedResults) {
+        resultWithRoundScore.sort(customSort);
+      }
+      console.log('xxx result', resultWithRoundScore);
       if (!showCategories) {
-        setOptions(generateOptions(result));
+        setOptions(generateOptions(resultWithRoundScore, ifShowScore));
       } else {
         const groupedResults = mapDataToSearchResult(result);
         setSearchResult(groupedResults);
@@ -238,6 +278,12 @@ function SearchComponent({
       const searchParams = new URLSearchParams(queryString);
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
+      // const score = searchParams.get('score');
+
+      // if (score && score === 'true') {
+      //   setShowScore(true);
+      // }
+
       const fuseAddressesOptions = {
         distance: !isNaN(parseInt(distance)) ? parseInt(distance) : 100,
         threshold: !isNaN(parseFloat(threshold)) ? parseFloat(threshold) : 0.5,
@@ -251,6 +297,10 @@ function SearchComponent({
       setFuseInstance(fuse);
     }
   }, [allGazeteerData, fuseInstance]);
+
+  // useEffect(() => {
+  //   console.log('xx score', showScore);
+  // }, [showScore]);
 
   const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
@@ -334,7 +384,6 @@ export default SearchComponent;
 function removeStopwords(text, stopwords) {
   const words = text.split(' ');
   const placeholderWords = words.map((word) => {
-    // Check if the word is in the stopwords array (case insensitive)
     if (stopwords.includes(word.toLowerCase())) {
       // Replace each character in the word with an underscore
       return '_'.repeat(word.length);
@@ -359,6 +408,24 @@ function prepareGazData(data) {
 }
 
 function customSort(a, b) {
+  // const newA = a.item.xSearchData;
+  // const newB = b.item.xSearchData;
+
+  if (a.score !== b.score) {
+    return a.score - b.score;
+  }
+  if (a.item.type !== b.item.type) {
+    return a.item.type.localeCompare(b.item.type);
+  }
+
+  if (!a.item.sorter || !a.item.sorter) {
+    return a.item.xSearchData.localeCompare(a.item.xSearchData);
+  } else {
+    return a.item.sorter - b.item.sorter;
+  }
+}
+
+function customSortDigit(a, b) {
   const newA = a.item.xSearchData;
   const newB = b.item.xSearchData;
 
