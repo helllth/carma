@@ -39,9 +39,13 @@ const LibItem = ({
   const tags = layer.type === 'link' ? layer.tags : layer?.tags?.slice(1);
 
   // @ts-ignore
-  const name = layer.name;
+  const name =
+    layer.type === 'collection' ? layer.layers[0].props.name : layer.name;
   // @ts-ignore
-  const service = layer.service;
+  const service =
+    layer.type === 'collection'
+      ? { url: layer.layers[0].props.url.slice(0, -1) }
+      : layer.service;
 
   const box = layer.pictureBoundingBox || [];
 

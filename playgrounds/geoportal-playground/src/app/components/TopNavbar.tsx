@@ -31,6 +31,7 @@ import {
   removeLayer,
   setBackgroundLayer,
   setFocusMode,
+  setLayers,
 } from '../store/slices/mapping';
 import Share from './Share';
 import './switch.css';
@@ -102,6 +103,22 @@ const TopNavbar = () => {
 
   const updateLayers = (layer: Item) => {
     let newLayer: Layer;
+
+    if (layer.type === 'collection') {
+      try {
+        dispatch(setLayers(layer.layers));
+        messageApi.open({
+          type: 'success',
+          content: `${layer.title} wurde erfolgreich angewandt.`,
+        });
+      } catch {
+        messageApi.open({
+          type: 'error',
+          content: `Es gab einen Fehler beim anwenden von ${layer.title}`,
+        });
+      }
+      return;
+    }
 
     if (layer.type === 'layer') {
       switch (layer.layerType) {
