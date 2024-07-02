@@ -194,7 +194,8 @@ function SearchComponent({
   const [showScore, setShowScore] = useState(false);
 
   const handleSearchAutoComplete = (value) => {
-    let showTestScore = null;
+    let ifShowScore = null;
+    let showSortedResults = null;
     if (allGazeteerData.length > 0 && fuseInstance) {
       const hash = window.location.hash;
       const queryString = hash.includes('?') ? hash.split('?')[1] : '';
@@ -202,11 +203,19 @@ function SearchComponent({
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
       const score = searchParams.get('score');
+      const sort = searchParams.get('sort');
 
-      if (score && score === 'true') {
-        showTestScore = true;
+      if (sort && sort === 'true') {
+        showSortedResults = true;
+        console.log('xxx show sort true');
       } else {
-        showTestScore = false;
+        showSortedResults = false;
+        console.log('xxx show sort false');
+      }
+      if (score && score === 'true') {
+        ifShowScore = true;
+      } else {
+        ifShowScore = false;
       }
       if (distance !== fuseInstance.options.distance && distance) {
         fuseInstance.options.distance = parseFloat(distance);
@@ -215,7 +224,7 @@ function SearchComponent({
       if (threshold && threshold !== fuseInstance.options.threshold) {
         fuseInstance.options.threshold = parseFloat(threshold);
       }
-      console.log('xxx fuseInstance.options', fuseInstance.options);
+      // console.log('xxx fuseInstance.options', fuseInstance.options);
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
 
@@ -225,10 +234,12 @@ function SearchComponent({
           score: r.score.toFixed(1),
         };
       });
-      resultWithRoundScore.sort(customSort);
-      console.log('xxx results', resultWithRoundScore);
+      if (showSortedResults) {
+        resultWithRoundScore.sort(customSort);
+      }
+      console.log('xxx result', resultWithRoundScore);
       if (!showCategories) {
-        setOptions(generateOptions(resultWithRoundScore, showTestScore));
+        setOptions(generateOptions(resultWithRoundScore, ifShowScore));
       } else {
         const groupedResults = mapDataToSearchResult(result);
         setSearchResult(groupedResults);
@@ -399,8 +410,6 @@ function prepareGazData(data) {
 function customSort(a, b) {
   // const newA = a.item.xSearchData;
   // const newB = b.item.xSearchData;
-
-  console.log('xxx custom sort', a, b);
 
   if (a.item.score !== b.item.score) {
     return a.item.score - b.item.score;
