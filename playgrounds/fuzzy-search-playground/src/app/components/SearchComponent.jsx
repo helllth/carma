@@ -196,6 +196,7 @@ function SearchComponent({
   const handleSearchAutoComplete = (value) => {
     let ifShowScore = null;
     let showSortedResults = null;
+    let defaultLimit = 3;
     if (allGazeteerData.length > 0 && fuseInstance) {
       const hash = window.location.hash;
       const queryString = hash.includes('?') ? hash.split('?')[1] : '';
@@ -204,6 +205,7 @@ function SearchComponent({
       const threshold = searchParams.get('threshold');
       const score = searchParams.get('score');
       const sort = searchParams.get('sort');
+      const limit = searchParams.get('limit');
 
       if (sort && sort === 'true') {
         showSortedResults = true;
@@ -214,6 +216,9 @@ function SearchComponent({
         ifShowScore = true;
       } else {
         ifShowScore = false;
+      }
+      if (limit && parseFloat(limit) !== defaultLimit) {
+        defaultLimit = parseFloat(limit);
       }
       if (distance !== fuseInstance.options.distance && distance) {
         fuseInstance.options.distance = parseFloat(distance);
@@ -236,7 +241,7 @@ function SearchComponent({
         resultWithRoundScore.sort(customSort);
       }
       console.log('xxx result', resultWithRoundScore);
-      console.log(limitSearchResult(resultWithRoundScore, 3));
+      console.log(limitSearchResult(resultWithRoundScore, defaultLimit));
       if (!showCategories) {
         setOptions(generateOptions(resultWithRoundScore, ifShowScore));
       } else {
