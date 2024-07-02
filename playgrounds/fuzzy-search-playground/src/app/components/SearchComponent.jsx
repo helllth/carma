@@ -411,8 +411,8 @@ function customSort(a, b) {
   // const newA = a.item.xSearchData;
   // const newB = b.item.xSearchData;
 
-  if (a.item.score !== b.item.score) {
-    return a.item.score - b.item.score;
+  if (a.score !== b.score) {
+    return a.score - b.score;
   }
   if (a.item.type !== b.item.type) {
     return a.item.type.localeCompare(b.item.type);
