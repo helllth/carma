@@ -1488,10 +1488,79 @@ export const baseConfig = {
     serviceName: 'wuppImmo',
     layers: [
       {
-        name: 'borisplus_brw',
-        pictureBoundingBox: [
-          779236.43555291, 6639001.66376131, 823764.23187022, 6692356.43526254,
-        ],
+        name: 'wohnlage2024',
+      },
+      {
+        name: 'borisplus',
+      },
+      {
+        name: 'borisimmo',
+      },
+      {
+        name: 'wg_2020',
+      },
+      {
+        name: 'wg_2010',
+      },
+      {
+        name: 'wg_2000',
+      },
+      {
+        name: 'wg_1990',
+      },
+      {
+        name: 'wg_1980',
+      },
+      {
+        name: 'wg_1970',
+      },
+      {
+        name: 'wg_1960',
+      },
+      {
+        name: 'wg_1949',
+      },
+      {
+        name: 'wg_1919',
+      },
+      {
+        name: 'wg',
+      },
+      {
+        name: 'wg_unbek',
+      },
+      {
+        name: 'nwg_2020',
+      },
+      {
+        name: 'nwg_2010',
+      },
+      {
+        name: 'nwg_2000',
+      },
+      {
+        name: 'nwg_1990',
+      },
+      {
+        name: 'nwg_1980',
+      },
+      {
+        name: 'nwg_1970',
+      },
+      {
+        name: 'nwg_1960',
+      },
+      {
+        name: 'nwg_1949',
+      },
+      {
+        name: 'nwg_1919',
+      },
+      {
+        name: 'nwg',
+      },
+      {
+        name: 'nwg_unbek',
       },
     ],
   },
