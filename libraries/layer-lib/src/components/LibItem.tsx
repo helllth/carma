@@ -34,18 +34,15 @@ const LibItem = ({
   const [isFavourite, setIsFavourite] = useState(false);
   const [isActiveLayer, setIsActiveLayer] = useState(false);
   const [thumbUrl, setThumbUrl] = useState('');
+  const [collectionImages, setCollectionImages] = useState([]);
   const title = layer.title;
   const description = layer.description;
   const tags = layer.type === 'link' ? layer.tags : layer?.tags?.slice(1);
 
   // @ts-ignore
-  const name =
-    layer.type === 'collection' ? layer.layers[0].props.name : layer.name;
+  const name = layer.name;
   // @ts-ignore
-  const service =
-    layer.type === 'collection'
-      ? { url: layer.layers[0].props.url.slice(0, -1) }
-      : layer.service;
+  const service = layer.service;
 
   const box = layer.pictureBoundingBox || [];
 
@@ -90,7 +87,7 @@ const LibItem = ({
   }, [activeLayers]);
 
   useEffect(() => {
-    const getImgUrl = async (response, url) => {
+    const getImgUrl = async (response, url, onFinish?) => {
       const blob = await response.blob();
       const imgUrl = URL.createObjectURL(blob);
       let reader = new FileReader();
@@ -104,7 +101,46 @@ const LibItem = ({
           setThumbnail({ data, name: name + '_' + service.name });
         }
       };
-      setThumbUrl(imgUrl);
+      if (onFinish) {
+        onFinish(imgUrl);
+      } else {
+        setThumbUrl(imgUrl);
+      }
+    };
+
+    const getCollectionImages = async (collection) => {
+      const layers = collection.layers;
+      let urls = [];
+      let imgUrls = [];
+      if (layers.length > 3) {
+        urls = layers.slice(0, 4).map((layer) => {
+          return `${layer.props.url.slice(
+            0,
+            -1
+          )}?service=WMS&request=GetMap&layers=${encodeURIComponent(
+            layer.props.name
+          )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=800903.8186576363,6669199.149176236,802126.8111101991,6670013.681258901`;
+        });
+      } else {
+        urls = layers.map((layer) => {
+          return `${layer.props.url.slice(
+            0,
+            -1
+          )}?service=WMS&request=GetMap&layers=${encodeURIComponent(
+            layer.props.name
+          )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=800903.8186576363,6669199.149176236,802126.8111101991,6670013.681258901`;
+        });
+      }
+      urls.forEach(async (url) => {
+        const response = await fetch(url);
+
+        getImgUrl(response, url, (imgUrl) => {
+          console.log('xxx imgUrl', imgUrl);
+          imgUrls.push(imgUrl);
+        });
+      });
+      setIsLoading(false);
+      setCollectionImages(imgUrls);
     };
 
     if (!layer.thumbnail) {
@@ -117,16 +153,24 @@ const LibItem = ({
           });
         }
       } else {
-        if (thumbnail?.data) {
-          setThumbUrl(thumbnail.data);
+        if (layer.type === 'collection') {
+          getCollectionImages(layer);
         } else {
-          fetch(url).then((response) => {
-            getImgUrl(response, url);
-          });
+          if (thumbnail?.data) {
+            setThumbUrl(thumbnail.data);
+          } else {
+            fetch(url).then((response) => {
+              getImgUrl(response, url);
+            });
+          }
         }
       }
     }
   }, [name]);
+
+  if (layer.type === 'collection') {
+    console.log('xxx collection', collectionImages);
+  }
 
   return (
     <div
@@ -141,7 +185,7 @@ const LibItem = ({
           </div>
         )}
 
-        {thumbUrl || layer.thumbnail ? (
+        {(thumbUrl && layer.type !== 'collection') || layer.thumbnail ? (
           <img
             src={layer.thumbnail ? layer.thumbnail : thumbUrl}
             alt={title}
@@ -153,6 +197,26 @@ const LibItem = ({
               setIsLoading(false);
             }}
           />
+        ) : layer.type === 'collection' ? (
+          <div
+            className={`grid ${
+              collectionImages.length > 3 ? 'grid-cols-2' : 'grid-cols-1'
+            }`}
+          >
+            {collectionImages.map((imgUrl, i) => {
+              return (
+                <img
+                  key={`collection_img_${i}`}
+                  src={imgUrl}
+                  alt={title}
+                  loading="lazy"
+                  className={`object-cover relative h-full overflow-clip w-[calc(130%+7.2px)] ${
+                    hovered && 'scale-110'
+                  } transition-all duration-200`}
+                />
+              );
+            })}
+          </div>
         ) : (
           <div className="object-cover relative h-full overflow-clip w-[calc(130%+7.2px)]" />
         )}

@@ -223,8 +223,6 @@ const LibModal = ({
     setAllLayers(updatedLayers);
   }, [customCategories]);
 
-  console.log('xxx', layers);
-
   return (
     <Modal
       open={open}
