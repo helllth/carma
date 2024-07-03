@@ -23,8 +23,6 @@ const Save = () => {
         <h4 className="mb-0">Speichern</h4>
       </div>
       <hr className="my-0" />
-      <h5 className="-mb-1 text-lg">Einstellungen:</h5>
-
       <label className="-mb-2 font-medium" htmlFor="title">
         Name:
       </label>
