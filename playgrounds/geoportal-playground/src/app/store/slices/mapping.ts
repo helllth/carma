@@ -6,8 +6,18 @@ export type BackgroundLayer = Layer & {
   layers: string;
 };
 
+export type SavedLayerConfig = {
+  title: string;
+  description: string;
+  type: string;
+  id: string;
+  thumbnail?: string;
+  layers: Layer[];
+};
+
 interface MappingState {
   layers: Layer[];
+  savedLayerConfigs: SavedLayerConfig[];
   selectedLayerIndex: number;
   backgroundLayer: BackgroundLayer;
   showLeftScrollButton: boolean;
@@ -21,6 +31,7 @@ interface MappingState {
 
 const initialState: MappingState = {
   layers: [],
+  savedLayerConfigs: [],
   selectedLayerIndex: -2,
   backgroundLayer: {
     title: 'Stadtplan',
@@ -74,6 +85,18 @@ const slice = createSlice({
     removeLayer(state, action: PayloadAction<string>) {
       const newLayers = state.layers.filter((obj) => obj.id !== action.payload);
       state.layers = newLayers;
+    },
+    appendSavedLayerConfig(state, action: PayloadAction<SavedLayerConfig>) {
+      let newLayers = state.savedLayerConfigs;
+      newLayers.push(action.payload);
+      state.savedLayerConfigs = newLayers;
+    },
+    deleteSavedLayerConfig(state, action: PayloadAction<string>) {
+      let newLayers = state.savedLayerConfigs;
+      newLayers = newLayers.filter((obj) => {
+        return obj.id !== action.payload;
+      });
+      state.savedLayerConfigs = newLayers;
     },
     changeOpacity(state, action) {
       const newLayers = state.layers.map((obj) => {
@@ -156,6 +179,8 @@ export const {
   setLayers,
   appendLayer,
   removeLayer,
+  appendSavedLayerConfig,
+  deleteSavedLayerConfig,
   changeOpacity,
   changeVisibility,
   setSelectedLayerIndex,
@@ -173,6 +198,10 @@ export const {
 
 export const getLayers = (state: RootState) => {
   return state.mapping.layers;
+};
+
+export const getSavedLayerConfigs = (state: RootState) => {
+  return state.mapping.savedLayerConfigs;
 };
 
 export const getSelectedLayerIndex = (state: RootState) => {

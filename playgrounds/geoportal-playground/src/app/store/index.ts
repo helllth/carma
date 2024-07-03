@@ -61,6 +61,7 @@ const mappingConfig = {
   storage: localForage,
   whitelist: [
     'layers',
+    'savedLayerConfigs',
     'backgroundLayer',
     'showFullscreenButton',
     'showLocatorButton',

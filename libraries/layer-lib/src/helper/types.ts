@@ -1,6 +1,13 @@
+import { Layer } from '../components/LibModal';
+
 type Link = {
   type: 'link';
   url: string;
+};
+
+type Collection = {
+  type: 'collection';
+  layers: Layer[];
 };
 
 export type wmsProps = {
@@ -36,7 +43,7 @@ export type Item = {
   thumbnail?: string;
   pictureBoundingBox?: [number, number, number, number];
   id: string;
-} & (tmpLayer | Link | Feature);
+} & (tmpLayer | Link | Feature | Collection);
 
 export type XMLLayer = {
   Abstract: string;

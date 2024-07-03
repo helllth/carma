@@ -11,6 +11,7 @@ import {
   faEye,
   faEyeSlash,
   faF,
+  faFileExport,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
@@ -23,18 +24,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getThumbnails, setThumbnail } from '../store/slices/layers';
 import {
   appendLayer,
+  deleteSavedLayerConfig,
   getBackgroundLayer,
   getFocusMode,
   getLayers,
+  getSavedLayerConfigs,
   removeLayer,
   setBackgroundLayer,
   setFocusMode,
+  setLayers,
 } from '../store/slices/mapping';
 import Share from './Share';
 import './switch.css';
 import { getShowLayerButtons, setShowLayerButtons } from '../store/slices/ui';
 import { cn } from '../helper/helper';
 import { Item } from 'libraries/layer-lib/src/helper/types';
+import Save from './Save';
 
 export const layerMap = {
   amtlich: {
@@ -93,11 +98,32 @@ const TopNavbar = () => {
   const activeLayers = useSelector(getLayers);
   const showLayerButtons = useSelector(getShowLayerButtons);
   const focusMode = useSelector(getFocusMode);
+  const savedLayerConfigs = useSelector(getSavedLayerConfigs);
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const updateLayers = (layer: Item) => {
+  const updateLayers = (layer: Item, deleteItem: boolean = false) => {
     let newLayer: Layer;
+
+    if (layer.type === 'collection') {
+      if (deleteItem) {
+        dispatch(deleteSavedLayerConfig(layer.id));
+      } else {
+        try {
+          dispatch(setLayers(layer.layers));
+          messageApi.open({
+            type: 'success',
+            content: `${layer.title} wurde erfolgreich angewandt.`,
+          });
+        } catch {
+          messageApi.open({
+            type: 'error',
+            content: `Es gab einen Fehler beim anwenden von ${layer.title}`,
+          });
+        }
+      }
+      return;
+    }
 
     if (layer.type === 'layer') {
       switch (layer.layerType) {
@@ -114,6 +140,9 @@ const TopNavbar = () => {
               legend: layer.props.Style[0].LegendURL,
               name: layer.props.Name,
             },
+            other: {
+              ...layer,
+            },
           };
           break;
         }
@@ -127,6 +156,9 @@ const TopNavbar = () => {
             visible: true,
             props: {
               style: layer.props.style,
+            },
+            other: {
+              ...layer,
             },
           };
           break;
@@ -175,6 +207,12 @@ const TopNavbar = () => {
         }}
         thumbnails={thumbnails}
         activeLayers={activeLayers}
+        customCategories={[
+          {
+            Title: 'Meine Zusammenstellungen',
+            layers: savedLayerConfigs,
+          },
+        ]}
       />
 
       <div className="flex items-center gap-6">
@@ -185,7 +223,7 @@ const TopNavbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-6 absolute left-1/2 -ml-[62px]">
+      <div className="flex items-center gap-6 absolute left-1/2 -ml-[70px]">
         <Tooltip title="Refresh">
           <button
             onClick={() => {
@@ -231,6 +269,13 @@ const TopNavbar = () => {
           >
             <FontAwesomeIcon icon={showLayerButtons ? faEye : faEyeSlash} />
           </button>
+        </Tooltip>
+        <Tooltip title="Speichern">
+          <Popover trigger="click" placement="bottom" content={<Save />}>
+            <button className="hover:text-gray-600 text-xl">
+              <FontAwesomeIcon icon={faFileExport} />
+            </button>
+          </Popover>
         </Tooltip>
         <Tooltip title="Teilen">
           <Popover trigger="click" placement="bottom" content={<Share />}>

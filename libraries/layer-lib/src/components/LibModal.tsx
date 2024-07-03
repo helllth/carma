@@ -17,7 +17,7 @@ import LayerTabs from './LayerTabs';
 import LibItem from './LibItem';
 import './input.css';
 import './modal.css';
-import { vectorProps, wmsProps } from '../helper/types';
+import { Item, vectorProps, wmsProps } from '../helper/types';
 const { Search } = Input;
 
 // @ts-ignore
@@ -31,6 +31,7 @@ export type Layer = {
   description: string;
   visible: boolean;
   icon?: string;
+  other?: Item;
   // type?: 'wmts' | 'wmts-nt' | 'tiles' | 'vector';
   // legend?: { Format: string; OnlineResource: string; size: [number, number] }[];
 } & (
@@ -56,6 +57,7 @@ export interface LibModalProps {
   setThumbnail: any;
   thumbnails: any;
   activeLayers: Layer[];
+  customCategories?: any[];
 }
 
 const LibModal = ({
@@ -65,6 +67,7 @@ const LibModal = ({
   thumbnails,
   setThumbnail,
   activeLayers,
+  customCategories,
 }: LibModalProps) => {
   const [layers, setLayers] = useState<any[]>([]);
   const [allLayers, setAllLayers] = useState<any[]>([]);
@@ -224,9 +227,11 @@ const LibModal = ({
                   serviceName: services[key].name,
                 });
                 const mergedLayer = mergeStructures(tmpLayer, newLayers);
+
                 newLayers = mergedLayer;
-                setLayers(newLayers);
-                setAllLayers(newLayers);
+                // @ts-ignore
+                setLayers([...customCategories, ...newLayers]);
+                setAllLayers([...customCategories, ...newLayers]);
               } else {
                 getDataFromJson(result);
               }
@@ -240,8 +245,9 @@ const LibModal = ({
           });
           const mergedLayer = mergeStructures(tmpLayer, newLayers);
           newLayers = mergedLayer;
-          setLayers(newLayers);
-          setAllLayers(newLayers);
+          // @ts-ignore
+          setLayers([...customCategories, ...newLayers]);
+          setAllLayers([...customCategories, ...newLayers]);
         } else {
           const tmpLayer = getLayerStructure({
             config,
@@ -249,8 +255,8 @@ const LibModal = ({
           });
           const mergedLayer = mergeStructures(tmpLayer, newLayers);
           newLayers = mergedLayer;
-          setLayers(newLayers);
-          setAllLayers(newLayers);
+          setLayers([...customCategories, ...newLayers]);
+          setAllLayers([...customCategories, ...newLayers]);
         }
       }
     }
@@ -259,6 +265,21 @@ const LibModal = ({
   useEffect(() => {
     search(debouncedSearchTerm);
   }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    let updatedLayers = layers.map((category) => {
+      const title = category.Title;
+      // @ts-ignore
+      customCategories.forEach((customCategory) => {
+        if (customCategory.Title === title) {
+          category.layers = customCategory.layers;
+        }
+      });
+      return category;
+    });
+    setLayers(updatedLayers);
+    setAllLayers(updatedLayers);
+  }, [customCategories]);
 
   return (
     <Modal
