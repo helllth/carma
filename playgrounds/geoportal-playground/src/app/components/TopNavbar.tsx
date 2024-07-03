@@ -107,12 +107,7 @@ const TopNavbar = () => {
 
     if (layer.type === 'collection') {
       if (deleteItem) {
-        dispatch(
-          deleteSavedLayerConfig({
-            title: layer.title,
-            description: layer.description,
-          })
-        );
+        dispatch(deleteSavedLayerConfig(layer.id));
       } else {
         try {
           dispatch(setLayers(layer.layers));
@@ -228,7 +223,7 @@ const TopNavbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-6 absolute left-1/2 -ml-[62px]">
+      <div className="flex items-center gap-6 absolute left-1/2 -ml-[70px]">
         <Tooltip title="Refresh">
           <button
             onClick={() => {

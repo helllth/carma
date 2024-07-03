@@ -10,6 +10,7 @@ export type SavedLayerConfig = {
   title: string;
   description: string;
   type: string;
+  id: string;
   thumbnail?: string;
   layers: Layer[];
 };
@@ -90,16 +91,10 @@ const slice = createSlice({
       newLayers.push(action.payload);
       state.savedLayerConfigs = newLayers;
     },
-    deleteSavedLayerConfig(
-      state,
-      action: PayloadAction<{ title: string; description: string }>
-    ) {
+    deleteSavedLayerConfig(state, action: PayloadAction<string>) {
       let newLayers = state.savedLayerConfigs;
       newLayers = newLayers.filter((obj) => {
-        return (
-          obj.title !== action.payload.title &&
-          obj.description !== action.payload.description
-        );
+        return obj.id !== action.payload;
       });
       state.savedLayerConfigs = newLayers;
     },
