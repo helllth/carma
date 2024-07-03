@@ -389,7 +389,7 @@ const LibItem = ({
         onCancel={() => setOpenDeleteModal(false)}
       >
         <div className="flex flex-col gap-2 p-4">
-          <h3 className="text-lg">Zusammestellung wirklich löschen?</h3>
+          <h3 className="text-lg">Zusammenstellung wirklich löschen?</h3>
           <p className="text-base line-clamp-3 h-[66px]">
             Diese Aktion kann nicht rückgängig gemacht werden.
           </p>
