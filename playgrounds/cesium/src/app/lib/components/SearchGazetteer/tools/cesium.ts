@@ -2,8 +2,9 @@ import {
   HeadingPitchRange,
   Math as CMath,
   Scene,
-  sampleTerrainMostDetailed,
   Cartographic,
+  Cartesian3,
+  PolygonHierarchy,
 } from 'cesium';
 
 export const distanceFromZoomLevel = (zoom: number) => {
@@ -37,4 +38,20 @@ export const getPositionWithHeightAsync = async (
   const cartesianPosition = Cartographic.toCartesian(position);
   const clampedPosition = scene.clampToHeight(cartesianPosition);
   return Cartographic.fromCartesian(clampedPosition);
+};
+
+export const polygonHierarchyFromPolygonCoords = (
+  polygonCoords: number[][][]
+) => {
+  // [positions, hole1, hole2, ...]
+  const [positions, ...holes] = polygonCoords;
+
+  const hierarchy = new PolygonHierarchy(
+    Cartesian3.fromDegreesArray(positions.flat()),
+    holes.map(
+      (hole: number[][]) =>
+        new PolygonHierarchy(Cartesian3.fromDegreesArray(hole.flat()))
+    )
+  );
+  return hierarchy;
 };

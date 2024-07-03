@@ -7,7 +7,12 @@ import {
   BoundingSphere,
   Cartesian3,
   Cartographic,
+  Color,
   EasingFunction,
+  Entity,
+  HeightReference,
+  PolygonGraphics,
+  PolygonHierarchy,
   Scene,
   Viewer,
 } from 'cesium';
@@ -18,14 +23,16 @@ import {
   SourceWithPayload,
 } from '../types';
 import {
-  distanceFromZoomLevel,
+  polygonHierarchyFromPolygonCoords,
   getHeadingPitchRangeFromZoom,
   getPositionWithHeightAsync,
+  distanceFromZoomLevel,
 } from './cesium';
 import { addMarker, removeMarker } from './cesium3dMarker';
 
 const proj4ConverterLookup = {};
 const DEFAULT_ZOOM_LEVEL = 16;
+export const SELECTED_POLYGON_ID = 'searchgaz-hihglight-polygon';
 
 type Coord = { lat: number; lon: number };
 // type MapType = 'leaflet' | 'cesium';
@@ -108,6 +115,15 @@ const getPosInWGS84 = ({ x, y }, refSystem: Converter) => {
   };
 };
 
+const getRingInWGS84 = (coords: (string | number)[][], refSystem: Converter) =>
+  coords
+    .map((c) => c.map((v) => (typeof v === 'string' ? parseFloat(v) : v)))
+    .filter(
+      (coords) =>
+        !coords.some((c) => isNaN(c) || c === Infinity || c === -Infinity)
+    )
+    .map((coord) => PROJ4_CONVERTERS.CRS4326.forward(refSystem.inverse(coord)));
+
 // TODO should be handeld by app state not here
 const getUrlFromSearchParams = () => {
   let url: string | null = null;
@@ -167,8 +183,6 @@ export const builtInGazetteerHitTrigger = (
 
     const { crs } = hitObject;
 
-    console.log('hitObject', hitObject, hitObject.more.zl, crs, hitObject.crs);
-
     let refSystemConverter = proj4ConverterLookup[crs];
     if (!refSystemConverter) {
       console.log('create new proj4 converter for', crs);
@@ -176,24 +190,65 @@ export const builtInGazetteerHitTrigger = (
       proj4ConverterLookup[crs] = refSystemConverter;
     }
 
+    const hasPolygon =
+      hitObject.more.g.type === 'Polygon' &&
+      hitObject.more.g.coordinates.length > 0;
+
     const pos = getPosInWGS84(hitObject, refSystemConverter); //console.log(pos)
     const zoom = hitObject.more.zl ?? DEFAULT_ZOOM_LEVEL;
+    const polygon = hasPolygon
+      ? hitObject.more.g.coordinates.map((ring) =>
+          getRingInWGS84(ring, refSystemConverter)
+        )
+      : null;
+    console.log(
+      'hitObject',
+      hitObject,
+      hitObject.more.zl,
+      crs,
+      hitObject.crs,
+      pos,
+      zoom,
+      polygon
+    );
 
-    console.log(mapConsumers, mapActions, pos, zoom);
+    // console.log(mapConsumers, mapActions, pos, zoom);
 
     mapConsumers.forEach(async (mapElement) => {
       console.log('mapElement', mapElement);
       if (mapElement instanceof Viewer) {
+        const viewer = mapElement;
         //console.log('lookAt', mapElement, pos, zoom);
         // add marker entity to map
-        removeMarker(mapElement);
+        removeMarker(viewer);
+        viewer.entities.removeById(SELECTED_POLYGON_ID);
         const posHeight = await getPositionWithHeightAsync(
-          mapElement.scene,
+          viewer.scene,
           Cartographic.fromDegrees(pos.lon, pos.lat)
         );
 
-        marker3dStyle && addMarker(mapElement, posHeight, marker3dStyle);
-        cAction.lookAt(mapElement.scene, pos, zoom);
+        if (polygon) {
+          const polygonEntity = new Entity({
+            id: SELECTED_POLYGON_ID,
+            position: new Cartesian3(0, 0, 0),
+            polygon: {
+              hierarchy: polygonHierarchyFromPolygonCoords(polygon),
+              material: Color.YELLOW.withAlpha(0.25),
+              outline: false,
+              closeBottom: false,
+              extrudedHeight: 200,
+              extrudedHeightReference: HeightReference.RELATIVE_TO_GROUND,
+              height: 0,
+              heightReference: HeightReference.RELATIVE_TO_GROUND,
+            },
+          });
+          viewer.entities.add(polygonEntity);
+          viewer.flyTo(polygonEntity);
+        } else {
+          marker3dStyle && addMarker(viewer, posHeight, marker3dStyle);
+
+          cAction.lookAt(mapElement.scene, pos, zoom);
+        }
       } else if (mapElement instanceof L.Map) {
         lAction.panTo(mapElement, pos);
       } else {

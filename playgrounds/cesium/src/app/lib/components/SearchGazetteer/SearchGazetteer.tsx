@@ -12,6 +12,7 @@ import './topicMaps.css';
 import {
   builtInGazetteerHitTrigger,
   MapConsumer,
+  SELECTED_POLYGON_ID,
 } from './tools/gazetteerHelper';
 import { Viewer } from 'cesium';
 import { removeMarker } from './tools/cesium3dMarker';
@@ -184,7 +185,10 @@ export function SearchGazetteer({
     setValue('');
     setOptions([]);
     setSearchResult([]);
-    cesiumRef && removeMarker(cesiumRef);
+    if (cesiumRef) {
+      removeMarker(cesiumRef);
+      cesiumRef.entities.removeById(SELECTED_POLYGON_ID);
+    }
     //setOverlayFeature(null);
   };
 
@@ -196,8 +200,7 @@ export function SearchGazetteer({
         width: pixelwidth,
       }}
     >
-      <Button 
-      icon={<CloseOutlined />} onClick={handleOnClose} />
+      <Button icon={<CloseOutlined />} onClick={handleOnClose} />
       {!showCategories ? (
         <>
           <AutoComplete
