@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { appendSavedLayerConfig, getLayers } from '../store/slices/mapping';
 import './popover.css';
+import { nanoid } from '@reduxjs/toolkit';
 
 const Save = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -47,6 +48,7 @@ const Save = () => {
             description,
             type: 'collection',
             layers,
+            id: nanoid(),
           };
           try {
             dispatch(appendSavedLayerConfig(config));
