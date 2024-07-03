@@ -16,7 +16,7 @@ import LayerTabs from './LayerTabs';
 import LibItem from './LibItem';
 import './input.css';
 import './modal.css';
-import { vectorProps, wmsProps } from '../helper/types';
+import { Item, vectorProps, wmsProps } from '../helper/types';
 const { Search } = Input;
 
 // @ts-ignore
@@ -30,6 +30,7 @@ export type Layer = {
   description: string;
   visible: boolean;
   icon?: string;
+  other?: Item;
   // type?: 'wmts' | 'wmts-nt' | 'tiles' | 'vector';
   // legend?: { Format: string; OnlineResource: string; size: [number, number] }[];
 } & (

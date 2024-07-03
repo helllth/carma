@@ -135,6 +135,9 @@ const TopNavbar = () => {
               legend: layer.props.Style[0].LegendURL,
               name: layer.props.Name,
             },
+            other: {
+              ...layer,
+            },
           };
           break;
         }
@@ -148,6 +151,9 @@ const TopNavbar = () => {
             visible: true,
             props: {
               style: layer.props.style,
+            },
+            other: {
+              ...layer,
             },
           };
           break;

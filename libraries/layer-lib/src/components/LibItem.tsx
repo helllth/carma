@@ -114,6 +114,17 @@ const LibItem = ({
       let imgUrls = [];
       if (layers.length > 3) {
         urls = layers.slice(0, 4).map((layer) => {
+          const thumbnail = thumbnails.find(
+            (element) =>
+              element?.name ===
+              layer.other.name + '_' + layer.other.service?.name
+          );
+
+          if (thumbnail?.data) {
+            imgUrls.push(thumbnail.data);
+            return null;
+          }
+
           return `${layer.props.url.slice(
             0,
             -1
@@ -132,12 +143,13 @@ const LibItem = ({
         });
       }
       urls.forEach(async (url) => {
-        const response = await fetch(url);
+        if (url) {
+          const response = await fetch(url);
 
-        getImgUrl(response, url, (imgUrl) => {
-          console.log('xxx imgUrl', imgUrl);
-          imgUrls.push(imgUrl);
-        });
+          getImgUrl(response, url, (imgUrl) => {
+            imgUrls.push(imgUrl);
+          });
+        }
       });
       setIsLoading(false);
       setCollectionImages(imgUrls);
@@ -168,10 +180,6 @@ const LibItem = ({
     }
   }, [name]);
 
-  if (layer.type === 'collection') {
-    console.log('xxx collection', collectionImages);
-  }
-
   return (
     <div
       className="flex flex-col rounded-lg w-full shadow-sm h-fit hover:!shadow-lg bg-white"
@@ -199,7 +207,7 @@ const LibItem = ({
           />
         ) : layer.type === 'collection' ? (
           <div
-            className={`grid ${
+            className={`grid overflow-clip ${
               collectionImages.length > 3 ? 'grid-cols-2' : 'grid-cols-1'
             }`}
           >
@@ -210,7 +218,7 @@ const LibItem = ({
                   src={imgUrl}
                   alt={title}
                   loading="lazy"
-                  className={`object-cover relative h-full overflow-clip w-[calc(130%+7.2px)] ${
+                  className={`object-cover relative overflow-clip w-[calc(130%+7.2px)] ${
                     hovered && 'scale-110'
                   } transition-all duration-200`}
                 />
