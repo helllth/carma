@@ -8,7 +8,7 @@ import IconComp from 'react-cismap/commons/Icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { location-dot } from '@fortawesome/free-solid-svg-icons';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-
+import { Tooltip } from 'antd';
 const renderTitle = (category) => {
   let title = '???';
   switch (category) {
@@ -163,7 +163,7 @@ function SearchComponent({
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
-  pixelwidth = 300,
+  pixelwidth = 400,
   ifShowCategories: standardSearch = false,
 }) {
   const [options, setOptions] = useState([]);
@@ -197,6 +197,7 @@ function SearchComponent({
     let ifShowScore = null;
     let showSortedResults = null;
     let defaultLimit = 0;
+    let defaultCut = 0.4;
     if (allGazeteerData.length > 0 && fuseInstance) {
       const hash = window.location.hash;
       const queryString = hash.includes('?') ? hash.split('?')[1] : '';
@@ -206,6 +207,7 @@ function SearchComponent({
       const score = searchParams.get('score');
       const sort = searchParams.get('sort');
       const limit = searchParams.get('limit');
+      const cut = searchParams.get('cut');
 
       if (sort && sort === 'true') {
         showSortedResults = true;
@@ -227,6 +229,9 @@ function SearchComponent({
       if (threshold && threshold !== fuseInstance.options.threshold) {
         fuseInstance.options.threshold = parseFloat(threshold);
       }
+      if (cut) {
+        defaultCut = parseFloat(cut);
+      }
 
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
@@ -244,7 +249,8 @@ function SearchComponent({
       if (defaultLimit !== 0) {
         resultWithRoundScore = limitSearchResult(
           resultWithRoundScore,
-          defaultLimit
+          defaultLimit,
+          defaultCut
         );
       }
 
@@ -314,7 +320,8 @@ function SearchComponent({
     <div
       style={{
         marginTop: '20px',
-        width: pixelwidth,
+        // width: pixelwidth,
+        display: 'flex',
       }}
       className="fuzzy-search-container"
     >
@@ -323,7 +330,10 @@ function SearchComponent({
           cleanBtnDisable ? (
             <FontAwesomeIcon
               icon={faLocationDot}
-              style={{ fontSize: '16px' }}
+              style={{
+                fontSize: '16px',
+                // color: '#1d93d4',
+              }}
             />
           ) : (
             <IconComp name="close" />
@@ -331,7 +341,7 @@ function SearchComponent({
         }
         className={
           cleanBtnDisable
-            ? 'clear-fuzzy-button'
+            ? 'clear-fuzzy-button clear-fuzzy-button__active'
             : 'clear-fuzzy-button clear-fuzzy-button__active'
         }
         onClick={() => {
@@ -351,7 +361,7 @@ function SearchComponent({
           style={inputStyle}
           onSearch={(value) => handleSearchAutoComplete(value)}
           onChange={(value) => setValue(value)}
-          placeholder="Stadtteil | Adresse | POI"
+          placeholder="Wohin?"
           value={value}
           onSelect={(value, option) => handleOnSelect(option)}
           defaultActiveFirstOption={true}
@@ -362,7 +372,7 @@ function SearchComponent({
           popupMatchSelectWidth={500}
           style={inputStyle}
           onSearch={(value) => handleSearchAutoComplete(value)}
-          placeholder="Stadtteil | Adresse | POI"
+          placeholder="Wohin?"
           options={searchResult}
           onSelect={(value, option) => handleOnSelect(option)}
           value={value}
@@ -426,19 +436,19 @@ function customSort(a, b) {
   }
 }
 
-function limitSearchResult(searchRes, limit) {
-  let limitedScore = searchRes[0].score;
+function limitSearchResult(searchRes, limit, cut = 0.4) {
+  let limitedScore = searchRes[0].score < cut ? searchRes[0].score : cut;
   let countOfCategories = 1;
   searchRes.forEach((r) => {
-    if (r.score > limitedScore && countOfCategories < limit) {
+    if (r.score <= cut && r.score > limitedScore && countOfCategories < limit) {
       limitedScore = r.score;
       countOfCategories += 1;
     }
   });
 
-  const limitedresalts = searchRes.filter((r) => r.score <= limitedScore);
+  const limitedresults = searchRes.filter((r) => r.score <= limitedScore);
 
-  return limitedresalts;
+  return limitedresults;
 }
 
 function customSortDigit(a, b) {
