@@ -399,7 +399,7 @@ const LibItem = ({
               danger
               onClick={() => {
                 setOpenDeleteModal(false);
-                setAdditionalLayers(layer);
+                setAdditionalLayers(layer, true);
               }}
             >
               Löschen

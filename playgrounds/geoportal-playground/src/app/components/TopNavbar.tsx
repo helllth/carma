@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getThumbnails, setThumbnail } from '../store/slices/layers';
 import {
   appendLayer,
+  deleteSavedLayerConfig,
   getBackgroundLayer,
   getFocusMode,
   getLayers,
@@ -101,21 +102,30 @@ const TopNavbar = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const updateLayers = (layer: Item) => {
+  const updateLayers = (layer: Item, deleteItem: boolean = false) => {
     let newLayer: Layer;
 
     if (layer.type === 'collection') {
-      try {
-        dispatch(setLayers(layer.layers));
-        messageApi.open({
-          type: 'success',
-          content: `${layer.title} wurde erfolgreich angewandt.`,
-        });
-      } catch {
-        messageApi.open({
-          type: 'error',
-          content: `Es gab einen Fehler beim anwenden von ${layer.title}`,
-        });
+      if (deleteItem) {
+        dispatch(
+          deleteSavedLayerConfig({
+            title: layer.title,
+            description: layer.description,
+          })
+        );
+      } else {
+        try {
+          dispatch(setLayers(layer.layers));
+          messageApi.open({
+            type: 'success',
+            content: `${layer.title} wurde erfolgreich angewandt.`,
+          });
+        } catch {
+          messageApi.open({
+            type: 'error',
+            content: `Es gab einen Fehler beim anwenden von ${layer.title}`,
+          });
+        }
       }
       return;
     }
