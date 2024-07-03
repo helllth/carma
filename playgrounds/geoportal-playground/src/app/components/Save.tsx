@@ -16,7 +16,7 @@ const Save = () => {
   const layers = useSelector(getLayers);
 
   return (
-    <div className="p-2 flex flex-col gap-3 w-80">
+    <div className="p-2 flex flex-col gap-3 w-96">
       {contextHolder}
       <div className="flex items-center gap-2">
         <FontAwesomeIcon icon={faFileExport} className="text-xl" />
