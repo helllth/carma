@@ -216,7 +216,7 @@ function SearchComponent({
       const score = searchParams.get('score');
       const sort = searchParams.get('sort');
       const limit = searchParams.get('limit');
-      const cat = searchParams.get('cat');
+      const cut = searchParams.get('cut');
 
       if (sort && sort === 'true') {
         showSortedResults = true;
@@ -257,7 +257,7 @@ function SearchComponent({
         resultWithRoundScore = limitSearchResult(
           resultWithRoundScore,
           defaultLimit,
-          parseFloat(cat)
+          parseFloat(cut)
         );
       }
 
@@ -443,20 +443,19 @@ function customSort(a, b) {
   }
 }
 
-function limitSearchResult(searchRes, limit, cat = 0.4) {
-  console.log('xxx cat', cat);
-  let limitedScore = searchRes[0].score;
+function limitSearchResult(searchRes, limit, cut = 0.4) {
+  let limitedScore = searchRes[0].score < cut ? searchRes[0].score : cut;
   let countOfCategories = 1;
   searchRes.forEach((r) => {
-    if (r.score < cat && r.score > limitedScore && countOfCategories < limit) {
+    if (r.score <= cut && r.score > limitedScore && countOfCategories < cut) {
       limitedScore = r.score;
       countOfCategories += 1;
     }
   });
 
-  const limitedresalts = searchRes.filter((r) => r.score <= limitedScore);
+  const limitedresults = searchRes.filter((r) => r.score <= limitedScore);
 
-  return limitedresalts;
+  return limitedresults;
 }
 
 function customSortDigit(a, b) {
