@@ -9,13 +9,34 @@ import {
   useViewerDataSources,
 } from '../../../store/slices/viewer';
 import { create3DTileStyle } from '../../../utils/cesiumHelpers';
-import { Cesium3DTileset, viewerCesium3DTilesInspectorMixin } from 'cesium';
+import {
+  Cesium3DTileset,
+  CustomShader,
+  ShadowMode,
+  viewerCesium3DTilesInspectorMixin,
+} from 'cesium';
 import { useSecondaryStyleTilesetClickHandler } from '../../../hooks';
 import { useTweakpaneCtx } from '@carma/debug-ui';
+import {
+  CUSTOM_SHADERS_DEFINITIONS,
+  CustomShaderKeys,
+} from '../../../utils/cesiumShaders';
 
 const preloadWhenHidden = true;
 let enableDebugWireframe = false;
 let maximumScreenSpaceError = 4; // 16 is default but quite Low Quality
+
+const customShaderKeys = {
+  clay: CustomShaderKeys.CLAY,
+  "unlit enhanced": CustomShaderKeys.UNLIT,
+  "unlit": CustomShaderKeys.UNLIT_BASE,
+  undefined: CustomShaderKeys.UNDEFINED,
+};
+
+const DEFAULT_MESH_SHADER_KEY = CustomShaderKeys.UNLIT;
+const DEFAULT_MESH_SHADER = new CustomShader(
+  CUSTOM_SHADERS_DEFINITIONS[DEFAULT_MESH_SHADER_KEY]
+);
 
 export const BaseTilesets = () => {
   const tilesets = useViewerDataSources().tilesets;
@@ -25,6 +46,12 @@ export const BaseTilesets = () => {
   const [tsA, setTsA] = React.useState<Cesium3DTileset | null>(null);
   const [tsB, setTsB] = React.useState<Cesium3DTileset | null>(null);
   const [showTileInspector, setShowTileInspector] = useState(false);
+  const [customShaderKey, setCustomShaderKey] = useState(
+    DEFAULT_MESH_SHADER_KEY
+  );
+  const [customMeshShader, setCustomMeshShader] = useState<
+    undefined | CustomShader
+  >(DEFAULT_MESH_SHADER);
 
   const tilesetOpacity = useTilesetOpacity();
 
@@ -38,6 +65,24 @@ export const BaseTilesets = () => {
       title: 'Base Tilesets',
     },
     {
+      get customShaderKey() {
+        return customShaderKey;
+      },
+      set customShaderKey(v) {
+        setCustomShaderKey(v);
+        if (tsA) {
+          const def = CUSTOM_SHADERS_DEFINITIONS[customShaderKeys[v]];
+          if (def === CustomShaderKeys.UNDEFINED) {
+            setCustomMeshShader(undefined);
+            tsA.customShader = undefined;
+          } else {
+            const shader = new CustomShader(CUSTOM_SHADERS_DEFINITIONS[v]);
+            tsA.customShader = shader;
+            setCustomMeshShader(shader);
+          }
+        }
+      },
+
       get enableDebugWireframe() {
         return enableDebugWireframe;
       },
@@ -84,6 +129,7 @@ export const BaseTilesets = () => {
     },
 
     [
+      { name: 'customShaderKey', options: customShaderKeys },
       { name: 'enableDebugWireframe' },
       { name: 'showPrimary' },
       { name: 'showSecondary' },
@@ -126,15 +172,22 @@ export const BaseTilesets = () => {
       });
   }, [folderCallback, viewer, showTileInspector]);
 
-  // TODO add the alternative planning style tileset here too for instant switching after first load
+  useEffect(() => {
+    if (viewer) {
+      viewer.scene.light.intensity = 2.0;
+      viewer.scene.fog.enabled = false;
+    }
+  }, [viewer]);
 
   return (
     <>
       <Resium3DTileset
         show={showPrimary}
+        customShader={customMeshShader}
         enableDebugWireframe={enableDebugWireframe}
         // quality
         cacheBytes={536870912 * 2}
+        shadows={ShadowMode.DISABLED}
         dynamicScreenSpaceError={false}
         baseScreenSpaceError={256}
         maximumScreenSpaceError={maximumScreenSpaceError}

@@ -256,6 +256,7 @@ export const builtInGazetteerHitTrigger = (
               //extrudedHeight: 200,
               //extrudedHeightReference: HeightReference.RELATIVE_TO_GROUND,
               height: undefined,
+              zIndex: -1,
               //heightReference: HeightReference.RELATIVE_TO_GROUND,
             },
           });
