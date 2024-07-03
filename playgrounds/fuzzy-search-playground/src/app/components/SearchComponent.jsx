@@ -242,7 +242,6 @@ function SearchComponent({
           score: r.score.toFixed(1),
         };
       });
-      console.log('xxx result', resultWithRoundScore);
       if (showSortedResults) {
         resultWithRoundScore.sort(customSort);
       }
