@@ -27,12 +27,14 @@ import {
   getHeadingPitchRangeFromZoom,
   getPositionWithHeightAsync,
   distanceFromZoomLevel,
+  invertedPolygonHierarchy,
 } from './cesium';
 import { addMarker, removeMarker } from './cesium3dMarker';
 
 const proj4ConverterLookup = {};
 const DEFAULT_ZOOM_LEVEL = 16;
-export const SELECTED_POLYGON_ID = 'searchgaz-hihglight-polygon';
+export const SELECTED_POLYGON_ID = 'searchgaz-highlight-polygon';
+export const INVERTED_SELECTED_POLYGON_ID = 'searchgaz-inverted-polygon';
 
 type Coord = { lat: number; lon: number };
 // type MapType = 'leaflet' | 'cesium';
@@ -191,8 +193,8 @@ export const builtInGazetteerHitTrigger = (
     }
 
     const hasPolygon =
-      hitObject.more.g.type === 'Polygon' &&
-      hitObject.more.g.coordinates.length > 0;
+      hitObject.more?.g?.type === 'Polygon' &&
+      hitObject.more?.g?.coordinates?.length > 0;
 
     const pos = getPosInWGS84(hitObject, refSystemConverter); //console.log(pos)
     const zoom = hitObject.more.zl ?? DEFAULT_ZOOM_LEVEL;
@@ -222,6 +224,7 @@ export const builtInGazetteerHitTrigger = (
         // add marker entity to map
         removeMarker(viewer);
         viewer.entities.removeById(SELECTED_POLYGON_ID);
+        viewer.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
         const posHeight = await getPositionWithHeightAsync(
           viewer.scene,
           Cartographic.fromDegrees(pos.lon, pos.lat)
@@ -230,23 +233,36 @@ export const builtInGazetteerHitTrigger = (
         if (polygon) {
           const polygonEntity = new Entity({
             id: SELECTED_POLYGON_ID,
-            position: new Cartesian3(0, 0, 0),
             polygon: {
               hierarchy: polygonHierarchyFromPolygonCoords(polygon),
-              material: Color.YELLOW.withAlpha(0.25),
+              material: Color.YELLOW.withAlpha(0.1),
               outline: false,
               closeBottom: false,
-              extrudedHeight: 200,
+              extrudedHeight: 150,
               extrudedHeightReference: HeightReference.RELATIVE_TO_GROUND,
               height: 0,
               heightReference: HeightReference.RELATIVE_TO_GROUND,
             },
           });
+          const invertedPolygonEntity = new Entity({
+            id: INVERTED_SELECTED_POLYGON_ID,
+            polygon: {
+              hierarchy: invertedPolygonHierarchy(polygon),
+              material: Color.GRAY.withAlpha(0.66),
+              outline: false,
+              //closeBottom: false,
+              //extrudedHeight: 200,
+              //extrudedHeightReference: HeightReference.RELATIVE_TO_GROUND,
+              height: undefined,
+              //heightReference: HeightReference.RELATIVE_TO_GROUND,
+            },
+          });
+
           viewer.entities.add(polygonEntity);
+          viewer.entities.add(invertedPolygonEntity);
           viewer.flyTo(polygonEntity);
         } else {
           marker3dStyle && addMarker(viewer, posHeight, marker3dStyle);
-
           cAction.lookAt(mapElement.scene, pos, zoom);
         }
       } else if (mapElement instanceof L.Map) {

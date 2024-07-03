@@ -55,3 +55,20 @@ export const polygonHierarchyFromPolygonCoords = (
   );
   return hierarchy;
 };
+
+// WUPPERTAL EXTENT PLUS SOME PADDING
+const LAT_MIN = 51.16;
+const LAT_MAX = 51.33;
+const LON_MIN = 7.0;
+const LON_MAX = 7.32;
+
+export const invertedPolygonHierarchy = (
+  [polygon]: number[][][],
+  outerPolygon = [
+    [LON_MIN, LAT_MIN],
+    [LON_MIN, LAT_MAX],
+    [LON_MAX, LAT_MAX],
+    [LON_MAX, LAT_MIN],
+    [LON_MIN, LAT_MIN],
+  ]
+) => polygonHierarchyFromPolygonCoords([outerPolygon, polygon]);

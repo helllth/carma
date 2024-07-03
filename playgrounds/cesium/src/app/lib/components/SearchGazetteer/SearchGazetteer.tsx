@@ -11,6 +11,7 @@ import { getGazData, prepareGazData, removeStopwords } from './utils';
 import './topicMaps.css';
 import {
   builtInGazetteerHitTrigger,
+  INVERTED_SELECTED_POLYGON_ID,
   MapConsumer,
   SELECTED_POLYGON_ID,
 } from './tools/gazetteerHelper';
@@ -188,6 +189,7 @@ export function SearchGazetteer({
     if (cesiumRef) {
       removeMarker(cesiumRef);
       cesiumRef.entities.removeById(SELECTED_POLYGON_ID);
+      cesiumRef.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
     }
     //setOverlayFeature(null);
   };
