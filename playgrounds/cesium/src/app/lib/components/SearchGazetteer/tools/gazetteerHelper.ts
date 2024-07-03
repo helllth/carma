@@ -235,12 +235,13 @@ export const builtInGazetteerHitTrigger = (
             id: SELECTED_POLYGON_ID,
             polygon: {
               hierarchy: polygonHierarchyFromPolygonCoords(polygon),
-              material: Color.YELLOW.withAlpha(0.1),
+              material: Color.WHITE.withAlpha(0.5),
               outline: false,
               closeBottom: false,
-              extrudedHeight: 150,
+              closeTop: false,
+              extrudedHeight: 80,
               extrudedHeightReference: HeightReference.RELATIVE_TO_GROUND,
-              height: 0,
+              height: -50,
               heightReference: HeightReference.RELATIVE_TO_GROUND,
             },
           });

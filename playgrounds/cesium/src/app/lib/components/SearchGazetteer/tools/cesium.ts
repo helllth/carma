@@ -57,10 +57,12 @@ export const polygonHierarchyFromPolygonCoords = (
 };
 
 // WUPPERTAL EXTENT PLUS SOME PADDING
-const LAT_MIN = 51.16;
-const LAT_MAX = 51.33;
-const LON_MIN = 7.0;
-const LON_MAX = 7.32;
+const LAT_PADDING = 8;
+const LON_PADDING = 5;
+const LAT_MIN = 51.16 - LAT_PADDING;
+const LAT_MAX = 51.33 + LAT_PADDING;
+const LON_MIN = 7.0 - LON_PADDING;
+const LON_MAX = 7.32 + LON_PADDING;
 
 export const invertedPolygonHierarchy = (
   [polygon]: number[][][],
