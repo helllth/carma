@@ -8,7 +8,7 @@ import IconComp from 'react-cismap/commons/Icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { location-dot } from '@fortawesome/free-solid-svg-icons';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-
+import { Tooltip } from 'antd';
 const renderTitle = (category) => {
   let title = '???';
   switch (category) {
@@ -65,8 +65,14 @@ function buildAddressWithIconUI(addresObj, showScore = false, score) {
       <span>
         {showScore ? (
           <span>
-            <span>{joinNumberLetter(addresObj.string)}</span>
-            <span style={{ color: 'gray' }}> ({score})</span>
+            <Tooltip
+              title={
+                joinNumberLetter(addresObj.string) + ' (Score: ' + score + ')'
+              }
+            >
+              <span>{joinNumberLetter(addresObj.string)}</span>
+              <span style={{ color: 'gray' }}> ({score})</span>
+            </Tooltip>
           </span>
         ) : (
           joinNumberLetter(addresObj.string)
