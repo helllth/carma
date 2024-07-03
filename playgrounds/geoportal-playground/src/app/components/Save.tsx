@@ -25,7 +25,7 @@ const Save = () => {
       <hr className="my-0" />
       <h5 className="-mb-1 text-lg">Einstellungen:</h5>
 
-      <label className="mb-0" htmlFor="title">
+      <label className="-mb-2 font-medium" htmlFor="title">
         Name:
       </label>
       <Input
@@ -33,7 +33,7 @@ const Save = () => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <label className="mb-0" htmlFor="description">
+      <label className="-mb-2 font-medium" htmlFor="description">
         Beschreibung:
       </label>
       <Input.TextArea
@@ -41,7 +41,7 @@ const Save = () => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <label className="mb-0" htmlFor="thumbnail">
+      <label className="-mb-2 font-medium" htmlFor="thumbnail">
         Vorschaubild:
       </label>
       <Input
