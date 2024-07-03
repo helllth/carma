@@ -163,7 +163,7 @@ function SearchComponent({
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
-  pixelwidth = 1000,
+  pixelwidth = 400,
   ifShowCategories: standardSearch = false,
 }) {
   const [options, setOptions] = useState([]);
@@ -321,8 +321,8 @@ function SearchComponent({
     <div
       style={{
         marginTop: '20px',
-        // width: '400px',
-        // display: 'flex',
+        // width: pixelwidth,
+        display: 'flex',
       }}
       className="fuzzy-search-container"
     >
