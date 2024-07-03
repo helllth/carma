@@ -1,5 +1,17 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { Color, HeadingPitchRange, Viewer, Math as CeMath } from 'cesium';
+import React, {
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import {
+  Color,
+  HeadingPitchRange,
+  Viewer,
+  Math as CeMath,
+  PerspectiveFrustum,
+} from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
 import Crosshair from '../UI/Crosshair';
 import SearchWrapper from './components/SearchWrapper';
@@ -12,12 +24,18 @@ import {
 } from '../../store/slices/viewer';
 import { BaseTilesets } from './components/BaseTilesets';
 import ControlsUI from './components/ControlsUI';
-import { encodeScene, replaceHashRoutedHistory } from './utils';
+import { encodeScene, replaceHashRoutedHistory, setLeafletView } from './utils';
 import { ResizeableContainer } from './components/ResizeableContainer';
 import { useLocation } from 'react-router-dom';
 import useInitializeViewer from './hooks';
 import TopicMap from './components/TopicMap';
-import { TopicMapContextProvider } from 'react-cismap/contexts/TopicMapContextProvider';
+import {
+  TopicMapContextProvider,
+  TopicMapContext,
+} from 'react-cismap/contexts/TopicMapContextProvider';
+import { useTweakpaneCtx } from '@carma/debug-ui';
+import { resolutionFractions } from '../../utils/cesiumHelpers';
+import { formatFractions } from '../Formatters';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -28,7 +46,7 @@ type CustomViewerProps = {
   homeOrientation?: HeadingPitchRange;
   // UI
   showControls?: boolean;
-  showDebug?: boolean;
+  showFader?: boolean;
   showHome?: boolean;
   showLockCenter?: boolean;
   showOrbit?: boolean;
@@ -55,24 +73,111 @@ function CustomViewer(props: CustomViewerProps) {
   const {
     children,
     className,
-    showCrosshair = true,
     showControls = true,
     showHome = true,
     showOrbit = true,
-    showDebug = false,
     infoBox = false,
     selectionIndicator = false,
 
     globeColor = globeBaseColor,
   } = props;
 
+  const [showFader, setShowFader] = useState(props.showFader ?? false);
+  const [showCrosshair, setShowCrosshair] = useState<boolean>(
+    props.showCrosshair ?? true
+  );
+
   const [viewer, setViewer] = useState<Viewer | null>(null);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const topicMapContext: any = useContext(TopicMapContext);
-  // const leafletElement =    topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
+  const topicMapContext: any = useContext(TopicMapContext);
+  const leaflet = topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
 
   const [isUserAction, setIsUserAction] = useState(false);
+  // DEV TWEAKPANE
 
+  // Create a callback function to set the FOV
+
+  useTweakpaneCtx(
+    {
+      title: 'Camera Settings',
+    },
+    {
+      get fov() {
+        return (viewer?.scene.camera.frustum as PerspectiveFrustum)?.fov || 1.0;
+      },
+
+      set fov(value: number) {
+        if (
+          viewer &&
+          viewer.scene.camera.frustum instanceof PerspectiveFrustum &&
+          !Number.isNaN(value)
+        ) {
+          viewer.scene.camera.frustum.fov = value;
+        }
+      },
+    },
+
+    [
+      {
+        name: 'fov',
+        label: 'FOV',
+        min: Math.PI / 400,
+        max: Math.PI,
+        step: 0.01,
+        format: (v) => `${parseFloat(CeMath.toDegrees(v).toFixed(2))}°`,
+      },
+    ]
+  );
+
+  useTweakpaneCtx(
+    {
+      title: 'Scene Settings',
+    },
+    {
+      get showCrosshair() {
+        return showCrosshair;
+      },
+      set showCrosshair(value: boolean) {
+        setShowCrosshair(value);
+      },
+      get showFader() {
+        return showFader;
+      },
+      set showFader(value: boolean) {
+        setShowFader(value);
+      },
+      get resolutionScale() {
+        // Find the closest value in the array to the current resolutionScale and return its index
+        const currentValue = viewer ? viewer.resolutionScale : 1;
+        const closestIndex = resolutionFractions.findIndex(
+          (value) => value === currentValue
+        );
+        return closestIndex !== -1
+          ? closestIndex
+          : resolutionFractions.length - 1; // Default to the last index if not found
+      },
+      set resolutionScale(index) {
+        // Use the index to set the resolutionScale from the array
+        if (viewer && index >= 0 && index < resolutionFractions.length) {
+          const value = resolutionFractions[index];
+          viewer.resolutionScale = value;
+        }
+      },
+    },
+
+    [
+      { name: 'showFader' },
+      { name: 'showCrosshair' },
+      {
+        name: 'resolutionScale',
+        min: 0, // The minimum index
+        max: resolutionFractions.length - 1, // The maximum index
+        step: 1, // Step by index
+        format: (v: number) => formatFractions(resolutionFractions[v]),
+      },
+    ]
+  );
   useEffect(() => {
     if (!viewer) return;
 
@@ -168,8 +273,7 @@ function CustomViewer(props: CustomViewerProps) {
               duration,
             });
           }
-          // TODO: this will mess with url state, as TopicMap also updates the hash
-          //showDebug && setLeafletView(viewer, leafletElement);
+          showFader && setLeafletView(viewer, leaflet, { animate: false });
         }
       }
     };
@@ -224,7 +328,6 @@ function CustomViewer(props: CustomViewerProps) {
       <TopicMapContextProvider>
         {showControls && (
           <ControlsUI
-            showDebug={showDebug}
             showHome={showHome}
             showOrbit={showOrbit}
             searchComponent={<SearchWrapper />}
@@ -232,8 +335,8 @@ function CustomViewer(props: CustomViewerProps) {
         )}
         {showCrosshair && <Crosshair lineColor="white" />}
         <ResizeableContainer
-          enableDragging={showDebug}
-          start={showDebug ? 5 : 0}
+          enableDragging={showFader}
+          start={showFader ? 5 : 0}
         >
           <TopicMap />
         </ResizeableContainer>{' '}

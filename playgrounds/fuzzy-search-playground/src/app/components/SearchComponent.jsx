@@ -196,6 +196,7 @@ function SearchComponent({
   const handleSearchAutoComplete = (value) => {
     let ifShowScore = null;
     let showSortedResults = null;
+    let defaultLimit = 0;
     if (allGazeteerData.length > 0 && fuseInstance) {
       const hash = window.location.hash;
       const queryString = hash.includes('?') ? hash.split('?')[1] : '';
@@ -204,18 +205,20 @@ function SearchComponent({
       const threshold = searchParams.get('threshold');
       const score = searchParams.get('score');
       const sort = searchParams.get('sort');
+      const limit = searchParams.get('limit');
 
       if (sort && sort === 'true') {
         showSortedResults = true;
-        console.log('xxx show sort true');
       } else {
         showSortedResults = false;
-        console.log('xxx show sort false');
       }
       if (score && score === 'true') {
         ifShowScore = true;
       } else {
         ifShowScore = false;
+      }
+      if (limit && parseFloat(limit) !== defaultLimit) {
+        defaultLimit = parseFloat(limit);
       }
       if (distance !== fuseInstance.options.distance && distance) {
         fuseInstance.options.distance = parseFloat(distance);
@@ -224,11 +227,11 @@ function SearchComponent({
       if (threshold && threshold !== fuseInstance.options.threshold) {
         fuseInstance.options.threshold = parseFloat(threshold);
       }
-      // console.log('xxx fuseInstance.options', fuseInstance.options);
+
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
 
-      const resultWithRoundScore = result.map((r) => {
+      let resultWithRoundScore = result.map((r) => {
         return {
           ...r,
           score: r.score.toFixed(1),
@@ -237,7 +240,14 @@ function SearchComponent({
       if (showSortedResults) {
         resultWithRoundScore.sort(customSort);
       }
-      console.log('xxx result', resultWithRoundScore);
+
+      if (defaultLimit !== 0) {
+        resultWithRoundScore = limitSearchResult(
+          resultWithRoundScore,
+          defaultLimit
+        );
+      }
+
       if (!showCategories) {
         setOptions(generateOptions(resultWithRoundScore, ifShowScore));
       } else {
@@ -278,11 +288,6 @@ function SearchComponent({
       const searchParams = new URLSearchParams(queryString);
       const distance = searchParams.get('distance');
       const threshold = searchParams.get('threshold');
-      // const score = searchParams.get('score');
-
-      // if (score && score === 'true') {
-      //   setShowScore(true);
-      // }
 
       const fuseAddressesOptions = {
         distance: !isNaN(parseInt(distance)) ? parseInt(distance) : 100,
@@ -297,10 +302,6 @@ function SearchComponent({
       setFuseInstance(fuse);
     }
   }, [allGazeteerData, fuseInstance]);
-
-  // useEffect(() => {
-  //   console.log('xx score', showScore);
-  // }, [showScore]);
 
   const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
@@ -423,6 +424,21 @@ function customSort(a, b) {
   } else {
     return a.item.sorter - b.item.sorter;
   }
+}
+
+function limitSearchResult(searchRes, limit) {
+  let limitedScore = searchRes[0].score;
+  let countOfCategories = 1;
+  searchRes.forEach((r) => {
+    if (r.score > limitedScore && countOfCategories < limit) {
+      limitedScore = r.score;
+      countOfCategories += 1;
+    }
+  });
+
+  const limitedresalts = searchRes.filter((r) => r.score <= limitedScore);
+
+  return limitedresalts;
 }
 
 function customSortDigit(a, b) {
