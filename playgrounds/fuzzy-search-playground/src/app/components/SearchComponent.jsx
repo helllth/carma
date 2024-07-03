@@ -178,6 +178,10 @@ function SearchComponent({
   const inputStyle = {
     width: 'calc(100% - 32px)',
     borderTopLeftRadius: 0,
+    // border: '1px solid #1677ff',
+    // borderRadius: '0.25rem',
+    // borderTopLeftRadius: 0,
+    // borderBottomLeftRadius: 0,
   };
   const autoCompleteRef = useRef(null);
   const internalGazetteerHitTrigger = (hit) => {
@@ -321,6 +325,7 @@ function SearchComponent({
       style={{
         marginTop: '20px',
         width: pixelwidth,
+        display: 'flex',
       }}
       className="fuzzy-search-container"
     >
@@ -329,7 +334,10 @@ function SearchComponent({
           cleanBtnDisable ? (
             <FontAwesomeIcon
               icon={faLocationDot}
-              style={{ fontSize: '16px' }}
+              style={{
+                fontSize: '16px',
+                // color: '#1d93d4',
+              }}
             />
           ) : (
             <IconComp name="close" />
@@ -337,7 +345,7 @@ function SearchComponent({
         }
         className={
           cleanBtnDisable
-            ? 'clear-fuzzy-button'
+            ? 'clear-fuzzy-button clear-fuzzy-button__active'
             : 'clear-fuzzy-button clear-fuzzy-button__active'
         }
         onClick={() => {
@@ -357,7 +365,7 @@ function SearchComponent({
           style={inputStyle}
           onSearch={(value) => handleSearchAutoComplete(value)}
           onChange={(value) => setValue(value)}
-          placeholder="Stadtteil | Adresse | POI"
+          placeholder="Wohin?"
           value={value}
           onSelect={(value, option) => handleOnSelect(option)}
           defaultActiveFirstOption={true}
@@ -368,7 +376,7 @@ function SearchComponent({
           popupMatchSelectWidth={500}
           style={inputStyle}
           onSearch={(value) => handleSearchAutoComplete(value)}
-          placeholder="Stadtteil | Adresse | POI"
+          placeholder="Wohin?"
           options={searchResult}
           onSelect={(value, option) => handleOnSelect(option)}
           value={value}
