@@ -1,4 +1,5 @@
 .fuzzy-search-container {
+  width: 400px;
 }
 
 .fuzzy-search-container .ant-select-selector {
@@ -54,3 +55,9 @@
   );
   border: 1px solid #007bff;
 }
+
+/* @media (max-width: 649px) {
+  .fuzzy-search-container {
+
+  }
+} */

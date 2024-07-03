@@ -65,14 +65,8 @@ function buildAddressWithIconUI(addresObj, showScore = false, score) {
       <span>
         {showScore ? (
           <span>
-            <Tooltip
-              title={
-                joinNumberLetter(addresObj.string) + ' (Score: ' + score + ')'
-              }
-            >
-              <span>{joinNumberLetter(addresObj.string)}</span>
-              <span style={{ color: 'gray' }}> ({score})</span>
-            </Tooltip>
+            <span>{joinNumberLetter(addresObj.string)}</span>
+            <span style={{ color: 'gray' }}> ({score})</span>
           </span>
         ) : (
           joinNumberLetter(addresObj.string)
@@ -203,6 +197,7 @@ function SearchComponent({
     let ifShowScore = null;
     let showSortedResults = null;
     let defaultLimit = 0;
+    let defaultCut = 0.4;
     if (allGazeteerData.length > 0 && fuseInstance) {
       const hash = window.location.hash;
       const queryString = hash.includes('?') ? hash.split('?')[1] : '';
@@ -234,6 +229,9 @@ function SearchComponent({
       if (threshold && threshold !== fuseInstance.options.threshold) {
         fuseInstance.options.threshold = parseFloat(threshold);
       }
+      if (cut) {
+        defaultCut = parseFloat(cut);
+      }
 
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
@@ -253,7 +251,7 @@ function SearchComponent({
         resultWithRoundScore = limitSearchResult(
           resultWithRoundScore,
           defaultLimit,
-          parseFloat(cut)
+          defaultCut
         );
       }
 
@@ -323,9 +321,8 @@ function SearchComponent({
     <div
       style={{
         marginTop: '20px',
-        // width: `${pixelwidth}px`,
-        width: '400px',
-        display: 'flex',
+        // width: '400px',
+        // display: 'flex',
       }}
       className="fuzzy-search-container"
     >
