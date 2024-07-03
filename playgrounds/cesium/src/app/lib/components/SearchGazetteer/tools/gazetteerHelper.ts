@@ -239,9 +239,9 @@ export const builtInGazetteerHitTrigger = (
               outline: false,
               closeBottom: false,
               closeTop: false,
-              extrudedHeight: 80,
+              extrudedHeight: 0, // falls jemand die Absicht hat eine Mauer zu errichten, kann dies hier getan werden.
               extrudedHeightReference: HeightReference.RELATIVE_TO_GROUND,
-              height: -50,
+              height: -50, // height reference needs top compensate for some terrain variation minus the mount point of the polygon to ground
               heightReference: HeightReference.RELATIVE_TO_GROUND,
             },
           });
