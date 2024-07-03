@@ -36,7 +36,7 @@ const LibItem = ({
   const [isFavourite, setIsFavourite] = useState(false);
   const [isActiveLayer, setIsActiveLayer] = useState(false);
   const [thumbUrl, setThumbUrl] = useState('');
-  const [collectionImages, setCollectionImages] = useState([]);
+  const [collectionImages, setCollectionImages] = useState<string[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const title = layer.title;
   const description = layer.description;
@@ -114,7 +114,7 @@ const LibItem = ({
     const getCollectionImages = async (collection) => {
       const layers = collection.layers;
       let urls = [];
-      let imgUrls = [];
+      let imgUrls: string[] = [];
       if (layers.length > 3) {
         urls = layers.slice(0, 4).map((layer) => {
           const thumbnail = thumbnails.find(
@@ -181,7 +181,7 @@ const LibItem = ({
         }
       }
     }
-  }, [name]);
+  }, [name, layer.id]);
 
   return (
     <div
