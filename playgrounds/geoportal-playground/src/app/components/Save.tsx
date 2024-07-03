@@ -21,13 +21,19 @@ const Save = () => {
       <hr className="my-0" />
       <h5 className="-mb-1 text-lg">Einstellungen:</h5>
 
+      <label className="mb-0" htmlFor="title">
+        Name:
+      </label>
       <Input
-        placeholder="Name"
+        id="title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <Input
-        placeholder="Beschreibung"
+      <label className="mb-0" htmlFor="description">
+        Beschreibung:
+      </label>
+      <Input.TextArea
+        id="description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
@@ -41,6 +47,8 @@ const Save = () => {
             layers,
           };
           dispatch(appendSavedLayerConfig(config));
+          setTitle('');
+          setDescription('');
         }}
       >
         Konfiguration Speichern
