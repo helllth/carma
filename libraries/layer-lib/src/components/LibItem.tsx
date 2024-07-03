@@ -8,9 +8,10 @@ import {
   faMinus,
   faPlus,
   faStar,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Spin } from 'antd';
+import { Button, Modal, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { InfoOutlined } from '@ant-design/icons';
 import { Layer } from './LibModal';
@@ -36,6 +37,7 @@ const LibItem = ({
   const [isActiveLayer, setIsActiveLayer] = useState(false);
   const [thumbUrl, setThumbUrl] = useState('');
   const [collectionImages, setCollectionImages] = useState([]);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const title = layer.title;
   const description = layer.description;
   const tags = layer.type === 'link' ? layer.tags : layer?.tags?.slice(1);
@@ -253,11 +255,18 @@ const LibItem = ({
             <FontAwesomeIcon icon={faExternalLinkAlt} />
           </a>
         ) : layer.type === 'collection' ? (
-          <FontAwesomeIcon
-            onClick={handleLayerClick}
-            icon={faFill}
-            className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
-          />
+          <>
+            <FontAwesomeIcon
+              onClick={handleLayerClick}
+              icon={faFill}
+              className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
+            />
+            <FontAwesomeIcon
+              onClick={() => setOpenDeleteModal(true)}
+              icon={faTrash}
+              className="absolute left-1 top-11 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
+            />
+          </>
         ) : (
           <FontAwesomeIcon
             onClick={handleLayerClick}
@@ -283,13 +292,22 @@ const LibItem = ({
                 </>
               </a>
             ) : layer.type === 'collection' ? (
-              <button
-                className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
-                onClick={handleLayerClick}
-              >
-                <FontAwesomeIcon icon={faFill} className="text-lg mr-2" />{' '}
-                Anwenden
-              </button>
+              <>
+                <button
+                  className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
+                  onClick={handleLayerClick}
+                >
+                  <FontAwesomeIcon icon={faFill} className="text-lg mr-2" />{' '}
+                  Anwenden
+                </button>
+                <button
+                  className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
+                  onClick={() => setOpenDeleteModal(true)}
+                >
+                  <FontAwesomeIcon icon={faTrash} className="text-lg mr-2" />{' '}
+                  Löschen
+                </button>
+              </>
             ) : (
               <button
                 className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
@@ -365,6 +383,30 @@ const LibItem = ({
           ))}
         </p>
       </div>
+      <Modal
+        footer={null}
+        open={openDeleteModal}
+        onCancel={() => setOpenDeleteModal(false)}
+      >
+        <div className="flex flex-col gap-2 p-4">
+          <h3 className="text-lg">Zusammestellung wirklich löschen?</h3>
+          <p className="text-base line-clamp-3 h-[66px]">
+            Diese Aktion kann nicht rückgängig gemacht werden.
+          </p>
+          <div className="flex gap-2 w-full justify-end items-center">
+            <Button onClick={() => setOpenDeleteModal(false)}>Abbrechen</Button>
+            <Button
+              danger
+              onClick={() => {
+                setOpenDeleteModal(false);
+                setAdditionalLayers(layer);
+              }}
+            >
+              Löschen
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
