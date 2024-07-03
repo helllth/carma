@@ -216,6 +216,7 @@ function SearchComponent({
       const score = searchParams.get('score');
       const sort = searchParams.get('sort');
       const limit = searchParams.get('limit');
+      const cat = searchParams.get('cat');
 
       if (sort && sort === 'true') {
         showSortedResults = true;
@@ -247,6 +248,7 @@ function SearchComponent({
           score: r.score.toFixed(1),
         };
       });
+      console.log('xxx result', resultWithRoundScore);
       if (showSortedResults) {
         resultWithRoundScore.sort(customSort);
       }
@@ -254,7 +256,8 @@ function SearchComponent({
       if (defaultLimit !== 0) {
         resultWithRoundScore = limitSearchResult(
           resultWithRoundScore,
-          defaultLimit
+          defaultLimit,
+          parseFloat(cat)
         );
       }
 
@@ -440,11 +443,12 @@ function customSort(a, b) {
   }
 }
 
-function limitSearchResult(searchRes, limit) {
+function limitSearchResult(searchRes, limit, cat = 0.4) {
+  console.log('xxx cat', cat);
   let limitedScore = searchRes[0].score;
   let countOfCategories = 1;
   searchRes.forEach((r) => {
-    if (r.score > limitedScore && countOfCategories < limit) {
+    if (r.score < cat && r.score > limitedScore && countOfCategories < limit) {
       limitedScore = r.score;
       countOfCategories += 1;
     }
