@@ -169,7 +169,7 @@ function SearchComponent({
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
-  pixelwidth = 300,
+  pixelwidth = 1000,
   ifShowCategories: standardSearch = false,
 }) {
   const [options, setOptions] = useState([]);
@@ -178,10 +178,6 @@ function SearchComponent({
   const inputStyle = {
     width: 'calc(100% - 32px)',
     borderTopLeftRadius: 0,
-    // border: '1px solid #1677ff',
-    // borderRadius: '0.25rem',
-    // borderTopLeftRadius: 0,
-    // borderBottomLeftRadius: 0,
   };
   const autoCompleteRef = useRef(null);
   const internalGazetteerHitTrigger = (hit) => {
@@ -327,7 +323,8 @@ function SearchComponent({
     <div
       style={{
         marginTop: '20px',
-        width: pixelwidth,
+        // width: `${pixelwidth}px`,
+        width: '400px',
         display: 'flex',
       }}
       className="fuzzy-search-container"
@@ -447,7 +444,7 @@ function limitSearchResult(searchRes, limit, cut = 0.4) {
   let limitedScore = searchRes[0].score < cut ? searchRes[0].score : cut;
   let countOfCategories = 1;
   searchRes.forEach((r) => {
-    if (r.score <= cut && r.score > limitedScore && countOfCategories < cut) {
+    if (r.score <= cut && r.score > limitedScore && countOfCategories < limit) {
       limitedScore = r.score;
       countOfCategories += 1;
     }
