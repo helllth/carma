@@ -40,7 +40,12 @@ const LibItem = ({
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const title = layer.title;
   const description = layer.description;
-  const tags = layer.type === 'link' ? layer.tags : layer?.tags?.slice(1);
+  const tags =
+    layer.type === 'collection'
+      ? layer.layers.map((l) => l.title)
+      : layer.type === 'link'
+      ? layer.tags
+      : layer?.tags?.slice(1);
 
   // @ts-ignore
   const name = layer.name;
@@ -137,6 +142,17 @@ const LibItem = ({
         });
       } else {
         urls = layers.map((layer) => {
+          const thumbnail = thumbnails.find(
+            (element) =>
+              element?.name ===
+              layer.other.name + '_' + layer.other.service?.name
+          );
+
+          if (thumbnail?.data) {
+            imgUrls.push(thumbnail.data);
+            return null;
+          }
+
           return `${layer.props.url.slice(
             0,
             -1
@@ -210,8 +226,10 @@ const LibItem = ({
           />
         ) : layer.type === 'collection' ? (
           <div
-            className={`grid overflow-clip ${
-              collectionImages.length > 3 ? 'grid-cols-2' : 'grid-rows-2'
+            className={`overflow-clip ${
+              collectionImages.length > 3
+                ? 'grid grid-cols-2'
+                : 'flex flex-col h-full'
             }`}
           >
             {collectionImages.map((imgUrl, i) => {
