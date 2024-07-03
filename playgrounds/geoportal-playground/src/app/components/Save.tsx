@@ -46,7 +46,7 @@ const Save = () => {
       </label>
       <Input
         id="thumbnail"
-        value={title}
+        value={thumbnail}
         onChange={(e) => setThumbnail(e.target.value)}
       />
 
