@@ -16,6 +16,12 @@ const Save = () => {
   const dispatch = useDispatch();
   const layers = useSelector(getLayers);
 
+  const resetStates = () => {
+    setTitle('');
+    setDescription('');
+    setThumbnail('');
+  };
+
   return (
     <div className="p-2 flex flex-col gap-3 w-96">
       {contextHolder}
@@ -72,8 +78,7 @@ const Save = () => {
           };
           try {
             dispatch(appendSavedLayerConfig(config));
-            setTitle('');
-            setDescription('');
+            resetStates();
             messageApi.open({
               type: 'success',
               content: `Konfiguration "${title}" wurde erfolgreich gespeichert.`,
