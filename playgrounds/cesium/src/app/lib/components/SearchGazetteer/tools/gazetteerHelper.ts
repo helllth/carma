@@ -235,13 +235,14 @@ export const builtInGazetteerHitTrigger = (
             id: SELECTED_POLYGON_ID,
             polygon: {
               hierarchy: polygonHierarchyFromPolygonCoords(polygon),
-              material: Color.WHITE.withAlpha(0.5),
+              material: Color.WHITE.withAlpha(0.01),
               outline: false,
               closeBottom: false,
               closeTop: false,
-              extrudedHeight: 0, // falls jemand die Absicht hat eine Mauer zu errichten, kann dies hier getan werden.
+              // needs some Geometry for proper fly to and centering in correct elevation
+              extrudedHeight: 1, // falls jemand die Absicht hat eine Mauer zu errichten, kann dies hier getan werden.
               extrudedHeightReference: HeightReference.RELATIVE_TO_GROUND,
-              height: -50, // height reference needs top compensate for some terrain variation minus the mount point of the polygon to ground
+              height: 0, // height reference needs top compensate for some terrain variation minus the mount point of the polygon to ground
               heightReference: HeightReference.RELATIVE_TO_GROUND,
             },
           });
