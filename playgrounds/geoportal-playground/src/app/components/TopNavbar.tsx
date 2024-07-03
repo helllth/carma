@@ -270,17 +270,17 @@ const TopNavbar = () => {
             <FontAwesomeIcon icon={showLayerButtons ? faEye : faEyeSlash} />
           </button>
         </Tooltip>
-        <Tooltip title="Teilen">
-          <Popover trigger="click" placement="bottom" content={<Share />}>
-            <button className="hover:text-gray-600 text-xl">
-              <FontAwesomeIcon icon={faShareNodes} />
-            </button>
-          </Popover>
-        </Tooltip>
         <Tooltip title="Speichern">
           <Popover trigger="click" placement="bottom" content={<Save />}>
             <button className="hover:text-gray-600 text-xl">
               <FontAwesomeIcon icon={faFileExport} />
+            </button>
+          </Popover>
+        </Tooltip>
+        <Tooltip title="Teilen">
+          <Popover trigger="click" placement="bottom" content={<Share />}>
+            <button className="hover:text-gray-600 text-xl">
+              <FontAwesomeIcon icon={faShareNodes} />
             </button>
           </Popover>
         </Tooltip>
