@@ -4,6 +4,7 @@ import {
   faCircleMinus,
   faCirclePlus,
   faExternalLinkAlt,
+  faFill,
   faMinus,
   faPlus,
   faStar,
@@ -208,7 +209,7 @@ const LibItem = ({
         ) : layer.type === 'collection' ? (
           <div
             className={`grid overflow-clip ${
-              collectionImages.length > 3 ? 'grid-cols-2' : 'grid-cols-1'
+              collectionImages.length > 3 ? 'grid-cols-2' : 'grid-rows-2'
             }`}
           >
             {collectionImages.map((imgUrl, i) => {
@@ -251,6 +252,12 @@ const LibItem = ({
           >
             <FontAwesomeIcon icon={faExternalLinkAlt} />
           </a>
+        ) : layer.type === 'collection' ? (
+          <FontAwesomeIcon
+            onClick={handleLayerClick}
+            icon={faFill}
+            className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
+          />
         ) : (
           <FontAwesomeIcon
             onClick={handleLayerClick}
@@ -275,6 +282,14 @@ const LibItem = ({
                   Öffnen
                 </>
               </a>
+            ) : layer.type === 'collection' ? (
+              <button
+                className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
+                onClick={handleLayerClick}
+              >
+                <FontAwesomeIcon icon={faFill} className="text-lg mr-2" />{' '}
+                Anwenden
+              </button>
             ) : (
               <button
                 className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
