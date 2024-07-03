@@ -174,6 +174,7 @@ const LibModal = ({
                 const mergedLayer = mergeStructures(tmpLayer, newLayers);
 
                 newLayers = mergedLayer;
+                // @ts-ignore
                 setLayers([...customCategories, ...newLayers]);
                 setAllLayers([...customCategories, ...newLayers]);
               } else {
@@ -189,6 +190,7 @@ const LibModal = ({
           });
           const mergedLayer = mergeStructures(tmpLayer, newLayers);
           newLayers = mergedLayer;
+          // @ts-ignore
           setLayers([...customCategories, ...newLayers]);
           setAllLayers([...customCategories, ...newLayers]);
         } else {
@@ -212,7 +214,7 @@ const LibModal = ({
   useEffect(() => {
     let updatedLayers = layers.map((category) => {
       const title = category.Title;
-
+      // @ts-ignore
       customCategories.forEach((customCategory) => {
         if (customCategory.Title === title) {
           category.layers = customCategory.layers;
