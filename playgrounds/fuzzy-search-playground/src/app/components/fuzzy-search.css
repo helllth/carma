@@ -56,6 +56,10 @@
   border: 1px solid #007bff;
 }
 
+.fuzzy-search-container .ant-select-selection-placeholder {
+  color: #adadad;
+}
+
 @media (max-width: 649px) {
   .fuzzy-search-container {
     width: calc(100vw - 20px);
