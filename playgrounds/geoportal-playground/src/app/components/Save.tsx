@@ -11,6 +11,7 @@ const Save = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [thumbnail, setThumbnail] = useState('');
   const dispatch = useDispatch();
   const layers = useSelector(getLayers);
 
@@ -40,6 +41,14 @@ const Save = () => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
+      <label className="mb-0" htmlFor="thumbnail">
+        Vorschaubild:
+      </label>
+      <Input
+        id="thumbnail"
+        value={title}
+        onChange={(e) => setThumbnail(e.target.value)}
+      />
 
       <Button
         onClick={() => {
@@ -48,6 +57,7 @@ const Save = () => {
             description,
             type: 'collection',
             layers,
+            thumbnail,
             id: nanoid(),
           };
           try {
