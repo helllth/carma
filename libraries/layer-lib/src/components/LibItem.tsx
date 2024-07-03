@@ -4,9 +4,9 @@ import {
   faCircleMinus,
   faCirclePlus,
   faExternalLinkAlt,
-  faFill,
   faMinus,
   faPlus,
+  faSquareUpRight,
   faStar,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
@@ -276,7 +276,7 @@ const LibItem = ({
           <>
             <FontAwesomeIcon
               onClick={handleLayerClick}
-              icon={faFill}
+              icon={faSquareUpRight}
               className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
             />
             <FontAwesomeIcon
@@ -315,7 +315,10 @@ const LibItem = ({
                   className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
                   onClick={handleLayerClick}
                 >
-                  <FontAwesomeIcon icon={faFill} className="text-lg mr-2" />{' '}
+                  <FontAwesomeIcon
+                    icon={faSquareUpRight}
+                    className="text-lg mr-2"
+                  />{' '}
                   Anwenden
                 </button>
                 <button
