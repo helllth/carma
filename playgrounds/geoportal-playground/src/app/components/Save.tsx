@@ -1,11 +1,12 @@
-import { faFileExport } from '@fortawesome/free-solid-svg-icons';
+import { faFileExport, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Input, message } from 'antd';
+import { Button, Input, Tooltip, message } from 'antd';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { appendSavedLayerConfig, getLayers } from '../store/slices/mapping';
 import './popover.css';
 import { nanoid } from '@reduxjs/toolkit';
+import { faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
 
 const Save = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -39,12 +40,23 @@ const Save = () => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <label className="-mb-2 font-medium" htmlFor="thumbnail">
-        Vorschaubild:
-      </label>
+      <div className="flex gap-1 -mb-2 font-medium items-center">
+        <label className="mb-0 font-medium" htmlFor="thumbnail">
+          Vorschaubild
+        </label>
+        <Tooltip
+          placement="bottom"
+          title="Das Vorschaubild wird automatisch generiert wenn keine URL angegeben wird."
+          arrow={false}
+          trigger={['hover', 'click']}
+        >
+          <FontAwesomeIcon icon={faQuestionCircle} className="text-sm" />
+        </Tooltip>
+      </div>
       <Input
         id="thumbnail"
         value={thumbnail}
+        placeholder="Vorschau URL"
         onChange={(e) => setThumbnail(e.target.value)}
       />
 
