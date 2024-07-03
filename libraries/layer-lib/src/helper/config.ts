@@ -649,61 +649,6 @@ export const baseConfig = {
         ],
       },
       {
-        name: 'gewaesser:biotope',
-      },
-      {
-        name: 'gewaesser:gewnamen',
-      },
-      {
-        name: 'gewaesser:linien',
-      },
-      {
-        name: 'gewaesser:teiche',
-        pictureBoundingBox: [
-          790989.4779520752, 6664143.201786021, 800673.0939729535,
-          6670157.840449209,
-        ],
-      },
-      {
-        name: 'gewaesser:quellen',
-        pictureBoundingBox: [
-          790989.4779520752, 6664143.201786021, 800673.0939729535,
-          6670157.840449209,
-        ],
-      },
-      {
-        name: 'gewaesser:station',
-      },
-      {
-        name: 'gewaesser:strukturguete',
-      },
-      {
-        name: 'gewaesser:einleitungen',
-        pictureBoundingBox: [
-          790989.4779520752, 6664143.201786021, 800673.0939729535,
-          6670157.840449209,
-        ],
-      },
-      {
-        name: 'gewaesser:querbauten',
-      },
-      {
-        name: 'gewaesser:massnaue',
-      },
-      {
-        name: 'gewaesser:entwicklungsziel',
-      },
-      {
-        name: 'gewaesser:massnahmen',
-      },
-      {
-        name: 'gewaesser:querbauweg',
-        pictureBoundingBox: [
-          792828.7439451873, 6668492.946426873, 797161.7679861032,
-          6671500.2657584725,
-        ],
-      },
-      {
         name: 'uschwemm_ermittelt',
         pictureBoundingBox: [
           790989.4779520752, 6664143.201786021, 800673.0939729535,
