@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { FolderApi, Pane } from 'tweakpane';
 import localForage from 'localforage';
+import { hasHashParam, removeHashParam, removeParamFromString } from './utils';
 
 interface TweakpaneContextType {
   //isEnabled: boolean;
@@ -77,12 +78,15 @@ const TweakpaneProvider: React.FC<{
   const containerRef = useRef<HTMLDivElement>(null);
   const paneRef = useRef<Pane | null>(null);
 
+  const disableTweakpane = () => {
+    setIsEnabled(false);
+    localForage.removeItem(localForageKey);
+    removeHashParam(hashparam);
+  };
+
   useEffect(() => {
     const checkHashAndStoredState = async () => {
-      console.log('Dev mode check');
-      const hashParams = new URLSearchParams(window.location.hash.split('?')[1]);
-      const isEnabledFromHash = hashParams.has(hashparam);
-      console.log('Dev mode check', ...hashParams.keys(), isEnabledFromHash);
+      const isEnabledFromHash = hasHashParam(hashparam);
       if (isEnabledFromHash) {
         // If 'dev' is in the URL, enable debug view immediately
         console.log('Dev mode enabled from hash');
@@ -99,9 +103,12 @@ const TweakpaneProvider: React.FC<{
 
     const toggleTweakpane = (event: KeyboardEvent) => {
       if (eventKeys.includes(event.key)) {
+        // dev state should not be persited in URL when sharing
         setIsEnabled((prevState) => {
-          localForage.setItem(localForageKey, !prevState);
-          return !prevState;
+          const newState = !prevState;
+          localForage.setItem(localForageKey, newState);
+          newState === false && removeHashParam(hashparam);
+          return newState;
         });
       }
     };
@@ -118,6 +125,14 @@ const TweakpaneProvider: React.FC<{
         container: containerRef.current,
       });
       paneRef.current = pane;
+
+      const closeButton = pane.addButton({
+        title: 'Close This Dev GUI',
+        label: 'Toggle with F12 or ~',
+      });
+      closeButton.on('click', () => {
+        disableTweakpane();
+      });
     }
 
     return () => {
