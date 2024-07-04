@@ -4,7 +4,9 @@ import {
   Scene,
   Cartographic,
   Cartesian3,
+  GroundPrimitive,
   PolygonHierarchy,
+  Viewer,
 } from 'cesium';
 
 export const distanceFromZoomLevel = (zoom: number) => {
@@ -74,3 +76,33 @@ export const invertedPolygonHierarchy = (
     [LON_MIN, LAT_MIN],
   ]
 ) => polygonHierarchyFromPolygonCoords([outerPolygon, polygon]);
+
+export function removeGroundPrimitiveById(viewer: Viewer, id: string): boolean {
+  const groundPrimitives = viewer.scene.groundPrimitives;
+  console.log(groundPrimitives)
+
+  for (let i = 0; i < groundPrimitives.length; ++i) {
+    const primitive = groundPrimitives.get(i);
+    if (primitive instanceof GroundPrimitive) {
+      // Check if the primitive's geometryInstances has the matching id
+      // needs that   
+      // releaseGeometryInstances: false
+      // on the primitive constructor, not other obvious way to get the id of it otherwise.
+
+      console.log("remove",i,primitive);
+      if (Array.isArray(primitive.geometryInstances)) {
+        for (const instance of primitive.geometryInstances) {
+          if (instance.id === id) {
+            groundPrimitives.remove(primitive);
+            return true;
+          }
+        }
+      } else if (primitive.geometryInstances?.id === id) {
+        groundPrimitives.remove(primitive);
+        return true;
+      }
+    }
+  }
+
+  return false;
+}

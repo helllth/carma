@@ -37,7 +37,6 @@ export const useClickActionTileset = (
       position,
     }: ScreenSpaceEventHandler.PositionedEvent) => {
       if (!position) return;
-
       const pickedObjects = scene.drillPick(position, drillPickLimit);
       let feature;
 
@@ -55,9 +54,8 @@ export const useClickActionTileset = (
       const pickedPosition = position && scene.pickPosition(position);
 
       if (defined(feature)) {
-        //console.log('pickedFeature', feature);
         if (feature instanceof Cesium3DTileFeature) {
-          const propertyIds = feature.getPropertyIds();
+                    const propertyIds = feature.getPropertyIds();
           const properties = propertyIds.reduce((acc, propertyId) => {
             return {
               ...acc,

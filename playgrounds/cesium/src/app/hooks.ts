@@ -47,6 +47,7 @@ export const useClickActionFootprints = (
       const pickedFeature = position && scene.pick(position);
       const pickedPosition = position && scene.pickPosition(position);
 
+
       if (defined(pickedFeature) && pickedFeature.id?.properties) {
         const selectedFeatureId =
           pickedFeature.id.properties[idProperty].getValue();
@@ -120,6 +121,7 @@ export const useSecondaryStyleTilesetClickHandler = () => {
       }
 
       const pickedObject = viewer.scene.pick(movement.position);
+      console.log("SCENE PICK: secondary", pickedObject); 
       if (!pickedObject) return;
 
       if (pickedObject.primitive instanceof Cesium3DTileset) {

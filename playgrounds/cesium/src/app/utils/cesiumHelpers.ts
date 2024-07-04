@@ -211,6 +211,7 @@ export function pickFromClampedGeojson(
   limit: number = GEOJSON_DRILL_LIMIT
 ): Entity | null {
   const pickedObjects = viewer.scene.drillPick(position, limit);
+  console.log('SCENE DRILL PICK:', pickedObjects);
   return getLastGroundPrimitive(pickedObjects);
 }
 

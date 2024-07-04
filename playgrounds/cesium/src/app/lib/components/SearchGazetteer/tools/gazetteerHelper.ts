@@ -7,12 +7,14 @@ import {
   BoundingSphere,
   Cartesian3,
   Cartographic,
+  ClassificationType,
   Color,
-  EasingFunction,
+  ColorGeometryInstanceAttribute,
   Entity,
+  GeometryInstance,
+  GroundPrimitive,
   HeightReference,
-  PolygonGraphics,
-  PolygonHierarchy,
+  PolygonGeometry,
   Scene,
   Viewer,
 } from 'cesium';
@@ -28,6 +30,7 @@ import {
   getPositionWithHeightAsync,
   distanceFromZoomLevel,
   invertedPolygonHierarchy,
+  removeGroundPrimitiveById,
 } from './cesium';
 import { addMarker, removeMarker } from './cesium3dMarker';
 
@@ -224,7 +227,8 @@ export const builtInGazetteerHitTrigger = (
         // add marker entity to map
         removeMarker(viewer);
         viewer.entities.removeById(SELECTED_POLYGON_ID);
-        viewer.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
+        //viewer.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
+        removeGroundPrimitiveById(viewer, INVERTED_SELECTED_POLYGON_ID);
         const posHeight = await getPositionWithHeightAsync(
           viewer.scene,
           Cartographic.fromDegrees(pos.lon, pos.lat)
@@ -246,23 +250,31 @@ export const builtInGazetteerHitTrigger = (
               heightReference: HeightReference.RELATIVE_TO_GROUND,
             },
           });
-          const invertedPolygonEntity = new Entity({
+          // For the inverted polygon
+          const invertedPolygonGeometry = new PolygonGeometry({
+            polygonHierarchy: invertedPolygonHierarchy(polygon),
+            //height: 0,
+          });
+
+          const invertedGeometryInstance = new GeometryInstance({
+            geometry: invertedPolygonGeometry,
             id: INVERTED_SELECTED_POLYGON_ID,
-            polygon: {
-              hierarchy: invertedPolygonHierarchy(polygon),
-              material: Color.GRAY.withAlpha(0.66),
-              outline: false,
-              //closeBottom: false,
-              //extrudedHeight: 200,
-              //extrudedHeightReference: HeightReference.RELATIVE_TO_GROUND,
-              height: undefined,
-              zIndex: -1,
-              //heightReference: HeightReference.RELATIVE_TO_GROUND,
+            attributes: {
+              color: ColorGeometryInstanceAttribute.fromColor(Color.GRAY.withAlpha(0.66)),
             },
           });
 
+          const invertedGroundPrimitive = new GroundPrimitive({
+            geometryInstances: invertedGeometryInstance,
+            allowPicking: false,
+            releaseGeometryInstances: false, // needed to get ID
+            //classificationType: ClassificationType.BOTH,
+          });
+
+          viewer.scene.groundPrimitives.add(invertedGroundPrimitive);
+
           viewer.entities.add(polygonEntity);
-          viewer.entities.add(invertedPolygonEntity);
+          //viewer.entities.add(invertedPolygonEntity);
           viewer.flyTo(polygonEntity);
         } else {
           marker3dStyle && addMarker(viewer, posHeight, marker3dStyle);

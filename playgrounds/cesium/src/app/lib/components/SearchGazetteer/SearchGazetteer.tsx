@@ -17,6 +17,7 @@ import {
 } from './tools/gazetteerHelper';
 import { Viewer } from 'cesium';
 import { removeMarker } from './tools/cesium3dMarker';
+import { removeGroundPrimitiveById } from './tools/cesium';
 
 const renderItem = (address) => {
   return {
@@ -189,7 +190,8 @@ export function SearchGazetteer({
     if (cesiumRef) {
       removeMarker(cesiumRef);
       cesiumRef.entities.removeById(SELECTED_POLYGON_ID);
-      cesiumRef.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
+      //cesiumRef.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
+      removeGroundPrimitiveById(cesiumRef, INVERTED_SELECTED_POLYGON_ID);
     }
     //setOverlayFeature(null);
   };
