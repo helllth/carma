@@ -328,8 +328,12 @@ function SearchComponent({
 
       items.forEach((item) => {
         const itemWidth = item.offsetWidth;
-        if (itemWidth > maxWidth) {
-          maxWidth = itemWidth;
+        const checkOverflow = item.scrollWidth > item.clientWidth;
+        const itemScrollWidth = item.scrollWidth;
+        if (checkOverflow && maxWidth < itemScrollWidth) {
+          maxWidth = itemScrollWidth;
+
+          console.log('xxx checkOverflow', checkOverflow, itemScrollWidth);
         }
       });
 
@@ -339,14 +343,15 @@ function SearchComponent({
 
       if (
         dropdown &&
-        !dropdown.classList.contains('ant-select-dropdown-hidden')
+        !dropdown.classList.contains('ant-select-dropdown-hidden') &&
+        maxWidth > pixelwidth
       ) {
         console.log('xxx list holder', maxWidth);
         const listHolder = dropdown.querySelector(
           '.rc-virtual-list-holder > div:first-child'
         );
 
-        // listHolder.style.width = `${maxWidth}px`;
+        listHolder.style.width = `${maxWidth + 60}px`;
       }
     }
   }, [dropdownContainerRef, options]);
