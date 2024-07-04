@@ -100,14 +100,12 @@ const LibModal = ({
   function findDifferences(array1, array2) {
     // Find layers in array1 but not in array2
     const missingInConfig = array1.filter(
-      (layer1) =>
-        !array2.some((layer2) => layer2.name === layer1.Name.toLowerCase())
+      (layer1) => !array2.some((layer2) => layer2.name === layer1.Name)
     );
 
     // Find layers in array2 but not in array1
     const missingInWms = array2.filter(
-      (layer2) =>
-        !array1.some((layer1) => layer1.Name.toLowerCase() === layer2.name)
+      (layer2) => !array1.some((layer1) => layer1.Name === layer2.name)
     );
 
     return {
