@@ -223,7 +223,7 @@ const TopNavbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-6 absolute left-1/2 -ml-[70px]">
+      <div className="flex items-center gap-6 absolute left-1/2 -ml-[98px]">
         <Tooltip title="Refresh">
           <button
             onClick={() => {
