@@ -174,6 +174,7 @@ function SearchComponent({
     borderTopLeftRadius: 0,
   };
   const autoCompleteRef = useRef(null);
+  const dropdownContainerRef = useRef(null);
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
       hit,
@@ -316,6 +317,40 @@ function SearchComponent({
     setValue('');
   };
 
+  useEffect(() => {
+    console.log('xxx custom dropdown');
+    if (dropdownContainerRef.current) {
+      const container = dropdownContainerRef.current;
+      const items = container.querySelectorAll(
+        '.ant-select-item-option-content'
+      );
+      let maxWidth = 0;
+
+      items.forEach((item) => {
+        const itemWidth = item.offsetWidth;
+        if (itemWidth > maxWidth) {
+          maxWidth = itemWidth;
+        }
+      });
+
+      console.log('xxx maxWidth', maxWidth);
+
+      const dropdown = document.querySelector('.ant-select-dropdown');
+
+      if (
+        dropdown &&
+        !dropdown.classList.contains('ant-select-dropdown-hidden')
+      ) {
+        console.log('xxx list holder', maxWidth);
+        const listHolder = dropdown.querySelector(
+          '.rc-virtual-list-holder > div:first-child'
+        );
+
+        // listHolder.style.width = `${maxWidth}px`;
+      }
+    }
+  }, [dropdownContainerRef, options]);
+
   return (
     <div
       style={{
@@ -366,6 +401,14 @@ function SearchComponent({
           onSelect={(value, option) => handleOnSelect(option)}
           defaultActiveFirstOption={true}
           popupClassName="custom-autocomplete-dropdown"
+          dropdownRender={(item) => {
+            // console.log('xxx dropdown render', item);
+            return (
+              <div className="fuzzy-dropdownwrapper" ref={dropdownContainerRef}>
+                {item}
+              </div>
+            );
+          }}
         />
       ) : (
         <AutoComplete
