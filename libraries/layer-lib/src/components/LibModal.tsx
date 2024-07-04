@@ -8,8 +8,10 @@ import { InView } from 'react-intersection-observer';
 import WMSCapabilities from 'wms-capabilities';
 import { baseConfig as config, serviceConfig } from '../helper/config';
 import {
+  findDifferences,
   findLayerAndAddTags,
   flattenLayer,
+  getAllLeafLayers,
   getLayerStructure,
   mergeStructures,
 } from '../helper/layerHelper';
@@ -77,42 +79,6 @@ const LibModal = ({
   const [searchValue, setSearchValue] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const debouncedSearchTerm = useDebounce(searchValue, 300);
-
-  function getLeafLayers(layer, leafLayers = []) {
-    // Check if the layer has sub-layers
-    if (layer.Layer && Array.isArray(layer.Layer) && layer.Layer.length > 0) {
-      // Recursively check each sub-layer
-      layer.Layer.forEach((subLayer) => getLeafLayers(subLayer, leafLayers));
-    } else {
-      // If no sub-layers, it's a leaf layer, add it to the list
-      // @ts-ignore
-      leafLayers.push(layer);
-    }
-    return leafLayers;
-  }
-
-  function getAllLeafLayers(capabilities) {
-    // Start the recursive search from the top-level layers
-    const rootLayer = capabilities.Capability.Layer;
-    return getLeafLayers(rootLayer);
-  }
-
-  function findDifferences(array1, array2) {
-    // Find layers in array1 but not in array2
-    const missingInConfig = array1.filter(
-      (layer1) => !array2.some((layer2) => layer2.name === layer1.Name)
-    );
-
-    // Find layers in array2 but not in array1
-    const missingInWms = array2.filter(
-      (layer2) => !array1.some((layer1) => layer1.Name === layer2.name)
-    );
-
-    return {
-      missingInConfig,
-      missingInWms,
-    };
-  }
 
   const checkDifferences = (url, configName) => {
     fetch(`${url}?service=WMS&request=GetCapabilities&version=1.1.1`)

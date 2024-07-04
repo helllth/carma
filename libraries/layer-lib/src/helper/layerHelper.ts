@@ -55,12 +55,41 @@ export const createBaseConfig = (layers) => {
   return null;
 };
 
+const getLeafLayers = (layer, leafLayers = []) => {
+  // Check if the layer has sub-layers
+  if (layer.Layer && Array.isArray(layer.Layer) && layer.Layer.length > 0) {
+    // Recursively check each sub-layer
+    layer.Layer.forEach((subLayer) => getLeafLayers(subLayer, leafLayers));
+  } else {
+    // If no sub-layers, it's a leaf layer, add it to the list
+    // @ts-ignore
+    leafLayers.push(layer);
+  }
+  return leafLayers;
+};
+
+export const getAllLeafLayers = (capabilities) => {
+  const rootLayer = capabilities.Capability.Layer;
+  return getLeafLayers(rootLayer);
+};
+
+export const findDifferences = (array1, array2) => {
+  const missingInConfig = array1.filter(
+    (layer1) => !array2.some((layer2) => layer2.name === layer1.Name)
+  );
+
+  return {
+    missingInConfig,
+  };
+};
+
 const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
   let item: Item = {
     title: layer.Title,
     description: layer.Abstract,
     tags: layer.tags,
     id: serviceName + ':' + layer.Name,
+    name: layer.Name,
     type: 'layer',
     layerType: 'wmts',
     props: { ...layer },
@@ -122,9 +151,41 @@ export const getLayerStructure = ({
         }
       }
     }
+
+    if (wms && serviceName === services[categoryConfig.serviceName].name) {
+      const missingInConfig = findDifferences(
+        getAllLeafLayers(wms),
+        categoryConfig.layers
+      );
+
+      for (const layer of missingInConfig.missingInConfig) {
+        const wmsLayer = findLayerAndAddTags(
+          wms.Capability.Layer,
+          layer.Name,
+          []
+        );
+        let foundLayer = wmsLayerToGenericItem(wmsLayer, serviceName);
+        // @ts-ignore
+        foundLayer.props['url'] =
+          wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
+
+        let tags = foundLayer.tags;
+        tags[0] = categoryObject.Title;
+        foundLayer = {
+          ...foundLayer,
+          ...layer,
+          tags,
+          service: services[categoryConfig.serviceName],
+        };
+
+        layers.push(foundLayer);
+      }
+    }
+
     categoryObject.layers = layers;
     structure.push(categoryObject);
   }
+
   return structure;
 };
 
