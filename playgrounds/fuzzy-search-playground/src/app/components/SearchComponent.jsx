@@ -163,7 +163,7 @@ function SearchComponent({
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
-  pixelwidth = 400,
+  pixelwidth = 300,
   ifShowCategories: standardSearch = false,
 }) {
   const [options, setOptions] = useState([]);
@@ -320,7 +320,7 @@ function SearchComponent({
     <div
       style={{
         marginTop: '20px',
-        // width: pixelwidth,
+        width: pixelwidth,
         display: 'flex',
       }}
       className="fuzzy-search-container"
@@ -365,6 +365,7 @@ function SearchComponent({
           value={value}
           onSelect={(value, option) => handleOnSelect(option)}
           defaultActiveFirstOption={true}
+          popupClassName="custom-autocomplete-dropdown"
         />
       ) : (
         <AutoComplete
