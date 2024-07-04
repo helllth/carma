@@ -174,7 +174,6 @@ function SearchComponent({
     borderTopLeftRadius: 0,
   };
   const autoCompleteRef = useRef(null);
-  const dropdownContainerRef = useRef(null);
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
       hit,
@@ -190,9 +189,7 @@ function SearchComponent({
   const [searchResult, setSearchResult] = useState([]);
   const [allGazeteerData, setAllGazeteerData] = useState([]);
   const [value, setValue] = useState('');
-  const [searchParams, setSearchParams] = useState(null);
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
-  const [showScore, setShowScore] = useState(false);
 
   const handleSearchAutoComplete = (value) => {
     let ifShowScore = null;
@@ -317,67 +314,6 @@ function SearchComponent({
     setValue('');
   };
 
-  // useEffect(() => {
-  //   if (dropdownContainerRef.current) {
-  //     const handleScroll = () => {
-  //       const dropdown = document.querySelector('.ant-select-dropdown');
-
-  //       const container = dropdownContainerRef.current;
-
-  //       const inputWidth = document.querySelector(
-  //         '.ant-select-selection-search-input'
-  //       ).clientWidth;
-
-  //       console.log('yyy inputWidth', inputWidth);
-
-  //       if (
-  //         dropdown &&
-  //         !dropdown.classList.contains('ant-select-dropdown-hidden')
-  //       ) {
-  //         const listHolder = dropdown.querySelector(
-  //           '.rc-virtual-list-holder > div:first-child'
-  //         );
-  //         const dropdownWidth = inputWidth;
-  //         let maxWidth = 0;
-
-  //         const items = container.querySelectorAll(
-  //           '.ant-select-item-option-content'
-  //         );
-
-  //         items.forEach((item, idx) => {
-  //           const checkOverflow = item.scrollWidth > dropdownWidth;
-  //           const itemScrollWidth = item.scrollWidth;
-  //           console.log(
-  //             'yyy debug dropdownContainerRef.current, itemScrollWidth, item.clientWidth',
-  //             dropdownWidth,
-  //             itemScrollWidth,
-  //             item.clientWidth,
-  //             idx
-  //           );
-  //           if (checkOverflow && itemScrollWidth > maxWidth) {
-  //             maxWidth = itemScrollWidth;
-  //           }
-  //         });
-
-  //         console.log('yyy maxwidth', maxWidth);
-
-  //         if (maxWidth > dropdownWidth - 60) {
-  //           const listHolderHeight = listHolder.style.height;
-  //           listHolder.style.width = `${maxWidth + 60}px`;
-  //         } else {
-  //           listHolder.style.width = `${dropdownWidth}px`;
-  //         }
-  //       }
-  //     };
-
-  //     handleScroll();
-
-  //     dropdownContainerRef.current.addEventListener('scroll', () =>
-  //       console.log('yyy scroll')
-  //     );
-  //   }
-  // }, [dropdownContainerRef, options]);
-
   return (
     <div
       style={{
@@ -427,15 +363,6 @@ function SearchComponent({
           value={value}
           onSelect={(value, option) => handleOnSelect(option)}
           defaultActiveFirstOption={true}
-          popupClassName="custom-autocomplete-dropdown"
-          dropdownRender={(item) => {
-            // console.log('xxx dropdown render', item);
-            return (
-              <div className="fuzzy-dropdownwrapper" ref={dropdownContainerRef}>
-                {item}
-              </div>
-            );
-          }}
         />
       ) : (
         <AutoComplete
@@ -490,9 +417,6 @@ function prepareGazData(data) {
 }
 
 function customSort(a, b) {
-  // const newA = a.item.xSearchData;
-  // const newB = b.item.xSearchData;
-
   if (a.score !== b.score) {
     return a.score - b.score;
   }
