@@ -52,7 +52,7 @@ const getGazData = async (setGazData) => {
   setGazData(gazData);
 };
 
-function App() {
+function App({ vectorStyles = [] }) {
   const [syncToken, setSyncToken] = useState(null);
   const [layers, setLayers] = useState('');
   useEffect(() => {
@@ -71,7 +71,7 @@ function App() {
   }, []);
   const backgroundConfigurations = {
     stadtplan: {
-      layerkey: 'basemap_relief@40',
+      layerkey: 'wupp-plan-live',
       src: '/images/rain-hazard-map-bg/citymap.png',
       title: 'Stadtplan',
     },
@@ -80,6 +80,12 @@ function App() {
       src: '/images/rain-hazard-map-bg/ortho.png',
       title: 'Luftbildkarte',
     },
+    basemap: {
+      layerkey: 'basemap_relief@10',
+      src: '/images/rain-hazard-map-bg/citymap.png',
+      title: 'basemap',
+    },
+
     vector1: {
       layerkey: 'OMT_Klokantech_basic@100',
       src: '/images/rain-hazard-map-bg/citymap.png',
@@ -93,9 +99,9 @@ function App() {
   };
   const backgroundModes = [
     {
-      title: 'Vektorbasierter Layer (Klokantech Basic)',
+      title: 'Vektorbasierter Layer (Basemap.de)',
       mode: 'default',
-      layerKey: 'vector1',
+      layerKey: 'basemap',
     },
     {
       title: 'Vektorbasierter Layer (OSM bright)',
@@ -110,33 +116,6 @@ function App() {
     { title: 'Luftbildkarte', mode: 'default', layerKey: 'lbk' },
   ];
 
-  // const layersConfig = [
-  //   {
-  //     title: 'Kanal',
-  //     type: 'vector',
-  //     style: 'https://omt.map-hosting.de/styles/kanal/style.json',
-  //     pane: 'additionalLayers1',
-  //   },
-  //   {
-  //     title: 'Bäume',
-  //     type: 'vector',
-  //     style: 'https://omt.map-hosting.de/styles/baeume/style.json',
-  //     pane: 'additionalLayers1',
-  //   },
-  //   {
-  //     title: 'POIs',
-  //     type: 'vector',
-  //     style: 'https://omt.map-hosting.de/styles/pois/style.json',
-  //     pane: 'additionalLayers1',
-  //   },
-  //   {
-  //     title: 'Solar',
-  //     type: 'vector',
-  //     style: 'https://omt.map-hosting.de/styles/solar/style.json',
-  //     pane: 'additionalLayers1',
-  //   },
-  // ];
-
   const content = (
     <TopicMapContextProvider
       appKey="VectorPlaygroundWuppertal.TopicMap"
@@ -146,42 +125,17 @@ function App() {
       referenceSystemDefinition={MappingConstants.proj4crs3857def}
     >
       <TopicMapComponent maxZoom={22} gazData={gazData} locatorControl={true}>
-        {layers.includes('kanal') && (
-          <CismapLayer
-            {...{
-              type: 'vector',
-              style: 'https://omt.map-hosting.de/styles/kanal/style.json',
-              pane: 'additionalLayers1',
-            }}
-          />
-        )}
-        {layers.includes('baeume') && (
-          <CismapLayer
-            {...{
-              type: 'vector',
-              style: 'https://omt.map-hosting.de/styles/baeume/style.json',
-              pane: 'additionalLayers2',
-            }}
-          />
-        )}
-        {layers.includes('pois') && (
-          <CismapLayer
-            {...{
-              type: 'vector',
-              style: 'https://omt.map-hosting.de/styles/pois/style.json',
-              pane: 'additionalLayers3',
-            }}
-          />
-        )}
-        {layers.includes('solar') && (
-          <CismapLayer
-            {...{
-              type: 'vector',
-              style: 'https://omt.map-hosting.de/styles/solar/style.json',
-              pane: 'additionalLayers4',
-            }}
-          />
-        )}
+        {vectorStyles.map((style, index) => {
+          return (
+            <CismapLayer
+              {...{
+                type: 'vector',
+                style: style,
+                pane: 'additionalLayers' + index,
+              }}
+            />
+          );
+        })}
       </TopicMapComponent>
     </TopicMapContextProvider>
   );

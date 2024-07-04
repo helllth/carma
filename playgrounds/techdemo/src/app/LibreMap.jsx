@@ -56,15 +56,20 @@ export default function LibreMap(props = { opacity: 0.1 }) {
     map.current.on('load', function () {
       console.log('on"load"');
 
-      map.current.addSource('wms-test-source', {
-        type: 'raster',
-        // use the tiles option to specify a WMS tile source URL
-        // https://maplibre.org/maplibre-gl-js-docs/style-spec/sources/
-        tiles: [
-          'https://maps.wuppertal.de/deegree/wms?service=WMS&request=GetMap&layers=R102%3Atrueortho202010&styles=&format=image%2Fpng&transparent=false&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=256&height=256&srs=EPSG%3A3857&bbox={bbox-epsg-3857}',
-        ],
-        tileSize: 256,
-      });
+      map.current.addSource(
+        'wms-test-source',
+
+        {
+          type: 'raster',
+          // use the tiles option to specify a WMS tile source URL
+          // https://maplibre.org/maplibre-gl-js-docs/style-spec/sources/
+          tiles: [
+            'https://maps.wuppertal.de/karten?service=WMS&request=GetMap&layers=R102:trueortho2022&styles=&format=image%2Fpng&transparent=false&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=256&height=256&srs=EPSG%3A3857&bbox={bbox-epsg-3857}',
+          ],
+          tileSize: 256,
+        }
+      );
+
       map.current.addSource('terrainSource', {
         type: 'raster-dem',
         tiles: [
@@ -107,26 +112,26 @@ export default function LibreMap(props = { opacity: 0.1 }) {
         },
       });
 
-      map.current.addLayer({
-        id: '3d-buildings',
-        source: 'openmaptiles',
-        'source-layer': 'building',
+      // map.current.addLayer({
+      //   id: '3d-buildings',
+      //   source: 'openmaptiles',
+      //   'source-layer': 'building',
 
-        type: 'fill-extrusion',
-        minzoom: 15,
-        paint: {
-          'fill-extrusion-color': '#aaa',
-          'fill-extrusion-height': {
-            type: 'identity',
-            property: 'render_height',
-          },
-          'fill-extrusion-base': {
-            type: 'identity',
-            property: 'render_min_height',
-          },
-          'fill-extrusion-opacity': 0.5,
-        },
-      });
+      //   type: 'fill-extrusion',
+      //   minzoom: 15,
+      //   paint: {
+      //     'fill-extrusion-color': '#aaa',
+      //     'fill-extrusion-height': {
+      //       type: 'identity',
+      //       property: 'render_height',
+      //     },
+      //     'fill-extrusion-base': {
+      //       type: 'identity',
+      //       property: 'render_min_height',
+      //     },
+      //     'fill-extrusion-opacity': 0.5,
+      //   },
+      // });
 
       console.log('map.current', map.current);
     });
