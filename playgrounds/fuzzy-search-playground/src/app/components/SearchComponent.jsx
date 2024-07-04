@@ -317,44 +317,66 @@ function SearchComponent({
     setValue('');
   };
 
-  useEffect(() => {
-    console.log('xxx custom dropdown');
-    if (dropdownContainerRef.current) {
-      const container = dropdownContainerRef.current;
-      const items = container.querySelectorAll(
-        '.ant-select-item-option-content'
-      );
-      let maxWidth = 0;
+  // useEffect(() => {
+  //   if (dropdownContainerRef.current) {
+  //     const handleScroll = () => {
+  //       const dropdown = document.querySelector('.ant-select-dropdown');
 
-      items.forEach((item) => {
-        const itemWidth = item.offsetWidth;
-        const checkOverflow = item.scrollWidth > item.clientWidth;
-        const itemScrollWidth = item.scrollWidth;
-        if (checkOverflow && maxWidth < itemScrollWidth) {
-          maxWidth = itemScrollWidth;
+  //       const container = dropdownContainerRef.current;
 
-          console.log('xxx checkOverflow', checkOverflow, itemScrollWidth);
-        }
-      });
+  //       const inputWidth = document.querySelector(
+  //         '.ant-select-selection-search-input'
+  //       ).clientWidth;
 
-      console.log('xxx maxWidth', maxWidth);
+  //       console.log('yyy inputWidth', inputWidth);
 
-      const dropdown = document.querySelector('.ant-select-dropdown');
+  //       if (
+  //         dropdown &&
+  //         !dropdown.classList.contains('ant-select-dropdown-hidden')
+  //       ) {
+  //         const listHolder = dropdown.querySelector(
+  //           '.rc-virtual-list-holder > div:first-child'
+  //         );
+  //         const dropdownWidth = inputWidth;
+  //         let maxWidth = 0;
 
-      if (
-        dropdown &&
-        !dropdown.classList.contains('ant-select-dropdown-hidden') &&
-        maxWidth > pixelwidth
-      ) {
-        console.log('xxx list holder', maxWidth);
-        const listHolder = dropdown.querySelector(
-          '.rc-virtual-list-holder > div:first-child'
-        );
+  //         const items = container.querySelectorAll(
+  //           '.ant-select-item-option-content'
+  //         );
 
-        listHolder.style.width = `${maxWidth + 60}px`;
-      }
-    }
-  }, [dropdownContainerRef, options]);
+  //         items.forEach((item, idx) => {
+  //           const checkOverflow = item.scrollWidth > dropdownWidth;
+  //           const itemScrollWidth = item.scrollWidth;
+  //           console.log(
+  //             'yyy debug dropdownContainerRef.current, itemScrollWidth, item.clientWidth',
+  //             dropdownWidth,
+  //             itemScrollWidth,
+  //             item.clientWidth,
+  //             idx
+  //           );
+  //           if (checkOverflow && itemScrollWidth > maxWidth) {
+  //             maxWidth = itemScrollWidth;
+  //           }
+  //         });
+
+  //         console.log('yyy maxwidth', maxWidth);
+
+  //         if (maxWidth > dropdownWidth - 60) {
+  //           const listHolderHeight = listHolder.style.height;
+  //           listHolder.style.width = `${maxWidth + 60}px`;
+  //         } else {
+  //           listHolder.style.width = `${dropdownWidth}px`;
+  //         }
+  //       }
+  //     };
+
+  //     handleScroll();
+
+  //     dropdownContainerRef.current.addEventListener('scroll', () =>
+  //       console.log('yyy scroll')
+  //     );
+  //   }
+  // }, [dropdownContainerRef, options]);
 
   return (
     <div
