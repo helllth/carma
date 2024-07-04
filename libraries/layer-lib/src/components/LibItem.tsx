@@ -47,7 +47,6 @@ const LibItem = ({
       ? layer.tags
       : layer?.tags?.slice(1);
 
-  // @ts-ignore
   const name = layer.name;
   // @ts-ignore
   const service = layer.service;

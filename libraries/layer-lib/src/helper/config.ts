@@ -274,6 +274,7 @@ export const vectorConfig: Config = {
   layers: [
     {
       id: 'vecKanal',
+      name: 'vecKanal',
       title: 'Kanäle',
       description: 'Vektor Layer der Kanäle',
       tags: ['Vector Karten', 'Kanäle'],
@@ -287,6 +288,7 @@ export const vectorConfig: Config = {
     },
     {
       id: 'vecBaeume',
+      name: 'vecBaeume',
       title: 'Bäume',
       description: 'Vektor Layer der Bäume',
       tags: ['Vector Karten', 'Bäume'],
@@ -300,6 +302,7 @@ export const vectorConfig: Config = {
     },
     {
       id: 'vecPOIs',
+      name: 'vecPOIs',
       title: 'POIs',
       description: 'Vektor Layer der POIs',
       tags: ['Vector Karten', 'POIs'],
@@ -313,6 +316,7 @@ export const vectorConfig: Config = {
     },
     {
       id: 'vecSolar',
+      name: 'vecSolar',
       title: 'Solar',
       description: 'Vektor Layer der Solar Flächen',
       tags: ['Vector Karten', 'Solar'],
@@ -333,6 +337,7 @@ export const topicMapsConfig: Config = {
   layers: [
     {
       id: 'wuppTopic_stadtplan',
+      name: 'wuppTopic_stadtplan',
       title: 'Online Stadtplan',
       description: `Interaktiver personalisierbarer Themenstadtplan für Wuppertal.`,
       tags: ['Topic Maps', 'Stadtplan'],
@@ -344,6 +349,7 @@ export const topicMapsConfig: Config = {
     },
     {
       id: 'wuppTopic_kultur',
+      name: 'wuppTopic_kultur',
       title: 'Kulturstadtplan',
       description: `Interaktiver personalisierbarer Kulturstadtplan für Wuppertal.`,
       tags: ['Topic Maps', 'Stadtplan', 'Kultur'],
@@ -354,6 +360,7 @@ export const topicMapsConfig: Config = {
     },
     {
       id: 'wuppTopic_baeder',
+      name: 'wuppTopic_baeder',
       title: 'Bäderkarte',
       description: `Interaktive Kartenanwendung für die Schwimmbäder in Wuppertal.`,
       tags: ['Topic Maps', 'Bäder'],
@@ -364,6 +371,7 @@ export const topicMapsConfig: Config = {
     },
     {
       id: 'wuppTopic_ebike',
+      name: 'wuppTopic_ebike',
       title: 'Ladestationen E-Bikes',
       description: `Interaktive Kartenanwendung zu den Lade- und Verleihstationen für E-Fahrräder in Wuppertal.`,
       tags: ['Topic Maps', 'E-Bikes', 'Ladestationen'],
@@ -375,6 +383,7 @@ export const topicMapsConfig: Config = {
     },
     {
       id: 'wuppTopic_ehrenamt',
+      name: 'wuppTopic_ehrenamt',
       title: 'Ehrenamtskarte',
       description: `Interaktive Kartenanwendung der Vermittlungsagentur "Zentrum für gute Taten e. V." für die erste Recherche nach Ehrenamtsstellen in Wuppertal .`,
       tags: ['Topic Maps', 'Ehrenamt'],
@@ -385,6 +394,7 @@ export const topicMapsConfig: Config = {
     },
     {
       id: 'wuppTopic_emobi',
+      name: 'wuppTopic_emobi',
       title: 'Ladestationen E-Autos',
       description: `Interaktive Kartenanwendung für die E-Auto-Ladestationen in Wuppertal.`,
       tags: ['Topic Maps', 'E-Auto', 'Ladestationen'],
@@ -396,6 +406,7 @@ export const topicMapsConfig: Config = {
     },
     {
       id: 'wuppTopic_kitas',
+      name: 'wuppTopic_kitas',
       title: 'Kita-Finder',
       description: `Interaktive Kartenanwendung für die Recherche nach Kindertageseinrichtungen (Kitas) in Wuppertal - Spezialisierung des Online-Stadtplans Wuppertal mit spezifischen Filter- und Darstellungsoptionen.`,
       tags: ['Topic Maps', 'Kitas'],
@@ -407,6 +418,7 @@ export const topicMapsConfig: Config = {
     },
     {
       id: 'wuppTopic_xandride',
+      name: 'wuppTopic_xandride',
       title: 'Park & Ride',
       description: `Interaktive Kartenanwendung zu den Park & Ride Standorten in Wuppertal.`,
       tags: ['Topic Maps', 'Park & Ride'],
@@ -417,6 +429,7 @@ export const topicMapsConfig: Config = {
     },
     {
       id: 'wuppTopic_wasserstoff',
+      name: 'wuppTopic_wasserstoff',
       title: 'Wasserstofftankstellen',
       description: `Interaktive Kartenanwendung zu den Wasserstofftankstellen in Wuppertal.`,
       tags: ['Topic Maps', 'Tankstellen', 'Wasserstoff'],
@@ -427,6 +440,7 @@ export const topicMapsConfig: Config = {
     },
     {
       id: 'wuppTopic_luftmessstationen',
+      name: 'wuppTopic_luftmessstationen',
       title: 'Luftmessstationen',
       description: `Interaktive Kartenanwendung zu den Luftmessstationen in Wuppertal.`,
       tags: ['Topic Maps', 'Luftmessstationen'],
@@ -437,6 +451,7 @@ export const topicMapsConfig: Config = {
     },
     {
       id: 'wuppTopic_klimaorte',
+      name: 'wuppTopic_klimaorte',
       title: 'Klimaortkarte',
       description: `Interaktive Kartenanwendung für die Publikation von Best-Practice-Beispielen zum Klimaschutz in Wuppertal .`,
       tags: ['Topic Maps', 'Klimaorte'],
