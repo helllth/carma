@@ -21,7 +21,6 @@ import { ColorRgbaArray, NumericResult, TilesetConfig } from '../..';
 
 // Constants
 
-
 export const resolutionFractions = [
   5,
   4,

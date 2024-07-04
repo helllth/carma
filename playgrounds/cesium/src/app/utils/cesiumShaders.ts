@@ -5,6 +5,7 @@ export enum CustomShaderKeys {
   UNLIT = 'UNLIT',
   UNLIT_BASE = 'UNLIT_BASE',
   UNDEFINED = 'UNDEFINED',
+  MONOCHROME = 'MONOCHROME',
 }
 
 export const CUSTOM_SHADERS_DEFINITIONS = {
@@ -40,5 +41,28 @@ export const CUSTOM_SHADERS_DEFINITIONS = {
   },
   [CustomShaderKeys.UNLIT_BASE]: {
     lightingModel: LightingModel.UNLIT,
+  },
+  [CustomShaderKeys.MONOCHROME]: {
+    lightingModel: LightingModel.UNLIT,
+    fragmentShaderText: `
+    void fragmentMain(FragmentInput fsInput, inout czm_modelMaterial material)
+    {
+        // This is tuned for a specific tileset texture, not generic
+        // Apply gamma correction
+        vec3 gammaCorrection = vec3(1.0,1.0,1.25); // reduce blue somewhat
+
+        // Apply black point correction
+        float blackPoint = -0.1; // more pale for washed out look
+        float whitePoint = 0.9; // stretch to white
+
+        vec3 color = (material.diffuse - vec3(blackPoint)) / (vec3(whitePoint) - vec3(blackPoint));
+        color = clamp(color, 0.0, 1.0); // Ensure values are in [0,1] range
+
+        // Apply gamma correction after point adjustments
+        vec3 correctedColor = pow(color, gammaCorrection);
+        float greyScale = 0.2126 * correctedColor.r + 0.7152 * correctedColor.g + 0.0722 * correctedColor.b; // https://en.wikipedia.org/wiki/Grayscale#Luma_coding_in_video_systems
+        material.diffuse = vec3(greyScale);
+    }
+    `,
   },
 };
