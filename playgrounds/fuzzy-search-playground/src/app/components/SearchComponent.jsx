@@ -190,6 +190,7 @@ function SearchComponent({
   const [allGazeteerData, setAllGazeteerData] = useState([]);
   const [value, setValue] = useState('');
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
+  const [showNotFoundContent, setShowNotFoundContent] = useState(false);
 
   const handleSearchAutoComplete = (value) => {
     let ifShowScore = null;
@@ -363,6 +364,9 @@ function SearchComponent({
           value={value}
           onSelect={(value, option) => handleOnSelect(option)}
           defaultActiveFirstOption={true}
+          notFoundContent={
+            showNotFoundContent ? <div>Keine Treffer gefunden</div> : ''
+          }
         />
       ) : (
         <AutoComplete

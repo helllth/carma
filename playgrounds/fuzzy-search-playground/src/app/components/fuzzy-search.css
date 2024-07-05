@@ -59,8 +59,17 @@
   overflow-x: auto !important;
 }
 
-.ant-select-dropdown.custom-autocomplete-dropdown
-  .rc-virtual-list-holder-inner {
-  width: 700px;
+.ant-select-dropdown .rc-virtual-list-holder-inner {
   overflow-x: auto !important;
+  border: 1px solid red;
+  /* max-width: 700px; */
+  width: 700px;
+}
+
+.ant-select-item-option-content {
+  width: 700px;
+}
+
+.rc-virtual-list-scrollbar-show {
+  display: block !important;
 }
