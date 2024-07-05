@@ -19,6 +19,7 @@ import {
 import LayerRow from './LayerRow';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { layerMap } from '../TopNavbar';
+import { useState } from 'react';
 
 interface InfoProps {
   description: string;
@@ -27,6 +28,7 @@ interface InfoProps {
 
 const Info = ({ description, legend }: InfoProps) => {
   const dispatch = useDispatch();
+  const [value, setValue] = useState('1');
   const activeTabKey = useSelector(getActiveTabKey);
   const parsedDescription = parseDescription(description);
   const layers = useSelector(getLayers);
@@ -65,8 +67,21 @@ const Info = ({ description, legend }: InfoProps) => {
       {isBaseLayer && (
         <div className="flex flex-col gap-2 pb-4">
           <h5 className="font-semibold">Hintergrund Layer:</h5>
-          <Radio.Group
+          {/* <Radio.Group
+            value={value}
+            onChange={(e) => {
+              setValue(e.target.value);
+            }}
+            className="pb-2"
+            optionType="default"
+          >
+            <Radio value="1">Stadtplan</Radio>
+            <Radio value="2">Gelände</Radio>
+            <Radio value="3">Amtliche Geobasisdaten</Radio>
+          </Radio.Group> */}
+          {/* <Radio.Group
             value={backgroundLayer.id}
+            className="w-full h-full"
             onChange={(e) => {
               dispatch(
                 setBackgroundLayer({
@@ -85,10 +100,53 @@ const Info = ({ description, legend }: InfoProps) => {
               );
             }}
           >
-            <Radio value="stadtplan">Stadtplan</Radio>
-            <Radio value="luftbild">Luftbild</Radio>
-          </Radio.Group>
-          <h5 className="font-semibold">Inhalt</h5>
+            <Radio.Button className="w-1/2 h-full" value="stadtplan">
+              <div className="w-full flex flex-col items-center justify-center gap-3">
+                Karte
+                <Radio.Group
+                  value={value}
+                  onChange={(e) => {
+                    setValue(e.target.value);
+                  }}
+                  className="pb-2"
+                  // optionType="default"
+                >
+                  <Radio value="1">Stadtplan</Radio>
+                  <Radio value="2">Gelände</Radio>
+                  <Radio value="3">Amtliche Geobasisdaten</Radio>
+                </Radio.Group>
+              </div>
+            </Radio.Button>
+            <Radio.Button className="w-1/2 h-full" value="luftbild">
+              <div className="w-full flex items-center justify-center">
+                Luftbild
+              </div>
+            </Radio.Button>
+          </Radio.Group> */}
+
+          <div className="w-full flex last:rounded-s-md first:rounded-s-md">
+            <button className="w-full !border-[#1677ff] border-[1px] rounded-s-md">
+              <div className="w-full flex flex-col text-[14px]/[30px] items-center justify-center gap-3">
+                <p className="mb-0 text-[#1677ff]">Karte</p>
+                <Radio.Group
+                  value={value}
+                  onChange={(e) => {
+                    setValue(e.target.value);
+                  }}
+                  className="pb-2"
+                  optionType="default"
+                >
+                  <Radio value="1">Stadtplan</Radio>
+                  <Radio value="2">Gelände</Radio>
+                  <Radio value="3">Amtliche Geobasisdaten</Radio>
+                </Radio.Group>
+              </div>
+            </button>
+            <button className="w-full rounded-e-md border border-solid flex flex-col items-center justify-start">
+              <p className="mb-0 text-[14px]/[30px]">Luftbild</p>
+            </button>
+          </div>
+          <h5 className="font-semibold pt-2">Inhalt</h5>
           <div
             className="text-sm"
             dangerouslySetInnerHTML={{ __html: description }}
