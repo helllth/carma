@@ -56,15 +56,18 @@
 }
 
 .ant-select-dropdown .rc-virtual-list-holder > div:first-child {
-  overflow-x: auto !important;
+  /* overflow-x: auto !important; */
 }
 
 .ant-select-dropdown .rc-virtual-list-holder-inner {
-  width: 200px;
+  /* width: 200px; */
+  max-width: 300px;
+  border: 1px solid red;
 }
 
 .ant-select-item-option-content {
   overflow: visible !important;
-  text-overflow: clip !important;
+  /* text-overflow: clip !important; */
   /* overflow-x: auto; */
+  border: 1px solid yellow;
 }

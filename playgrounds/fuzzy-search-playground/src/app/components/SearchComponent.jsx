@@ -329,20 +329,31 @@ function SearchComponent({
       const antdDrapdownSelect = dropdownContainerRef.current.querySelector(
         '.rc-virtual-list-holder'
       );
+      const inputWidth = document.querySelector(
+        '.ant-select-selection-search-input'
+      ).clientWidth;
 
       if (holderInner) {
-        let biggestItem = 0;
         const handleScroll = (event) => {
           setFireScrollEvent(event.target.scrollTop);
         };
         antdDrapdownSelect.addEventListener('scroll', handleScroll);
 
-        const isOverflowing = holderInner.scrollWidth > holderInner.clientWidth;
+        let biggestItem = 0;
+
+        allItems.forEach((item) => {
+          const itemWidth = item.scrollWidth;
+          if (itemWidth > biggestItem) biggestItem = itemWidth;
+          console.log('yyy item width', itemWidth, item.clientWidth);
+        });
+
+        console.log('yyy biggestItem', biggestItem);
+
+        const isOverflowing = biggestItem > inputWidth + 20;
+        console.log('xxx isOverflowing', biggestItem, inputWidth);
         if (isOverflowing) {
-          // listHolder.style.width = holderInner.scrollWidth + 'px';
-          listHolder.style.width = 700 + 'px';
+          listHolder.style.width = holderInner.scrollWidth + 'px';
         } else {
-          listHolder.style.overflowX = 'hidden';
           listHolder.style.removeProperty('width');
         }
       }
