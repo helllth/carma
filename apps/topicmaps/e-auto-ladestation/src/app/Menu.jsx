@@ -52,11 +52,11 @@ const Menu = () => {
     <CustomizationContextProvider customizations={{}}>
       <ModalApplicationMenu
         menuIcon={'bars'}
-        menuTitle={'Filter, Merkliste und Kompaktanleitung'}
+        menuTitle={'Filter, Einstellungen und Kompaktanleitung'}
         menuFooter={<MenuFooter />}
         menuIntroduction={
           <span>
-            W&auml;hlen Sie Ihre Such- und Ausschlussbedingungen in den{' '}
+            Benutzen Sie die Auswahlmöglichkeiten unter{' '}
             <Link
               className="useAClassNameToRenderProperLink"
               to="filter"
@@ -65,23 +65,22 @@ const Menu = () => {
               delay={100}
               onClick={() => setAppMenuActiveMenuSection('filter')}
             >
-              Filtern
+              Filter
             </Link>{' '}
-            aus, um die angezeigten Angebote an Ihre Interessen anzupassen
-            (alternativ über die Einstellungen unter den darunter folgenden
-            Leitfragen). Über{' '}
+            um die in der Karte angezeigten Ladestationen für E-Autos auf die
+            für Sie relevanten Stationen zu beschränken. Über{' '}
             <Link
               className="useAClassNameToRenderProperLink"
               to="settings"
               containerId="myMenu"
               smooth={true}
               delay={100}
-              onClick={() => setAppMenuActiveMenuSection('merkliste')}
+              onClick={() => setAppMenuActiveMenuSection('settings')}
             >
-              meine Merkliste
+              Einstellungen
             </Link>{' '}
-            erreichen Sie die Liste der Angebote, die Sie festgehalten haben.
-            Wählen Sie{' '}
+            können Sie die Darstellung der Hintergrundkarte und der
+            Ladestationen an Ihre Vorlieben anpassen. Wählen Sie{' '}
             <Link
               className="useAClassNameToRenderProperLink"
               to="help"
