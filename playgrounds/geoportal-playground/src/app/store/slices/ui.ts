@@ -12,8 +12,8 @@ interface UIState {
 }
 
 const initialState: UIState = {
-  showInfo: false,
-  showInfoText: false,
+  showInfo: true,
+  showInfoText: true,
   activeTabKey: '1',
   mode: 'default',
   showLayerButtons: true,
