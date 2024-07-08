@@ -29,6 +29,8 @@ const Menu = () => {
   const { setFilterState } = useContext(FeatureCollectionDispatchContext);
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
 
+  const urlPrefix = window.location.origin + window.location.pathname;
+
   const onlineSVG = getSymbolSVG(24, '#003B80', 'pr', 'onlineSVGinHELP');
   const offlineSVG = getSymbolSVG(24, '#888A87', 'pr', 'offlineSVGinHELP');
 
@@ -186,7 +188,7 @@ const Menu = () => {
                               <img
                                 alt="Cluster"
                                 width="32"
-                                src="images/emob_cluster.png"
+                                src={urlPrefix + 'images/emob_cluster.png'}
                               />
                               . Vergrößern Sie ein paar Mal durch direktes
                               Anklicken eines solchen Punktes oder mit{' '}
