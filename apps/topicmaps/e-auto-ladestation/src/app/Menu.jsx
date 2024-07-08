@@ -14,12 +14,10 @@ import LicenseLuftbildkarte from 'react-cismap/topicmaps/wuppertal/LicenseLuftbi
 import LicenseStadtplanTagNacht from 'react-cismap/topicmaps/wuppertal/LicenseStadtplanTagNacht';
 import DefaultSettingsPanel from 'react-cismap/topicmaps/menu/DefaultSettingsPanel';
 import { Link } from 'react-scroll';
-import PieChart from './PieChart';
 
 import FilterUI from './FilterUI';
 import MenuFooter from './MenuFooter';
 import { TopicMapDispatchContext } from 'react-cismap/contexts/TopicMapContextProvider';
-import { getColorForProperties } from './helper/styler';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { getSymbolSVG } from './helper/helper';
@@ -111,19 +109,6 @@ const Menu = () => {
                 filter={filterState}
                 setFilter={setFilterState}
                 steckertypes={steckertypes}
-                pieChart={
-                  <PieChart
-                    filteredObjects={filteredItems}
-                    colorizer={getColorForProperties}
-                    groupingFunction={(obj) => {
-                      if (obj.online === true) {
-                        return 'online';
-                      } else {
-                        return 'offline';
-                      }
-                    }}
-                  />
-                }
               />
             }
           />,

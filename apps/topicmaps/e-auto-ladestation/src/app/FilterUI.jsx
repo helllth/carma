@@ -4,27 +4,33 @@ import OeffnungszeitenFC from './filtercontrols/Oeffnungszeiten';
 import OnlineFC from './filtercontrols/Online';
 import SchnellladerFC from './filtercontrols/Schnelllader';
 import SteckerFC from './filtercontrols/Stecker';
+import PieChart from './PieChart';
+import { ResponsiveTopicMapContext } from 'react-cismap/contexts/ResponsiveTopicMapContextProvider';
 
 import 'url-search-params-polyfill';
+import { useContext } from 'react';
 
 const FilterUI = ({
   filter,
   setFilter,
   featureRenderingOption,
-  pieChart,
   steckertypes,
 }) => {
+  const { windowSize } = useContext(ResponsiveTopicMapContext);
+  const width = windowSize?.width || 500;
   let widePieChartPlaceholder = null;
   let narrowPieChartPlaceholder = null;
-  if (true) {
+
+  let pieChart = <PieChart />;
+
+  if (width < 995) {
     narrowPieChartPlaceholder = (
       <div>
-        <br />
-        {pieChart}
+        <br /> {pieChart}
       </div>
     );
   } else {
-    widePieChartPlaceholder = <td>{pieChart}</td>;
+    widePieChartPlaceholder = pieChart;
   }
 
   return (
