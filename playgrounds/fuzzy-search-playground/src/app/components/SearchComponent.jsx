@@ -331,7 +331,9 @@ function SearchComponent({
       );
       const inputWidth = document.querySelector(
         '.ant-select-selection-search-input'
-      ).clientWidth;
+      ).scrollWidth;
+
+      holderInner.style.width = inputWidth + 'px';
 
       if (holderInner) {
         const handleScroll = (event) => {
@@ -339,18 +341,18 @@ function SearchComponent({
         };
         antdDrapdownSelect.addEventListener('scroll', handleScroll);
 
-        let biggestItem = 0;
+        let biggestItem = inputWidth;
 
         allItems.forEach((item) => {
           const itemWidth = item.scrollWidth;
           if (itemWidth > biggestItem) biggestItem = itemWidth;
-          console.log('yyy item width', itemWidth, item.clientWidth);
+          console.log('yyy item width', itemWidth, inputWidth);
         });
 
         console.log('yyy biggestItem', biggestItem);
 
-        const isOverflowing = biggestItem > inputWidth + 20;
-        console.log('xxx isOverflowing', biggestItem, inputWidth);
+        const isOverflowing = biggestItem > inputWidth;
+        console.log('xxx isOverflowing, inputWidth', biggestItem, inputWidth);
         if (isOverflowing) {
           listHolder.style.width = holderInner.scrollWidth + 'px';
         } else {
@@ -358,7 +360,7 @@ function SearchComponent({
         }
       }
     }
-  }, [dropdownContainerRef, options, fireScrollEvent]);
+  }, [dropdownContainerRef, options, fireScrollEvent, value]);
 
   const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
