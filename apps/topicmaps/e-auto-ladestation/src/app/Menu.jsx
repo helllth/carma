@@ -37,9 +37,9 @@ const Menu = () => {
 
     let term;
     if (count === 1) {
-      term = 'Angebot';
+      term = 'Ladestation';
     } else {
-      term = 'Angebote';
+      term = 'Ladestationen';
     }
 
     return `Filter (${count} ${term} gefunden, davon ${
