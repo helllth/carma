@@ -42,7 +42,7 @@ const Menu = () => {
       term = 'Angebote';
     }
 
-    return `Filtern (${count} ${term} gefunden, davon ${
+    return `Filter (${count} ${term} gefunden, davon ${
       shownFeatures?.length || '0'
     } in der Karte)`;
   };
