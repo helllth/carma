@@ -192,6 +192,7 @@ function SearchComponent({
   const [value, setValue] = useState('');
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
   const [showNotFoundContent, setShowNotFoundContent] = useState(false);
+  const [fireScrollEvent, setFireScrollEvent] = useState(null);
 
   const handleSearchAutoComplete = (value) => {
     let ifShowScore = null;
@@ -312,8 +313,11 @@ function SearchComponent({
   useEffect(() => {
     console.log('xxx custom dropdown', dropdownContainerRef);
     if (dropdownContainerRef.current) {
-      const allItems =
-        dropdownContainerRef.current.querySelectorAll('.ant-select-item');
+      // const allItems =
+      //   dropdownContainerRef.current.querySelectorAll('.ant-select-item');
+      const allItems = dropdownContainerRef.current.querySelectorAll(
+        '.ant-select-item-option-content'
+      );
 
       const holderInner = dropdownContainerRef.current.querySelector(
         '.rc-virtual-list-holder-inner'
@@ -322,7 +326,17 @@ function SearchComponent({
         '.rc-virtual-list-holder > div:first-child'
       );
 
+      const antdDrapdownSelect = dropdownContainerRef.current.querySelector(
+        '.rc-virtual-list-holder'
+      );
+
       if (holderInner) {
+        let biggestItem = 0;
+        const handleScroll = (event) => {
+          setFireScrollEvent(event.target.scrollTop);
+        };
+        antdDrapdownSelect.addEventListener('scroll', handleScroll);
+
         const isOverflowing = holderInner.scrollWidth > holderInner.clientWidth;
         if (isOverflowing) {
           // listHolder.style.width = holderInner.scrollWidth + 'px';
@@ -333,7 +347,7 @@ function SearchComponent({
         }
       }
     }
-  }, [dropdownContainerRef, options, value]);
+  }, [dropdownContainerRef, options, fireScrollEvent]);
 
   const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
@@ -391,10 +405,11 @@ function SearchComponent({
           placeholder="Wohin?"
           value={value}
           onSelect={(value, option) => handleOnSelect(option)}
-          // defaultActiveFirstOption={true}
+          defaultActiveFirstOption={true}
           // notFoundContent={
-          //   showNotFoundContent ? <div>Keine Treffer gefunden</div> : ''
+          //   fireScrollEvent ? <div>Keine Treffer gefunden</div> : ''
           // }
+          onScroll={() => console.log('xxx scroll')}
           dropdownRender={(item) => {
             return (
               <div className="fuzzy-dropdownwrapper" ref={dropdownContainerRef}>
