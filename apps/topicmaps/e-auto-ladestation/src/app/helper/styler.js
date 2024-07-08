@@ -15,10 +15,11 @@ const fallbackSVG = `
 `;
 
 export const getColorForProperties = (properties) => {
-  if (properties.online === false) {
-    return '#888A87';
-  } else {
+  if (properties.online === true) {
     return '#003D7D';
+  } else {
+    console.log('xxx properties', properties);
+    return '#888A87';
   }
 };
 
