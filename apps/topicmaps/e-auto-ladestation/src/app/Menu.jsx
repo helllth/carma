@@ -20,6 +20,9 @@ import FilterUI from './FilterUI';
 import MenuFooter from './MenuFooter';
 import { TopicMapDispatchContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { getColorForProperties } from './helper/styler';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { getSymbolSVG } from './helper/helper';
 
 const Menu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
@@ -27,6 +30,9 @@ const Menu = () => {
     useContext(FeatureCollectionContext);
   const { setFilterState } = useContext(FeatureCollectionDispatchContext);
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
+
+  const onlineSVG = getSymbolSVG(24, '#003B80', 'pr', 'onlineSVGinHELP');
+  const offlineSVG = getSymbolSVG(24, '#888A87', 'pr', 'offlineSVGinHELP');
 
   const getFilterHeader = () => {
     const count = filteredItems?.length || 0;
@@ -135,13 +141,16 @@ const Menu = () => {
                     configs: [
                       {
                         title: 'Datengrundlage',
-                        bsStyle: 'warning',
+                        bsStyle: 'default',
                         contentBlockConf: {
                           type: 'REACTCOMP',
                           content: (
                             <div>
                               <p>
-                                Der <strong>Online-Stadtplan Wuppertal</strong>{' '}
+                                Die{' '}
+                                <strong>
+                                  E-Auto-Ladestationskarte Wuppertal
+                                </strong>{' '}
                                 bietet ihnen die folgenden Hintergrundkarten an,
                                 die auf verschiedenen Geodatendiensten und
                                 Geodaten basieren:
@@ -153,27 +162,13 @@ const Menu = () => {
                               </ul>
 
                               <p>
-                                Zusätzlich nutzt der Online-Stadtplan für die
-                                Themendarstellung den Datensatz{' '}
+                                Zusätzlich nutzt die E-Auto-Ladestationskarte
+                                den Datensatz{' '}
                                 <a
                                   target="_legal"
-                                  href="https://offenedaten-wuppertal.de/dataset/interessante-orte-poi-wuppertal"
+                                  href="https://offenedaten-wuppertal.de/dataset/ladestationen-e-autos-wuppertal"
                                 >
-                                  Interessante Orte Wuppertal (POI)
-                                </a>
-                                ,{' '}
-                                <a
-                                  target="_legal"
-                                  href="https://offenedaten-wuppertal.de/dataset/kindertageseinrichtungen-wuppertal"
-                                >
-                                  Kindertageseinrichtungen Wuppertal
-                                </a>{' '}
-                                und{' '}
-                                <a
-                                  target="_legal"
-                                  href="https://offenedaten-wuppertal.de/dataset/schulen-wuppertal"
-                                >
-                                  Schulen Wuppertal
+                                  Ladestationen E-Autos Wuppertal
                                 </a>{' '}
                                 aus dem Open-Data-Angebot der Stadt Wuppertal.
                               </p>
@@ -182,50 +177,45 @@ const Menu = () => {
                         },
                       },
                       {
-                        title: 'Kartendarstellung der POI',
-                        bsStyle: 'warning',
+                        title: 'Kartendarstellung',
+                        bsStyle: 'success',
                         contentBlockConf: {
                           type: 'REACTCOMP',
                           content: (
-                            <div>
-                              {' '}
-                              <p>
-                                Jeder POI (Point of Interest, 'Interessanter
-                                Ort') ist einem oder mehreren übergeordneten
-                                Themenfeldern wie z. B. "<em>Freizeit</em>" oder
-                                "<em>Erholung</em>" zugeordnet. Die
-                                Hintergrundfarben der POI-Symbole stehen jeweils
-                                für eine eindeutige Kombination dieser
-                                Themenfelder, z. B. Hellgrün für "
-                                <em>Freizeit, Erholung</em>
-                                ".
-                              </p>
-                              <p>
-                                Räumlich nah beieinander liegende POI werden
-                                standardmäßig maßstabsabhängig zu größeren
-                                Punkten zusammengefasst, mit der Anzahl der
-                                repräsentierten POI im Zentrum{' '}
-                                <img
-                                  alt="Cluster"
-                                  src="images/poi_zusammen.png"
-                                />
-                                . Vergrößern Sie ein paar Mal durch direktes
-                                Anklicken eines solchen Punktes oder mit{' '}
-                                <Icon name="plus" /> die Darstellung, so werden
-                                die zusammengefassten POI Schritt für Schritt in
-                                die kleineren Symbole für die konkreten
-                                Einzel-POI zerlegt. Ab einer bestimmten
-                                Maßstabsstufe (Zoomstufe 12) führt ein weiterer
-                                Klick dazu, dass eine Explosionsgraphik der
-                                zusammengefassten POI angezeigt wird.
-                              </p>
-                            </div>
+                            <p>
+                              Zur Darstellung der Ladestationen in der Karte
+                              verwenden wir zwei unterschiedliche Symbole für
+                              die Ladestationen, die derzeit in Betrieb
+                              ("online") {onlineSVG} sind, und diejenigen, die
+                              wegen länger dauernder Maßnahmen nicht in Betrieb
+                              ("offline") {offlineSVG} sind. Die Farben der
+                              Symbole werden in der Titelzeile der Info-Box
+                              unten rechts aufgegriffen. Zusätzlich wird dort
+                              der Betriebszustand der Ladestation - Ladestation
+                              für E-Autos (online) bzw. Ladestation für E-Autos
+                              (offline) - wiederholt. Räumlich nah beieinander
+                              liegende Anlagen werden standardmäßig
+                              maßstabsabhängig zu größeren Kreis-Symbolen
+                              zusammengefasst, jeweils mit der Anzahl der
+                              repräsentierten Anlagen im Zentrum{' '}
+                              <img
+                                alt="Cluster"
+                                width="32"
+                                src="images/emob_cluster.png"
+                              />
+                              . Vergrößern Sie ein paar Mal durch direktes
+                              Anklicken eines solchen Punktes oder mit{' '}
+                              <FontAwesomeIcon icon={faPlus} /> die Darstellung,
+                              so werden die zusammengefassten Anlagen Schritt
+                              für Schritt in die kleineren Symbole für die
+                              Einzel-Anlagen zerlegt.
+                            </p>
                           ),
                         },
                       },
                       {
-                        title: 'POI auswählen und abfragen',
-                        bsStyle: 'secondary',
+                        title: 'Ladestationen abfragen',
+                        bsStyle: 'success',
                         contentBlockConf: {
                           type: 'REACTCOMP',
                           content: (
@@ -233,53 +223,72 @@ const Menu = () => {
                               {' '}
                               <p>
                                 Bewegen Sie den Mauszeiger im Kartenfenster auf
-                                einen konkreten Einzel-POI, um sich seine
-                                Bezeichnung anzeigen zu lassen. Ein Klick auf
-                                das zugehörige POI-Symbol setzt den Fokus auf
-                                diesen POI. Er wird dann blau hinterlegt und die
-                                zugehörigen Informationen (Bezeichnung,
-                                Info-Text und ggf. Adresse) werden in der
-                                Info-Box (unten rechts) angezeigt. (Auf einem
-                                Tablet-PC wird der Fokus durch das erste
-                                Antippen des Angebots gesetzt, das zweite
-                                Antippen blendet die Bezeichnung ein.) Außerdem
-                                werden Ihnen in der Info-Box weiterführende
-                                (Kommunikations-) Links zum POI angezeigt:{' '}
-                                <Icon name="external-link-square" /> Internet,{' '}
-                                <Icon name="envelope-square" /> E-Mail und{' '}
-                                <Icon name="phone" /> Telefon. Bei POI, zu denen
-                                im Terminkalender von{' '}
-                                <a href="https://wuppertal-live.de">
-                                  www.wuppertal-live.de
-                                </a>{' '}
-                                Veranstaltungen geführt werden, finden sie
-                                zusätzlich noch eine <Icon name="calendar" />{' '}
-                                Verknüpfung zu wuppertal-live.de, wo sie für
-                                viele Veranstaltungen auch Online-Tickets
-                                erwerben können.
+                                eines der Symbole für die Ladestationen (online
+                                oder offline), um sich den Namen der Station
+                                anzeigen zu lassen. Ein Klick auf das Symbol
+                                setzt den Fokus auf diese Ladestation. Sie wird
+                                dann blau hinterlegt und die zugehörigen
+                                Informationen (Name, ggf. Lagebeschreibung,
+                                Adresse) werden in der Info-Box angezeigt. (Auf
+                                einem Tablet-PC wird der Fokus durch das erste
+                                Antippen des Symbols gesetzt, das zweite
+                                Antippen blendet den Namen ein.) Durch Anklicken
+                                des Symbols <Icon name="info" /> rechts neben
+                                dem Namen der Ladestation öffnen Sie das
+                                Datenblatt mit den vollständigen Informationen
+                                zu dieser Station einschließlich einer
+                                Verknüpfung zur Ladekosten-Information des
+                                Betreibers. Mit dem Lupensymbol{' '}
+                                <Icon name="search" /> links daneben wird die
+                                Karte auf die Ladestation, die gerade den Fokus
+                                hat, zentriert und gleichzeitig ein großer
+                                Betrachtungsmaßstab (Zoomstufe 14) eingestellt.
+                                Mit den Symbolen <Icon name="phone" /> und{' '}
+                                <Icon name="external-link-square" /> rechts
+                                daneben können Sie den Betreiber via Smartphone
+                                direkt anrufen oder zu seiner Website wechseln.
                               </p>
                               <p>
-                                Wenn Sie noch nicht aktiv einen bestimmten POI
-                                im aktuellen Kartenausschnitt selektiert haben,
-                                wird der Fokus automatisch auf den nördlichsten
-                                POI gesetzt. Mit den Funktionen <a>&lt;&lt;</a>{' '}
-                                vorheriger Treffer und <a>&gt;&gt;</a> nächster
-                                Treffer können Sie in nördlicher bzw. südlicher
-                                Richtung alle aktuell im Kartenfenster
-                                angezeigten POI durchmustern.
+                                Wenn Sie noch keine Ladestation im aktuellen
+                                Kartenausschnitt selektiert haben, wird der
+                                Fokus automatisch auf die nördlichste Station
+                                gesetzt. Mit den Funktionen{' '}
+                                <a className="useAClassNameToRenderProperLink">
+                                  &lt;&lt;
+                                </a>{' '}
+                                vorheriger Treffer und{' '}
+                                <a className="useAClassNameToRenderProperLink">
+                                  &gt;&gt;
+                                </a>{' '}
+                                nächster Treffer können Sie ausgehend von der
+                                Ladestation, auf der gerade der Fokus liegt, in
+                                nördlicher bzw. südlicher Richtung alle aktuell
+                                im Kartenfenster angezeigten Stationen
+                                durchmustern.
                               </p>
                               <p>
                                 Mit der Schaltfläche{' '}
                                 <Icon name="chevron-circle-down" /> im
                                 dunkelgrau abgesetzten rechten Rand der Info-Box
                                 lässt sich diese so verkleinern, dass nur noch
-                                die thematische Zuordnung und die Bezeichnung
-                                des POI sowie die Link-Symbole angezeigt werden
-                                - nützlich für Endgeräte mit kleinem Display.
-                                Mit der Schaltfläche{' '}
+                                der Betriebszustand der Ladestation (Ladestation
+                                online oder offline), ihr Name und die Symbole{' '}
+                                <Icon name="search-location" />,{' '}
+                                <Icon name="info" />, <Icon name="phone" /> und{' '}
+                                <Icon name="external-link-square" /> angezeigt
+                                werden - nützlich für Endgeräte mit kleinem
+                                Display. Mit der Schaltfläche{' '}
                                 <Icon name="chevron-circle-up" /> an derselben
-                                Stelle können Sie die Info-Box dann wieder
+                                Stelle können Sie die Info-Box wieder
                                 vollständig einblenden.
+                              </p>
+                              <p>
+                                Ein kleines Foto über der Info-Box vermittelt
+                                Ihnen bei den meisten Ladestationen einen
+                                Eindruck vom Aussehen der Station vor Ort.
+                                Klicken Sie auf dieses Vorschaubild, um einen
+                                Bildbetrachter ("Leuchtkasten") mit dem Foto zu
+                                öffnen.
                               </p>
                             </div>
                           ),
@@ -287,29 +296,31 @@ const Menu = () => {
                       },
                       {
                         title: 'In Karte positionieren',
-                        bsStyle: 'secondary',
+                        bsStyle: 'warning',
                         contentBlockConf: {
                           type: 'REACTCOMP',
                           content: (
                             <div>
                               {' '}
                               <p>
-                                Um eine bestimmte Stelle des Stadtgebietes zu
-                                erkunden, geben Sie den Anfang eines Stadtteils
-                                (Stadtbezirk oder Quartier), einer Adresse,
-                                eines Straßennamens oder eines POI im
-                                Eingabefeld links unten ein (mindestens 2
-                                Zeichen). In der inkrementellen Auswahlliste
-                                werden Ihnen passende Treffer angeboten. (Wenn
-                                Sie weitere Zeichen eingeben, wird der Inhalt
-                                der Auswahlliste angepasst.) Durch das
-                                vorangestellte Symbol erkennen Sie, ob es sich
-                                dabei um einen <Icon name="circle" />{' '}
-                                Stadtbezirk, ein <Icon name="pie-chart" />{' '}
-                                Quartier, eine <Icon name="home" /> Adresse,
-                                eine <Icon name="road" /> Straße ohne
-                                zugeordnete Hausnummern, einen{' '}
-                                <Icon name="tag" /> POI, die{' '}
+                                Um direkt zu einer Ladestation zu gelangen,
+                                geben Sie den Anfang des Namens dieser
+                                Ladestation im Eingabefeld links unten ein
+                                (mindestens 2 Zeichen). In der inkrementellen
+                                Auswahlliste werden Ihnen passende Treffer
+                                angeboten. (Wenn Sie weitere Zeichen eingeben,
+                                wird der Inhalt der Auswahlliste angepasst.) Sie
+                                können auch andere Suchbegriffe eingeben,
+                                nämlich Stadtteil (Stadtbezirk oder Quartier),
+                                Adresse, Straßenname oder POI. Durch das in der
+                                Auswahlliste vorangestellte Symbol erkennen Sie,
+                                ob es sich bei einem Treffer um eine{' '}
+                                <Icon name="charging-station" /> Ladestation,
+                                einen <Icon name="circle" /> Stadtbezirk, ein{' '}
+                                <Icon name="pie-chart" /> Quartier, eine{' '}
+                                <Icon name="home" /> Adresse, eine{' '}
+                                <Icon name="road" /> Straße ohne zugeordnete
+                                Hausnummern, einen <Icon name="tag" /> POI, die{' '}
                                 <Icon name="tags" /> alternative Bezeichnung
                                 eines POI, eine <Icon name="child" />{' '}
                                 Kindertageseinrichtung oder eine{' '}
@@ -319,19 +330,16 @@ const Menu = () => {
                                 Nach der Auswahl eines Treffers aus der Liste
                                 wird die Karte auf die zugehörige Position
                                 zentriert. Bei Suchbegriffen mit Punktgeometrie
-                                (Adresse, Straße, POI) wird außerdem ein großer
-                                Maßstab (Zoomstufe 14) eingestellt und ein
-                                Marker{' '}
-                                <img
-                                  alt="Cluster"
-                                  src="images/AdressMarker.jpg"
-                                />{' '}
-                                auf der Zielposition platziert. Bei
-                                Suchbegriffen mit Flächengeometrie (Stadtbezirk,
-                                Quartier) wird der Maßstab so eingestellt, dass
-                                die Fläche vollständig dargestellt werden kann.
-                                Zusätzlich wird der Bereich außerhalb dieser
-                                Fläche abgedunkelt (Spotlight-Effekt).
+                                (Ladestation, Adresse, Straße, POI) wird
+                                außerdem ein großer Maßstab (Zoomstufe 14)
+                                eingestellt und ein Marker{' '}
+                                <Icon name="map-marker" /> auf der Zielposition
+                                platziert. Bei Suchbegriffen mit
+                                Flächengeometrie (Stadtbezirk, Quartier) wird
+                                der Maßstab so eingestellt, dass die Fläche
+                                vollständig dargestellt werden kann. Zusätzlich
+                                wird der Bereich außerhalb dieser Fläche
+                                abgedunkelt (Spotlight-Effekt).
                               </p>
                               <p>
                                 Durch Anklicken des Werkzeugs{' '}
@@ -340,13 +348,29 @@ const Menu = () => {
                                 (Entfernung von Marker bzw. Abdunklung, Löschen
                                 des Textes im Eingabefeld).
                               </p>
+                              <p>
+                                Wenn Sie die Karte wie oben beschrieben auf eine
+                                Ladestation positionieren, erhält diese sofort
+                                den Fokus, sodass die zugehörigen Informationen
+                                direkt in der Info-Box angezeigt werden.
+                                Voraussetzung dafür ist, dass die aktuellen{' '}
+                                <Link
+                                  to="MeinThemenstadtplan"
+                                  className="useAClassNameToRenderProperLink"
+                                  containerId="myMenu"
+                                >
+                                  Filtereinstellungen
+                                </Link>{' '}
+                                die Darstellung der Ladestation in der Karte
+                                erlauben.
+                              </p>
                             </div>
                           ),
                         },
                       },
                       {
                         title: 'Mein Standort',
-                        bsStyle: 'secondary',
+                        bsStyle: 'warning',
                         contentBlockConf: {
                           type: 'REACTCOMP',
                           content: (
@@ -357,54 +381,85 @@ const Menu = () => {
                         },
                       },
                       {
-                        title: 'Mein Themenstadtplan',
-                        bsStyle: 'primary',
+                        title: 'Filtern',
+                        bsStyle: 'info',
                         contentBlockConf: {
                           type: 'REACTCOMP',
                           content: (
                             <div>
                               {' '}
                               <p>
-                                Unter "<strong>Mein Themenstadtplan</strong>"
-                                können Sie im Anwendungsmenü{' '}
-                                <Icon name="bars" /> auswählen, welche
-                                POI-Kategorien in der Karte dargestellt werden.
-                                Über die Schaltfläche{' '}
-                                <img
-                                  alt="Cluster"
-                                  src="images/sf_keinethemenausw.png"
-                                />{' '}
-                                können Sie die POI vollständig ausblenden - auch
-                                die Info-Box wird dann nicht mehr angezeigt.
+                                Im Bereich "<b>Filter</b>" können Sie im
+                                Anwendungsmenü <Icon name="bars" /> die in der
+                                Karte angezeigten Ladestationen so ausdünnen,
+                                dass nur die für Sie interessanten Stationen
+                                übrig bleiben. Standardmäßig sind die
+                                Einstellungen hier so gesetzt, dass alle
+                                Ladestationen angezeigt werden.
                               </p>
                               <p>
-                                Zur Filterung der POI-Kategorien bieten wir
-                                Ihnen die oben beschriebenen Themenfelder an.
-                                Wählen Sie z. B. mit <Icon name="thumbs-up" />{' '}
-                                ausschließlich das Thema "<em>Kultur</em>" aus.
-                                Als Vorschau wird Ihnen ein Donut-Diagramm
-                                angezeigt, das die Anzahl der zugehörigen POI
-                                und deren Verteilung auf die
-                                Themen-Kombinationen (hier "
-                                <em>Kultur, Gesellschaft</em>" und "
-                                <em>Kultur, Freizeit</em>
-                                ") anzeigt. Bewegen Sie dazu den Mauszeiger auf
-                                eines der farbigen Segmente des Donut-Diagramms.
-                                (Bei einem Gerät mit Touchscreen tippen Sie auf
-                                eines der farbigen Segmente.)
+                                Mit den Optionsgruppen "
+                                <b>
+                                  <i>Verfügbarkeit</i>
+                                </b>
+                                ", "
+                                <b>
+                                  <i>Öffnungszeiten</i>
+                                </b>
+                                ", "
+                                <b>
+                                  <i>Ökostrom</i>
+                                </b>
+                                " und "
+                                <b>
+                                  <i>Schnelllader</i>
+                                </b>
+                                " können Sie die Kartenanzeige auf Ladestationen
+                                beschränken, die aktuell verfügbar (online)
+                                sind, die durchgehend (jeweils 24 Stunden an 7
+                                Tagen die Woche) erreichbar sind, die ökologisch
+                                erzeugten Strom bereitstellen oder bei denen es
+                                sich um Schnell-Ladestationen handelt. Mit der
+                                in jeder dieser Gruppen verfügbaren Option "
+                                <i>alle Ladestationen</i>" wird das jeweilige
+                                Filterkriterium nicht ausgewertet. In der
+                                Optionsgruppe "
+                                <b>
+                                  <i>Steckertypen</i>
+                                </b>
+                                " können Sie die für ihre Ladekabel passenden
+                                Steckertypen auswählen. Damit grenzen Sie die
+                                Kartenanzeige auf diejenigen Stationen ein, die
+                                mindestens eine entsprechende
+                                Anschlussmöglichkeit besitzen. Alle
+                                Filterkriterien werden mit einem logischen "und"
+                                kombiniert: Wenn Sie z. B. unter "
+                                <b>
+                                  <i>Öffnungszeiten</i>
+                                </b>
+                                " den Wert "<i>24/7</i>" wählen und unter "
+                                <b>
+                                  <i>Ökostrom</i>
+                                </b>
+                                " den Wert "<i>nur Ökostrom-Ladestationen</i>",
+                                werden alle Stationen angezeigt, die durchgehend
+                                erreichbar sind <b>und</b> ökologisch erzeugten
+                                Strom bereitstellen.
                               </p>
                               <p>
-                                Mit <Icon name="thumbs-down" /> können Sie die
-                                POI, die dem entsprechenden Thema zugeordnet
-                                sind, ausblenden und dadurch die Treffermenge
-                                reduzieren. Schließen Sie jetzt z. B. das Thema
-                                "<em>Gesellschaft</em>" aus. Im Donut-Diagramm
-                                werden Ihnen dann nur noch die POI mit der
-                                Themen-Kombination "<em>Kultur, Freizeit</em>"
-                                angezeigt (Theater, Museen etc.). Die POI mit
-                                der Kombination "<em>Kultur, Gesellschaft</em>"
-                                (Standorte von Verlagen und anderen
-                                Medienunternehmungen) wurden dagegen entfernt.
+                                Ihre Einstellungen werden direkt in der blauen
+                                Titelzeile des Bereichs "<b>Filter</b>" und in
+                                dem Donut-Diagramm, das Sie rechts neben oder
+                                unter den Filteroptionen finden, ausgewertet.
+                                Die Titelzeile zeigt die Gesamtanzahl der
+                                Ladestationen, die den von Ihnen gesetzten
+                                Filterbedingungen entsprechen. Das
+                                Donut-Diagramm zeigt zusätzlich die Verteilung
+                                auf die beiden Kategorien verfügbare
+                                Ladestationen (online) und nicht verfügbare
+                                Ladestationen (offline). Bewegen Sie dazu den
+                                Mauszeiger auf eines der farbigen Segmente des
+                                Diagramms.
                               </p>
                             </div>
                           ),
@@ -412,7 +467,7 @@ const Menu = () => {
                       },
                       {
                         title: 'Einstellungen',
-                        bsStyle: 'success',
+                        bsStyle: 'info',
                         contentBlockConf: {
                           type: 'REACTCOMP',
                           content: (
@@ -420,55 +475,65 @@ const Menu = () => {
                               <p>
                                 Unter "<strong>Einstellungen</strong>" können
                                 Sie im Anwendungsmenü <Icon name="bars" />{' '}
-                                festlegen, wie die POI und die Hintergrundkarte
-                                angezeigt werden sollen. Zu den POI können Sie
-                                auswählen, ob Ihre unter "
-                                <strong>Mein Themenstadtplan</strong>"
-                                festgelegte Lebenslagen-Filterung in einer
-                                Titelzeile ausgeprägt wird oder nicht. Weiter
-                                können Sie festlegen, ob räumlich nah
-                                beieinander liegende POI maßstabsabhängig zu
-                                einem Punktsymbol zusammengefasst werden oder
-                                nicht. Unter "
-                                <em>
-                                  <strong>Symbolgröße</strong>
-                                </em>
+                                festlegen, wie die Ladestationen und die
+                                Hintergrundkarte angezeigt werden sollen.
+                              </p>
+                              <p>
+                                Zu den Ladestationen können Sie unter "
+                                <b>
+                                  <i>Ladestation-Einstellungen</i>
+                                </b>
+                                " auswählen, ob Ihre unter "<b>Filter</b>"
+                                festgelegten Filterbedingungen in einer
+                                Titelzeile ausgeprägt werden oder nicht. Weiter
+                                können Sie dort festlegen, ob räumlich nah
+                                beieinander liegende Ladestationen
+                                maßstabsabhängig zu einem Punktsymbol
+                                zusammengefasst werden oder nicht. Unter "
+                                <b>
+                                  <i>Symbolgröße</i>
+                                </b>
                                 " können Sie in Abhängigkeit von Ihrer
                                 Bildschirmauflösung und Ihrem Sehvermögen
-                                auswählen, ob die POI mit kleinen (25 Pixel),
-                                mittleren (35 Pixel) oder großen (45 Pixel)
-                                Symbolen angezeigt werden.
+                                auswählen, ob die Ladestationen mit kleinen (35
+                                Pixel), mittleren (45 Pixel) oder großen (55
+                                Pixel) Symbolen angezeigt werden.
                               </p>
                               <p>
                                 Unter "
-                                <em>
-                                  <strong>Hintergrundkarte</strong>
-                                </em>
+                                <strong>
+                                  <em>Hintergrundkarte</em>
+                                </strong>
                                 " können Sie auswählen, ob Sie die standardmäßig
                                 aktivierte farbige Hintergrundkarte verwenden
                                 möchten ("<em>Stadtplan (Tag)</em>") oder lieber
                                 eine invertierte Graustufenkarte ("
-                                <em>Stadtplan (Nacht)</em>
-                                "), zu der uns die von vielen PKW-Navis bei
-                                Dunkelheit eingesetzte Darstellungsweise
-                                inspiriert hat. <strong>Hinweis:</strong> Der
-                                Stadtplan (Nacht) wird Ihnen nur angeboten, wenn
-                                Ihr Browser CSS3-Filtereffekte unterstützt, also
-                                z. B. nicht beim Microsoft Internet Explorer.
-                                Die Nacht-Karte erzeugt einen deutlicheren
-                                Kontrast mit den farbigen POI-Symbolen, die
+                                <em>Stadtplan (Nacht)</em>"), zu der uns die von
+                                vielen PKW-Navis bei Dunkelheit eingesetzte
+                                Darstellungsweise inspiriert hat.{' '}
+                                <strong>Hinweis</strong>: Der Stadtplan (Nacht)
+                                wird Ihnen nur angeboten, wenn Ihr Browser
+                                CSS3-Filtereffekte unterstützt, also z. B. nicht
+                                beim Microsoft Internet Explorer. Die
+                                Nacht-Karte erzeugt einen deutlicheren Kontrast
+                                mit den farbigen Symbolen der Ladestationen, die
                                 unterschiedlichen Flächennutzungen in der
                                 Hintergrundkarte lassen sich aber nicht mehr so
                                 gut unterscheiden wie in der Tag-Karte. Als
-                                dritte Möglichkeit steht eine Luftbildkarte zur
-                                Verfügung, die die Anschaulichkeit des
-                                Luftbildes mit der Eindeutigkeit des Stadtplans
-                                (Kartenschrift, durchscheinende Linien)
-                                verbindet.{' '}
+                                dritte Möglichkeit steht eine{' '}
+                                <i>Luftbildkarte</i> zur Verfügung, die die
+                                Anschaulichkeit des Luftbildes mit der
+                                Eindeutigkeit des Stadtplans (Kartenschrift,
+                                durchscheinende Linien) verbindet.
                               </p>
+
                               <p>
-                                Im Vorschaubild sehen Sie direkt die
-                                prinzipielle Wirkung ihrer Einstellungen.
+                                In der{' '}
+                                <b>
+                                  <i>Vorschau</i>
+                                </b>{' '}
+                                sehen Sie direkt die Wirkung ihrer Einstellungen
+                                in einem fest eingestellten Kartenausschnitt.
                               </p>
                             </div>
                           ),
@@ -476,18 +541,15 @@ const Menu = () => {
                       },
                       {
                         title: 'Personalisierung',
-                        bsStyle: 'success',
+                        bsStyle: 'info',
                         contentBlockConf: {
                           type: 'REACTCOMP',
                           content: (
                             <p>
-                              Ihre Themenauswahl und Einstellungen bleiben auch
-                              nach einem Neustart der Anwendung erhalten. (Es
-                              sei denn, Sie löschen den Browser-Verlauf
-                              einschließlich der gehosteten App-Daten.) Damit
-                              können Sie mit wenigen Klicks aus unserem
-                              Online-Stadtplan einen dauerhaft für Sie
-                              optimierten Themenstadtplan machen.
+                              Ihre Einstellungen bleiben auch nach einem
+                              Neustart der Anwendung erhalten. (Es sei denn, Sie
+                              löschen den Browser-Verlauf einschließlich der
+                              gehosteten App-Daten.)
                             </p>
                           ),
                         },
