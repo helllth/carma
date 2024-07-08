@@ -174,6 +174,7 @@ function SearchComponent({
     borderTopLeftRadius: 0,
   };
   const autoCompleteRef = useRef(null);
+  const dropdownContainerRef = useRef(null);
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
       hit,
@@ -308,6 +309,32 @@ function SearchComponent({
     }
   }, [allGazeteerData, fuseInstance]);
 
+  useEffect(() => {
+    console.log('xxx custom dropdown', dropdownContainerRef);
+    if (dropdownContainerRef.current) {
+      const allItems =
+        dropdownContainerRef.current.querySelectorAll('.ant-select-item');
+
+      const holderInner = dropdownContainerRef.current.querySelector(
+        '.rc-virtual-list-holder-inner'
+      );
+      const listHolder = dropdownContainerRef.current.querySelector(
+        '.rc-virtual-list-holder > div:first-child'
+      );
+
+      if (holderInner) {
+        const isOverflowing = holderInner.scrollWidth > holderInner.clientWidth;
+        if (isOverflowing) {
+          // listHolder.style.width = holderInner.scrollWidth + 'px';
+          listHolder.style.width = 700 + 'px';
+        } else {
+          listHolder.style.overflowX = 'hidden';
+          listHolder.style.removeProperty('width');
+        }
+      }
+    }
+  }, [dropdownContainerRef, options, value]);
+
   const handleShowCategories = (e) => {
     setSfStandardSearch(e.target.checked);
     setOptions([]);
@@ -358,15 +385,23 @@ function SearchComponent({
           ref={autoCompleteRef}
           options={options}
           style={inputStyle}
+          open={true}
           onSearch={(value) => handleSearchAutoComplete(value)}
           onChange={(value) => setValue(value)}
           placeholder="Wohin?"
           value={value}
           onSelect={(value, option) => handleOnSelect(option)}
-          defaultActiveFirstOption={true}
-          notFoundContent={
-            showNotFoundContent ? <div>Keine Treffer gefunden</div> : ''
-          }
+          // defaultActiveFirstOption={true}
+          // notFoundContent={
+          //   showNotFoundContent ? <div>Keine Treffer gefunden</div> : ''
+          // }
+          dropdownRender={(item) => {
+            return (
+              <div className="fuzzy-dropdownwrapper" ref={dropdownContainerRef}>
+                {item}
+              </div>
+            );
+          }}
         />
       ) : (
         <AutoComplete
