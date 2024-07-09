@@ -50,7 +50,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
           <FontAwesomeIcon
             icon={properties.schluessel === 'B' ? faBicycle : faCar}
           />
-          {`Datenblatt: ${groupingFunction(properties)} ${properties.name}`}
+          {` Datenblatt: ${groupingFunction(properties)} ${properties.name}`}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body id="myMenu" key={'prbr.secondaryInfo'}>
