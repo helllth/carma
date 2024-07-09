@@ -38,7 +38,7 @@ const initialState: MappingState = {
   selectedLayerIndex: -2,
   selectedMapLayer: {
     title: 'Stadtplan',
-    id: 'karte',
+    id: 'stadtplan',
     opacity: 1.0,
     description: ``,
     inhalt: `Kartendienst (WMS) des Regionalverbandes Ruhr (RVR). Datengrundlage: Stadtkarte 2.0. Wöchentlich in einem automatischen Prozess aktualisierte Zusammenführung des Straßennetzes der OpenStreetMap mit Amtlichen Geobasisdaten des Landes NRW aus den Fachverfahren ALKIS (Gebäude, Flächennutzungen) und ATKIS (Gewässer). © RVR und Kooperationspartner ( <a href="https://www.govdata.de/dl-de/by-2-0">
