@@ -76,7 +76,7 @@ const Info = ({ description, legend }: InfoProps) => {
       )}
       {isBaseLayer && (
         <div className="flex flex-col gap-2 pb-4">
-          <h5 className="font-semibold">Hintergrund Layer:</h5>
+          <h5 className="font-semibold">Hintergrund:</h5>
           <div className="w-full flex last:rounded-s-md first:rounded-s-md">
             <button
               onClick={(e) => {
@@ -215,62 +215,57 @@ const Info = ({ description, legend }: InfoProps) => {
       )}
       <hr className="h-px my-0 bg-gray-300 border-0 w-full" />
       {isBaseLayer ? (
-        <Tabs
-          animated={false}
-          items={[
-            {
-              key: '1',
-              label: 'Inhalt',
-              children: (
-                <div className="h-full overflow-auto">
-                  <div
-                    className="text-base"
-                    dangerouslySetInnerHTML={{ __html: backgroundLayer.inhalt }}
-                  />
-                </div>
-              ),
-            },
-            {
-              key: '2',
-              label: 'Eignung',
-              children: (
-                <div className="h-full overflow-auto">
-                  <div
-                    className="text-base"
-                    dangerouslySetInnerHTML={{
-                      __html: backgroundLayer.eignung,
-                    }}
-                  />
-                </div>
-              ),
-            },
-            {
-              key: '3',
-              label: 'Layer',
-              children: (
-                <DndContext
-                  onDragEnd={handleDragEnd}
-                  modifiers={[restrictToVerticalAxis]}
-                >
-                  <div className="h-full overflow-auto flex flex-col gap-2">
-                    <SortableContext
-                      items={layers}
-                      strategy={verticalListSortingStrategy}
-                    >
-                      {layers.map((layer, i) => (
-                        <LayerRow
-                          key={`layer.${i}`}
-                          layer={layer}
-                          id={layer.id}
-                        />
-                      ))}
-                    </SortableContext>
+        <div className="flex flex-col h-full gap-2">
+          <Tabs
+            animated={false}
+            items={[
+              {
+                key: '1',
+                label: 'Inhalt',
+                children: (
+                  <div className="h-full overflow-auto">
+                    <div
+                      className="text-base"
+                      dangerouslySetInnerHTML={{
+                        __html: backgroundLayer.inhalt,
+                      }}
+                    />
                   </div>
-                </DndContext>
-              ),
-            },
-          ]}
-        />
+                ),
+              },
+              {
+                key: '2',
+                label: 'Eignung',
+                children: (
+                  <div className="h-full overflow-auto">
+                    <div
+                      className="text-base"
+                      dangerouslySetInnerHTML={{
+                        __html: backgroundLayer.eignung,
+                      }}
+                    />
+                  </div>
+                ),
+              },
+            ]}
+          />
+          <h5 className="font-semibold">Kartenebenen:</h5>
+          <DndContext
+            onDragEnd={handleDragEnd}
+            modifiers={[restrictToVerticalAxis]}
+          >
+            <div className="h-full overflow-auto flex flex-col gap-2">
+              <SortableContext
+                items={layers}
+                strategy={verticalListSortingStrategy}
+              >
+                {layers.map((layer, i) => (
+                  <LayerRow key={`layer.${i}`} layer={layer} id={layer.id} />
+                ))}
+              </SortableContext>
+            </div>
+          </DndContext>
+        </div>
       ) : (
         <Tabs
           animated={false}
