@@ -333,7 +333,7 @@ function SearchComponent({
         '.ant-select-selection-search-input'
       ).scrollWidth;
 
-      holderInner.style.width = inputWidth + 'px';
+      holderInner.style.width = inputWidth + 10 + 'px';
 
       if (holderInner) {
         const handleScroll = (event) => {
@@ -355,6 +355,7 @@ function SearchComponent({
         console.log('xxx isOverflowing, inputWidth', biggestItem, inputWidth);
         if (isOverflowing) {
           listHolder.style.width = holderInner.scrollWidth + 'px';
+          holderInner.style.width = holderInner.scrollWidth + 10 + 'px';
         } else {
           listHolder.style.removeProperty('width');
         }
@@ -412,17 +413,16 @@ function SearchComponent({
           ref={autoCompleteRef}
           options={options}
           style={inputStyle}
-          open={true}
           onSearch={(value) => handleSearchAutoComplete(value)}
           onChange={(value) => setValue(value)}
           placeholder="Wohin?"
           value={value}
           onSelect={(value, option) => handleOnSelect(option)}
           defaultActiveFirstOption={true}
+          open={true}
           // notFoundContent={
           //   fireScrollEvent ? <div>Keine Treffer gefunden</div> : ''
           // }
-          onScroll={() => console.log('xxx scroll')}
           dropdownRender={(item) => {
             return (
               <div className="fuzzy-dropdownwrapper" ref={dropdownContainerRef}>
