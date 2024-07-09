@@ -43,7 +43,7 @@
 
 .fuzzy-search-container .ant-btn-default:disabled {
   color: black;
-  opacity: 0.85;
+  opacity: 0.7;
   background-image: linear-gradient(
     rgb(255, 255, 255) 0px,
     rgb(224, 224, 224) 100%
