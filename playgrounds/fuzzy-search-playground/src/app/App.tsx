@@ -23,14 +23,7 @@ const host = 'https://wupp-topicmaps-data.cismet.de';
 
 export const getGazData = async (
   setGazData,
-  topics = [
-    'bpklimastandorte',
-    'pois',
-    'kitas',
-    'bezirke',
-    'quartiere',
-    'adressen',
-  ]
+  topics = ['pois', 'kitas', 'bezirke', 'quartiere', 'adressen']
 ) => {
   const prefix = 'GazDataForStories';
   const sources: any = {};
@@ -49,10 +42,10 @@ export const getGazData = async (
   );
   sources.pois = await md5FetchText(prefix, host + '/data/3857/pois.json');
   sources.kitas = await md5FetchText(prefix, host + '/data/3857/kitas.json');
-  sources.bpklimastandorte = await md5FetchText(
-    prefix,
-    host + '/data/3857/bpklimastandorte.json'
-  );
+  // sources.bpklimastandorte = await md5FetchText(
+  //   prefix,
+  //   host + '/data/3857/bpklimastandorte.json'
+  // );
 
   const gazData = getGazDataForTopicIds(sources, topics);
 
