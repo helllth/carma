@@ -135,10 +135,11 @@ const MapMeasurement = (props) => {
       if (moveToShape && !deleteShape) {
         measureControl.showActiveShape(map, shapeCoordinates[0]?.coordinates);
       }
+    }
+
+    if (measureControl) {
       measureControl.changeMeasurementMode(mode);
-      console.log('vvv', mode);
       if (mode === 'measurement' && visibleShapes.length === 0) {
-        console.log('vvv', visibleShapes);
         const visibleShapesIds = measureControl.getVisibleShapeIdsArr(
           measureControl._map
         );
