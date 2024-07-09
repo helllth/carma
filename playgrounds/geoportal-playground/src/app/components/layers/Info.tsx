@@ -1,5 +1,5 @@
 import { Radio, Tabs } from 'antd';
-import { parseDescription } from '../../helper/helper';
+import { cn, parseDescription } from '../../helper/helper';
 import { tabItems } from './items';
 import { useDispatch, useSelector } from 'react-redux';
 import { getActiveTabKey, setActiveTabKey } from '../../store/slices/ui';
@@ -125,9 +125,38 @@ const Info = ({ description, legend }: InfoProps) => {
           </Radio.Group> */}
 
           <div className="w-full flex last:rounded-s-md first:rounded-s-md">
-            <button className="w-full !border-[#1677ff] border-[1px] rounded-s-md">
+            <button
+              onClick={() => {
+                dispatch(
+                  setBackgroundLayer({
+                    id: 'stadtplan',
+                    title: layerMap['stadtplan'].title,
+                    opacity: 1.0,
+                    description: layerMap['stadtplan'].description,
+                    layerType: 'wmts',
+                    visible: true,
+                    props: {
+                      name: '',
+                      url: layerMap['stadtplan'].url,
+                    },
+                    layers: layerMap['stadtplan'].layers,
+                  })
+                );
+              }}
+              className={cn(
+                'w-full border-[1px] rounded-s-md',
+                backgroundLayer.id === 'stadtplan' && 'border-[#1677ff]'
+              )}
+            >
               <div className="w-full flex flex-col text-[14px]/[30px] items-center justify-center gap-3">
-                <p className="mb-0 text-[#1677ff]">Karte</p>
+                <p
+                  className={cn(
+                    'mb-0',
+                    backgroundLayer.id === 'stadtplan' && 'text-[#1677ff]'
+                  )}
+                >
+                  Stadtplan
+                </p>
                 <Radio.Group
                   value={value}
                   onChange={(e) => {
@@ -142,8 +171,39 @@ const Info = ({ description, legend }: InfoProps) => {
                 </Radio.Group>
               </div>
             </button>
-            <button className="w-full rounded-e-md border border-solid flex flex-col items-center justify-start">
-              <p className="mb-0 text-[14px]/[30px]">Luftbild</p>
+            <button
+              onClick={() => {
+                dispatch(
+                  setBackgroundLayer({
+                    id: 'luftbild',
+                    title: layerMap['luftbild'].title,
+                    opacity: 1.0,
+                    description: layerMap['luftbild'].description,
+                    layerType: 'wmts',
+                    visible: true,
+                    props: {
+                      name: '',
+                      url: layerMap['luftbild'].url,
+                    },
+                    layers: layerMap['luftbild'].layers,
+                  })
+                );
+              }}
+              className={cn(
+                'w-full rounded-e-md border-[1px]',
+                backgroundLayer.id === 'luftbild' && 'border-[#1677ff]'
+              )}
+            >
+              <div className="flex text-[14px]/[30px] flex-col items-center h-full justify-start">
+                <p
+                  className={cn(
+                    'mb-0',
+                    backgroundLayer.id === 'luftbild' && 'text-[#1677ff]'
+                  )}
+                >
+                  Luftbild
+                </p>
+              </div>
             </button>
           </div>
           <h5 className="font-semibold pt-2">Inhalt</h5>
