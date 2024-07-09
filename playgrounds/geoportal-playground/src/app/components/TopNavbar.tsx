@@ -65,13 +65,13 @@ export const possibleLayers = {
     url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
   },
   gelaende: {
-    title: 'Topographisch',
+    title: 'Gelände',
     layers: 'basemap_relief@40',
     description: ``,
     url: 'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_top.json',
   },
   amtlich: {
-    title: 'Amtlich',
+    title: 'Amtliche Geobasisdaten',
     layers: 'amtlichBasiskarte@90',
     description: ``,
 
