@@ -7,8 +7,10 @@ import {
   getBackgroundLayer,
   getLayers,
   getSelectedLayerIndex,
+  getSelectedMapLayer,
   setBackgroundLayer,
   setLayers,
+  setSelectedMapLayer,
 } from '../../store/slices/mapping';
 import { DndContext } from '@dnd-kit/core';
 import {
@@ -18,8 +20,7 @@ import {
 } from '@dnd-kit/sortable';
 import LayerRow from './LayerRow';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { layerMap } from '../TopNavbar';
-import { useState } from 'react';
+import { layerMap, possibleLayers } from '../TopNavbar';
 
 interface InfoProps {
   description: string;
@@ -28,7 +29,7 @@ interface InfoProps {
 
 const Info = ({ description, legend }: InfoProps) => {
   const dispatch = useDispatch();
-  const [value, setValue] = useState('1');
+  const selectedMapLayer = useSelector(getSelectedMapLayer);
   const activeTabKey = useSelector(getActiveTabKey);
   const parsedDescription = parseDescription(description);
   const layers = useSelector(getLayers);
@@ -46,6 +47,15 @@ const Info = ({ description, legend }: InfoProps) => {
       const newLayers = arrayMove(layers, originalPos, newPos);
 
       dispatch(setLayers(newLayers));
+    }
+  };
+
+  const handleRadioClick = (radioValue) => {
+    if (
+      backgroundLayer.id === 'luftbild' &&
+      selectedMapLayer.id === radioValue
+    ) {
+      dispatch(setBackgroundLayer({ ...selectedMapLayer, id: 'karte' }));
     }
   };
 
@@ -132,49 +142,89 @@ const Info = ({ description, legend }: InfoProps) => {
                   e.target.localName !== 'input'
                 ) {
                   dispatch(
-                    setBackgroundLayer({
-                      id: 'stadtplan',
-                      title: layerMap['stadtplan'].title,
-                      opacity: 1.0,
-                      description: layerMap['stadtplan'].description,
-                      layerType: 'wmts',
-                      visible: true,
-                      props: {
-                        name: '',
-                        url: layerMap['stadtplan'].url,
-                      },
-                      layers: layerMap['stadtplan'].layers,
-                    })
+                    setBackgroundLayer({ ...selectedMapLayer, id: 'karte' })
                   );
                 }
               }}
               className={cn(
                 'w-full group border-[1px] rounded-s-md',
-                backgroundLayer.id === 'stadtplan' && 'border-[#1677ff]'
+                backgroundLayer.id !== 'luftbild' && 'border-[#1677ff]'
               )}
             >
               <div className="w-full flex flex-col text-[14px]/[30px] items-center justify-center gap-3">
                 <p
                   className={cn(
                     'mb-0 group-hover:text-[#1677ff]',
-                    backgroundLayer.id === 'stadtplan' && 'text-[#1677ff]'
+                    backgroundLayer.id !== 'luftbild' && 'text-[#1677ff]'
                   )}
                 >
                   Karte
                 </p>
                 <Radio.Group
-                  value={value}
+                  value={selectedMapLayer.id}
                   onChange={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setValue(e.target.value);
+                    dispatch(
+                      setSelectedMapLayer({
+                        id: e.target.value,
+                        title: possibleLayers[e.target.value].title,
+                        opacity: 1.0,
+                        description: possibleLayers[e.target.value].description,
+                        layerType: 'wmts',
+                        visible: true,
+                        props: {
+                          name: '',
+                          url: possibleLayers[e.target.value].url,
+                        },
+                        layers: possibleLayers[e.target.value].layers,
+                      })
+                    );
+
+                    if (backgroundLayer.id === 'karte') {
+                      dispatch(
+                        setBackgroundLayer({
+                          id: 'karte',
+                          title: possibleLayers[e.target.value].title,
+                          opacity: 1.0,
+                          description:
+                            possibleLayers[e.target.value].description,
+                          layerType: 'wmts',
+                          visible: true,
+                          props: {
+                            name: '',
+                            url: possibleLayers[e.target.value].url,
+                          },
+                          layers: possibleLayers[e.target.value].layers,
+                        })
+                      );
+                    }
                   }}
                   className="pb-2"
                   optionType="default"
                 >
-                  <Radio value="1">Stadtplan</Radio>
-                  <Radio value="2">Gelände</Radio>
-                  <Radio value="3">Amtliche Geobasisdaten</Radio>
+                  <Radio
+                    onClick={(e) => {
+                      handleRadioClick(e.target.value);
+                    }}
+                    value="stadtplan"
+                  >
+                    Stadtplan
+                  </Radio>
+                  <Radio
+                    onClick={(e) => {
+                      handleRadioClick(e.target.value);
+                    }}
+                    value="gelaende"
+                  >
+                    Gelände
+                  </Radio>
+                  <Radio
+                    onClick={(e) => {
+                      handleRadioClick(e.target.value);
+                    }}
+                    value="amtlich"
+                  >
+                    Amtliche Geobasisdaten
+                  </Radio>
                 </Radio.Group>
               </div>
             </button>

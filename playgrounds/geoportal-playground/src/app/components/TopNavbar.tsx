@@ -29,6 +29,7 @@ import {
   getFocusMode,
   getLayers,
   getSavedLayerConfigs,
+  getSelectedMapLayer,
   removeLayer,
   setBackgroundLayer,
   setFocusMode,
@@ -40,6 +41,43 @@ import { getShowLayerButtons, setShowLayerButtons } from '../store/slices/ui';
 import { cn } from '../helper/helper';
 import { Item } from 'libraries/layer-lib/src/helper/types';
 import Save from './Save';
+
+export const possibleLayers = {
+  stadtplan: {
+    title: 'Stadtplan',
+    layers: 'amtlich@90',
+    description: `Kartendienst (WMS) des Regionalverbandes Ruhr (RVR). Datengrundlage:
+            <strong>Stadtkarte 2.0</strong>. Wöchentlich in einem automatischen Prozess
+            aktualisierte Zusammenführung des Straßennetzes der OpenStreetMap
+            mit Amtlichen Geobasisdaten des Landes NRW aus den Fachverfahren
+            ALKIS (Gebäude, Flächennutzungen) und ATKIS (Gewässer). © RVR und
+            Kooperationspartner (
+            <a href="https://www.govdata.de/dl-de/by-2-0">
+              Datenlizenz Deutschland - Namensnennung - Version 2.0
+            </a>
+            ). Lizenzen der Ausgangsprodukte:
+            <a href="https://www.govdata.de/dl-de/zero-2-0">
+              Datenlizenz Deutschland - Zero - Version 2.0
+            </a>
+            (Amtliche Geobasisdaten) und
+            <a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL</a>
+            (OpenStreetMap contributors).`,
+    url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
+  },
+  gelaende: {
+    title: 'Topographisch',
+    layers: 'basemap_relief@40',
+    description: ``,
+    url: 'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_top.json',
+  },
+  amtlich: {
+    title: 'Amtlich',
+    layers: 'amtlichBasiskarte@90',
+    description: ``,
+
+    url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
+  },
+};
 
 export const layerMap = {
   amtlich: {
@@ -93,6 +131,7 @@ const TopNavbar = () => {
   // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
   const backgroundLayer = useSelector(getBackgroundLayer);
+  const selectedMapLayer = useSelector(getSelectedMapLayer);
   const dispatch = useDispatch();
   const thumbnails = useSelector(getThumbnails);
   const activeLayers = useSelector(getLayers);
@@ -291,25 +330,30 @@ const TopNavbar = () => {
           <Radio.Group
             value={backgroundLayer.id}
             onChange={(e) => {
-              // setSelectedBackground(e.target.value);
-              dispatch(
-                setBackgroundLayer({
-                  id: e.target.value,
-                  title: layerMap[e.target.value].title,
-                  opacity: 1.0,
-                  description: layerMap[e.target.value].description,
-                  layerType: 'wmts',
-                  visible: true,
-                  props: {
-                    name: '',
-                    url: layerMap[e.target.value].url,
-                  },
-                  layers: layerMap[e.target.value].layers,
-                })
-              );
+              if (e.target.value === 'karte') {
+                dispatch(
+                  setBackgroundLayer({ ...selectedMapLayer, id: 'karte' })
+                );
+              } else {
+                dispatch(
+                  setBackgroundLayer({
+                    id: e.target.value,
+                    title: layerMap[e.target.value].title,
+                    opacity: 1.0,
+                    description: layerMap[e.target.value].description,
+                    layerType: 'wmts',
+                    visible: true,
+                    props: {
+                      name: '',
+                      url: layerMap[e.target.value].url,
+                    },
+                    layers: layerMap[e.target.value].layers,
+                  })
+                );
+              }
             }}
           >
-            <Radio.Button value="stadtplan">Stadtplan</Radio.Button>
+            <Radio.Button value="karte">Karte</Radio.Button>
             <Radio.Button value="luftbild">Luftbild</Radio.Button>
           </Radio.Group>
         </div>

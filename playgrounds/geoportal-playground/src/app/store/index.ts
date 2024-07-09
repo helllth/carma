@@ -62,6 +62,7 @@ const mappingConfig = {
   whitelist: [
     'layers',
     'savedLayerConfigs',
+    'selectedMapLayer',
     'backgroundLayer',
     'showFullscreenButton',
     'showLocatorButton',
