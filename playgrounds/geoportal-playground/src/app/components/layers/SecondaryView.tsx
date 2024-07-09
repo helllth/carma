@@ -1,4 +1,6 @@
 import {
+  faArrowDown,
+  faArrowUp,
   faChevronLeft,
   faChevronRight,
   faInfo,
@@ -152,9 +154,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                 id="opacity-slider"
               />
             </div>
-            <FontAwesomeIcon
-              icon={faInfo}
-              className="text-base"
+            <button
               onClick={() => {
                 dispatch(setShowInfo(!showInfo));
                 setTimeout(
@@ -162,7 +162,17 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                   showInfoText ? 0 : 80
                 );
               }}
-            />
+              className="relative fa-stack mt-1"
+            >
+              <hr className="h-0.5 absolute -top-4 right-[3px] bg-black border-0 w-full" />
+              <FontAwesomeIcon
+                className="text-base pr-[5px]"
+                icon={showInfo ? faArrowUp : faArrowDown}
+              />
+              {!showInfo && (
+                <hr className="h-0.5 absolute top-[3px] right-[3px] bg-black border-0 w-full" />
+              )}
+            </button>
           </div>
 
           {showInfoText && (

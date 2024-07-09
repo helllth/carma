@@ -4,6 +4,8 @@ import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 
 export type BackgroundLayer = Layer & {
   layers: string;
+  inhalt?: string;
+  eignung?: string;
 };
 
 export type SavedLayerConfig = {
@@ -19,6 +21,7 @@ interface MappingState {
   layers: Layer[];
   savedLayerConfigs: SavedLayerConfig[];
   selectedLayerIndex: number;
+  selectedMapLayer: BackgroundLayer;
   backgroundLayer: BackgroundLayer;
   showLeftScrollButton: boolean;
   showRightScrollButton: boolean;
@@ -33,6 +36,34 @@ const initialState: MappingState = {
   layers: [],
   savedLayerConfigs: [],
   selectedLayerIndex: -2,
+  selectedMapLayer: {
+    title: 'Stadtplan',
+    id: 'stadtplan',
+    opacity: 1.0,
+    description: `Kartendienst (WMS) des Regionalverbandes Ruhr (RVR). Datengrundlage:
+            <strong>Stadtkarte 2.0</strong>. Wöchentlich in einem automatischen Prozess
+            aktualisierte Zusammenführung des Straßennetzes der OpenStreetMap
+            mit Amtlichen Geobasisdaten des Landes NRW aus den Fachverfahren
+            ALKIS (Gebäude, Flächennutzungen) und ATKIS (Gewässer). © RVR und
+            Kooperationspartner (
+            <a href="https://www.govdata.de/dl-de/by-2-0">
+              Datenlizenz Deutschland - Namensnennung - Version 2.0
+            </a>
+            ). Lizenzen der Ausgangsprodukte:
+            <a href="https://www.govdata.de/dl-de/zero-2-0">
+              Datenlizenz Deutschland - Zero - Version 2.0
+            </a>
+            (Amtliche Geobasisdaten) und
+            <a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL</a>
+            (OpenStreetMap contributors).`,
+    visible: true,
+    layerType: 'wmts',
+    props: {
+      name: '',
+      url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX=%7Bz%7D&TILEROW=%7By%7D&TILECOL=%7Bx%7D',
+    },
+    layers: 'amtlich@100',
+  },
   backgroundLayer: {
     title: 'Stadtplan',
     id: 'stadtplan',
@@ -146,6 +177,9 @@ const slice = createSlice({
         state.selectedLayerIndex = newIndex;
       }
     },
+    setSelectedMapLayer(state, action: PayloadAction<BackgroundLayer>) {
+      state.selectedMapLayer = action.payload;
+    },
     setBackgroundLayer(state, action: PayloadAction<BackgroundLayer>) {
       state.backgroundLayer = action.payload;
     },
@@ -186,6 +220,7 @@ export const {
   setSelectedLayerIndex,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
+  setSelectedMapLayer,
   setBackgroundLayer,
   setShowLeftScrollButton,
   setShowRightScrollButton,
@@ -206,6 +241,10 @@ export const getSavedLayerConfigs = (state: RootState) => {
 
 export const getSelectedLayerIndex = (state: RootState) => {
   return state.mapping.selectedLayerIndex;
+};
+
+export const getSelectedMapLayer = (state: RootState) => {
+  return state.mapping.selectedMapLayer;
 };
 
 export const getBackgroundLayer = (state: RootState) => {

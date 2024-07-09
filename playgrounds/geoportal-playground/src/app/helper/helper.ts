@@ -42,6 +42,10 @@ export const parseDescription = (description: string) => {
   const result = { inhalt: '', sichtbarkeit: '', nutzung: '' };
   const keywords = ['Inhalt:', 'Sichtbarkeit:', 'Nutzung:'];
 
+  if (!description) {
+    return result;
+  }
+
   function extractTextAfterKeyword(input, keyword) {
     const index = input.indexOf(keyword);
     if (index !== -1) {
