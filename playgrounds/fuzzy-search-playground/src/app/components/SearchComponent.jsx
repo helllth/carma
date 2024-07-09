@@ -196,7 +196,7 @@ function SearchComponent({
   const handleSearchAutoComplete = (value) => {
     let ifShowScore = null;
     let showSortedResults = null;
-    let defaultLimit = 0;
+    let defaultLimit = 3;
     let defaultCut = 0.4;
     if (allGazeteerData.length > 0 && fuseInstance) {
       const hash = window.location.hash;
