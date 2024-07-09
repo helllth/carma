@@ -81,8 +81,8 @@ const Info = ({ description, legend }: InfoProps) => {
             <button
               onClick={(e) => {
                 if (
-                  e.target.localName !== 'span' &&
-                  e.target.localName !== 'input'
+                  (e.target as HTMLElement).localName !== 'span' &&
+                  (e.target as HTMLElement).localName !== 'input'
                 ) {
                   dispatch(
                     setBackgroundLayer({ ...selectedMapLayer, id: 'karte' })
@@ -149,7 +149,7 @@ const Info = ({ description, legend }: InfoProps) => {
                 >
                   <Radio
                     onClick={(e) => {
-                      handleRadioClick(e.target.value);
+                      handleRadioClick((e.target as HTMLInputElement).value);
                     }}
                     value="stadtplan"
                   >
@@ -157,7 +157,7 @@ const Info = ({ description, legend }: InfoProps) => {
                   </Radio>
                   <Radio
                     onClick={(e) => {
-                      handleRadioClick(e.target.value);
+                      handleRadioClick((e.target as HTMLInputElement).value);
                     }}
                     value="gelaende"
                   >
@@ -165,7 +165,7 @@ const Info = ({ description, legend }: InfoProps) => {
                   </Radio>
                   <Radio
                     onClick={(e) => {
-                      handleRadioClick(e.target.value);
+                      handleRadioClick((e.target as HTMLInputElement).value);
                     }}
                     value="amtlich"
                   >
