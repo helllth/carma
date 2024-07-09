@@ -12,6 +12,7 @@ import { forwardRef, useContext, useEffect, useRef } from 'react';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '../../helper/helper';
+import type { SliderSingleProps } from 'antd';
 import {
   changeOpacity,
   getBackgroundLayer,
@@ -33,6 +34,10 @@ import { iconColorMap, iconMap } from './items';
 type Ref = HTMLDivElement;
 
 interface SecondaryViewProps {}
+
+export const formatter: NonNullable<
+  SliderSingleProps['tooltip']
+>['formatter'] = (value) => `${value * 100}%`;
 
 const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
   // @ts-ignore
@@ -137,6 +142,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
               </label>
               <Slider
                 disabled={background}
+                tooltip={{ formatter }}
                 onFocus={() => {
                   routedMapRef?.leafletMap?.leafletElement.dragging.disable();
                 }}

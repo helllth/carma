@@ -12,6 +12,7 @@ import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 import { useDispatch } from 'react-redux';
 import { changeOpacity, changeVisibility } from '../../store/slices/mapping';
 import { iconColorMap, iconMap } from './items';
+import { formatter } from './SecondaryView';
 
 interface LayerRowProps {
   layer: Layer;
@@ -70,6 +71,7 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
       <Slider
         min={0}
         max={1}
+        tooltip={{ formatter: formatter }}
         step={0.1}
         onChange={(value) => {
           dispatch(changeOpacity({ id: layer.id, opacity: value }));
