@@ -77,63 +77,6 @@ const Info = ({ description, legend }: InfoProps) => {
       {isBaseLayer && (
         <div className="flex flex-col gap-2 pb-4">
           <h5 className="font-semibold">Hintergrund Layer:</h5>
-          {/* <Radio.Group
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-            className="pb-2"
-            optionType="default"
-          >
-            <Radio value="1">Stadtplan</Radio>
-            <Radio value="2">Gelände</Radio>
-            <Radio value="3">Amtliche Geobasisdaten</Radio>
-          </Radio.Group> */}
-          {/* <Radio.Group
-            value={backgroundLayer.id}
-            className="w-full h-full"
-            onChange={(e) => {
-              dispatch(
-                setBackgroundLayer({
-                  id: e.target.value,
-                  title: layerMap[e.target.value].title,
-                  opacity: 1.0,
-                  description: layerMap[e.target.value].description,
-                  layerType: 'wmts',
-                  visible: true,
-                  props: {
-                    name: '',
-                    url: layerMap[e.target.value].url,
-                  },
-                  layers: layerMap[e.target.value].layers,
-                })
-              );
-            }}
-          >
-            <Radio.Button className="w-1/2 h-full" value="stadtplan">
-              <div className="w-full flex flex-col items-center justify-center gap-3">
-                Karte
-                <Radio.Group
-                  value={value}
-                  onChange={(e) => {
-                    setValue(e.target.value);
-                  }}
-                  className="pb-2"
-                  // optionType="default"
-                >
-                  <Radio value="1">Stadtplan</Radio>
-                  <Radio value="2">Gelände</Radio>
-                  <Radio value="3">Amtliche Geobasisdaten</Radio>
-                </Radio.Group>
-              </div>
-            </Radio.Button>
-            <Radio.Button className="w-1/2 h-full" value="luftbild">
-              <div className="w-full flex items-center justify-center">
-                Luftbild
-              </div>
-            </Radio.Button>
-          </Radio.Group> */}
-
           <div className="w-full flex last:rounded-s-md first:rounded-s-md">
             <button
               onClick={(e) => {
