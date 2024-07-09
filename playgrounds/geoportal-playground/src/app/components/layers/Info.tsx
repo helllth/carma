@@ -126,22 +126,27 @@ const Info = ({ description, legend }: InfoProps) => {
 
           <div className="w-full flex last:rounded-s-md first:rounded-s-md">
             <button
-              onClick={() => {
-                dispatch(
-                  setBackgroundLayer({
-                    id: 'stadtplan',
-                    title: layerMap['stadtplan'].title,
-                    opacity: 1.0,
-                    description: layerMap['stadtplan'].description,
-                    layerType: 'wmts',
-                    visible: true,
-                    props: {
-                      name: '',
-                      url: layerMap['stadtplan'].url,
-                    },
-                    layers: layerMap['stadtplan'].layers,
-                  })
-                );
+              onClick={(e) => {
+                if (
+                  e.target.localName !== 'span' &&
+                  e.target.localName !== 'input'
+                ) {
+                  dispatch(
+                    setBackgroundLayer({
+                      id: 'stadtplan',
+                      title: layerMap['stadtplan'].title,
+                      opacity: 1.0,
+                      description: layerMap['stadtplan'].description,
+                      layerType: 'wmts',
+                      visible: true,
+                      props: {
+                        name: '',
+                        url: layerMap['stadtplan'].url,
+                      },
+                      layers: layerMap['stadtplan'].layers,
+                    })
+                  );
+                }
               }}
               className={cn(
                 'w-full group border-[1px] rounded-s-md',
@@ -160,6 +165,8 @@ const Info = ({ description, legend }: InfoProps) => {
                 <Radio.Group
                   value={value}
                   onChange={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
                     setValue(e.target.value);
                   }}
                   className="pb-2"
