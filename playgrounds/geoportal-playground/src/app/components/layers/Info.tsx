@@ -155,7 +155,7 @@ const Info = ({ description, legend }: InfoProps) => {
                     backgroundLayer.id === 'stadtplan' && 'text-[#1677ff]'
                   )}
                 >
-                  Stadtplan
+                  Karte
                 </p>
                 <Radio.Group
                   value={value}
