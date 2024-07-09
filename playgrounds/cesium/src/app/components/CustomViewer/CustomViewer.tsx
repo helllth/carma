@@ -11,6 +11,7 @@ import {
   Viewer,
   Math as CeMath,
   PerspectiveFrustum,
+  Rectangle,
 } from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
 import Crosshair from '../UI/Crosshair';
@@ -29,13 +30,15 @@ import { ResizeableContainer } from './components/ResizeableContainer';
 import { useLocation } from 'react-router-dom';
 import useInitializeViewer from './hooks';
 import TopicMap from './components/TopicMap';
-import {
-  TopicMapContextProvider,
-  TopicMapContext,
-} from 'react-cismap/contexts/TopicMapContextProvider';
+import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { useTweakpaneCtx } from '@carma/debug-ui';
-import { resolutionFractions } from '../../utils/cesiumHelpers';
+import {
+  extentDegreesToRectangle,
+  resolutionFractions,
+} from '../../utils/cesiumHelpers';
 import { formatFractions } from '../Formatters';
+import WUPPERTAL from '../../config/locations.config';
+import MiniMap from './components/LeafletMiniMap';
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -58,14 +61,18 @@ type CustomViewerProps = {
 
   //disableZoomRestrictions?: boolean; // todo
   //minZoom?: number; // todo
-
-  globeColor?: Color;
+  globe?: {
+    // https://cesium.com/learn/cesiumjs/ref-doc/Globe.html
+    baseColor?: Color;
+    cartograpicLimitRectangle?: Rectangle;
+    showGroundAtmosphere?: boolean;
+    showSkirts?: boolean;
+  };
 };
 
 function CustomViewer(props: CustomViewerProps) {
   const home = useViewerHome();
   const homeOffset = useViewerHomeOffset();
-  const globeBaseColor = Color.WHITE; //useGlobeBaseColor();
   const isSecondaryStyle = useShowSecondaryTileset();
   const isMode2d = useViewerIsMode2d();
   //const isAnimating = useViewerIsAnimating();
@@ -76,13 +83,20 @@ function CustomViewer(props: CustomViewerProps) {
     showControls = true,
     showHome = true,
     showOrbit = true,
-    infoBox = false,
     selectionIndicator = false,
-
-    globeColor = globeBaseColor,
+    globe: globeProps = {
+      baseColor: Color.WHITESMOKE,
+      cartograpicLimitRectangle: extentDegreesToRectangle(WUPPERTAL.extent),
+      showGroundAtmosphere: false,
+      showSkirts: false,
+    },
   } = props;
 
   const [showFader, setShowFader] = useState(props.showFader ?? false);
+  const [showMiniMap, setShowMiniMap] = useState<boolean>(false);
+  const [viewportLimit, setViewportLimit] = useState<number>(4);
+  const [viewportLimitDebug, setViewportLimitDebug] = useState<boolean>(false);
+
   const [showCrosshair, setShowCrosshair] = useState<boolean>(
     props.showCrosshair ?? true
   );
@@ -91,7 +105,6 @@ function CustomViewer(props: CustomViewerProps) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const topicMapContext: any = useContext(TopicMapContext);
-  const leaflet = topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
 
   const [isUserAction, setIsUserAction] = useState(false);
   // DEV TWEAKPANE
@@ -135,6 +148,25 @@ function CustomViewer(props: CustomViewerProps) {
       title: 'Scene Settings',
     },
     {
+      get showMiniMap() {
+        return showMiniMap;
+      },
+      set showMiniMap(value: boolean) {
+        setShowMiniMap(value);
+      },
+      get viewportLimitDebug() {
+        return viewportLimitDebug;
+      },
+      set viewportLimitDebug(value: boolean) {
+        setViewportLimitDebug(value);
+      },
+      get viewportLimit() {
+        return viewportLimit;
+      },
+      set viewportLimit(value: number) {
+
+        (!Number.isNaN(value)) && setViewportLimit(value);
+      },
       get showCrosshair() {
         return showCrosshair;
       },
@@ -169,6 +201,9 @@ function CustomViewer(props: CustomViewerProps) {
     [
       { name: 'showFader' },
       { name: 'showCrosshair' },
+      { name: 'showMiniMap' },
+      { name: 'viewportLimit', min: 1.5, max: 10, step: 0.5 },
+      { name: 'viewportLimitDebug' },
       {
         name: 'resolutionScale',
         min: 0, // The minimum index
@@ -234,18 +269,30 @@ function CustomViewer(props: CustomViewerProps) {
   }, [viewer, location.pathname, isSecondaryStyle]);
 
   useEffect(() => {
-    console.log('HOOK: init or globeColor changed');
-    if (!viewer) return;
-    // set the globe color
-    const { scene } = viewer;
-    scene.globe.baseColor = globeColor;
-    viewer.imageryLayers.removeAll();
-    scene.screenSpaceCameraController.enableCollisionDetection = true;
-  }, [viewer, globeColor]);
+    if (viewer) {
+      console.log('HOOK: globe setting changed');
+      // set the globe props
+      //Object.assign(scene.globe, globeProps);
+      Object.entries(globeProps).forEach(([key, value]) => {
+        if (value !== undefined) {
+          viewer.scene.globe[key] = value;
+        }
+      });
+    }
+  }, [viewer, globeProps]);
+
+  useEffect(() => {
+    if (viewer) {
+      console.log('HOOK: viewer changed intit scene settings');
+      viewer.imageryLayers.removeAll();
+      viewer.scene.screenSpaceCameraController.enableCollisionDetection = true;
+    }
+  }, [viewer]);
 
   useEffect(() => {
     console.log('HOOK: viewer changed', isSecondaryStyle);
     if (!viewer) return;
+
     // remove default imagery
 
     const moveEndListener = async () => {
@@ -256,7 +303,7 @@ function CustomViewer(props: CustomViewerProps) {
         // let TopicMap/leaflet handle the view change in 2d Mode
         !isMode2d && replaceHashRoutedHistory(encodedScene, location.pathname);
 
-        if (isUserAction && !isMode2d) {
+        if (isUserAction && (!isMode2d || showFader)) {
           // remove roll from camera orientation
           const rollDeviation =
             Math.abs(CeMath.TWO_PI - viewer.camera.roll) % CeMath.TWO_PI;
@@ -273,7 +320,11 @@ function CustomViewer(props: CustomViewerProps) {
               duration,
             });
           }
-          showFader && setLeafletView(viewer, leaflet, { animate: false });
+          // preload 2D view
+          const leaflet =
+            topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
+          console.log('leaflet', leaflet, topicMapContext?.routedMapRef);
+          leaflet && setLeafletView(viewer, leaflet, { animate: false });
         }
       }
     };
@@ -282,12 +333,13 @@ function CustomViewer(props: CustomViewerProps) {
     return () => {
       viewer.camera.moveEnd.removeEventListener(moveEndListener);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     viewer,
     location.pathname,
     isSecondaryStyle,
-    //leafletElement,
+    showFader,
+    topicMapContext?.routedMapRef,
+    isMode2d,
     isUserAction,
   ]);
 
@@ -325,22 +377,23 @@ function CustomViewer(props: CustomViewerProps) {
     >
       <BaseTilesets />
       {children}
-      <TopicMapContextProvider>
-        {showControls && (
-          <ControlsUI
-            showHome={showHome}
-            showOrbit={showOrbit}
-            searchComponent={<SearchWrapper />}
-          />
-        )}
-        {showCrosshair && <Crosshair lineColor="white" />}
-        <ResizeableContainer
-          enableDragging={showFader}
-          start={showFader ? 5 : 0}
-        >
-          <TopicMap />
-        </ResizeableContainer>{' '}
-      </TopicMapContextProvider>
+      {showControls && (
+        <ControlsUI
+          showHome={showHome}
+          showOrbit={showOrbit}
+          searchComponent={<SearchWrapper />}
+        />
+      )}
+      {showCrosshair && <Crosshair lineColor="white" />}
+      <ResizeableContainer enableDragging={showFader} start={showFader ? 5 : 0}>
+        <TopicMap forceShow={showFader} />
+      </ResizeableContainer>
+      {showMiniMap && (
+        <MiniMap
+          viewportLimitResolutionFactor={viewportLimit}
+          showCesiumPolygon={viewportLimitDebug}
+        />
+      )}
     </ResiumViewer>
   );
 }

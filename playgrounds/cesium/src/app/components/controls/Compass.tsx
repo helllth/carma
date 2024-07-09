@@ -34,16 +34,24 @@ export const Compass = (props: CompassProps) => {
       if (defined(horizonTest)) {
         console.log('scene center below horizon');
         //const pos = getCanvasCenter(viewer);
-        const pos = pickViewerCanvasCenter(viewer);
-        const distance = Cartesian3.distance(pos, viewer.camera.position);
-        const cartographic = Cartographic.fromCartesian(pos);
-        const longitude = CeMath.toDegrees(cartographic.longitude);
-        const latitude = CeMath.toDegrees(cartographic.latitude);
-        destination = Cartesian3.fromDegrees(
-          longitude,
-          latitude,
-          cartographic.height + Math.max(distance, MIN_TOP_DOWN_DISTANCE)
-        );
+        const { scenePosition, coordinates } = pickViewerCanvasCenter(viewer, {
+          getCoordinates: true,
+        });
+        console.log("pick compass", coordinates, scenePosition);
+        if (scenePosition && coordinates) {
+          const distance = Cartesian3.distance(
+            scenePosition,
+            viewer.camera.position
+          );
+          const cartographic = coordinates;
+          const longitude = CeMath.toDegrees(cartographic.longitude);
+          const latitude = CeMath.toDegrees(cartographic.latitude);
+          destination = Cartesian3.fromDegrees(
+            longitude,
+            latitude,
+            cartographic.height + Math.max(distance, MIN_TOP_DOWN_DISTANCE)
+          );
+        }
       } else {
         console.info('scene above horizon, using camera position as reference');
         // use camera position if horizon is not visible

@@ -16,6 +16,7 @@ import 'leaflet/dist/leaflet.css';
 import { UIComponentProvider } from './components/UI/UIProvider';
 
 import { TweakpaneProvider } from '@carma/debug-ui';
+import { TopicMapContextProvider } from 'react-cismap/contexts/TopicMapContextProvider';
 
 const ViewerRoutes = routeGenerator(viewerRoutes);
 const OtherRoutes = routeGenerator(otherRoutes);
@@ -45,9 +46,11 @@ export function App() {
                 <Route
                   path="/*"
                   element={
-                    <CustomViewer>
-                      <Routes>{...ViewerRoutes}</Routes>
-                    </CustomViewer>
+                    <TopicMapContextProvider>
+                      <CustomViewer>
+                        <Routes>{...ViewerRoutes}</Routes>
+                      </CustomViewer>
+                    </TopicMapContextProvider>
                   }
                 />
                 {...OtherRoutes}

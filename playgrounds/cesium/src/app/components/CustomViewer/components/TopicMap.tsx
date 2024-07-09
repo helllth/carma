@@ -10,7 +10,7 @@ import {
 } from '../../../store/slices/viewer';
 import { DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION } from '../../../config';
 
-export const TopicMap = () => {
+export const TopicMap = ({ forceShow = false } = {}) => {
   const { viewer } = useCesium();
   const isPrimaryStyle = useShowPrimaryTileset();
   const isMode2d = useViewerIsMode2d();
@@ -21,7 +21,6 @@ export const TopicMap = () => {
 
   useEffect(() => {
     const node = componentRef.current;
-
     if (node) {
       const handleFocus = () => (isFocused.current = true);
       const handleBlur = () => (isFocused.current = false);
@@ -73,11 +72,10 @@ export const TopicMap = () => {
     <div
       ref={componentRef}
       style={{
-        opacity: isMode2d ? 1 : 0,
+        opacity: isMode2d || forceShow ? 1 : 0,
         transition: `opacity ${DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION}ms ease-in-out`,
-        pointerEvents: isMode2d ? 'auto' : 'none',
+        pointerEvents: isMode2d || forceShow ? 'auto' : 'none',
       }}
-
       //className={isMode2d ? 'fade-in' : 'fade-out'}
     >
       <TopicMapComponent
@@ -88,6 +86,8 @@ export const TopicMap = () => {
         zoomSnap={1} // TODO fix zoom snapping in TopicMap Component
         zoomDelta={1}
         locationChangedHandler={handleLeafletLocationChange}
+        //zoomControls={true}
+        //fullScreenControl={false}
       >
         <StyledWMSTileLayer
           {...{

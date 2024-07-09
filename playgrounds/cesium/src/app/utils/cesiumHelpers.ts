@@ -16,6 +16,7 @@ import {
   Viewer,
   Math as CeMath,
   BoundingSphere,
+  Rectangle,
 } from 'cesium';
 import { ColorRgbaArray, NumericResult, TilesetConfig } from '../..';
 
@@ -105,6 +106,14 @@ export function create3DTileStyle(
 
 const TOP_DOWN_DIRECTION = new Cartesian3(0, 0, -1);
 
+export const cameraToCartographicDegrees = (camera: Camera) => {
+  const { latitude, longitude } = camera.positionCartographic.clone();
+  return {
+    latitude: CeMath.toDegrees(latitude),
+    longitude: CeMath.toDegrees(longitude),
+  };
+};
+
 export const getTopDownCameraDeviationAngle = (viewer: Viewer) => {
   const currentDirection = viewer.camera.direction;
 
@@ -116,14 +125,16 @@ export const getTopDownCameraDeviationAngle = (viewer: Viewer) => {
 };
 
 export const getCameraHeightAboveGround = (viewer: Viewer) => {
-  const groundCenterPickPos = pickViewerCanvasCenter(viewer);
+  const { scenePosition: pos, coordinates } = pickViewerCanvasCenter(viewer, {
+    getCoordinates: true,
+  });
 
   let cameraHeightAboveGround: number;
-  const groundPositionCartographic =
-    Cartographic.fromCartesian(groundCenterPickPos);
-  const groundHeight = groundPositionCartographic.height;
+  let groundHeight: number = 0;
 
-  if (defined(groundCenterPickPos)) {
+  if (defined(pos) && defined(coordinates)) {
+    groundHeight = coordinates.height;
+
     cameraHeightAboveGround =
       viewer.camera.positionCartographic.height - groundHeight;
   } else {
@@ -140,8 +151,8 @@ export const getCameraHeightAboveGround = (viewer: Viewer) => {
 
 const getWindowPositions = (viewer: Viewer, [x, y] = [0.5, 0.5]) => {
   return new Cartesian2(
-    viewer.canvas.clientWidth * x,
-    viewer.canvas.clientHeight * y
+    (viewer.canvas.clientWidth - 1) * x + 0.5, // needs pixel to sample so shift into pixel centers
+    (viewer.canvas.clientHeight - 1) * y + 0.5
   );
 };
 
@@ -149,17 +160,31 @@ const CENTER_POSITION: [number, number] = [0.5, 0.5];
 
 /* Helper function to pick positions on the viewer canvas in unit coordinates*/
 
+export type PickResult = {
+  position: [number, number];
+  windowPosition: Cartesian2;
+  pixelSize: number | null;
+  scenePosition: Cartesian3 | null;
+  coordinates: Cartographic | null;
+};
+
+interface PickOptions {
+  depthTestAgainstTerrain?: boolean;
+  getPixelSize?: boolean;
+  getCoordinates?: boolean;
+  pickTranslucentDepth?: boolean;
+}
+
 export const pickViewerCanvasPositions = (
   viewer: Viewer,
   positions: [number, number][] = [CENTER_POSITION],
   {
+    getPixelSize = false,
+    getCoordinates = false,
     depthTestAgainstTerrain = true,
     pickTranslucentDepth = true,
-  }: {
-    depthTestAgainstTerrain?: boolean;
-    pickTranslucentDepth?: boolean;
-  } = {}
-) => {
+  }: PickOptions = {}
+): PickResult[] => {
   // store previous settings
   const prev = {
     depthTestAgainstTerrain: viewer.scene.globe.depthTestAgainstTerrain,
@@ -168,9 +193,47 @@ export const pickViewerCanvasPositions = (
   // apply overrides
   viewer.scene.pickTranslucentDepth = pickTranslucentDepth;
   viewer.scene.globe.depthTestAgainstTerrain = depthTestAgainstTerrain;
-  const pickedPositions = positions.map((position) =>
-    viewer.scene.pickPosition(getWindowPositions(viewer, position))
-  );
+  const pickedPositions: PickResult[] = positions.map((position) => {
+    const windowPosition = getWindowPositions(viewer, position);
+    const result: PickResult = {
+      position,
+      windowPosition,
+      scenePosition: null,
+      pixelSize: null,
+      coordinates: null,
+    };
+
+    const scenePosition = viewer.scene.pickPosition(windowPosition);
+
+    if (!defined(scenePosition)) {
+      console.warn(
+        'No scene position found at the picked position.',
+        position,
+        windowPosition
+      );
+      return result;
+    }
+
+    result.scenePosition = scenePosition;
+
+    if (getPixelSize) {
+      const pixelSize = viewer.camera.getPixelSize(
+        new BoundingSphere(scenePosition, 1),
+        viewer.scene.drawingBufferWidth,
+        viewer.scene.drawingBufferHeight
+      );
+      result.pixelSize = pixelSize;
+    }
+
+    if (getCoordinates) {
+      const coordinates =
+        scenePosition instanceof Cartesian3
+          ? Cartographic.fromCartesian(scenePosition)
+          : null;
+      result.coordinates = coordinates;
+    }
+    return result;
+  });
 
   // restore previous settings
   Object.assign(viewer.scene.globe, prev);
@@ -178,9 +241,93 @@ export const pickViewerCanvasPositions = (
   return pickedPositions;
 };
 
+// GET FRUSTUM/VIEWPORT EXTENT
+
+const findTopPick = (viewer: Viewer, xPos = 0, targetPixelSize: number) => {
+  let top: PickResult | null = null;
+  let yPos = 0;
+
+  while (top === null && yPos < 1) {
+    const [candidate] = pickViewerCanvasPositions(viewer, [[xPos, yPos]], {
+      getPixelSize: true,
+      getCoordinates: true,
+    });
+    if (candidate && candidate.pixelSize) {
+      const validResolution = candidate.pixelSize <= targetPixelSize;
+      if (validResolution) {
+        top = candidate;
+      }
+    }
+    yPos += 0.1;
+  }
+  return top;
+};
+
+export const getViewerViewportPolygonRing = (
+  viewer: Viewer,
+  { resolutionRange = 4 }: { resolutionRange?: number } = {}
+): [number, number][] | null => {
+  const bottom = pickViewerCanvasPositions(
+    viewer,
+    [
+      [0, 1],
+      //[0.25, 1],
+      [0.5, 1],
+      //[0.75, 1],
+      [1, 1],
+    ],
+    {
+      getPixelSize: true,
+      getCoordinates: true,
+    }
+  );
+  if (!bottom || bottom.length < 2) {
+    //console.warn('No bottom pixel position found', bottom);
+    return null;
+  }
+  const targetPixelSize =
+    bottom.reduce((acc, pos) => {
+      // find smallesT Value for PixelSize
+      if (pos.pixelSize && pos.pixelSize < acc) {
+        return Math.min(acc, pos.pixelSize);
+      } else {
+        return acc;
+      }
+    }, Infinity) * resolutionRange;
+
+  const top = bottom.map((pos) => {
+    const result = findTopPick(viewer, pos.position[0], targetPixelSize);
+    if (result) {
+      //console.info('Top pixel position found', pos.position[0], result);
+      return result;
+    } else {
+      //console.warn('No valid top pixel position found');
+      return null;
+    }
+  });
+
+  const geom: ([number, number] | null)[] = [...top, ...bottom.reverse()].map(
+    (result) => {
+      if (result && result.coordinates) {
+        return [
+          CeMath.toDegrees(result.coordinates.latitude),
+          CeMath.toDegrees(result.coordinates.longitude),
+        ];
+      } else {
+        //console.warn('No valid mappingg', result);
+        return null;
+      }
+    }
+  );
+  return geom.filter((point) => point !== null) as [number, number][];
+};
+
 // helper shorthand
-export const pickViewerCanvasCenter = (viewer: Viewer) =>
-  pickViewerCanvasPositions(viewer, [CENTER_POSITION])[0];
+export const pickViewerCanvasCenter = (
+  viewer: Viewer,
+  options?: PickOptions
+): PickResult =>
+  pickViewerCanvasPositions(viewer, [CENTER_POSITION], options)[0];
 
 const GEOJSON_DRILL_LIMIT = 10;
 
@@ -252,6 +399,43 @@ export function getAllPrimitives(viewer: Viewer) {
 }
 
 // GEO
+
+export const extentDegreesToRectangle = (extent: {
+  west: number;
+  east: number;
+  north: number;
+  south: number;
+}) => {
+  const { west, east, north, south } = extent;
+  const wsen = [west, south, east, north];
+  const wsenRad = wsen.map((x) => CeMath.toRadians(x));
+  return new Rectangle(...wsenRad);
+};
+
+export const rectangleToExtentDegrees = ({
+  west,
+  south,
+  east,
+  north,
+}: Rectangle) => {
+  const wsen = [west, south, east, north].map((x) => CeMath.toDegrees(x));
+  return {
+    west: wsen[0],
+    south: wsen[1],
+    east: wsen[2],
+    north: wsen[3],
+    leafletBounds: {
+      NE: {
+        lat: wsen[3],
+        lng: wsen[2],
+      },
+      SW: {
+        lat: wsen[1],
+        lng: wsen[0],
+      },
+    },
+  };
+};
 
 export const EARTH_CIRCUMFERENCE = 40075016.686;
 export const DEFAULT_LEAFLET_TILESIZE = 256;
@@ -325,10 +509,10 @@ const sampleRingPixelSize = (
   const positionCoords = generatePostionsForRing(samples, radius);
   const positions = pickViewerCanvasPositions(viewer, positionCoords);
   const pixelSizes = positions.map(
-    (position) =>
-      defined(position) &&
+    ({ scenePosition }) =>
+      defined(scenePosition) &&
       viewer.camera.getPixelSize(
-        new BoundingSphere(position, 1),
+        new BoundingSphere(scenePosition, 1),
         viewer.scene.drawingBufferWidth,
         viewer.scene.drawingBufferHeight
       )
@@ -384,14 +568,10 @@ const getScenePixelSize = (
     // eslint-disable-next-line no-fallthrough
     case PICKMODE.CENTER:
     default: {
-      const groundCenterPickPos = pickViewerCanvasCenter(viewer);
-      if (defined(groundCenterPickPos)) {
-        result.value = camera.getPixelSize(
-          new BoundingSphere(groundCenterPickPos, 1),
-          scene.drawingBufferWidth,
-          scene.drawingBufferHeight
-        );
-      }
+      const centerPos = pickViewerCanvasCenter(viewer, {
+        getPixelSize: true,
+      });
+      result.value = centerPos.pixelSize;
     }
   }
 

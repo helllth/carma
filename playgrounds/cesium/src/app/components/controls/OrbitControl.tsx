@@ -49,16 +49,18 @@ const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
 
   const toggleOrbit = (viewer: Viewer) => {
     if (!isAnimating) {
-      orbitPointRef.current = pickViewerCanvasCenter(viewer);
+      const position = pickViewerCanvasCenter(viewer).scenePosition;
+      orbitPointRef.current = position;
       lastRenderTimeRef.current = null;
       // console.log('orbitPoint', orbitPointRef.current);
       viewer.clock.onTick.addEventListener(orbitListener);
 
       //showCenterPoint && viewer.entities.removeById(orbitCenterPointId);
 
-      showCenterPoint &&
+      position &&
+        showCenterPoint &&
         viewer.entities.add({
-          position: orbitPointRef.current,
+          position,
           point: {
             pixelSize: 30,
             color: Color.RED,

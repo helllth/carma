@@ -48,7 +48,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
 
   const transitionToMode2d = (viewer: Viewer) => {
     // TODO consolidate this logic into a shared helper function
-    const groundPos = pickViewerCanvasCenter(viewer);
+    const groundPos = pickViewerCanvasCenter(viewer).scenePosition;
     let latitude: number, longitude: number;
     let height = viewer.camera.positionCartographic.height;
     let distance = height;
@@ -65,18 +65,21 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
              },
            });
            */
-      const pos = pickViewerCanvasCenter(viewer);
-      const cartographic = Cartographic.fromCartesian(pos);
-      longitude = CeMath.toDegrees(cartographic.longitude);
-      latitude = CeMath.toDegrees(cartographic.latitude);
-      distance = Cartesian3.distance(pos, viewer.camera.position);
-      height = cartographic.height + distance;
+      const { scenePosition: pos, coordinates: cartographic } =
+        pickViewerCanvasCenter(viewer, { getCoordinates: true });
+      if (pos && cartographic) {
+        longitude = CeMath.toDegrees(cartographic.longitude);
+        latitude = CeMath.toDegrees(cartographic.latitude);
+        distance = Cartesian3.distance(pos, viewer.camera.position);
+        height = cartographic.height + distance;
+      }
     } else {
       console.info('scene above horizon, using camera position as reference');
       // use camera position if horizon is not visible
       const cartographic = Cartographic.fromCartesian(viewer.camera.position);
       longitude = CeMath.toDegrees(cartographic.longitude);
       latitude = CeMath.toDegrees(cartographic.latitude);
+      // TODO resolve
     }
 
     // evaluate angles for animation duration
@@ -195,19 +198,17 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
         }
 
         //console.log('restore 3d camera position');
-        prevHPR &&
-          animateInterpolateHeadingPitchRange(
-            viewer,
-            pickViewerCanvasCenter(viewer),
-            prevHPR,
-            {
-              delay: DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION, // allow the css transition to finish
-              duration: prevDuration * 1000,
-              onComplete: () => {
-                setIsTransitioning(false);
-              },
-            }
-          );
+        const pos = pickViewerCanvasCenter(viewer).scenePosition;
+
+        pos &&
+          prevHPR &&
+          animateInterpolateHeadingPitchRange(viewer, pos, prevHPR, {
+            delay: DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION, // allow the css transition to finish
+            duration: prevDuration * 1000,
+            onComplete: () => {
+              setIsTransitioning(false);
+            },
+          });
       } else {
         transitionToMode2d(viewer);
       }
