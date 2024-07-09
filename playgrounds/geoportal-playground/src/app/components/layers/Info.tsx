@@ -61,7 +61,6 @@ const Info = ({ description, legend }: InfoProps) => {
 
   return (
     <>
-      <h4 className="font-semibold">Informationen</h4>
       {parsedDescription && !isBaseLayer && (
         <div>
           <h5 className="font-semibold">Inhalt</h5>
