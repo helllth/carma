@@ -26,7 +26,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
   };
   let foto;
   if (properties.foto !== undefined) {
-    foto = 'https://www.wuppertal.de/geoportal/prbr/fotos/' + properties.foto;
+    foto = properties.foto;
   }
 
   let plaetze_label = 'Plätze';
