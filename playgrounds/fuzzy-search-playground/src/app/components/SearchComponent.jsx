@@ -191,7 +191,6 @@ function SearchComponent({
   const [allGazeteerData, setAllGazeteerData] = useState([]);
   const [value, setValue] = useState('');
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
-  const [showNotFoundContent, setShowNotFoundContent] = useState(false);
   const [fireScrollEvent, setFireScrollEvent] = useState(null);
 
   const handleSearchAutoComplete = (value) => {
@@ -311,10 +310,7 @@ function SearchComponent({
   }, [allGazeteerData, fuseInstance]);
 
   useEffect(() => {
-    console.log('xxx custom dropdown', dropdownContainerRef);
     if (dropdownContainerRef.current) {
-      // const allItems =
-      //   dropdownContainerRef.current.querySelectorAll('.ant-select-item');
       const allItems = dropdownContainerRef.current.querySelectorAll(
         '.ant-select-item-option-content'
       );
@@ -346,13 +342,9 @@ function SearchComponent({
         allItems.forEach((item) => {
           const itemWidth = item.scrollWidth;
           if (itemWidth > biggestItem) biggestItem = itemWidth;
-          console.log('yyy item width', itemWidth, inputWidth);
         });
 
-        console.log('yyy biggestItem', biggestItem);
-
         const isOverflowing = biggestItem > inputWidth;
-        console.log('xxx isOverflowing, inputWidth', biggestItem, inputWidth);
         if (isOverflowing) {
           listHolder.style.width = holderInner.scrollWidth + 'px';
           holderInner.style.width = holderInner.scrollWidth + 10 + 'px';
@@ -419,10 +411,6 @@ function SearchComponent({
           value={value}
           onSelect={(value, option) => handleOnSelect(option)}
           defaultActiveFirstOption={true}
-          open={true}
-          // notFoundContent={
-          //   fireScrollEvent ? <div>Keine Treffer gefunden</div> : ''
-          // }
           dropdownRender={(item) => {
             return (
               <div className="fuzzy-dropdownwrapper" ref={dropdownContainerRef}>

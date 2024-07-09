@@ -55,6 +55,24 @@
   color: #a6a6a6;
 }
 
+.ant-select-dropdown .rc-virtual-list-holder::-webkit-scrollbar {
+  width: 1px;
+  opacity: 0.6;
+  height: 8px;
+}
+
+.ant-select-dropdown .rc-virtual-list-holder::-webkit-scrollbar-thumb {
+  background-color: #8e8e8e;
+  width: 1px;
+  border-radius: 10px;
+}
+
+.ant-select-dropdown .rc-virtual-list-holder::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 10px;
+  width: 1px;
+}
+
 .ant-select-dropdown .rc-virtual-list-holder > div:first-child {
   /* overflow-x: auto !important; */
 }
