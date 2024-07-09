@@ -59,16 +59,10 @@
   /* overflow-x: auto !important; */
 }
 
-.ant-select-dropdown .rc-virtual-list-holder-inner {
-  /* width: 200px; */
+.ant-select-dropdown .rc-virtual-list-holder-inner > div:last-child {
+  padding-bottom: 13px;
 }
 
 .ant-select-item-option-content {
   overflow: visible !important;
-  /* text-overflow: clip !important; */
-  /* overflow-x: auto; */
 }
-
-/* .ant-select-item-option-content:hover {
-  background-color: #f7f7f7;
-} */
