@@ -4,6 +4,8 @@ import { Layer } from 'libraries/layer-lib/src/components/LibModal';
 
 export type BackgroundLayer = Layer & {
   layers: string;
+  inhalt?: string;
+  eignung?: string;
 };
 
 export type SavedLayerConfig = {

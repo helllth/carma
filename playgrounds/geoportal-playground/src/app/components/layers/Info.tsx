@@ -169,6 +169,8 @@ const Info = ({ description, legend }: InfoProps) => {
                         title: possibleLayers[e.target.value].title,
                         opacity: 1.0,
                         description: possibleLayers[e.target.value].description,
+                        inhalt: possibleLayers[e.target.value].inhalt,
+                        eignung: possibleLayers[e.target.value].eignung,
                         layerType: 'wmts',
                         visible: true,
                         props: {
@@ -187,6 +189,8 @@ const Info = ({ description, legend }: InfoProps) => {
                           opacity: 1.0,
                           description:
                             possibleLayers[e.target.value].description,
+                          inhalt: possibleLayers[e.target.value].inhalt,
+                          eignung: possibleLayers[e.target.value].eignung,
                           layerType: 'wmts',
                           visible: true,
                           props: {
@@ -236,6 +240,8 @@ const Info = ({ description, legend }: InfoProps) => {
                     title: layerMap['luftbild'].title,
                     opacity: 1.0,
                     description: layerMap['luftbild'].description,
+                    inhalt: layerMap['luftbild'].inhalt,
+                    eignung: layerMap['luftbild'].eignung,
                     layerType: 'wmts',
                     visible: true,
                     props: {
@@ -263,11 +269,6 @@ const Info = ({ description, legend }: InfoProps) => {
               </div>
             </button>
           </div>
-          <h5 className="font-semibold pt-2">Inhalt</h5>
-          <div
-            className="text-sm"
-            dangerouslySetInnerHTML={{ __html: description }}
-          />
         </div>
       )}
       <hr className="h-px my-0 bg-gray-300 border-0 w-full" />
@@ -277,6 +278,32 @@ const Info = ({ description, legend }: InfoProps) => {
           items={[
             {
               key: '1',
+              label: 'Inhalt',
+              children: (
+                <div className="h-full overflow-auto">
+                  <div
+                    className="text-base"
+                    dangerouslySetInnerHTML={{ __html: backgroundLayer.inhalt }}
+                  />
+                </div>
+              ),
+            },
+            {
+              key: '2',
+              label: 'Eignung',
+              children: (
+                <div className="h-full overflow-auto">
+                  <div
+                    className="text-base"
+                    dangerouslySetInnerHTML={{
+                      __html: backgroundLayer.eignung,
+                    }}
+                  />
+                </div>
+              ),
+            },
+            {
+              key: '3',
               label: 'Layer',
               children: (
                 <DndContext
