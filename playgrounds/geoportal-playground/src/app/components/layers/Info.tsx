@@ -144,14 +144,14 @@ const Info = ({ description, legend }: InfoProps) => {
                 );
               }}
               className={cn(
-                'w-full border-[1px] rounded-s-md',
+                'w-full group border-[1px] rounded-s-md',
                 backgroundLayer.id === 'stadtplan' && 'border-[#1677ff]'
               )}
             >
               <div className="w-full flex flex-col text-[14px]/[30px] items-center justify-center gap-3">
                 <p
                   className={cn(
-                    'mb-0',
+                    'mb-0 group-hover:text-[#1677ff]',
                     backgroundLayer.id === 'stadtplan' && 'text-[#1677ff]'
                   )}
                 >
@@ -190,14 +190,14 @@ const Info = ({ description, legend }: InfoProps) => {
                 );
               }}
               className={cn(
-                'w-full rounded-e-md border-[1px]',
+                'w-full group rounded-e-md border-[1px]',
                 backgroundLayer.id === 'luftbild' && 'border-[#1677ff]'
               )}
             >
               <div className="flex text-[14px]/[30px] flex-col items-center h-full justify-start">
                 <p
                   className={cn(
-                    'mb-0',
+                    'mb-0 group-hover:text-[#1677ff]',
                     backgroundLayer.id === 'luftbild' && 'text-[#1677ff]'
                   )}
                 >
