@@ -248,25 +248,10 @@ L.Control.MeasurePolygon = L.Control.extend({
   `;
     lineIcon.href = '#';
     lineIcon.title = 'Messmodus';
-    // this.ui_icon = icon;
-
-    // const polygonContainer = L.DomUtil.create(
-    //   'div',
-    //   'leaflet-bar leaflet-control measure_icon_wrapper__polygon'
-    // );
-    //   const polygonIcon = L.DomUtil.create('a', '', polygonContainer);
-    //   polygonIcon.innerHTML = `
-    //   <div class="measure_icon_wrapper">
-    //     <img id="img_plg_measure_polygon" class='mesure_icon' src="${this.options.icon_polygonInactive}" alt="Ruler Icon">
-    //   </div>
-    // `;
-    //   polygonIcon.href = '#';
-    //   polygonIcon.title = 'Flächen- und Umfangsmessungen';
-    // this.ui_icon = icon;
 
     const iconsWrapper = L.DomUtil.create('div', 'm-icons-wrapper');
     iconsWrapper.appendChild(linesContainer);
-    // iconsWrapper.appendChild(polygonContainer);
+
     iconsWrapper.appendChild(modeBtn);
     L.DomEvent.on(
       modeBtn,
@@ -283,7 +268,7 @@ L.Control.MeasurePolygon = L.Control.extend({
       'click',
       (event) => {
         event.preventDefault(); // Prevent default action (e.g., redirection)
-        this.toggleMeasurementMode();
+        this.toggleMeasurementMode(map);
       },
       this
     );
@@ -340,6 +325,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     });
 
     map.on('draw:drawvertex', (event) => {
+      console.log('xxx drawing');
       const layers = event.layers;
       const latlngs = [];
       let index = 0;
@@ -790,7 +776,9 @@ L.Control.MeasurePolygon = L.Control.extend({
     }
   },
 
-  toggleMeasurementMode: function () {
+  toggleMeasurementMode: function (map) {
+    console.log('xxx this map', map);
+    map.fire('draw:canceled');
     const mode = this.options.measurementMode;
     if (mode === 'measurement') {
       this._clearMeasurements();

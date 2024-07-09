@@ -8,13 +8,10 @@ const MeasurementTitle = ({
   setUpdateMeasurementStatus,
   tooltip,
 }) => {
-  console.log('xxx title', title);
   const [content, setContent] = useState(title.trim());
   const [oldContent, setOldContent] = useState(title);
 
-  useEffect(() => {
-    console.log('xxx content', content);
-  }, [content]);
+  useEffect(() => {}, [content]);
 
   return (
     <div>
@@ -23,7 +20,6 @@ const MeasurementTitle = ({
         onBlur={(t) => {
           const trimmedContent = t.currentTarget.textContent.trim();
           setContent(trimmedContent);
-          console.log('xxx trim', trimmedContent);
 
           if (trimmedContent.length === 0) {
             setContent(oldContent);
@@ -34,10 +30,7 @@ const MeasurementTitle = ({
             setUpdateMeasurementStatus(true);
           }
         }}
-        onFocus={(t) => {
-          console.log('ccc focus');
-          console.log('xxx title on focus', title);
-        }}
+        onFocus={(t) => {}}
         contentEditable
         className="text-[14px] min-h-[20px] min-w-[10px]"
         dangerouslySetInnerHTML={{ __html: capitalizeFirstLetter(content) }}
