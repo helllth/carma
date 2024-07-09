@@ -49,7 +49,7 @@ export default function LibreMap({ opacity = 0.1, vectorStyles = [] }) {
       center: [lng, lat],
       zoom: zoom,
       opacity: 1,
-      maxZoom: 19,
+      maxZoom: 22,
     });
 
     map.current.on('load', function () {
@@ -61,12 +61,19 @@ export default function LibreMap({ opacity = 0.1, vectorStyles = [] }) {
           .then((response) => response.json())
           .then((additionalStyle) => {
             // Add glyphs and sprite to the map
-            map.current.setStyle({
+
+            const newStyle = {
               ...map.current.getStyle(),
-              glyphs: additionalStyle.glyphs,
-              sprite: additionalStyle.sprite,
-              // sprite: { default: additionalStyle.sprite },
-            });
+              //sprite: { default: additionalStyle.sprite },
+            };
+            if (additionalStyle.sprite) {
+              newStyle.sprite = additionalStyle.sprite;
+            }
+            if (additionalStyle.glyphs) {
+              newStyle.glyphs = additionalStyle.glyphs;
+            }
+
+            map.current.setStyle(newStyle);
 
             console.log('sprites', map.current.getStyle().sprite);
 
