@@ -99,11 +99,14 @@ function App({ published }: { published?: boolean }) {
 
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('keyup', onKeyUp);
+    window.addEventListener('blur', onKeyUp);
 
     return () => {
       document.removeEventListener('keydown', onKeyDown);
 
       document.removeEventListener('keyup', onKeyUp);
+
+      window.removeEventListener('blur', onKeyUp);
     };
   }, [allowUiChanges]);
 
