@@ -20,7 +20,7 @@ import {
 } from '@dnd-kit/sortable';
 import LayerRow from './LayerRow';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { layerMap, possibleLayers } from '../TopNavbar';
+import { layerMap } from '../TopNavbar';
 
 interface InfoProps {
   description: string;
@@ -166,18 +166,18 @@ const Info = ({ description, legend }: InfoProps) => {
                     dispatch(
                       setSelectedMapLayer({
                         id: e.target.value,
-                        title: possibleLayers[e.target.value].title,
+                        title: layerMap[e.target.value].title,
                         opacity: 1.0,
-                        description: possibleLayers[e.target.value].description,
-                        inhalt: possibleLayers[e.target.value].inhalt,
-                        eignung: possibleLayers[e.target.value].eignung,
+                        description: layerMap[e.target.value].description,
+                        inhalt: layerMap[e.target.value].inhalt,
+                        eignung: layerMap[e.target.value].eignung,
                         layerType: 'wmts',
                         visible: true,
                         props: {
                           name: '',
-                          url: possibleLayers[e.target.value].url,
+                          url: layerMap[e.target.value].url,
                         },
-                        layers: possibleLayers[e.target.value].layers,
+                        layers: layerMap[e.target.value].layers,
                       })
                     );
 
@@ -185,19 +185,18 @@ const Info = ({ description, legend }: InfoProps) => {
                       dispatch(
                         setBackgroundLayer({
                           id: 'karte',
-                          title: possibleLayers[e.target.value].title,
+                          title: layerMap[e.target.value].title,
                           opacity: 1.0,
-                          description:
-                            possibleLayers[e.target.value].description,
-                          inhalt: possibleLayers[e.target.value].inhalt,
-                          eignung: possibleLayers[e.target.value].eignung,
+                          description: layerMap[e.target.value].description,
+                          inhalt: layerMap[e.target.value].inhalt,
+                          eignung: layerMap[e.target.value].eignung,
                           layerType: 'wmts',
                           visible: true,
                           props: {
                             name: '',
-                            url: possibleLayers[e.target.value].url,
+                            url: layerMap[e.target.value].url,
                           },
-                          layers: possibleLayers[e.target.value].layers,
+                          layers: layerMap[e.target.value].layers,
                         })
                       );
                     }
