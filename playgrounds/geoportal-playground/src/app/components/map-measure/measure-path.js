@@ -555,21 +555,10 @@ L.Control.MeasurePolygon = L.Control.extend({
   },
 
   _toggleMeasure: function (btnId = '', activeIcon = '', inactiveIcon = '') {
-    // this.options.cb(true);
-
     if (this.options.checkonedrawpoligon) {
-      // this._measureHandler.disable();
-
-      // document.getElementById(btnId).src = this.options[inactiveIcon];
-      // this._clearMeasurements();
       this.options.checkonedrawpoligon = false;
-
-      // this._clearMeasurements();
     } else {
       this._measureHandler.enable();
-      // document.getElementById(btnId).src = this.options[activeIcon];
-      // document.getElementById(btnId).src = this.options.icon_lineActive;
-      // this.options.cb(true);
     }
   },
 
