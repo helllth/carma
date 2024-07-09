@@ -20,7 +20,7 @@ import {
 } from '@dnd-kit/sortable';
 import LayerRow from './LayerRow';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { layerMap } from '../TopNavbar';
+import { layerMap } from '../../helper/layer';
 
 interface InfoProps {
   description: string;
