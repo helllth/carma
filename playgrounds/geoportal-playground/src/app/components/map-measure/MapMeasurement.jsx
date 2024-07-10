@@ -227,7 +227,9 @@ const MapMeasurement = (props) => {
     dispatch(updateAreaOfDrawingMeasurement(newArea));
   };
 
-  return <div></div>;
+  return (
+    <div onClick={() => dispatch(toggletModeMeasuremen())}>Toggle mode</div>
+  );
 };
 
 export default MapMeasurement;

@@ -271,7 +271,7 @@ L.Control.MeasurePolygon = L.Control.extend({
       'click',
       (event) => {
         event.preventDefault(); // Prevent default action (e.g., redirection)
-        this.toggleMeasurementMode(map);
+        this.toggleMeasurementMode();
       },
       this
     );
@@ -780,26 +780,57 @@ L.Control.MeasurePolygon = L.Control.extend({
     }
   },
 
-  toggleMeasurementMode: function (map) {
-    this.cancelDrawing();
+  // toggleMeasurementMode: function (map) {
+  //   this.cancelDrawing();
+  //   const mode = this.options.measurementMode;
+  //   if (mode === 'measurement') {
+  //     this._clearMeasurements();
+  //     const drawBtn = document.getElementById('draw_shape');
+  //     drawBtn.classList.add('hide-draw-btn');
+  //   } else {
+  //     this._clearMeasurements();
+  //     const drawBtn = document.getElementById('draw_shape');
+  //     drawBtn.classList.remove('hide-draw-btn');
+  //     this.loadMeasurements();
+  //   }
+  //   this._toggleMeasurementBtn();
+
+  //   this.options.cbToggleMeasurementMode();
+  // },
+
+  toggleMeasurementMode: function (ifChangeMode = true) {
+    // this.cancelDrawing();
     const mode = this.options.measurementMode;
     if (mode === 'measurement') {
       this._clearMeasurements();
-      const drawBtn = document.getElementById('draw_shape');
-      drawBtn.classList.add('hide-draw-btn');
-    } else {
-      this._clearMeasurements();
+      // const drawBtn = document.getElementById('draw_shape');
+      // drawBtn.classList.add('hide-draw-btn');
+      this.loadMeasurements();
       const drawBtn = document.getElementById('draw_shape');
       drawBtn.classList.remove('hide-draw-btn');
-      this.loadMeasurements();
-    }
-    this._toggleMeasurementBtn();
 
-    this.options.cbToggleMeasurementMode();
+      document.getElementById('img_plg_lines').src =
+        this.options.icon_lineActive;
+    } else {
+      this._clearMeasurements();
+      // const drawBtn = document.getElementById('draw_shape');
+      // drawBtn.classList.add('hide-draw-btn');
+      const drawBtn = document.getElementById('draw_shape');
+      drawBtn.classList.add('hide-draw-btn');
+
+      document.getElementById('img_plg_lines').src =
+        this.options.icon_lineInactive;
+    }
+    // this._toggleMeasurementBtn();
+
+    if (ifChangeMode) {
+      this.options.cbToggleMeasurementMode();
+    }
   },
 
   changeMeasurementMode: function (mode) {
     this.options.measurementMode = mode;
+    this.toggleMeasurementMode(false);
   },
   changeMeasurementsArr: function (arr) {
     this.options.shapes = arr;
