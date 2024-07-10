@@ -166,6 +166,18 @@ export const deleteShapeById = (shapeId) => {
   };
 };
 
+export const deleteVisibleShapeById = (shapeId) => {
+  return function (dispatch, getState) {
+    const state = getState();
+    const allVisibleShapes = state.measurements.visibleShapes;
+    const cleaerShapesArr = allVisibleShapes.filter(
+      (s) => s.shapeId !== shapeId
+    );
+
+    dispatch(setVisibleShapes(cleaerShapesArr));
+  };
+};
+
 export const updateShapeById = (
   shapeId,
   newCoordinates,

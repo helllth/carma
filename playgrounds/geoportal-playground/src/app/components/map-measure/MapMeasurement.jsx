@@ -38,6 +38,7 @@ import {
   setDrawingWithLastActiveShape,
   setActiveShapeIfDrawCanseld,
   updateAreaOfDrawingMeasurement,
+  deleteVisibleShapeById,
 } from '../../store/slices/measurements';
 
 import { getMode, toggletModeMeasuremen } from '../../store/slices/ui';
@@ -75,6 +76,7 @@ const MapMeasurement = (props) => {
         cbSaveShape: saveShapeHandler,
         cbUpdateShape: updateShapeHandler,
         cdDeleteShape: deleteShapeHandler,
+        cbDeleteVisibleShapeById: deleteVisibleShapeByIdHandler,
         cbVisiblePolylinesChange: visiblePolylinesChange,
         cbSetDrawingStatus: drawingStatusHandler,
         cbSetDrawingShape: drawingShapeHandler,
@@ -181,6 +183,9 @@ const MapMeasurement = (props) => {
   };
   const deleteShapeHandler = (id) => {
     dispatch(deleteShapeById(id));
+  };
+  const deleteVisibleShapeByIdHandler = (id) => {
+    dispatch(deleteVisibleShapeById(id));
   };
   const updateShapeHandler = (id, newCoordinates, newDistance, newSquare) => {
     dispatch(updateShapeById(id, newCoordinates, newDistance, newSquare));

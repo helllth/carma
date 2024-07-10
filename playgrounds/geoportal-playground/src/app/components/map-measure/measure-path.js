@@ -65,6 +65,9 @@ L.Control.MeasurePolygon = L.Control.extend({
     cbGetMeasurementModeHandler: function () {
       console.log('Callback function executed!');
     },
+    cbDeleteVisibleShapeById: function () {
+      console.log('Callback function executed!');
+    },
     cbUpdateAreaOfDrawingMeasurement: function () {
       console.log('Callback function executed!');
     },
@@ -809,8 +812,8 @@ L.Control.MeasurePolygon = L.Control.extend({
       this._measureLayers.clearLayers();
 
       this.options.cbSetDrawingStatus(false);
-      this.options.cbSetDrawingShape(null);
-      this.options.checkonedrawpoligon = true;
+      this.options.cbDeleteVisibleShapeById(5555);
+      // this.options.checkonedrawpoligon = true;
     }
   },
 });
