@@ -409,6 +409,8 @@ L.Control.MeasurePolygon = L.Control.extend({
         'icon_lineInactive'
       );
 
+      this.options.cbDeleteVisibleShapeById(5555);
+
       this.options.cbChangeActiveCanceldShapeId();
     });
 
