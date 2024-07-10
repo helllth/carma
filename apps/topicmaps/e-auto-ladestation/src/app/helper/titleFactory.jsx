@@ -2,32 +2,32 @@ import React from 'react';
 const factory = ({ featureCollectionContext }) => {
   const { itemsDictionary, filteredItems, filterState } =
     featureCollectionContext;
-  const lebenslagen = itemsDictionary?.lebenslagen || [];
 
-  let themenstadtplanDesc = 'alle Angebote';
   if (filterState) {
-    if (
-      filterState.positiv.length > 0 &&
-      filterState.positiv.length < lebenslagen.length
-    ) {
-      if (filterState.positiv.length <= 4) {
-        themenstadtplanDesc += filterState.positiv.join(', ');
-      } else {
-        themenstadtplanDesc += filterState.positiv.length + ' Themen';
-      }
-      if (filterState.negativ.length > 0) {
-        if (filterState.negativ.length <= 3) {
-          themenstadtplanDesc += ' ohne ';
-          themenstadtplanDesc += filterState.negativ.join(', ');
-        } else {
-          themenstadtplanDesc +=
-            ' (' + filterState.negativ.length + ' Themen ausgeschlossen)';
-        }
-      }
+    let filterDescriptions = [];
+    if (filterState?.nur_online === true) {
+      filterDescriptions.push('verfügbar');
     }
+    if (filterState?.oeffnungszeiten === '24') {
+      filterDescriptions.push('24/7');
+    }
+    if (filterState?.stecker?.length < 6) {
+      filterDescriptions.push('passender Stecker');
+    }
+    if (filterState?.nur_gruener_strom === true) {
+      filterDescriptions.push('Ökostrom');
+    }
+    if (filterState?.nur_schnelllader === true) {
+      filterDescriptions.push('Schnelllader');
+    }
+
+    if (filterDescriptions.length === 0) {
+      return null;
+    }
+
     return (
       <div>
-        <b>Ehrenamtskarte:</b> {themenstadtplanDesc}
+        <b>Meine Ladestationen:</b> {filterDescriptions.join(' | ')}
       </div>
     );
   }
