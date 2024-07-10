@@ -43,7 +43,7 @@ export const layerMap = {
     layers: 'basemap_relief@40',
     description: ``,
     inhalt: ``,
-    eignung: ``,
+    eignung: `Mit diesem Kartenhintergrund aus dem Projekt "basemap.de" wird durch eine Geländeschummerung, Höhenlinien und im Detailmaßstab perspektivische Gebäudedarstellung ein plastischer Geländeeindruck erzeugt.`,
     url: 'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_top.json',
   },
   amtlich: {
