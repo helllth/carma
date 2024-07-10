@@ -21,6 +21,7 @@ import {
 import LayerRow from './LayerRow';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { layerMap } from '../../helper/layer';
+import './text.css';
 
 interface InfoProps {
   description: string;
