@@ -277,6 +277,8 @@ export const defaultLayerConf = {
     },
     amtlich: {
       type: 'tiles',
+      maxNativeZoom: 20,
+      maxZoom: 22,
       url: 'https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
     },
     basemap_relief: {
