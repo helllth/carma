@@ -121,7 +121,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
       <Modal.Header>
         <Modal.Title>
           <FontAwesomeIcon icon={faChargingStation} />
-          {`Datenblatt: Ladestation ${ladestation.name}`}
+          {` Datenblatt: Ladestation ${ladestation.name}`}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body id="myMenu" key={'prbr.secondaryInfo'}>
