@@ -777,8 +777,7 @@ L.Control.MeasurePolygon = L.Control.extend({
   },
 
   toggleMeasurementMode: function (map) {
-    console.log('xxx this map', map);
-    map.fire('draw:canceled');
+    this.cancelDrawing();
     const mode = this.options.measurementMode;
     if (mode === 'measurement') {
       this._clearMeasurements();
@@ -800,6 +799,19 @@ L.Control.MeasurePolygon = L.Control.extend({
   },
   changeMeasurementsArr: function (arr) {
     this.options.shapes = arr;
+  },
+  cancelDrawing: function () {
+    console.log('xxx this ifDrawing', this.options.ifDrawing);
+    if (this.options.ifDrawing) {
+      this._measureHandler.disable();
+      this.options.ifDrawing = false;
+
+      this._measureLayers.clearLayers();
+
+      this.options.cbSetDrawingStatus(false);
+      this.options.cbSetDrawingShape(null);
+      this.options.checkonedrawpoligon = true;
+    }
   },
 });
 
