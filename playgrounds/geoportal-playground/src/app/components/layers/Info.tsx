@@ -76,7 +76,7 @@ const Info = ({ description, legend }: InfoProps) => {
       )}
       {isBaseLayer && (
         <div className="flex flex-col gap-2 pb-4">
-          <h5 className="font-semibold">Hintergrund:</h5>
+          <h5 className="font-semibold text-lg">Hintergrund:</h5>
           <div className="w-full flex last:rounded-s-md first:rounded-s-md">
             <button
               onClick={(e) => {
@@ -249,7 +249,7 @@ const Info = ({ description, legend }: InfoProps) => {
               },
             ]}
           />
-          <h5 className="font-semibold">Kartenebenen:</h5>
+          <h5 className="font-semibold text-lg">Kartenebenen:</h5>
           <DndContext
             onDragEnd={handleDragEnd}
             modifiers={[restrictToVerticalAxis]}
