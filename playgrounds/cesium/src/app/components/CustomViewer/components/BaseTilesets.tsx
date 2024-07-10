@@ -30,6 +30,7 @@ const customShaderKeys = {
   clay: CustomShaderKeys.CLAY,
   "unlit enhanced": CustomShaderKeys.UNLIT,
   "unlit": CustomShaderKeys.UNLIT_BASE,
+  'unlit fog': CustomShaderKeys.UNLIT_FOG,
   monochrome: CustomShaderKeys.MONOCHROME,
   undefined: CustomShaderKeys.UNDEFINED,
 };

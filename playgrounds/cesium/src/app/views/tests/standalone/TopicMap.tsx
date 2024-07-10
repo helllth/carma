@@ -33,7 +33,7 @@ function View() {
             layers: 'R102:trueortho2022',
             type: 'wms',
             format: 'image/png',
-            tiled: 'true',
+            tiled: true,
             maxZoom: 22,
             opacity: 1,
             version: '1.1.1',
