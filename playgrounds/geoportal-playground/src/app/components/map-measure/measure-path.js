@@ -328,7 +328,6 @@ L.Control.MeasurePolygon = L.Control.extend({
     });
 
     map.on('draw:drawvertex', (event) => {
-      console.log('xxx drawing');
       const layers = event.layers;
       const latlngs = [];
       let index = 0;
@@ -806,7 +805,6 @@ L.Control.MeasurePolygon = L.Control.extend({
     this.options.shapes = arr;
   },
   cancelDrawing: function () {
-    console.log('xxx this ifDrawing', this.options.ifDrawing);
     if (this.options.ifDrawing) {
       this._measureHandler.disable();
       this.options.ifDrawing = false;

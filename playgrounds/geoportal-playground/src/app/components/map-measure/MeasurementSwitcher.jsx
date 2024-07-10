@@ -25,7 +25,6 @@ const MeasurementSwitcher = (props) => {
 
   useEffect(() => {
     let measurePolygonControl;
-    console.log('mode', measurementMode);
     if (routedMapRef && !measureControl) {
       const mapExample = routedMapRef.leafletMap.leafletElement;
       const customOptions = {
@@ -41,7 +40,6 @@ const MeasurementSwitcher = (props) => {
     }
 
     if (!measurementMode && measureControl) {
-      console.log(measureControl);
       const mapExample = routedMapRef.leafletMap.leafletElement;
 
       mapExample.removeControl(measureControl);
