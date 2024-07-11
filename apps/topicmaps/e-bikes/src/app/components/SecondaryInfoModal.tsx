@@ -7,6 +7,7 @@ import {
   faSquareEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from 'antd';
 import { Button, Modal, Accordion, Card, Table } from 'react-bootstrap';
 
 const SecondaryInfoModal = ({ feature, setOpen }) => {
@@ -24,7 +25,10 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
   let links: any = [];
   if (ladestation?.betreiber?.telefon) {
     links.push(
-      <a href={'tel:' + ladestation?.betreiber?.telefon}>
+      <a
+        title="Beitreiber anrufen"
+        href={'tel:' + ladestation?.betreiber?.telefon}
+      >
         <FontAwesomeIcon
           icon={faPhoneFlip}
           style={{ color: 'grey', width: '26px', textAlign: 'center' }}
@@ -38,7 +42,11 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
       ? ladestation?.betreiber?.email
       : ladestation.email;
     links.push(
-      <a href={'mailto:' + mail} target="_blank">
+      <a
+        title="E-Mail an den Betreiber schreiben"
+        href={'mailto:' + mail}
+        target="_blank"
+      >
         <FontAwesomeIcon
           icon={faSquareEnvelope}
           style={{ color: 'grey', width: '26px', textAlign: 'center' }}
@@ -49,7 +57,11 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
   }
   if (ladestation?.betreiber?.web) {
     links.push(
-      <a href={ladestation?.betreiber?.web} target="_blank">
+      <a
+        title="Betreiberwebseite"
+        href={ladestation?.betreiber?.web}
+        target="_blank"
+      >
         <FontAwesomeIcon
           icon={faSquareArrowUpRight}
           style={{ color: 'grey', width: '26px', textAlign: 'center' }}
