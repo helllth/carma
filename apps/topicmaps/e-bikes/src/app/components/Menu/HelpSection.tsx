@@ -14,6 +14,7 @@ import GenericHelpTextForMyLocation from 'react-cismap/topicmaps/docBlocks/Gener
 import { Link } from 'react-scroll';
 
 const HelpSection = () => {
+  let urlPrefix = window.location.origin + window.location.pathname;
   const chargingOnlineSVG = getSymbolSVG(
     30,
     '#1EA342',
@@ -112,7 +113,7 @@ const HelpSection = () => {
                         <img
                           alt="Cluster"
                           width="32"
-                          src="images/ebikes_cluster.png"
+                          src={urlPrefix + 'images/ebikes_cluster.png'}
                         />
                         . Vergrößern Sie ein paar Mal durch direktes Anklicken
                         eines solchen Punktes oder mit{' '}
