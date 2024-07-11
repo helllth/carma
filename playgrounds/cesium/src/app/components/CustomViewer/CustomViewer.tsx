@@ -12,6 +12,7 @@ import {
   Math as CeMath,
   PerspectiveFrustum,
   Rectangle,
+  OrthographicFrustum,
 } from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
 import Crosshair from '../UI/Crosshair';
@@ -129,6 +130,23 @@ function CustomViewer(props: CustomViewerProps) {
           viewer.scene.camera.frustum.fov = value;
         }
       },
+      get orthographic() {
+        return viewer?.scene.camera.frustum instanceof OrthographicFrustum;
+      },
+      set orthographic(value: boolean) {
+        if (viewer) {
+          if (
+            value &&
+            viewer.scene.camera.frustum instanceof PerspectiveFrustum
+          ) {
+            viewer.scene.camera.switchToOrthographicFrustum();
+          } else if (
+            viewer.scene.camera.frustum instanceof OrthographicFrustum
+          ) {
+            viewer.scene.camera.switchToPerspectiveFrustum();
+          }
+        }
+      },
     },
 
     [
@@ -139,6 +157,11 @@ function CustomViewer(props: CustomViewerProps) {
         max: Math.PI,
         step: 0.01,
         format: (v) => `${parseFloat(CeMath.toDegrees(v).toFixed(2))}°`,
+      },
+      {
+        name: 'orthographic',
+        label: 'Orthographic',
+        type: 'boolean',
       },
     ]
   );
@@ -164,8 +187,7 @@ function CustomViewer(props: CustomViewerProps) {
         return viewportLimit;
       },
       set viewportLimit(value: number) {
-
-        (!Number.isNaN(value)) && setViewportLimit(value);
+        !Number.isNaN(value) && setViewportLimit(value);
       },
       get showCrosshair() {
         return showCrosshair;

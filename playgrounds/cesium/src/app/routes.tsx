@@ -19,6 +19,7 @@ import TestComponentByGeoJsonClassifier from './views/tests/components/ByGeoJson
 import StandaloneResium from './views/tests/standalone/Resium';
 import StandaloneTopicMap from './views/tests/standalone/TopicMap';
 import StandaloneTailwind from './views/tests/standalone/Tailwind';
+import StandaloneWidget from './views/tests/standalone/Widget';
 
 import { ComponentType } from 'react';
 
@@ -91,6 +92,7 @@ export const otherRoutes: RouteDescriptor[] = [
         'Standalone Test TopicMapWithBaseLayer',
         StandaloneTopicMap,
       ],
+      ['/widget', 'Standalone Test Widget', StandaloneWidget],
     ],
   ],
 ];

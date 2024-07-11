@@ -18,7 +18,13 @@ import {
   BoundingSphere,
   Rectangle,
 } from 'cesium';
-import { ColorRgbaArray, NumericResult, TilesetConfig } from '../..';
+import {
+  ColorRgbaArray,
+  LatLngRadians,
+  LatLngRecord,
+  NumericResult,
+  TilesetConfig,
+} from '../..';
 
 // Constants
 
@@ -438,6 +444,8 @@ export const rectangleToExtentDegrees = ({
 };
 
 export const EARTH_CIRCUMFERENCE = 40075016.686;
+export const EARTH_RADIUS = 6371008.7714;
+export const EARTH_RADIUS_KM = EARTH_RADIUS / 1000;
 export const DEFAULT_LEAFLET_TILESIZE = 256;
 
 const WEB_MERCATOR_MAX_LATITUDE = 85.051129;
@@ -489,7 +497,7 @@ enum PICKMODE {
   RING,
 }
 
-const generatePostionsForRing = (n = 8, radius = 0.1, center = [0.5, 0.5]) => {
+const generatePositionsForRing = (n = 8, radius = 0.1, center = [0.5, 0.5]) => {
   const positions: [number, number][] = [];
   const [cx, cy] = center;
   for (let i = 0; i < n; i++) {
@@ -501,12 +509,43 @@ const generatePostionsForRing = (n = 8, radius = 0.1, center = [0.5, 0.5]) => {
   return positions;
 };
 
+export const generateRingFromDegrees = (
+  centerDeg: LatLngRecord,
+  radiusInMeters: number,
+  samples: number = 24
+): LatLngRadians[] => {
+  const center = Cartographic.fromDegrees(
+    centerDeg.longitude,
+    centerDeg.latitude
+  );
+  const points: LatLngRadians[] = [];
+
+  const scaleFactor = {
+    latitude: 1/ EARTH_RADIUS,
+    longitude: 1/ (EARTH_RADIUS * Math.cos(center.latitude)),
+  };
+
+  for (let i = 0; i < samples; i++) {
+    const angle = (CeMath.TWO_PI * i) / samples;
+    const dx = radiusInMeters * Math.cos(angle);
+    const dy = radiusInMeters * Math.sin(angle);
+    const point = {
+      lngRad: center.longitude + dx * scaleFactor.longitude,
+      latRad: center.latitude + dy * scaleFactor.latitude,
+    };
+
+    points.push(point);
+  }
+  points.push(points[0]); // Close the loop
+  return points;
+};
+
 const sampleRingPixelSize = (
   viewer: Viewer,
   samples: number,
   radius: number
 ) => {
-  const positionCoords = generatePostionsForRing(samples, radius);
+  const positionCoords = generatePositionsForRing(samples, radius);
   const positions = pickViewerCanvasPositions(viewer, positionCoords);
   const pixelSizes = positions.map(
     ({ scenePosition }) =>

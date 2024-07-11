@@ -4,6 +4,21 @@ type Translation = {
   z: number;
 };
 
+export type LatLngRecord = {
+  latitude: number;
+  longitude: number;
+};
+
+export type LatLngDegrees = {
+  latRad: number;
+  lngRad: number;
+};
+
+export type LatLngRadians = {
+  latRad: number;
+  lngRad: number;
+};
+
 export type TilesetConfig = {
   url: string;
   translation: Translation;
