@@ -47,8 +47,8 @@ const convertItemToFeature = async (itemIn) => {
       ebike.tel = ebike.betreiber.telefon;
     }
 
-    if (ebike.betreiber.homepage) {
-      ebike.url = ebike.betreiber.homepage;
+    if (ebike.betreiber.web) {
+      ebike.url = ebike.betreiber.web;
     }
   }
 
