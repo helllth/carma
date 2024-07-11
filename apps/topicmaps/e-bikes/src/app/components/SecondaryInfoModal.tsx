@@ -23,52 +23,99 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
   }
 
   let links: any = [];
-  if (ladestation?.betreiber?.telefon) {
-    links.push(
-      <a
-        title="Beitreiber anrufen"
-        href={'tel:' + ladestation?.betreiber?.telefon}
-      >
-        <FontAwesomeIcon
-          icon={faPhoneFlip}
-          style={{ color: 'grey', width: '26px', textAlign: 'center' }}
-          size="2x"
-        />
-      </a>
-    );
-  }
-  if (ladestation?.betreiber?.email || ladestation.email) {
-    const mail = ladestation?.betreiber?.email
-      ? ladestation?.betreiber?.email
-      : ladestation.email;
-    links.push(
-      <a
-        title="E-Mail an den Betreiber schreiben"
-        href={'mailto:' + mail}
-        target="_blank"
-      >
-        <FontAwesomeIcon
-          icon={faSquareEnvelope}
-          style={{ color: 'grey', width: '26px', textAlign: 'center' }}
-          size="2x"
-        />
-      </a>
-    );
-  }
-  if (ladestation?.betreiber?.web) {
-    links.push(
-      <a
-        title="Betreiberwebseite"
-        href={ladestation?.betreiber?.web}
-        target="_blank"
-      >
-        <FontAwesomeIcon
-          icon={faSquareArrowUpRight}
-          style={{ color: 'grey', width: '26px', textAlign: 'center' }}
-          size="2x"
-        />
-      </a>
-    );
+
+  if (ladestation.betreiber) {
+    if (ladestation?.betreiber?.telefon) {
+      links.push(
+        <a
+          title="Beitreiber anrufen"
+          href={'tel:' + ladestation?.betreiber?.telefon}
+        >
+          <FontAwesomeIcon
+            icon={faPhoneFlip}
+            style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+            size="2x"
+          />
+        </a>
+      );
+    }
+    if (ladestation?.betreiber?.email || ladestation.email) {
+      const mail = ladestation?.betreiber?.email
+        ? ladestation?.betreiber?.email
+        : ladestation.email;
+      links.push(
+        <a
+          title="E-Mail an den Betreiber schreiben"
+          href={'mailto:' + mail}
+          target="_blank"
+        >
+          <FontAwesomeIcon
+            icon={faSquareEnvelope}
+            style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+            size="2x"
+          />
+        </a>
+      );
+    }
+    if (ladestation?.betreiber?.web) {
+      links.push(
+        <a
+          title="Betreiberwebseite"
+          href={ladestation?.betreiber?.web}
+          target="_blank"
+        >
+          <FontAwesomeIcon
+            icon={faSquareArrowUpRight}
+            style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+            size="2x"
+          />
+        </a>
+      );
+    }
+  } else {
+    if (ladestation.telefon) {
+      links.push(
+        <a title="Beitreiber anrufen" href={'tel:' + ladestation?.telefon}>
+          <FontAwesomeIcon
+            icon={faPhoneFlip}
+            style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+            size="2x"
+          />
+        </a>
+      );
+    }
+
+    if (ladestation.email) {
+      links.push(
+        <a
+          title="E-Mail an den Betreiber schreiben"
+          href={'mailto:' + ladestation?.email}
+          target="_blank"
+        >
+          <FontAwesomeIcon
+            icon={faSquareEnvelope}
+            style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+            size="2x"
+          />
+        </a>
+      );
+    }
+
+    if (ladestation.homepage) {
+      links.push(
+        <a
+          title="Betreiberwebseite"
+          href={ladestation?.homepage}
+          target="_blank"
+        >
+          <FontAwesomeIcon
+            icon={faSquareArrowUpRight}
+            style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+            size="2x"
+          />
+        </a>
+      );
+    }
   }
 
   return (
@@ -224,7 +271,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
           <Card style={{ backgroundColor: '#d6e9c6' }}>
             <Card.Header>
               <Accordion.Toggle as={Button} variant="link" eventKey="2">
-                Betreiber
+                {ladestation.betreiber ? 'Betreiber' : 'Kontakt'}
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="2">
