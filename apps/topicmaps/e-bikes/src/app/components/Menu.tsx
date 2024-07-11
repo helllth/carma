@@ -23,7 +23,7 @@ const Menu = () => {
       term = 'Angebote';
     }
 
-    return `Filtern (${count} ${term} gefunden, davon ${
+    return `Filter (${count} ${term} gefunden, davon ${
       shownFeatures?.length || '0'
     } in der Karte)`;
   };
@@ -32,7 +32,7 @@ const Menu = () => {
     <CustomizationContextProvider customizations={{}}>
       <ModalApplicationMenu
         menuIcon={'bars'}
-        menuTitle={'Filter, Merkliste und Kompaktanleitung'}
+        menuTitle={'Filter, Einstellungen und Kompaktanleitung'}
         // menuFooter={<MenuFooter />}
         menuIntroduction={<Introduction />}
         menuSections={[
