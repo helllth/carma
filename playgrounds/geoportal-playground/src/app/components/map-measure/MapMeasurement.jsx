@@ -141,6 +141,17 @@ const MapMeasurement = (props) => {
 
     if (measureControl) {
       measureControl.changeMeasurementMode(mode);
+      const map = routedMapRef.leafletMap.leafletElement;
+      const shapeCoordinates = measurementShapes.filter(
+        (s) => s.shapeId === activeShape
+      );
+      if (shapeCoordinates[0]?.shapeId) {
+        measureControl.changeColorByActivePolyline(
+          map,
+          shapeCoordinates[0].shapeId
+        );
+      }
+
       if (mode === 'measurement' && visibleShapes.length === 0) {
         const visibleShapesIds = measureControl.getVisibleShapeIdsArr(
           measureControl._map
