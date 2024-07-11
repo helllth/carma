@@ -34,15 +34,11 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
     );
   }
   if (ladestation?.betreiber?.email || ladestation.email) {
+    const mail = ladestation?.betreiber?.email
+      ? ladestation?.betreiber?.email
+      : ladestation.email;
     links.push(
-      <a
-        href={
-          'mailto:' + ladestation?.betreiber?.email
-            ? ladestation?.betreiber?.email
-            : ladestation.email
-        }
-        target="_blank"
-      >
+      <a href={'mailto:' + mail} target="_blank">
         <FontAwesomeIcon
           icon={faSquareEnvelope}
           style={{ color: 'grey', width: '26px', textAlign: 'center' }}
@@ -53,7 +49,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
   }
   if (ladestation?.betreiber?.web) {
     links.push(
-      <a href={ladestation?.betreiber?.homepage} target="_blank">
+      <a href={ladestation?.betreiber?.web} target="_blank">
         <FontAwesomeIcon
           icon={faSquareArrowUpRight}
           style={{ color: 'grey', width: '26px', textAlign: 'center' }}
