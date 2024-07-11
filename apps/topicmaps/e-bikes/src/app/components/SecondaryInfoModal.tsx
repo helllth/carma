@@ -157,17 +157,21 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
             <div>
               {ladestation.strasse} {ladestation.hausnummer}
             </div>
-            <br />
-            {isVerleih && ladestation.weitereinfo ? (
+            {isVerleih ? (
               <>
-                <div>
-                  <b>Weitere Informationen:</b>
-                  <div>{ladestation.weitereinfo}</div>
-                </div>
+                {ladestation.weitereinfo && (
+                  <>
+                    <br />
+                    <div>
+                      <b>Weitere Informationen:</b>
+                      <div>{ladestation.weitereinfo}</div>
+                    </div>
+                  </>
+                )}
               </>
             ) : (
               <>
-                {' '}
+                <br />{' '}
                 <div>
                   <b>Detailinformation:</b>
                 </div>
