@@ -69,11 +69,11 @@ const Map = () => {
             city: 'Wuppertal',
             navigator: {
               noun: {
-                singular: 'Ladestation',
-                plural: 'Ladestationen',
+                singular: 'Sation',
+                plural: 'Stationen',
               },
             },
-            noCurrentFeatureTitle: 'Keine Ladestationen gefunden',
+            noCurrentFeatureTitle: 'Keine Stationen gefunden',
             noCurrentFeatureContent: (
               <span>
                 Für mehr Ladestationen Ansicht mit verkleinern oder mit dem
