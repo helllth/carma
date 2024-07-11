@@ -46,9 +46,9 @@ export const createFilterRows = (
   for (let item of lebenslagen) {
     let buttonValue = 'two'; // neutral state
 
-    if (filterState.positiv.indexOf(item) !== -1) {
+    if (filterState?.positiv.indexOf(item) !== -1) {
       buttonValue = 'one';
-    } else if (filterState.negativ.indexOf(item) !== -1) {
+    } else if (filterState?.negativ.indexOf(item) !== -1) {
       buttonValue = 'three';
     }
 
@@ -105,13 +105,13 @@ export const toggleFilter = (kind, filter, filterState, setFilterState) => {
   } else {
     filterGroupSet.add(filter);
     if (kind === 'positiv') {
-      if (newFilterState.negativ.indexOf(filter) !== -1) {
+      if (newFilterState?.negativ.indexOf(filter) !== -1) {
         let otherFilterGroupSet = new Set(newFilterState['negativ']);
         otherFilterGroupSet.delete(filter);
         newFilterState['negativ'] = Array.from(otherFilterGroupSet);
       }
     } else {
-      if (newFilterState.positiv.indexOf(filter) !== -1) {
+      if (newFilterState?.positiv.indexOf(filter) !== -1) {
         let otherFilterGroupSet = new Set(newFilterState['positiv']);
         otherFilterGroupSet.delete(filter);
         newFilterState['positiv'] = Array.from(otherFilterGroupSet);

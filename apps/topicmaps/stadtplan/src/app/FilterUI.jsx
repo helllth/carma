@@ -116,7 +116,7 @@ const FilterUI = ({ apps = crossLinkApps }) => {
     for (const appLebenslage of app.on) {
       if (
         filterState?.positiv &&
-        filterState.positiv.indexOf(appLebenslage) !== -1 &&
+        filterState?.positiv.indexOf(appLebenslage) !== -1 &&
         usedApps.indexOf(app.name) === -1
       ) {
         usedApps.push(app.name);
