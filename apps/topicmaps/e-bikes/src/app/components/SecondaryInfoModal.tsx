@@ -158,7 +158,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
               {ladestation.strasse} {ladestation.hausnummer}
             </div>
             <br />
-            {isVerleih ? (
+            {isVerleih && ladestation.weitereinfo ? (
               <>
                 <div>
                   <b>Weitere Informationen:</b>
