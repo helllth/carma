@@ -22,7 +22,7 @@ const HelpSection = () => {
               configs: [
                 {
                   title: 'Datengrundlage',
-                  bsStyle: 'default',
+                  bsStyle: 'secondary',
                   contentBlockConf: {
                     type: 'REACTCOMP',
                     content: <Datengrundlage />,

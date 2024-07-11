@@ -128,7 +128,7 @@ const Menu = () => {
                     configs: [
                       {
                         title: 'Datengrundlage',
-                        bsStyle: 'default',
+                        bsStyle: 'secondary',
                         contentBlockConf: {
                           type: 'REACTCOMP',
                           content: (
