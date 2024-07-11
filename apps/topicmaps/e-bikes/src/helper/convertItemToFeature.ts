@@ -29,7 +29,7 @@ const convertItemToFeature = async (itemIn) => {
 
   const header = `${ebike.typ} ${
     ebike.typ === 'Ladestation' ? 'für' : 'von'
-  } E-Fahrrädern ${onlineStatus}`;
+  } E-Fahrräder${ebike.typ === 'Ladestation' ? '' : 'n'} ${onlineStatus}`;
 
   const info = {
     header: header,
