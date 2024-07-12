@@ -25,6 +25,7 @@ import {
 import { getShowLayerHideButtons } from '../../store/slices/ui';
 import { iconColorMap, iconMap } from './items';
 import './tabs.css';
+import { useSearchParams } from 'react-router-dom';
 // import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
@@ -59,6 +60,11 @@ const LayerButton = ({
       id,
     });
   const buttonRef = useRef<HTMLDivElement>(null);
+  let [searchParams, setSearchParams] = useSearchParams();
+  const showAlternateIcons = searchParams.get('altIcon') !== null;
+  const iconName = showAlternateIcons
+    ? layer.other?.alternativeIcon
+    : layer.other?.icon;
 
   const style = { transform: CSS.Translate.toString(transform) };
 
@@ -114,7 +120,15 @@ const LayerButton = ({
             : 'bg-neutral-200'
         )}
       >
-        {icon === 'ortho' ? (
+        {iconName ? (
+          <div style={{ height: 14, width: 14 }}>
+            <img
+              src={urlPrefix + `icons/${iconName}.svg`}
+              alt="icon"
+              className="h-full"
+            />
+          </div>
+        ) : icon === 'ortho' ? (
           <div style={{ height: 14, width: 14 }}>
             <img
               src={urlPrefix + 'images/ortho.png'}
