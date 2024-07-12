@@ -283,10 +283,10 @@ const CustomCesiumWidget: React.FC<{
     return () => {
       if (tileset && clippingPolygonCollection) {
         //console.log(          'Removing clipping polygon collection:',          tileset.clippingPolygons        );
-        //clippingPolygonCollection.removeAll();
+        clippingPolygonCollection.removeAll();
         //clippingPolygon && tileset.clippingPolygons.remove(clippingPolygon);
-        //tileset.clippingPolygons.removeAll();
-        //tileset.clippingPlanes?.removeAll && tileset.clippingPlanes.removeAll();
+        tileset.clippingPolygons?.removeAll && tileset.clippingPolygons.removeAll();
+        tileset.clippingPlanes?.removeAll && tileset.clippingPlanes.removeAll();
         //!clippingPolygonCollection.isDestroyed() && clippingPolygonCollection.destroy();
       }
     };
