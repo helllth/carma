@@ -17,7 +17,7 @@ import {
 } from 'cesium';
 import { WUPP3D } from '../config/dataSources.config';
 import { generateRingFromDegrees } from '../utils/cesiumHelpers';
-import { LatLngRadians } from '../..';
+import { LatLngRadians, LatLngRecord } from '../..';
 import { CUSTOM_SHADERS_DEFINITIONS } from '../utils/cesiumShaders';
 
 const unlit = new CustomShader(CUSTOM_SHADERS_DEFINITIONS.UNLIT);
@@ -59,7 +59,7 @@ const CustomCesiumWidget: React.FC<{
   position: { longitude: number; latitude: number; height?: number };
   range?: number;
   clip?: boolean;
-  clipPolygon?: ClippingPolygon;
+  clipPolygon?: LatLngRecord[];
   clipRadius?: number;
   tilesetUrl?: string;
   debug?: boolean;
@@ -73,6 +73,7 @@ const CustomCesiumWidget: React.FC<{
   pixelSize = { width: 1024, height: 1024 },
   range = 30,
   clipRadius,
+  clipPolygon,
   tilesetUrl = WUPP3D.url,
   position = { longitude: 7.201578, latitude: 51.256565, height: 335 },
   debug = false,
@@ -244,16 +245,30 @@ const CustomCesiumWidget: React.FC<{
     if (widget && tileset) {
       if (clip) {
         //console.log('Creating clipping polygon:', clipRadius);
-        const ringCoords = generateRingFromDegrees(
-          { longitude: position.longitude, latitude: position.latitude },
-          clipRadius ?? 100
-        );
 
-        clippingPolygon = new ClippingPolygon({
-          positions: ringCoords.map((coord: LatLngRadians) =>
-            Cartesian3.fromRadians(coord.lngRad, coord.latRad)
-          ),
-        });
+        if (clipPolygon && clipPolygon.length > 2) {
+          clippingPolygon = new ClippingPolygon({
+            positions: clipPolygon.map((coord: LatLngRecord) =>
+              Cartesian3.fromDegrees(coord.longitude, coord.latitude)
+            ),
+          });
+          console.info('Clipping polygon created', clippingPolygon);
+        } else if (clipRadius) {
+          console.info('Creating clipping circle:', clipRadius);
+          const ringCoords = generateRingFromDegrees(
+            { longitude: position.longitude, latitude: position.latitude },
+            clipRadius ?? 100
+          );
+
+          clippingPolygon = new ClippingPolygon({
+            positions: ringCoords.map((coord: LatLngRadians) =>
+              Cartesian3.fromRadians(coord.lngRad, coord.latRad)
+            ),
+          });
+        }
+
+        console.info('Clipping polygon created', clippingPolygon);
+
         if (clippingPolygon) {
           clippingPolygonCollection = new ClippingPolygonCollection({
             polygons: [clippingPolygon],
@@ -264,17 +279,18 @@ const CustomCesiumWidget: React.FC<{
         }
       }
     }
+
     return () => {
       if (tileset && clippingPolygonCollection) {
         //console.log(          'Removing clipping polygon collection:',          tileset.clippingPolygons        );
         //clippingPolygonCollection.removeAll();
-        clippingPolygon && tileset.clippingPolygons.remove(clippingPolygon);
-        tileset.clippingPolygons.removeAll();
-        tileset.clippingPlanes?.removeAll && tileset.clippingPlanes.removeAll();
+        //clippingPolygon && tileset.clippingPolygons.remove(clippingPolygon);
+        //tileset.clippingPolygons.removeAll();
+        //tileset.clippingPlanes?.removeAll && tileset.clippingPlanes.removeAll();
         //!clippingPolygonCollection.isDestroyed() && clippingPolygonCollection.destroy();
       }
     };
-  }, [clip, clipRadius, position, tileset, widget]);
+  }, [clip, clipRadius, clipPolygon, position, tileset, widget]);
 
   useEffect(() => {
     if (debug && widget && cartesian) {
