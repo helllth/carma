@@ -17,6 +17,10 @@ import {
   Math as CeMath,
   BoundingSphere,
   Rectangle,
+  OrthographicFrustum,
+  OrthographicOffCenterFrustum,
+  PerspectiveFrustum,
+  PerspectiveOffCenterFrustum,
 } from 'cesium';
 import {
   ColorRgbaArray,
@@ -248,6 +252,56 @@ export const pickViewerCanvasPositions = (
 };
 
 // GET FRUSTUM/VIEWPORT EXTENT
+
+export const createOffCenterFrustum = (
+  // TODO Implement and Test
+  sourceFrustum: PerspectiveFrustum | OrthographicFrustum,
+  {
+    near,
+    far,
+    left,
+    right,
+    top,
+    bottom,
+    fov,
+    aspectRatio = 1,
+  }: {
+    near?: number;
+    far?: number;
+    left?: number;
+    right?: number;
+    top?: number;
+    bottom?: number;
+    aspectRatio?: number;
+    fov?: number;
+  } = {}
+) => {
+  const src = sourceFrustum.clone();
+
+  if (src instanceof OrthographicFrustum) {
+    const frustum = new OrthographicOffCenterFrustum({
+      near: near ?? src.near,
+      far: far ?? src.far,
+      left: -500,
+      right: 500,
+      top: 800,
+      bottom: -300,
+    });
+
+    return frustum;
+  } else if (src instanceof PerspectiveFrustum) {
+    const frustum = new PerspectiveOffCenterFrustum({
+      //fov: fov ?? src.fov,
+      //aspectRatio: aspectRatio ?? src.aspectRatio,
+      near: near ?? src.near,
+      far: far ?? src.far,
+      left: left ?? -500,
+      right: right ?? 500,
+      top: top ?? 800,
+      bottom: bottom ?? -300,
+    });
+  }
+};
 
 const findTopPick = (viewer: Viewer, xPos = 0, targetPixelSize: number) => {
   let top: PickResult | null = null;
@@ -521,8 +575,8 @@ export const generateRingFromDegrees = (
   const points: LatLngRadians[] = [];
 
   const scaleFactor = {
-    latitude: 1/ EARTH_RADIUS,
-    longitude: 1/ (EARTH_RADIUS * Math.cos(center.latitude)),
+    latitude: 1 / EARTH_RADIUS,
+    longitude: 1 / (EARTH_RADIUS * Math.cos(center.latitude)),
   };
 
   for (let i = 0; i < samples; i++) {
