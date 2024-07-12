@@ -648,6 +648,8 @@ export const baseConfig = {
     layers: [
       {
         name: 'baeume',
+        icon: 'Viereck_baumgruen',
+        alternativeIcon: 'Viereck_baumgruen',
       },
       {
         name: 'kga',
@@ -806,6 +808,8 @@ export const baseConfig = {
           790989.4779520752, 6664143.201786021, 800673.0939729535,
           6670157.840449209,
         ],
+        icon: 'Viereck_freiflaechen',
+        alternativeIcon: 'Viereck_freiflaechen',
       },
       {
         name: 'umweltzonen',
@@ -1035,9 +1039,13 @@ export const baseConfig = {
           792683.0358600187, 6666519.9156342605, 796975.4527296581,
           6669527.234965856,
         ],
+        icon: 'Kreis_dunkelgruen',
+        alternativeIcon: 'Icon_Friedhof',
       },
       {
         name: 'poi_friedhoefe_ehem',
+        icon: 'Kreis_dunkelgruen',
+        alternativeIcon: 'Icon_Friedhof',
       },
       {
         name: 'poi_gebaeude',
@@ -1048,6 +1056,8 @@ export const baseConfig = {
           792683.0358600187, 6666519.9156342605, 796975.4527296581,
           6669527.234965856,
         ],
+        icon: 'Viereck_gruen',
+        alternativeIcon: 'Icon_Gruenanlagen_und_Waelder',
       },
       {
         name: 'poi_stauseen',
@@ -1055,6 +1065,8 @@ export const baseConfig = {
           799177.1974428413, 6659678.204438456, 800137.4376106737,
           6660409.730685716,
         ],
+        icon: 'Kreis_gruen',
+        alternativeIcon: 'Icon_Stausee',
       },
       {
         name: 'poi_wupperufer',
@@ -1062,6 +1074,8 @@ export const baseConfig = {
           790989.4779520752, 6664143.201786021, 800673.0939729535,
           6670157.840449209,
         ],
+        icon: 'Kreis_gruen',
+        alternativeIcon: 'Icon_Lebensader_Wupper',
       },
       {
         name: 'poi_jugend',

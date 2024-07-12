@@ -41,6 +41,8 @@ export type Item = {
   description: string;
   tags: string[];
   thumbnail?: string;
+  icon?: string;
+  alternativeIcon?: string;
   name: string;
   pictureBoundingBox?: [number, number, number, number];
   id: string;
