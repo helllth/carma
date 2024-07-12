@@ -296,7 +296,7 @@ function View() {
             debug={debug}
             animate={animate}
           >
-            {poi.label} {orthographic ? 'orthographic' : 'perspective'}
+            {poi.label} {orthographic ? 'orthografisch' : 'perspektive'}
           </CustomCesiumWidget>
           <CustomCesiumWidget
             position={poi.position}
@@ -309,13 +309,13 @@ function View() {
             debug={debug}
             animate={animate}
           >
-            {poi.label} {orthographic ? 'orthographic' : 'perspective'} clipped
+            {poi.label} {orthographic ? 'orthografisch' : 'perspektive'} clipped
           </CustomCesiumWidget>
         </div>
         <ViewToggle />
 
         <LocationToggle />
-        Beannte Gebäude aus GeoJson mit gebufferten Umrissen:
+        Benannte Gebäude aus Sample-GeoJson mit gebufferten Umrissen:
         <GeoJSONDropdown />
         <div
           style={{
