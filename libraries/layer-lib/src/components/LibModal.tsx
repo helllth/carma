@@ -256,10 +256,8 @@ const LibModal = ({
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (open) {
-        setShowItems(open);
-      }
-    }, 150);
+      setShowItems(open);
+    }, 225);
 
     return () => clearTimeout(timer);
   }, [open]);
@@ -328,7 +326,7 @@ const LibModal = ({
             </>
           )}
         </div>
-        {!showItems && (
+        {!showItems && open && (
           <div className="h-full w-full flex items-center justify-center">
             <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 w-full gap-8 mb-4 px-6 pt-4">
               {[...Array(10)].map((_, i) => (
