@@ -259,7 +259,7 @@ const LibModal = ({
       if (open) {
         setShowItems(open);
       }
-    }, 75);
+    }, 150);
 
     return () => clearTimeout(timer);
   }, [open]);
@@ -330,11 +330,11 @@ const LibModal = ({
         </div>
         {!showItems && (
           <div className="h-full w-full flex items-center justify-center">
-            <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8 mb-4 px-6 pt-4">
+            <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 w-full gap-8 mb-4 px-6 pt-4">
               {[...Array(10)].map((_, i) => (
                 <div
                   key={i}
-                  className="bg-white rounded-lg shadow-sm h-80 w-96 flex flex-col gap-2 animate-pulse"
+                  className="bg-white rounded-lg shadow-sm h-80 w-full flex flex-col gap-2 animate-pulse"
                 >
                   <div className="h-40 p-2 w-full bg-slate-200 rounded-t-lg"></div>
                   <div className="h-2 bg-slate-200 rounded mx-8 w-1/3"></div>
