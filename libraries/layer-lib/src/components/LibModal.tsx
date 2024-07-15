@@ -78,6 +78,7 @@ const LibModal = ({
   const [allCategoriesInView, setAllCategoriesInView] = useState<string[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [showItems, setShowItems] = useState(false);
   const debouncedSearchTerm = useDebounce(searchValue, 300);
 
   const checkDifferences = (url, configName) => {
@@ -245,6 +246,16 @@ const LibModal = ({
     setAllLayers(updatedLayers);
   }, [customCategories]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (open) {
+        setShowItems(open);
+      }
+    }, 75);
+
+    return () => clearTimeout(timer);
+  }, [open]);
+
   return (
     <Modal
       open={open}
@@ -264,7 +275,6 @@ const LibModal = ({
           minHeight: 'calc(100vh - 200px)',
         }}
       >
-        {/* <div className='h-full w-full flex flex-col'></div> */}
         <div className="sticky top-0 px-6 pt-6">
           <div className="flex justify-between items-center">
             <h1 className="mb-0 text-2xl font-semibold">Ressourcen</h1>
@@ -312,56 +322,57 @@ const LibModal = ({
         </div>
         <div className="overflow-auto pt-0.5">
           <div className="px-6">
-            {layers.map((category, i) => (
-              <div key={category.Title}>
-                {category.layers.length > 0 && (
-                  <InView
-                    rootMargin="20px 0px 20px 0px"
-                    as="div"
-                    onChange={(inView, entry) => {
-                      if (inView) {
-                        setInViewCategory(entry.target.id);
+            {showItems &&
+              layers.map((category, i) => (
+                <div key={category.Title}>
+                  {category.layers.length > 0 && (
+                    <InView
+                      rootMargin="20px 0px 20px 0px"
+                      as="div"
+                      onChange={(inView, entry) => {
+                        if (inView) {
+                          setInViewCategory(entry.target.id);
 
-                        setAllCategoriesInView((prev) => {
-                          return [...prev, entry.target.id];
-                        });
-                      } else {
-                        const updatedCategoriesInView =
-                          allCategoriesInView.filter(
-                            (item) => item !== entry.target.id
-                          );
-                        setAllCategoriesInView(updatedCategoriesInView);
-                        if (inViewCategory === entry.target.id && i > 0) {
-                          for (let j = i - 1; j >= 0; j--) {
-                            if (layers[j].layers.length > 0) {
-                              setInViewCategory(layers[j].Title);
+                          setAllCategoriesInView((prev) => {
+                            return [...prev, entry.target.id];
+                          });
+                        } else {
+                          const updatedCategoriesInView =
+                            allCategoriesInView.filter(
+                              (item) => item !== entry.target.id
+                            );
+                          setAllCategoriesInView(updatedCategoriesInView);
+                          if (inViewCategory === entry.target.id && i > 0) {
+                            for (let j = i - 1; j >= 0; j--) {
+                              if (layers[j].layers.length > 0) {
+                                setInViewCategory(layers[j].Title);
+                              }
                             }
                           }
                         }
-                      }
-                    }}
-                    id={category?.Title}
-                    key={category?.Title}
-                  >
-                    <p className="mb-4 text-2xl font-semibold">
-                      {category?.Title}
-                    </p>
-                    <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8 mb-4">
-                      {category?.layers?.map((layer: any, i) => (
-                        <LibItem
-                          setAdditionalLayers={setAdditionalLayers}
-                          layer={layer}
-                          thumbnails={thumbnails}
-                          setThumbnail={setThumbnail}
-                          activeLayers={activeLayers}
-                          key={`${category.Title}_layer_${i}`}
-                        />
-                      ))}
-                    </div>
-                  </InView>
-                )}
-              </div>
-            ))}
+                      }}
+                      id={category?.Title}
+                      key={category?.Title}
+                    >
+                      <p className="mb-4 text-2xl font-semibold">
+                        {category?.Title}
+                      </p>
+                      <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8 mb-4">
+                        {category?.layers?.map((layer: any, i) => (
+                          <LibItem
+                            setAdditionalLayers={setAdditionalLayers}
+                            layer={layer}
+                            thumbnails={thumbnails}
+                            setThumbnail={setThumbnail}
+                            activeLayers={activeLayers}
+                            key={`${category.Title}_layer_${i}`}
+                          />
+                        ))}
+                      </div>
+                    </InView>
+                  )}
+                </div>
+              ))}
             {getNumberOfLayers(layers) === 0 && (
               <h1 className="text-2xl font-normal">
                 Keine Ressourcen gefunden
