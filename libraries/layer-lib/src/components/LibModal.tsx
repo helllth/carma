@@ -1,7 +1,7 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDebounce } from '@uidotdev/usehooks';
-import { Button, Input, Modal } from 'antd';
+import { Button, Input, Modal, Spin } from 'antd';
 import Fuse from 'fuse.js';
 import { useEffect, useState } from 'react';
 import { InView } from 'react-intersection-observer';
@@ -328,6 +328,11 @@ const LibModal = ({
             </>
           )}
         </div>
+        {!showItems && (
+          <div className="h-full w-full flex items-center justify-center">
+            <Spin size="large" />
+          </div>
+        )}
         <div className="overflow-auto pt-0.5">
           <div className="px-6">
             {showItems &&
