@@ -16,7 +16,7 @@ import {
   viewerCesium3DTilesInspectorMixin,
 } from 'cesium';
 import { useSecondaryStyleTilesetClickHandler } from '../../../hooks';
-import { useTweakpaneCtx } from '@carma/debug-ui';
+import { useTweakpaneCtx } from '@carma-commons/debug';
 import {
   CUSTOM_SHADERS_DEFINITIONS,
   CustomShaderKeys,
