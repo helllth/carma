@@ -101,13 +101,13 @@ const CustomCesiumWidget: React.FC<{
         (async () => {
           console.log('Loading tileset:', tilesetUrl);
           const newTileset = await Cesium3DTileset.fromUrl(tilesetUrl, {
-            maximumScreenSpaceError: 4,
-            baseScreenSpaceError: 128,
+            //maximumScreenSpaceError: 4,
+            //baseScreenSpaceError: 128,
             foveatedScreenSpaceError: false,
             dynamicScreenSpaceError: false,
             //skipLevels: 1,
             //preferLeaves: true,
-            preloadWhenHidden: true,
+            //preloadWhenHidden: true,
           });
           newTileset.customShader = unlit;
           setTileset(newTileset);
@@ -285,7 +285,8 @@ const CustomCesiumWidget: React.FC<{
         //console.log(          'Removing clipping polygon collection:',          tileset.clippingPolygons        );
         clippingPolygonCollection.removeAll();
         //clippingPolygon && tileset.clippingPolygons.remove(clippingPolygon);
-        tileset.clippingPolygons?.removeAll && tileset.clippingPolygons.removeAll();
+        tileset.clippingPolygons?.removeAll &&
+          tileset.clippingPolygons.removeAll();
         tileset.clippingPlanes?.removeAll && tileset.clippingPlanes.removeAll();
         //!clippingPolygonCollection.isDestroyed() && clippingPolygonCollection.destroy();
       }

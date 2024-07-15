@@ -24,12 +24,12 @@ import {
 
 const preloadWhenHidden = true;
 let enableDebugWireframe = false;
-let maximumScreenSpaceError = 4; // 16 is default but quite Low Quality
+let maximumScreenSpaceError = 8; // 16 is default but quite Low Quality
 
 const customShaderKeys = {
   clay: CustomShaderKeys.CLAY,
-  "unlit enhanced": CustomShaderKeys.UNLIT,
-  "unlit": CustomShaderKeys.UNLIT_BASE,
+  'unlit enhanced': CustomShaderKeys.UNLIT,
+  unlit: CustomShaderKeys.UNLIT_BASE,
   'unlit fog': CustomShaderKeys.UNLIT_FOG,
   monochrome: CustomShaderKeys.MONOCHROME,
   undefined: CustomShaderKeys.UNDEFINED,
@@ -61,6 +61,17 @@ export const BaseTilesets = () => {
     color: `vec4(1.0, 1.0, 1.0, ${tilesetOpacity.toFixed(2)})`,
     show: true,
   });
+
+  // SAMPLE for 3DTilesStyles
+  /*
+  const styleThematicLod2 = create3DTileStyle({
+    //color: `vec4(0.5, 1.0, 1.0, ${tilesetOpacity.toFixed(2)})`,
+    // eslint-disable-next-line no-template-curly-in-string
+    color:
+      '(${building_id} === "DENW29AL1000AzKQ")? color("orange") : color("grey")',
+    show: true,
+  });
+  */
 
   const { folderCallback } = useTweakpaneCtx(
     {
@@ -135,7 +146,7 @@ export const BaseTilesets = () => {
       { name: 'enableDebugWireframe' },
       { name: 'showPrimary' },
       { name: 'showSecondary' },
-      { name: 'maximumScreenSpaceError', min: 0.1, max: 64 },
+      { name: 'maximumScreenSpaceError', min: 1, max: 16, step: 1 },
     ]
   );
 
@@ -188,13 +199,13 @@ export const BaseTilesets = () => {
         customShader={customMeshShader}
         enableDebugWireframe={enableDebugWireframe}
         // quality
-        cacheBytes={536870912 * 2}
+        //cacheBytes={536870912 * 2}
         shadows={ShadowMode.DISABLED}
         dynamicScreenSpaceError={false}
         baseScreenSpaceError={256}
         maximumScreenSpaceError={maximumScreenSpaceError}
         foveatedScreenSpaceError={false}
-        skipScreenSpaceErrorFactor={8}
+        //skipScreenSpaceErrorFactor={8}
         skipLevelOfDetail={true}
         //immediatelyLoadDesiredLevelOfDetail={true}
 
@@ -211,12 +222,14 @@ export const BaseTilesets = () => {
         dynamicScreenSpaceError={false}
         maximumScreenSpaceError={maximumScreenSpaceError}
         foveatedScreenSpaceError={false}
-        skipScreenSpaceErrorFactor={4}
+        //skipScreenSpaceErrorFactor={4}
         skipLevelOfDetail={true}
         //immediatelyLoadDesiredLevelOfDetail={true}
 
         url={tilesets.secondary.url}
         style={style}
+        //style={styleThematicLod2}
+
         enableCollision={false}
         preloadWhenHidden={preloadWhenHidden}
         onReady={(tileset) => setTsB(tileset)}
