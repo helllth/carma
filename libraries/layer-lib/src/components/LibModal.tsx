@@ -20,6 +20,7 @@ import LibItem from './LibItem';
 import './input.css';
 import './modal.css';
 import { Item, vectorProps, wmsProps } from '../helper/types';
+import { isEqual } from 'lodash';
 const { Search } = Input;
 
 // @ts-ignore
@@ -79,6 +80,9 @@ const LibModal = ({
   const [searchValue, setSearchValue] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [showItems, setShowItems] = useState(false);
+  const [tmpCustomCategories, setTmpCustomCategories] = useState<
+    any[] | undefined
+  >([]);
   const debouncedSearchTerm = useDebounce(searchValue, 300);
 
   const checkDifferences = (url, configName) => {
@@ -232,18 +236,22 @@ const LibModal = ({
   }, [debouncedSearchTerm]);
 
   useEffect(() => {
-    let updatedLayers = layers.map((category) => {
-      const title = category.Title;
-      // @ts-ignore
-      customCategories.forEach((customCategory) => {
-        if (customCategory.Title === title) {
-          category.layers = customCategory.layers;
-        }
+    if (!isEqual(customCategories, tmpCustomCategories)) {
+      setTmpCustomCategories(customCategories);
+
+      let updatedLayers = layers.map((category) => {
+        const title = category.Title;
+        // @ts-ignore
+        customCategories.forEach((customCategory) => {
+          if (customCategory.Title === title) {
+            category.layers = customCategory.layers;
+          }
+        });
+        return category;
       });
-      return category;
-    });
-    setLayers(updatedLayers);
-    setAllLayers(updatedLayers);
+      setLayers(updatedLayers);
+      setAllLayers(updatedLayers);
+    }
   }, [customCategories]);
 
   useEffect(() => {
