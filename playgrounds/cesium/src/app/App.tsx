@@ -13,7 +13,6 @@ import CustomViewer from './components/CustomViewer/CustomViewer';
 import { routeGenerator } from './utils/routeGenerator';
 
 import 'leaflet/dist/leaflet.css';
-import { UIComponentProvider } from './components/UI/UIProvider';
 
 import { TweakpaneProvider } from '@carma-commons/debug';
 import { TopicMapContextProvider } from 'react-cismap/contexts/TopicMapContextProvider';
@@ -27,35 +26,33 @@ export function App() {
       <TweakpaneProvider>
         <HashRouter>
           <LocationProvider>
-            <UIComponentProvider>
-              <Navigation
-                className="leaflet-bar"
-                style={{
-                  position: 'absolute',
-                  top: 8,
-                  left: '50%',
-                  width: 'auto',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  transform: 'translate(-50%, 0)',
-                  zIndex: 10,
-                }}
-                routes={[...viewerRoutes, ...otherRoutes]}
+            <Navigation
+              className="leaflet-bar"
+              style={{
+                position: 'absolute',
+                top: 8,
+                left: '50%',
+                width: 'auto',
+                display: 'flex',
+                justifyContent: 'center',
+                transform: 'translate(-50%, 0)',
+                zIndex: 10,
+              }}
+              routes={[...viewerRoutes, ...otherRoutes]}
+            />
+            <Routes>
+              <Route
+                path="/*"
+                element={
+                  <TopicMapContextProvider>
+                    <CustomViewer>
+                      <Routes>{...ViewerRoutes}</Routes>
+                    </CustomViewer>
+                  </TopicMapContextProvider>
+                }
               />
-              <Routes>
-                <Route
-                  path="/*"
-                  element={
-                    <TopicMapContextProvider>
-                      <CustomViewer>
-                        <Routes>{...ViewerRoutes}</Routes>
-                      </CustomViewer>
-                    </TopicMapContextProvider>
-                  }
-                />
-                {...OtherRoutes}
-              </Routes>
-            </UIComponentProvider>
+              {...OtherRoutes}
+            </Routes>
           </LocationProvider>
         </HashRouter>
       </TweakpaneProvider>

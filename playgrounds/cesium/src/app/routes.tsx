@@ -1,24 +1,15 @@
 import ClassifyByGeoJson from './views/ByGeoJsonClassifier';
 
 import TilesetSelectionFromCityGml from './views/TilesetSelectionFromCityGml';
-import TilesetSelectionFromBaseMapDE from './views/TilesetSelectionBasemapDe';
-import TilesetSelectionClassify from './views/TilesetSelectionClassify';
-
-import ObsoletePlanModelStyle from './views/obsolete/PlanningModelStyle';
 
 import TestExtrudeGeoJson from './views/tests/ExtrudeGeoJson';
 import TestMarkers from './views/tests/Markers';
-import TestGeojsonWithCityGML from './views/tests/CityGml';
-
-import TestObsoleteGeojson from './views/tests/obsolete/Geojson';
-import TestObsoleteTileset from './views/tests/obsolete/Tileset';
 
 import TestComponentCustomViewer from './views/tests/components/CustomViewer';
 import TestComponentByGeoJsonClassifier from './views/tests/components/ByGeoJsonClassifier';
 
 import StandaloneResium from './views/tests/standalone/Resium';
 import StandaloneTopicMap from './views/tests/standalone/TopicMap';
-import StandaloneTailwind from './views/tests/standalone/Tailwind';
 import StandaloneWidget from './views/tests/standalone/Widget';
 
 import { ComponentType } from 'react';
@@ -42,14 +33,6 @@ export const viewerRoutes: RouteDescriptor[] = [
     '/test',
     '⚙️ Test',
     [
-      [
-        '/citygml',
-        'FeatureTest GeoJson Vergleich mit CityGML 🚧',
-        TestGeojsonWithCityGML,
-      ],
-      //['/geojson-old', '(GeoJson Vergleich 🚧)', TestObsoleteGeojson],
-      // ['/stadtmodell', 'Stil Vorauswahl 🚧', ObsoletePlanModelStyle],
-      //['/tileset', '(FeatureTest Tileset 🚧)', TestObsoleteTileset],
       [
         '/geojson',
         'ComponentTest GeoJSON Overlay',
@@ -86,7 +69,6 @@ export const otherRoutes: RouteDescriptor[] = [
     '⚙️ Standalone',
     [
       ['/resium', 'Standalone Test Resium', StandaloneResium],
-      ['/tailwind', 'Standalone Test Tailwind', StandaloneTailwind],
       [
         '/topicMapWithBaseLayer',
         'Standalone Test TopicMapWithBaseLayer',
