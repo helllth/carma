@@ -1,8 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import defaultState from '../../config';
 import { Cartesian3, Color } from 'cesium';
-import { ColorRgbaArray } from '../../..';
-import { colorToArray } from '../../utils/cesiumHelpers';
+import { cesiumHelpers, ColorRgbaArray } from'@carma-mapping/cesium-engine';
 import { useSelector } from 'react-redux';
 import { RootState } from '..';
 
@@ -115,7 +114,7 @@ const slice = createSlice({
       state.sceneStyles[style] = {
         ...state.sceneStyles[style],
         globe: {
-          baseColor: Array.isArray(color) ? color : colorToArray(color),
+          baseColor: Array.isArray(color) ? color : cesiumHelpers.colorToArray(color),
         },
       };
     },

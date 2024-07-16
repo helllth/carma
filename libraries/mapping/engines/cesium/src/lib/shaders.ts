@@ -1,4 +1,4 @@
-import { LightingModel, shaderUniforms } from 'cesium';
+import { LightingModel } from 'cesium';
 
 export enum CustomShaderKeys {
   CLAY = 'CLAY',

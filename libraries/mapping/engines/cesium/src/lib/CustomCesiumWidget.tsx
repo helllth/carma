@@ -1,4 +1,5 @@
-import React, { Children, ReactNode, useEffect, useRef, useState } from 'react';
+import * as React from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import {
   CesiumWidget,
   Cesium3DTileset,
@@ -14,11 +15,11 @@ import {
   PerspectiveFrustum,
   HeadingPitchRange,
   OrthographicFrustum,
+  ClippingPlaneCollection,
 } from 'cesium';
-import { WUPP3D } from '../config/dataSources.config';
-import { generateRingFromDegrees } from '../utils/cesiumHelpers';
-import { LatLngRadians, LatLngRecord } from '../..';
-import { CUSTOM_SHADERS_DEFINITIONS } from '../utils/cesiumShaders';
+import { generateRingFromDegrees } from './cesiumHelpers';
+import { LatLngRadians, LatLngRecord } from '.';
+import { CUSTOM_SHADERS_DEFINITIONS } from './shaders';
 
 const unlit = new CustomShader(CUSTOM_SHADERS_DEFINITIONS.UNLIT);
 
@@ -54,14 +55,14 @@ const addDebugPrimitives = (widget: CesiumWidget, cartesian: Cartesian3) => {
   };
 };
 
-const CustomCesiumWidget: React.FC<{
+export const CustomCesiumWidget: React.FC<{
   pixelSize?: { width: number; height: number };
   position: { longitude: number; latitude: number; height?: number };
   range?: number;
   clip?: boolean;
   clipPolygon?: LatLngRecord[];
   clipRadius?: number;
-  tilesetUrl?: string;
+  tilesetUrl: string;
   debug?: boolean;
   orthographic?: boolean;
   animate?: boolean;
@@ -74,7 +75,7 @@ const CustomCesiumWidget: React.FC<{
   range = 30,
   clipRadius,
   clipPolygon,
-  tilesetUrl = WUPP3D.url,
+  tilesetUrl,
   position = { longitude: 7.201578, latitude: 51.256565, height: 335 },
   debug = false,
   animate = false,
@@ -135,6 +136,7 @@ const CustomCesiumWidget: React.FC<{
         }
       };
     }
+    return;
   }, [tileset, widget]);
 
   useEffect(() => {
@@ -149,7 +151,7 @@ const CustomCesiumWidget: React.FC<{
         useBrowserRecommendedResolution: true,
         contextOptions: {
           webgl: {
-            alpha: clip,
+            alpha: true,
             //depth: true,
             //stencil: true,
             antialias: true,
@@ -178,7 +180,7 @@ const CustomCesiumWidget: React.FC<{
         setWidget(null);
       }
     };
-  }, [widget, clip]);
+  }, [widget]);
 
   useEffect(() => {
     if (widget && cartesian) {
@@ -206,6 +208,7 @@ const CustomCesiumWidget: React.FC<{
         //widget.camera.frustum.yOffset = 100;
       }
     }
+    return;
   }, [widget, orthographic, cartesian, range]);
 
   useEffect(() => {
@@ -236,6 +239,7 @@ const CustomCesiumWidget: React.FC<{
         cancelAnimationFrame(animationFrameId);
       };
     }
+    return;
   }, [widget, cartesian, animate, range]);
 
   useEffect(() => {
@@ -277,6 +281,13 @@ const CustomCesiumWidget: React.FC<{
           });
           tileset.clippingPolygons = clippingPolygonCollection;
         }
+      } else {
+        tileset.clippingPlanes = new ClippingPlaneCollection({
+          enabled: false,
+        });
+        tileset.clippingPolygons = new ClippingPolygonCollection({
+          enabled: false,
+        });
       }
     }
 
@@ -302,6 +313,7 @@ const CustomCesiumWidget: React.FC<{
         }
       };
     }
+    return;
   }, [debug, cartesian, widget]);
 
   console.log('Render CustomCesiumWidget', position, range);

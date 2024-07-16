@@ -8,7 +8,6 @@ import {
   useTilesetOpacity,
   useViewerDataSources,
 } from '../../../store/slices/viewer';
-import { create3DTileStyle } from '../../../utils/cesiumHelpers';
 import {
   Cesium3DTileset,
   CustomShader,
@@ -17,27 +16,26 @@ import {
 } from 'cesium';
 import { useSecondaryStyleTilesetClickHandler } from '../../../hooks';
 import { useTweakpaneCtx } from '@carma-commons/debug';
-import {
-  CUSTOM_SHADERS_DEFINITIONS,
-  CustomShaderKeys,
-} from '../../../utils/cesiumShaders';
+import { cesiumHelpers, shaders } from '@carma-mapping/cesium-engine';
 
 const preloadWhenHidden = true;
 let enableDebugWireframe = false;
 let maximumScreenSpaceError = 8; // 16 is default but quite Low Quality
 
+const k = shaders.CustomShaderKeys;
+
 const customShaderKeys = {
-  clay: CustomShaderKeys.CLAY,
-  'unlit enhanced': CustomShaderKeys.UNLIT,
-  unlit: CustomShaderKeys.UNLIT_BASE,
-  'unlit fog': CustomShaderKeys.UNLIT_FOG,
-  monochrome: CustomShaderKeys.MONOCHROME,
-  undefined: CustomShaderKeys.UNDEFINED,
+  clay: k.CLAY,
+  'unlit enhanced': k.UNLIT,
+  unlit: k.UNLIT_BASE,
+  'unlit fog': k.UNLIT_FOG,
+  monochrome: k.MONOCHROME,
+  undefined: k.UNDEFINED,
 };
 
-const DEFAULT_MESH_SHADER_KEY = CustomShaderKeys.UNLIT;
+const DEFAULT_MESH_SHADER_KEY = shaders.CustomShaderKeys.UNLIT;
 const DEFAULT_MESH_SHADER = new CustomShader(
-  CUSTOM_SHADERS_DEFINITIONS[DEFAULT_MESH_SHADER_KEY]
+  shaders.CUSTOM_SHADERS_DEFINITIONS[DEFAULT_MESH_SHADER_KEY]
 );
 
 export const BaseTilesets = () => {
@@ -57,7 +55,7 @@ export const BaseTilesets = () => {
 
   const tilesetOpacity = useTilesetOpacity();
 
-  const style = create3DTileStyle({
+  const style = cesiumHelpers.create3DTileStyle({
     color: `vec4(1.0, 1.0, 1.0, ${tilesetOpacity.toFixed(2)})`,
     show: true,
   });
@@ -84,12 +82,14 @@ export const BaseTilesets = () => {
       set customShaderKey(v) {
         setCustomShaderKey(v);
         if (tsA) {
-          const def = CUSTOM_SHADERS_DEFINITIONS[customShaderKeys[v]];
-          if (def === CustomShaderKeys.UNDEFINED) {
+          const def = shaders.CUSTOM_SHADERS_DEFINITIONS[customShaderKeys[v]];
+          if (def === k.UNDEFINED) {
             setCustomMeshShader(undefined);
             tsA.customShader = undefined;
           } else {
-            const shader = new CustomShader(CUSTOM_SHADERS_DEFINITIONS[v]);
+            const shader = new CustomShader(
+              shaders.CUSTOM_SHADERS_DEFINITIONS[v]
+            );
             tsA.customShader = shader;
             setCustomMeshShader(shader);
           }

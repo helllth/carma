@@ -11,7 +11,9 @@ import {
   useViewerIsAnimating,
 } from '../../store/slices/viewer';
 import { useDispatch } from 'react-redux';
-import { pickViewerCanvasCenter } from '../../utils/cesiumHelpers';
+import { cesiumHelpers } from '@carma-mapping/cesium-engine';
+
+
 type SpinningControlProps = {
   showCenterPoint?: boolean;
   children?: ReactNode;
@@ -49,7 +51,7 @@ const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
 
   const toggleOrbit = (viewer: Viewer) => {
     if (!isAnimating) {
-      const position = pickViewerCanvasCenter(viewer).scenePosition;
+      const position = cesiumHelpers.pickViewerCanvasCenter(viewer).scenePosition;
       orbitPointRef.current = position;
       lastRenderTimeRef.current = null;
       // console.log('orbitPoint', orbitPointRef.current);

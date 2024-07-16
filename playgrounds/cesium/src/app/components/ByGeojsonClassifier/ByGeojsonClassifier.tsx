@@ -17,7 +17,7 @@ import {
   useShowPrimaryTileset,
 } from '../../store/slices/viewer';
 import { useSelectAndHighlightGeoJsonEntity } from './hooks';
-import { SELECTABLE_TRANSPARENT_MATERIAL } from '../../utils/cesiumHelpers';
+import { cesiumHelpers } from '@carma-mapping/cesium-engine';
 
 interface ByGeoJsonClassifier {
   debug?: boolean;
@@ -61,7 +61,7 @@ const ByGeoJsonClassifier: React.FC<ByGeoJsonClassifier> = ({
         entity.polygon.classificationType = classificationTypeProperty;
         entity.polygon.material = debug
           ? new ColorMaterialProperty(Color.fromRandom({ alpha: 0.5 }))
-          : SELECTABLE_TRANSPARENT_MATERIAL;
+          : cesiumHelpers.SELECTABLE_TRANSPARENT_MATERIAL;
       }
     });
   };

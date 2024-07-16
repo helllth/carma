@@ -33,13 +33,13 @@ import useInitializeViewer from './hooks';
 import TopicMap from './components/TopicMap';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { useTweakpaneCtx } from '@carma-commons/debug';
-import {
-  extentDegreesToRectangle,
-  resolutionFractions,
-} from '../../utils/cesiumHelpers';
+import { cesiumHelpers } from '@carma-mapping/cesium-engine';
+
 import { formatFractions } from '../../utils/formatters';
 import WUPPERTAL from '../../config/locations.config';
 import MiniMap from './components/LeafletMiniMap';
+
+const { extentDegreesToRectangle, resolutionFractions } = cesiumHelpers;
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -87,7 +87,9 @@ function CustomViewer(props: CustomViewerProps) {
     selectionIndicator = false,
     globe: globeProps = {
       baseColor: Color.WHITESMOKE,
-      cartograpicLimitRectangle: extentDegreesToRectangle(WUPPERTAL.extent),
+      cartograpicLimitRectangle: extentDegreesToRectangle(
+        WUPPERTAL.extent
+      ),
       showGroundAtmosphere: false,
       showSkirts: false,
     },
@@ -213,7 +215,11 @@ function CustomViewer(props: CustomViewerProps) {
       },
       set resolutionScale(index) {
         // Use the index to set the resolutionScale from the array
-        if (viewer && index >= 0 && index < resolutionFractions.length) {
+        if (
+          viewer &&
+          index >= 0 &&
+          index < resolutionFractions.length
+        ) {
           const value = resolutionFractions[index];
           viewer.resolutionScale = value;
         }

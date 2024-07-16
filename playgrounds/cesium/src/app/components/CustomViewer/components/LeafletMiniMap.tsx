@@ -4,16 +4,18 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import { DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION } from '../../../config';
-import {
-  cameraToCartographicDegrees,
-  getViewerViewportPolygonRing,
-  rectangleToExtentDegrees,
-} from '../../../utils/cesiumHelpers';
 import { Color, Entity, PolygonGraphics } from 'cesium';
 import { METROPOLERUHR_WMTS_SPW2_WEBMERCATOR } from '../../../config/dataSources.config';
 import camera_png from './camera.png';
 import { makeLeafletMarkerRotatable } from './LeafletMiniMap.utils';
 import { polygonHierarchyFromPolygonCoords } from '../../../lib/components/SearchGazetteer/tools/cesium';
+import { cesiumHelpers } from '@carma-mapping/cesium-engine';
+
+const {
+  cameraToCartographicDegrees,
+  getViewerViewportPolygonRing,
+  rectangleToExtentDegrees,
+} = cesiumHelpers;
 
 const cameraIcon = new L.Icon({
   iconUrl: camera_png,

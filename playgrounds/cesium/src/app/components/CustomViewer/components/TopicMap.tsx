@@ -3,7 +3,8 @@ import { useCesium } from 'resium';
 
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
-import { leafletToCesiumCamera } from '../../../utils/cesiumHelpers';
+import { cesiumHelpers } from '@carma-mapping/cesium-engine';
+
 import {
   useShowPrimaryTileset,
   useViewerIsMode2d,
@@ -47,7 +48,7 @@ export const TopicMap = ({ forceShow = false } = {}) => {
       return;
     }
     if (viewer) {
-      leafletToCesiumCamera(viewer, event);
+      cesiumHelpers.leafletToCesiumCamera(viewer, event);
     }
   };
 

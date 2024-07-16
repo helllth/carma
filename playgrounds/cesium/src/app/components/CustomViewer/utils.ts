@@ -1,8 +1,5 @@
 import { Cartesian3, Cartographic, Viewer, Math as CeMath } from 'cesium';
-import {
-  cameraToCartographicDegrees,
-  cesiumCenterPixelSizeToLeafletZoom,
-} from '../../utils/cesiumHelpers';
+import { cesiumHelpers } from '@carma-mapping/cesium-engine';
 import L from 'leaflet';
 
 // 5 DEGREES OF FREEDOM CAMERA encoding/decoding
@@ -226,7 +223,7 @@ export const setLeafletView = async (
 ) => {
   if (!viewer || !leafletElement) return;
 
-  let zoom = cesiumCenterPixelSizeToLeafletZoom(viewer).value;
+  let zoom = cesiumHelpers.cesiumCenterPixelSizeToLeafletZoom(viewer).value;
   if (zoom === null) {
     console.warn('zoom is null, skipping');
     return;
@@ -241,9 +238,8 @@ export const setLeafletView = async (
     zoom = MIN_2D_ZOOM;
   }
   L.setOptions(leafletElement, { zoomSnap }); // TODO fix zoom snapping in TopicMap Component
-  const { longitude: lng, latitude: lat } = cameraToCartographicDegrees(
-    viewer.camera
-  );
+  const { longitude: lng, latitude: lat } =
+    cesiumHelpers.cameraToCartographicDegrees(viewer.camera);
   console.log('Leaflet setView', { lng, lat, zoom });
   leafletElement.setView({ lng, lat }, zoom, { duration, animate });
 };

@@ -9,20 +9,24 @@ import {
   HeadingPitchRange,
   Viewer,
 } from 'cesium';
-import {
-  cesiumCenterPixelSizeToLeafletZoom,
-  getCameraHeightAboveGround,
-  getTopDownCameraDeviationAngle,
-  pickViewerCanvasCenter,
-} from '../../utils/cesiumHelpers';
 import { useDispatch } from 'react-redux';
 import { useViewerIsMode2d, setIsMode2d } from '../../store/slices/viewer';
 import { setLeafletView } from '../CustomViewer/utils';
 
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
-import { CameraPositionAndOrientation } from '../../..';
 import { animateInterpolateHeadingPitchRange } from '../../utils/cesiumAnimations';
 import { DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION } from '../../config';
+
+import {
+  cesiumHelpers,
+  CameraPositionAndOrientation,
+} from '@carma-mapping/cesium-engine';
+
+const {
+  cesiumCenterPixelSizeToLeafletZoom,
+  getTopDownCameraDeviationAngle,
+  pickViewerCanvasCenter,
+} = cesiumHelpers;
 
 type Props = {
   zoomSnap?: 0 | 1 | 0.5 | 0.25 | 0.125 | 0.0625 | 0.03125 | 0.015625;

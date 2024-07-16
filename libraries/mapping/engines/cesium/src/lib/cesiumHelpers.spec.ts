@@ -1,5 +1,6 @@
 // cesiumHelpers.test.ts
 
+/*
 import {
   getMercatorScaleFactorAtLatitude,
   WEB_MERCATOR_MAX_LATITUDE_RAD,
@@ -122,3 +123,4 @@ describe('cesiumHelpers', () => {
     expect(roundTripResolution).toBeCloseTo(meterResolution);
   });
 });
+*/

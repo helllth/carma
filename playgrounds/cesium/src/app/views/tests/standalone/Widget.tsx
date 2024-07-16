@@ -3,11 +3,13 @@
 // eslint disable
 
 import { useTweakpaneCtx } from '@carma-commons/debug';
-import CustomCesiumWidget from '../../../components/CustomCesiumWidget';
+import { CustomCesiumWidget, LatLngRecord } from '@carma-mapping/cesium-engine';
 import { useEffect, useState } from 'react';
-import { LatLngRecord } from '../../../../';
 import { Checkbox, Radio, Select } from 'antd';
-import { FOOTPRINT_GEOJSON_SOURCES } from '../../../config/dataSources.config';
+import {
+  FOOTPRINT_GEOJSON_SOURCES,
+  WUPP3D,
+} from '../../../config/dataSources.config';
 
 const { Option } = Select;
 
@@ -78,6 +80,7 @@ function View() {
   const [poi, setPoi] = useState<Poi | null>(POI[poiKey]);
   const [debug, setDebug] = useState<boolean>(false);
   const [animate, setAnimate] = useState<boolean>(false);
+  const [clip, setClip] = useState<boolean>(false);
 
   useTweakpaneCtx(
     {
@@ -91,7 +94,12 @@ function View() {
         setPoiKey(v);
         setPoi(POI[v]);
       },
-
+      get clip() {
+        return debug;
+      },
+      set clip(value: boolean) {
+        setClip(value);
+      },
       get debug() {
         return debug;
       },
@@ -117,6 +125,7 @@ function View() {
         name: 'poi',
         options,
       },
+      { name: 'clip', type: 'boolean' },
       { name: 'debug', type: 'boolean' },
       { name: 'orthographic', type: 'boolean' },
       { name: 'animate', type: 'boolean' },
@@ -147,6 +156,13 @@ function View() {
         style={{ marginLeft: '20px' }}
       >
         Animation
+      </Checkbox>
+      <Checkbox
+        checked={clip}
+        onChange={(e) => setClip(e.target.checked)}
+        style={{ marginLeft: '20px' }}
+      >
+        Clipping
       </Checkbox>
     </div>
   );
@@ -286,9 +302,10 @@ function View() {
           }}
         >
           <CustomCesiumWidget
+            tilesetUrl={WUPP3D.url}
             position={poi.position}
             range={poi.range}
-            clip={false}
+            clip={clip}
             clipRadius={poi.clipBy?.radius}
             clipPolygon={poi.clipBy?.polygon}
             orthographic={orthographic}
@@ -297,19 +314,6 @@ function View() {
             animate={animate}
           >
             {poi.label} {orthographic ? 'orthografisch' : 'perspektive'}
-          </CustomCesiumWidget>
-          <CustomCesiumWidget
-            position={poi.position}
-            range={poi.range}
-            clip={true}
-            clipRadius={poi.clipBy?.radius}
-            clipPolygon={poi.clipBy?.polygon}
-            orthographic={orthographic}
-            pixelSize={{ width: 512, height: 512 }}
-            debug={debug}
-            animate={animate}
-          >
-            {poi.label} {orthographic ? 'orthografisch' : 'perspektive'} clipped
           </CustomCesiumWidget>
         </div>
         <ViewToggle />

@@ -8,7 +8,7 @@ import {
   Viewer,
 } from 'cesium';
 import { useEffect, useRef } from 'react';
-import { pickFromClampedGeojson } from '../../utils/cesiumHelpers';
+import { cesiumHelpers } from '@carma-mapping/cesium-engine';
 
 const restoreMaterial = (
   entity: Entity,
@@ -79,7 +79,7 @@ export const useSelectAndHighlightGeoJsonEntity = (
         let hasPick = false;
 
         // last picked object is the top one we need for highlighting
-        const lastGroundPrimitive = pickFromClampedGeojson(
+        const lastGroundPrimitive = cesiumHelpers.pickFromClampedGeojson(
           viewer,
           event.position
         );

@@ -28,7 +28,15 @@ import {
   LatLngRecord,
   NumericResult,
   TilesetConfig,
-} from '../..';
+} from '.';
+
+export type {
+  ColorRgbaArray,
+  LatLngRadians,
+  LatLngRecord,
+  NumericResult,
+  TilesetConfig,
+};
 
 // Constants
 
@@ -300,7 +308,10 @@ export const createOffCenterFrustum = (
       top: top ?? 800,
       bottom: bottom ?? -300,
     });
+    return frustum;
   }
+  console.warn('Unsupported frustum type');
+  return;
 };
 
 const findTopPick = (viewer: Viewer, xPos = 0, targetPixelSize: number) => {
@@ -655,10 +666,9 @@ const getScenePixelSize = (
         result.value = sampleRingPixelSize(viewer, samples, radius);
         break;
       }
-      // intentional fallthrough for no radius
+      console.warn('radius is 0, skipping');
+      break;
     }
-
-    // eslint-disable-next-line no-fallthrough
     case PICKMODE.CENTER:
     default: {
       const centerPos = pickViewerCanvasCenter(viewer, {

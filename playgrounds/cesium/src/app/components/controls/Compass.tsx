@@ -10,7 +10,8 @@ import {
   defined,
   Cartesian2,
 } from 'cesium';
-import { pickViewerCanvasCenter } from '../../utils/cesiumHelpers';
+import { cesiumHelpers } from '@carma-mapping/cesium-engine';
+
 
 type CompassProps = {
   children?: ReactNode;
@@ -34,7 +35,7 @@ export const Compass = (props: CompassProps) => {
       if (defined(horizonTest)) {
         console.log('scene center below horizon');
         //const pos = getCanvasCenter(viewer);
-        const { scenePosition, coordinates } = pickViewerCanvasCenter(viewer, {
+        const { scenePosition, coordinates } = cesiumHelpers.pickViewerCanvasCenter(viewer, {
           getCoordinates: true,
         });
         console.log("pick compass", coordinates, scenePosition);

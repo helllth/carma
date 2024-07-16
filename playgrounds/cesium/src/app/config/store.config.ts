@@ -1,6 +1,7 @@
 import { Cartesian3, Color } from 'cesium';
 import { RootState } from '../store';
-import { colorToArray } from '../utils/cesiumHelpers';
+import { cesiumHelpers } from '@carma-mapping/cesium-engine';
+
 import {
   FOOTPRINT_GEOJSON_SOURCES,
   WUPP3D,
@@ -52,7 +53,7 @@ export const defaultState: RootState = {
     sceneStyles: {
       default: {
         globe: {
-          baseColor: colorToArray(Color.TEAL),
+          baseColor: cesiumHelpers.colorToArray(Color.TEAL),
         },
       },
     },
