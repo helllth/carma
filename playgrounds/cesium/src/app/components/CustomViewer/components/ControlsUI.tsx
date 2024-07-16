@@ -1,11 +1,9 @@
-import { useContext } from 'react';
 import ControlContainer from '../../controls/ControlContainer';
 import ControlGroup from '../../controls/ControlGroup';
 import HomeControl from '../../controls/HomeControl';
 import LockCenterControl from '../../controls/LockCenterControl';
 import OrbitControl from '../../controls/OrbitControl';
 import ZoomControls from '../../controls/ZoomControls';
-import { UIComponentContext } from '../../UI/UIProvider';
 import { useViewerHome, useViewerIsMode2d } from '../../../store/slices/viewer';
 import Compass from '../../controls/Compass';
 import SceneStyleToggle from '../../controls/SceneStyleToggle';
@@ -16,7 +14,6 @@ const ControlsUI = ({
   showOrbit = true,
   searchComponent,
 }) => {
-  const UI = useContext(UIComponentContext);
   const home = useViewerHome();
   const isMode2d = useViewerIsMode2d();
 
@@ -56,11 +53,6 @@ const ControlsUI = ({
       </ControlContainer>
       <ControlContainer position="bottomleft">
         <ControlGroup useLeafletElements={false}>
-          {
-            UI.components.bottomLeft.map((component, index) => (
-              <div key={index}>{component}</div>
-            )) // Workaround to prevent missing key warning
-          }
           {!isMode2d && searchComponent}
         </ControlGroup>
       </ControlContainer>

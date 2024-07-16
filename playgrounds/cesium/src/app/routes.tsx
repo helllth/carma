@@ -1,7 +1,5 @@
 import ClassifyByGeoJson from './views/ByGeoJsonClassifier';
 
-import TilesetSelectionFromCityGml from './views/TilesetSelectionFromCityGml';
-
 import TestExtrudeGeoJson from './views/tests/ExtrudeGeoJson';
 import TestMarkers from './views/tests/Markers';
 
@@ -41,26 +39,6 @@ export const viewerRoutes: RouteDescriptor[] = [
       ['/viewer', 'ComponentTest Viewer', TestComponentCustomViewer],
     ],
   ],
-  /*
-  // TODO: defunct with the Tilesets visibile by default
-  [
-    '/tileset',
-    '⚙️ Tileset',
-    [
-      ['/citygml', 'Auswahl in CityGML 🚧', TilesetSelectionFromCityGml],
-      [
-        '/citygml-classify',
-        'Klassifiziertes CityGML 🚧',
-        TilesetSelectionClassify,
-      ],
-      [
-        '/basemap-de',
-        'Auswahl in BaseMap.de 🚧',
-        TilesetSelectionFromBaseMapDE,
-      ],
-    ],
-  ],
-  */
 ];
 
 export const otherRoutes: RouteDescriptor[] = [

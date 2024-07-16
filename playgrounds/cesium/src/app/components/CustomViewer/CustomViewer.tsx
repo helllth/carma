@@ -15,7 +15,7 @@ import {
   OrthographicFrustum,
 } from 'cesium';
 import { Viewer as ResiumViewer } from 'resium';
-import Crosshair from '../UI/Crosshair';
+import Crosshair from '../Crosshair';
 import SearchWrapper from './components/SearchWrapper';
 
 import {
@@ -37,7 +37,7 @@ import {
   extentDegreesToRectangle,
   resolutionFractions,
 } from '../../utils/cesiumHelpers';
-import { formatFractions } from '../Formatters';
+import { formatFractions } from '../../utils/formatters';
 import WUPPERTAL from '../../config/locations.config';
 import MiniMap from './components/LeafletMiniMap';
 

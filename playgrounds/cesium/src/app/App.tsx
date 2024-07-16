@@ -3,12 +3,12 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 
 // Cesium Styles
 import 'cesium/Build/Cesium/Widgets/widgets.css';
-import Navigation from './components/UI/Navigation';
+import Navigation from './components/Navigation';
 import LocationProvider from './components/LocationProvider';
 import { Provider } from 'react-redux';
 import store from './store';
 import { viewerRoutes, otherRoutes } from './routes';
-import CustomViewer from './components/CustomViewer/CustomViewer';
+import CustomViewer from './components/CustomViewer';
 
 import { routeGenerator } from './utils/routeGenerator';
 
