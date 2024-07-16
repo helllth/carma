@@ -48,7 +48,7 @@ export const layerMap = {
             <a href="https://www.bkg.bund.de/">BKG</a>
             <span>(2024)</span>
             <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>`,
-    eignung: `Mit diesem Kartenhintergrund aus dem Projekt "basemap.de" wird durch eine Geländeschummerung, Höhenlinien und im Detailmaßstab perspektivische Gebäudedarstellung ein plastischer Geländeeindruck erzeugt.`,
+    eignung: `Mit diesem Kartenhintergrund wird durch eine Geländeschummerung, Höhenlinien und im Detailmaßstab perspektivische Gebäudedarstellung ein plastischer Geländeeindruck erzeugt. Er eignet sich damit in beliebigen Maßstäben für Karten, bei denen die Geländeform wichtig ist, z. B. zu Radwegen oder zum Regenwasserabfluss. "Gelände" basiert auf Vektor-Kacheln und ist dadurch die Hintergrundkarte mit der kürzesten Ladezeit. Der Gebäudebestand wird jährlich aktualisiert, hat also keine Spitzenaktualität.`,
     url: 'https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_top.json',
   },
   amtlich: {
