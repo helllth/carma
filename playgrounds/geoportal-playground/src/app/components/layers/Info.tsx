@@ -221,20 +221,6 @@ const Info = ({ description, legend }: InfoProps) => {
             items={[
               {
                 key: '1',
-                label: 'Inhalt',
-                children: (
-                  <div className="h-full overflow-auto">
-                    <div
-                      className="text-base"
-                      dangerouslySetInnerHTML={{
-                        __html: backgroundLayer.inhalt,
-                      }}
-                    />
-                  </div>
-                ),
-              },
-              {
-                key: '2',
                 label: 'Eignung',
                 children: (
                   <div className="h-full overflow-auto">
@@ -242,6 +228,20 @@ const Info = ({ description, legend }: InfoProps) => {
                       className="text-base"
                       dangerouslySetInnerHTML={{
                         __html: backgroundLayer.eignung,
+                      }}
+                    />
+                  </div>
+                ),
+              },
+              {
+                key: '2',
+                label: 'Inhalt',
+                children: (
+                  <div className="h-full overflow-auto">
+                    <div
+                      className="text-base"
+                      dangerouslySetInnerHTML={{
+                        __html: backgroundLayer.inhalt,
                       }}
                     />
                   </div>
