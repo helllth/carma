@@ -1,12 +1,16 @@
 {
   "extends": "../../../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs",
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsxdev",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
   "files": [],

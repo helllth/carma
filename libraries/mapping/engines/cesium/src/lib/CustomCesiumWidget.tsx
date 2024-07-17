@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import {
   CesiumWidget,
   Cesium3DTileset,
@@ -17,8 +16,8 @@ import {
   OrthographicFrustum,
   ClippingPlaneCollection,
 } from 'cesium';
-import { generateRingFromDegrees } from './cesiumHelpers';
-import { LatLngRadians, LatLngRecord } from '.';
+import { generateRingFromDegrees } from './utils/cesiumHelpers';
+import { LatLngRadians, LatLngRecord } from '..';
 import { CUSTOM_SHADERS_DEFINITIONS } from './shaders';
 
 const unlit = new CustomShader(CUSTOM_SHADERS_DEFINITIONS.UNLIT);
@@ -55,7 +54,7 @@ const addDebugPrimitives = (widget: CesiumWidget, cartesian: Cartesian3) => {
   };
 };
 
-export const CustomCesiumWidget: React.FC<{
+export const CustomCesiumWidget: FC<{
   pixelSize?: { width: number; height: number };
   position: { longitude: number; latitude: number; height?: number };
   range?: number;

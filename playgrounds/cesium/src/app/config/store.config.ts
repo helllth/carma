@@ -1,6 +1,5 @@
 import { Cartesian3, Color } from 'cesium';
-import { RootState } from '../store';
-import { cesiumHelpers } from '@carma-mapping/cesium-engine';
+import { ViewerState } from '@carma-mapping/cesium-engine';
 
 import {
   FOOTPRINT_GEOJSON_SOURCES,
@@ -9,6 +8,7 @@ import {
   WUPP_TERRAIN_PROVIDER,
 } from './dataSources.config';
 import WUPPERTAL from './locations.config';
+import { colorToArray } from '@carma-mapping/cesium-engine/utils';
 
 // SETUP Store State
 
@@ -25,47 +25,33 @@ const homeOffset = {
   z: 45000, // elevation
 };
 
-export const defaultState: RootState = {
-  buildings: {
-    key: null,
-    keys: [],
-    selection: null,
-    selectionKey: 'UUID',
-    defaultKey: 'GEB_FKT',
-    ignoredKeys: [],
+export const defaultViewerState: ViewerState = {
+  isAnimating: false,
+  isMode2d: false,
+  homeOffset: homeOffset,
+  homePosition: { x, y, z },
+  showPrimaryTileset: true,
+  showSecondaryTileset: false,
+  styling: {
+    tileset: {
+      opacity: 1.0,
+    },
   },
-  location: {
-    hash: null,
-  },
-  selectionTransparency: 0.5,
-  viewer: {
-    isAnimating: false,
-    isMode2d: false,
-    homeOffset: homeOffset,
-    homePosition: { x, y, z },
-    showPrimaryTileset: true,
-    showSecondaryTileset: false,
-    styling: {
-      tileset: {
-        opacity: 1.0,
+  sceneStyles: {
+    default: {
+      globe: {
+        baseColor: colorToArray(Color.TEAL),
       },
     },
-    sceneStyles: {
-      default: {
-        globe: {
-          baseColor: cesiumHelpers.colorToArray(Color.TEAL),
-        },
-      },
-    },
-    dataSources: {
-      footprintGeoJson: FOOTPRINT_GEOJSON_SOURCES.VORONOI,
-      tilesets: {
-        primary: WUPP3D,
-        secondary: WUPP_LOD2_TILESET,
-      },
-    },
-    terrainProvider: WUPP_TERRAIN_PROVIDER,
   },
+  dataSources: {
+    footprintGeoJson: FOOTPRINT_GEOJSON_SOURCES.VORONOI,
+    tilesets: {
+      primary: WUPP3D,
+      secondary: WUPP_LOD2_TILESET,
+    },
+  },
+  terrainProvider: WUPP_TERRAIN_PROVIDER,
 };
 
-export default defaultState;
+export default defaultViewerState;

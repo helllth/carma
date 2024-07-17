@@ -13,10 +13,11 @@
       },
       "configurations": {
         "development": {
-          "mode": "development"
+          "mode": "development",
         },
         "production": {
-          "mode": "production"
+          "mode": "production",
+          "tsConfig": "tsconfig.prod.json"
         }
       }
     },

@@ -1,7 +1,7 @@
 import { useCesium } from 'resium';
-import MarkerContainer from '../../components/CesiumMarkerContainer';
 import { MODEL_ASSETS as GLB, IMAGE_ASSETS } from '../../config/assets.config';
 import { useEffect } from 'react';
+import { MarkerContainer } from '@carma-mapping/cesium-engine';
 
 function View() {
   const { viewer } = useCesium();
@@ -18,7 +18,7 @@ function View() {
     <MarkerContainer
       markerData={[
         { position: [7.2, 51.273, 170], image: IMAGE_ASSETS.SvgMarker.uri },
-        { position: [7.200, 51.2725, 170], model: GLB.Marker3dFromSvg },
+        { position: [7.2, 51.2725, 170], model: GLB.Marker3dFromSvg },
 
         { position: [7.201, 51.274, 200], model: GLB.Marker },
 

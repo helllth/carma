@@ -1,5 +1,5 @@
 import { Color, ColorMaterialProperty, Math as CeMath } from 'cesium';
-import { defaultState } from './store.config';
+import { defaultViewerState } from './store.config';
 
 export const APP_DEFAULT_TITLE = '3D Viewer Prototype';
 export const APP_DEFAULT_SHORT_TITLE = '3DView';
@@ -18,4 +18,4 @@ const fullRotationDuration = 60; // seconds
 export const DEFAULT_ROTATION_SPEED =
   CeMath.TWO_PI / (fullRotationDuration * 1000); // rad per millisecond
 
-export default defaultState;
+export default defaultViewerState;

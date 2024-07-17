@@ -1,12 +1,13 @@
+import { ByGeojsonClassifier } from '@carma-mapping/cesium-engine';
+import { useViewerDataSources } from '@carma-mapping/cesium-engine';
 import React from 'react';
-import { useViewerDataSources } from '../../../store/slices/viewer';
-
-import ByGeojsonClassifier from '../../../components/ByGeojsonClassifier';
 
 function View() {
   const { footprintGeoJson } = useViewerDataSources();
 
-  return <ByGeojsonClassifier geojson={footprintGeoJson} debug />;
+  return (
+    footprintGeoJson && <ByGeojsonClassifier geojson={footprintGeoJson} debug />
+  );
 }
 
 export default View;
