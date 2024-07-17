@@ -10,8 +10,7 @@
 	path = envirometrics/korschenbroich/rainhazardmap/collab-texts
 	url = https://github.com/cismet-collab/ais-korschenbroich-texts.git
 	branch = main
-[submodule "libraries/collaboration/carma-wuppertal-collab/submodule"]
-	path = libraries/collaboration/carma-wuppertal-collab/submodule
+[submodule "libraries/collaboration/carma-wuppertal-collab/wuppertal-collab-submodule"]
+	path = libraries/collaboration/carma-wuppertal-collab/wuppertal-collab-submodule
 	url = https://github.com/cismet-collab/carma-wuppertal-collab.git
 	branch = main
-
