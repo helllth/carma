@@ -411,7 +411,7 @@ const LibItem = ({
               title
             )}
           </h3>
-          {keywords && extractVectorStyles(keywords) && (
+          {keywords && extractVectorStyles(keywords) && !forceWMS && (
             <FontAwesomeIcon
               icon={faRocket}
               className="text-xl cursor-pointer text-gray-700 z-50"
