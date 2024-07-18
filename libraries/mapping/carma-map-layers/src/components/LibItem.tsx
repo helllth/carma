@@ -386,35 +386,37 @@ const LibItem = ({
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-2 p-4 relative">
-        {keywords && extractVectorStyles(keywords) && (
-          <FontAwesomeIcon
-            icon={faFireFlameCurved}
-            className="absolute right-3 top-6 text-xl cursor-pointer text-green-300 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
-          />
-        )}
-        <h3 className="text-lg truncate">
-          {hightlightTextIndexes ? (
-            <>
-              {title.substring(0, hightlightTextIndexes[0])}
-              <span
-                style={{
-                  backgroundColor: 'rgba(240, 215, 139, 0.8)',
-                  padding: '0 0.08em',
-                }}
-              >
-                {title.substring(
-                  hightlightTextIndexes[0],
-                  hightlightTextIndexes[1] + 1
-                )}
-              </span>
+      <div className="flex flex-col gap-2 p-4">
+        <div className="w-full flex items-center gap-2">
+          <h3 className="text-lg truncate w-full mb-0">
+            {hightlightTextIndexes ? (
+              <>
+                {title.substring(0, hightlightTextIndexes[0])}
+                <span
+                  style={{
+                    backgroundColor: 'rgba(240, 215, 139, 0.8)',
+                    padding: '0 0.08em',
+                  }}
+                >
+                  {title.substring(
+                    hightlightTextIndexes[0],
+                    hightlightTextIndexes[1] + 1
+                  )}
+                </span>
 
-              {title.substring(hightlightTextIndexes[1] + 1)}
-            </>
-          ) : (
-            title
+                {title.substring(hightlightTextIndexes[1] + 1)}
+              </>
+            ) : (
+              title
+            )}
+          </h3>
+          {keywords && extractVectorStyles(keywords) && (
+            <FontAwesomeIcon
+              icon={faFireFlameCurved}
+              className="text-xl cursor-pointer text-green-300 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
+            />
           )}
-        </h3>
+        </div>
         <p
           className="text-base line-clamp-3 h-[66px]"
           style={{ color: 'rgba(0,0,0,0.7)' }}
