@@ -112,6 +112,7 @@ const LibModal = ({
     keys: [
       { name: 'title', weight: 2 },
       { name: 'description', weight: 1 },
+      { name: 'keywords', weight: 1 },
     ],
     shouldSort: false,
     includeMatches: true,

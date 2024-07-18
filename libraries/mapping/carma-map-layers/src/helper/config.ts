@@ -278,6 +278,7 @@ export const vectorConfig: Config = {
       title: 'Kanäle',
       description: 'Vektor Layer der Kanäle',
       tags: ['Vector Karten', 'Kanäle'],
+      keywords: [':vec:'],
       type: 'layer',
       layerType: 'vector',
       thumbnail:
@@ -292,6 +293,7 @@ export const vectorConfig: Config = {
       title: 'Bäume',
       description: 'Vektor Layer der Bäume',
       tags: ['Vector Karten', 'Bäume'],
+      keywords: [':vec:'],
       type: 'layer',
       layerType: 'vector',
       thumbnail:
@@ -306,6 +308,7 @@ export const vectorConfig: Config = {
       title: 'POIs',
       description: 'Vektor Layer der POIs',
       tags: ['Vector Karten', 'POIs'],
+      keywords: [':vec:'],
       type: 'layer',
       layerType: 'vector',
       thumbnail:
@@ -320,6 +323,7 @@ export const vectorConfig: Config = {
       title: 'Solar',
       description: 'Vektor Layer der Solar Flächen',
       tags: ['Vector Karten', 'Solar'],
+      keywords: [':vec:'],
       type: 'layer',
       layerType: 'vector',
       thumbnail:
@@ -976,6 +980,10 @@ export const baseConfig = {
           789024.8074594327, 6664703.341883925, 791171.0158942525,
           6666207.001549717,
         ],
+        keywords: [
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/poi/awg.style.json',
+        ],
       },
       {
         name: 'poi_bahnhoefe',
@@ -983,27 +991,55 @@ export const baseConfig = {
           794448.2534819795, 6665461.740523942, 796594.4619167992,
           6666965.400189739,
         ],
+        keywords: [
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/poi/bahnhofe.style.json',
+        ],
       },
       {
         name: 'poi_behoerden',
+        keywords: [
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/poi/behorden.style.json',
+        ],
       },
       {
         name: 'poi_bezirkssozialdienste',
+        keywords: [
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/poi/behorden.style.json',
+        ],
       },
       {
         name: 'poi_bibliotheken',
+        keywords: [
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/poi/bibliotheken.style.json',
+        ],
       },
       {
         name: 'poi_bildungseinrichtungen',
+        keywords: [
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/poi/bildungseinrichtungen.style.json',
+        ],
       },
       {
         name: 'poi_haltestellen',
       },
       {
         name: 'poi_clubs',
+        keywords: [
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/poi/clubs.style.json',
+        ],
       },
       {
         name: 'poi_dienstleistungsangebote',
+        keywords: [
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/poi/dienstleistungsangebote.style.json',
+        ],
       },
       {
         name: 'poi_feuerwehr',
@@ -1391,6 +1427,10 @@ export const baseConfig = {
     layers: [
       {
         name: 'apotheken',
+        keywords: [
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/apotheken/style.json',
+        ],
       },
       {
         name: 'fernwaermewsw',

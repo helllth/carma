@@ -66,6 +66,7 @@ export type Item = {
   description: string;
   tags: string[];
   thumbnail?: string;
+  keywords?: string[];
   icon?: string;
   alternativeIcon?: string;
   name: string;
@@ -81,6 +82,7 @@ export type XMLLayer = {
     extent: number[];
     res: number | undefined[];
   }[];
+  KeywordList?: string[];
   Dimension?: any;
   EX_GeographicBoundingBox?: any;
   LatLonBoundingBox: number[];
