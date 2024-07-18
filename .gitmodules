@@ -1,7 +1,3 @@
-[submodule "envirometrics/wuppertal/rainhazardmap/collab-texts"]
-	path = envirometrics/wuppertal/rainhazardmap/collab-texts
-	url = https://github.com/cismet-collab/rainhazardmap-wuppertal-texts.git
-	branch = main
 [submodule "envirometrics/korschenbroich/rainhazardmap/collab-texts"]
 	path = envirometrics/korschenbroich/rainhazardmap/collab-texts
 	url = https://github.com/cismet-collab/ais-korschenbroich-texts.git
