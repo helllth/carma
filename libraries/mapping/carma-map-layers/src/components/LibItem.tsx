@@ -7,6 +7,7 @@ import {
   faFireFlameCurved,
   faMinus,
   faPlus,
+  faRocket,
   faSquareUpRight,
   faStar,
   faTrash,
@@ -412,8 +413,8 @@ const LibItem = ({
           </h3>
           {keywords && extractVectorStyles(keywords) && (
             <FontAwesomeIcon
-              icon={faFireFlameCurved}
-              className="text-xl cursor-pointer text-green-300 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
+              icon={faRocket}
+              className="text-xl cursor-pointer text-gray-700 z-50"
             />
           )}
         </div>
