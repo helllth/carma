@@ -13,11 +13,6 @@ export type LatLngRecord = {
   longitude: number;
 };
 
-export type LatLngDegrees = {
-  latRad: number;
-  lngRad: number;
-};
-
 export type LatLngRadians = {
   latRad: number;
   lngRad: number;

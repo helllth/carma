@@ -13,7 +13,7 @@
       },
       "configurations": {
         "development": {
-          "mode": "development",
+          "mode": "development"
         },
         "production": {
           "mode": "production",

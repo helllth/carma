@@ -6,7 +6,6 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "importHelpers": true,
@@ -17,6 +16,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "jsx": "react",
+    "resolveJsonModule": true,
+    "noEmit": true,
     "paths": {
       "@carma-apps/envirometrics": [
         "libraries/appframeworks/envirometrics/src/index.ts"
@@ -40,6 +41,9 @@
       ],
       "@carma-mapping/cesium-engine/shaders": [
         "libraries/mapping/engines/cesium/src/lib/shaders.ts"
+      ],
+      "@carma-mapping/cesium-widget-engine": [
+        "libraries/mapping/engines/cesium-widget/src/index.ts"
       ],
       "@carma-mapping/components": [
         "libraries/mapping/carma-map-components/src/index.ts"
@@ -68,7 +72,8 @@
       "@carma-collab/wuppertal/commons": [
         "libraries/collaboration/carma-wuppertal-collab/src/commons/index.ts"
       ]
-    }
+    },
+    //"typeRoots": ["${configDir}/node_modules/@types", "${configDir}/types"]
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -3,9 +3,10 @@
 // eslint disable
 
 import { useTweakpaneCtx } from '@carma-commons/debug';
-import { CustomCesiumWidget, LatLngRecord } from '@carma-mapping/cesium-engine';
+import { Widget } from '@carma-mapping/cesium-widget-engine';
 import { useEffect, useState } from 'react';
 import { Checkbox, Radio, Select } from 'antd';
+import type { LatLngRecord } from 'types/common-geo';
 import {
   FOOTPRINT_GEOJSON_SOURCES,
   WUPP3D,
@@ -301,7 +302,7 @@ function View() {
             marginBottom: '10px',
           }}
         >
-          <CustomCesiumWidget
+          <Widget
             tilesetUrl={WUPP3D.url}
             position={poi.position}
             range={poi.range}
@@ -314,7 +315,7 @@ function View() {
             animate={animate}
           >
             {poi.label} {orthographic ? 'orthografisch' : 'perspektive'}
-          </CustomCesiumWidget>
+          </Widget>
         </div>
         <ViewToggle />
         <LocationToggle />

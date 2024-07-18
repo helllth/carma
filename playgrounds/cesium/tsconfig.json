@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "allowJs": false,
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "declarationMap": true,
-    "esModuleInterop": false,
-    "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx",
+    "jsx": "react-jsxdev",
+    "target": "es2022",
+    "moduleDetection": "force",
+
+    "moduleResolution": "bundler",
     "strict": true,
-    "types": ["vite/client", "vitest"]
+    "noImplicitAny": false,
+    //"types": ["vite/client", "vitest"]
   },
   "files": [],
   "include": [],

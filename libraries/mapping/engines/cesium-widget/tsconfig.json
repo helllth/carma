@@ -13,13 +13,12 @@
     // should be default in base
     "strict": true,
     // should be changed eventually
-    "noImplicitAny": false,
-    "noUncheckedIndexedAccess": false,
-    "verbatimModuleSyntax": false, 
+    "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true,
+    "verbatimModuleSyntax": true, 
 
     // lib stuff
-    //"declaration": true,
-    //"declarationMap": true,
+    // declaratiosn done by vite/dts
 
     "lib": ["ES2022", "DOM"]
   },
