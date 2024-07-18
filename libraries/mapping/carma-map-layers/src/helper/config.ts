@@ -969,6 +969,9 @@ export const baseConfig = {
     layers: [
       {
         name: 'poi',
+        keywords: [
+          ':vec::{"vectorStyles":"https://tiles.cismet.de/poi/style.json"}',
+        ],
       },
       {
         name: 'poi_awg',
