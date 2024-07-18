@@ -89,6 +89,7 @@ const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
       title: layer.Title,
       description: layer.Abstract,
       tags: layer.tags,
+      keywords: layer.KeywordList,
       id: serviceName + ':' + layer.Name,
       name: layer.Name,
       type: 'layer',

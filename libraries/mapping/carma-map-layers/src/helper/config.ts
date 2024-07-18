@@ -1391,6 +1391,9 @@ export const baseConfig = {
     layers: [
       {
         name: 'apotheken',
+        keywords: [
+          ":::vectorStyles='https://tiles.cismet.de/apotheken/style.json'",
+        ],
       },
       {
         name: 'fernwaermewsw',
