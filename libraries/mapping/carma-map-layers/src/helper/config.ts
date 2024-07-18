@@ -1392,7 +1392,7 @@ export const baseConfig = {
       {
         name: 'apotheken',
         keywords: [
-          ":::vectorStyles='https://tiles.cismet.de/apotheken/style.json'",
+          ':vec::{"vectorStyles":"https://tiles.cismet.de/apotheken/style.json"}',
         ],
       },
       {

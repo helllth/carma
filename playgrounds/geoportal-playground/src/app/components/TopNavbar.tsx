@@ -56,6 +56,18 @@ const TopNavbar = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
 
+  const extractVectorStyles = (keywords: string[]) => {
+    keywords.forEach((keyword) => {
+      if (keyword.startsWith(':vec:')) {
+        const objectString = keyword.slice(6);
+        const object = JSON.parse(objectString);
+        return object;
+      }
+    });
+
+    return null;
+  };
+
   const updateLayers = (layer: Item, deleteItem: boolean = false) => {
     let newLayer: Layer;
 
@@ -80,42 +92,60 @@ const TopNavbar = () => {
     }
 
     if (layer.type === 'layer') {
-      switch (layer.layerType) {
-        case 'wmts': {
-          newLayer = {
-            title: layer.title,
-            id: layer.id,
-            layerType: 'wmts',
-            opacity: 0.7,
-            description: layer.description,
-            visible: true,
-            props: {
-              url: layer.props.url,
-              legend: layer.props.Style[0].LegendURL,
-              name: layer.props.Name,
-            },
-            other: {
-              ...layer,
-            },
-          };
-          break;
-        }
-        case 'vector': {
-          newLayer = {
-            title: layer.title,
-            id: layer.id,
-            layerType: 'vector',
-            opacity: 0.7,
-            description: layer.description,
-            visible: true,
-            props: {
-              style: layer.props.style,
-            },
-            other: {
-              ...layer,
-            },
-          };
-          break;
+      const vectorObject = extractVectorStyles(layer.keywords);
+      if (vectorObject) {
+        newLayer = {
+          title: layer.title,
+          id: layer.id,
+          layerType: 'vector',
+          opacity: 0.7,
+          description: layer.description,
+          visible: true,
+          props: {
+            style: vectorObject.vectorStyles,
+          },
+          other: {
+            ...layer,
+          },
+        };
+      } else {
+        switch (layer.layerType) {
+          case 'wmts': {
+            newLayer = {
+              title: layer.title,
+              id: layer.id,
+              layerType: 'wmts',
+              opacity: 0.7,
+              description: layer.description,
+              visible: true,
+              props: {
+                url: layer.props.url,
+                legend: layer.props.Style[0].LegendURL,
+                name: layer.props.Name,
+              },
+              other: {
+                ...layer,
+              },
+            };
+            break;
+          }
+          case 'vector': {
+            newLayer = {
+              title: layer.title,
+              id: layer.id,
+              layerType: 'vector',
+              opacity: 0.7,
+              description: layer.description,
+              visible: true,
+              props: {
+                style: layer.props.style,
+              },
+              other: {
+                ...layer,
+              },
+            };
+            break;
+          }
         }
       }
     }
