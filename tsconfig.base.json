@@ -29,6 +29,9 @@
       "@carma-collab/wuppertal/baederkarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/baederkarte/index.ts"
       ],
+      "@carma-collab/wuppertal/e-auto-ladestation": [
+        "libraries/collaboration/carma-wuppertal-collab/src/e-auto-ladestation/index.ts"
+      ],
       "@carma-collab/wuppertal/commons": [
         "libraries/collaboration/carma-wuppertal-collab/src/commons/index.ts"
       ],
