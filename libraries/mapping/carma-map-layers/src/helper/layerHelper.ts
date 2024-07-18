@@ -84,18 +84,22 @@ export const findDifferences = (array1, array2) => {
 };
 
 const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
-  let item: Item = {
-    title: layer.Title,
-    description: layer.Abstract,
-    tags: layer.tags,
-    id: serviceName + ':' + layer.Name,
-    name: layer.Name,
-    type: 'layer',
-    layerType: 'wmts',
-    props: { ...layer },
-  };
+  if (layer) {
+    let item: Item = {
+      title: layer.Title,
+      description: layer.Abstract,
+      tags: layer.tags,
+      id: serviceName + ':' + layer.Name,
+      name: layer.Name,
+      type: 'layer',
+      layerType: 'wmts',
+      props: { ...layer },
+    };
 
-  return item;
+    return item;
+  } else {
+    return null;
+  }
 };
 
 export const getLayerStructure = ({
@@ -126,7 +130,7 @@ export const getLayerStructure = ({
         service = services[categoryConfig.serviceName];
       }
       if (service.name === serviceName) {
-        let foundLayer: Item;
+        let foundLayer: Item | null;
         if (wms) {
           const wmsLayer = findLayerAndAddTags(
             wms.Capability.Layer,
@@ -147,7 +151,9 @@ export const getLayerStructure = ({
           tags[0] = categoryObject.Title;
           foundLayer = { ...foundLayer, ...layer, tags, service };
 
-          layers.push(foundLayer);
+          if (foundLayer) {
+            layers.push(foundLayer);
+          }
         }
       }
     }
@@ -165,20 +171,24 @@ export const getLayerStructure = ({
           []
         );
         let foundLayer = wmsLayerToGenericItem(wmsLayer, serviceName);
-        // @ts-ignore
-        foundLayer.props['url'] =
-          wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
+        if (foundLayer) {
+          // @ts-ignore
+          foundLayer.props['url'] =
+            wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
 
-        let tags = foundLayer.tags;
-        tags[0] = categoryObject.Title;
-        foundLayer = {
-          ...foundLayer,
-          ...layer,
-          tags,
-          service: services[categoryConfig.serviceName],
-        };
+          let tags = foundLayer.tags;
+          tags[0] = categoryObject.Title;
+          foundLayer = {
+            ...foundLayer,
+            ...layer,
+            tags,
+            service: services[categoryConfig.serviceName],
+          };
 
-        layers.push(foundLayer);
+          if (foundLayer) {
+            layers.push(foundLayer);
+          }
+        }
       }
     }
 
