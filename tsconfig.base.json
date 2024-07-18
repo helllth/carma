@@ -19,12 +19,21 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "paths": {
+      "@carma/custom-wupp-components": [
+        "libraries/customer-specific/wuppertal/components/src/lib"
+      ],
       "@carma-apps/envirometrics": [
         "libraries/appframeworks/envirometrics/src/index.ts"
       ],
       "@carma-apps/portals": ["libraries/appframeworks/portals/src/index.ts"],
       "@carma-apps/topicmaps": [
         "libraries/appframeworks/topicmaps/src/index.ts"
+      ],
+      "@carma-collab/wuppertal/baederkarte": [
+        "libraries/collaboration/carma-wuppertal-collab/src/baederkarte/index.ts"
+      ],
+      "@carma-collab/wuppertal/commons": [
+        "libraries/collaboration/carma-wuppertal-collab/src/commons/index.ts"
       ],
       "@carma-commons/debug": ["libraries/commons/debug/src/index.ts"],
       "@carma-commons/document-viewer": [
@@ -60,18 +69,7 @@
       "@carma-mapping/maplibre-engine": [
         "libraries/mapping/engines/maplibre/src/index.ts"
       ],
-      "@carma-mapping/utils": [
-        "libraries/mapping/carma-map-utils/src/index.ts"
-      ],
-      "@carma/custom-wupp-components": [
-        "libraries/customer-specific/wuppertal/components/src/lib"
-      ],
-      "@carma-collab/wuppertal/baederkarte": [
-        "libraries/collaboration/carma-wuppertal-collab/src/baederkarte/index.ts"
-      ],
-      "@carma-collab/wuppertal/commons": [
-        "libraries/collaboration/carma-wuppertal-collab/src/commons/index.ts"
-      ]
+      "@carma-mapping/utils": ["libraries/mapping/carma-map-utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
