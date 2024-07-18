@@ -18,7 +18,7 @@ import Section from 'react-cismap/topicmaps/menu/Section';
 import LicenseLuftbildkarte from 'react-cismap/topicmaps/wuppertal/LicenseLuftbildkarte';
 import LicenseStadtplanTagNacht from 'react-cismap/topicmaps/wuppertal/LicenseStadtplanTagNacht';
 import { Link } from 'react-scroll';
-import GenericDigitalTwinReferenceTextComponent from '@carma/custom-wupp-components/help/GenericDigitalTwinReferenceTextComponent';
+import { GenericDigitalTwinReferenceTextComponent } from '@carma-collab/wuppertal/commons';
 
 import FilterUI from './FilterUI';
 import MenuFooter from './MenuFooter';
@@ -596,7 +596,6 @@ const Menu = () => {
     </CustomizationContextProvider>
   );
 };
-console.log('yy Menu', <GenericDigitalTwinReferenceTextComponent />);
 export default Menu;
 const NW = (props) => {
   return <span style={{ whiteSpace: 'nowrap' }}>{props.children}</span>;

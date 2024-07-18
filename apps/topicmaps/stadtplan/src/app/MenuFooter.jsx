@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 import { getApplicationVersion } from './version';
 import { scroller } from 'react-scroll';
-import Attribution from '@carma/custom-wupp-components/help/Attribution';
+import { Attribution } from '@carma-collab/wuppertal/commons';
 const Footer = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
 
