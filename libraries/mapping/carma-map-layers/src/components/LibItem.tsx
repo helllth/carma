@@ -4,6 +4,7 @@ import {
   faCircleMinus,
   faCirclePlus,
   faExternalLinkAlt,
+  faFireFlameCurved,
   faMinus,
   faPlus,
   faSquareUpRight,
@@ -15,6 +16,7 @@ import { Button, Modal, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { InfoOutlined } from '@ant-design/icons';
 import { Item, Layer } from '../helper/types';
+import { extractVectorStyles } from '../helper/layerHelper';
 
 interface LayerItemProps {
   setAdditionalLayers: any;
@@ -39,6 +41,7 @@ const LibItem = ({
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const title = layer.title;
   const description = layer.description;
+  const keywords = layer.keywords;
   const tags =
     layer.type === 'collection'
       ? layer.layers.map((l) => l.title)
@@ -361,7 +364,13 @@ const LibItem = ({
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-2 p-4">
+      <div className="flex flex-col gap-2 p-4 relative">
+        {keywords && extractVectorStyles(keywords) && (
+          <FontAwesomeIcon
+            icon={faFireFlameCurved}
+            className="absolute right-3 top-6 text-xl cursor-pointer text-green-300 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
+          />
+        )}
         <h3 className="text-lg truncate">
           {hightlightTextIndexes ? (
             <>
