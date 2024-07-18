@@ -69,7 +69,11 @@ const TopNavbar = () => {
     return vectorObject;
   };
 
-  const updateLayers = (layer: Item, deleteItem: boolean = false) => {
+  const updateLayers = (
+    layer: Item,
+    deleteItem: boolean = false,
+    forceWMS: boolean = false
+  ) => {
     let newLayer: Layer;
 
     if (layer.type === 'collection') {
@@ -94,7 +98,7 @@ const TopNavbar = () => {
 
     if (layer.type === 'layer') {
       const vectorObject = extractVectorStyles(layer.keywords);
-      if (vectorObject) {
+      if (vectorObject && !forceWMS) {
         newLayer = {
           title: layer.title,
           id: layer.id,

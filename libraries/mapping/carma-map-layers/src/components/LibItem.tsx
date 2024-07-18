@@ -39,6 +39,7 @@ const LibItem = ({
   const [thumbUrl, setThumbUrl] = useState('');
   const [collectionImages, setCollectionImages] = useState<string[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [forceWMS, setForceWMS] = useState(false);
   const title = layer.title;
   const description = layer.description;
   const keywords = layer.keywords;
@@ -84,7 +85,7 @@ const LibItem = ({
   const hightlightTextIndexes = undefined;
 
   const handleLayerClick = () => {
-    setAdditionalLayers(layer);
+    setAdditionalLayers(layer, false, forceWMS);
   };
 
   useEffect(() => {
@@ -199,6 +200,27 @@ const LibItem = ({
       }
     }
   }, [name, layer.id]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey) {
+        setForceWMS(true);
+      }
+    };
+
+    const onKeyUp = (e: KeyboardEvent) => {
+      setForceWMS(false);
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keyup', onKeyUp);
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+
+      document.removeEventListener('keyup', onKeyUp);
+    };
+  }, []);
 
   return (
     <div
