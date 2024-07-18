@@ -278,7 +278,7 @@ export const vectorConfig: Config = {
       title: 'Kanäle',
       description: 'Vektor Layer der Kanäle',
       tags: ['Vector Karten', 'Kanäle'],
-      keywords: [':vec::{}'],
+      keywords: [':vec:'],
       type: 'layer',
       layerType: 'vector',
       thumbnail:
@@ -293,7 +293,7 @@ export const vectorConfig: Config = {
       title: 'Bäume',
       description: 'Vektor Layer der Bäume',
       tags: ['Vector Karten', 'Bäume'],
-      keywords: [':vec::{}'],
+      keywords: [':vec:'],
       type: 'layer',
       layerType: 'vector',
       thumbnail:
@@ -308,7 +308,7 @@ export const vectorConfig: Config = {
       title: 'POIs',
       description: 'Vektor Layer der POIs',
       tags: ['Vector Karten', 'POIs'],
-      keywords: [':vec::{}'],
+      keywords: [':vec:'],
       type: 'layer',
       layerType: 'vector',
       thumbnail:
@@ -323,7 +323,7 @@ export const vectorConfig: Config = {
       title: 'Solar',
       description: 'Vektor Layer der Solar Flächen',
       tags: ['Vector Karten', 'Solar'],
-      keywords: [':vec::{}'],
+      keywords: [':vec:'],
       type: 'layer',
       layerType: 'vector',
       thumbnail:
@@ -974,7 +974,8 @@ export const baseConfig = {
       {
         name: 'poi',
         keywords: [
-          ':vec::{"vectorStyles":"https://tiles.cismet.de/poi/style.json"}',
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/poi/style.json',
         ],
       },
       {
@@ -1399,7 +1400,8 @@ export const baseConfig = {
       {
         name: 'apotheken',
         keywords: [
-          ':vec::{"vectorStyles":"https://tiles.cismet.de/apotheken/style.json"}',
+          ':vec:',
+          'carmaConf://vectorStyle:https://tiles.cismet.de/apotheken/style.json',
         ],
       },
       {

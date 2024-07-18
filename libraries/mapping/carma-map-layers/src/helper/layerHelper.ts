@@ -44,11 +44,15 @@ export const flattenLayer = (
 };
 
 export const extractVectorStyles = (keywords: string[]) => {
-  let vectorObject = null;
+  let vectorObject: any = null;
   keywords.forEach((keyword) => {
-    if (keyword.startsWith(':vec:')) {
-      const objectString = keyword.slice(6);
-      const object = JSON.parse(objectString);
+    if (keyword.startsWith('carmaConf://')) {
+      const objectString = keyword.slice(12);
+      let colonIndex = objectString.indexOf(':');
+      const property = objectString.split(':')[0];
+      let value =
+        colonIndex !== -1 ? objectString.substring(colonIndex + 1).trim() : '';
+      const object = { [property]: value };
       vectorObject = object;
     }
   });
