@@ -57,15 +57,16 @@ const TopNavbar = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const extractVectorStyles = (keywords: string[]) => {
+    let vectorObject = null;
     keywords.forEach((keyword) => {
       if (keyword.startsWith(':vec:')) {
         const objectString = keyword.slice(6);
         const object = JSON.parse(objectString);
-        return object;
+        vectorObject = object;
       }
     });
 
-    return null;
+    return vectorObject;
   };
 
   const updateLayers = (layer: Item, deleteItem: boolean = false) => {
