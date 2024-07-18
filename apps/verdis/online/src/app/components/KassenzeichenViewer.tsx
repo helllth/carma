@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 import Waiting from './Waiting';
 import Map from './Map';
 import ContactPanel from './ContactPanel';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getKassenzeichen } from '../../store/slices/kassenzeichen';
 import KassenzeichenPanel from './KassenzeichenPanel';
 import KassenzeichenFlaechenChartPanel from './KassenzeichenFlaechenChartPanel';
@@ -16,7 +16,11 @@ import {
   kassenzeichenFlaechenSorter,
 } from '../../utils/kassenzeichenHelper';
 import FlaechenPanel from './FlaechenPanel';
-import { getHeight, getUiState } from '../../store/slices/ui';
+import {
+  getHeight,
+  getUiState,
+  toggleInfoElements,
+} from '../../store/slices/ui';
 import { getMapping } from '../../store/slices/mapping';
 import HelpAndSettings from '../components/helpandsettings/Menu00MainComponent';
 import ChangeRequests from '../components/changerequests/CR00MainComponent';
@@ -30,6 +34,7 @@ const KassenzeichenViewer = () => {
   const mapping = useSelector(getMapping);
   const stac = useSelector(getStac);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   if (!stac) {
     navigate('/');
@@ -85,7 +90,7 @@ const KassenzeichenViewer = () => {
           variant="danger"
           dismissible
           onClose={() => {
-            // this.props.uiStateActions.showChangeRequestsMenu(true);
+            dispatch(toggleInfoElements({}));
           }}
         >
           <h5>
@@ -230,7 +235,7 @@ const KassenzeichenViewer = () => {
         <Alert
           variant="warning"
           onClose={() => {
-            // this.props.uiStateActions.toggleInfoElements();
+            dispatch(toggleInfoElements({}));
           }}
           dismissible
         >
