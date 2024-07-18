@@ -19,9 +19,6 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "paths": {
-      "@carma/custom-wupp-components": [
-        "libraries/customer-specific/wuppertal/components/src/lib"
-      ],
       "@carma-apps/envirometrics": [
         "libraries/appframeworks/envirometrics/src/index.ts"
       ],
@@ -42,14 +39,14 @@
       "@carma-mapping/cesium-engine": [
         "libraries/mapping/engines/cesium/src/index.ts"
       ],
+      "@carma-mapping/cesium-engine/shaders": [
+        "libraries/mapping/engines/cesium/src/lib/shaders.ts"
+      ],
       "@carma-mapping/cesium-engine/types": [
         "libraries/mapping/engines/cesium/src/index.d.ts"
       ],
       "@carma-mapping/cesium-engine/utils": [
         "libraries/mapping/engines/cesium/src/lib/utils/index.ts"
-      ],
-      "@carma-mapping/cesium-engine/shaders": [
-        "libraries/mapping/engines/cesium/src/lib/shaders.ts"
       ],
       "@carma-mapping/cesium-widget-engine": [
         "libraries/mapping/engines/cesium-widget/src/index.ts"
