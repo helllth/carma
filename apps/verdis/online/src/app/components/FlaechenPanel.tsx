@@ -1,4 +1,12 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { useDispatch, useSelector } from 'react-redux';
 import { colorChanged } from '../../utils/kassenzeichenHelper';
+import {
+  fitFeatureBounds,
+  getMapping,
+  setSelectedFeatureIndexWithSelector,
+} from '../../store/slices/mapping';
 
 interface FlaechenPanelProps {
   flaeche: any;
@@ -17,6 +25,38 @@ const FlaechenPanel = ({ flaeche, selected }: FlaechenPanelProps) => {
     editButtonColor;
   let borderStyle = '';
   let borderColor = '';
+  const mapping = useSelector(getMapping);
+  const dispatch = useDispatch();
+
+  const isFlaecheSelected = (flaeche) => {
+    return (
+      mapping.featureCollection !== 'undefined' &&
+      mapping.featureCollection.length > 0 &&
+      mapping.selectedIndex !== 'undefined' &&
+      mapping.featureCollection.length > mapping.selectedIndex &&
+      mapping.featureCollection[mapping.selectedIndex] &&
+      mapping.featureCollection[mapping.selectedIndex]?.properties.id ===
+        flaeche.id
+    );
+  };
+
+  const featureClick = (event) => {
+    const feature = mapping.featureCollection.find((feature) => {
+      return feature.properties.id === flaeche.id;
+    });
+
+    if (isFlaecheSelected(feature.properties)) {
+      dispatch(
+        fitFeatureBounds(mapping.featureCollection[mapping.selectedIndex], '')
+      );
+    } else {
+      dispatch(
+        setSelectedFeatureIndexWithSelector((testFeature) => {
+          return testFeature.properties.id === feature.properties.id;
+        })
+      );
+    }
+  };
 
   if (selected) {
     borderStyle = 'solid';
@@ -59,9 +99,7 @@ const FlaechenPanel = ({ flaeche, selected }: FlaechenPanelProps) => {
   return (
     <div>
       <div
-        onClick={() => {
-          // this.props.flaechenPanelClickHandler(this.props.flaeche);
-        }}
+        onClick={featureClick}
         style={{
           ...styleOverride,
           minHeight: 20,
