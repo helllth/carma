@@ -32,6 +32,9 @@
       "@carma-collab/wuppertal/commons": [
         "libraries/collaboration/carma-wuppertal-collab/src/commons/index.ts"
       ],
+      "@carma-collab/wuppertal/hochwassergefahrenkarte": [
+        "libraries/collaboration/carma-wuppertal-collab/src/hochwasssergefahrenkarte/index.jsx"
+      ],
       "@carma-commons/debug": ["libraries/commons/debug/src/index.ts"],
       "@carma-commons/document-viewer": [
         "libraries/commons/document-viewer/src/index.ts"
