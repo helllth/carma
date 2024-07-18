@@ -43,6 +43,19 @@ export const flattenLayer = (
   return flattenedLayer;
 };
 
+export const extractVectorStyles = (keywords: string[]) => {
+  let vectorObject = null;
+  keywords.forEach((keyword) => {
+    if (keyword.startsWith(':vec:')) {
+      const objectString = keyword.slice(6);
+      const object = JSON.parse(objectString);
+      vectorObject = object;
+    }
+  });
+
+  return vectorObject;
+};
+
 export const createBaseConfig = (layers) => {
   const result = {};
   layers.forEach((item) => {
