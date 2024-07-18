@@ -16,7 +16,7 @@ import { getApplicationVersion } from './version';
 import NotesDisplay from './NotesDisplay';
 import { EnviroMetricMapContext } from '@cismet-dev/react-cismap-envirometrics-maps/EnviroMetricMapContextProvider';
 import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
-import { getCollabedHelpComponentConfig } from './collab-texts';
+import { getCollabedHelpComponentConfig } from '@carma-collab/wuppertal/hochwassergefahrenkarte';
 
 function App() {
   const reactCismapEnvirometricsVersion = cismapEnvirometricsVersion;
