@@ -1,18 +1,56 @@
-import { AutoComplete } from 'antd';
+import { AutoComplete, Button } from 'antd';
 import Map from './components/Map';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getAllLayers } from './helper/layers';
 
 export function App() {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
+  const [layers, setLayers] = useState([]);
+
+  useEffect(() => {
+    getAllLayers().then((result) => {
+      setLayers(result);
+    });
+  }, []);
+
+  const renderTitle = (title: string) => (
+    <span className="text-lg font-semibold text-black">{title}</span>
+  );
+
+  const renderItem = (title: string) => ({
+    value: title,
+    label: (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        {title}
+      </div>
+    ),
+  });
+
   return (
     <div className="flex flex-col items-center h-screen w-full gap-2 p-2">
-      <div className="w-full bg-green-300 rounded-md h-20 flex items-center gap-2">
-        <AutoComplete style={{ width: '33%' }} placeholder="Layer auswählen" />
+      <div className="w-full rounded-md h-20 flex items-center gap-2">
+        <AutoComplete
+          options={layers.map((value) => {
+            const layers = value.layers.map((layer) => {
+              return renderItem(layer.Title);
+            });
+            return { label: renderTitle(value.title), options: layers };
+          })}
+          style={{ width: '50%' }}
+          placeholder={
+            layers.length > 0 ? 'Layer auswählen' : 'Layer werden geladen'
+          }
+        />
       </div>
       <div className="flex w-full items-center justify-center gap-2 h-full">
         {/* Map */}
