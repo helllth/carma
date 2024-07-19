@@ -1,6 +1,6 @@
-import { Layer, WMSCapabilitiesJSON } from 'wms-capabilities';
+import type { WMSCapabilitiesJSON } from 'wms-capabilities';
 import { serviceConfig } from './config';
-import { Item, XMLLayer } from './types';
+import type { Item, XMLLayer } from './types';
 
 export const flattenLayer = (
   layer: any,

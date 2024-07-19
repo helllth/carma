@@ -19,7 +19,7 @@ import LayerTabs from './LayerTabs';
 import LibItem from './LibItem';
 import './input.css';
 import './modal.css';
-import { Item, Layer, vectorProps, wmsProps } from '../helper/types';
+import type { Layer } from '../helper/types';
 import { isEqual } from 'lodash';
 const { Search } = Input;
 

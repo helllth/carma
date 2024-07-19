@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Modal, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { InfoOutlined } from '@ant-design/icons';
-import { Item, Layer } from '../helper/types';
+import type { Item, Layer } from '../helper/types';
 import { extractVectorStyles } from '../helper/layerHelper';
 
 interface LayerItemProps {
