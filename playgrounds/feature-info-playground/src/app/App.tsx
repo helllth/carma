@@ -40,6 +40,8 @@ export function App() {
                 fontFamily: '"Fira code", "Fira Mono", monospace',
                 fontSize: 12,
                 width: '100%',
+                border: '1px solid black',
+                borderRadius: '6px',
               }}
             />
           </div>
