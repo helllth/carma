@@ -2,10 +2,6 @@
   "compilerOptions": {},
   "files": [],
   "include": [],
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    }
-  ],
+  "references": [],
   "extends": "../../../tsconfig.base.json"
 }
