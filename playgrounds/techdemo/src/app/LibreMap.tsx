@@ -7,33 +7,29 @@ import './mapLibre.css';
 import { Button } from 'react-bootstrap';
 import { Map } from 'maplibre-gl';
 
-export default function LibreMap(props = { opacity: 0.1 }) {
+export default function LibreMap({ opacity = 0.5, textOpacity = 1, iconOpacity = 1 }: { opacity?: Number, textOpacity?: Number, iconOpacity?: Number } = {}) {
   const mapContainer = useRef(null);
-  const map = useRef(null);
+  const map = useRef<Map|null>(null);
   const [lng] = useState(7.150764);
   const [lat] = useState(51.256);
   const [zoom] = useState(15);
-  let opacity, textOpacity, iconOpacity; // } = props;
 
-  //   opacity = 0.5;
-  //   textOpacity = 1;
-  //   iconOpacity = 1;
   useEffect(() => {
-    if (map.current) return;
+    if (map.current !== null || mapContainer.current === null) return;
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: `https://omt.map-hosting.de/styles/osm-bright/style.json`,
       center: [lng, lat],
       zoom: zoom,
-      opacity: 0.5,
       maxZoom: 19,
     });
     console.log('map.current', map.current);
 
     if (opacity || textOpacity || iconOpacity) {
       map.current.getStyle().layers.map((layer) => {
-        if (layer.type === 'symbol') {
-          map.current.setPaintProperty(
+        if ( map.current){
+        if (layer.type === "symbol") {
+         map.current.setPaintProperty(
             layer.id,
             `icon-opacity`,
             iconOpacity || opacity || 1
@@ -50,11 +46,14 @@ export default function LibreMap(props = { opacity: 0.1 }) {
             opacity || 1
           );
         }
+      }
       });
     }
 
     map.current.on('load', function () {
       console.log('on"load"');
+
+      if (map.current) {
 
       map.current.addSource(
         'wms-test-source',
@@ -70,7 +69,7 @@ export default function LibreMap(props = { opacity: 0.1 }) {
         }
       );
 
-      map.current.addSource('terrainSource', {
+     map.current.addSource('terrainSource', {
         type: 'raster-dem',
         tiles: [
           'https://wuppertal-terrain.cismet.de/services/wupp_dgm_01/tiles/{z}/{x}/{y}.png',
@@ -91,8 +90,7 @@ export default function LibreMap(props = { opacity: 0.1 }) {
       map.current.addLayer({
         id: 'wms-test-layer',
         type: 'raster',
-        opacity: 0.25,
-
+        //opacity: 0.25,
         source: 'wms-test-source',
         paint: { 'raster-opacity': 0.5 },
       });
@@ -132,7 +130,7 @@ export default function LibreMap(props = { opacity: 0.1 }) {
       //     'fill-extrusion-opacity': 0.5,
       //   },
       // });
-
+    }
       console.log('map.current', map.current);
     });
 
@@ -140,8 +138,6 @@ export default function LibreMap(props = { opacity: 0.1 }) {
     map.current.addControl(
       new maplibregl.TerrainControl({
         source: 'terrainSource',
-        maxzoom: 16,
-
         exaggeration: 1,
       }),
       'top-left'

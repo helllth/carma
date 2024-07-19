@@ -1,5 +1,5 @@
 {
-  "name": "carma-map-contols-layout",
+  "name": "carma-map-controls-layout",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libraries/mapping/carma-map-control-layout/src",
   "projectType": "library",
@@ -59,12 +59,12 @@
     "static-storybook": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "carma-map-contols-layout:build-storybook",
+        "buildTarget": "carma-map-controls-layout:build-storybook",
         "staticFilePath": "dist/storybook/map-control"
       },
       "configurations": {
         "ci": {
-          "buildTarget": "carma-map-contols-layout:build-storybook:ci"
+          "buildTarget": "carma-map-controls-layout:build-storybook:ci"
         }
       }
     }

@@ -8,7 +8,7 @@ export interface ControlLayoutProps {
   onResponsiveCollapse?: Function;
   onHeightResize?: Function;
   debugMode?: boolean;
-  ifStorybook: boolean;
+  ifStorybook?: boolean;
 }
 
 export interface AllPositions {

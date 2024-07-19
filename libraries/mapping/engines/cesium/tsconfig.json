@@ -1,10 +1,6 @@
 {
   "extends": "../../../../tsconfig.legacy.base.json",
-  // only specifying options not in base or overriding them 
-  "compilerOptions": {
-
-  },
+  "compilerOptions": {},
   "files": [],
-  "include": [],
   "references": []
 }

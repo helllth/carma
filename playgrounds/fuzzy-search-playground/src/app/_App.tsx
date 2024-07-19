@@ -85,7 +85,7 @@ export function App() {
           setGazetteerHit={setGazetteerHit}
           overlayFeature={overlayFeature}
           setOverlayFeature={setOverlayFeature}
-          allData={gazData}
+          gazData={gazData}
           referenceSystem={MappingConstants.crs3857}
           referenceSystemDefinition={MappingConstants.proj4crs3857def}
         />

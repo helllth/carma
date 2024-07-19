@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React, { useEffect, useContext, useState, useRef } from 'react';
+import { useEffect, useContext, useState, useRef, CSSProperties } from 'react';
 import { MappingConstants } from 'react-cismap';
 import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
 import GazetteerSearchComponent from 'react-cismap/GazetteerSearchComponent';
@@ -17,7 +17,8 @@ import {
 } from './helper/styler';
 import './index.css';
 import 'leaflet.locatecontrol/dist/L.Control.Locate.css';
-import 'leaflet.locatecontrol';
+import L from 'leaflet';
+import LocateControl from 'leaflet.locatecontrol';
 import {
   ControlLayout,
   Control,
@@ -89,14 +90,14 @@ const iconPadding = {
   fontSize: '18px',
 };
 
-const LocateControl = ({ startLocate = 0 }) => {
-  const { routedMapRef } = useContext(TopicMapContext);
-  const [locationInstance, setLocationInstance] = useState(null);
+const LocateControlComponent = ({ startLocate = 0 }) => {
+  const { routedMapRef } = useContext(TopicMapContext) as any;
+  const [locationInstance, setLocationInstance] = useState<LocateControl|null>(null);
 
   useEffect(() => {
     if (!locationInstance && routedMapRef) {
       const mapExample = routedMapRef.leafletMap.leafletElement;
-      const lc = L.control
+      const lc = (L.control as LocateControl)
         .locate({
           position: 'topright',
           strings: {
@@ -116,7 +117,7 @@ const LocateControl = ({ startLocate = 0 }) => {
   }, [routedMapRef]);
 
   useEffect(() => {
-    if (startLocate) {
+    if (startLocate && locationInstance) {
       locationInstance.start();
     }
   }, [startLocate]);
@@ -126,7 +127,7 @@ const LocateControl = ({ startLocate = 0 }) => {
 
 export const ReplaceLocatorFromLeaflet = () => {
   const [locationProps, setLocationProps] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(null);
+  const [containerHeight, setContainerHeight] = useState<CSSProperties|null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -160,10 +161,10 @@ export const ReplaceLocatorFromLeaflet = () => {
           <ControlButtonStyler>
             <AimOutlined onClick={() => setLocationProps((prev) => prev + 1)} />
           </ControlButtonStyler>
-          <LocateControl startLocate={locationProps} />
+          <LocateControlComponent startLocate={locationProps} />
         </Control>
         <Main ref={containerRef}>
-          <Map mapStyle={containerHeight} />
+          <Map mapStyle={containerHeight ?? undefined} />
         </Main>
       </ControlLayout>
     </TopicMapContextProvider>
@@ -172,7 +173,7 @@ export const ReplaceLocatorFromLeaflet = () => {
 
 export const ExcalidrawExample = () => {
   const [locationProps, setLocationProps] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(null);
+  const [containerHeight, setContainerHeight] = useState<CSSProperties|null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -235,12 +236,12 @@ export const ExcalidrawExample = () => {
 };
 
 export const ResponsiveControlWithTwoColumns = () => {
-  const [containerWidth, setContainerWidth] = useState(null);
+  const [containerWidth, setContainerWidth] = useState<number|null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (containerRef) {
-      setContainerWidth(containerRef.current?.clientWidth);
+      setContainerWidth(containerRef.current?.clientWidth ?? null);
     }
   }, [containerRef]);
 
@@ -269,7 +270,7 @@ export const ResponsiveControlWithTwoColumns = () => {
 };
 
 export const ResponsiveCollapsWithTwoColumnsOnBottom = () => {
-  const [containerWidth, setContainerWidth] = useState(null);
+  const [containerWidth, setContainerWidth] = useState<CSSProperties|null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [layoutHeight, setLayoutHeight] = useState(null);
   useEffect(() => {
@@ -343,7 +344,7 @@ export const ResponsiveCollapsWithTwoColumnsOnBottom = () => {
         </Control>
 
         <Main ref={containerRef}>
-          <Map mapStyle={containerWidth} />
+          <Map mapStyle={containerWidth ?? undefined} />
         </Main>
       </ControlLayout>
     </TopicMapContextProvider>
@@ -351,7 +352,7 @@ export const ResponsiveCollapsWithTwoColumnsOnBottom = () => {
 };
 
 export const ResponsiveThreeColumnsOnTop = () => {
-  const [containerWidth, setContainerWidth] = useState(null);
+  const [containerWidth, setContainerWidth] = useState<CSSProperties|null>(null);
   const [resonsiveCollapse, setResonsiveCollapse] = useState(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -413,7 +414,7 @@ export const ResponsiveThreeColumnsOnTop = () => {
           </ControlCenterStyler>
         </Control>
         <Main ref={containerRef}>
-          <Map mapStyle={containerWidth} />
+          <Map mapStyle={containerWidth ?? undefined} />
         </Main>
       </ControlLayout>
     </TopicMapContextProvider>
@@ -421,7 +422,7 @@ export const ResponsiveThreeColumnsOnTop = () => {
 };
 
 export const ResponsiveAllPosition = () => {
-  const [containerWidth, setContainerWidth] = useState(null);
+  const [containerWidth, setContainerWidth] = useState<CSSProperties|null>(null);
   const [resonsiveCollapse, setResonsiveCollapse] = useState(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [layoutHeight, setLayoutHeight] = useState(null);
@@ -497,7 +498,7 @@ export const ResponsiveAllPosition = () => {
               padding: '5px 4px',
               border: 'none',
               borderRadius: '0px',
-            }}
+            } as CSSProperties}
           >
             <div>Center controller</div>
           </div>
@@ -520,7 +521,7 @@ export const ResponsiveAllPosition = () => {
           </div>
         </Control>
         <Main ref={containerRef}>
-          <Map mapStyle={containerWidth} />
+          <Map mapStyle={containerWidth ?? undefined} />
         </Main>
       </ControlLayout>
     </TopicMapContextProvider>
@@ -528,7 +529,7 @@ export const ResponsiveAllPosition = () => {
 };
 
 export const ResponsiveDebugMode = () => {
-  const [containerWidth, setContainerWidth] = useState(null);
+  const [containerWidth, setContainerWidth] = useState<CSSProperties|null>(null);
   const [resonsiveCollapse, setResonsiveCollapse] = useState(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [layoutHeight, setLayoutHeight] = useState(null);
@@ -598,7 +599,7 @@ export const ResponsiveDebugMode = () => {
               height: '100%',
               padding: '5px 4px',
               border: 'none',
-            }}
+            } as CSSProperties}
           >
             <div>Center controller</div>
           </div>
@@ -635,7 +636,7 @@ export const ResponsiveDebugMode = () => {
           </div>
         </Control>
         <Main ref={containerRef}>
-          <Map mapStyle={containerWidth} />
+          <Map mapStyle={containerWidth ?? undefined} />
         </Main>
       </ControlLayout>
     </TopicMapContextProvider>
@@ -643,7 +644,7 @@ export const ResponsiveDebugMode = () => {
 };
 
 export const CalculateResponsiveBrake = () => {
-  const [containerWidth, setContainerWidth] = useState(null);
+  const [containerWidth, setContainerWidth] = useState<CSSProperties|null>(null);
   const [resonsiveCollapse, setResonsiveCollapse] = useState(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [layoutHeight, setLayoutHeight] = useState(null);
@@ -737,7 +738,7 @@ export const CalculateResponsiveBrake = () => {
           </div>
         </Control>
         <Main ref={containerRef}>
-          <Map mapStyle={containerWidth} />
+          <Map mapStyle={containerWidth ?? undefined} />
         </Main>
       </ControlLayout>
     </TopicMapContextProvider>

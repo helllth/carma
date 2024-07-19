@@ -23,6 +23,13 @@
 
     "moduleDetection": "force",
 
+    "types": [
+      "vite/client",
+      "node",
+      "@nx/react/typings/cssmodule.d.ts",
+      "@nx/react/typings/image.d.ts"
+    ],
+    
     // intended to be used with
     // @tsconfig/strictest npm package
     // or for legacy codebase as
@@ -88,5 +95,11 @@
       "@carma-mapping/utils": ["libraries/mapping/carma-map-utils/src/index.ts"]
     }
   },
+  "include": [
+    "${configDir}/src/**/*.js",
+    "${configDir}/src/**/*.jsx",
+    "${configDir}/src/**/*.ts",
+    "${configDir}/src/**/*.tsx",
+    ],
   "exclude": ["node_modules", "tmp"]
 }
