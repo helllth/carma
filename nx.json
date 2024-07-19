@@ -24,7 +24,10 @@
     },
     "@nx/vite:test": {
       "cache": true,
-      "inputs": ["default", "^production"]
+      "inputs": ["default", "^production"],
+      "options": {
+        "passWithNoTests": true
+      }
     },
     "build-storybook": {
       "cache": true,
