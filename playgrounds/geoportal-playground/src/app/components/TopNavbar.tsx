@@ -58,19 +58,22 @@ const TopNavbar = () => {
 
   const extractVectorStyles = (keywords: string[]) => {
     let vectorObject = null;
-    keywords.forEach((keyword) => {
-      if (keyword.startsWith('carmaConf://')) {
-        const objectString = keyword.slice(12);
-        let colonIndex = objectString.indexOf(':');
-        const property = objectString.split(':')[0];
-        let value =
-          colonIndex !== -1
-            ? objectString.substring(colonIndex + 1).trim()
-            : '';
-        const object = { [property]: value };
-        vectorObject = object;
-      }
-    });
+
+    if (keywords) {
+      keywords.forEach((keyword) => {
+        if (keyword.startsWith('carmaConf://')) {
+          const objectString = keyword.slice(12);
+          let colonIndex = objectString.indexOf(':');
+          const property = objectString.split(':')[0];
+          let value =
+            colonIndex !== -1
+              ? objectString.substring(colonIndex + 1).trim()
+              : '';
+          const object = { [property]: value };
+          vectorObject = object;
+        }
+      });
+    }
 
     return vectorObject;
   };
