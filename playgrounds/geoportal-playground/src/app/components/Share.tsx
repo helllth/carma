@@ -1,13 +1,13 @@
-import { Button, Checkbox, Input, Radio, message } from 'antd';
-import { useSelector } from 'react-redux';
-import { getBackgroundLayer, getLayers } from '../store/slices/mapping';
-import LZString from 'lz-string';
-import { useCopyToClipboard } from '@uidotdev/usehooks';
-import { useSearchParams } from 'react-router-dom';
-import { useState } from 'react';
-import './popover.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareNodes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useCopyToClipboard } from '@uidotdev/usehooks';
+import { Button, Checkbox, Radio, message } from 'antd';
+import LZString from 'lz-string';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import { getBackgroundLayer, getLayers } from '../store/slices/mapping';
+import './popover.css';
 
 export type Settings = {
   showLayerButtons: boolean;
@@ -61,17 +61,6 @@ const Share = () => {
       </Radio.Group>
       <hr className="my-0" />
       <h5 className="-mb-1 text-lg">Einstellungen:</h5>
-      {/* <div className="flex items-center gap2">
-        <label htmlFor="customAppKey" className="mb-0 w-1/4">
-          App Key:
-        </label>
-        <Input
-          id="customAppKey"
-          type="text"
-          value={customAppKey}
-          onChange={(e) => setCustomAppKey(e.target.value)}
-        />
-      </div> */}
       <h5 className="mb-0">Layer</h5>
       <div className="flex items-center gap-2">
         <Checkbox
@@ -83,18 +72,6 @@ const Share = () => {
         >
           Layer Buttons anzeigen
         </Checkbox>
-        {/* <Checkbox
-          checked={!settings.showLayerHideButtons}
-          onChange={(e) =>
-            setSettings({
-              ...settings,
-              showLayerHideButtons: !e.target.checked,
-            })
-          }
-          disabled={!settings.showLayerButtons || mode === ''}
-        >
-          Layer entfernbar
-        </Checkbox> */}
       </div>
       <h5 className="mb-0">Karte</h5>
       <div className="flex items-center gap-2">
