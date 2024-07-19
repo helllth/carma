@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Modal } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
 import IconComp from "react-cismap/commons/Icon";
 import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
 import ReactLoading from "react-loading";

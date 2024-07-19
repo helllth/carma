@@ -16,8 +16,7 @@
           "mode": "development"
         },
         "production": {
-          "mode": "production",
-          "tsConfig": "tsconfig.prod.json"
+          "mode": "production"
         }
       }
     },

@@ -1,6 +1,6 @@
 import { Alert, AlertContainer } from 'react-bs-notifier';
 import { Form, FormGroup, Row, Col, Button, Container } from 'react-bootstrap';
-import Loadable from 'react-loading-overlay';
+import Loadable from 'react-loading-overlay-ts';
 import MaskedFormControl from 'react-bootstrap-maskedinput';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
