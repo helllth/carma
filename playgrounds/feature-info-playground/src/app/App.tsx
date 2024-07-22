@@ -7,13 +7,19 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
 import { useEffect, useState } from 'react';
 import { getAllLayers } from './helper/layers';
-import { getGMLOutput, getLayers, setLayers } from './store/slices/mapping';
+import {
+  getGMLOutput,
+  getJSONOutput,
+  getLayers,
+  setLayers,
+} from './store/slices/mapping';
 import { useDispatch, useSelector } from 'react-redux';
 
 export function App() {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
   const layers = useSelector(getLayers);
   const gmlOutput = useSelector(getGMLOutput);
+  const jsonOutput = useSelector(getJSONOutput);
   const dispatch = useDispatch();
   const [selectedLayer, setSelectedLayer] = useState(null);
 
@@ -82,6 +88,7 @@ export function App() {
             </div>
             <div className="border-solid rounded-md border-black border-[1px] w-full h-full">
               JSON:
+              <div>{jsonOutput && <pre>{JSON.stringify(jsonOutput)}</pre>}</div>
             </div>
           </div>
 
