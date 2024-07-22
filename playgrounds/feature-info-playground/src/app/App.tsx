@@ -1,6 +1,6 @@
 import { AutoComplete } from 'antd';
-import 'prismjs/components/prism-clike';
 import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
 import { useEffect, useState } from 'react';
@@ -60,7 +60,10 @@ export function App() {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen w-full gap-2 p-2">
+    <div
+      className="flex flex-col items-center h-screen w-full gap-2 p-2"
+      style={{ maxHeight: window.innerHeight, maxWidth: window.innerWidth }}
+    >
       <div className="w-full rounded-md h-20 flex items-center gap-2">
         <AutoComplete
           onSelect={(value) => {
@@ -78,17 +81,20 @@ export function App() {
           }
         />
       </div>
-      <div className="flex w-full items-center justify-center gap-2 h-full">
-        <div className="h-full rounded-md w-2/3">
+      <div
+        className="flex w-full items-center justify-center gap-2 h-full"
+        style={{ maxHeight: window.innerHeight - 100 }}
+      >
+        <div className="h-full rounded-md w-1/3">
           <Map layer={selectedLayer} />
         </div>
-        <div className="flex flex-col gap-2 items-center justify-center w-full h-full">
+        <div className="flex flex-col gap-2 items-center justify-center w-2/3 h-full">
           <div className="max-w-full w-full h-1/3 flex gap-2">
-            <div className="border-solid overflow-auto rounded-md border-black border-[1px] w-full h-full">
+            <div className="border-solid p-2 overflow-auto rounded-md border-black border-[1px] w-full h-full">
               GML:
               <div>{gmlOutput && <pre>{gmlOutput}</pre>}</div>
             </div>
-            <div className="border-solid rounded-md overflow-auto border-black border-[1px] w-full h-full">
+            <div className="border-solid p-2 rounded-md overflow-auto border-black border-[1px] w-full h-full">
               JSON:
               <div>
                 {jsonOutput && (
@@ -115,7 +121,7 @@ export function App() {
           </div>
 
           <div className="rounded-md w-full h-1/3 flex gap-2">
-            <div className="border-solid rounded-md border-black border-[1px] w-full h-full">
+            <div className="border-solid p-2 overflow-auto rounded-md border-black border-[1px] w-full h-full">
               Altes Design:
               {oldVariant && (
                 <div dangerouslySetInnerHTML={{ __html: oldVariant }} />
