@@ -6,7 +6,8 @@ import CismapLayer from 'react-cismap/CismapLayer';
 import proj4 from 'proj4';
 import { proj4crs25832def } from 'react-cismap/constants/gis';
 import { useDispatch } from 'react-redux';
-import { setGMLOutput } from '../store/slices/mapping';
+import { setGMLOutput, setJSONOutput } from '../store/slices/mapping';
+import { getLeafNodes } from '../helper/featureInfo';
 
 const Map = ({ layer }) => {
   const [height, setHeight] = useState(0);
@@ -67,6 +68,8 @@ const Map = ({ layer }) => {
               const content =
                 xmlDoc.getElementsByTagName('gml:featureMember')[0];
               dispatch(setGMLOutput(content.outerHTML));
+
+              dispatch(setJSONOutput(getLeafNodes(content)));
             });
         }}
       >
