@@ -3,11 +3,16 @@ import { useEffect, useRef, useState } from 'react';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import 'leaflet/dist/leaflet.css';
 import CismapLayer from 'react-cismap/CismapLayer';
+import proj4 from 'proj4';
+import { proj4crs25832def } from 'react-cismap/constants/gis';
+import { useDispatch } from 'react-redux';
+import { setGMLOutput } from '../store/slices/mapping';
 
 const Map = ({ layer }) => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleResize = () => {
@@ -34,6 +39,36 @@ const Map = ({ layer }) => {
         leafletMapProps={{ editable: true }}
         minZoom={5}
         gazetteerSearchControl={false}
+        onclick={(e) => {
+          // @ts-ignore
+          const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
+            e.latlng.lng,
+            e.latlng.lat,
+          ]);
+
+          const minimalBoxSize = 0.0001;
+          const url =
+            layer.url +
+            `?SERVICE=WMS&request=GetFeatureInfo&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&width=1&height=1&srs=EPSG%3A25832&` +
+            `bbox=` +
+            `${pos[0] - minimalBoxSize},` +
+            `${pos[1] - minimalBoxSize},` +
+            `${pos[0] + minimalBoxSize},` +
+            `${pos[1] + minimalBoxSize}&` +
+            `x=0&y=0&` +
+            `layers=${layer.name}&` +
+            `feature_count=100&QUERY_LAYERS=${layer.name}&`;
+
+          fetch(url)
+            .then((response) => response.text())
+            .then((data) => {
+              const parser = new DOMParser();
+              const xmlDoc = parser.parseFromString(data, 'text/xml');
+              const content =
+                xmlDoc.getElementsByTagName('gml:featureMember')[0];
+              dispatch(setGMLOutput(content.outerHTML));
+            });
+        }}
       >
         {layer && (
           <CismapLayer
