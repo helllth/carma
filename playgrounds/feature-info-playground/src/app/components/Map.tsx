@@ -59,27 +59,28 @@ const Map = ({ layer }) => {
           setPos([e.latlng.lat, e.latlng.lng]);
 
           if (layer) {
-            const minimalBoxSize = 0.0001;
+            const minimalBoxSize = 1;
             const url =
               layer.url +
-              `?SERVICE=WMS&request=GetFeatureInfo&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&width=1&height=1&srs=EPSG%3A25832&` +
+              `?SERVICE=WMS&request=GetFeatureInfo&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&width=10&height=10&srs=EPSG%3A25832&` +
               `bbox=` +
               `${pos[0] - minimalBoxSize},` +
               `${pos[1] - minimalBoxSize},` +
               `${pos[0] + minimalBoxSize},` +
               `${pos[1] + minimalBoxSize}&` +
-              `x=0&y=0&` +
+              `x=5&y=5&` +
               `layers=${layer.name}&` +
               `feature_count=100&QUERY_LAYERS=${layer.name}&`;
 
             const imgUrl =
+              layer.url +
               `
-            https://maps.wuppertal.de/umwelt?&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
+            ?&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
               `${pos[0] - minimalBoxSize},` +
               `${pos[1] - minimalBoxSize},` +
               `${pos[0] + minimalBoxSize},` +
               `${pos[1] + minimalBoxSize}` +
-              `&WIDTH=1&HEIGHT=1&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layer.name}&STYLES=default&QUERY_LAYERS=${layer.name}&INFO_FORMAT=text/html&X=0&Y=0
+              `&WIDTH=10&HEIGHT=10&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layer.name}&STYLES=default&QUERY_LAYERS=${layer.name}&INFO_FORMAT=text/html&X=5&Y=5
             `;
 
             fetch(url)
@@ -89,9 +90,15 @@ const Map = ({ layer }) => {
                 const xmlDoc = parser.parseFromString(data, 'text/xml');
                 const content =
                   xmlDoc.getElementsByTagName('gml:featureMember')[0];
-                dispatch(setGMLOutput(content.outerHTML));
+                dispatch(
+                  setGMLOutput(
+                    content?.outerHTML ? content.outerHTML : 'Nichts gefunden'
+                  )
+                );
 
-                dispatch(setJSONOutput(getLeafNodes(content)));
+                dispatch(
+                  setJSONOutput(content?.outerHTML ? getLeafNodes(content) : '')
+                );
               });
 
             fetch(imgUrl)
