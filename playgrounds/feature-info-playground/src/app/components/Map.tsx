@@ -1,21 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
-import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import 'leaflet/dist/leaflet.css';
-import CismapLayer from 'react-cismap/CismapLayer';
 import proj4 from 'proj4';
+import { TransitiveReactLeaflet } from 'react-cismap';
+import CismapLayer from 'react-cismap/CismapLayer';
 import { proj4crs25832def } from 'react-cismap/constants/gis';
+import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
+import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import { useDispatch } from 'react-redux';
+import { getLeafNodes } from '../helper/featureInfo';
 import {
   setGMLOutput,
   setJSONOutput,
   setOldVariant,
 } from '../store/slices/mapping';
-import { getLeafNodes } from '../helper/featureInfo';
+
+const { Marker } = TransitiveReactLeaflet;
 
 const Map = ({ layer }) => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
+  const [pos, setPos] = useState<[number, number] | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
@@ -51,46 +56,50 @@ const Map = ({ layer }) => {
             e.latlng.lat,
           ]);
 
-          const minimalBoxSize = 0.0001;
-          const url =
-            layer.url +
-            `?SERVICE=WMS&request=GetFeatureInfo&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&width=1&height=1&srs=EPSG%3A25832&` +
-            `bbox=` +
-            `${pos[0] - minimalBoxSize},` +
-            `${pos[1] - minimalBoxSize},` +
-            `${pos[0] + minimalBoxSize},` +
-            `${pos[1] + minimalBoxSize}&` +
-            `x=0&y=0&` +
-            `layers=${layer.name}&` +
-            `feature_count=100&QUERY_LAYERS=${layer.name}&`;
+          setPos([e.latlng.lat, e.latlng.lng]);
 
-          const imgUrl =
-            `
-          https://maps.wuppertal.de/umwelt?&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
-            `${pos[0] - minimalBoxSize},` +
-            `${pos[1] - minimalBoxSize},` +
-            `${pos[0] + minimalBoxSize},` +
-            `${pos[1] + minimalBoxSize}` +
-            `&WIDTH=1&HEIGHT=1&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layer.name}&STYLES=default&QUERY_LAYERS=${layer.name}&INFO_FORMAT=text/html&X=0&Y=0
-          `;
+          if (layer) {
+            const minimalBoxSize = 0.0001;
+            const url =
+              layer.url +
+              `?SERVICE=WMS&request=GetFeatureInfo&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&width=1&height=1&srs=EPSG%3A25832&` +
+              `bbox=` +
+              `${pos[0] - minimalBoxSize},` +
+              `${pos[1] - minimalBoxSize},` +
+              `${pos[0] + minimalBoxSize},` +
+              `${pos[1] + minimalBoxSize}&` +
+              `x=0&y=0&` +
+              `layers=${layer.name}&` +
+              `feature_count=100&QUERY_LAYERS=${layer.name}&`;
 
-          fetch(url)
-            .then((response) => response.text())
-            .then((data) => {
-              const parser = new DOMParser();
-              const xmlDoc = parser.parseFromString(data, 'text/xml');
-              const content =
-                xmlDoc.getElementsByTagName('gml:featureMember')[0];
-              dispatch(setGMLOutput(content.outerHTML));
+            const imgUrl =
+              `
+            https://maps.wuppertal.de/umwelt?&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
+              `${pos[0] - minimalBoxSize},` +
+              `${pos[1] - minimalBoxSize},` +
+              `${pos[0] + minimalBoxSize},` +
+              `${pos[1] + minimalBoxSize}` +
+              `&WIDTH=1&HEIGHT=1&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layer.name}&STYLES=default&QUERY_LAYERS=${layer.name}&INFO_FORMAT=text/html&X=0&Y=0
+            `;
 
-              dispatch(setJSONOutput(getLeafNodes(content)));
-            });
+            fetch(url)
+              .then((response) => response.text())
+              .then((data) => {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data, 'text/xml');
+                const content =
+                  xmlDoc.getElementsByTagName('gml:featureMember')[0];
+                dispatch(setGMLOutput(content.outerHTML));
 
-          fetch(imgUrl)
-            .then((response) => response.text())
-            .then((data) => {
-              dispatch(setOldVariant(data));
-            });
+                dispatch(setJSONOutput(getLeafNodes(content)));
+              });
+
+            fetch(imgUrl)
+              .then((response) => response.text())
+              .then((data) => {
+                dispatch(setOldVariant(data));
+              });
+          }
         }}
       >
         {layer && (
@@ -107,6 +116,22 @@ const Map = ({ layer }) => {
             type={'wmts'}
           />
         )}
+        {pos && <Marker position={pos}></Marker>}
+        <GenericInfoBoxFromFeature
+          pixelwidth={350}
+          config={{
+            displaySecondaryInfoAction: false,
+            city: 'Wuppertal',
+            navigator: {
+              noun: {
+                singular: 'Feature',
+                plural: 'Features',
+              },
+            },
+            noCurrentFeatureTitle: 'Nichts gefunden',
+            noCurrentFeatureContent: <span>Bitte klicken</span>,
+          }}
+        />
       </TopicMapComponent>
     </div>
   );
