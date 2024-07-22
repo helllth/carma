@@ -15,6 +15,7 @@ import {
   getOldVariant,
   setLayers,
 } from './store/slices/mapping';
+import { findLayerByTitle } from './helper/featureInfo';
 
 export function App() {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
@@ -23,7 +24,10 @@ export function App() {
   const jsonOutput = useSelector(getJSONOutput);
   const oldVariant = useSelector(getOldVariant);
   const dispatch = useDispatch();
-  const [selectedLayer, setSelectedLayer] = useState(null);
+  const [selectedLayer, setSelectedLayer] = useState<{
+    name: string;
+    url: string;
+  } | null>(null);
 
   useEffect(() => {
     const requestLayers = async () => {
@@ -39,13 +43,8 @@ export function App() {
   );
 
   const renderItem = (layer: any) => {
-    const item = {
-      name: layer.Name,
-      url: layer.url,
-    };
-
     return {
-      value: JSON.stringify(item),
+      value: layer.Title,
       label: (
         <div
           style={{
@@ -67,7 +66,12 @@ export function App() {
       <div className="w-full rounded-md h-20 flex items-center gap-2">
         <AutoComplete
           onSelect={(value) => {
-            setSelectedLayer(JSON.parse(value));
+            const layer = findLayerByTitle(layers, value);
+            const item = {
+              name: layer.Name,
+              url: layer.url,
+            };
+            setSelectedLayer(item);
           }}
           options={layers.map((value) => {
             const layers = value.layers.map((layer) => {

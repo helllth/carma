@@ -11,3 +11,15 @@ export const getLeafNodes = (node, result: any = {}): any => {
   }
   return result;
 };
+
+export const findLayerByTitle = (array: any[], title: string) => {
+  for (let i = 0; i < array.length; i++) {
+    let layers = array[i].layers;
+    for (let j = 0; j < layers.length; j++) {
+      if (layers[j].Title === title) {
+        return layers[j];
+      }
+    }
+  }
+  return null;
+};
