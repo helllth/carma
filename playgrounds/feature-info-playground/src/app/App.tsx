@@ -11,6 +11,7 @@ import {
   getGMLOutput,
   getJSONOutput,
   getLayers,
+  getOldVariant,
   setLayers,
 } from './store/slices/mapping';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +21,7 @@ export function App() {
   const layers = useSelector(getLayers);
   const gmlOutput = useSelector(getGMLOutput);
   const jsonOutput = useSelector(getJSONOutput);
+  const oldVariant = useSelector(getOldVariant);
   const dispatch = useDispatch();
   const [selectedLayer, setSelectedLayer] = useState(null);
 
@@ -110,10 +112,13 @@ export function App() {
 
           <div className="rounded-md w-full h-1/3 flex gap-2">
             <div className="border-solid rounded-md border-black border-[1px] w-full h-full">
-              Altes Design
+              Altes Design:
+              {oldVariant && (
+                <div dangerouslySetInnerHTML={{ __html: oldVariant }} />
+              )}
             </div>
             <div className="border-solid rounded-md border-black border-[1px] w-full h-full">
-              Neues Design
+              Neues Design:
             </div>
           </div>
         </div>

@@ -6,7 +6,11 @@ import CismapLayer from 'react-cismap/CismapLayer';
 import proj4 from 'proj4';
 import { proj4crs25832def } from 'react-cismap/constants/gis';
 import { useDispatch } from 'react-redux';
-import { setGMLOutput, setJSONOutput } from '../store/slices/mapping';
+import {
+  setGMLOutput,
+  setJSONOutput,
+  setOldVariant,
+} from '../store/slices/mapping';
 import { getLeafNodes } from '../helper/featureInfo';
 
 const Map = ({ layer }) => {
@@ -60,6 +64,16 @@ const Map = ({ layer }) => {
             `layers=${layer.name}&` +
             `feature_count=100&QUERY_LAYERS=${layer.name}&`;
 
+          const imgUrl =
+            `
+          https://maps.wuppertal.de/umwelt?&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
+            `${pos[0] - minimalBoxSize},` +
+            `${pos[1] - minimalBoxSize},` +
+            `${pos[0] + minimalBoxSize},` +
+            `${pos[1] + minimalBoxSize}` +
+            `&WIDTH=1&HEIGHT=1&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layer.name}&STYLES=default&QUERY_LAYERS=${layer.name}&INFO_FORMAT=text/html&X=0&Y=0
+          `;
+
           fetch(url)
             .then((response) => response.text())
             .then((data) => {
@@ -70,6 +84,12 @@ const Map = ({ layer }) => {
               dispatch(setGMLOutput(content.outerHTML));
 
               dispatch(setJSONOutput(getLeafNodes(content)));
+            });
+
+          fetch(imgUrl)
+            .then((response) => response.text())
+            .then((data) => {
+              dispatch(setOldVariant(data));
             });
         }}
       >

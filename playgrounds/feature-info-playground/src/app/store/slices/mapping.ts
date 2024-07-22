@@ -5,12 +5,14 @@ interface MappingState {
   layers: any[];
   gmlOutput: string | null;
   jsonOutput: any;
+  oldVariant: string | null;
 }
 
 const initialState: MappingState = {
   layers: [],
   gmlOutput: null,
   jsonOutput: null,
+  oldVariant: null,
 };
 
 const slice = createSlice({
@@ -26,12 +28,16 @@ const slice = createSlice({
     setJSONOutput(state, action) {
       state.jsonOutput = action.payload;
     },
+    setOldVariant(state, action) {
+      state.oldVariant = action.payload;
+    },
   },
 });
 
 export default slice;
 
-export const { setLayers, setGMLOutput, setJSONOutput } = slice.actions;
+export const { setLayers, setGMLOutput, setJSONOutput, setOldVariant } =
+  slice.actions;
 
 export const getLayers = (state: RootState) => {
   return state.mapping.layers;
@@ -43,4 +49,8 @@ export const getGMLOutput = (state: RootState) => {
 
 export const getJSONOutput = (state: RootState) => {
   return state.mapping.jsonOutput;
+};
+
+export const getOldVariant = (state: RootState) => {
+  return state.mapping.oldVariant;
 };
