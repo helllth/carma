@@ -19,7 +19,8 @@ import { MappingConstants } from 'react-cismap';
 import queryString from 'query-string';
 import CrossTabCommunicationContextProvider from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
 import CismapLayer from 'react-cismap/CismapLayer';
-
+import InfoBox from 'react-cismap/topicmaps/InfoBox';
+import { getActionLinksForFeature } from 'react-cismap/tools/uiHelper';
 const host = 'https://wupp-topicmaps-data.cismet.de';
 
 const getGazData = async (setGazData) => {
@@ -65,10 +66,7 @@ function App({ vectorStyles = [] }) {
       setLayers(params.layers);
     }
   }, []);
-  const [gazData, setGazData] = useState([]);
-  useEffect(() => {
-    getGazData(setGazData);
-  }, []);
+
   const backgroundConfigurations = {
     stadtplan: {
       layerkey: 'wupp-plan-live',
@@ -124,19 +122,7 @@ function App({ vectorStyles = [] }) {
       referenceSystem={MappingConstants.crs3857}
       referenceSystemDefinition={MappingConstants.proj4crs3857def}
     >
-      <TopicMapComponent maxZoom={22} gazData={gazData} locatorControl={true}>
-        {vectorStyles.map((style, index) => {
-          return (
-            <CismapLayer
-              {...{
-                type: 'vector',
-                style: style,
-                pane: 'additionalLayers' + index,
-              }}
-            />
-          );
-        })}
-      </TopicMapComponent>
+      <Map layers={layers} vectorStyles={vectorStyles} />
     </TopicMapContextProvider>
   );
   console.log('xxx sycn', syncToken);
@@ -151,3 +137,73 @@ function App({ vectorStyles = [] }) {
 }
 
 export default App;
+
+const Map = ({ layers, vectorStyles }) => {
+  const [gazData, setGazData] = useState([]);
+  const [selectedFeature, setSelectedFeature] = useState(undefined);
+  let links = [];
+  if (selectedFeature) {
+    links = getActionLinksForFeature(selectedFeature, {});
+  }
+  useEffect(() => {
+    getGazData(setGazData);
+  }, []);
+  return (
+    <TopicMapComponent
+      maxZoom={22}
+      gazData={gazData}
+      locatorControl={true}
+      infoBox={
+        selectedFeature && (
+          <InfoBox
+            currentFeature={selectedFeature}
+            hideNavigator={true}
+            header="kjshd"
+            pixelwidth={300}
+            headerColor="#ff0000"
+            {...selectedFeature?.properties?.info}
+            noCurrentFeatureTitle="nix da"
+            noCurrentFeatureContent="nix da"
+            links={links}
+          />
+        )
+      }
+    >
+      {vectorStyles.map((style, index) => {
+        return (
+          <CismapLayer
+            {...{
+              type: 'vector',
+              style: style,
+              pane: 'additionalLayers' + index,
+              opacity: 1,
+              maxSelectionCount: 1,
+              onSelectionChanged: (e) => {
+                console.log('xxx selectionChanged', e);
+                const selectedFeature = e.hits[0];
+                const p = selectedFeature.properties;
+                console.log('xxx p', p);
+
+                const identifications = JSON.parse(p.identifications);
+                const mainlocationtype = identifications[0].identification;
+                const info = {
+                  title: p.geographicidentifier,
+                  // additionalInfo: "bbb",
+                  subtitle: p.strasse,
+                  headerColor: p.schrift,
+                  header: mainlocationtype,
+                };
+                selectedFeature.properties.info = info;
+                selectedFeature.properties.url = p.url;
+                selectedFeature.properties.email = '';
+                selectedFeature.properties.tel = p.telefon;
+
+                setSelectedFeature(selectedFeature);
+              },
+            }}
+          />
+        );
+      })}
+    </TopicMapComponent>
+  );
+};
