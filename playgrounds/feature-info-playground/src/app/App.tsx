@@ -7,15 +7,18 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
 import { useEffect, useState } from 'react';
 import { getAllLayers } from './helper/layers';
+import { getLayers, setLayers } from './store/slices/mapping';
+import { useDispatch, useSelector } from 'react-redux';
 
 export function App() {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
-  const [layers, setLayers] = useState([]);
+  const layers = useSelector(getLayers);
+  const dispatch = useDispatch();
   const [selectedLayer, setSelectedLayer] = useState(null);
 
   useEffect(() => {
     getAllLayers().then((result) => {
-      setLayers(result);
+      dispatch(setLayers(result));
     });
   }, []);
 
