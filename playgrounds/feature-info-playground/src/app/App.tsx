@@ -1,11 +1,12 @@
-import { AutoComplete, Button } from 'antd';
-import Map from './components/Map';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
+import { AutoComplete } from 'antd';
 import 'prismjs/components/prism-clike';
+import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Editor from 'react-simple-code-editor';
+import Map from './components/Map';
 import { getAllLayers } from './helper/layers';
 import {
   getGMLOutput,
@@ -14,7 +15,6 @@ import {
   getOldVariant,
   setLayers,
 } from './store/slices/mapping';
-import { useDispatch, useSelector } from 'react-redux';
 
 export function App() {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
@@ -83,14 +83,18 @@ export function App() {
           <Map layer={selectedLayer} />
         </div>
         <div className="flex flex-col gap-2 items-center justify-center w-full h-full">
-          <div className="rounded-md w-full h-1/3 flex gap-2">
-            <div className="border-solid rounded-md border-black border-[1px] w-full h-full">
+          <div className="max-w-full w-full h-1/3 flex gap-2">
+            <div className="border-solid overflow-auto rounded-md border-black border-[1px] w-full h-full">
               GML:
               <div>{gmlOutput && <pre>{gmlOutput}</pre>}</div>
             </div>
-            <div className="border-solid rounded-md border-black border-[1px] w-full h-full">
+            <div className="border-solid rounded-md overflow-auto border-black border-[1px] w-full h-full">
               JSON:
-              <div>{jsonOutput && <pre>{JSON.stringify(jsonOutput)}</pre>}</div>
+              <div>
+                {jsonOutput && (
+                  <pre>{JSON.stringify(jsonOutput, null, '\t')}</pre>
+                )}
+              </div>
             </div>
           </div>
 
