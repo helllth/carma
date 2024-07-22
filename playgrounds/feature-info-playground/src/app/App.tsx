@@ -7,19 +7,23 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
 import { useEffect, useState } from 'react';
 import { getAllLayers } from './helper/layers';
-import { getLayers, setLayers } from './store/slices/mapping';
+import { getGMLOutput, getLayers, setLayers } from './store/slices/mapping';
 import { useDispatch, useSelector } from 'react-redux';
 
 export function App() {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
   const layers = useSelector(getLayers);
+  const gmlOutput = useSelector(getGMLOutput);
   const dispatch = useDispatch();
   const [selectedLayer, setSelectedLayer] = useState(null);
 
   useEffect(() => {
-    getAllLayers().then((result) => {
+    const requestLayers = async () => {
+      const result = await getAllLayers();
       dispatch(setLayers(result));
-    });
+    };
+
+    requestLayers();
   }, []);
 
   const renderTitle = (title: string) => (
@@ -52,7 +56,6 @@ export function App() {
       <div className="w-full rounded-md h-20 flex items-center gap-2">
         <AutoComplete
           onSelect={(value) => {
-            console.log('value', JSON.parse(value));
             setSelectedLayer(JSON.parse(value));
           }}
           options={layers.map((value) => {
@@ -68,21 +71,20 @@ export function App() {
         />
       </div>
       <div className="flex w-full items-center justify-center gap-2 h-full">
-        {/* Map */}
         <div className="h-full rounded-md w-2/3">
           <Map layer={selectedLayer} />
         </div>
         <div className="flex flex-col gap-2 items-center justify-center w-full h-full">
-          {/* JSON + GML Output */}
           <div className="rounded-md w-full h-1/3 flex gap-2">
             <div className="border-solid rounded-md border-black border-[1px] w-full h-full">
-              Hier kommt die JSON Ausgabe
+              GML:
+              <div>{gmlOutput && <pre>{gmlOutput}</pre>}</div>
             </div>
             <div className="border-solid rounded-md border-black border-[1px] w-full h-full">
-              Hier kommt die GML Ausgabe
+              JSON:
             </div>
           </div>
-          {/* Editor */}
+
           <div className="rounded-md w-full h-1/3 flex gap-2">
             <Editor
               value={code}
@@ -98,7 +100,7 @@ export function App() {
               }}
             />
           </div>
-          {/* Feature Box + Alte Variante */}
+
           <div className="rounded-md w-full h-1/3 flex gap-2">
             <div className="border-solid rounded-md border-black border-[1px] w-full h-full">
               Altes Design
