@@ -11,6 +11,7 @@ import { getAllLayers } from './helper/layers';
 export function App() {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
   const [layers, setLayers] = useState([]);
+  const [selectedLayer, setSelectedLayer] = useState(null);
 
   useEffect(() => {
     getAllLayers().then((result) => {
@@ -22,27 +23,38 @@ export function App() {
     <span className="text-lg font-semibold text-black">{title}</span>
   );
 
-  const renderItem = (title: string) => ({
-    value: title,
-    label: (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}
-      >
-        {title}
-      </div>
-    ),
-  });
+  const renderItem = (layer: any) => {
+    const item = {
+      name: layer.Name,
+      url: layer.url,
+    };
+
+    return {
+      value: JSON.stringify(item),
+      label: (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          {layer.Title}
+        </div>
+      ),
+    };
+  };
 
   return (
     <div className="flex flex-col items-center h-screen w-full gap-2 p-2">
       <div className="w-full rounded-md h-20 flex items-center gap-2">
         <AutoComplete
+          onSelect={(value) => {
+            console.log('value', JSON.parse(value));
+            setSelectedLayer(JSON.parse(value));
+          }}
           options={layers.map((value) => {
             const layers = value.layers.map((layer) => {
-              return renderItem(layer.Title);
+              return renderItem(layer);
             });
             return { label: renderTitle(value.title), options: layers };
           })}
@@ -55,7 +67,7 @@ export function App() {
       <div className="flex w-full items-center justify-center gap-2 h-full">
         {/* Map */}
         <div className="h-full rounded-md w-2/3">
-          <Map />
+          <Map layer={selectedLayer} />
         </div>
         <div className="flex flex-col gap-2 items-center justify-center w-full h-full">
           {/* JSON + GML Output */}

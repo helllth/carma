@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import 'leaflet/dist/leaflet.css';
+import CismapLayer from 'react-cismap/CismapLayer';
 
-const Map = () => {
+const Map = ({ layer }) => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -33,7 +34,22 @@ const Map = () => {
         leafletMapProps={{ editable: true }}
         minZoom={5}
         gazetteerSearchControl={false}
-      ></TopicMapComponent>
+      >
+        {layer && (
+          <CismapLayer
+            key={layer.name}
+            url={layer.url}
+            maxZoom={26}
+            layers={layer.name}
+            format="image/png"
+            tiled={true}
+            transparent="true"
+            pane="additionalLayers1"
+            opacity={0.7}
+            type={'wmts'}
+          />
+        )}
+      </TopicMapComponent>
     </div>
   );
 };
