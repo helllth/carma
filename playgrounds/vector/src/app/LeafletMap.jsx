@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 
 import './App.css';
 import { useState } from 'react';
@@ -21,6 +21,8 @@ import CrossTabCommunicationContextProvider from 'react-cismap/contexts/CrossTab
 import CismapLayer from 'react-cismap/CismapLayer';
 import InfoBox from 'react-cismap/topicmaps/InfoBox';
 import { getActionLinksForFeature } from 'react-cismap/tools/uiHelper';
+import { TopicMapDispatchContext } from 'react-cismap/contexts/TopicMapContextProvider';
+
 const host = 'https://wupp-topicmaps-data.cismet.de';
 
 const getGazData = async (setGazData) => {
@@ -141,13 +143,20 @@ export default App;
 const Map = ({ layers, vectorStyles }) => {
   const [gazData, setGazData] = useState([]);
   const [selectedFeature, setSelectedFeature] = useState(undefined);
+  const { zoomToFeature, gotoHome } = useContext(TopicMapDispatchContext);
   let links = [];
   if (selectedFeature) {
-    links = getActionLinksForFeature(selectedFeature, {});
+    links = getActionLinksForFeature(selectedFeature, {
+      displayZoomToFeature: true,
+      zoomToFeature,
+    });
   }
+
   useEffect(() => {
     getGazData(setGazData);
   }, []);
+  console.log('xxx selectedFeature ', selectedFeature);
+
   return (
     <TopicMapComponent
       maxZoom={22}
@@ -156,12 +165,12 @@ const Map = ({ layers, vectorStyles }) => {
       infoBox={
         selectedFeature && (
           <InfoBox
+            pixelwidth={350}
             currentFeature={selectedFeature}
             hideNavigator={true}
             header="kjshd"
-            pixelwidth={300}
             headerColor="#ff0000"
-            {...selectedFeature?.properties?.info}
+            {...selectedFeature?.properties}
             noCurrentFeatureTitle="nix da"
             noCurrentFeatureContent="nix da"
             links={links}
@@ -179,26 +188,78 @@ const Map = ({ layers, vectorStyles }) => {
               opacity: 1,
               maxSelectionCount: 1,
               onSelectionChanged: (e) => {
-                console.log('xxx selectionChanged', e);
                 const selectedFeature = e.hits[0];
                 const p = selectedFeature.properties;
-                console.log('xxx p', p);
 
-                const identifications = JSON.parse(p.identifications);
-                const mainlocationtype = identifications[0].identification;
-                const info = {
-                  title: p.geographicidentifier,
-                  // additionalInfo: "bbb",
-                  subtitle: p.strasse,
-                  headerColor: p.schrift,
-                  header: mainlocationtype,
-                };
-                selectedFeature.properties.info = info;
-                selectedFeature.properties.url = p.url;
-                selectedFeature.properties.email = '';
-                selectedFeature.properties.tel = p.telefon;
+                if (p.infobox_info) {
+                  selectedFeature.properties = {
+                    ...selectedFeature.properties,
+                    ...JSON.parse(p.infobox_info),
+                  };
+                  setSelectedFeature(selectedFeature);
+                } else {
+                  //if style has /poi/ in it, then it is a POI layer
+                  if (style.indexOf('/poi/') > -1) {
+                    console.log('xxxx style ', style);
 
-                setSelectedFeature(selectedFeature);
+                    const createInfoBoxInfo = (p) => {
+                      const identifications = JSON.parse(p.identifications);
+                      const mainlocationtype =
+                        identifications[0].identification;
+                      const info = {
+                        title: p.geographicidentifier,
+                        // additionalInfo: "bbb",
+                        subtitle: p.strasse,
+                        headerColor: p.schrift,
+                        header: mainlocationtype,
+                        url: p.url,
+                        tel: p.telefon,
+                      };
+                      return info;
+                    };
+
+                    selectedFeature.properties = {
+                      ...selectedFeature.properties,
+                      ...createInfoBoxInfo(p),
+                    };
+
+                    setSelectedFeature(selectedFeature);
+                  }
+                  //if style has /sgk_hausnummer/ in it
+                  else if (style.indexOf('/sgk_hausnummern/') > -1) {
+                    console.log('xxx------');
+
+                    const conf = [
+                      "title:p.name+' '+p.hnummer",
+                      "header:'Adresse ('+p.adressart+')'",
+                      "headerColor:({1: '#006622', 2: '#0000CC', 3: '#FF6600', 4: '#CC0000', 5: '#7030A0'}[p.adresstyp] || '#000000')",
+                    ];
+                    // // Create the function as a string
+                    let functionString = `(function(p) {
+                                          const info = {`;
+
+                    conf.forEach((rule) => {
+                      functionString += `${rule.trim()},\n`;
+                    });
+
+                    functionString += `
+                                          };
+                                          return info;
+                    })`;
+                    console.log('xxx functionString', functionString);
+
+                    const tmpInfo = eval(functionString)(p);
+
+                    console.log('xxx tmpInfo', tmpInfo);
+
+                    selectedFeature.properties = {
+                      ...selectedFeature.properties,
+                      ...tmpInfo,
+                    };
+
+                    setSelectedFeature(selectedFeature);
+                  }
+                }
               },
             }}
           />
