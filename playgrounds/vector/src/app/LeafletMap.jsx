@@ -31,15 +31,15 @@ const getGazData = async (setGazData) => {
 
   sources.adressen = await md5FetchText(
     prefix,
-    host + '/data/3857/adressen.json'
+    host + '/data/3857/adressen.json',
   );
   sources.bezirke = await md5FetchText(
     prefix,
-    host + '/data/3857/bezirke.json'
+    host + '/data/3857/bezirke.json',
   );
   sources.quartiere = await md5FetchText(
     prefix,
-    host + '/data/3857/quartiere.json'
+    host + '/data/3857/quartiere.json',
   );
   sources.pois = await md5FetchText(prefix, host + '/data/3857/pois.json');
   sources.kitas = await md5FetchText(prefix, host + '/data/3857/kitas.json');
@@ -205,7 +205,7 @@ const Map = ({ layers, vectorStyles }) => {
                 const selectedFeature = e.hits[0];
                 console.log(
                   'xxxy selectedFeature',
-                  JSON.stringify(selectedFeature, null, 2)
+                  JSON.stringify(selectedFeature, null, 2),
                 );
 
                 const p = selectedFeature.properties;
