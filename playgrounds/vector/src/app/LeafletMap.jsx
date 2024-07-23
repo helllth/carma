@@ -148,7 +148,21 @@ const Map = ({ layers, vectorStyles }) => {
   if (selectedFeature) {
     links = getActionLinksForFeature(selectedFeature, {
       displayZoomToFeature: true,
-      zoomToFeature,
+      zoomToFeature: () => {
+        if (selectedFeature) {
+          const f = JSON.stringify(selectedFeature, null, 2);
+          const pf = JSON.parse(f);
+          pf.crs = {
+            type: 'name',
+            properties: {
+              name: 'urn:ogc:def:crs:EPSG::4326',
+            },
+          };
+          console.log('xxx zoomToFeature', pf);
+
+          zoomToFeature(pf);
+        }
+      },
     });
   }
 
@@ -189,6 +203,11 @@ const Map = ({ layers, vectorStyles }) => {
               maxSelectionCount: 1,
               onSelectionChanged: (e) => {
                 const selectedFeature = e.hits[0];
+                console.log(
+                  'xxxy selectedFeature',
+                  JSON.stringify(selectedFeature, null, 2)
+                );
+
                 const p = selectedFeature.properties;
 
                 if (p.infobox_info) {
