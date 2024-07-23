@@ -31,8 +31,6 @@ export function App() {
     name: string;
     url: string;
   } | null>(null);
-  const [header, setHeader] = useState('');
-  const [primaryText, setPrimaryText] = useState('');
   const [selectedFeature, setSelectedFeature] = useState(null);
 
   useEffect(() => {
@@ -129,8 +127,9 @@ export function App() {
             />
             <Button
               onClick={() => {
-                console.log('xxx', code.split('\n'));
-                const conf = code.split('\n');
+                const conf = code
+                  .split('\n')
+                  .filter((line) => line.trim() !== '');
                 let functionString = `(function(p) {
                   const info = {`;
 
@@ -142,11 +141,8 @@ export function App() {
                                         };
                                         return info;
                   })`;
-                console.log('xxx functionString', functionString);
 
                 const tmpInfo = eval(functionString)(jsonOutput);
-
-                console.log('xxx tmpInfo', tmpInfo);
 
                 const properties = {
                   ...tmpInfo,
@@ -155,9 +151,6 @@ export function App() {
                 setSelectedFeature({
                   properties,
                 });
-                // const result = eval('(' + code + ')');
-
-                // setPrimaryText(result(jsonOutput));
               }}
             >
               Anwenden
@@ -173,7 +166,6 @@ export function App() {
             </div>
             <div className="border-solid p-2 rounded-md overflow-auto border-black border-[1px] w-full h-full">
               Neues Design:
-              <h2>{primaryText}</h2>
             </div>
           </div>
         </div>
