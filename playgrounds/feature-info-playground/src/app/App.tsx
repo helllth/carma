@@ -19,9 +19,22 @@ import {
 import { findLayerByTitle } from './helper/featureInfo';
 
 export function App() {
-  const [code, setCode] = useState(`function getHeader(json) {
-  return "Maximale Wassertiefe";
-}`);
+  const [code, setCode] = useState(`// Erste Variante
+title:p.name
+header:'Adresse ('+p.adresse+')'
+
+// Zweite Variante
+const createInfoBoxInfo = (p) => {
+  const info = {
+    title: p.geographicidentifier,
+    subtitle: p.strasse,
+    headerColor: p.schrift,
+    header: mainlocationtype,
+    url: p.url,
+    tel: p.telefon,
+    };
+    return info;
+};`);
   const layers = useSelector(getLayers);
   const gmlOutput = useSelector(getGMLOutput);
   const jsonOutput = useSelector(getJSONOutput);
