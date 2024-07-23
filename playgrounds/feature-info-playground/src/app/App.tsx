@@ -44,7 +44,7 @@ function createInfoBoxInfo(p) {
     name: string;
     url: string;
   } | null>(null);
-  const [selectedFeature, setSelectedFeature] = useState(null);
+  const [selectedFeature, setSelectedFeature] = useState<{} | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -171,8 +171,12 @@ function createInfoBoxInfo(p) {
                     properties,
                   });
                   setErrorMessage('');
-                } catch (e) {
-                  setErrorMessage(e.message);
+                } catch (e: unknown) {
+                  if (typeof e === 'string') {
+                    setErrorMessage(e.toUpperCase());
+                  } else if (e instanceof Error) {
+                    setErrorMessage(e.message);
+                  }
                 }
 
                 try {
@@ -187,8 +191,12 @@ function createInfoBoxInfo(p) {
                     properties,
                   });
                   setErrorMessage('');
-                } catch (e) {
-                  setErrorMessage(e.message);
+                } catch (e: unknown) {
+                  if (typeof e === 'string') {
+                    setErrorMessage(e.toUpperCase());
+                  } else if (e instanceof Error) {
+                    setErrorMessage(e.message);
+                  }
                 }
               }}
             >
