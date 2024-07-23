@@ -173,6 +173,7 @@ const Map = ({ layers, vectorStyles }) => {
 
   return (
     <TopicMapComponent
+      key={JSON.stringify(vectorStyles)}
       maxZoom={22}
       gazData={gazData}
       locatorControl={true}

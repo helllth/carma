@@ -1,10 +1,11 @@
-import { StrictMode } from 'react';
+import { StrictMode, useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import {
   HashRouter as Router,
   Routes,
   Route,
   useSearchParams,
+  useNavigate,
 } from 'react-router-dom';
 
 import LeafletMap from './app/LeafletMap';
@@ -30,19 +31,60 @@ console.error = (message, ...args) => {
 };
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );
 
 const RootComponent = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const vectorStyles = searchParams.get('vectorStyles');
 
   //check if vectorStyles has more than one url (comma separated).
   //put them in an array and pass it to the App component
-  let vectorStylesArray: string[] = [];
+  let initialVectorStylesArray: string[] = [];
   if (vectorStyles) {
-    vectorStylesArray = vectorStyles.split(',');
+    initialVectorStylesArray = vectorStyles.split(',');
   }
+  const [vectorStylesArray, setVectorStylesArray] = useState<string[]>(
+    initialVectorStylesArray,
+  );
+
+  useEffect(() => {
+    const vectorStyles = searchParams.get('vectorStyles');
+    if (vectorStyles) {
+      setVectorStylesArray(vectorStyles.split(','));
+    } else {
+      setVectorStylesArray([]);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const handleDrop = (event: DragEvent) => {
+      event.preventDefault();
+      const url = event.dataTransfer?.getData('URL');
+      if (url) {
+        const newParams = new URLSearchParams(searchParams);
+        newParams.set('vectorStyles', url);
+        setSearchParams(newParams);
+        navigate({
+          search: newParams.toString(),
+        });
+      }
+    };
+
+    const handleDragOver = (event: DragEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener('drop', handleDrop);
+    window.addEventListener('dragover', handleDragOver);
+
+    return () => {
+      window.removeEventListener('drop', handleDrop);
+      window.removeEventListener('dragover', handleDragOver);
+    };
+  }, [searchParams, setSearchParams, navigate]);
+
   return (
     <div className="App">
       <Routes>
@@ -68,5 +110,5 @@ root.render(
     <Router>
       <RootComponent />
     </Router>
-  </StrictMode>
+  </StrictMode>,
 );
