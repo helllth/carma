@@ -20,21 +20,21 @@ import { findLayerByTitle } from './helper/featureInfo';
 
 export function App() {
   const [code, setCode] = useState(`// Erste Variante
-title:p.name
-header:'Adresse ('+p.adresse+')'
+title:'Adresse ('+p.adresse+')'
+subtitle: p.ort
+header:p.name
 
 // Zweite Variante
-const createInfoBoxInfo = (p) => {
+function createInfoBoxInfo(p) {
   const info = {
-    title: p.geographicidentifier,
-    subtitle: p.strasse,
-    headerColor: p.schrift,
-    header: mainlocationtype,
-    url: p.url,
+    title: p.adresse,
+    subtitle: p.ort,
+    header: p.name,
+    url: p.homepage,
     tel: p.telefon,
-    };
-    return info;
-};`);
+  };
+  return info;
+}`);
   const layers = useSelector(getLayers);
   const gmlOutput = useSelector(getGMLOutput);
   const jsonOutput = useSelector(getJSONOutput);
@@ -173,7 +173,22 @@ const createInfoBoxInfo = (p) => {
                   setErrorMessage('');
                 } catch (e) {
                   setErrorMessage(e.message);
-                  console.log('xxx error', e);
+                }
+
+                try {
+                  let codeFunction = eval('(' + code + ')');
+                  const tmpInfo = codeFunction(jsonOutput);
+
+                  const properties = {
+                    ...tmpInfo,
+                  };
+
+                  setSelectedFeature({
+                    properties,
+                  });
+                  setErrorMessage('');
+                } catch (e) {
+                  setErrorMessage(e.message);
                 }
               }}
             >
