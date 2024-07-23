@@ -1,76 +1,61 @@
 {
+  "extends": "./tsconfig.base.options.json",
   "compileOnSave": false,
+  "include": [
+    "${configDir}/src/**/*.js",
+    "${configDir}/src/**/*.ts",
+    "${configDir}/src/**/*.jsx",
+    "${configDir}/src/**/*.tsx",
+    "${configDir}/*.config.js",
+    "${configDir}/*.config.ts",
+    "${configDir}/*.config.cjs",
+    "${configDir}/*.config.mjs",
+    "${configDir}/*.config.mts",
+    "types/*.d.ts",
+  ],
+  "exclude": [".nx", "dist", "node_modules", "tmp"],
   "compilerOptions": {
-    "esModuleInterop": true,
     "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "Bundler",
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "importHelpers": true,
-    "target": "es2022",
-    "module": "esnext",
-    "lib": ["es2022", "dom"],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "jsx": "react",
-    "resolveJsonModule": true,
-    "noEmit": true,
+    "types": [
+      "vite/client",
+      "node",
+      "@nx/react/typings/cssmodule.d.ts",
+      "@nx/react/typings/image.d.ts",
+      "@nx/react/typings/styled-jsx.d.ts"
+    ],
     "paths": {
-      "@carma-apps/envirometrics": [
-        "libraries/appframeworks/envirometrics/src/index.ts"
-      ],
+      "#/*": ["./*"],
+      "@carma-apps/envirometrics": ["libraries/appframeworks/envirometrics/src/index.ts"],
       "@carma-apps/portals": ["libraries/appframeworks/portals/src/index.ts"],
-      "@carma-apps/topicmaps": [
-        "libraries/appframeworks/topicmaps/src/index.ts"
-      ],
+      "@carma-apps/topicmaps": ["libraries/appframeworks/topicmaps/src/index.ts"],
       "@carma-collab/wuppertal/baederkarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/baederkarte/index.ts"
       ],
-      "@carma-collab/wuppertal/commons": [
-        "libraries/collaboration/carma-wuppertal-collab/src/commons/index.ts"
+      "@carma-collab/wuppertal/commons": ["libraries/collaboration/carma-wuppertal-collab/src/commons/index.ts"],
+      "@carma-collab/wuppertal/e-auto-ladestation": [
+        "libraries/collaboration/carma-wuppertal-collab/src/e-auto-ladestation/index.ts"
       ],
       "@carma-collab/wuppertal/hochwassergefahrenkarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/hochwasssergefahrenkarte/index.jsx"
       ],
+      "@carma-collab/wuppertal/starkregengefahrenkarte": [
+        "libraries/collaboration/carma-wuppertal-collab/src/starkregengefahrenkarte/index.jsx"
+      ],
       "@carma-commons/debug": ["libraries/commons/debug/src/index.ts"],
-      "@carma-commons/document-viewer": [
-        "libraries/commons/document-viewer/src/index.ts"
-      ],
-      "@carma-mapping/cesium-engine": [
-        "libraries/mapping/engines/cesium/src/index.ts"
-      ],
-      "@carma-mapping/cesium-engine/shaders": [
-        "libraries/mapping/engines/cesium/src/lib/shaders.ts"
-      ],
-      "@carma-mapping/cesium-engine/types": [
-        "libraries/mapping/engines/cesium/src/index.d.ts"
-      ],
-      "@carma-mapping/cesium-engine/utils": [
-        "libraries/mapping/engines/cesium/src/lib/utils/index.ts"
-      ],
-      "@carma-mapping/cesium-widget-engine": [
-        "libraries/mapping/engines/cesium-widget/src/index.ts"
-      ],
-      "@carma-mapping/components": [
-        "libraries/mapping/carma-map-components/src/index.ts"
-      ],
-      "@carma-mapping/layers": [
-        "libraries/mapping/carma-map-layers/src/index.ts"
-      ],
-      "@carma-mapping/leaflet-engine": [
-        "libraries/mapping/engines/leaflet/src/index.ts"
-      ],
-      "@carma-mapping/map-controls-layout": [
-        "libraries/mapping/carma-map-control-layout/src/index.ts"
-      ],
-      "@carma-mapping/maplibre-engine": [
-        "libraries/mapping/engines/maplibre/src/index.ts"
-      ],
+      "@carma-commons/document-viewer": ["libraries/commons/document-viewer/src/index.ts"],
+      "@carma-mapping/cesium-engine": ["libraries/mapping/engines/cesium/src/index.ts"],
+      "@carma-mapping/cesium-engine/shaders": ["libraries/mapping/engines/cesium/src/lib/shaders.ts"],
+      "@carma-mapping/cesium-engine/types": ["libraries/mapping/engines/cesium/src/index.d.ts"],
+      "@carma-mapping/cesium-engine/utils": ["libraries/mapping/engines/cesium/src/lib/utils/index.ts"],
+      "@carma-mapping/cesium-widget-engine": ["libraries/mapping/engines/cesium-widget/src/index.ts"],
+      "@carma-mapping/components": ["libraries/mapping/carma-map-components/src/index.ts"],
+      "@carma-mapping/layers": ["libraries/mapping/carma-map-layers/src/index.ts"],
+      "@carma-mapping/leaflet-engine": ["libraries/mapping/engines/leaflet/src/index.ts"],
+      "@carma-mapping/map-controls-layout": ["libraries/mapping/carma-map-control-layout/src/index.ts"],
+      "@carma-mapping/maplibre-engine": ["libraries/mapping/engines/maplibre/src/index.ts"],
       "@carma-mapping/utils": ["libraries/mapping/carma-map-utils/src/index.ts"]
-    }
-  },
-  "exclude": ["node_modules", "tmp"]
+    },
+    "skipLibCheck": true
+  }
 }

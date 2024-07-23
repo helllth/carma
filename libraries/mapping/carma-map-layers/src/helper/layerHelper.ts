@@ -1,10 +1,12 @@
-import { Layer, WMSCapabilitiesJSON } from 'wms-capabilities';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { WMSCapabilitiesJSON } from 'wms-capabilities';
 import { serviceConfig } from './config';
-import { Item, XMLLayer } from './types';
+import type { Item, XMLLayer, Layer } from './types';
 
 export const flattenLayer = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   layer: any,
-  parentTitles: any = [],
+  parentTitles = [],
   url: string
 ) => {
   const layerTitle = layer.Title;
@@ -43,6 +45,23 @@ export const flattenLayer = (
   return flattenedLayer;
 };
 
+export const extractVectorStyles = (keywords: string[]) => {
+  let vectorObject: any = null;
+  keywords.forEach((keyword) => {
+    if (keyword.startsWith('carmaConf://')) {
+      const objectString = keyword.slice(12);
+      let colonIndex = objectString.indexOf(':');
+      const property = objectString.split(':')[0];
+      let value =
+        colonIndex !== -1 ? objectString.substring(colonIndex + 1).trim() : '';
+      const object = { [property]: value };
+      vectorObject = object;
+    }
+  });
+
+  return vectorObject;
+};
+
 export const createBaseConfig = (layers) => {
   const result = {};
   layers.forEach((item) => {
@@ -62,7 +81,6 @@ const getLeafLayers = (layer, leafLayers = []) => {
     layer.Layer.forEach((subLayer) => getLeafLayers(subLayer, leafLayers));
   } else {
     // If no sub-layers, it's a leaf layer, add it to the list
-    // @ts-ignore
     leafLayers.push(layer);
   }
   return leafLayers;
@@ -84,18 +102,23 @@ export const findDifferences = (array1, array2) => {
 };
 
 const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
-  let item: Item = {
-    title: layer.Title,
-    description: layer.Abstract,
-    tags: layer.tags,
-    id: serviceName + ':' + layer.Name,
-    name: layer.Name,
-    type: 'layer',
-    layerType: 'wmts',
-    props: { ...layer },
-  };
+  if (layer) {
+    let item: Item = {
+      title: layer.Title,
+      description: layer.Abstract,
+      tags: layer.tags,
+      keywords: layer.KeywordList,
+      id: serviceName + ':' + layer.Name,
+      name: layer.Name,
+      type: 'layer',
+      layerType: 'wmts',
+      props: { ...layer },
+    };
 
-  return item;
+    return item;
+  } else {
+    return null;
+  }
 };
 
 export const getLayerStructure = ({
@@ -103,11 +126,11 @@ export const getLayerStructure = ({
   wms,
   serviceName,
 }: {
-  config: any;
+  config;
   wms?: WMSCapabilitiesJSON;
   serviceName: string;
 }) => {
-  const structure: any[] = [];
+  const structure: unknown[] = [];
   const services = serviceConfig;
   for (let category in config) {
     const categoryConfig = config[category];
@@ -126,7 +149,7 @@ export const getLayerStructure = ({
         service = services[categoryConfig.serviceName];
       }
       if (service.name === serviceName) {
-        let foundLayer: Item;
+        let foundLayer: Item | null;
         if (wms) {
           const wmsLayer = findLayerAndAddTags(
             wms.Capability.Layer,
@@ -139,7 +162,7 @@ export const getLayerStructure = ({
         }
         if (foundLayer) {
           if (wms) {
-            // @ts-ignore
+            // @ts-expect-error fix typing
             foundLayer.props['url'] =
               wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
           }
@@ -147,7 +170,9 @@ export const getLayerStructure = ({
           tags[0] = categoryObject.Title;
           foundLayer = { ...foundLayer, ...layer, tags, service };
 
-          layers.push(foundLayer);
+          if (foundLayer) {
+            layers.push(foundLayer);
+          }
         }
       }
     }
@@ -165,20 +190,23 @@ export const getLayerStructure = ({
           []
         );
         let foundLayer = wmsLayerToGenericItem(wmsLayer, serviceName);
-        // @ts-ignore
-        foundLayer.props['url'] =
-          wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
+        if (foundLayer) {
+          foundLayer.props['url'] =
+            wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
 
-        let tags = foundLayer.tags;
-        tags[0] = categoryObject.Title;
-        foundLayer = {
-          ...foundLayer,
-          ...layer,
-          tags,
-          service: services[categoryConfig.serviceName],
-        };
+          let tags = foundLayer.tags;
+          tags[0] = categoryObject.Title;
+          foundLayer = {
+            ...foundLayer,
+            ...layer,
+            tags,
+            service: services[categoryConfig.serviceName],
+          };
 
-        layers.push(foundLayer);
+          if (foundLayer) {
+            layers.push(foundLayer);
+          }
+        }
       }
     }
 

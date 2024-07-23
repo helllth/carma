@@ -1,3 +1,19 @@
+export type LayerConfig = {
+  name: string;
+  url?: string;
+  type?: 'topicmaps';
+};
+
+export type LayerProps = {
+  url: string;
+  name: string;
+  legend?: {
+    format: string;
+    OnlineResource: string;
+    size: [number, number];
+  }[];
+};
+
 export type Layer = {
   title: string;
   // url: string;
@@ -12,15 +28,7 @@ export type Layer = {
 } & (
   | {
       layerType: 'wmts' | 'wmts-nt';
-      props: {
-        url: string;
-        name: string;
-        legend?: {
-          format: string;
-          OnlineResource: string;
-          size: [number, number];
-        }[];
-      };
+      props: LayerProps;
     }
   | vectorProps
 );
@@ -66,6 +74,7 @@ export type Item = {
   description: string;
   tags: string[];
   thumbnail?: string;
+  keywords?: string[];
   icon?: string;
   alternativeIcon?: string;
   name: string;
@@ -81,6 +90,7 @@ export type XMLLayer = {
     extent: number[];
     res: number | undefined[];
   }[];
+  KeywordList?: string[];
   Dimension?: any;
   EX_GeographicBoundingBox?: any;
   LatLonBoundingBox: number[];

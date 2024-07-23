@@ -11,7 +11,7 @@ import CrossTabCommunicationContextProvider from 'react-cismap/contexts/CrossTab
 import config from './config';
 import { getApplicationVersion } from './version';
 import NotesDisplay from './NotesDisplay';
-import { getCollabedHelpComponentConfig } from './collab-texts';
+import { getCollabedHelpComponentConfig } from '@carma-collab/wuppertal/starkregengefahrenkarte';
 
 function App() {
   const email = 'starkregen@stadt.wuppertal.de';

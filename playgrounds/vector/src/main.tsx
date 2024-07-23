@@ -7,7 +7,7 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 
-import App from './app/App';
+import LeafletMap from './app/LeafletMap';
 import LibreMap from './app/LibreMap';
 
 const originalWarn = console.warn.bind(console);
@@ -48,11 +48,11 @@ const RootComponent = () => {
       <Routes>
         <Route
           path="/"
-          element={<App vectorStyles={vectorStylesArray} />}
+          element={<LeafletMap vectorStyles={vectorStylesArray} />}
         ></Route>
         <Route
           path="/leaflet"
-          element={<App vectorStyles={vectorStylesArray} />}
+          element={<LeafletMap vectorStyles={vectorStylesArray} />}
         ></Route>
         <Route
           path="/maplibre"

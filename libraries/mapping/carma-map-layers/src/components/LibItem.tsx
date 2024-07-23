@@ -4,8 +4,10 @@ import {
   faCircleMinus,
   faCirclePlus,
   faExternalLinkAlt,
+  faFireFlameCurved,
   faMinus,
   faPlus,
+  faRocket,
   faSquareUpRight,
   faStar,
   faTrash,
@@ -14,14 +16,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Modal, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { InfoOutlined } from '@ant-design/icons';
-import { Item, Layer } from '../helper/types';
+import type { Item, Layer } from '../helper/types';
+import { extractVectorStyles } from '../helper/layerHelper';
 
 interface LayerItemProps {
   setAdditionalLayers: any;
   layer: Item;
   thumbnails: any;
   setThumbnail: any;
-  activeLayers: Layer[];
+  activeLayers: Item[];
 }
 
 const LibItem = ({
@@ -37,8 +40,10 @@ const LibItem = ({
   const [thumbUrl, setThumbUrl] = useState('');
   const [collectionImages, setCollectionImages] = useState<string[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [forceWMS, setForceWMS] = useState(false);
   const title = layer.title;
   const description = layer.description;
+  const keywords = layer.keywords;
   const tags =
     layer.type === 'collection'
       ? layer.layers.map((l) => l.title)
@@ -47,7 +52,7 @@ const LibItem = ({
       : layer?.tags?.slice(1);
 
   const name = layer.name;
-  // @ts-ignore
+  // @ts-expect-error tbd
   const service = layer.service;
 
   const box = layer.pictureBoundingBox || [];
@@ -81,7 +86,7 @@ const LibItem = ({
   const hightlightTextIndexes = undefined;
 
   const handleLayerClick = () => {
-    setAdditionalLayers(layer);
+    setAdditionalLayers(layer, false, forceWMS);
   };
 
   useEffect(() => {
@@ -196,6 +201,27 @@ const LibItem = ({
       }
     }
   }, [name, layer.id]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey) {
+        setForceWMS(true);
+      }
+    };
+
+    const onKeyUp = (e: KeyboardEvent) => {
+      setForceWMS(false);
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keyup', onKeyUp);
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+
+      document.removeEventListener('keyup', onKeyUp);
+    };
+  }, []);
 
   return (
     <div
@@ -362,28 +388,36 @@ const LibItem = ({
         )}
       </div>
       <div className="flex flex-col gap-2 p-4">
-        <h3 className="text-lg truncate">
-          {hightlightTextIndexes ? (
-            <>
-              {title.substring(0, hightlightTextIndexes[0])}
-              <span
-                style={{
-                  backgroundColor: 'rgba(240, 215, 139, 0.8)',
-                  padding: '0 0.08em',
-                }}
-              >
-                {title.substring(
-                  hightlightTextIndexes[0],
-                  hightlightTextIndexes[1] + 1
-                )}
-              </span>
+        <div className="w-full flex items-center gap-2">
+          <h3 className="text-lg truncate w-full mb-0">
+            {hightlightTextIndexes ? (
+              <>
+                {title.substring(0, hightlightTextIndexes[0])}
+                <span
+                  style={{
+                    backgroundColor: 'rgba(240, 215, 139, 0.8)',
+                    padding: '0 0.08em',
+                  }}
+                >
+                  {title.substring(
+                    hightlightTextIndexes[0],
+                    hightlightTextIndexes[1] + 1
+                  )}
+                </span>
 
-              {title.substring(hightlightTextIndexes[1] + 1)}
-            </>
-          ) : (
-            title
+                {title.substring(hightlightTextIndexes[1] + 1)}
+              </>
+            ) : (
+              title
+            )}
+          </h3>
+          {keywords && extractVectorStyles(keywords) && !forceWMS && (
+            <FontAwesomeIcon
+              icon={faRocket}
+              className="text-xl cursor-pointer text-gray-700 z-50"
+            />
           )}
-        </h3>
+        </div>
         <p
           className="text-base line-clamp-3 h-[66px]"
           style={{ color: 'rgba(0,0,0,0.7)' }}

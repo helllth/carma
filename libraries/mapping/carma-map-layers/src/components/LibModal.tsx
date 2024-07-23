@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDebounce } from '@uidotdev/usehooks';
@@ -19,11 +20,11 @@ import LayerTabs from './LayerTabs';
 import LibItem from './LibItem';
 import './input.css';
 import './modal.css';
-import { Item, Layer, vectorProps, wmsProps } from '../helper/types';
+import type { Item, Layer } from '../helper/types';
 import { isEqual } from 'lodash';
 const { Search } = Input;
 
-// @ts-ignore
+// @ts-expect-error tbd
 const parser = new WMSCapabilities();
 
 export interface LibModalProps {
@@ -32,7 +33,7 @@ export interface LibModalProps {
   setAdditionalLayers: any;
   setThumbnail: any;
   thumbnails: any;
-  activeLayers: Layer[];
+  activeLayers: any[];
   customCategories?: any[];
 }
 
@@ -112,6 +113,7 @@ const LibModal = ({
     keys: [
       { name: 'title', weight: 2 },
       { name: 'description', weight: 1 },
+      { name: 'keywords', weight: 1 },
     ],
     shouldSort: false,
     includeMatches: true,
@@ -171,7 +173,6 @@ const LibModal = ({
                 const mergedLayer = mergeStructures(tmpLayer, newLayers);
 
                 newLayers = mergedLayer;
-                // @ts-ignore
                 setLayers([...customCategories, ...newLayers]);
                 setAllLayers([...customCategories, ...newLayers]);
               } else {
@@ -187,7 +188,6 @@ const LibModal = ({
           });
           const mergedLayer = mergeStructures(tmpLayer, newLayers);
           newLayers = mergedLayer;
-          // @ts-ignore
           setLayers([...customCategories, ...newLayers]);
           setAllLayers([...customCategories, ...newLayers]);
         } else {
@@ -214,7 +214,6 @@ const LibModal = ({
 
       let updatedLayers = layers.map((category) => {
         const title = category.Title;
-        // @ts-ignore
         customCategories.forEach((customCategory) => {
           if (customCategory.Title === title) {
             category.layers = customCategory.layers;

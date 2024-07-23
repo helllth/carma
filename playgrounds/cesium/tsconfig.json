@@ -1,23 +1,5 @@
 {
-  "compilerOptions": {
-    "jsx": "react-jsxdev",
-    "target": "es2022",
-    "moduleDetection": "force",
-
-    "moduleResolution": "bundler",
-    "strict": true,
-    "noImplicitAny": false,
-    //"types": ["vite/client", "vitest"]
-  },
+  "extends": ["../../tsconfig.legacy.base.json"],
   "files": [],
-  "include": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ],
-  "extends": "../../tsconfig.base.json"
+  "references": []
 }

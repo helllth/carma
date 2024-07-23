@@ -1,9 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Alert } from 'react-bootstrap';
 import Navbar from './Navbar';
 import Waiting from './Waiting';
 import Map from './Map';
 import ContactPanel from './ContactPanel';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getKassenzeichen } from '../../store/slices/kassenzeichen';
 import KassenzeichenPanel from './KassenzeichenPanel';
 import KassenzeichenFlaechenChartPanel from './KassenzeichenFlaechenChartPanel';
@@ -14,7 +16,11 @@ import {
   kassenzeichenFlaechenSorter,
 } from '../../utils/kassenzeichenHelper';
 import FlaechenPanel from './FlaechenPanel';
-import { getHeight, getUiState } from '../../store/slices/ui';
+import {
+  getHeight,
+  getUiState,
+  toggleInfoElements,
+} from '../../store/slices/ui';
 import { getMapping } from '../../store/slices/mapping';
 import HelpAndSettings from '../components/helpandsettings/Menu00MainComponent';
 import ChangeRequests from '../components/changerequests/CR00MainComponent';
@@ -28,6 +34,7 @@ const KassenzeichenViewer = () => {
   const mapping = useSelector(getMapping);
   const stac = useSelector(getStac);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   if (!stac) {
     navigate('/');
@@ -49,7 +56,7 @@ const KassenzeichenViewer = () => {
     );
   };
 
-  let selectedFlaeche: any = null;
+  let selectedFlaeche = null;
   if (mapping.selectedIndex !== undefined && mapping.selectedIndex !== -1) {
     selectedFlaeche = mapping.featureCollection[mapping.selectedIndex];
   }
@@ -83,7 +90,7 @@ const KassenzeichenViewer = () => {
           variant="danger"
           dismissible
           onClose={() => {
-            // this.props.uiStateActions.showChangeRequestsMenu(true);
+            dispatch(toggleInfoElements({}));
           }}
         >
           <h5>
@@ -139,7 +146,7 @@ const KassenzeichenViewer = () => {
   let kassenzeichenPanel = <div />;
   let kassenzeichenHorizontalFlaechenChartsPanel;
   let kassenzeichenVerticalFlaechenChartsPanel;
-  let flComps: any = [];
+  let flComps = [];
 
   flComps = flaechen.map(function (flaeche) {
     // const sel = that.isFlaecheSelected(flaeche);
@@ -192,7 +199,6 @@ const KassenzeichenViewer = () => {
   verdisMapWithAdditionalComponents = (
     <div>
       <div
-        // @ts-ignore
         style={Object.assign({}, detailsStyle, {
           height: mapHeight + 'px',
           width: verticalPanelWidth + 'px',
@@ -228,7 +234,7 @@ const KassenzeichenViewer = () => {
         <Alert
           variant="warning"
           onClose={() => {
-            // this.props.uiStateActions.toggleInfoElements();
+            dispatch(toggleInfoElements({}));
           }}
           dismissible
         >

@@ -1,5 +1,4 @@
 import WMSCapabilities from 'wms-capabilities';
-import { WMSCapabilitiesJSON } from 'wms-capabilities';
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -8,7 +7,7 @@ export const getAllLayers = async () => {
   let categories: any[] = [];
   for (const key in serviceConfig) {
     await fetch(
-      `${serviceConfig[key].url}?service=WMS&request=GetCapabilities&version=1.1.1`
+      `${serviceConfig[key].url}?service=WMS&request=GetCapabilities&version=1.1.1`,
     )
       .then((response) => {
         return response.text();
@@ -19,10 +18,10 @@ export const getAllLayers = async () => {
           const flattenedLayer = flattenLayer(
             result.Capability.Layer,
             [],
-            serviceConfig[key].url
+            serviceConfig[key].url,
           );
           const queryableLayers = flattenedLayer.layers.filter(
-            (layer) => layer.queryable
+            (layer) => layer.queryable,
           );
           const category = {
             title: serviceConfig[key].name,
@@ -41,7 +40,7 @@ export const getAllLayers = async () => {
 export const flattenLayer = (
   layer: any,
   parentTitles: any = [],
-  url: string
+  url: string,
 ) => {
   const layerTitle = layer.Title;
   const layerTags = [...parentTitles, layerTitle];

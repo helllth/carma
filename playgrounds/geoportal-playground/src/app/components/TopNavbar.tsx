@@ -1,5 +1,4 @@
 import { Button, Popover, Radio, Tooltip, message } from 'antd';
-// @ts-ignore
 import {
   faB,
   faBars,
@@ -15,7 +14,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
-// @ts-ignore
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
 import { LayerLib, Item, Layer } from '@carma-mapping/layers';
@@ -43,7 +41,6 @@ import { layerMap } from '../helper/layer';
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // @ts-ignore
   const { setAppMenuVisible } = useContext(UIDispatchContext);
   const backgroundLayer = useSelector(getBackgroundLayer);
   const selectedMapLayer = useSelector(getSelectedMapLayer);
@@ -56,7 +53,33 @@ const TopNavbar = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const updateLayers = (layer: Item, deleteItem: boolean = false) => {
+  const extractVectorStyles = (keywords: string[]) => {
+    let vectorObject = null;
+
+    if (keywords) {
+      keywords.forEach((keyword) => {
+        if (keyword.startsWith('carmaConf://')) {
+          const objectString = keyword.slice(12);
+          let colonIndex = objectString.indexOf(':');
+          const property = objectString.split(':')[0];
+          let value =
+            colonIndex !== -1
+              ? objectString.substring(colonIndex + 1).trim()
+              : '';
+          const object = { [property]: value };
+          vectorObject = object;
+        }
+      });
+    }
+
+    return vectorObject;
+  };
+
+  const updateLayers = (
+    layer: Item,
+    deleteItem: boolean = false,
+    forceWMS: boolean = false
+  ) => {
     let newLayer: Layer;
 
     if (layer.type === 'collection') {
@@ -80,42 +103,60 @@ const TopNavbar = () => {
     }
 
     if (layer.type === 'layer') {
-      switch (layer.layerType) {
-        case 'wmts': {
-          newLayer = {
-            title: layer.title,
-            id: layer.id,
-            layerType: 'wmts',
-            opacity: 0.7,
-            description: layer.description,
-            visible: true,
-            props: {
-              url: layer.props.url,
-              legend: layer.props.Style[0].LegendURL,
-              name: layer.props.Name,
-            },
-            other: {
-              ...layer,
-            },
-          };
-          break;
-        }
-        case 'vector': {
-          newLayer = {
-            title: layer.title,
-            id: layer.id,
-            layerType: 'vector',
-            opacity: 0.7,
-            description: layer.description,
-            visible: true,
-            props: {
-              style: layer.props.style,
-            },
-            other: {
-              ...layer,
-            },
-          };
-          break;
+      const vectorObject = extractVectorStyles(layer.keywords);
+      if (vectorObject && !forceWMS) {
+        newLayer = {
+          title: layer.title,
+          id: layer.id,
+          layerType: 'vector',
+          opacity: 0.7,
+          description: layer.description,
+          visible: true,
+          props: {
+            style: vectorObject.vectorStyle,
+          },
+          other: {
+            ...layer,
+          },
+        };
+      } else {
+        switch (layer.layerType) {
+          case 'wmts': {
+            newLayer = {
+              title: layer.title,
+              id: layer.id,
+              layerType: 'wmts',
+              opacity: 0.7,
+              description: layer.description,
+              visible: true,
+              props: {
+                url: layer.props.url,
+                legend: layer.props.Style[0].LegendURL,
+                name: layer.props.Name,
+              },
+              other: {
+                ...layer,
+              },
+            };
+            break;
+          }
+          case 'vector': {
+            newLayer = {
+              title: layer.title,
+              id: layer.id,
+              layerType: 'vector',
+              opacity: 0.7,
+              description: layer.description,
+              visible: true,
+              props: {
+                style: layer.props.style,
+              },
+              other: {
+                ...layer,
+              },
+            };
+            break;
+          }
         }
       }
     }
