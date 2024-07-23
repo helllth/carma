@@ -1,6 +1,7 @@
-import { AutoComplete } from 'antd';
+import { AutoComplete, Button } from 'antd';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
+// import 'prismjs/components/prism-xml-doc';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css';
 import { useEffect, useState } from 'react';
@@ -18,7 +19,9 @@ import {
 import { findLayerByTitle } from './helper/featureInfo';
 
 export function App() {
-  const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
+  const [code, setCode] = useState(`function getHeader(json) {
+  return "Maximale Wassertiefe";
+}`);
   const layers = useSelector(getLayers);
   const gmlOutput = useSelector(getGMLOutput);
   const jsonOutput = useSelector(getJSONOutput);
@@ -28,6 +31,9 @@ export function App() {
     name: string;
     url: string;
   } | null>(null);
+  const [header, setHeader] = useState('');
+  const [primaryText, setPrimaryText] = useState('');
+  const [selectedFeature, setSelectedFeature] = useState(null);
 
   useEffect(() => {
     const requestLayers = async () => {
@@ -90,7 +96,7 @@ export function App() {
         style={{ maxHeight: window.innerHeight - 100 }}
       >
         <div className="h-full rounded-md w-1/3">
-          <Map layer={selectedLayer} />
+          <Map layer={selectedLayer} selectedFeature={selectedFeature} />
         </div>
         <div className="flex flex-col gap-2 items-center justify-center w-2/3 h-full">
           <div className="max-w-full w-full h-1/3 flex gap-2">
@@ -108,7 +114,7 @@ export function App() {
             </div>
           </div>
 
-          <div className="rounded-md w-full h-1/3 flex gap-2">
+          <div className="rounded-md border-solid border-black border-[1px] p-2 w-full h-1/3 flex flex-col gap-2">
             <Editor
               value={code}
               onValueChange={(code) => setCode(code)}
@@ -118,10 +124,44 @@ export function App() {
                 fontFamily: '"Fira code", "Fira Mono", monospace',
                 fontSize: 12,
                 width: '100%',
-                border: '1px solid black',
-                borderRadius: '6px',
+                height: '100%',
               }}
             />
+            <Button
+              onClick={() => {
+                console.log('xxx', code.split('\n'));
+                const conf = code.split('\n');
+                let functionString = `(function(p) {
+                  const info = {`;
+
+                conf.forEach((rule) => {
+                  functionString += `${rule.trim()},\n`;
+                });
+
+                functionString += `
+                                        };
+                                        return info;
+                  })`;
+                console.log('xxx functionString', functionString);
+
+                const tmpInfo = eval(functionString)(jsonOutput);
+
+                console.log('xxx tmpInfo', tmpInfo);
+
+                const properties = {
+                  ...tmpInfo,
+                };
+
+                setSelectedFeature({
+                  properties,
+                });
+                // const result = eval('(' + code + ')');
+
+                // setPrimaryText(result(jsonOutput));
+              }}
+            >
+              Anwenden
+            </Button>
           </div>
 
           <div className="rounded-md w-full h-1/3 flex gap-2">
@@ -131,8 +171,9 @@ export function App() {
                 <div dangerouslySetInnerHTML={{ __html: oldVariant }} />
               )}
             </div>
-            <div className="border-solid rounded-md border-black border-[1px] w-full h-full">
+            <div className="border-solid p-2 rounded-md overflow-auto border-black border-[1px] w-full h-full">
               Neues Design:
+              <h2>{primaryText}</h2>
             </div>
           </div>
         </div>
