@@ -45,6 +45,7 @@ const createInfoBoxInfo = (p) => {
     url: string;
   } | null>(null);
   const [selectedFeature, setSelectedFeature] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const requestLayers = async () => {
@@ -125,7 +126,11 @@ const createInfoBoxInfo = (p) => {
             </div>
           </div>
 
-          <div className="rounded-md border-solid border-black border-[1px] p-2 w-full h-1/3 flex flex-col gap-2">
+          <div
+            className={`rounded-md border-solid ${
+              errorMessage ? 'border-red-500' : 'border-black'
+            } border-[1px] p-2 w-full h-1/3 flex flex-col gap-2`}
+          >
             <Editor
               value={code}
               onValueChange={(code) => setCode(code)}
@@ -140,30 +145,36 @@ const createInfoBoxInfo = (p) => {
             />
             <Button
               onClick={() => {
-                const conf = code
-                  .split('\n')
-                  .filter((line) => line.trim() !== '');
-                let functionString = `(function(p) {
-                  const info = {`;
+                try {
+                  const conf = code
+                    .split('\n')
+                    .filter((line) => line.trim() !== '');
+                  let functionString = `(function(p) {
+                    const info = {`;
 
-                conf.forEach((rule) => {
-                  functionString += `${rule.trim()},\n`;
-                });
+                  conf.forEach((rule) => {
+                    functionString += `${rule.trim()},\n`;
+                  });
 
-                functionString += `
-                                        };
-                                        return info;
-                  })`;
+                  functionString += `
+                                          };
+                                          return info;
+                    })`;
 
-                const tmpInfo = eval(functionString)(jsonOutput);
+                  const tmpInfo = eval(functionString)(jsonOutput);
 
-                const properties = {
-                  ...tmpInfo,
-                };
+                  const properties = {
+                    ...tmpInfo,
+                  };
 
-                setSelectedFeature({
-                  properties,
-                });
+                  setSelectedFeature({
+                    properties,
+                  });
+                  setErrorMessage('');
+                } catch (e) {
+                  setErrorMessage(e.message);
+                  console.log('xxx error', e);
+                }
               }}
             >
               Anwenden
@@ -178,7 +189,8 @@ const createInfoBoxInfo = (p) => {
               )}
             </div>
             <div className="border-solid p-2 rounded-md overflow-auto border-black border-[1px] w-full h-full">
-              Neues Design:
+              Error Code:
+              {errorMessage && <div>{errorMessage}</div>}
             </div>
           </div>
         </div>
