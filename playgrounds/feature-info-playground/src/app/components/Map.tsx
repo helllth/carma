@@ -5,7 +5,6 @@ import proj4 from 'proj4';
 import { TransitiveReactLeaflet } from 'react-cismap';
 import CismapLayer from 'react-cismap/CismapLayer';
 import { proj4crs25832def } from 'react-cismap/constants/gis';
-import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
 import { useDispatch } from 'react-redux';
 import { getLeafNodes } from '../helper/featureInfo';
@@ -14,10 +13,11 @@ import {
   setJSONOutput,
   setOldVariant,
 } from '../store/slices/mapping';
+import InfoBox from 'react-cismap/topicmaps/InfoBox';
 
 const { Marker } = TransitiveReactLeaflet;
 
-const Map = ({ layer }) => {
+const Map = ({ layer, selectedFeature }) => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const [pos, setPos] = useState<[number, number] | null>(null);
@@ -49,6 +49,23 @@ const Map = ({ layer }) => {
         leafletMapProps={{ editable: true }}
         minZoom={5}
         gazetteerSearchControl={false}
+        infoBox={
+          selectedFeature ? (
+            <InfoBox
+              pixelwidth={350}
+              currentFeature={selectedFeature}
+              hideNavigator={true}
+              header="kjshd"
+              headerColor="#ff0000"
+              {...selectedFeature?.properties}
+              noCurrentFeatureTitle="nix da"
+              noCurrentFeatureContent="nix da"
+              // links={links}
+            />
+          ) : (
+            <></>
+          )
+        }
         onclick={(e) => {
           // @ts-ignore
           const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
@@ -124,21 +141,6 @@ const Map = ({ layer }) => {
           />
         )}
         {pos && <Marker position={pos}></Marker>}
-        <GenericInfoBoxFromFeature
-          pixelwidth={350}
-          config={{
-            displaySecondaryInfoAction: false,
-            city: 'Wuppertal',
-            navigator: {
-              noun: {
-                singular: 'Feature',
-                plural: 'Features',
-              },
-            },
-            noCurrentFeatureTitle: 'Nichts gefunden',
-            noCurrentFeatureContent: <span>Bitte klicken</span>,
-          }}
-        />
       </TopicMapComponent>
     </div>
   );
