@@ -48,6 +48,7 @@ function createInfoBoxInfo(p) {
   } | null>(null);
   const [selectedFeature, setSelectedFeature] = useState<{} | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [value, setValue] = useState('');
 
   useEffect(() => {
     const requestLayers = async () => {
@@ -85,6 +86,10 @@ function createInfoBoxInfo(p) {
     >
       <div className="w-full rounded-md h-20 flex items-center gap-2">
         <AutoComplete
+          value={value}
+          onChange={(e) => {
+            setValue(e);
+          }}
           onSelect={(value) => {
             const layer = findLayerByTitle(layers, value);
             const item = {
