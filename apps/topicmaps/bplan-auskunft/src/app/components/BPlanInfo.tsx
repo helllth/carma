@@ -12,6 +12,7 @@ import L from 'leaflet';
 //import type {TopicMapContext} from 'react-cismap';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
+import { InfoBoxText } from '@carma-collab/wuppertal/bplan-auskunft';
 
 const BPlanInfo = ({
   pixelwidth,
@@ -21,7 +22,7 @@ const BPlanInfo = ({
   setFeatures,
 }) => {
   const { setAppMenuVisible } = useContext(UIDispatchContext);
-  const { routedMapRef } = useContext(TopicMapContext) 
+  const { routedMapRef } = useContext(TopicMapContext);
   let headertext;
   let headerColor;
 
@@ -81,36 +82,7 @@ const BPlanInfo = ({
         header={tmpVis}
         isCollapsible={false}
         collapsibleDiv={<></>}
-        alwaysVisibleDiv={
-          <>
-            <ul>
-              <li>
-                <b>einen B-Plan laden:</b> Doppelklick auf Plan in
-                Hintergrundkarte
-              </li>
-              <li>
-                <b>alle B-Pl&auml;ne im Kartenausschnitt laden:</b>{' '}
-                <Icon name="search" />
-              </li>
-              <li>
-                <b>bekannten B-Plan laden:</b> Nummer als Suchbegriff eingeben,
-                Auswahl aus Vorschlagsliste
-              </li>
-              <li>
-                <b>Suche nach B-Pl&auml;nen:</b> Adresse oder POI als
-                Suchbegriff eingeben, Auswahl aus Vorschlagsliste
-              </li>
-            </ul>
-            <a
-              onClick={() => {
-                setAppMenuVisible(true);
-              }}
-              style={{ cursor: 'pointer', color: '#0078A8' }}
-            >
-              Kompaktanleitung
-            </a>
-          </>
-        }
+        alwaysVisibleDiv={<InfoBoxText setAppMenuVisible={setAppMenuVisible} />}
       ></ResponsiveInfoBox>
     );
   }
