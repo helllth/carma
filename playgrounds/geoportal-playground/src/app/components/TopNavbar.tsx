@@ -14,7 +14,7 @@ import {
   faBookOpenReader,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
 import { LayerLib, Item, Layer } from '@carma-mapping/layers';
@@ -59,7 +59,8 @@ const TopNavbar = () => {
   const savedLayerConfigs = useSelector(getSavedLayerConfigs);
 
   const [messageApi, contextHolder] = message.useMessage();
-  const menuTour = useOverlayHelper('Menüleiste');
+  const menuTourRef = useOverlayHelper('Menüleiste');
+  const mode = useSelector(getMode);
 
   const extractVectorStyles = (keywords: string[]) => {
     let vectorObject = null;
@@ -307,7 +308,7 @@ const TopNavbar = () => {
         </Tooltip>
       </div>
       <div className="flex items-center gap-6">
-        <div className="lg:flex hidden" ref={hintagroundTourRef}>
+        <div className="lg:flex hidden">
           <Radio.Group
             value={backgroundLayer.id}
             onChange={(e) => {
