@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import 'leaflet/dist/leaflet.css';
 import proj4 from 'proj4';
@@ -14,6 +14,8 @@ import {
   setOldVariant,
 } from '../store/slices/mapping';
 import InfoBox from 'react-cismap/topicmaps/InfoBox';
+import { getActionLinksForFeature } from 'react-cismap/tools/uiHelper';
+import { TopicMapDispatchContext } from 'react-cismap/contexts/TopicMapContextProvider';
 
 const { Marker } = TransitiveReactLeaflet;
 
@@ -23,6 +25,7 @@ const Map = ({ layer, selectedFeature }) => {
   const [pos, setPos] = useState<[number, number] | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
+  const { zoomToFeature } = useContext(TopicMapDispatchContext);
 
   useEffect(() => {
     const handleResize = () => {
@@ -38,6 +41,28 @@ const Map = ({ layer, selectedFeature }) => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  let links = [];
+  if (selectedFeature) {
+    links = getActionLinksForFeature(selectedFeature, {
+      displayZoomToFeature: true,
+      zoomToFeature: () => {
+        if (selectedFeature) {
+          const f = JSON.stringify(selectedFeature, null, 2);
+          const pf = JSON.parse(f);
+          pf.crs = {
+            type: 'name',
+            properties: {
+              name: 'urn:ogc:def:crs:EPSG::4326',
+            },
+          };
+          console.log('xxx zoomToFeature', pf);
+
+          zoomToFeature(pf);
+        }
+      },
+    });
+  }
 
   return (
     <div className="h-full w-full" ref={wrapperRef}>
@@ -60,7 +85,7 @@ const Map = ({ layer, selectedFeature }) => {
               {...selectedFeature?.properties}
               noCurrentFeatureTitle="nix da"
               noCurrentFeatureContent="nix da"
-              // links={links}
+              links={links}
             />
           ) : (
             <></>
@@ -109,12 +134,14 @@ const Map = ({ layer, selectedFeature }) => {
                   xmlDoc.getElementsByTagName('gml:featureMember')[0];
                 dispatch(
                   setGMLOutput(
-                    content?.outerHTML ? content.outerHTML : 'Nichts gefunden'
-                  )
+                    content?.outerHTML ? content.outerHTML : 'Nichts gefunden',
+                  ),
                 );
 
                 dispatch(
-                  setJSONOutput(content?.outerHTML ? getLeafNodes(content) : '')
+                  setJSONOutput(
+                    content?.outerHTML ? getLeafNodes(content) : '',
+                  ),
                 );
               });
 
