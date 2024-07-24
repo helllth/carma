@@ -7,7 +7,7 @@ import {
 } from 'react-bootstrap';
 import Icon from 'react-cismap/commons/Icon';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Doc } from '../document-viewer';
+import type { Doc } from '../document-viewer';
 import './navItem.css';
 
 interface NavProps {
@@ -68,7 +68,7 @@ const Navbar = ({
           return response.json();
         } else {
           console.log(
-            'Error:' + response.status + ' -> ' + response.statusText
+            'Error:' + response.status + ' -> ' + response.statusText,
           );
         }
       })
@@ -103,7 +103,7 @@ const Navbar = ({
       zipnamePrefix = zipnamePrefix + '.';
     }
 
-    let downloadConf : {
+    let downloadConf: {
       name: string;
       files: unknown[];
       encoding: string;
@@ -156,12 +156,12 @@ const Navbar = ({
                   if (page && file)
                     if (parseInt(page) > 1) {
                       navigate(
-                        `/docs/${docPackageId}/${file}/${parseInt(page) - 1}`
+                        `/docs/${docPackageId}/${file}/${parseInt(page) - 1}`,
                       );
                     } else {
                       if (parseInt(file) > 1) {
                         navigate(
-                          `/docs/${docPackageId}/${parseInt(file) - 1}/1`
+                          `/docs/${docPackageId}/${parseInt(file) - 1}/1`,
                         );
                       } else {
                         navigate(`/docs/${docPackageId}/${docs.length}/1`);
@@ -195,12 +195,12 @@ const Navbar = ({
                   if (page && file)
                     if (parseInt(page) < maxIndex) {
                       navigate(
-                        `/docs/${docPackageId}/${file}/${parseInt(page) + 1}`
+                        `/docs/${docPackageId}/${file}/${parseInt(page) + 1}`,
                       );
                     } else {
                       if (parseInt(file) < docs.length) {
                         navigate(
-                          `/docs/${docPackageId}/${parseInt(file) + 1}/1`
+                          `/docs/${docPackageId}/${parseInt(file) + 1}/1`,
                         );
                       } else {
                         navigate(`/docs/${docPackageId}/1/1`);

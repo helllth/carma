@@ -1,6 +1,6 @@
 // @ts-ignore
 import { RoutedMap, TransitiveReactLeaflet } from 'react-cismap';
-import { Doc, layer } from '../document-viewer';
+import type { Doc, layer } from '../document-viewer';
 import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import CismapLayer from 'react-cismap/CismapLayer';
@@ -85,7 +85,7 @@ const DocMap = ({
         const maxZoom = meta['layer' + `${pageNumber - 1}`].maxZoom;
 
         const zoomLevel = Math.ceil(
-          Math.log(Math.max(dimensions[0], dimensions[1]) / 256) / Math.log(2)
+          Math.log(Math.max(dimensions[0], dimensions[1]) / 256) / Math.log(2),
         );
         // const meta = {};
 
@@ -95,7 +95,7 @@ const DocMap = ({
           // @ts-ignore
           const rc = new L.RasterCoords(
             leafletMapRef.current.leafletMap.leafletElement,
-            dimensions
+            dimensions,
           );
           layerBounds = [
             [
@@ -156,7 +156,7 @@ const DocMap = ({
           // @ts-ignore
           const rc = new L.RasterCoords(
             leafletMapRef.current.leafletMap.leafletElement,
-            targetDimensions
+            targetDimensions,
           );
 
           return [
@@ -173,7 +173,7 @@ const DocMap = ({
           // @ts-ignore
           let rc = new L.RasterCoords(
             leafletMapRef.current.leafletMap.leafletElement,
-            targetDimensions
+            targetDimensions,
           );
           return [
             [
@@ -191,7 +191,7 @@ const DocMap = ({
           // @ts-ignore
           let rc = new L.RasterCoords(
             leafletMapRef.current.leafletMap.leafletElement,
-            targetDimensions
+            targetDimensions,
           );
           return [
             [
@@ -204,7 +204,7 @@ const DocMap = ({
           // @ts-ignore
           let rc = new L.RasterCoords(
             leafletMapRef.current.leafletMap.leafletElement,
-            targetDimensions
+            targetDimensions,
           );
           return [
             [
@@ -218,7 +218,7 @@ const DocMap = ({
         // @ts-ignore
         const rc = new L.RasterCoords(
           leafletMapRef.current.leafletMap.leafletElement,
-          dimensions
+          dimensions,
         );
         const layerBounds = [
           [rc.unproject([0, 0]), rc.unproject([dimensions[0], dimensions[1]])],

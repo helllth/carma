@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import Icon from 'react-cismap/commons/Icon';
-import { Doc } from '../document-viewer';
+import type { Doc } from '../document-viewer';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile } from '@fortawesome/free-regular-svg-icons';
