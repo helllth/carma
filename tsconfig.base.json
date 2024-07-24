@@ -11,7 +11,7 @@
     "${configDir}/*.config.cjs",
     "${configDir}/*.config.mjs",
     "${configDir}/*.config.mts",
-    "types/*.d.ts",
+    "types/*.d.ts"
   ],
   "exclude": [".nx", "dist", "node_modules", "tmp"],
   "compilerOptions": {
@@ -31,6 +31,9 @@
       "@carma-apps/topicmaps": ["libraries/appframeworks/topicmaps/src/index.ts"],
       "@carma-collab/wuppertal/baederkarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/baederkarte/index.ts"
+      ],
+      "@carma-collab/wuppertal/bplan-auskunft": [
+        "libraries/collaboration/carma-wuppertal-collab/src/bplan-auskunft/index.ts"
       ],
       "@carma-collab/wuppertal/commons": ["libraries/collaboration/carma-wuppertal-collab/src/commons/index.ts"],
       "@carma-collab/wuppertal/e-auto-ladestation": [
