@@ -59,8 +59,9 @@ const TopNavbar = () => {
   const savedLayerConfigs = useSelector(getSavedLayerConfigs);
 
   const [messageApi, contextHolder] = message.useMessage();
-  const menuTourRef = useOverlayHelper('Menüleiste');
   const mode = useSelector(getMode);
+  const menuTourRef = useOverlayHelper('Menüleiste');
+  const hintagroundTourRef = useOverlayHelper('Hintergrund', 'left', 'bottom');
 
   const extractVectorStyles = (keywords: string[]) => {
     let vectorObject = null;
@@ -308,7 +309,7 @@ const TopNavbar = () => {
         </Tooltip>
       </div>
       <div className="flex items-center gap-6">
-        <div className="lg:flex hidden">
+        <div className="lg:flex hidden" ref={hintagroundTourRef}>
           <Radio.Group
             value={backgroundLayer.id}
             onChange={(e) => {
