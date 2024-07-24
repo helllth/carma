@@ -23,6 +23,8 @@ export function App() {
 title:'Adresse ('+p.adresse+')'
 subtitle: p.ort
 header:p.name
+url:p.homepage
+tel:p.telefon
 
 // Zweite Variante
 function createInfoBoxInfo(p) {
@@ -145,6 +147,7 @@ function createInfoBoxInfo(p) {
             />
             <Button
               onClick={() => {
+                let error = '';
                 try {
                   const conf = code
                     .split('\n')
@@ -173,29 +176,33 @@ function createInfoBoxInfo(p) {
                   setErrorMessage('');
                 } catch (e: unknown) {
                   if (typeof e === 'string') {
-                    setErrorMessage(e.toUpperCase());
+                    error = e.toUpperCase();
                   } else if (e instanceof Error) {
-                    setErrorMessage(e.message);
+                    error = e.message;
                   }
                 }
 
-                try {
-                  let codeFunction = eval('(' + code + ')');
-                  const tmpInfo = codeFunction(jsonOutput);
+                setErrorMessage(error);
 
-                  const properties = {
-                    ...tmpInfo,
-                  };
+                if (error) {
+                  try {
+                    let codeFunction = eval('(' + code + ')');
+                    const tmpInfo = codeFunction(jsonOutput);
 
-                  setSelectedFeature({
-                    properties,
-                  });
-                  setErrorMessage('');
-                } catch (e: unknown) {
-                  if (typeof e === 'string') {
-                    setErrorMessage(e.toUpperCase());
-                  } else if (e instanceof Error) {
-                    setErrorMessage(e.message);
+                    const properties = {
+                      ...tmpInfo,
+                    };
+
+                    setSelectedFeature({
+                      properties,
+                    });
+                    setErrorMessage('');
+                  } catch (e: unknown) {
+                    if (typeof e === 'string') {
+                      setErrorMessage(e.toUpperCase());
+                    } else if (e instanceof Error) {
+                      setErrorMessage(e.message);
+                    }
                   }
                 }
               }}
