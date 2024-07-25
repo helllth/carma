@@ -8,7 +8,7 @@
 module.exports = {
   //arrowParens: "always",
   //bracketSpacing: 'true',
-  singleQuote: true,
+  singleQuote: false, // causes less escaping
   trailingComma: 'all',
   //semi: true,
   //tabWidth: 2,
