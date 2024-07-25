@@ -1,12 +1,6 @@
 import { AutoComplete, Button } from 'antd';
-import { highlight, languages } from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-// import 'prismjs/components/prism-xml-doc';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/themes/prism.css';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Editor from 'react-simple-code-editor';
 import Map from './components/Map';
 import { getAllLayers } from './helper/layers';
 import {
@@ -17,6 +11,8 @@ import {
   setLayers,
 } from './store/slices/mapping';
 import { findLayerByTitle } from './helper/featureInfo';
+import CodeMirror from '@uiw/react-codemirror';
+import { javascript } from '@codemirror/lang-javascript';
 
 export function App() {
   const [code, setCode] = useState(`// Erste Variante
@@ -138,17 +134,11 @@ function createInfoBoxInfo(p) {
               errorMessage ? 'border-red-500' : 'border-black'
             } border-[1px] p-2 w-full h-1/3 flex flex-col gap-2`}
           >
-            <Editor
+            <CodeMirror
               value={code}
-              onValueChange={(code) => setCode(code)}
-              highlight={(code) => highlight(code, languages.js)}
-              padding={10}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-                width: '100%',
-                height: '100%',
-              }}
+              height="330px"
+              extensions={[javascript({ jsx: true })]}
+              onChange={(value) => setCode(value)}
             />
             <Button
               onClick={() => {
