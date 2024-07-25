@@ -15,14 +15,14 @@ import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 
 export function App() {
-  const [code, setCode] = useState(`// Erste Variante
+  const [code, setCode] = useState(`// Objekt Variante
 title:'Adresse ('+p.adresse+')'
 subtitle: p.ort
 header:p.name
 url:p.homepage
 tel:p.telefon
 
-// Zweite Variante
+// Funktion Variante
 function createInfoBoxInfo(p) {
   const info = {
     title: p.adresse,
@@ -46,6 +46,70 @@ function createInfoBoxInfo(p) {
   const [errorMessage, setErrorMessage] = useState('');
   const [value, setValue] = useState('');
   const [codeVariant, setCodeVariant] = useState('object');
+
+  const objectToFeature = () => {
+    try {
+      const conf = code.split('\n').filter((line) => line.trim() !== '');
+      let functionString = `(function(p) {
+                    const info = {`;
+
+      conf.forEach((rule) => {
+        functionString += `${rule.trim()},\n`;
+      });
+
+      functionString += `
+                                          };
+                                          return info;
+                    })`;
+
+      const tmpInfo = eval(functionString)(jsonOutput);
+
+      const properties = {
+        ...tmpInfo,
+      };
+
+      setSelectedFeature({
+        properties,
+      });
+      setErrorMessage('');
+    } catch (e: unknown) {
+      if (typeof e === 'string') {
+        setErrorMessage(e.toUpperCase());
+      } else if (e instanceof Error) {
+        setErrorMessage(e.message);
+      }
+    }
+  };
+
+  const functionToFeature = () => {
+    try {
+      let codeFunction = eval('(' + code + ')');
+      const tmpInfo = codeFunction(jsonOutput);
+
+      const properties = {
+        ...tmpInfo,
+      };
+
+      setSelectedFeature({
+        properties,
+      });
+      setErrorMessage('');
+    } catch (e: unknown) {
+      if (typeof e === 'string') {
+        setErrorMessage(e.toUpperCase());
+      } else if (e instanceof Error) {
+        setErrorMessage(e.message);
+      }
+    }
+  };
+
+  const applyCode = () => {
+    if (codeVariant === 'object') {
+      objectToFeature();
+    } else {
+      functionToFeature();
+    }
+  };
 
   useEffect(() => {
     const requestLayers = async () => {
@@ -148,70 +212,7 @@ function createInfoBoxInfo(p) {
               extensions={[javascript({ jsx: true })]}
               onChange={(value) => setCode(value)}
             />
-            <Button
-              onClick={() => {
-                let error = '';
-                try {
-                  const conf = code
-                    .split('\n')
-                    .filter((line) => line.trim() !== '');
-                  let functionString = `(function(p) {
-                    const info = {`;
-
-                  conf.forEach((rule) => {
-                    functionString += `${rule.trim()},\n`;
-                  });
-
-                  functionString += `
-                                          };
-                                          return info;
-                    })`;
-
-                  const tmpInfo = eval(functionString)(jsonOutput);
-
-                  const properties = {
-                    ...tmpInfo,
-                  };
-
-                  setSelectedFeature({
-                    properties,
-                  });
-                  setErrorMessage('');
-                } catch (e: unknown) {
-                  if (typeof e === 'string') {
-                    error = e.toUpperCase();
-                  } else if (e instanceof Error) {
-                    error = e.message;
-                  }
-                }
-
-                setErrorMessage(error);
-
-                if (error) {
-                  try {
-                    let codeFunction = eval('(' + code + ')');
-                    const tmpInfo = codeFunction(jsonOutput);
-
-                    const properties = {
-                      ...tmpInfo,
-                    };
-
-                    setSelectedFeature({
-                      properties,
-                    });
-                    setErrorMessage('');
-                  } catch (e: unknown) {
-                    if (typeof e === 'string') {
-                      setErrorMessage(e.toUpperCase());
-                    } else if (e instanceof Error) {
-                      setErrorMessage(e.message);
-                    }
-                  }
-                }
-              }}
-            >
-              Anwenden
-            </Button>
+            <Button onClick={applyCode}>Anwenden</Button>
           </div>
 
           <div className="rounded-md w-full h-1/3 flex gap-2">
