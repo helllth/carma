@@ -1,4 +1,4 @@
-import { AutoComplete, Button } from 'antd';
+import { AutoComplete, Button, Radio } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Map from './components/Map';
@@ -45,6 +45,7 @@ function createInfoBoxInfo(p) {
   const [selectedFeature, setSelectedFeature] = useState<{} | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [value, setValue] = useState('');
+  const [codeVariant, setCodeVariant] = useState('object');
 
   useEffect(() => {
     const requestLayers = async () => {
@@ -134,9 +135,16 @@ function createInfoBoxInfo(p) {
               errorMessage ? 'border-red-500' : 'border-black'
             } border-[1px] p-2 w-full h-1/3 flex flex-col gap-2`}
           >
+            <Radio.Group
+              onChange={(e) => setCodeVariant(e.target.value)}
+              value={codeVariant}
+            >
+              <Radio value="object">Objekt</Radio>
+              <Radio value="function">Funktion</Radio>
+            </Radio.Group>
             <CodeMirror
               value={code}
-              height="330px"
+              height="300px"
               extensions={[javascript({ jsx: true })]}
               onChange={(value) => setCode(value)}
             />
