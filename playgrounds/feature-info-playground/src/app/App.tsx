@@ -19,6 +19,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRepeat } from '@fortawesome/free-solid-svg-icons';
+import type { Layer } from 'wms-capabilities';
 
 export function App() {
   const [code, setCode] = useState(`// Objekt Variante
@@ -50,7 +51,11 @@ function createInfoBoxInfo(p) {
     name: string;
     url: string;
   } | null>(null);
-  const [selectedFeature, setSelectedFeature] = useState<{} | null>(null);
+  const [selectedFeature, setSelectedFeature] = useState<{
+    properties: {
+      [key: string]: string;
+    };
+  } | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [value, setValue] = useState('');
   const [codeVariant, setCodeVariant] = useState('object');
@@ -182,7 +187,7 @@ function createInfoBoxInfo(p) {
     <span className="text-lg font-semibold text-black">{title}</span>
   );
 
-  const renderItem = (layer: any) => {
+  const renderItem = (layer: Layer) => {
     return {
       value: layer.Title,
       label: (
@@ -262,7 +267,7 @@ function createInfoBoxInfo(p) {
               setSelectedLayer(item);
             }}
             options={layers.map((value) => {
-              const layers = value.layers.map((layer) => {
+              const layers = value.layers.map((layer: Layer) => {
                 return renderItem(layer);
               });
               return { label: renderTitle(value.title), options: layers };
