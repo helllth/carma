@@ -123,7 +123,7 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
 
             setPos([e.latlng.lat, e.latlng.lng]);
 
-            if (layer) {
+            if (layer && pos[0] && pos[1]) {
               const minimalBoxSize = 1;
               const url =
                 layer.url +
@@ -201,8 +201,7 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
             opacity={1}
             maxSelectionCount={1}
             // key={vectorStyle}
-            onSelectionChanged={(e) => {
-              console.log('xxx', e);
+            onSelectionChanged={(e: { hits: any[]; hit: any }) => {
               const selectedFeature = e.hits[0];
               console.log('xxxy selectedFeature', selectedFeature);
 
