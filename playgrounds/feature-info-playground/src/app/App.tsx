@@ -1,5 +1,5 @@
 import { AutoComplete, Button, Input, Radio } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Map from './components/Map';
 import { getAllLayers } from './helper/layers';
@@ -56,6 +56,7 @@ function createInfoBoxInfo(p) {
   const [codeVariant, setCodeVariant] = useState('object');
   const [tmpVectorStyle, setTmpVectorStyle] = useState('');
   const [outputTags, setOutputTags] = useState('');
+  const containerRef = useRef(null);
 
   const objectToTags = () => {
     try {
@@ -306,6 +307,7 @@ function createInfoBoxInfo(p) {
           </div>
 
           <div
+            ref={containerRef}
             className={`rounded-md border-solid ${
               errorMessage ? 'border-red-500' : 'border-black'
             } border-[1px] p-2 w-full h-1/3 flex flex-col gap-2`}
