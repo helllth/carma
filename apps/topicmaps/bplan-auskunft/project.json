@@ -11,8 +11,8 @@
       "defaultConfiguration": "production",
       "options": {
         "logLevel": "debug",
-        "buildLibsFromSource": false,
-        "skipTypeCheck": false,
+        "buildLibsFromSource": true,
+        "skipTypeCheck": true,
         "outputPath": "dist/apps/topicmaps/bplan-auskunft"
       },
       "configurations": {
