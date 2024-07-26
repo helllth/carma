@@ -89,3 +89,25 @@ declare module 'react-cismap/StyledWMSTileLayer' {
   const StyledWMSTileLayer: any;
   export default StyledWMSTileLayer;
 }
+
+declare module 'react-cismap/constants/gis' {
+  const proj4crs25832def: string;
+}
+
+declare module 'react-cismap/topicmaps/InfoBox' {
+  const InfoBox: FC<InfoBoxProps>;
+  export default InfoBox;
+}
+
+declare module 'react-cismap' {
+  const TransitiveReactLeaflet: any;
+}
+
+declare module 'react-cismap/tools/uiHelper' {
+  const getActionLinksForFeature: (feature: any, options: any) => any;
+}
+
+declare module 'react-cismap/CismapLayer' {
+  const CismapLayer: FC<CismapLayerProps>;
+  export default CismapLayer;
+}
