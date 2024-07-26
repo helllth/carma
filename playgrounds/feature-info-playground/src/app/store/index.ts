@@ -1,4 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import type {
+  ActionCreatorInvariantMiddlewareOptions,
+  ImmutableStateInvariantMiddlewareOptions,
+  Middleware,
+  SerializableStateInvariantMiddlewareOptions,
+} from '@reduxjs/toolkit';
 
 import mappingSlice from './slices/mapping';
 
@@ -9,13 +15,24 @@ import { APP_KEY, STORAGE_PREFIX } from '../helper/constants';
 
 console.log('store initializing ....');
 
+interface ThunkOptions<E = any> {
+  extraArgument: E;
+}
+
+interface GetDefaultMiddlewareOptions {
+  thunk?: boolean | ThunkOptions;
+  immutableCheck?: boolean | ImmutableStateInvariantMiddlewareOptions;
+  serializableCheck?: boolean | SerializableStateInvariantMiddlewareOptions;
+  actionCreatorCheck?: boolean | ActionCreatorInvariantMiddlewareOptions;
+}
+
 const customAppKey = new URLSearchParams(window.location.hash).get('appKey');
 
 const devToolsEnabled =
   new URLSearchParams(window.location.search).get('devToolsEnabled') === 'true';
 console.log('devToolsEnabled:', devToolsEnabled);
 const stateLoggingEnabledFromSearch = new URLSearchParams(
-  window.location.search
+  window.location.search,
 ).get('stateLoggingEnabled');
 
 const inProduction = process.env.NODE_ENV === 'production';
@@ -30,7 +47,7 @@ console.log(
   'stateLoggingEnabled:',
   stateLoggingEnabledFromSearch,
   'x',
-  stateLoggingEnabled
+  stateLoggingEnabled,
 );
 const logger = createLogger({
   collapsed: true,
@@ -38,12 +55,20 @@ const logger = createLogger({
 
 let middleware;
 if (stateLoggingEnabled === true) {
-  middleware = (getDefaultMiddleware) =>
+  middleware = (
+    getDefaultMiddleware: (
+      options: GetDefaultMiddlewareOptions,
+    ) => Middleware[],
+  ) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(logger);
 } else {
-  middleware = (getDefaultMiddleware) =>
+  middleware = (
+    getDefaultMiddleware: (
+      options: GetDefaultMiddlewareOptions,
+    ) => Middleware[],
+  ) =>
     getDefaultMiddleware({
       serializableCheck: false,
     });
