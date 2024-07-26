@@ -5,6 +5,7 @@ import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvid
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { Provider } from 'react-redux';
+import { MappingConstants } from 'react-cismap';
 
 import App from './app/App';
 import store from './app/store';
@@ -33,16 +34,19 @@ console.error = (message, ...args) => {
 };
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );
 root.render(
   <StrictMode>
     <PersistGate loading={null} persistor={persistor}>
       <Provider store={store}>
-        <TopicMapContextProvider>
+        <TopicMapContextProvider
+          referenceSystem={MappingConstants.crs3857}
+          referenceSystemDefinition={MappingConstants.proj4crs3857def}
+        >
           <App />
         </TopicMapContextProvider>
       </Provider>
     </PersistGate>
-  </StrictMode>
+  </StrictMode>,
 );

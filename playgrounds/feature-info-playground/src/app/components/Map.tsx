@@ -6,12 +6,15 @@ import { TransitiveReactLeaflet } from 'react-cismap';
 import CismapLayer from 'react-cismap/CismapLayer';
 import { proj4crs25832def } from 'react-cismap/constants/gis';
 import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getLeafNodes } from '../helper/featureInfo';
 import {
+  getLayerMode,
+  getVectorStyle,
   setGMLOutput,
   setJSONOutput,
   setOldVariant,
+  setVectorOutput,
 } from '../store/slices/mapping';
 import InfoBox from 'react-cismap/topicmaps/InfoBox';
 import { getActionLinksForFeature } from 'react-cismap/tools/uiHelper';
@@ -24,6 +27,8 @@ const Map = ({ layer, selectedFeature }) => {
   const [width, setWidth] = useState(0);
   const [pos, setPos] = useState<[number, number] | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const vectorStyle = useSelector(getVectorStyle);
+  const layerMode = useSelector(getLayerMode);
   const dispatch = useDispatch();
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
 
@@ -92,68 +97,72 @@ const Map = ({ layer, selectedFeature }) => {
           )
         }
         onclick={(e) => {
-          // @ts-ignore
-          const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
-            e.latlng.lng,
-            e.latlng.lat,
-          ]);
+          if (layerMode === 'default') {
+            // @ts-ignore
+            const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
+              e.latlng.lng,
+              e.latlng.lat,
+            ]);
 
-          setPos([e.latlng.lat, e.latlng.lng]);
+            setPos([e.latlng.lat, e.latlng.lng]);
 
-          if (layer) {
-            const minimalBoxSize = 1;
-            const url =
-              layer.url +
-              `?SERVICE=WMS&request=GetFeatureInfo&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&width=10&height=10&srs=EPSG%3A25832&` +
-              `bbox=` +
-              `${pos[0] - minimalBoxSize},` +
-              `${pos[1] - minimalBoxSize},` +
-              `${pos[0] + minimalBoxSize},` +
-              `${pos[1] + minimalBoxSize}&` +
-              `x=5&y=5&` +
-              `layers=${layer.name}&` +
-              `feature_count=100&QUERY_LAYERS=${layer.name}&`;
+            if (layer) {
+              const minimalBoxSize = 1;
+              const url =
+                layer.url +
+                `?SERVICE=WMS&request=GetFeatureInfo&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&width=10&height=10&srs=EPSG%3A25832&` +
+                `bbox=` +
+                `${pos[0] - minimalBoxSize},` +
+                `${pos[1] - minimalBoxSize},` +
+                `${pos[0] + minimalBoxSize},` +
+                `${pos[1] + minimalBoxSize}&` +
+                `x=5&y=5&` +
+                `layers=${layer.name}&` +
+                `feature_count=100&QUERY_LAYERS=${layer.name}&`;
 
-            const imgUrl =
-              layer.url +
-              `
+              const imgUrl =
+                layer.url +
+                `
             ?&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
-              `${pos[0] - minimalBoxSize},` +
-              `${pos[1] - minimalBoxSize},` +
-              `${pos[0] + minimalBoxSize},` +
-              `${pos[1] + minimalBoxSize}` +
-              `&WIDTH=10&HEIGHT=10&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layer.name}&STYLES=default&QUERY_LAYERS=${layer.name}&INFO_FORMAT=text/html&X=5&Y=5
+                `${pos[0] - minimalBoxSize},` +
+                `${pos[1] - minimalBoxSize},` +
+                `${pos[0] + minimalBoxSize},` +
+                `${pos[1] + minimalBoxSize}` +
+                `&WIDTH=10&HEIGHT=10&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layer.name}&STYLES=default&QUERY_LAYERS=${layer.name}&INFO_FORMAT=text/html&X=5&Y=5
             `;
 
-            fetch(url)
-              .then((response) => response.text())
-              .then((data) => {
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(data, 'text/xml');
-                const content =
-                  xmlDoc.getElementsByTagName('gml:featureMember')[0];
-                dispatch(
-                  setGMLOutput(
-                    content?.outerHTML ? content.outerHTML : 'Nichts gefunden',
-                  ),
-                );
+              fetch(url)
+                .then((response) => response.text())
+                .then((data) => {
+                  const parser = new DOMParser();
+                  const xmlDoc = parser.parseFromString(data, 'text/xml');
+                  const content =
+                    xmlDoc.getElementsByTagName('gml:featureMember')[0];
+                  dispatch(
+                    setGMLOutput(
+                      content?.outerHTML
+                        ? content.outerHTML
+                        : 'Nichts gefunden',
+                    ),
+                  );
 
-                dispatch(
-                  setJSONOutput(
-                    content?.outerHTML ? getLeafNodes(content) : '',
-                  ),
-                );
-              });
+                  dispatch(
+                    setJSONOutput(
+                      content?.outerHTML ? getLeafNodes(content) : '',
+                    ),
+                  );
+                });
 
-            fetch(imgUrl)
-              .then((response) => response.text())
-              .then((data) => {
-                dispatch(setOldVariant(data));
-              });
+              fetch(imgUrl)
+                .then((response) => response.text())
+                .then((data) => {
+                  dispatch(setOldVariant(data));
+                });
+            }
           }
         }}
       >
-        {layer && (
+        {layer && layerMode === 'default' && (
           <CismapLayer
             key={layer.name}
             url={layer.url}
@@ -165,6 +174,23 @@ const Map = ({ layer, selectedFeature }) => {
             pane="additionalLayers1"
             opacity={0.7}
             type={'wmts'}
+          />
+        )}
+        {vectorStyle && layerMode === 'vector' && (
+          <CismapLayer
+            type={'vector'}
+            style={vectorStyle}
+            pane="additionalLayers2"
+            opacity={1}
+            maxSelectionCount={1}
+            // key={vectorStyle}
+            onSelectionChanged={(e) => {
+              const selectedFeature = e.hits[0];
+              console.log('xxxy selectedFeature', selectedFeature);
+
+              const p = selectedFeature.properties;
+              dispatch(setVectorOutput(p));
+            }}
           />
         )}
         {pos && <Marker position={pos}></Marker>}

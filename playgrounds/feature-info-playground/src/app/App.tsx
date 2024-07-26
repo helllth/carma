@@ -1,4 +1,4 @@
-import { AutoComplete, Button, Radio } from 'antd';
+import { AutoComplete, Button, Input, Radio } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Map from './components/Map';
@@ -6,13 +6,19 @@ import { getAllLayers } from './helper/layers';
 import {
   getGMLOutput,
   getJSONOutput,
+  getLayerMode,
   getLayers,
   getOldVariant,
+  getVectorOutput,
+  setLayerMode,
   setLayers,
+  setVectorStyle,
 } from './store/slices/mapping';
 import { findLayerByTitle } from './helper/featureInfo';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRepeat } from '@fortawesome/free-solid-svg-icons';
 
 export function App() {
   const [code, setCode] = useState(`// Objekt Variante
@@ -37,6 +43,8 @@ function createInfoBoxInfo(p) {
   const gmlOutput = useSelector(getGMLOutput);
   const jsonOutput = useSelector(getJSONOutput);
   const oldVariant = useSelector(getOldVariant);
+  const layerMode = useSelector(getLayerMode);
+  const vectorOutput = useSelector(getVectorOutput);
   const dispatch = useDispatch();
   const [selectedLayer, setSelectedLayer] = useState<{
     name: string;
@@ -46,8 +54,10 @@ function createInfoBoxInfo(p) {
   const [errorMessage, setErrorMessage] = useState('');
   const [value, setValue] = useState('');
   const [codeVariant, setCodeVariant] = useState('object');
+  const [tmpVectorStyle, setTmpVectorStyle] = useState('');
 
   const objectToFeature = () => {
+    const output = layerMode === 'default' ? jsonOutput : vectorOutput;
     try {
       const conf = code.split('\n').filter((line) => line.trim() !== '');
       let functionString = `(function(p) {
@@ -62,7 +72,7 @@ function createInfoBoxInfo(p) {
                                           return info;
                     })`;
 
-      const tmpInfo = eval(functionString)(jsonOutput);
+      const tmpInfo = eval(functionString)(output);
 
       const properties = {
         ...tmpInfo,
@@ -82,9 +92,10 @@ function createInfoBoxInfo(p) {
   };
 
   const functionToFeature = () => {
+    const output = layerMode === 'default' ? jsonOutput : vectorOutput;
     try {
       let codeFunction = eval('(' + code + ')');
-      const tmpInfo = codeFunction(jsonOutput);
+      const tmpInfo = codeFunction(output);
 
       const properties = {
         ...tmpInfo,
@@ -146,30 +157,57 @@ function createInfoBoxInfo(p) {
       style={{ maxHeight: window.innerHeight, maxWidth: window.innerWidth }}
     >
       <div className="w-full rounded-md h-20 flex items-center gap-2">
-        <AutoComplete
-          value={value}
-          onChange={(e) => {
-            setValue(e);
-          }}
-          onSelect={(value) => {
-            const layer = findLayerByTitle(layers, value);
-            const item = {
-              name: layer.Name,
-              url: layer.url,
-            };
-            setSelectedLayer(item);
-          }}
-          options={layers.map((value) => {
-            const layers = value.layers.map((layer) => {
-              return renderItem(layer);
-            });
-            return { label: renderTitle(value.title), options: layers };
-          })}
-          style={{ width: '50%' }}
-          placeholder={
-            layers.length > 0 ? 'Layer auswählen' : 'Layer werden geladen'
-          }
-        />
+        {layerMode === 'default' ? (
+          <AutoComplete
+            value={value}
+            onChange={(e) => {
+              setValue(e);
+            }}
+            onSelect={(value) => {
+              const layer = findLayerByTitle(layers, value);
+              const item = {
+                name: layer.Name,
+                url: layer.url,
+              };
+              setSelectedLayer(item);
+            }}
+            options={layers.map((value) => {
+              const layers = value.layers.map((layer) => {
+                return renderItem(layer);
+              });
+              return { label: renderTitle(value.title), options: layers };
+            })}
+            style={{ width: '50%' }}
+            placeholder={
+              layers.length > 0 ? 'Layer auswählen' : 'Layer werden geladen'
+            }
+          />
+        ) : (
+          <div className="w-1/2 h-full flex items-center gap-2">
+            <Input
+              placeholder="Vectorstyle url (https://tiles.cismet.de/poi/awg.style.json)"
+              value={tmpVectorStyle}
+              onChange={(e) => setTmpVectorStyle(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                dispatch(setVectorStyle(tmpVectorStyle));
+              }}
+            >
+              Layer laden
+            </Button>
+          </div>
+        )}
+        <Button>
+          <FontAwesomeIcon
+            icon={faRepeat}
+            onClick={() => {
+              dispatch(
+                setLayerMode(layerMode === 'default' ? 'vector' : 'default'),
+              );
+            }}
+          />
+        </Button>
       </div>
       <div
         className="flex w-full items-center justify-center gap-2 h-full"
@@ -187,8 +225,11 @@ function createInfoBoxInfo(p) {
             <div className="border-solid p-2 rounded-md overflow-auto border-black border-[1px] w-full h-full">
               JSON:
               <div>
-                {jsonOutput && (
+                {jsonOutput && layerMode === 'default' && (
                   <pre>{JSON.stringify(jsonOutput, null, '\t')}</pre>
+                )}
+                {vectorOutput && layerMode === 'vector' && (
+                  <pre>{JSON.stringify(vectorOutput, null, '\t')}</pre>
                 )}
               </div>
             </div>
