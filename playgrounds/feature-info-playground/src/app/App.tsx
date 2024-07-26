@@ -55,6 +55,51 @@ function createInfoBoxInfo(p) {
   const [value, setValue] = useState('');
   const [codeVariant, setCodeVariant] = useState('object');
   const [tmpVectorStyle, setTmpVectorStyle] = useState('');
+  const [outputTags, setOutputTags] = useState('');
+
+  const objectToTags = () => {
+    try {
+      const conf = code.split('\n').filter((line) => line.trim() !== '');
+      const updatedConf = conf.map((tag) => {
+        if (tag.startsWith('//')) {
+          return undefined;
+        }
+        return (
+          '<Keyword>carmaconf://infoBoxMapping:' + tag.trim() + '</Keyword>'
+        );
+      });
+      setOutputTags(updatedConf.filter((tag) => tag !== undefined).join('\n'));
+    } catch (e: unknown) {
+      if (typeof e === 'string') {
+        setErrorMessage(e.toUpperCase());
+      } else if (e instanceof Error) {
+        setErrorMessage(e.message);
+      }
+    }
+  };
+
+  const functionToTags = () => {
+    try {
+      const conf = code.replace(/\s+/g, ' ').trim();
+      setOutputTags(
+        '<Keyword>carmaconf://infoBoxMapping:' + conf + '</Keyword>',
+      );
+    } catch (e: unknown) {
+      if (typeof e === 'string') {
+        setErrorMessage(e.toUpperCase());
+      } else if (e instanceof Error) {
+        setErrorMessage(e.message);
+      }
+    }
+  };
+
+  const generateTags = () => {
+    if (codeVariant === 'object') {
+      objectToTags();
+    } else {
+      functionToTags();
+    }
+  };
 
   const objectToFeature = () => {
     const output = layerMode === 'default' ? jsonOutput : vectorOutput;
@@ -150,6 +195,31 @@ function createInfoBoxInfo(p) {
       ),
     };
   };
+
+  useEffect(() => {
+    const handleDrop = (event: DragEvent) => {
+      event.preventDefault();
+      const url = event.dataTransfer?.getData('URL');
+
+      if (url) {
+        dispatch(setVectorStyle(url));
+        dispatch(setLayerMode('vector'));
+        setTmpVectorStyle(url);
+      }
+    };
+
+    const handleDragOver = (event: DragEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener('drop', handleDrop);
+    window.addEventListener('dragover', handleDragOver);
+
+    return () => {
+      window.removeEventListener('drop', handleDrop);
+      window.removeEventListener('dragover', handleDragOver);
+    };
+  }, []);
 
   return (
     <div
@@ -247,13 +317,27 @@ function createInfoBoxInfo(p) {
               <Radio value="object">Objekt</Radio>
               <Radio value="function">Funktion</Radio>
             </Radio.Group>
-            <CodeMirror
-              value={code}
-              height="300px"
-              extensions={[javascript({ jsx: true })]}
-              onChange={(value) => setCode(value)}
-            />
-            <Button onClick={applyCode}>Anwenden</Button>
+            <div className="flex gap-2 items-center">
+              <CodeMirror
+                value={code}
+                height="300px"
+                extensions={[javascript({ jsx: true })]}
+                onChange={(value) => setCode(value)}
+                style={{ width: outputTags ? '50%' : '100%' }}
+              />
+              {outputTags && (
+                <CodeMirror
+                  value={outputTags}
+                  height="300px"
+                  extensions={[javascript({ jsx: true })]}
+                  style={{ width: '50%%', maxWidth: '50%' }}
+                />
+              )}
+            </div>
+            <div className="flex gap-2 items-center">
+              <Button onClick={applyCode}>Anwenden</Button>
+              <Button onClick={generateTags}>Keywords generieren</Button>
+            </div>
           </div>
 
           <div className="rounded-md w-full h-1/3 flex gap-2">
