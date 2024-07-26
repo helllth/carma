@@ -56,7 +56,8 @@ function createInfoBoxInfo(p) {
   const [codeVariant, setCodeVariant] = useState('object');
   const [tmpVectorStyle, setTmpVectorStyle] = useState('');
   const [outputTags, setOutputTags] = useState('');
-  const containerRef = useRef(null);
+  const [height, setHeight] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const objectToTags = () => {
     try {
@@ -222,6 +223,24 @@ function createInfoBoxInfo(p) {
     };
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        setHeight(containerRef.current.clientHeight - 90);
+      }
+    };
+
+    if (containerRef.current) {
+      handleResize();
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [containerRef]);
+
   return (
     <div
       className="flex flex-col items-center h-screen w-full gap-2 p-2"
@@ -322,7 +341,7 @@ function createInfoBoxInfo(p) {
             <div className="flex gap-2 items-center">
               <CodeMirror
                 value={code}
-                height="300px"
+                height={height ? `${height}px` : '300px'}
                 extensions={[javascript({ jsx: true })]}
                 onChange={(value) => setCode(value)}
                 style={{ width: outputTags ? '50%' : '100%' }}
@@ -330,7 +349,7 @@ function createInfoBoxInfo(p) {
               {outputTags && (
                 <CodeMirror
                   value={outputTags}
-                  height="300px"
+                  height={height ? `${height}px` : '300px'}
                   extensions={[javascript({ jsx: true })]}
                   style={{ width: '50%%', maxWidth: '50%' }}
                 />
