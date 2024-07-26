@@ -41,6 +41,7 @@
       "@carma-collab/wuppertal/hochwassergefahrenkarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/hochwasssergefahrenkarte/index.jsx"
       ],
+      "@carma-collab/wuppertal/stadtplan": ["libraries/collaboration/carma-wuppertal-collab/src/stadtplan/index.ts"],
       "@carma-collab/wuppertal/starkregengefahrenkarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/starkregengefahrenkarte/index.jsx"
       ],
