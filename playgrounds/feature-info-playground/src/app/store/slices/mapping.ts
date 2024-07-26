@@ -6,6 +6,9 @@ interface MappingState {
   gmlOutput: string | null;
   jsonOutput: any;
   oldVariant: string | null;
+  layerMode: string;
+  vectorStyle?: string;
+  vectorOutput?: string;
 }
 
 const initialState: MappingState = {
@@ -13,6 +16,8 @@ const initialState: MappingState = {
   gmlOutput: null,
   jsonOutput: null,
   oldVariant: null,
+  layerMode: 'default',
+  vectorOutput: '',
 };
 
 const slice = createSlice({
@@ -31,13 +36,29 @@ const slice = createSlice({
     setOldVariant(state, action) {
       state.oldVariant = action.payload;
     },
+    setLayerMode(state, action) {
+      state.layerMode = action.payload;
+    },
+    setVectorStyle(state, action) {
+      state.vectorStyle = action.payload;
+    },
+    setVectorOutput(state, action) {
+      state.vectorOutput = action.payload;
+    },
   },
 });
 
 export default slice;
 
-export const { setLayers, setGMLOutput, setJSONOutput, setOldVariant } =
-  slice.actions;
+export const {
+  setLayers,
+  setGMLOutput,
+  setJSONOutput,
+  setOldVariant,
+  setLayerMode,
+  setVectorStyle,
+  setVectorOutput,
+} = slice.actions;
 
 export const getLayers = (state: RootState) => {
   return state.mapping.layers;
@@ -53,4 +74,16 @@ export const getJSONOutput = (state: RootState) => {
 
 export const getOldVariant = (state: RootState) => {
   return state.mapping.oldVariant;
+};
+
+export const getLayerMode = (state: RootState) => {
+  return state.mapping.layerMode;
+};
+
+export const getVectorStyle = (state: RootState) => {
+  return state.mapping.vectorStyle;
+};
+
+export const getVectorOutput = (state: RootState) => {
+  return state.mapping.vectorOutput;
 };
