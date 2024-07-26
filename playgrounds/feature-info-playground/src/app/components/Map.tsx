@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-// @ts-ignore
 import 'leaflet/dist/leaflet.css';
 import proj4 from 'proj4';
 import { TransitiveReactLeaflet } from 'react-cismap';
@@ -19,6 +18,7 @@ import {
 import InfoBox from 'react-cismap/topicmaps/InfoBox';
 import { getActionLinksForFeature } from 'react-cismap/tools/uiHelper';
 import { TopicMapDispatchContext } from 'react-cismap/contexts/TopicMapContextProvider';
+import type { LatLng, Point } from 'leaflet';
 
 const { Marker } = TransitiveReactLeaflet;
 
@@ -105,7 +105,15 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
             <></>
           )
         }
-        onclick={(e) => {
+        onclick={(e: {
+          containerPoint: Point;
+          latlng: LatLng;
+          layerPoint: Point;
+          originalEvent: PointerEvent;
+          sourceTarget: HTMLElement;
+          target: HTMLElement;
+          type: string;
+        }) => {
           if (layerMode === 'default') {
             // @ts-ignore
             const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
@@ -194,6 +202,7 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
             maxSelectionCount={1}
             // key={vectorStyle}
             onSelectionChanged={(e) => {
+              console.log('xxx', e);
               const selectedFeature = e.hits[0];
               console.log('xxxy selectedFeature', selectedFeature);
 
