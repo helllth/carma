@@ -10,7 +10,11 @@ declare module 'react-cismap/contexts/TopicMapContextProvider' {
       leafletElement: L.Map;
     };
   }
+  interface DispatchContext {
+    zoomToFeature: (feature: any) => void;
+  }
   export const TopicMapContext: Context<RoutedMapRefContext>;
+  export const TopicMapDispatchContext: Context<DispatchContext>;
   export const TopicMapContextProvider: FC<TopicMapContextProviderProps>;
   export default TopicMapContextProvider;
 }
@@ -46,7 +50,6 @@ declare module 'react-cismap/contexts/FeatureCollectionContextProvider' {
     setSelectedFeatureByPredicate: (predicate: any) => void;
     setClusteringOptions: (options: any) => void;
     setFilterState: (state: any) => void;
-
   }>;
   export const FeatureCollectionContextProvider: FC<TopicMapContextProviderProps>;
   export default FeatureCollectionContextProvider;
