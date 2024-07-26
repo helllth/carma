@@ -22,7 +22,16 @@ import { TopicMapDispatchContext } from 'react-cismap/contexts/TopicMapContextPr
 
 const { Marker } = TransitiveReactLeaflet;
 
-const Map = ({ layer, selectedFeature }) => {
+interface MapProps {
+  layer: { name: string; url: string } | null;
+  selectedFeature: {
+    properties: {
+      [key: string]: string;
+    };
+  } | null;
+}
+
+const Map = ({ layer, selectedFeature }: MapProps) => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const [pos, setPos] = useState<[number, number] | null>(null);
