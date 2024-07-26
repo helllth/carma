@@ -101,6 +101,10 @@ declare module 'react-cismap/topicmaps/InfoBox' {
 
 declare module 'react-cismap' {
   const TransitiveReactLeaflet: any;
+  const MappingConstants: {
+    proj4crs3857def: string;
+    crs3857: string;
+  };
 }
 
 declare module 'react-cismap/tools/uiHelper' {

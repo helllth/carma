@@ -1,6 +1,5 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-// @ts-ignore
 import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
