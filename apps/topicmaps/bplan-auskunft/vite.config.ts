@@ -1,6 +1,7 @@
 /// <reference types='vitest' />
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import react from '@vitejs/plugin-react'
 import * as path from "path";
 import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
 
@@ -25,6 +26,7 @@ export default defineConfig({
 
   plugins: [
     nxViteTsPaths(),
+    react(),
     dts({
       entryRoot: "src",
       tsconfigPath: path.join(__dirname, "tsconfig.json"),
@@ -38,13 +40,11 @@ export default defineConfig({
   build: {
     outDir: "../../../dist/apps/topicmaps/bplan-auskunft",
     reportCompressedSize: true,
-    commonjsOptions: {
-      transformMixedEsModules: true,
-    },
+    commonjsOptions: {   },
     rollupOptions: {
-      logLevel: "debug",
+      logLevel: "info",
       // preserveSymlinks: true,
-      external: ["@carma-collab/wuppertal/bplan-auskunft"],
+      //external: ["@carma-collab/wuppertal/bplan-auskunft"],
     },
   },
 

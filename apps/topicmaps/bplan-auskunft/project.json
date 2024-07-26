@@ -10,7 +10,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "logLevel": "debug",
+        "logLevel": "info",
         "buildLibsFromSource": true,
         "skipTypeCheck": true,
         "outputPath": "dist/apps/topicmaps/bplan-auskunft"
