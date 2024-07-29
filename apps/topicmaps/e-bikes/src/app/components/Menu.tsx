@@ -11,6 +11,7 @@ import {
   MenuTitle,
 } from "@carma-collab/wuppertal/e-bikes";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 
 const Menu = () => {
   const { filteredItems, shownFeatures } = useContext(FeatureCollectionContext);
@@ -51,6 +52,13 @@ const Menu = () => {
           />,
           <DefaultSettingsPanel key="settings" />,
           <KompaktanleitungSection />,
+          <Section
+            key="digiTal"
+            sectionKey="digiTal"
+            sectionTitle={"DigiTal Zwilling"}
+            sectionBsStyle="warning"
+            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
+          ></Section>,
         ]}
       />
     </CustomizationContextProvider>
