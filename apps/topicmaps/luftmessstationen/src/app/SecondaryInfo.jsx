@@ -1,20 +1,20 @@
-import React, { useContext, useRef } from 'react';
-import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
-import SecondaryInfoPanelSection from 'react-cismap/topicmaps/SecondaryInfoPanelSection';
-import SecondaryInfo from 'react-cismap/topicmaps/SecondaryInfo';
+import React, { useContext, useRef } from "react";
+import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
+import SecondaryInfoPanelSection from "react-cismap/topicmaps/SecondaryInfoPanelSection";
+import SecondaryInfo from "react-cismap/topicmaps/SecondaryInfo";
 import {
   getLastYearMeasurements,
   getLastYearMinus1Measurements,
   getStatus4Value,
-} from './helper/convertItemToFeature';
-import { Chart } from 'chart.js';
-import ReactChartkick, { ColumnChart } from 'react-chartkick';
-import { LOOKUP, MONTHS, opendataLinkSections } from './helper/constants';
-import Color from 'color';
-import Icon from 'react-cismap/commons/Icon';
-import { ResponsiveTopicMapContext } from 'react-cismap/contexts/ResponsiveTopicMapContextProvider';
-import { getApplicationVersion } from './version';
-import { version as reactCismapVersion } from 'react-cismap/meta';
+} from "./helper/convertItemToFeature";
+import { Chart } from "chart.js";
+import ReactChartkick, { ColumnChart } from "react-chartkick";
+import { LOOKUP, MONTHS, opendataLinkSections } from "./helper/constants";
+import Color from "color";
+import Icon from "react-cismap/commons/Icon";
+import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopicMapContextProvider";
+import { getApplicationVersion } from "./version";
+import { version as reactCismapVersion } from "react-cismap/meta";
 
 ReactChartkick.addAdapter(Chart);
 
@@ -23,24 +23,24 @@ const InfoPanel = () => {
   const { windowSize } = useContext(ResponsiveTopicMapContext);
   const station = selectedFeature?.properties;
   const footer = (
-    <div style={{ fontSize: '11px' }}>
+    <div style={{ fontSize: "11px" }}>
       <div>
         <b>
           {document.title} v{getApplicationVersion()}
         </b>
-        :{' '}
+        :{" "}
         <a href="https://cismet.de/" target="_cismet">
           cismet GmbH
-        </a>{' '}
-        auf Basis von{' '}
+        </a>{" "}
+        auf Basis von{" "}
         <a href="http://leafletjs.com/" target="_more">
           Leaflet
-        </a>{' '}
-        und{' '}
+        </a>{" "}
+        und{" "}
         <a href="https://cismet.de/#refs" target="_cismet">
           cids | react-cismap v{reactCismapVersion}
-        </a>{' '}
-        |{' '}
+        </a>{" "}
+        |{" "}
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -119,11 +119,11 @@ const InfoPanel = () => {
       // ---create the chart objects
 
       for (const entry of last12) {
-        const key = entry.year + ' ' + MONTHS[entry.index].shortname;
+        const key = entry.year + " " + MONTHS[entry.index].shortname;
         if (entry.value !== -9999) {
           last12ChartData.push([key, entry.value]);
           last12Colors.push(
-            new Color(LOOKUP[getStatus4Value(entry.value)].color).fade(0.5)
+            new Color(LOOKUP[getStatus4Value(entry.value)].color).fade(0.5),
           );
         } else {
           last12ChartData.push([key, null]);
@@ -134,7 +134,7 @@ const InfoPanel = () => {
       for (const year of Object.keys(avgs)) {
         avgsChartData.push([year, avgs[year]]);
         avgsColors.push(
-          new Color(LOOKUP[getStatus4Value(avgs[year])].color).fade(0.5)
+          new Color(LOOKUP[getStatus4Value(avgs[year])].color).fade(0.5),
         );
       }
 
@@ -145,25 +145,25 @@ const InfoPanel = () => {
 
     const subSections = [];
     const legend = (
-      <div style={{ fontSize: '90%', textAlign: 'center' }}>
+      <div style={{ fontSize: "90%", textAlign: "center" }}>
         <div>
-          <span style={{ whiteSpace: 'nowrap' }}>
-            <Icon style={{ color: LOOKUP.unauffaellig.color }} name="square" />{' '}
-            unauffällig {'(≦ 35)'}
+          <span style={{ whiteSpace: "nowrap" }}>
+            <Icon style={{ color: LOOKUP.unauffaellig.color }} name="square" />{" "}
+            unauffällig {"(≦ 35)"}
           </span>
           <span
-            style={{ whiteSpace: 'nowrap', marginLeft: 10, marginRight: 10 }}
+            style={{ whiteSpace: "nowrap", marginLeft: 10, marginRight: 10 }}
           >
-            <Icon style={{ color: LOOKUP.auffaellig.color }} name="square" />{' '}
-            auffällig {'(> 35)'}
+            <Icon style={{ color: LOOKUP.auffaellig.color }} name="square" />{" "}
+            auffällig {"(> 35)"}
           </span>
           {windowSize?.width < 463 && <br />}
-          <span style={{ whiteSpace: 'nowrap' }}>
-            <Icon style={{ color: LOOKUP.warnend.color }} name="square" />{' '}
-            warnend {'(> 40)'}
+          <span style={{ whiteSpace: "nowrap" }}>
+            <Icon style={{ color: LOOKUP.warnend.color }} name="square" />{" "}
+            warnend {"(> 40)"}
           </span>
         </div>
-        <div style={{ fontSize: '80%' }}> Messwerte in µg/m³</div>
+        <div style={{ fontSize: "80%" }}> Messwerte in µg/m³</div>
       </div>
     );
     if (station?.bis === undefined) {
@@ -171,11 +171,12 @@ const InfoPanel = () => {
         <SecondaryInfoPanelSection
           key="last12"
           bsStyle="info"
-          header={'NO₂-Messwerte der letzten 12 Monate'}
+          header={"NO₂-Messwerte der letzten 12 Monate"}
         >
-          <div style={{ fontSize: '115%', padding: '10px', paddingTop: '0px' }}>
+          <div style={{ fontSize: "115%", padding: "10px", paddingTop: "0px" }}>
             {legend}
             <ColumnChart
+              legend={false}
               data={[
                 {
                   data: last12ChartData,
@@ -187,7 +188,7 @@ const InfoPanel = () => {
                     legend: {
                       display: false,
                       labels: {
-                        fontColor: 'rgb(255, 99, 132)',
+                        fontColor: "rgb(255, 99, 132)",
                       },
                     },
                   },
@@ -195,7 +196,7 @@ const InfoPanel = () => {
               ]}
             />
           </div>
-        </SecondaryInfoPanelSection>
+        </SecondaryInfoPanelSection>,
       );
     }
     if (Object.keys(avgsChartData).length > 0) {
@@ -203,11 +204,12 @@ const InfoPanel = () => {
         <SecondaryInfoPanelSection
           key="average10"
           bsStyle="warning"
-          header={'NO₂-Jahresmittelwerte der letzten zehn Kalenderjahre'}
+          header={"NO₂-Jahresmittelwerte der letzten zehn Kalenderjahre"}
         >
-          <div style={{ fontSize: '115%', padding: '10px', paddingTop: '0px' }}>
+          <div style={{ fontSize: "115%", padding: "10px", paddingTop: "0px" }}>
             {legend}
             <ColumnChart
+              legend={false}
               data={[
                 {
                   data: avgsChartData,
@@ -222,7 +224,7 @@ const InfoPanel = () => {
             />
             {/* <pre>{JSON.stringify(avgs, null, 2)}</pre> */}
           </div>
-        </SecondaryInfoPanelSection>
+        </SecondaryInfoPanelSection>,
       );
     }
     let opendataLink = (
@@ -235,7 +237,7 @@ const InfoPanel = () => {
     );
 
     let stationsaktivitaet;
-    const twothousandandeight = new Date('2008-01-01');
+    const twothousandandeight = new Date("2008-01-01");
 
     if (new Date(station?.bis) < twothousandandeight) {
       //Fall 1
@@ -243,7 +245,7 @@ const InfoPanel = () => {
         <div>
           <b>Stationsaktivität:</b>
           <p>
-            Von {new Date(station?.von).toLocaleDateString()} bis{' '}
+            Von {new Date(station?.von).toLocaleDateString()} bis{" "}
             {new Date(station?.bis).toLocaleDateString()} generierte diese
             Station NO₂-Messwerte.
             {opendataLinkSections[0]}
@@ -259,7 +261,7 @@ const InfoPanel = () => {
         <div>
           <b>Stationsaktivität:</b>
           <p>
-            Von {new Date(station?.von).toLocaleDateString()} bis{' '}
+            Von {new Date(station?.von).toLocaleDateString()} bis{" "}
             {new Date(station?.bis).toLocaleDateString()} generierte diese
             Station insgesamt {valueCounter} NO₂-Messwerte (Ausfälle und
             Messwerte vor 1.1.2008 nicht berücksichtigt).
@@ -277,7 +279,7 @@ const InfoPanel = () => {
           <b>Stationsaktivität:</b>
 
           <p>
-            Von {new Date(station?.von).toLocaleDateString()} bis{' '}
+            Von {new Date(station?.von).toLocaleDateString()} bis{" "}
             {new Date(station?.bis).toLocaleDateString()} generierte diese
             Station insgesamt {valueCounter} NO₂-Messwerte (Ausfälle nicht
             berücksichtigt).
@@ -287,12 +289,12 @@ const InfoPanel = () => {
           <b>Messausfälle:</b>
           {outageCounter > 0 && (
             <p>
-              Diese Messstation generierte an {outageCounter}{' '}
-              {outageCounter === 1 ? 'Monat' : 'Monaten'} einen Messausfall.
-              Damit besitzt sie eine Zuverlässigkeit von{' '}
+              Diese Messstation generierte an {outageCounter}{" "}
+              {outageCounter === 1 ? "Monat" : "Monaten"} einen Messausfall.
+              Damit besitzt sie eine Zuverlässigkeit von{" "}
               {(
                 Math.round(
-                  (valueCounter / (valueCounter + outageCounter)) * 1000
+                  (valueCounter / (valueCounter + outageCounter)) * 1000,
                 ) / 10
               ).toLocaleString()}
               %.
@@ -325,12 +327,12 @@ const InfoPanel = () => {
           <b>Messausfälle:</b>
           {outageCounter > 0 && (
             <p>
-              Diese Messstation generierte an {outageCounter}{' '}
-              {outageCounter === 1 ? 'Monat' : 'Monaten'} einen Messausfall.
-              Damit besitzt sie eine Zuverlässigkeit von{' '}
+              Diese Messstation generierte an {outageCounter}{" "}
+              {outageCounter === 1 ? "Monat" : "Monaten"} einen Messausfall.
+              Damit besitzt sie eine Zuverlässigkeit von{" "}
               {(
                 Math.round(
-                  (valueCounter / (valueCounter + outageCounter)) * 1000
+                  (valueCounter / (valueCounter + outageCounter)) * 1000,
                 ) / 10
               ).toLocaleString()}
               %.
@@ -369,7 +371,7 @@ const InfoPanel = () => {
 
           {station?.bis !== undefined && (
             <p>
-              Von {new Date(station?.von).toLocaleDateString()} bis{' '}
+              Von {new Date(station?.von).toLocaleDateString()} bis{" "}
               {new Date(station?.bis).toLocaleDateString()} generierte diese
               Station insgesamt {valueCounter} NO₂-Messwerte (Ausfälle nicht
               berücksichtigt).
@@ -385,12 +387,12 @@ const InfoPanel = () => {
           <b>Messausfälle:</b>
           {outageCounter > 0 && (
             <p>
-              Diese Messstation generierte an {outageCounter}{' '}
-              {outageCounter === 1 ? 'Monat' : 'Monaten'} einen Messausfall.
-              Damit besitzt sie eine Zuverlässigkeit von{' '}
+              Diese Messstation generierte an {outageCounter}{" "}
+              {outageCounter === 1 ? "Monat" : "Monaten"} einen Messausfall.
+              Damit besitzt sie eine Zuverlässigkeit von{" "}
               {(
                 Math.round(
-                  (valueCounter / (valueCounter + outageCounter)) * 1000
+                  (valueCounter / (valueCounter + outageCounter)) * 1000,
                 ) / 10
               ).toLocaleString()}
               %.
@@ -410,14 +412,14 @@ const InfoPanel = () => {
     return (
       <SecondaryInfo
         titleIconName="info-circle"
-        title={'Datenblatt: Messstation für Stickstoffdioxid (NO₂)'}
+        title={"Datenblatt: Messstation für Stickstoffdioxid (NO₂)"}
         mainSection={
-          <div style={{ width: '100%', minHeight: minHeight4MainSextion }}>
+          <div style={{ width: "100%", minHeight: minHeight4MainSextion }}>
             {foto !== undefined && (
               <div
                 style={{
-                  textAlign: 'center',
-                  float: windowSize?.width < 500 ? undefined : 'right',
+                  textAlign: "center",
+                  float: windowSize?.width < 500 ? undefined : "right",
                 }}
               >
                 <img
@@ -425,8 +427,8 @@ const InfoPanel = () => {
                   style={{
                     paddingLeft: 10,
                     paddingRight: 10,
-                    horizontalAlignment: 'center',
-                    paddingBottom: '5px',
+                    horizontalAlignment: "center",
+                    paddingBottom: "5px",
                   }}
                   src={foto}
                   width="250"
@@ -435,16 +437,16 @@ const InfoPanel = () => {
             )}
             <div
               style={{
-                fontSize: '115%',
-                padding: '10px',
-                paddingTop: '0px',
+                fontSize: "115%",
+                padding: "10px",
+                paddingTop: "0px",
               }}
             >
               <div>
                 <b>Adresse:</b>
 
                 <p>
-                  {station?.strasse} {station?.hausnummer}{' '}
+                  {station?.strasse} {station?.hausnummer}{" "}
                   {station?.zusatzinfo && <span>({station?.zusatzinfo})</span>}
                 </p>
                 {stationsaktivitaet}
