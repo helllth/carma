@@ -1,12 +1,12 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import 'leaflet/dist/leaflet.css';
-import proj4 from 'proj4';
-import { TransitiveReactLeaflet } from 'react-cismap';
-import CismapLayer from 'react-cismap/CismapLayer';
-import { proj4crs25832def } from 'react-cismap/constants/gis';
-import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import { useDispatch, useSelector } from 'react-redux';
-import { getLeafNodes } from '../helper/featureInfo';
+import { useContext, useEffect, useRef, useState } from "react";
+import "leaflet/dist/leaflet.css";
+import proj4 from "proj4";
+import { TransitiveReactLeaflet } from "react-cismap";
+import CismapLayer from "react-cismap/CismapLayer";
+import { proj4crs25832def } from "react-cismap/constants/gis";
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { getLeafNodes } from "../helper/featureInfo";
 import {
   getLayerMode,
   getVectorStyle,
@@ -14,11 +14,11 @@ import {
   setJSONOutput,
   setOldVariant,
   setVectorOutput,
-} from '../store/slices/mapping';
-import InfoBox from 'react-cismap/topicmaps/InfoBox';
-import { getActionLinksForFeature } from 'react-cismap/tools/uiHelper';
-import { TopicMapDispatchContext } from 'react-cismap/contexts/TopicMapContextProvider';
-import type { LatLng, Point } from 'leaflet';
+} from "../store/slices/mapping";
+import InfoBox from "react-cismap/topicmaps/InfoBox";
+import { getActionLinksForFeature } from "react-cismap/tools/uiHelper";
+import { TopicMapDispatchContext } from "react-cismap/contexts/TopicMapContextProvider";
+import type { LatLng, Point } from "leaflet";
 
 const { Marker } = TransitiveReactLeaflet;
 
@@ -49,11 +49,11 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     handleResize();
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   let links = [];
@@ -65,12 +65,12 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
           const f = JSON.stringify(selectedFeature, null, 2);
           const pf = JSON.parse(f);
           pf.crs = {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn:ogc:def:crs:EPSG::4326',
+              name: "urn:ogc:def:crs:EPSG::4326",
             },
           };
-          console.log('xxx zoomToFeature', pf);
+          console.log("xxx zoomToFeature", pf);
 
           zoomToFeature(pf);
         }
@@ -87,6 +87,7 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
         mapStyle={{ width, height }}
         leafletMapProps={{ editable: true }}
         minZoom={5}
+        backgroundlayers="wupp-plan-live"
         gazetteerSearchControl={false}
         infoBox={
           selectedFeature ? (
@@ -114,9 +115,9 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
           target: HTMLElement;
           type: string;
         }) => {
-          if (layerMode === 'default') {
+          if (layerMode === "default") {
             // @ts-ignore
-            const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
+            const pos = proj4(proj4.defs("EPSG:4326"), proj4crs25832def, [
               e.latlng.lng,
               e.latlng.lat,
             ]);
@@ -152,20 +153,20 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
                 .then((response) => response.text())
                 .then((data) => {
                   const parser = new DOMParser();
-                  const xmlDoc = parser.parseFromString(data, 'text/xml');
+                  const xmlDoc = parser.parseFromString(data, "text/xml");
                   const content =
-                    xmlDoc.getElementsByTagName('gml:featureMember')[0];
+                    xmlDoc.getElementsByTagName("gml:featureMember")[0];
                   dispatch(
                     setGMLOutput(
                       content?.outerHTML
                         ? content.outerHTML
-                        : 'Nichts gefunden',
+                        : "Nichts gefunden",
                     ),
                   );
 
                   dispatch(
                     setJSONOutput(
-                      content?.outerHTML ? getLeafNodes(content) : '',
+                      content?.outerHTML ? getLeafNodes(content) : "",
                     ),
                   );
                 });
@@ -179,7 +180,7 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
           }
         }}
       >
-        {layer && layerMode === 'default' && (
+        {layer && layerMode === "default" && (
           <CismapLayer
             key={layer.name}
             url={layer.url}
@@ -190,12 +191,12 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
             transparent="true"
             pane="additionalLayers1"
             opacity={0.7}
-            type={'wmts'}
+            type={"wmts"}
           />
         )}
-        {vectorStyle && layerMode === 'vector' && (
+        {vectorStyle && layerMode === "vector" && (
           <CismapLayer
-            type={'vector'}
+            type={"vector"}
             style={vectorStyle}
             pane="additionalLayers2"
             opacity={1}
@@ -203,7 +204,7 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
             // key={vectorStyle}
             onSelectionChanged={(e: { hits: any[]; hit: any }) => {
               const selectedFeature = e.hits[0];
-              console.log('xxxy selectedFeature', selectedFeature);
+              console.log("xxxy selectedFeature", selectedFeature);
 
               const p = selectedFeature.properties;
               dispatch(setVectorOutput(p));
