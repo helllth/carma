@@ -1,10 +1,10 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import proj4 from "proj4";
-import { TransitiveReactLeaflet } from "react-cismap";
 import CismapLayer from "react-cismap/CismapLayer";
 import { proj4crs25832def } from "react-cismap/constants/gis";
 import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+import ExtraMarker from "react-cismap/ExtraMarker";
 import { useDispatch, useSelector } from "react-redux";
 import { getLeafNodes } from "../helper/featureInfo";
 import {
@@ -19,8 +19,6 @@ import InfoBox from "react-cismap/topicmaps/InfoBox";
 import { getActionLinksForFeature } from "react-cismap/tools/uiHelper";
 import { TopicMapDispatchContext } from "react-cismap/contexts/TopicMapContextProvider";
 import type { LatLng, Point } from "leaflet";
-
-const { Marker } = TransitiveReactLeaflet;
 
 interface MapProps {
   layer: { name: string; url: string } | null;
@@ -211,7 +209,12 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
             }}
           />
         )}
-        {pos && <Marker position={pos}></Marker>}
+        {pos && (
+          <ExtraMarker
+            markerOptions={{ markerColor: "cyan", spin: false }}
+            position={pos}
+          />
+        )}
       </TopicMapComponent>
     </div>
   );
