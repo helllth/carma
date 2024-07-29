@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { RootState } from '..';
+import { createSlice } from "@reduxjs/toolkit";
+import type { RootState } from "..";
 
 interface MappingState {
   layers: any[];
@@ -16,12 +16,12 @@ const initialState: MappingState = {
   gmlOutput: null,
   jsonOutput: null,
   oldVariant: null,
-  layerMode: 'default',
-  vectorOutput: '',
+  layerMode: "default",
+  vectorOutput: "",
 };
 
 const slice = createSlice({
-  name: 'mapping',
+  name: "mapping",
   initialState,
   reducers: {
     setLayers(state, action) {

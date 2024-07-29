@@ -1,5 +1,4 @@
-import WMSCapabilities from 'wms-capabilities';
-import { WMSCapabilitiesJSON } from 'wms-capabilities';
+import WMSCapabilities from "wms-capabilities";
 
 // @ts-ignore
 const parser = new WMSCapabilities();
@@ -8,7 +7,7 @@ export const getAllLayers = async () => {
   let categories: any[] = [];
   for (const key in serviceConfig) {
     await fetch(
-      `${serviceConfig[key].url}?service=WMS&request=GetCapabilities&version=1.1.1`
+      `${serviceConfig[key].url}?service=WMS&request=GetCapabilities&version=1.1.1`,
     )
       .then((response) => {
         return response.text();
@@ -19,10 +18,10 @@ export const getAllLayers = async () => {
           const flattenedLayer = flattenLayer(
             result.Capability.Layer,
             [],
-            serviceConfig[key].url
+            serviceConfig[key].url,
           );
           const queryableLayers = flattenedLayer.layers.filter(
-            (layer) => layer.queryable
+            (layer) => layer.queryable,
           );
           const category = {
             title: serviceConfig[key].name,
@@ -41,14 +40,14 @@ export const getAllLayers = async () => {
 export const flattenLayer = (
   layer: any,
   parentTitles: any = [],
-  url: string
+  url: string,
 ) => {
   const layerTitle = layer.Title;
   const layerTags = [...parentTitles, layerTitle];
 
   const flattenedLayer: any = {
     Title: layerTitle,
-    Name: layer.Name ? layer.Name : '',
+    Name: layer.Name ? layer.Name : "",
     Abstract: layer.Abstract,
     tags: layerTags,
     srs: layer.SRS,
@@ -69,7 +68,7 @@ export const flattenLayer = (
         childLayers.push(...flattennedSubLayer.layers);
         delete flattennedSubLayer.layers;
       }
-      if (flattennedSubLayer.Name !== '') {
+      if (flattennedSubLayer.Name !== "") {
         childLayers.push(flattennedSubLayer);
       }
     });
@@ -81,39 +80,39 @@ export const flattenLayer = (
 
 const serviceConfig = {
   wuppKarten: {
-    url: 'https://maps.wuppertal.de/karten',
-    name: 'Karten',
+    url: "https://maps.wuppertal.de/karten",
+    name: "Karten",
   },
   wuppUmwelt: {
-    url: 'https://maps.wuppertal.de/umwelt',
-    name: 'Umwelt',
+    url: "https://maps.wuppertal.de/umwelt",
+    name: "Umwelt",
   },
   wuppInfra: {
-    url: 'https://maps.wuppertal.de/infra',
-    name: 'Infra',
+    url: "https://maps.wuppertal.de/infra",
+    name: "Infra",
   },
   wuppPOI: {
-    url: 'https://maps.wuppertal.de/poi',
-    name: 'Poi',
+    url: "https://maps.wuppertal.de/poi",
+    name: "Poi",
   },
   wuppPlanung: {
-    url: 'https://maps.wuppertal.de/planung',
-    name: 'Planung',
+    url: "https://maps.wuppertal.de/planung",
+    name: "Planung",
   },
   wuppInspire: {
-    url: 'https://maps.wuppertal.de/inspire',
-    name: 'Inspire',
+    url: "https://maps.wuppertal.de/inspire",
+    name: "Inspire",
   },
   wuppImmo: {
-    url: 'https://maps.wuppertal.de/immo',
-    name: 'Immo',
+    url: "https://maps.wuppertal.de/immo",
+    name: "Immo",
   },
   wuppVerkehr: {
-    url: 'https://maps.wuppertal.de/verkehr',
-    name: 'Verkehr',
+    url: "https://maps.wuppertal.de/verkehr",
+    name: "Verkehr",
   },
   wuppGebiet: {
-    url: 'https://maps.wuppertal.de/gebiet',
-    name: 'Gebiet',
+    url: "https://maps.wuppertal.de/gebiet",
+    name: "Gebiet",
   },
 };
