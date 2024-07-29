@@ -1,5 +1,5 @@
-declare module 'react-cismap/contexts/TopicMapContextProvider' {
-  import { Context, FC } from 'react';
+declare module "react-cismap/contexts/TopicMapContextProvider" {
+  import { Context, FC } from "react";
   interface RoutedMapRefContext {
     routedMapRef: {
       leafletMap?: {
@@ -19,8 +19,8 @@ declare module 'react-cismap/contexts/TopicMapContextProvider' {
   export default TopicMapContextProvider;
 }
 
-declare module 'react-cismap/contexts/UIContextProvider' {
-  import { Context, FC } from 'react';
+declare module "react-cismap/contexts/UIContextProvider" {
+  import { Context, FC } from "react";
 
   export const UIContext: Context<{
     appMenuActiveMenuSection: string;
@@ -37,8 +37,8 @@ declare module 'react-cismap/contexts/UIContextProvider' {
   export default UIDispatchContextProvider;
 }
 
-declare module 'react-cismap/contexts/FeatureCollectionContextProvider' {
-  import { Context, FC } from 'react';
+declare module "react-cismap/contexts/FeatureCollectionContextProvider" {
+  import { Context, FC } from "react";
   export const FeatureCollectionContext: Context<{
     selectedFeature: any;
     clusteringOptions: any;
@@ -55,8 +55,8 @@ declare module 'react-cismap/contexts/FeatureCollectionContextProvider' {
   export default FeatureCollectionContextProvider;
 }
 
-declare module 'react-cismap/contexts/TopicMapStylingContextProvider' {
-  import { Context, FC } from 'react';
+declare module "react-cismap/contexts/TopicMapStylingContextProvider" {
+  import { Context, FC } from "react";
   export const TopicMapStylingContext: Context<{
     markerSymbolSize: number;
     additionalStylingInfo: any;
@@ -68,8 +68,8 @@ declare module 'react-cismap/contexts/TopicMapStylingContextProvider' {
   export default TopicMapStylingContextProvider;
 }
 
-declare module 'react-cismap/contexts/ResponsiveTopicMapContextProvider' {
-  import { Context, FC } from 'react';
+declare module "react-cismap/contexts/ResponsiveTopicMapContextProvider" {
+  import { Context, FC } from "react";
   export const ResponsiveTopicMapContext: Context<{
     windowSize: {
       width: number;
@@ -80,38 +80,40 @@ declare module 'react-cismap/contexts/ResponsiveTopicMapContextProvider' {
   export default ResponsiveTopicMapContextProvider;
 }
 
-declare module 'react-cismap/topicmaps/TopicMapComponent' {
+declare module "react-cismap/topicmaps/TopicMapComponent" {
   const TopicMapComponent: FC<TopicMapProps>;
   export default TopicMapComponent;
 }
 
-declare module 'react-cismap/StyledWMSTileLayer' {
+declare module "react-cismap/StyledWMSTileLayer" {
   const StyledWMSTileLayer: any;
   export default StyledWMSTileLayer;
 }
 
-declare module 'react-cismap/constants/gis' {
+declare module "react-cismap/constants/gis" {
   const proj4crs25832def: string;
 }
 
-declare module 'react-cismap/topicmaps/InfoBox' {
+declare module "react-cismap/topicmaps/InfoBox" {
   const InfoBox: FC<InfoBoxProps>;
   export default InfoBox;
 }
 
-declare module 'react-cismap' {
+declare module "react-cismap" {
   const TransitiveReactLeaflet: any;
   const MappingConstants: {
     proj4crs3857def: string;
+    proj4crs25832def: string;
     crs3857: string;
+    crs25832: string;
   };
 }
 
-declare module 'react-cismap/tools/uiHelper' {
+declare module "react-cismap/tools/uiHelper" {
   const getActionLinksForFeature: (feature: any, options: any) => any;
 }
 
-declare module 'react-cismap/CismapLayer' {
+declare module "react-cismap/CismapLayer" {
   const CismapLayer: FC<CismapLayerProps>;
   export default CismapLayer;
 }
