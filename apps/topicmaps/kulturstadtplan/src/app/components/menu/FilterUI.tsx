@@ -1,19 +1,19 @@
-import { useContext } from 'react';
-import { Form, Tabs, Tab } from 'react-bootstrap';
+import { useContext } from "react";
+import { Form, Tabs, Tab } from "react-bootstrap";
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
-} from 'react-cismap/contexts/FeatureCollectionContextProvider';
-import { ResponsiveTopicMapContext } from 'react-cismap/contexts/ResponsiveTopicMapContextProvider';
+} from "react-cismap/contexts/FeatureCollectionContextProvider";
+import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopicMapContextProvider";
 
-import 'url-search-params-polyfill';
-import Icon from 'react-cismap/commons/Icon';
+import "url-search-params-polyfill";
+import Icon from "react-cismap/commons/Icon";
 import {
   getAllEinrichtungen,
   getColorFromMainlocationTypeName,
   textConversion,
-} from '../../../helper/styler';
-import KulturPieChart from './KulturPieChart';
+} from "../../../helper/styler";
+import KulturPieChart from "./KulturPieChart";
 
 const FilterUI = () => {
   // @ts-expect-error legacy codebase exception
@@ -64,14 +64,14 @@ const FilterUI = () => {
   const setAllFilter = (kind) => {
     const newFilterState = JSON.parse(JSON.stringify(filterState));
     const einrichtungen = getAllEinrichtungen().map(
-      (einrichtung) => einrichtung
+      (einrichtung) => einrichtung,
     );
     const veranstaltungen = itemsDictionary?.veranstaltungsarten?.map(
-      (veranstaltung) => veranstaltung
+      (veranstaltung) => veranstaltung,
     );
-    if (kind === 'veranstaltung') {
+    if (kind === "veranstaltung") {
       newFilterState[kind] = veranstaltungen;
-    } else if (kind === 'einrichtung') {
+    } else if (kind === "einrichtung") {
       newFilterState[kind] = einrichtungen;
     }
 
@@ -83,13 +83,13 @@ const FilterUI = () => {
       <table border={0} width="100%">
         <tbody>
           <tr>
-            <td style={{ width: '330px', verticalAlign: 'top' }}>
+            <td style={{ width: "330px", verticalAlign: "top" }}>
               <Form>
-                <table style={{ width: '100%', border: 0 }}>
-                  <tbody style={{ width: '100%', verticalAlign: 'top' }}>
+                <table style={{ width: "100%", border: 0 }}>
+                  <tbody style={{ width: "100%", verticalAlign: "top" }}>
                     <tr>
                       <td>
-                        <div style={{ width: '100%' }}>
+                        <div style={{ width: "100%" }}>
                           <h4>Filtern nach</h4>
                           <Tabs
                             id="controlled-tabs"
@@ -103,7 +103,13 @@ const FilterUI = () => {
                             }}
                           >
                             <Tab eventKey="einrichtungen" title="Einrichtungen">
-                              <table style={{ width: '100%', margin: 8 }}>
+                              <table
+                                style={{
+                                  width: "100%",
+                                  margin: 8,
+                                  marginTop: 14,
+                                }}
+                              >
                                 <tbody>
                                   <tr>
                                     <td align="center">
@@ -112,7 +118,7 @@ const FilterUI = () => {
                                           margin: 4,
                                         }}
                                         onClick={() => {
-                                          setAllFilter('einrichtung');
+                                          setAllFilter("einrichtung");
                                         }}
                                         className="renderAsLink"
                                       >
@@ -125,7 +131,7 @@ const FilterUI = () => {
                                           margin: 4,
                                         }}
                                         onClick={() => {
-                                          clearFilter('einrichtung');
+                                          clearFilter("einrichtung");
                                         }}
                                         className="renderAsLink"
                                       >
@@ -140,43 +146,43 @@ const FilterUI = () => {
                                 return (
                                   <div
                                     key={
-                                      'filter.kulturstadtplan.kategorien.div.' +
+                                      "filter.kulturstadtplan.kategorien.div." +
                                       einrichtung
                                     }
                                   >
                                     <Form.Check
                                       readOnly={true}
                                       key={
-                                        'filter.kulturstadtplan.kategorie.' +
+                                        "filter.kulturstadtplan.kategorie." +
                                         einrichtung
                                       }
                                       onClick={(e) => {
                                         setFilterValue(
-                                          'einrichtung',
+                                          "einrichtung",
                                           einrichtung,
                                           // @ts-expect-error legacy codebase exception
-                                          e.target.checked
+                                          e.target.checked,
                                         );
                                       }}
                                       checked={
-                                        filterState['einrichtung']?.indexOf(
-                                          einrichtung
+                                        filterState["einrichtung"]?.indexOf(
+                                          einrichtung,
                                         ) !== -1
                                       }
                                       inline
                                       label={
                                         <>
-                                          {textConversion(einrichtung)}{' '}
+                                          {textConversion(einrichtung)}{" "}
                                           <Icon
                                             style={{
                                               color:
                                                 getColorFromMainlocationTypeName(
-                                                  einrichtung
+                                                  einrichtung,
                                                 ),
-                                              width: '30px',
-                                              textAlign: 'center',
+                                              width: "30px",
+                                              textAlign: "center",
                                             }}
-                                            name={'circle'}
+                                            name={"circle"}
                                           />
                                         </>
                                       }
@@ -189,7 +195,13 @@ const FilterUI = () => {
                               eventKey="veranstaltungen"
                               title="Veranstaltungen"
                             >
-                              <table style={{ width: '100%', margin: 8 }}>
+                              <table
+                                style={{
+                                  width: "100%",
+                                  margin: 8,
+                                  marginTop: 14,
+                                }}
+                              >
                                 <tbody>
                                   <tr>
                                     <td align="center">
@@ -198,7 +210,7 @@ const FilterUI = () => {
                                           margin: 4,
                                         }}
                                         onClick={() => {
-                                          setAllFilter('veranstaltung');
+                                          setAllFilter("veranstaltung");
                                         }}
                                         className="renderAsLink"
                                       >
@@ -211,7 +223,7 @@ const FilterUI = () => {
                                           margin: 4,
                                         }}
                                         onClick={() => {
-                                          clearFilter('veranstaltung');
+                                          clearFilter("veranstaltung");
                                         }}
                                         className="renderAsLink"
                                       >
@@ -226,27 +238,27 @@ const FilterUI = () => {
                                   return (
                                     <div
                                       key={
-                                        'div.filter.kulturstadtplan.veranstaltungsart.' +
+                                        "div.filter.kulturstadtplan.veranstaltungsart." +
                                         art
                                       }
                                     >
                                       <Form.Check
                                         readOnly={true}
                                         key={
-                                          'filter.kulturstadtplan.veranstaltungsart.' +
+                                          "filter.kulturstadtplan.veranstaltungsart." +
                                           art
                                         }
                                         onClick={(e) => {
                                           setFilterValue(
-                                            'veranstaltung',
+                                            "veranstaltung",
                                             art,
                                             // @ts-expect-error legacy codebase exception
-                                            e.target.checked
+                                            e.target.checked,
                                           );
                                         }}
                                         checked={
-                                          filterState['veranstaltung']?.indexOf(
-                                            art
+                                          filterState["veranstaltung"]?.indexOf(
+                                            art,
                                           ) !== -1
                                         }
                                         inline
@@ -254,7 +266,7 @@ const FilterUI = () => {
                                       />
                                     </div>
                                   );
-                                }
+                                },
                               )}
                             </Tab>
                           </Tabs>
