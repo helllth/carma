@@ -1,39 +1,46 @@
-import { useContext } from 'react';
-import CustomizationContextProvider from 'react-cismap/contexts/CustomizationContextProvider';
-import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
-import ModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
-import Section from 'react-cismap/topicmaps/menu/Section';
-import DefaultSettingsPanel from 'react-cismap/topicmaps/menu/DefaultSettingsPanel';
-
-import Introduction from './Menu/Introduction';
-import HelpSection from './Menu/HelpSection';
-import FilterUI from './Menu/FilterUI';
+import { useContext } from "react";
+import CustomizationContextProvider from "react-cismap/contexts/CustomizationContextProvider";
+import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
+import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
+import Section from "react-cismap/topicmaps/menu/Section";
+import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
+import FilterUI from "./Menu/FilterUI";
+import {
+  KompaktanleitungSection,
+  MenuIntroduction,
+  MenuTitle,
+} from "@carma-collab/wuppertal/e-bikes";
+import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 
 const Menu = () => {
   const { filteredItems, shownFeatures } = useContext(FeatureCollectionContext);
-
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const getFilterHeader = () => {
     const count = filteredItems?.length || 0;
 
     let term;
     if (count === 1) {
-      term = 'Angebot';
+      term = "Angebot";
     } else {
-      term = 'Angebote';
+      term = "Angebote";
     }
 
     return `Filter (${count} ${term} gefunden, davon ${
-      shownFeatures?.length || '0'
+      shownFeatures?.length || "0"
     } in der Karte)`;
   };
 
   return (
     <CustomizationContextProvider customizations={{}}>
       <ModalApplicationMenu
-        menuIcon={'bars'}
-        menuTitle={'Filter, Einstellungen und Kompaktanleitung'}
+        menuIcon={"bars"}
+        menuTitle={<MenuTitle />}
         // menuFooter={<MenuFooter />}
-        menuIntroduction={<Introduction />}
+        menuIntroduction={
+          <MenuIntroduction
+            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+          />
+        }
         menuSections={[
           <Section
             key="filter"
@@ -43,7 +50,7 @@ const Menu = () => {
             sectionContent={<FilterUI />}
           />,
           <DefaultSettingsPanel key="settings" />,
-          <HelpSection />,
+          <KompaktanleitungSection />,
         ]}
       />
     </CustomizationContextProvider>

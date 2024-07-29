@@ -1,29 +1,34 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from "react";
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
-} from 'react-cismap/contexts/FeatureCollectionContextProvider';
-import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
-import FeatureCollection from 'react-cismap/FeatureCollection';
-import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
-import { getGazData } from '../../helper/gazData';
-import { getPoiClusterIconCreatorFunction } from '../../helper/styler';
-import Menu from './Menu';
-import SecondaryInfoModal from './SecondaryInfoModal';
+} from "react-cismap/contexts/FeatureCollectionContextProvider";
+import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
+import FeatureCollection from "react-cismap/FeatureCollection";
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
+import { getGazData } from "../../helper/gazData";
+import { getPoiClusterIconCreatorFunction } from "../../helper/styler";
+import Menu from "./Menu";
+import SecondaryInfoModal from "./SecondaryInfoModal";
 import {
   UIContext,
   UIDispatchContext,
-} from 'react-cismap/contexts/UIContextProvider';
-
+} from "react-cismap/contexts/UIContextProvider";
+import {
+  InfoBoxTextContent,
+  InfoBoxTextTitle,
+  MenuTooltip,
+  searchTextPlaceholder,
+} from "@carma-collab/wuppertal/e-bikes";
 const Map = () => {
   const [gazData, setGazData] = useState([]);
   const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
-    FeatureCollectionDispatchContext
+    FeatureCollectionDispatchContext,
   );
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   const { clusteringOptions, selectedFeature } = useContext(
-    FeatureCollectionContext
+    FeatureCollectionContext,
   );
   const { secondaryInfoVisible } = useContext(UIContext);
   const { setSecondaryInfoVisible } = useContext(UIDispatchContext);
@@ -46,35 +51,30 @@ const Map = () => {
       modalMenu={<Menu />}
       locatorControl={true}
       photoLightBox
-      gazetteerSearchPlaceholder="Ladestation | Verleih | Adresse"
+      gazetteerSearchPlaceholder={searchTextPlaceholder}
       gazetteerHitTrigger={(hits) => {
         if ((Array.isArray(hits) && hits[0]?.more?.pid) || hits[0]?.more?.kid) {
           const gazId = hits[0]?.more?.pid || hits[0]?.more?.kid;
           setSelectedFeatureByPredicate(
-            (feature) => feature.properties.id === gazId
+            (feature) => feature.properties.id === gazId,
           );
         }
       }}
-      applicationMenuTooltipString="Filter | Einstellungen | Kompaktanleitung"
+      applicationMenuTooltipString={<MenuTooltip />}
       infoBox={
         <GenericInfoBoxFromFeature
           pixelwidth={350}
           config={{
             displaySecondaryInfoAction: true,
-            city: 'Wuppertal',
+            city: "Wuppertal",
             navigator: {
               noun: {
-                singular: 'Sation',
-                plural: 'Stationen',
+                singular: "Sation",
+                plural: "Stationen",
               },
             },
-            noCurrentFeatureTitle: 'Keine Stationen gefunden',
-            noCurrentFeatureContent: (
-              <span>
-                Für mehr Ladestationen Ansicht mit verkleinern oder mit dem
-                untenstehenden Link auf das komplette Stadtgebiet zoomen.
-              </span>
-            ),
+            noFeatureTitle: <InfoBoxTextTitle />,
+            noCurrentFeatureContent: <InfoBoxTextContent />,
           }}
         />
       }
