@@ -397,6 +397,25 @@
       },
       "projectPath": "./dist/playgrounds/map-control-playground"
     },
+    "feature-info-playground": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-playground-deployments",
+            "prj": "feature-info-playground"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-playground-deployments",
+              "prj": "feature-info-playground"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/playgrounds/feature-info-playground"
+    },
     "verdis-desktop": {
       "deployment": {
         "manual": {
