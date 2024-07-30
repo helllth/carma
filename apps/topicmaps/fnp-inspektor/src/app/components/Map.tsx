@@ -1,49 +1,52 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
+import { useContext, useEffect, useRef, useState } from "react";
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
 import {
   FeatureCollectionDisplayWithTooltipLabels,
   TransitiveReactLeaflet,
-} from 'react-cismap';
-import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faShuffle } from '@fortawesome/free-solid-svg-icons';
-import AEVInfo from './infos/AEVInfo';
-import HNInfo from './infos/HNInfo';
-import HN9999Info from './infos/HN9999Info';
-import EmptyAEVInfo from './infos/EmptyAEVInfo';
-import EmptyHNInfo from './infos/EmptyHNInfo';
-import { useDispatch, useSelector } from 'react-redux';
+} from "react-cismap";
+import StyledWMSTileLayer from "react-cismap/StyledWMSTileLayer";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faShuffle } from "@fortawesome/free-solid-svg-icons";
+import AEVInfo from "./infos/AEVInfo";
+import HNInfo from "./infos/HNInfo";
+import HN9999Info from "./infos/HN9999Info";
+import EmptyAEVInfo from "./infos/EmptyAEVInfo";
+import EmptyHNInfo from "./infos/EmptyHNInfo";
+import { useDispatch, useSelector } from "react-redux";
 import {
   loadHauptnutzungen,
   searchForHauptnutzungen,
-} from '../../store/slices/hauptnutzungen';
-import proj4 from 'proj4';
-import { proj4crs25832def } from 'react-cismap/constants/gis';
+} from "../../store/slices/hauptnutzungen";
+import proj4 from "proj4";
+import { proj4crs25832def } from "react-cismap/constants/gis";
 import {
   getData,
   loadAEVs,
   searchForAEVs,
-} from '../../store/slices/aenderungsverfahren';
+} from "../../store/slices/aenderungsverfahren";
 import {
   getFeatureCollection,
   getSelectedFeatureIndex,
   setFeatureCollection,
   setSelectedFeatureIndex,
-} from '../../store/slices/mapping';
-import ShowAEVModeButton from './ShowAEVModeButton';
+} from "../../store/slices/mapping";
+import ShowAEVModeButton from "./ShowAEVModeButton";
 import {
   aevFeatureStyler,
   aevLabeler,
   hnFeatureStyler,
   hnLabeler,
-} from '../../utils/Styler';
-import Modal from './help/Modal';
-import { getGazData } from '../../utils/gazData';
-import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
-import L from 'leaflet';
-import type { UnknownAction } from 'redux';
-
+} from "../../utils/Styler";
+import Modal from "./help/Modal";
+import { getGazData } from "../../utils/gazData";
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
+import L from "leaflet";
+import { UnknownAction } from "redux";
+import {
+  MenuTooltip,
+  searchTextPlaceholder,
+} from "@carma-collab/wuppertal/fnp-inspektor";
 const { ScaleControl } = TransitiveReactLeaflet;
 
 const Map = () => {
@@ -53,11 +56,11 @@ const Map = () => {
   const features = useSelector(getFeatureCollection);
   const selectedFeatureIndex = useSelector(getSelectedFeatureIndex);
   const [gazData, setGazData] = useState([]);
-  const [mapMode, setMapMode] = useState({ mode: 'rechtsplan' });
+  const [mapMode, setMapMode] = useState({ mode: "rechtsplan" });
   let { mode } = useParams();
   const navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
-  let aevVisible = searchParams.get('aevVisible') !== null;
+  let aevVisible = searchParams.get("aevVisible") !== null;
   const dispatch = useDispatch();
   const aevFeatures = useSelector(getData);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -72,46 +75,46 @@ const Map = () => {
   }, []);
 
   useEffect(() => {
-    if (mode !== 'arbeitskarte' && mode !== 'rechtsplan') {
-      navigate('/rechtsplan');
-      setMapMode({ mode: 'rechtsplan' });
-    } else if (mode === 'arbeitskarte') {
-      setMapMode({ mode: 'arbeitskarte' });
+    if (mode !== "arbeitskarte" && mode !== "rechtsplan") {
+      navigate("/rechtsplan");
+      setMapMode({ mode: "rechtsplan" });
+    } else if (mode === "arbeitskarte") {
+      setMapMode({ mode: "arbeitskarte" });
     } else {
-      setMapMode({ mode: 'rechtsplan' });
+      setMapMode({ mode: "rechtsplan" });
     }
   }, [mode]);
 
   let info;
 
-  if (features.length > 0 && (aevVisible || mapMode.mode === 'arbeitskarte')) {
-    if (mapMode.mode === 'rechtsplan') {
+  if (features.length > 0 && (aevVisible || mapMode.mode === "arbeitskarte")) {
+    if (mapMode.mode === "rechtsplan") {
       info = <AEVInfo />;
-    } else if (mapMode.mode === 'arbeitskarte') {
-      if (features[selectedFeatureIndex].properties.os !== '9999') {
+    } else if (mapMode.mode === "arbeitskarte") {
+      if (features[selectedFeatureIndex].properties.os !== "9999") {
         info = <HNInfo />;
       } else {
         info = <HN9999Info />;
       }
     }
   } else {
-    if (mapMode.mode === 'rechtsplan') {
+    if (mapMode.mode === "rechtsplan") {
       info = <EmptyAEVInfo />;
-    } else if (mapMode.mode === 'arbeitskarte') {
+    } else if (mapMode.mode === "arbeitskarte") {
       info = <EmptyHNInfo />;
     }
   }
 
   let titleContent;
   let backgrounds;
-  if (mapMode.mode === 'arbeitskarte') {
+  if (mapMode.mode === "arbeitskarte") {
     titleContent = (
       <div>
         <b>Arbeitskarte: </b> fortgeschriebene Hauptnutzungen (informeller
         FNP-Auszug)
-        <div style={{ float: 'right', paddingRight: 10 }}>
+        <div style={{ float: "right", paddingRight: 10 }}>
           <a
-            href={urlPrefix + '/#/rechtsplan?' + searchParams}
+            href={urlPrefix + "/#/rechtsplan?" + searchParams}
             onClick={() => {
               dispatch(setFeatureCollection([]));
             }}
@@ -125,9 +128,9 @@ const Map = () => {
 
     backgrounds = [
       <StyledWMSTileLayer
-        key={'Hauptnutzungen.flaeche:aevVisible:' + aevVisible}
+        key={"Hauptnutzungen.flaeche:aevVisible:" + aevVisible}
         url="https://maps.wuppertal.de/planung"
-        layers={'r102:fnp_haupt_fl'}
+        layers={"r102:fnp_haupt_fl"}
         version="1.1.1"
         transparent="true"
         format="image/png"
@@ -138,14 +141,14 @@ const Map = () => {
         caching={true}
       />,
     ];
-  } else if (mapMode.mode === 'rechtsplan') {
+  } else if (mapMode.mode === "rechtsplan") {
     titleContent = (
       <div>
-        <b>Rechtsplan: </b> Flächennutzungsplan (FNP){' '}
-        {aevVisible === true ? 'mit Änderungsverfahren (ÄV)' : ''}
-        <div style={{ float: 'right', paddingRight: 10 }}>
+        <b>Rechtsplan: </b> Flächennutzungsplan (FNP){" "}
+        {aevVisible === true ? "mit Änderungsverfahren (ÄV)" : ""}
+        <div style={{ float: "right", paddingRight: 10 }}>
           <a
-            href={urlPrefix + '/#/arbeitskarte?' + searchParams}
+            href={urlPrefix + "/#/arbeitskarte?" + searchParams}
             onClick={() => {
               dispatch(setFeatureCollection([]));
             }}
@@ -159,9 +162,9 @@ const Map = () => {
 
     backgrounds = [
       <StyledWMSTileLayer
-        key={'rechtsplan:aevVisible:' + aevVisible}
+        key={"rechtsplan:aevVisible:" + aevVisible}
         url="https://maps.wuppertal.de/planung?SRS=EPSG:25832"
-        layers={'r102:fnp_clip'}
+        layers={"r102:fnp_clip"}
         version="1.1.1"
         transparent="true"
         format="image/png"
@@ -178,9 +181,9 @@ const Map = () => {
   title = (
     <table
       style={{
-        width: width - 54 - 12 - 38 - 12 + 'px',
-        height: '30px',
-        position: 'absolute',
+        width: width - 54 - 12 - 38 - 12 + "px",
+        height: "30px",
+        position: "absolute",
         left: 54,
         top: 12,
         zIndex: 555,
@@ -190,12 +193,12 @@ const Map = () => {
         <tr>
           <td
             style={{
-              textAlign: 'center',
-              verticalAlign: 'middle',
-              background: '#ffffff',
-              color: 'black',
-              opacity: '0.9',
-              paddingLeft: '10px',
+              textAlign: "center",
+              verticalAlign: "middle",
+              background: "#ffffff",
+              color: "black",
+              opacity: "0.9",
+              paddingLeft: "10px",
             }}
           >
             {titleContent}
@@ -216,24 +219,24 @@ const Map = () => {
 
   const doubleMapClick = (event) => {
     // @ts-expect-error legacy codebase exception
-    const pos = proj4(proj4.defs('EPSG:4326'), proj4crs25832def, [
+    const pos = proj4(proj4.defs("EPSG:4326"), proj4crs25832def, [
       event.latlng.lng,
       event.latlng.lat,
     ]);
 
-    if (mapMode.mode === 'rechtsplan' && aevVisible) {
+    if (mapMode.mode === "rechtsplan" && aevVisible) {
       dispatch(
         // @ts-expect-error legacy codebase exception
         searchForAEVs({
           point: { x: pos[0], y: pos[1] },
-        })
+        }),
       );
-    } else if (mapMode.mode === 'arbeitskarte') {
+    } else if (mapMode.mode === "arbeitskarte") {
       dispatch(
         // @ts-expect-error legacy codebase exception
         searchForHauptnutzungen({
           point: { x: pos[0], y: pos[1] },
-        })
+        }),
       );
     }
   };
@@ -249,7 +252,7 @@ const Map = () => {
       map.fitBounds(bounds);
     } else {
       const index = features.findIndex(
-        (element) => element.id === event.target.feature.id
+        (element) => element.id === event.target.feature.id,
       );
       if (index !== -1) {
         dispatch(setSelectedFeatureIndex(index));
@@ -262,7 +265,7 @@ const Map = () => {
       // @ts-expect-error legacy codebase exception
       searchForAEVs({
         boundingBox: boundingBox,
-      })
+      }),
     );
   };
 
@@ -285,7 +288,7 @@ const Map = () => {
   }, [wrapperRef]);
 
   return (
-    <div style={{ position: 'relative' }} ref={wrapperRef}>
+    <div style={{ position: "relative" }} ref={wrapperRef}>
       {title}
       <TopicMapComponent
         initialLoadingText="Laden der B-Plan-Daten"
@@ -294,10 +297,10 @@ const Map = () => {
         locatorControl
         gazetteerSearchControl={true}
         gazData={gazData}
-        backgroundlayers={'wupp-plan-live'}
+        backgroundlayers={"wupp-plan-live"}
         modalMenu={<Modal />}
         infoBox={info}
-        applicationMenuTooltipString="Kompaktanleitung anzeigen"
+        applicationMenuTooltipString={<MenuTooltip />}
         applicationMenuIconname="info"
         homeZoom={12}
         mappingBoundsChanged={(bbox) => {
@@ -308,21 +311,21 @@ const Map = () => {
           setSearchParams(newParams);
         }}
         ondblclick={doubleMapClick}
-        gazetteerSearchPlaceholder="ÄV | BPL | Stadtteil | Adresse | POI"
+        gazetteerSearchPlaceholder={searchTextPlaceholder}
         gazetteerSearchControlProps={{
           tertiaryAction: aevSearchButtonHit,
           tertiaryActionIcon: faSearch,
-          tertiaryActionTooltip: 'Änderungsverfahren Suchen',
-          teriaryActionDisabled: mapMode.mode === 'arbeitskarte',
+          tertiaryActionTooltip: "Änderungsverfahren Suchen",
+          teriaryActionDisabled: mapMode.mode === "arbeitskarte",
         }}
         gazetteerHitTrigger={(hits) => {
-          if (mapMode.mode === 'rechtsplan') {
+          if (mapMode.mode === "rechtsplan") {
             dispatch(
               // @ts-expect-error legacy codebase exception
               searchForAEVs({
                 gazObject: hits,
                 done: (result) => {
-                  searchParams.set('aevVisible', 'true');
+                  searchParams.set("aevVisible", "true");
                   setSearchParams(searchParams);
                   const projectedFC = L.Proj.geoJson(result);
                   const bounds = projectedFC.getBounds();
@@ -332,7 +335,7 @@ const Map = () => {
                   }
                   map.fitBounds(bounds);
                 },
-              })
+              }),
             );
           } else {
             dispatch(
@@ -348,7 +351,7 @@ const Map = () => {
                   }
                   map.fitBounds(bounds);
                 },
-              })
+              }),
             );
           }
         }}
@@ -360,43 +363,43 @@ const Map = () => {
           updateWhenIdle={false}
           position="bottomleft"
         />
-        {mapMode.mode === 'rechtsplan' && <ShowAEVModeButton />}
+        {mapMode.mode === "rechtsplan" && <ShowAEVModeButton />}
         <FeatureCollectionDisplayWithTooltipLabels
           key={`map_` + JSON.stringify(features[0])}
           featureCollection={features}
           featureClickHandler={featureClick}
           style={
-            mapMode.mode === 'arbeitskarte' ? hnFeatureStyler : aevFeatureStyler
+            mapMode.mode === "arbeitskarte" ? hnFeatureStyler : aevFeatureStyler
           }
-          labeler={mapMode.mode === 'arbeitskarte' ? hnLabeler : aevLabeler}
+          labeler={mapMode.mode === "arbeitskarte" ? hnLabeler : aevLabeler}
         />
-        {aevVisible && mapMode.mode === 'rechtsplan' && (
+        {aevVisible && mapMode.mode === "rechtsplan" && (
           <FeatureCollectionDisplayWithTooltipLabels
             key={`map_` + selectedFeatureIndex}
             featureCollection={aevFeatures}
             featureClickHandler={featureClick}
             style={(feature) => {
               const style = {
-                color: '#155317',
+                color: "#155317",
                 weight: 3,
                 opacity: 0.8,
-                fillColor: '#ffffff',
+                fillColor: "#ffffff",
                 fillOpacity: 0.6,
               };
               if (10 >= searchMinZoom) {
-                if (feature.properties.status === 'r') {
-                  style.color = '#155317';
+                if (feature.properties.status === "r") {
+                  style.color = "#155317";
                 } else {
-                  style.color = '#9F111B';
+                  style.color = "#9F111B";
                 }
               } else {
-                if (feature.properties.status === 'r') {
-                  style.color = '#155317';
-                  style.fillColor = '#155317';
+                if (feature.properties.status === "r") {
+                  style.color = "#155317";
+                  style.fillColor = "#155317";
                   style.opacity = 0.0;
                 } else {
-                  style.color = '#9F111B';
-                  style.fillColor = '#9F111B';
+                  style.color = "#9F111B";
+                  style.fillColor = "#9F111B";
                   style.opacity = 0.0;
                 }
               }

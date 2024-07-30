@@ -42,6 +42,9 @@
       "@carma-collab/wuppertal/ehrenamtskarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/ehrenamtskarte/index.ts"
       ],
+      "@carma-collab/wuppertal/fnp-inspektor": [
+        "libraries/collaboration/carma-wuppertal-collab/src/fnp-inspektor/index.ts"
+      ],
       "@carma-collab/wuppertal/hochwassergefahrenkarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/hochwasssergefahrenkarte/index.jsx"
       ],
