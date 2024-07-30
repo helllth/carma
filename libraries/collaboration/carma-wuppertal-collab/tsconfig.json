@@ -1,6 +1,8 @@
 {
   "extends": "../../../tsconfig.legacy.base.json",
-  "compilerOptions": {},
-  "files": [],
-  "references": []
+  "compilerOptions": {
+    "strict": false,
+    "moduleResolution": "node"
+  },
+  "exclude": ["**/*.stories.tsx"]
 }

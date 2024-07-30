@@ -37,7 +37,7 @@ Welcome to CARMA, a monolithic repository (monorepo) powered by Nx, designed to 
 
 #### Updating submodules:
 
-`git submodule update --remote --merge`
+`git submodule update --remote --recursive --merge`
 
 ## Development Guidelines
 
@@ -59,9 +59,26 @@ for the whole project run
 
 `npx nx run-many -t test`
 
-there might be a need to impor submodule to the project for all build to complete.
+make sure the submodules stay in sync
 
-`git submodule update --init --recursive`
+`git submodule update --remote --recursive --merge`
+
+after updating the submodules one might need to skip the cache with
+
+`npx nx reset`
+
+or skip the cache directly with `--skipNxCache`
+
+all projects should build before committing.
+
+`npx nx run-many -t build --skipNxCache --nxBail`
+`npx nx run-many -t lint --skipNxCache --nxBail`
+
+additional checks:
+
+`npx nx run-many -t build-storybook --skipNxCache --nxBail`
+`npx nx run-many -t test --skipNxCache --nxBail`
+
 
 ### Typescript configuration
 

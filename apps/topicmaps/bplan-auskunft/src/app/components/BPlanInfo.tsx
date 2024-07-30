@@ -21,7 +21,7 @@ const BPlanInfo = ({
   setSelectedIndex,
   setFeatures,
 }) => {
-  const { setAppMenuVisible } = useContext(UIDispatchContext);
+  const { setAppMenuVisible } = useContext<UIDispatchContext>(UIDispatchContext);
   const { routedMapRef } = useContext(TopicMapContext);
   let headertext;
   let headerColor;

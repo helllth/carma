@@ -57,13 +57,16 @@ declare module "react-cismap/contexts/FeatureCollectionContextProvider" {
 
 export const FeatureCollectionDisplayWithTooltipLabels: FC<any>;
 
-
 declare module "react-cismap/contexts/TopicMapStylingContextProvider" {
   import { Context, FC } from "react";
-  export const TopicMapStylingContext: Context<{
+
+  interface TopicMapContextType {
     markerSymbolSize: number;
     additionalStylingInfo: any;
-  }>;
+  }
+
+  export const TopicMapStylingContext: Context<TopicMapContextType>;
+
   export const TopicMapStylingDispatchContext: Context<{
     setMarkerSymbolSize: (size: number) => void;
   }>;

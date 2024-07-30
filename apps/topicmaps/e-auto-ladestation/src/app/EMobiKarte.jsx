@@ -25,12 +25,12 @@ const EMobiKarte = () => {
     setSelectedFeatureByPredicate,
     setClusteringOptions,
     setFilterState,
-  } = useContext(FeatureCollectionDispatchContext);
+  } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
   const { secondaryInfoVisible } = useContext(UIContext);
-  const { setSecondaryInfoVisible } = useContext(UIDispatchContext);
+  const { setSecondaryInfoVisible } = useContext<UIDispatchContext>(UIDispatchContext);
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   const { clusteringOptions, selectedFeature, filteredItems, shownFeatures } =
-    useContext(FeatureCollectionContext);
+    useContext<FeatureCollectionContext>(FeatureCollectionContext);
   useEffect(() => {
     getGazData(setGazData);
   }, []);

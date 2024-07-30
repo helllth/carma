@@ -1,6 +1,6 @@
 import WMSCapabilities from "wms-capabilities";
 
-// @ts-ignore
+// @ts-expect-error TODO fix argument count
 const parser = new WMSCapabilities();
 
 export const getAllLayers = async () => {

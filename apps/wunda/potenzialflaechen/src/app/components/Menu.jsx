@@ -25,12 +25,12 @@ import Filterung from "./onlinehelpsections/080_Filterung";
 import AnmeldungUndOfflineBenutzung from "./onlinehelpsections/090_AnmeldungUndOfflineBenutzung";
 
 const MyMenu = () => {
-  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
   const { filterState, filterMode, filteredItems, shownFeatures } =
-    useContext(FeatureCollectionContext);
-  const { setFilterState, setFilterMode } = useContext(FeatureCollectionDispatchContext);
+    useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { setFilterState, setFilterMode } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
 
-  const { items } = useContext(FeatureCollectionContext);
+  const { items } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
 
   let kampagnen = [];
   const kampagnenValues = [];

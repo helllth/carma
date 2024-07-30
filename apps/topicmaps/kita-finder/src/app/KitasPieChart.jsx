@@ -8,7 +8,7 @@ import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectio
 ReactChartkick.addAdapter(Chart);
 
 const KitasPieChart = ({ visible = true, renderingOption }) => {
-  const { filteredItems } = useContext(FeatureCollectionContext);
+  const { filteredItems } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
 
   if (visible && filteredItems) {
     let stats = {};

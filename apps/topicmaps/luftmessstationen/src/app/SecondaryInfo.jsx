@@ -19,8 +19,8 @@ import { version as reactCismapVersion } from "react-cismap/meta";
 ReactChartkick.addAdapter(Chart);
 
 const InfoPanel = () => {
-  const { selectedFeature, items } = useContext(FeatureCollectionContext);
-  const { windowSize } = useContext(ResponsiveTopicMapContext);
+  const { selectedFeature, items } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
   const station = selectedFeature?.properties;
   const footer = (
     <div style={{ fontSize: "11px" }}>

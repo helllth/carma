@@ -37,7 +37,7 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
   const vectorStyle = useSelector(getVectorStyle);
   const layerMode = useSelector(getLayerMode);
   const dispatch = useDispatch();
-  const { zoomToFeature } = useContext(TopicMapDispatchContext);
+  const { zoomToFeature } = useContext<TopicMapDispatchContext>(TopicMapDispatchContext);
 
   useEffect(() => {
     const handleResize = () => {
@@ -114,8 +114,8 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
           type: string;
         }) => {
           if (layerMode === "default") {
-            // @ts-ignore
-            const pos = proj4(proj4.defs("EPSG:4326"), proj4crs25832def, [
+            // TODO fix type mapping
+            const pos = proj4(proj4.defs("EPSG:4326") as unknown as string, proj4crs25832def, [
               e.latlng.lng,
               e.latlng.lat,
             ]);

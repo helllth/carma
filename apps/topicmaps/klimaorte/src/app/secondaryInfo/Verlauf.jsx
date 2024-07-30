@@ -16,7 +16,7 @@ export default function Verlauf({ revertedOrder }) {
     FeatureCollectionContext
   );
 
-  const { windowSize } = useContext(ResponsiveTopicMapContext);
+  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
 
   const item = selectedFeature?.properties;
   let timeline;

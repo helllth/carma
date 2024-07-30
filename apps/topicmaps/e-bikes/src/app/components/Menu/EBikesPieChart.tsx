@@ -5,7 +5,7 @@ import { Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 const EBikesPieChart = ({ visible = true }) => {
-  const { filteredItems } = useContext(FeatureCollectionContext);
+  const { filteredItems } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
 
   const groupingFunction = (obj) => {
     let groupString = obj.typ;

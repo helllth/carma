@@ -13,6 +13,7 @@ delete globals.browser["AudioWorkletGlobalScope "]; // some weird bug
 
 const baseConfig = {
   ...eslint.configs.recommended,
+  ...eslint.configs.recommendedTypeChecked,
   name: "Base Config",
   files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
   //ignores: ["**/*.cy.ts"],

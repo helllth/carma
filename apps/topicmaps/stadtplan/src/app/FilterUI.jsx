@@ -30,13 +30,13 @@ const FilterUI = ({ apps = crossLinkApps }) => {
   const { itemsDictionary, filteredItems, filterState } = useContext(
     FeatureCollectionContext
   );
-  const { setFilterState } = useContext(FeatureCollectionDispatchContext);
+  const { setFilterState } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
   const filteredPOIs = filteredItems || [];
   const lebenslagen = useMemo(
     () => itemsDictionary?.lebenslagen || [],
     [itemsDictionary]
   );
-  const { windowSize } = useContext(ResponsiveTopicMapContext);
+  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
   const [filterRows, setFilterRows] = useState();
   const { additionalStylingInfo } = useContext(TopicMapStylingContext);
   const poiColors = additionalStylingInfo?.poiColors;

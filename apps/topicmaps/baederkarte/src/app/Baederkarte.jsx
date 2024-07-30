@@ -18,7 +18,7 @@ const Baederkarte = () => {
     FeatureCollectionDispatchContext
   );
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
-  const { clusteringOptions } = useContext(FeatureCollectionContext);
+  const { clusteringOptions } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
   useEffect(() => {
     getGazData(setGazData);
   }, []);

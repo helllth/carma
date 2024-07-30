@@ -3,7 +3,7 @@ import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectio
 import SecondaryInfoPanelSection from "react-cismap/topicmaps/SecondaryInfoPanelSection";
 import SecondaryInfo from "react-cismap/topicmaps/SecondaryInfo";
 const InfoPanel = () => {
-  const { selectedFeature } = useContext(FeatureCollectionContext);
+  const { selectedFeature } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
 
   const potenzialflaeche = selectedFeature?.properties;
 

@@ -13,7 +13,7 @@ import {
 import { getApplicationVersion } from './version';
 
 const Menu = () => {
-  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
 
   const helpSVGSize = 18;
   const hallenBadSVG = getBadSVG(

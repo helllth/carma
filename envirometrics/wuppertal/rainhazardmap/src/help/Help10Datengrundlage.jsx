@@ -6,7 +6,7 @@ import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 const Component = () => {
-  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
 
   return (
     <GenericModalMenuSection

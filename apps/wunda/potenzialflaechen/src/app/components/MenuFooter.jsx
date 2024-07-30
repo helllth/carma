@@ -5,7 +5,7 @@ import { scroller } from "react-scroll";
 import { getApplicationVersion } from "../version";
 
 const Footer = () => {
-  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
   /*eslint jsx-a11y/anchor-is-valid: "off"*/
   return (
     <div style={{ fontSize: "11px" }}>

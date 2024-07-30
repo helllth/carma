@@ -19,10 +19,10 @@ import {
 } from '@carma-collab/wuppertal/e-auto-ladestation';
 
 const Menu = () => {
-  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
   const { filteredItems, shownFeatures, filterState, itemsDictionary } =
-    useContext(FeatureCollectionContext);
-  const { setFilterState } = useContext(FeatureCollectionDispatchContext);
+    useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { setFilterState } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
 
   const onlineSVG = getSymbolSVG(24, '#003B80', 'pr', 'onlineSVGinHELP');

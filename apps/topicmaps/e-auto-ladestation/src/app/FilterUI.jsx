@@ -16,7 +16,7 @@ const FilterUI = ({
   featureRenderingOption,
   steckertypes,
 }) => {
-  const { windowSize } = useContext(ResponsiveTopicMapContext);
+  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
   const width = windowSize?.width || 500;
   let widePieChartPlaceholder = null;
   let narrowPieChartPlaceholder = null;

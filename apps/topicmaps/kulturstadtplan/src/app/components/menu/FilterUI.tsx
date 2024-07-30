@@ -16,10 +16,9 @@ import {
 import KulturPieChart from "./KulturPieChart";
 
 const FilterUI = () => {
-  // @ts-expect-error legacy codebase exception
-  const { filterState, itemsDictionary } = useContext(FeatureCollectionContext);
-  const { setFilterState } = useContext(FeatureCollectionDispatchContext);
-  const { windowSize } = useContext(ResponsiveTopicMapContext);
+  const { filterState, itemsDictionary } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { setFilterState } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
 
   const width = windowSize?.width || 500;
 

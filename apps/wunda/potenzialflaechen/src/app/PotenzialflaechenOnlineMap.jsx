@@ -43,7 +43,7 @@ function PotenzialflaechenOnlineMap({ gazData, jwt, setJWT, setLoginInfo }) {
   );
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
   const { history } = useContext(TopicMapContext);
-  const { setAppMenuActiveMenuSection, setAppMenuVisible } = useContext(UIDispatchContext);
+  const { setAppMenuActiveMenuSection, setAppMenuVisible } = useContext<UIDispatchContext>(UIDispatchContext);
 
   useEffect(() => {
     const handleCleanStart = (search) => {

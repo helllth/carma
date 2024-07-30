@@ -22,14 +22,13 @@ const Map = () => {
     setSelectedFeatureByPredicate,
     setClusteringOptions,
     setFilterState,
-  } = useContext(FeatureCollectionDispatchContext);
-  const { markerSymbolSize } = useContext(TopicMapStylingContext);
-  // @ts-expect-error legacy codebase exception
-  const { clusteringOptions, itemsDictionary } = useContext(
+  } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+  const { markerSymbolSize } = useContext<TopicMapStylingContext>(TopicMapStylingContext);
+  const { clusteringOptions, itemsDictionary } = useContext<FeatureCollectionContext>(
     FeatureCollectionContext,
   );
   const { setAppMenuActiveMenuSection, setAppMenuVisible } =
-    useContext(UIDispatchContext);
+    useContext<UIDispatchContext>(UIDispatchContext);
 
   useEffect(() => {
     getGazData(setGazData);

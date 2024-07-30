@@ -1,20 +1,23 @@
 import { useContext, useEffect, useState } from "react";
+
 import {
   FeatureCollectionContext,
-  FeatureCollectionDispatchContext,
-} from "react-cismap/contexts/FeatureCollectionContextProvider";
+  FeatureCollectionDispatchContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
 import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
-import FeatureCollection from "react-cismap/FeatureCollection";
-import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
-import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
-import { getGazData } from "../../helper/gazData";
-import { getPoiClusterIconCreatorFunction } from "../../helper/styler";
-import Menu from "./Menu";
-import SecondaryInfoModal from "./SecondaryInfoModal";
+
 import {
   UIContext,
   UIDispatchContext,
 } from "react-cismap/contexts/UIContextProvider";
+
+import FeatureCollection from "react-cismap/FeatureCollection";
+import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+
+import { getGazData } from "../../helper/gazData";
+import { getPoiClusterIconCreatorFunction } from "../../helper/styler";
+import Menu from "./Menu";
+import SecondaryInfoModal from "./SecondaryInfoModal";
 import {
   InfoBoxTextContent,
   InfoBoxTextTitle,
@@ -23,15 +26,15 @@ import {
 } from "@carma-collab/wuppertal/e-bikes";
 const Map = () => {
   const [gazData, setGazData] = useState([]);
-  const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
+  const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext<FeatureCollectionDispatchContext>(
     FeatureCollectionDispatchContext,
   );
-  const { markerSymbolSize } = useContext(TopicMapStylingContext);
-  const { clusteringOptions, selectedFeature } = useContext(
+  const { markerSymbolSize } = useContext<TopicMapStylingContext>(TopicMapStylingContext);
+  const { clusteringOptions, selectedFeature } = useContext<FeatureCollectionContext>(
     FeatureCollectionContext,
   );
-  const { secondaryInfoVisible } = useContext(UIContext);
-  const { setSecondaryInfoVisible } = useContext(UIDispatchContext);
+  const { secondaryInfoVisible } = useContext<UIContext>(UIContext);
+  const { setSecondaryInfoVisible } = useContext<UIDispatchContext>(UIDispatchContext);
   useEffect(() => {
     getGazData(setGazData);
   }, []);

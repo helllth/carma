@@ -24,7 +24,7 @@ import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectio
 ChartJS.register(...registerables, zoomPlugin);
 
 export default function ElevationChart({ revertedOrder }) {
-  const { selectedFeature } = useContext(FeatureCollectionContext);
+  const { selectedFeature } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
   const item = selectedFeature?.properties;
   const geomlength = item.geomlength;
 

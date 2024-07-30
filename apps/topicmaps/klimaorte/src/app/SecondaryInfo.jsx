@@ -5,7 +5,7 @@ import Zwischenstopps from "./secondaryInfo/Zwischenstopps";
 import Routen from "./secondaryInfo/Routen";
 
 const InfoPanel = () => {
-  const { selectedFeature } = useContext(FeatureCollectionContext);
+  const { selectedFeature } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
 
   switch (selectedFeature?.featuretype) {
     case "ort":

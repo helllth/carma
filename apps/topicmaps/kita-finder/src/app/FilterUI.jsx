@@ -21,8 +21,8 @@ const FilterUI = () => {
   const { itemsDictionary, filteredItems, filterState } = useContext(
     FeatureCollectionContext
   );
-  const { setFilterState } = useContext(FeatureCollectionDispatchContext);
-  const { windowSize } = useContext(ResponsiveTopicMapContext);
+  const { setFilterState } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
 
   const { additionalStylingInfo } = useContext(TopicMapStylingContext);
   const poiColors = additionalStylingInfo?.poiColors;
