@@ -48,6 +48,7 @@ import {
   TextInMerkliste,
   KompaktanleitungSection,
 } from "@carma-collab/wuppertal/ehrenamtskarte";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 
 const Menu = ({ bookmarks, setBookmarks }) => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
@@ -301,6 +302,13 @@ const Menu = ({ bookmarks, setBookmarks }) => {
             }
           />,
           <KompaktanleitungSection />,
+          <Section
+            key="digiTal"
+            sectionKey="digiTal"
+            sectionTitle={"DigiTal Zwilling"}
+            sectionBsStyle="warning"
+            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
+          ></Section>,
         ]}
       />
     </CustomizationContextProvider>
