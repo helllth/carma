@@ -39,6 +39,9 @@
         "libraries/collaboration/carma-wuppertal-collab/src/e-auto-ladestation/index.ts"
       ],
       "@carma-collab/wuppertal/e-bikes": ["libraries/collaboration/carma-wuppertal-collab/src/e-bikes/index.ts"],
+      "@carma-collab/wuppertal/ehrenamtskarte": [
+        "libraries/collaboration/carma-wuppertal-collab/src/ehrenamtskarte/index.ts"
+      ],
       "@carma-collab/wuppertal/hochwassergefahrenkarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/hochwasssergefahrenkarte/index.jsx"
       ],
