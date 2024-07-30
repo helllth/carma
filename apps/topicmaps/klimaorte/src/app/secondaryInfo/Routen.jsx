@@ -18,6 +18,7 @@ const InfoPanel = () => {
   const { selectedFeature } = useContext(FeatureCollectionContext);
   const { windowSize } = useContext(ResponsiveTopicMapContext);
   const [revertedOrder, setRevertedOrder] = useState(false);
+  const urlPrefix = window.location.origin + window.location.pathname;
 
   const item = selectedFeature?.properties;
 
@@ -29,14 +30,14 @@ const InfoPanel = () => {
     <ElevationChart
       key={"ElevationChart" + item.id + "." + windowSize.width}
       revertedOrder={revertedOrder}
-    />
+    />,
   );
 
   subsections.push(
     <Verlauf
       key={"VerlaufElement" + item.id + "." + windowSize.width}
       revertedOrder={revertedOrder}
-    />
+    />,
   );
   if (!productionMode) {
     subsections.push(
@@ -47,7 +48,7 @@ const InfoPanel = () => {
         collapsedOnStart={true}
       >
         <pre>{JSON.stringify(item, null, 2)}</pre>
-      </SecondaryInfoPanelSection>
+      </SecondaryInfoPanelSection>,
     );
   }
   let text;
@@ -107,7 +108,7 @@ const InfoPanel = () => {
               <img
                 height="30"
                 alt="Komoot"
-                src="/logo_komoot_green_h30.png"
+                src={urlPrefix + "images/logo_komoot_green_h30.png"}
                 // src="/logo_komoot_green_RGB_v2-1.svg"
               />
             </a>
