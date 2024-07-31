@@ -46,6 +46,7 @@ import { UnknownAction } from "redux";
 import {
   MenuTooltip,
   searchTextPlaceholder,
+  loadingText,
 } from "@carma-collab/wuppertal/fnp-inspektor";
 const { ScaleControl } = TransitiveReactLeaflet;
 
@@ -291,7 +292,7 @@ const Map = () => {
     <div style={{ position: "relative" }} ref={wrapperRef}>
       {title}
       <TopicMapComponent
-        initialLoadingText="Laden der B-Plan-Daten"
+        initialLoadingText={loadingText}
         fullScreenControl
         //   pendingLoader={isLoading ? 1 : 0}
         locatorControl

@@ -1,7 +1,6 @@
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import { useContext } from "react";
-import Footer from "./Footer";
 import {
   MenuIntroduction,
   RechtsplanUndArbeitskarte,
@@ -12,7 +11,11 @@ import {
   FlaechenInDerArbeitskarteAuswaehlenUndAbfragen,
   DokumenteBetrachten,
   DokumenteHerunterladen,
+  MenuTitle,
+  MenuFooter,
 } from "@carma-collab/wuppertal/fnp-inspektor";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import Section from "react-cismap/topicmaps/menu/Section";
 
 const Modal = () => {
   const { setAppMenuActiveMenuSection } =
@@ -20,7 +23,7 @@ const Modal = () => {
   return (
     <ModalApplicationMenu
       menuIcon={"info"}
-      menuTitle={"Kompaktanleitung FNP-Inspektor Wuppertal"}
+      menuTitle={<MenuTitle />}
       menuIntroduction={<MenuIntroduction />}
       menuSections={[
         <RechtsplanUndArbeitskarte />,
@@ -39,8 +42,21 @@ const Modal = () => {
         />,
         <DokumenteBetrachten />,
         <DokumenteHerunterladen />,
+        <Section
+          key="digiTal"
+          sectionKey="digiTal"
+          sectionTitle={"DigiTal Zwilling"}
+          sectionBsStyle="warning"
+          sectionContent={<GenericDigitalTwinReferenceTextComponent />}
+        ></Section>,
       ]}
-      menuFooter={<Footer />}
+      menuFooter={
+        <MenuFooter
+          title={"Fnp-inspektor"}
+          version={"1.22.5"}
+          setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+        />
+      }
     />
   );
 };
