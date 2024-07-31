@@ -133,3 +133,35 @@ not mixed in like
 ```
 import React, { useEffect, ReactNode } from "react";
 ```
+
+## Updating the Monorepo
+
+
+### Updating the Nx CLI
+
+Always do nx updates with the provided migrate utility.
+
+-- `npx nx migrate nx@latest`
+
+(prerequisites: have `npm-check-updates` installed globally with `npm install -g npm-check-updates`)
+
+until further notice keep: 
+
+- eslint at 8.57
+- storybook at v7
+- prettier at 2.8.8
+- vitest at 1.6
+
+the remaining dev deps can be updated with
+
+`npx npm-check-updates --dep dev --reject "eslint* *vitest* prettier *storybook*"`
+
+and after sanity check
+
+`npx npm-check-updates --dep dev --reject "eslint* *vitest* prettier *storybook*" -u`
+
+### Updating prod packages
+
+same as dev packages, but keep integration/migration heavy major upgrades like bootstrap or react-pdf-html at current versions
+
+`npx npm-check-updates --dep prod --reject "\*bootstrap react-pdf-html graphql-request"`
