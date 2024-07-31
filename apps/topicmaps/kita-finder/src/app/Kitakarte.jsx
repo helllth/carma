@@ -1,28 +1,33 @@
-import React from 'react';
-import { useContext, useEffect, useState } from 'react';
+import React from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
-} from 'react-cismap/contexts/FeatureCollectionContextProvider';
-import { LightBoxContext } from 'react-cismap/contexts/LightBoxContextProvider';
-import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
-import FeatureCollection from 'react-cismap/FeatureCollection';
-import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
-import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-
-import { getGazData } from './helper/helper';
-import { getPoiClusterIconCreatorFunction } from './helper/styler';
-import Menu from './Menu';
+} from "react-cismap/contexts/FeatureCollectionContextProvider";
+import { LightBoxContext } from "react-cismap/contexts/LightBoxContextProvider";
+import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
+import FeatureCollection from "react-cismap/FeatureCollection";
+import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+import { getGazData } from "./helper/helper";
+import { getPoiClusterIconCreatorFunction } from "./helper/styler";
+import Menu from "./Menu";
+import {
+  searchTextPlaceholder,
+  MenuTooltip,
+  InfoBoxTextContent,
+  InfoBoxTextTitle,
+} from "@carma-collab/wuppertal/kita-finder";
 
 const Stadtplankarte = ({ poiColors }) => {
   const [gazData, setGazData] = useState([]);
   const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
-    FeatureCollectionDispatchContext
+    FeatureCollectionDispatchContext,
   );
   const lightBoxContext = useContext(LightBoxContext);
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   const { clusteringOptions, selectedFeature } = useContext(
-    FeatureCollectionContext
+    FeatureCollectionContext,
   );
   useEffect(() => {
     getGazData(setGazData);
@@ -45,35 +50,30 @@ const Stadtplankarte = ({ poiColors }) => {
       gazData={gazData}
       modalMenu={<Menu />}
       locatorControl={true}
-      gazetteerSearchPlaceholder="Stadtteil | Adresse | Kita"
+      gazetteerSearchPlaceholder={searchTextPlaceholder}
       gazetteerHitTrigger={(hits) => {
         if ((Array.isArray(hits) && hits[0]?.more?.pid) || hits[0]?.more?.kid) {
           const gazId = hits[0]?.more?.pid || hits[0]?.more?.kid;
           setSelectedFeatureByPredicate(
-            (feature) => feature.properties.id === gazId
+            (feature) => feature.properties.id === gazId,
           );
         }
       }}
-      applicationMenuTooltipString="Filter | Einstellungen | Kompaktanleitung"
+      applicationMenuTooltipString={<MenuTooltip />}
       infoBox={
         <GenericInfoBoxFromFeature
           pixelwidth={350}
           config={{
             displaySecondaryInfoAction: false,
-            city: 'Wuppertal',
+            city: "Wuppertal",
             navigator: {
               noun: {
-                singular: 'Kita',
-                plural: 'Kitas',
+                singular: "Kita",
+                plural: "Kitas",
               },
             },
-            noCurrentFeatureTitle: 'Keine Kitas gefunden',
-            noCurrentFeatureContent: (
-              <span>
-                Für mehr Kita Ansicht mit verkleinern. Um nach Themenfeldern zu
-                filtern, das Menü öffnen.
-              </span>
-            ),
+            noFeatureTitle: <InfoBoxTextTitle />,
+            noCurrentFeatureContent: <InfoBoxTextContent />,
           }}
         />
       }
