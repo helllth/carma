@@ -18,11 +18,6 @@ export type LatLngRadians = {
   lngRad: number;
 };
 
-export type TilesetConfig = {
-  url: string;
-  translation?: Translation;
-};
-
 export type ColorRgbaArray = [number, number, number, number];
 
 export type CameraPositionAndOrientation = {
@@ -131,7 +126,7 @@ export type RootState = {
   viewer: ViewerState;
 };
 
-type ColorInput = ColorRgbaArray | Color;
+export type ColorInput = ColorRgbaArray | Color;
 
 // from Hash
 

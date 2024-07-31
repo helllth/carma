@@ -9,7 +9,7 @@ import {
   Cartographic,
   Math as CeMath,
 } from 'cesium';
-import { ModelAsset } from '../types';
+import { ModelAsset } from '../types.d';
 
 let preRenderListener: () => void;
 

@@ -8,7 +8,7 @@ import { getKassenzeichenbySTAC } from '../../store/slices/kassenzeichen';
 import { getLoginInProgress, getLoginInfoText } from '../../store/slices/auth';
 import { useNavigate } from 'react-router-dom';
 import { getConfData, getUiState } from '../../store/slices/ui';
-import { UnknownAction } from 'redux';
+import type { UnknownAction } from 'redux';
 
 const VerdisOnlineLanding = () => {
   const [stac, setStac] = useState('');

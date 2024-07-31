@@ -1,6 +1,6 @@
 import Document from './Document';
 
-const Documents = ({ docs, setDocs, readOnly = false, embedded = false }) => {
+export const Documents = ({ docs, setDocs, readOnly = false, embedded = false }) => {
   let remover;
   if (readOnly === false) {
     remover = (index) => {

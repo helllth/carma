@@ -12,7 +12,8 @@ import {
 } from '../store/slices/aenderungsverfahren';
 import { useParams } from 'react-router-dom';
 import { getDocsForAEVGazetteerEntry } from '../utils/DocsHelper';
-import { UnknownAction } from 'redux';
+import type { UnknownAction } from 'redux';
+
 
 export function App() {
   const dispatch = useDispatch();

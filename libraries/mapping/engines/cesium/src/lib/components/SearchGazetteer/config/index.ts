@@ -1,5 +1,5 @@
 import { stopwords } from './stopwords.de-de';
-import { ENDPOINT } from '../types';
+import { ENDPOINT } from '../types.d';
 
 export { stopwords };
 

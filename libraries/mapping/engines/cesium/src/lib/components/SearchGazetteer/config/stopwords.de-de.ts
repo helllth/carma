@@ -1,4 +1,4 @@
-import { StopWords } from '../types';
+import { StopWords } from '../types.d';
 
 const preps: StopWords = [
   'am',

@@ -1,7 +1,7 @@
 // adapted from react-cismap/tools/gazetteerHelper
 
 import L from 'leaflet';
-import proj4, { Converter } from 'proj4';
+import proj4 from 'proj4';
 import { PROJ4_CONVERTERS } from './geo';
 import {
   BoundingSphere,
@@ -23,7 +23,7 @@ import {
   ModelAsset,
   PayloadItem,
   SourceWithPayload,
-} from '../types';
+} from '../types.d';
 import {
   polygonHierarchyFromPolygonCoords,
   getHeadingPitchRangeFromZoom,
@@ -112,7 +112,7 @@ const CesiumMapActions = {
     scene && scene.camera.flyToBoundingSphere(bounds),
 };
 
-const getPosInWGS84 = ({ x, y }, refSystem: Converter) => {
+const getPosInWGS84 = ({ x, y }, refSystem: proj4.Converter) => {
   const coords = PROJ4_CONVERTERS.CRS4326.forward(refSystem.inverse([x, y]));
   return {
     lat: coords[1],
@@ -120,7 +120,7 @@ const getPosInWGS84 = ({ x, y }, refSystem: Converter) => {
   };
 };
 
-const getRingInWGS84 = (coords: (string | number)[][], refSystem: Converter) =>
+const getRingInWGS84 = (coords: (string | number)[][], refSystem: proj4.Converter) =>
   coords
     .map((c) => c.map((v) => (typeof v === 'string' ? parseFloat(v) : v)))
     .filter(

@@ -4,7 +4,7 @@ import {
   SourceConfig,
   SourceWithPayload,
   StopWords,
-} from './types';
+} from './types.d';
 import { md5FetchText } from './tools/fetching';
 import { getGazDataFromSources } from './tools/gazetteerHelper';
 export const titleMap = new Map(Object.entries(titleMapConfig));

@@ -1,35 +1,33 @@
 const nx = require("@nx/eslint-plugin");
-const ts = require("@typescript-eslint/eslint-plugin");
-const tsParser = require("@typescript-eslint/parser");
-const eslint = require("@eslint/js");
+const tseslint = require("typescript-eslint");
 const a11y = require("eslint-plugin-jsx-a11y");
 const cypress = require("eslint-plugin-cypress");
 const importPlugin = require("eslint-plugin-import");
 const react = require("eslint-plugin-react");
-const hooksPlugin = require("eslint-plugin-react-hooks");
+const reactHooks = require("eslint-plugin-react-hooks");
+const reactRefresh = require("eslint-plugin-react-refresh");
 const globals = require("globals");
 
 delete globals.browser["AudioWorkletGlobalScope "]; // some weird bug
 
 const baseConfig = {
-  ...eslint.configs.recommended,
-  ...eslint.configs.recommendedTypeChecked,
   name: "Base Config",
-  files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-  //ignores: ["**/*.cy.ts"],
+  files: ["**/*.ts", "**/*.tsx"],
   plugins: {
     import: importPlugin,
     "jsx-a11y": a11y,
     nx,
     react,
-    "react-hooks": hooksPlugin,
-    "@typescript-eslint": ts,
+    "react-hooks": reactHooks,
+    "react-refresh": reactRefresh,
+    "@typescript-eslint": tseslint.plugin,
   },
   languageOptions: {
-    parser: tsParser,
+    parser: tseslint.parser,
     parserOptions: {
       ecmaVersion: 2022,
-      project: "{projectRoot}tsconfig.json",
+      tsconfigRootDir: __dirname,
+      EXPERIMENTAL_useProjectService: true,
       ecmaFeatures: {
         jsx: true,
         modules: true,
@@ -42,10 +40,11 @@ const baseConfig = {
     },
   },
   rules: {
-    ...ts.configs["eslint-recommended"].rules,
-    ...ts.configs["recommended"].rules,
-    ...a11y.configs["recommended"].rules,
-    //...importPlugin.configs["recommended"].rules,
+    ...tseslint.configs.strictTypeChecked.rules,
+    ...react.configs.recommended.rules,
+    ...reactHooks.configs.recommended.rules,
+    ...a11y.configs.recommended.rules,
+    ...importPlugin.configs.recommended.rules,
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-unused-vars": "warn",
     "jsx-a11y/anchor-is-valid": "warn",
@@ -57,8 +56,19 @@ const baseConfig = {
     "jsx-a11y/no-autofocus": "warn",
     "jsx-a11y/no-noninteractive-element-interactions": "warn",
     "jsx-a11y/no-static-element-interactions": "warn",
+    "react/display-name": "off",
+    "react/jsx-key": "warn",
+    "react/jsx-no-undef": ["error", { "allowGlobals": true }],
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
+    "react/jsx-no-target-blank": "off", // noopener now set by browsers
+    "react/no-unescaped-entities": "off", // TODO discuss template format
+    "react/prop-types": "warn",
+    "react/react-in-jsx-scope": "off", // not needed with jsx since react 17
+    "react-refresh/only-export-components": [
+      "warn",
+      { allowConstantExport: true },
+    ],
     "nx/enforce-module-boundaries": [
       "error",
       {
@@ -76,11 +86,15 @@ const baseConfig = {
   settings: {
     "import/parsers": {
       espree: [".js", ".cjs", ".mjs", ".jsx"],
-      "@typescript-eslint/parser": [".ts", ".mts", ".mtx"],
+      "@typescript-eslint/parser": [".ts", "*.tsm", ".tsx"],
     },
     "import/resolver": {
       ...importPlugin.configs.typescript.settings["import/resolver"],
+      typescript: {
+        project: ['./tsconfig.*.json'],
+      },
     },
+
   },
 };
 

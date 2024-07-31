@@ -6,7 +6,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'leaflet/dist/leaflet.css';
 // import './lib/topicMaps.css';
 // xx
-import App from './app/App.jsx';
+import App from './app/App';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

@@ -42,7 +42,8 @@ import Modal from './help/Modal';
 import { getGazData } from '../../utils/gazData';
 import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
 import L from 'leaflet';
-import { UnknownAction } from 'redux';
+import type { UnknownAction } from 'redux';
+
 const { ScaleControl } = TransitiveReactLeaflet;
 
 const Map = () => {

@@ -51,6 +51,7 @@ const Sidebar = ({
         {docs?.length > 0 &&
           docs?.map((doc, i) => (
             <div
+              key={`sidebarItem.${i}`}
               style={{
                 background: `${
                   index - 1 === i ? 'rgb(119, 119, 119)' : '#f5f5f5'

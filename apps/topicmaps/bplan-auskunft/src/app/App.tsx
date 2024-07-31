@@ -11,7 +11,8 @@ import {
 } from '../store/slices/bplaene';
 import { useParams } from 'react-router-dom';
 import { getDocsForBPlaeneGazetteerEntry } from '../utils/DocsHelper';
-import { UnknownAction } from 'redux';
+import type { UnknownAction } from 'redux';
+
 
 export function App() {
   const dispatch = useDispatch();

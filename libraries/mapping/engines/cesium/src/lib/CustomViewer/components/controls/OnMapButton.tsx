@@ -5,7 +5,7 @@
    but to leverage the leaflet css classes and style nesting as-is, we are using an anchor tag
 */
 
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode, MouseEvent, HTMLAttributes } from 'react';
 

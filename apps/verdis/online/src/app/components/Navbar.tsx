@@ -38,9 +38,9 @@ import { colorDraft } from '../../utils/kassenzeichenHelper';
 import Waiting from './Waiting';
 import { useRef } from 'react';
 import './navbar.css';
-import { OverlayTriggerType } from 'react-bootstrap/esm/OverlayTrigger';
 import { logout } from '../../store/slices/auth';
-import { UnknownAction } from 'redux';
+import type { OverlayTriggerType } from 'react-bootstrap/esm/OverlayTrigger';
+import type { UnknownAction } from 'redux';
 
 const VerdisOnlineAppNavbar = () => {
   const dispatch = useDispatch();

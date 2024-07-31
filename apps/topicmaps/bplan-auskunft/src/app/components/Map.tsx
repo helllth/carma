@@ -19,7 +19,7 @@ import { Modal } from "@carma-collab/wuppertal/bplan-auskunft";
 import { useSearchParams } from "react-router-dom";
 import L from "leaflet";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
-import { UnknownAction } from "redux";
+import type { UnknownAction } from "redux";
 
 const Map = () => {
   const dispatch = useDispatch();

@@ -28,17 +28,17 @@ export type ENDPOINT =
   | 'quartiere'
   | 'pois';
 
-type SourceConfig = {
+export type SourceConfig = {
   topic: ENDPOINT;
   url: string;
   crs: string;
 };
 
-type SourceWithPayload = SourceConfig & {
+export type SourceWithPayload = SourceConfig & {
   payload?: unknown;
 };
 
-type PayloadItem = {
+export type PayloadItem = {
   s?: string;
   g?: string;
   x?: number;

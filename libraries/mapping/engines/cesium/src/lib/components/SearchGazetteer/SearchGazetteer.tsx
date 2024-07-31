@@ -4,7 +4,7 @@ import L from 'leaflet';
 import { AutoComplete, Button } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import AddressLabel from './components/AddressLabel';
-import { ModelAsset, OptionItem } from './types';
+import { ModelAsset, OptionItem } from './types.d';
 import Title from './components/Title';
 import { gazDataPrefix, sourcesConfig, stopwords } from './config';
 import { getGazData, prepareGazData, removeStopwords } from './utils';
