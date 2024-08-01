@@ -31,6 +31,10 @@ Welcome to CARMA, a monolithic repository (monorepo) powered by Nx, designed to 
 
 2. npm install
 
+3. on dev branch you can also run the custom script
+`npm run update-all`
+   to refresh the repo and update all submodules
+
 #### adding submodules:
 
 `git submodule update --init --recursive`

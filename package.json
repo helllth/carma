@@ -2,7 +2,9 @@
   "name": "@carma/source",
   "version": "0.9.1",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "update-all": "git pull && git submodule update --init --recursive --remote --checkout --force && nx reset && npm install"
+  },
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
