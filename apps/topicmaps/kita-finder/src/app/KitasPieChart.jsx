@@ -1,11 +1,9 @@
-import ReactChartkick, { PieChart } from 'react-chartkick';
-import { Chart } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+import 'chart.js/auto';
 import { constants as kitasConstants } from './helper/constants';
 import { getColor, getColorForProperties } from './helper/styler';
 import { useContext } from 'react';
 import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
-
-ReactChartkick.addAdapter(Chart);
 
 const KitasPieChart = ({ visible = true, renderingOption }) => {
   const { filteredItems } = useContext(FeatureCollectionContext);
@@ -53,14 +51,56 @@ const KitasPieChart = ({ visible = true, renderingOption }) => {
       piechartData.push([key, stats[key]]);
       piechartColor.push(colormodel[key]);
     }
+
+    const labels = piechartData.map((data) => {
+      return data[0];
+    });
+
+    const tmpData = piechartData.map((data) => {
+      return data[1];
+    });
+
+    const data = {
+      labels: labels,
+      datasets: [
+        {
+          data: tmpData,
+          backgroundColor: piechartColor,
+        },
+      ],
+    };
     return (
-      <PieChart
-        data={piechartData}
-        donut={true}
-        title="Verteilung"
-        legend={false}
-        colors={piechartColor}
-      />
+      <td
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignContent: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ width: '40%' }}>
+          <Doughnut
+              data={data}
+              options={{
+                plugins: {
+                  legend: {
+                     display: false,
+                  },
+                  title: {
+                    display: true,
+                    text: 'Verteilung',
+                    font: {
+                      weight: 'bold',
+                      size: 20,
+                    },
+                    color: 'black',
+                  },
+                },
+              }}
+            />
+        </div>
+      </td>
     );
   } else {
     return null;
