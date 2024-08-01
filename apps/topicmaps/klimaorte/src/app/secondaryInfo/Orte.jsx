@@ -5,7 +5,7 @@ import SecondaryInfo from "react-cismap/topicmaps/SecondaryInfo";
 import Footer from "./Footer";
 
 const InfoPanel = () => {
-  const { selectedFeature, items } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { selectedFeature, items } = useContext(FeatureCollectionContext);
 
   const item = selectedFeature?.properties;
 

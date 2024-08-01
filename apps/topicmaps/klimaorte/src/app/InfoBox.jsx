@@ -13,7 +13,7 @@ const InfoBox = (props) => {
   let boxConfig = null;
   let secondaryInfoBoxElements = [];
 
-  const featureCollectionContext = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const featureCollectionContext = useContext(FeatureCollectionContext);
   const { setSelectedFeatureByPredicate, fitBoundsForCollection } = useContext(
     FeatureCollectionDispatchContext
   );

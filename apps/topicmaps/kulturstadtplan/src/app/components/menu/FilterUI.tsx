@@ -16,9 +16,9 @@ import {
 import KulturPieChart from "./KulturPieChart";
 
 const FilterUI = () => {
-  const { filterState, itemsDictionary } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
-  const { setFilterState } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
-  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
+  const { filterState, itemsDictionary } = useContext<typeof FeatureCollectionContext>(FeatureCollectionContext);
+  const { setFilterState } = useContext<typeof FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+  const { windowSize } = useContext<typeof ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
 
   const width = windowSize?.width || 500;
 

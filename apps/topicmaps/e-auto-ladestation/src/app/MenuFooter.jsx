@@ -3,7 +3,7 @@ import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 import CismetFooterAcks from 'react-cismap/topicmaps/wuppertal/CismetFooterAcknowledgements';
 
 const Footer = () => {
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
 
   return (
     <div style={{ fontSize: '11px' }}>

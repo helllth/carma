@@ -86,7 +86,7 @@ const baseConfig = {
   settings: {
     "import/parsers": {
       espree: [".js", ".cjs", ".mjs", ".jsx"],
-      "@typescript-eslint/parser": [".ts", "*.tsm", ".tsx"],
+      "@typescript-eslint/parser": [".ts", ".tsm", ".tsx"],
     },
     "import/resolver": {
       ...importPlugin.configs.typescript.settings["import/resolver"],
@@ -94,7 +94,9 @@ const baseConfig = {
         project: ['./tsconfig.*.json'],
       },
     },
-
+    "react": {
+      version: "detect",
+    }
   },
 };
 

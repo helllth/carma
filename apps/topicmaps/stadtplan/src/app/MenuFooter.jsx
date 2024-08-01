@@ -4,7 +4,7 @@ import { getApplicationVersion } from './version';
 import { scroller } from 'react-scroll';
 import { Attribution } from '@carma-collab/wuppertal/commons';
 const Footer = () => {
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
 
   return (
     <div style={{ fontSize: '11px' }}>

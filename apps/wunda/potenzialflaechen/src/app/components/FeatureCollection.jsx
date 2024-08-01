@@ -15,7 +15,7 @@ dayjs.extend(customParseFormat);
 
 const FC = ({ jwt, setJWT, setLoginInfo }) => {
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
-  const { setItems, setMetaInformation } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+  const { setItems, setMetaInformation } = useContext(FeatureCollectionDispatchContext);
 
   useEffect(() => {
     if (jwt !== undefined) {

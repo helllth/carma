@@ -5,7 +5,7 @@ import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectio
 import ReactLoading from "react-loading";
 
 const Waiting = ({ waiting }) => {
-  const { selectedFeature } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { selectedFeature } = useContext(FeatureCollectionContext);
 
   return (
     <Modal

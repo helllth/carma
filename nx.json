@@ -24,7 +24,7 @@
     "@nx/eslint:lint": {
       "cache": true,
       "options": {
-        "eslintConfig": "{workspaceRoot}/eslint.config.cjs",
+        "eslintConfig": "{workspaceRoot}/eslint.config.cjs"
       }
     }
   },

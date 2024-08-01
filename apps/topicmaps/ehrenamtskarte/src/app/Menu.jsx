@@ -51,9 +51,9 @@ import {
 import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 
 const Menu = ({ bookmarks, setBookmarks }) => {
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const { filteredItems, shownFeatures, itemsDictionary, allFeatures } =
-    useContext<FeatureCollectionContext>(FeatureCollectionContext);
+    useContext(FeatureCollectionContext);
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
 
   const globalbereiche = useMemo(

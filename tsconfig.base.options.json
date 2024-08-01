@@ -13,18 +13,22 @@
     "target": "es2022",
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "preserve",
-    // ^ also implies:
-    // "moduleResolution": "bundler",
-    // "esModuleInterop": true,
-    // "resolveJsonModule": true,
+    "module": "CommonJS",
+    // "module": "preserve",
+    // ^ also implies: moduleresolution: bundler
+    // cant resolve types without updating the exports in package json
+    // changed module resolution to node und bundled is possible
+    // https://github.com/microsoft/TypeScript/issues/52363
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "noEmit": true,
     "strict": true,
     "sourceMap": true,
-    "verbatimModuleSyntax": true,
+    // "verbatimModuleSyntax": true,
     // ^ implies isolatedModules: true
     "moduleDetection": "force"
   }

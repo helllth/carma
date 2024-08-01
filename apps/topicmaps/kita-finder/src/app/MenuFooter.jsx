@@ -5,7 +5,7 @@ import { version as reactCismapVersion } from 'react-cismap//meta';
 import { Link, scroller } from 'react-scroll';
 
 const Footer = () => {
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
 
   return (
     <div style={{ fontSize: '11px' }}>

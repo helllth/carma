@@ -6,7 +6,7 @@ import { getApplicationVersion } from "./version";
 import { version as reactCismapVersion } from "react-cismap/meta";
 
 const InfoPanel = () => {
-  const { selectedFeature, items } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { selectedFeature, items } = useContext(FeatureCollectionContext);
 
   const angebot = selectedFeature?.properties;
   const footer = (

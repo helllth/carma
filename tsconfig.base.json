@@ -11,12 +11,12 @@
     "${configDir}/*.config.cjs",
     "${configDir}/*.config.mjs",
     "${configDir}/*.config.mts",
-    "types/*.d.ts"
+    "types/**/*.d.ts"
   ],
-  "exclude": [".nx", "dist", "node_modules", "tmp"],
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",
+    //"typeRoots": ["node_modules", "node_modules/@types", "types"],
     "types": [
       "vite/client",
       "node",

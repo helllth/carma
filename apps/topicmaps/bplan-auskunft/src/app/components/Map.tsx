@@ -31,7 +31,7 @@ const Map = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   let refRoutedMap = useRef(null);
   const zoom = searchParams.get("zoom");
-  const { routedMapRef } = useContext(TopicMapContext);
+  const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
 
   const doubleMapClick = (event) => {
     const pos = proj4(

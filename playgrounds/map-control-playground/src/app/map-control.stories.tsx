@@ -91,7 +91,7 @@ const iconPadding = {
 };
 
 const LocateControlComponent = ({ startLocate = 0 }) => {
-  const { routedMapRef } = useContext(TopicMapContext) as any;
+  const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext) as any;
   const [locationInstance, setLocationInstance] =
     useState<LocateControl | null>(null);
 

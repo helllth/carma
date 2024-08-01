@@ -19,8 +19,8 @@ import InfoPanel from "./SecondaryInfo";
 
 function Comp() {
   const [gazData, setGazData] = useState([]);
-  const { setSelectedFeatureByPredicate } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
-  // const { items, filteredItems, allFeatures } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { setSelectedFeatureByPredicate } = useContext(FeatureCollectionDispatchContext);
+  // const { items, filteredItems, allFeatures } = useContext(FeatureCollectionContext);
 
   // console.log("allFeatures", allFeatures);
 

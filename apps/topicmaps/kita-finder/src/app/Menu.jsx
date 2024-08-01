@@ -24,21 +24,19 @@ const getDefaultFilterConfiguration = (lebenslagen) => {
 };
 
 const Menu = () => {
-  const { setAppMenuActiveMenuSection } =
-    useContext < UIDispatchContext > UIDispatchContext;
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const {
     filterState,
     filterMode,
     filteredItems,
     shownFeatures,
     itemsDictionary,
-  } = useContext < FeatureCollectionContext > FeatureCollectionContext;
+  } = useContext(FeatureCollectionContext);
   const { setFilterState, setFilterMode } = useContext(
     FeatureCollectionDispatchContext,
   );
 
-  const { items } =
-    useContext < FeatureCollectionContext > FeatureCollectionContext;
+  const { items } = useContext(FeatureCollectionContext);
 
   if ((filterState === undefined) & (items !== undefined)) {
     setFilterState(getDefaultFilterConfiguration(itemsDictionary?.lebenslagen));

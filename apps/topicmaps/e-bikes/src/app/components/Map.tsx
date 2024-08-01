@@ -2,7 +2,8 @@ import { useContext, useEffect, useState } from "react";
 
 import {
   FeatureCollectionContext,
-  FeatureCollectionDispatchContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
+  FeatureCollectionDispatchContext
+} from "react-cismap/contexts/FeatureCollectionContextProvider";
 import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
 
 import {
@@ -26,15 +27,15 @@ import {
 } from "@carma-collab/wuppertal/e-bikes";
 const Map = () => {
   const [gazData, setGazData] = useState([]);
-  const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext<FeatureCollectionDispatchContext>(
+  const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext<typeof FeatureCollectionDispatchContext>(
     FeatureCollectionDispatchContext,
   );
-  const { markerSymbolSize } = useContext<TopicMapStylingContext>(TopicMapStylingContext);
-  const { clusteringOptions, selectedFeature } = useContext<FeatureCollectionContext>(
+  const { markerSymbolSize } = useContext<typeof TopicMapStylingContext>(TopicMapStylingContext);
+  const { clusteringOptions, selectedFeature } = useContext<typeof FeatureCollectionContext>(
     FeatureCollectionContext,
   );
-  const { secondaryInfoVisible } = useContext<UIContext>(UIContext);
-  const { setSecondaryInfoVisible } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { secondaryInfoVisible } = useContext<typeof UIContext>(UIContext);
+  const { setSecondaryInfoVisible } = useContext<typeof UIDispatchContext>(UIDispatchContext);
   useEffect(() => {
     getGazData(setGazData);
   }, []);

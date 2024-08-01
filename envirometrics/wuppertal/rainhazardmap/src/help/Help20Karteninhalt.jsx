@@ -6,7 +6,7 @@ import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import { CustomizationContext } from "react-cismap/contexts/CustomizationContextProvider";
 
 const Component = ({ simulationsklammer }) => {
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   return (
     <GenericModalMenuSection
       sectionKey="karteninhalt"

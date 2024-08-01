@@ -8,8 +8,8 @@ import {
 import './accordion.css';
 
 const FilterUI = () => {
-  const { itemsDictionary, filterState } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
-  const { setFilterState } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+  const { itemsDictionary, filterState } = useContext(FeatureCollectionContext);
+  const { setFilterState } = useContext(FeatureCollectionDispatchContext);
   const zielgruppen = useMemo(
     () => itemsDictionary?.zielgruppen || [],
     [itemsDictionary]

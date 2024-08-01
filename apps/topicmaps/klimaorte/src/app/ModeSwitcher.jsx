@@ -12,8 +12,8 @@ import klimaortTitleFactory from "./helper/klimaortTitleFactory";
 
 const Comp = ({ mode, setMode }) => {
   let titleContent;
-  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
-  const featureCollectionContext = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { windowSize } = useContext(ResponsiveTopicMapContext);
+  const featureCollectionContext = useContext(FeatureCollectionContext);
 
   if (mode === appModes.ORTE) {
     const mainTitle = klimaortTitleFactory({ featureCollectionContext });

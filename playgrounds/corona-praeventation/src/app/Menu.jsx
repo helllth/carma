@@ -5,7 +5,7 @@ import Section from "react-cismap/topicmaps/menu/Section";
 import CismetFooterAcks from "react-cismap/topicmaps/wuppertal/CismetFooterAcknowledgements";
 
 const Menu = () => {
-  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
+  const { windowSize } = useContext(ResponsiveTopicMapContext);
   let height;
 
   if (windowSize?.height) {

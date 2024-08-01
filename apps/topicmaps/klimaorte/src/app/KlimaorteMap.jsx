@@ -67,7 +67,7 @@ function KlimaorteMap() {
     shownFeatures,
     allFeatures,
     secondarySelection,
-  } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  } = useContext(FeatureCollectionContext);
   const { zoomToFeature, setAppMode } = useContext(TopicMapDispatchContext);
   const { history, appMode } = useContext(TopicMapContext);
 

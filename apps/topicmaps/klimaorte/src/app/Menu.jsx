@@ -68,7 +68,7 @@ export const getFilterInfo = (items) => {
 };
 
 const MyMenu = () => {
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const { filterState, filterMode, filteredItems, shownFeatures } = useContext(
     FeatureCollectionContext
   );
@@ -99,7 +99,7 @@ const MyMenu = () => {
   //   }
   // }, [allFeatures]);
 
-  const { items } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { items } = useContext(FeatureCollectionContext);
 
   const { kategorien, katValues, themen, themenValues } = getFilterInfo(items);
 

@@ -4,7 +4,7 @@ import GenericModalMenuSection from "react-cismap/topicmaps/menu/Section";
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 const Component = () => {
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
 
   return (
     <GenericModalMenuSection

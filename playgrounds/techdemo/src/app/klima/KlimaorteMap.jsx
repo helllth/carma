@@ -50,7 +50,7 @@ function KlimaorteMap() {
   );
   const lightBoxDispatchContext = useContext(LightBoxDispatchContext);
   const { selectedFeature, items, shownFeatures, filterState } =
-    useContext<FeatureCollectionContext>(FeatureCollectionContext);
+    useContext(FeatureCollectionContext);
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
   const { history } = useContext(TopicMapContext);
 

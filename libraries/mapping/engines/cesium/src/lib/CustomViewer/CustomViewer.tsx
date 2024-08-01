@@ -105,7 +105,7 @@ function CustomViewer(props: CustomViewerProps) {
   const [viewer, setViewer] = useState<Viewer | null>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const topicMapContext: any = useContext(TopicMapContext);
+  const topicMapContext: any = useContext<typeof TopicMapContext>(TopicMapContext);
 
   const [isUserAction, setIsUserAction] = useState(false);
   // DEV TWEAKPANE

@@ -1,5 +1,90 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+declare module "react-cismap" {
+  import * as React from "react";
+  import * as L from "leaflet";
+import FeatureCollection from 'react-cismap/FeatureCollection';
+
+  export { mappingHelpers as MappingHelpers } from "./tools";
+  export { gis as MappingConstants } from "./constants";
+
+  export class ProjGeoJson extends React.Component<any, any> {}
+  export class FeatureCollectionDisplay extends React.Component<any, any> {}
+  export class FeatureCollectionDisplayWithTooltipLabels extends React.Component<
+    any,
+    any
+  > {}
+  export class RoutedMap extends React.Component<any, any> {}
+
+  export function getLayersByName(name: string): React.ReactElement;
+
+  export class FullscreenControl extends React.Component<any, any> {}
+  export class LocateControl extends React.Component<any, any> {}
+  export class NewPolyControl extends React.Component<any, any> {}
+  export class NewMarkerControl extends React.Component<any, any> {}
+
+  export * as TransitiveReactLeaflet from "react-leaflet";
+  export * as TransitiveLeaflet from "leaflet";
+
+  export const ID: number;
+}
+
+declare module "react-cismap/CismapLayer" {
+  const CismapLayer: FC<any>;
+  export default CismapLayer;
+}
+
+declare module "react-cismap/FeatureCollection" {
+  const FeatureCollection: FC<any>;
+  export default FeatureCollection;
+}
+
+declare module "react-cismap/StyledWMSTileLayer" {
+  const StyledWMSTileLayer: any;
+  export default StyledWMSTileLayer;
+}
+
+/* CONSTANTS */
+
+declare module "react-cismap/constants/gis" {
+  const proj4crs25832def: string;
+}
+
+/* CONTEXTS */
+
+declare module "react-cismap/contexts/FeatureCollectionContextProvider" {
+  export const FeatureCollectionContext: Context<{
+    selectedFeature: any;
+    clusteringOptions: any;
+    filteredItems: any;
+    shownFeatures: any;
+    filterState: any;
+  }>;
+  export const FeatureCollectionDispatchContext: Context<{
+    setSelectedFeatureByPredicate: (predicate: any) => void;
+    setClusteringOptions: (options: any) => void;
+    setFilterState: (state: any) => void;
+  }>;
+  export const FeatureCollectionContextProvider: FC<
+    typeof FeatureCollectionContext
+  >;
+  export default FeatureCollectionContextProvider;
+}
+
+declare module "react-cismap/contexts/ResponsiveTopicMapContextProvider" {
+  export const ResponsiveTopicMapContext: Context<{
+    windowSize: {
+      width: number;
+      height: number;
+    };
+  }>;
+  export const ResponsiveTopicMapContextProvider: FC<
+    typeof ResponsiveTopicMapContext
+  >;
+  export default ResponsiveTopicMapContextProvider;
+}
+
 declare module "react-cismap/contexts/TopicMapContextProvider" {
-  import { Context, FC } from "react";
   interface RoutedMapRefContext {
     routedMapRef: {
       leafletMap?: {
@@ -15,13 +100,26 @@ declare module "react-cismap/contexts/TopicMapContextProvider" {
   }
   export const TopicMapContext: Context<RoutedMapRefContext>;
   export const TopicMapDispatchContext: Context<DispatchContext>;
-  export const TopicMapContextProvider: FC<any>;
+  export const TopicMapContextProvider: FC<typeof TopicMapContext>;
   export default TopicMapContextProvider;
 }
 
-declare module "react-cismap/contexts/UIContextProvider" {
-  import { Context, FC } from "react";
+declare module "react-cismap/contexts/TopicMapStylingContextProvider" {
+  export const TopicMapStylingContext: Context<{
+    markerSymbolSize: number;
+    additionalStylingInfo: any;
+  }>;
 
+  export const TopicMapStylingDispatchContext: Context<{
+    setMarkerSymbolSize: (size: number) => void;
+  }>;
+  export const TopicMapStylingContextProvider: FC<
+    typeof TopicMapStylingContext
+  >;
+  export default TopicMapStylingContextProvider;
+}
+
+declare module "react-cismap/contexts/UIContextProvider" {
   export const UIContext: Context<{
     appMenuActiveMenuSection: string;
     appMenuVisible: boolean;
@@ -33,93 +131,23 @@ declare module "react-cismap/contexts/UIContextProvider" {
     setAppMenuVisible: (section: boolean) => void;
     setSecondaryInfoVisible: (section: boolean) => void;
   }>;
-  export const UIDispatchContextProvider: FC<TopicMapContextProviderProps>;
+  export const UIDispatchContextProvider: FC<typeof UIDispatchContext>;
   export default UIDispatchContextProvider;
 }
 
-declare module "react-cismap/contexts/FeatureCollectionContextProvider" {
-  import { Context, FC } from "react";
-  export const FeatureCollectionContext: Context<{
-    selectedFeature: any;
-    clusteringOptions: any;
-    filteredItems: any;
-    shownFeatures: any;
-    filterState: any;
-  }>;
-  export const FeatureCollectionDispatchContext: Context<{
-    setSelectedFeatureByPredicate: (predicate: any) => void;
-    setClusteringOptions: (options: any) => void;
-    setFilterState: (state: any) => void;
-  }>;
-  export const FeatureCollectionContextProvider: FC<TopicMapContextProviderProps>;
-  export default FeatureCollectionContextProvider;
-}
-
-export const FeatureCollectionDisplayWithTooltipLabels: FC<any>;
-
-declare module "react-cismap/contexts/TopicMapStylingContextProvider" {
-  import { Context, FC } from "react";
-
-  interface TopicMapContextType {
-    markerSymbolSize: number;
-    additionalStylingInfo: any;
-  }
-
-  export const TopicMapStylingContext: Context<TopicMapContextType>;
-
-  export const TopicMapStylingDispatchContext: Context<{
-    setMarkerSymbolSize: (size: number) => void;
-  }>;
-  export const TopicMapStylingContextProvider: FC<TopicMapContextProviderProps>;
-  export default TopicMapStylingContextProvider;
-}
-
-declare module "react-cismap/contexts/ResponsiveTopicMapContextProvider" {
-  import { Context, FC } from "react";
-  export const ResponsiveTopicMapContext: Context<{
-    windowSize: {
-      width: number;
-      height: number;
-    };
-  }>;
-  export const ResponsiveTopicMapContextProvider: FC<TopicMapContextProviderProps>;
-  export default ResponsiveTopicMapContextProvider;
-}
-
-declare module "react-cismap/topicmaps/TopicMapComponent" {
-  const TopicMapComponent: FC<TopicMapProps>;
-  export default TopicMapComponent;
-}
-
-declare module "react-cismap/StyledWMSTileLayer" {
-  const StyledWMSTileLayer: any;
-  export default StyledWMSTileLayer;
-}
-
-declare module "react-cismap/constants/gis" {
-  const proj4crs25832def: string;
-}
-
-declare module "react-cismap/topicmaps/InfoBox" {
-  const InfoBox: FC<InfoBoxProps>;
-  export default InfoBox;
-}
-
-declare module "react-cismap" {
-  const TransitiveReactLeaflet: any;
-  const MappingConstants: {
-    proj4crs3857def: string;
-    proj4crs25832def: string;
-    crs3857: string;
-    crs25832: string;
-  };
-}
+/* TOOLS */
 
 declare module "react-cismap/tools/uiHelper" {
   const getActionLinksForFeature: (feature: any, options: any) => any;
 }
 
-declare module "react-cismap/CismapLayer" {
-  const CismapLayer: FC<CismapLayerProps>;
-  export default CismapLayer;
+/* TOPICMAPS */
+
+declare module "react-cismap/topicmaps/TopicMapComponent" {
+  const TopicMapComponent: FC<any>;
+  export default TopicMapComponent;
+}
+declare module "react-cismap/topicmaps/InfoBox" {
+  const InfoBox: FC<any>;
+  export default InfoBox;
 }

@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
-} from 'react-cismap/contexts/FeatureCollectionContextProvider';
+} from "react-cismap/contexts/FeatureCollectionContextProvider";
 import { LightBoxContext } from 'react-cismap/contexts/LightBoxContextProvider';
 import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
 import FeatureCollection from 'react-cismap/FeatureCollection';
@@ -25,12 +25,12 @@ const EMobiKarte = () => {
     setSelectedFeatureByPredicate,
     setClusteringOptions,
     setFilterState,
-  } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+  } = useContext(FeatureCollectionDispatchContext);
   const { secondaryInfoVisible } = useContext(UIContext);
-  const { setSecondaryInfoVisible } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setSecondaryInfoVisible } = useContext(UIDispatchContext);
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   const { clusteringOptions, selectedFeature, filteredItems, shownFeatures } =
-    useContext<FeatureCollectionContext>(FeatureCollectionContext);
+    useContext(FeatureCollectionContext);
   useEffect(() => {
     getGazData(setGazData);
   }, []);

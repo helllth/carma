@@ -14,8 +14,8 @@ import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 
 const Menu = () => {
-  const { filteredItems, shownFeatures } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { filteredItems, shownFeatures } = useContext<typeof FeatureCollectionContext>(FeatureCollectionContext);
+  const { setAppMenuActiveMenuSection } = useContext<typeof UIDispatchContext>(UIDispatchContext);
   const getFilterHeader = () => {
     const count = filteredItems?.length || 0;
 

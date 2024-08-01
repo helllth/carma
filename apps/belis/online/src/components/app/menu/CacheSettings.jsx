@@ -39,7 +39,7 @@ const CacheSettings = () => {
   const healthState = useSelector(getHealthState);
   const cacheReady = useSelector(isCacheFullUsable);
   const cacheReadyRef = React.useRef();
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
 
   useEffect(() => {
     cacheReadyRef.current = cacheReady;

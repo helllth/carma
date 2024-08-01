@@ -5,7 +5,7 @@ import 'chart.js/auto';
 import { getColorForProperties } from './helper/styler';
 
 const ChartComp = ({ visible = true }) => {
-  const { filteredItems } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { filteredItems } = useContext(FeatureCollectionContext);
 
   const groupingFunction = (obj) => {
     if (obj.online === true) {

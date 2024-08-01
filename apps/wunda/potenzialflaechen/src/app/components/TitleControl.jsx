@@ -5,8 +5,8 @@ import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectio
 import { CACHE_JWT } from "react-cismap/tools/fetching";
 
 const Title = ({ logout, jwt }) => {
-  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
-  const { metaInformation } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { windowSize } = useContext(ResponsiveTopicMapContext);
+  const { metaInformation } = useContext(FeatureCollectionContext);
   let dateInfo;
   if (metaInformation) {
     const t = metaInformation.time;

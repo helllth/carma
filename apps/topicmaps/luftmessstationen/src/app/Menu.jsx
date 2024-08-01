@@ -17,12 +17,12 @@ import CustomizationContextProvider from "react-cismap/contexts/CustomizationCon
 import Icon from "react-cismap/commons/Icon";
 
 const MyMenu = () => {
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const { filterState, filterMode, filteredItems, shownFeatures } =
-    useContext<FeatureCollectionContext>(FeatureCollectionContext);
-  const { setFilterState, setFilterMode } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+    useContext(FeatureCollectionContext);
+  const { setFilterState, setFilterMode } = useContext(FeatureCollectionDispatchContext);
 
-  const { items } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
+  const { items } = useContext(FeatureCollectionContext);
 
   const kategorien = [];
   const katValues = [];

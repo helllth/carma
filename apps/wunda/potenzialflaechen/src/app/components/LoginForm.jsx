@@ -13,7 +13,7 @@ const LoginForm = ({
   loginInfo,
   setLoginInfo = () => {},
 }) => {
-  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
+  const { windowSize } = useContext(ResponsiveTopicMapContext);
   const pwFieldRef = useRef();
   const userFieldRef = useRef();
   const _height = windowSize?.height || 800 - 180;

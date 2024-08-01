@@ -19,7 +19,7 @@ import Section from "react-cismap/topicmaps/menu/Section";
 
 const Modal = () => {
   const { setAppMenuActiveMenuSection } =
-    useContext<UIDispatchContext>(UIDispatchContext);
+    useContext<typeof UIDispatchContext>(UIDispatchContext);
   return (
     <ModalApplicationMenu
       menuIcon={"info"}

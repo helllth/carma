@@ -22,13 +22,13 @@ const Map = () => {
     setSelectedFeatureByPredicate,
     setClusteringOptions,
     setFilterState,
-  } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
-  const { markerSymbolSize } = useContext<TopicMapStylingContext>(TopicMapStylingContext);
-  const { clusteringOptions, itemsDictionary } = useContext<FeatureCollectionContext>(
+  } = useContext<typeof FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+  const { markerSymbolSize } = useContext<typeof TopicMapStylingContext>(TopicMapStylingContext);
+  const { clusteringOptions, itemsDictionary } = useContext<typeof FeatureCollectionContext>(
     FeatureCollectionContext,
   );
   const { setAppMenuActiveMenuSection, setAppMenuVisible } =
-    useContext<UIDispatchContext>(UIDispatchContext);
+    useContext<typeof UIDispatchContext>(UIDispatchContext);
 
   useEffect(() => {
     getGazData(setGazData);

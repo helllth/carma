@@ -48,7 +48,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   // TODO provide mapFramework context via props for UI?
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const topicMapContext: any = useContext(TopicMapContext);
+  const topicMapContext: any = useContext<typeof TopicMapContext>(TopicMapContext);
   const leaflet = topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
 
   const transitionToMode2d = (viewer: Viewer) => {

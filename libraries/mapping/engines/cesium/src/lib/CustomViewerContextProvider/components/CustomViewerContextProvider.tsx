@@ -30,7 +30,7 @@ export const CustomViewerContext = createContext<CustomViewerContextType>({
 });
 
 export const useCustomViewerContext = () => {
-  return useContext<CustomViewerContextType>(CustomViewerContext);
+  return useContext(CustomViewerContext);
 };
 
 export const CustomViewerContextProvider = ({

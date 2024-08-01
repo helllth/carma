@@ -37,7 +37,7 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
   const vectorStyle = useSelector(getVectorStyle);
   const layerMode = useSelector(getLayerMode);
   const dispatch = useDispatch();
-  const { zoomToFeature } = useContext<TopicMapDispatchContext>(TopicMapDispatchContext);
+  const { zoomToFeature } = useContext<typeof TopicMapDispatchContext>(TopicMapDispatchContext);
 
   useEffect(() => {
     const handleResize = () => {

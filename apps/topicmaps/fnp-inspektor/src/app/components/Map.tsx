@@ -42,12 +42,13 @@ import Modal from "./help/Modal";
 import { getGazData } from "../../utils/gazData";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 import L from "leaflet";
-import { UnknownAction } from "redux";
 import {
   MenuTooltip,
   searchTextPlaceholder,
   loadingText,
 } from "@carma-collab/wuppertal/fnp-inspektor";
+import type { UnknownAction } from "redux";
+
 const { ScaleControl } = TransitiveReactLeaflet;
 
 const Map = () => {
@@ -66,7 +67,7 @@ const Map = () => {
   const aevFeatures = useSelector(getData);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState<number>(0);
-  const { routedMapRef } = useContext<TopicMapContext>(TopicMapContext);
+  const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
 
   useEffect(() => {
     document.title = `FNP-Inspektor Wuppertal`;

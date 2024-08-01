@@ -8,8 +8,8 @@ import { createFilterRows } from './helper/filter';
 const FilterRowUI = ({ items }) => {
   const [filterRows, setFilterRows] = useState();
 
-  const { filterState } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
-  const { setFilterState } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+  const { filterState } = useContext(FeatureCollectionContext);
+  const { setFilterState } = useContext(FeatureCollectionDispatchContext);
 
   useEffect(() => {
     setFilterRows(createFilterRows(items, filterState, setFilterState));

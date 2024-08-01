@@ -216,7 +216,7 @@ const View = () => {
   }, [selectedTeam, storedJWT, dispatch]);
 
   const { setAppMenuActiveMenuSection, setAppMenuVisible } =
-    useContext<UIDispatchContext>(UIDispatchContext);
+    useContext(UIDispatchContext);
 
   let loginForm = null;
 

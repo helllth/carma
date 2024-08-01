@@ -15,7 +15,7 @@ import { getBadSVG } from './helper/helper';
 import { getColorForProperties } from './helper/styler';
 
 const Menu = () => {
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
 
   const helpSVGSize = 18;
   const hallenBadSVG = getBadSVG(

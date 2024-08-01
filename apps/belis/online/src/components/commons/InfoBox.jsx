@@ -39,7 +39,7 @@ const InfoBox = ({ refRoutedMap }) => {
   const selectedFeature = useSelector(getSelectedFeature);
   const secondaryInfoVisible = useSelector(isSecondaryInfoVisible);
   const healthState = useSelector(getHealthState);
-  const { setCollapsedInfoBox } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setCollapsedInfoBox } = useContext(UIDispatchContext);
   const { collapsedInfoBox } = useContext(UIContext);
   const mode = useSelector(getFeatureCollectionMode);
   const { setAll: setPhotoLightBoxData, setVisible, setCaptions } = useContext(

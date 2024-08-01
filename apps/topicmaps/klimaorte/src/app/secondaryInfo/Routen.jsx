@@ -15,8 +15,8 @@ import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopic
 const productionMode = process.env.NODE_ENV === "production";
 
 const InfoPanel = () => {
-  const { selectedFeature } = useContext<FeatureCollectionContext>(FeatureCollectionContext);
-  const { windowSize } = useContext<ResponsiveTopicMapContext>(ResponsiveTopicMapContext);
+  const { selectedFeature } = useContext(FeatureCollectionContext);
+  const { windowSize } = useContext(ResponsiveTopicMapContext);
   const [revertedOrder, setRevertedOrder] = useState(false);
   const urlPrefix = window.location.origin + window.location.pathname;
 

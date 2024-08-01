@@ -16,7 +16,7 @@ import Tasks from "./Tasks";
 import Teams from "./Teams";
 
 const MyMenu = ({ refRoutedMap }) => {
-  const { setAppMenuActiveMenuSection } = useContext<UIDispatchContext>(UIDispatchContext);
+  const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const filterState = useSelector(getFilter);
   const dispatch = useDispatch();
 

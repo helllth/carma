@@ -32,12 +32,12 @@ const Ehrenamtkarte = ({ bookmarks, setBookmarks }) => {
     fitBoundsForCollection,
     prev,
     next,
-  } = useContext<FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
+  } = useContext(FeatureCollectionDispatchContext);
   const { setAppMenuVisible, setAppMenuActiveMenuSection } =
-    useContext<UIDispatchContext>(UIDispatchContext);
+    useContext(UIDispatchContext);
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   const { clusteringOptions, selectedFeature, filteredItems, shownFeatures } =
-    useContext<FeatureCollectionContext>(FeatureCollectionContext);
+    useContext(FeatureCollectionContext);
   useEffect(() => {
     getGazData(setGazData);
   }, []);
