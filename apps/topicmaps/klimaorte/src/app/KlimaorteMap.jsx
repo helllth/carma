@@ -1,56 +1,61 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'leaflet/dist/leaflet.css';
-import { useContext, useEffect, useState } from 'react';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import FeatureCollection from 'react-cismap/FeatureCollection';
-import { md5FetchText } from 'react-cismap/tools/fetching';
-import { getGazDataForTopicIds } from 'react-cismap/tools/gazetteerHelper';
-import 'react-cismap/topicMaps.css';
-import InfoBoxFotoPreview from 'react-cismap/topicmaps/InfoBoxFotoPreview';
-import ModeSwitcher from './ModeSwitcher';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "leaflet/dist/leaflet.css";
+import { useContext, useEffect, useState } from "react";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import FeatureCollection from "react-cismap/FeatureCollection";
+import { md5FetchText } from "react-cismap/tools/fetching";
+import { getGazDataForTopicIds } from "react-cismap/tools/gazetteerHelper";
+import "react-cismap/topicMaps.css";
+import InfoBoxFotoPreview from "react-cismap/topicmaps/InfoBoxFotoPreview";
+import ModeSwitcher from "./ModeSwitcher";
 
-import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import './App.css';
-import MyMenu from './Menu';
-import InfoPanel from './SecondaryInfo';
-import { dataHost } from './App';
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+import "./App.css";
+import MyMenu from "./Menu";
+import InfoPanel from "./SecondaryInfo";
+import { dataHost } from "./App";
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
-} from 'react-cismap/contexts/FeatureCollectionContextProvider';
+} from "react-cismap/contexts/FeatureCollectionContextProvider";
 import {
   TopicMapContext,
   TopicMapDispatchContext,
-} from 'react-cismap/contexts/TopicMapContextProvider';
-import { removeQueryPart } from 'react-cismap/tools/routingHelper';
-import { LightBoxDispatchContext } from 'react-cismap/contexts/LightBoxContextProvider';
-import { appModes, getMode, getModeUrl } from './helper/modeParser';
-import { getClusterIconCreatorFunction } from 'react-cismap/tools/uiHelper';
-import { getColorConsideringSeondarySelection } from './helper/styler';
-import InfoBox from './InfoBox';
+} from "react-cismap/contexts/TopicMapContextProvider";
+import { removeQueryPart } from "react-cismap/tools/routingHelper";
+import { LightBoxDispatchContext } from "react-cismap/contexts/LightBoxContextProvider";
+import { appModes, getMode, getModeUrl } from "./helper/modeParser";
+import { getClusterIconCreatorFunction } from "react-cismap/tools/uiHelper";
+import { getColorConsideringSeondarySelection } from "./helper/styler";
+import InfoBox from "./InfoBox";
+import {
+  searchTextPlaceholder,
+  MenuTooltip,
+} from "@carma-collab/wuppertal/klimaorte";
+
 const getGazData = async (setGazData) => {
-  const prefix = 'GazDataForStories';
+  const prefix = "GazDataForStories";
   const sources = {};
 
   sources.adressen = await md5FetchText(
     prefix,
-    dataHost + '/data/adressen.json'
+    dataHost + "/data/adressen.json",
   );
-  sources.bezirke = await md5FetchText(prefix, dataHost + '/data/bezirke.json');
+  sources.bezirke = await md5FetchText(prefix, dataHost + "/data/bezirke.json");
   sources.quartiere = await md5FetchText(
     prefix,
-    dataHost + '/data/quartiere.json'
+    dataHost + "/data/quartiere.json",
   );
   sources.bpklimastandorte = await md5FetchText(
     prefix,
-    dataHost + '/data/bpklimastandorte.json'
+    dataHost + "/data/bpklimastandorte.json",
   );
 
   const gazData = getGazDataForTopicIds(sources, [
-    'bpklimastandorte',
-    'bezirke',
-    'quartiere',
-    'adressen',
+    "bpklimastandorte",
+    "bezirke",
+    "quartiere",
+    "adressen",
   ]);
 
   setGazData(gazData);
@@ -58,7 +63,7 @@ const getGazData = async (setGazData) => {
 
 function KlimaorteMap() {
   const { setSelectedFeatureByPredicate } = useContext(
-    FeatureCollectionDispatchContext
+    FeatureCollectionDispatchContext,
   );
   const lightBoxDispatchContext = useContext(LightBoxDispatchContext);
   const {
@@ -89,7 +94,7 @@ function KlimaorteMap() {
         if (shownFeatures === undefined || items === undefined) {
           return;
         }
-        const show = new URLSearchParams(search).get('show');
+        const show = new URLSearchParams(search).get("show");
         const foundShow = show != null;
 
         //http://localhost:3000/app#/orte?lat=51.23910202395776&lng=7.194871992741512&zoom=8&show=ort.10
@@ -97,15 +102,15 @@ function KlimaorteMap() {
 
         if (foundShow === true) {
           //split the show paramter (seperated by . in type and key)
-          const [type, key] = show.split('.');
-          console.log('type', type);
-          console.log('key', key);
+          const [type, key] = show.split(".");
+          console.log("type", type);
+          console.log("key", key);
 
           //todo check if the show type matches the current mode
           // if not ignore the show parameter
 
           let predicate = () => false;
-          if (type === 'ort') {
+          if (type === "ort") {
             predicate = (feature) => {
               try {
                 return (
@@ -115,7 +120,7 @@ function KlimaorteMap() {
                 return false;
               }
             };
-          } else if (type === 'route') {
+          } else if (type === "route") {
             predicate = (feature) => {
               try {
                 return (
@@ -140,10 +145,10 @@ function KlimaorteMap() {
             if (foundFeature !== undefined) {
               zoomToFeature(foundFeature);
             } else {
-              console.log('Objekt mit Standort.ID=' + show + ' nicht gefunden');
+              console.log("Objekt mit Standort.ID=" + show + " nicht gefunden");
             }
           }
-          history.push(removeQueryPart(search, 'show'));
+          history.push(removeQueryPart(search, "show"));
 
           // setFilterState({ kampagnen: [] });
           // setAppMenuVisible(true);
@@ -172,20 +177,20 @@ function KlimaorteMap() {
   let moreDataAvailable = false;
   //case switch for  selectedFeature.featuretype
   switch (selectedFeature?.featuretype) {
-    case 'route':
+    case "route":
       moreDataAvailable = true;
       break;
-    case 'zwischenstopp':
+    case "zwischenstopp":
       moreDataAvailable = true;
       break;
-    case 'ort':
+    case "ort":
       const angebot = item;
       if (angebot) {
         weitereAngebote = items.filter(
           (testItem) =>
-            testItem.typ === 'ort' &&
+            testItem.typ === "ort" &&
             testItem?.standort.id === angebot?.standort?.id &&
-            testItem.id !== angebot.id
+            testItem.id !== angebot.id,
         );
         moreDataAvailable =
           weitereAngebote.length > 0 ||
@@ -193,16 +198,16 @@ function KlimaorteMap() {
           selectedFeature?.properties?.kommentar !== undefined;
       }
       break;
-    case 'aussichtspunkt':
+    case "aussichtspunkt":
       break;
-    case 'poi':
+    case "poi":
       break;
     default:
       break;
   }
 
   const linkProduction = new URLSearchParams(history.location.search).get(
-    'linkProduction'
+    "linkProduction",
   );
   const linkProductionEnabled = linkProduction != null;
 
@@ -218,14 +223,14 @@ function KlimaorteMap() {
       <a
         href={
           window.location.href +
-          '&show=' +
+          "&show=" +
           selectedFeature?.properties?.standort?.id
         }
         target="_blank"
         rel="noreferrer"
       >
         π
-      </a>
+      </a>,
     );
   }
   // console.log("appMOde", appMode);
@@ -239,7 +244,7 @@ function KlimaorteMap() {
   } else {
     iconCreateFunction = getClusterIconCreatorFunction(
       30,
-      (props) => props.color
+      (props) => props.color,
     );
   }
 
@@ -256,15 +261,11 @@ function KlimaorteMap() {
       <TopicMapComponent
         maxZoom={19}
         minZoom={8}
-        applicationMenuTooltipString={
-          appMode === 'ORTE'
-            ? 'Filter | Einstellungen | Anleitung'
-            : 'Einstellungen | Anleitung'
-        }
+        applicationMenuTooltipString={<MenuTooltip appMode={appMode} />}
         locatorControl={true}
         modalMenu={<MyMenu mode={appMode} />}
         gazData={gazData}
-        gazetteerSearchPlaceholder="Klimaort | Stadtteil | Adresse"
+        gazetteerSearchPlaceholder={searchTextPlaceholder}
         infoBox={
           <InfoBox
             key={JSON.stringify(selectedFeature)}
@@ -295,7 +296,7 @@ function KlimaorteMap() {
         }}
       >
         <FeatureCollection
-          key={'featureCollection' + appMode}
+          key={"featureCollection" + appMode}
           clusteringOptions={{
             iconCreateFunction,
           }}

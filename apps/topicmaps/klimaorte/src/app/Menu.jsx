@@ -11,9 +11,13 @@ import Section from "react-cismap/topicmaps/menu/Section";
 import FilterPanel from "react-cismap/topicmaps/menu/FilterPanel";
 import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
 import ConfigurableDocBlocks from "react-cismap/topicmaps/ConfigurableDocBlocks";
-import MenuFooter from "./MenuFooter";
 import CustomizationContextProvider from "react-cismap/contexts/CustomizationContextProvider";
-
+import {
+  MenuIntroduction,
+  MenuFooter,
+  MenuTitle,
+  KompaktanleitungSection,
+} from "@carma-collab/wuppertal/klimaorte";
 import Icon from "react-cismap/commons/Icon";
 import previewFeatureCollection from "./helper/previewFC";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -70,10 +74,10 @@ export const getFilterInfo = (items) => {
 const MyMenu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const { filterState, filterMode, filteredItems, shownFeatures } = useContext(
-    FeatureCollectionContext
+    FeatureCollectionContext,
   );
   const { setFilterState, setFilterMode } = useContext(
-    FeatureCollectionDispatchContext
+    FeatureCollectionDispatchContext,
   );
   const { appMode } = useContext(TopicMapContext);
 
@@ -170,21 +174,21 @@ const MyMenu = () => {
           ausgewählten Klimaorten vorbei: Aussichtspunkte{" "}
           {getSymbolSVGGetter(
             featureSamples4Icons.aussichtspunkt?.properties?.svgBadge,
-            featureSamples4Icons.aussichtspunkt?.properties?.svgBadgeDimension
+            featureSamples4Icons.aussichtspunkt?.properties?.svgBadgeDimension,
           )(
             20,
             featureSamples4Icons.aussichtspunkt?.properties.color,
-            "aussichtspunktsample_"
+            "aussichtspunktsample_",
           )}{" "}
           ermöglichen Ihnen den Blick auf weitere Klimaorte aus größerer
           Entfernung zu werfen und Zwischenstopps{" "}
           {getSymbolSVGGetter(
             featureSamples4Icons.zwischenstopp?.properties?.svgBadge,
-            featureSamples4Icons.zwischenstopp?.properties?.svgBadgeDimension
+            featureSamples4Icons.zwischenstopp?.properties?.svgBadgeDimension,
           )(
             20,
             featureSamples4Icons.zwischenstopp?.properties.color,
-            "zwischenstoppsample_"
+            "zwischenstoppsample_",
           )}{" "}
           bieten Ihnen ausgewählte Highlights im Routenverlauf an.
         </p>
@@ -337,145 +341,145 @@ const MyMenu = () => {
 
   return (
     <CustomizationContextProvider
-      customizations={{
-        inKartePositionieren: {
-          listWithSymbols: (
-            <p>
-              Durch das in der Auswahlliste vorangestellte Symbol erkennen Sie,
-              ob es sich bei einem Treffer um einen{" "}
-              <NW>
-                <Icon name="circle" /> Stadtbezirk
-              </NW>
-              , ein{" "}
-              <NW>
-                <Icon name="pie-chart" /> Quartier
-              </NW>
-              , eine{" "}
-              <NW>
-                <Icon name="home" /> Adresse
-              </NW>
-              , eine{" "}
-              <NW>
-                <Icon name="road" /> Straße ohne Hausnummern
-              </NW>
-              , eine{" "}
-              <NW>
-                <Icon name="child" /> Kindertageseinrichtung
-              </NW>
-              , eine{" "}
-              <NW>
-                <Icon name="graduation-cap" /> Schule
-              </NW>{" "}
-              oder einen{" "}
-              <NW>
-                <Icon name="sun" /> Klimaort
-              </NW>{" "}
-              handelt.
-            </p>
-          ),
-        },
-        fachobjekteAuswaehlen: {
-          furtherExplanationOfClickableContent:
-            " (Signaturen oder dunkelblaue Fahrradtrassen)",
-        },
-        hintergrund: {
-          additionalDatasources: (
-            <div>
-              <ul>
-                <li>
-                  <strong>Fernwärme</strong>: Kartendienst (WMS) der Stadt
-                  Wuppertal in Zusammenarbeit mit der{" "}
-                  <a
-                    target="_wsw"
-                    href="https://www.wsw-online.de/wsw-energie-wasser/privatkunden/produkte/fernwaerme/talwaerme-wuppertal/"
-                  >
-                    WSW GmbH
-                  </a>
-                  . Datengrundlage: Fernwärmeleitungen der Wuppertaler
-                  Stadtwerke GmbH (Stand 02.2021) mit einer Puffergröße von 10
-                  m. ©{" "}
-                  <a target="_wsw" href="https://www.wsw-online.de/impressum/">
-                    Wuppertaler Stadtwerke GmbH
-                  </a>
-                  .
-                </li>
-              </ul>
+    // customizations={{
+    //   inKartePositionieren: {
+    //     listWithSymbols: (
+    //       <p>
+    //         Durch das in der Auswahlliste vorangestellte Symbol erkennen Sie,
+    //         ob es sich bei einem Treffer um einen{" "}
+    //         <NW>
+    //           <Icon name="circle" /> Stadtbezirk
+    //         </NW>
+    //         , ein{" "}
+    //         <NW>
+    //           <Icon name="pie-chart" /> Quartier
+    //         </NW>
+    //         , eine{" "}
+    //         <NW>
+    //           <Icon name="home" /> Adresse
+    //         </NW>
+    //         , eine{" "}
+    //         <NW>
+    //           <Icon name="road" /> Straße ohne Hausnummern
+    //         </NW>
+    //         , eine{" "}
+    //         <NW>
+    //           <Icon name="child" /> Kindertageseinrichtung
+    //         </NW>
+    //         , eine{" "}
+    //         <NW>
+    //           <Icon name="graduation-cap" /> Schule
+    //         </NW>{" "}
+    //         oder einen{" "}
+    //         <NW>
+    //           <Icon name="sun" /> Klimaort
+    //         </NW>{" "}
+    //         handelt.
+    //       </p>
+    //     ),
+    //   },
+    //   fachobjekteAuswaehlen: {
+    //     furtherExplanationOfClickableContent:
+    //       " (Signaturen oder dunkelblaue Fahrradtrassen)",
+    //   },
+    //   hintergrund: {
+    //     additionalDatasources: (
+    //       <div>
+    //         <ul>
+    //           <li>
+    //             <strong>Fernwärme</strong>: Kartendienst (WMS) der Stadt
+    //             Wuppertal in Zusammenarbeit mit der{" "}
+    //             <a
+    //               target="_wsw"
+    //               href="https://www.wsw-online.de/wsw-energie-wasser/privatkunden/produkte/fernwaerme/talwaerme-wuppertal/"
+    //             >
+    //               WSW GmbH
+    //             </a>
+    //             . Datengrundlage: Fernwärmeleitungen der Wuppertaler
+    //             Stadtwerke GmbH (Stand 02.2021) mit einer Puffergröße von 10
+    //             m. ©{" "}
+    //             <a target="_wsw" href="https://www.wsw-online.de/impressum/">
+    //               Wuppertaler Stadtwerke GmbH
+    //             </a>
+    //             .
+    //           </li>
+    //         </ul>
 
-              <div>
-                Im Bereich der{" "}
-                <span style={{ whiteSpace: "nowrap" }}>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <a className="styleaslink">
-                    <FontAwesomeIcon icon={faRandom} /> Klimaorte
-                  </a>
-                </span>{" "}
-                stellt die Klimaortkarte Wuppertal zusätzlich die Daten der{" "}
-                <a
-                  href="https://offenedaten-wuppertal.de/dataset/klimaorte-wuppertal"
-                  target="_opendata"
-                >
-                  Klimaorte
-                </a>{" "}
-                und eine Auswahl der{" "}
-                <a
-                  href="https://offenedaten-wuppertal.de/dataset/radrouten-wuppertal"
-                  target="_opendata"
-                >
-                  Radrouten
-                </a>{" "}
-                (mit <span style={{ whiteSpace: "nowrap" }}>1,5 Meter</span>{" "}
-                Puffer) aus dem Open-Data-Angebot der Stadt Wuppertal dar. Im
-                Bereich der{" "}
-                <span style={{ whiteSpace: "nowrap" }}>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <a className="styleaslink">
-                    <FontAwesomeIcon icon={faRandom} /> Klimarouten
-                  </a>
-                </span>{" "}
-                stellt die Klimaortkarte Wuppertal zusätzlich die Daten der
-                Klimarouten, aus dem Open-Data-Angebot (dieses befindet sich in
-                Vorbereitung) der Stadt Wuppertal dar, welche ausgewählte
-                Fahrrad- und Fußwegrouten symbolisieren (
-                <span style={{ whiteSpace: "nowrap" }}>2 Meter</span> Puffer um
-                Linienstruktur). Die Routen sind in Kooperation mit{" "}
-                <a href="https://www.komoot.de/" target="_komoot">
-                  komoot{" "}
-                </a>{" "}
-                hergestellt worden, wobei sich im jeweiligen Datenblatt{" "}
-                <FontAwesomeIcon icon={faInfoCircle} /> der Link zur externen
-                Datenquelle befindet. Weitere Objekte, welche sich in einem
-                Abstand von{" "}
-                <span style={{ whiteSpace: "nowrap" }}>60 Metern</span> zur
-                Klimaroute befinden, werden ebenfalls präsentiert bzw. der Route
-                zugeordnet:
-                <ul>
-                  <li>Klimaorte</li>
-                  <li>
-                    Aussichtspunkte und die von dort sichtbaren Klimaorte
-                    (Open-Data-Angebot befindet sich in Vorbereitung)
-                  </li>
-                  <li>
-                    Zwischenstopps, als Symbol für weitere Highlights im
-                    Routenverlauf (Open-Data-Angebot befindet sich in
-                    Vorbereitung)
-                  </li>
-                  <li>
-                    ausgewählte Point of Interests (
-                    <a
-                      href="https://offenedaten-wuppertal.de/dataset/interessante-orte-poi-wuppertal"
-                      target="_opendata"
-                    >
-                      Interessante Orte Wuppertal
-                    </a>
-                    , Anpassung des Open-Data-Angebots befindet sich in
-                    Vorbereitung).
-                  </li>
-                </ul>
-              </div>
-            </div>
-          ),
-        },
-      }}
+    //         <div>
+    //           Im Bereich der{" "}
+    //           <span style={{ whiteSpace: "nowrap" }}>
+    //             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+    //             <a className="styleaslink">
+    //               <FontAwesomeIcon icon={faRandom} /> Klimaorte
+    //             </a>
+    //           </span>{" "}
+    //           stellt die Klimaortkarte Wuppertal zusätzlich die Daten der{" "}
+    //           <a
+    //             href="https://offenedaten-wuppertal.de/dataset/klimaorte-wuppertal"
+    //             target="_opendata"
+    //           >
+    //             Klimaorte
+    //           </a>{" "}
+    //           und eine Auswahl der{" "}
+    //           <a
+    //             href="https://offenedaten-wuppertal.de/dataset/radrouten-wuppertal"
+    //             target="_opendata"
+    //           >
+    //             Radrouten
+    //           </a>{" "}
+    //           (mit <span style={{ whiteSpace: "nowrap" }}>1,5 Meter</span>{" "}
+    //           Puffer) aus dem Open-Data-Angebot der Stadt Wuppertal dar. Im
+    //           Bereich der{" "}
+    //           <span style={{ whiteSpace: "nowrap" }}>
+    //             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+    //             <a className="styleaslink">
+    //               <FontAwesomeIcon icon={faRandom} /> Klimarouten
+    //             </a>
+    //           </span>{" "}
+    //           stellt die Klimaortkarte Wuppertal zusätzlich die Daten der
+    //           Klimarouten, aus dem Open-Data-Angebot (dieses befindet sich in
+    //           Vorbereitung) der Stadt Wuppertal dar, welche ausgewählte
+    //           Fahrrad- und Fußwegrouten symbolisieren (
+    //           <span style={{ whiteSpace: "nowrap" }}>2 Meter</span> Puffer um
+    //           Linienstruktur). Die Routen sind in Kooperation mit{" "}
+    //           <a href="https://www.komoot.de/" target="_komoot">
+    //             komoot{" "}
+    //           </a>{" "}
+    //           hergestellt worden, wobei sich im jeweiligen Datenblatt{" "}
+    //           <FontAwesomeIcon icon={faInfoCircle} /> der Link zur externen
+    //           Datenquelle befindet. Weitere Objekte, welche sich in einem
+    //           Abstand von{" "}
+    //           <span style={{ whiteSpace: "nowrap" }}>60 Metern</span> zur
+    //           Klimaroute befinden, werden ebenfalls präsentiert bzw. der Route
+    //           zugeordnet:
+    //           <ul>
+    //             <li>Klimaorte</li>
+    //             <li>
+    //               Aussichtspunkte und die von dort sichtbaren Klimaorte
+    //               (Open-Data-Angebot befindet sich in Vorbereitung)
+    //             </li>
+    //             <li>
+    //               Zwischenstopps, als Symbol für weitere Highlights im
+    //               Routenverlauf (Open-Data-Angebot befindet sich in
+    //               Vorbereitung)
+    //             </li>
+    //             <li>
+    //               ausgewählte Point of Interests (
+    //               <a
+    //                 href="https://offenedaten-wuppertal.de/dataset/interessante-orte-poi-wuppertal"
+    //                 target="_opendata"
+    //               >
+    //                 Interessante Orte Wuppertal
+    //               </a>
+    //               , Anpassung des Open-Data-Angebots befindet sich in
+    //               Vorbereitung).
+    //             </li>
+    //           </ul>
+    //         </div>
+    //       </div>
+    //     ),
+    //   },
+    // }}
     >
       <ModalApplicationMenu
         menuIcon={"bars"}

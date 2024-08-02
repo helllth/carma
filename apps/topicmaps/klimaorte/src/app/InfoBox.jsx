@@ -1,21 +1,21 @@
-import { useContext } from 'react';
+import { useContext } from "react";
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
-} from 'react-cismap/contexts/FeatureCollectionContextProvider';
-import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
-import InfoBoxHeader from 'react-cismap/topicmaps/InfoBoxHeader';
-import { appModes } from './helper/modeParser';
-import { getColorConsideringSeondarySelection } from './helper/styler';
-import { ResponsiveTopicMapContext } from 'react-cismap/contexts/ResponsiveTopicMapContextProvider';
-
+} from "react-cismap/contexts/FeatureCollectionContextProvider";
+import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
+import InfoBoxHeader from "react-cismap/topicmaps/InfoBoxHeader";
+import { appModes } from "./helper/modeParser";
+import { getColorConsideringSeondarySelection } from "./helper/styler";
+import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopicMapContextProvider";
+import { InfoBoxTextContent } from "@carma-collab/wuppertal/klimaorte";
 const InfoBox = (props) => {
   let boxConfig = null;
   let secondaryInfoBoxElements = [];
 
   const featureCollectionContext = useContext(FeatureCollectionContext);
   const { setSelectedFeatureByPredicate, fitBoundsForCollection } = useContext(
-    FeatureCollectionDispatchContext
+    FeatureCollectionDispatchContext,
   );
 
   const {
@@ -26,7 +26,7 @@ const InfoBox = (props) => {
     allFeatures,
   } = featureCollectionContext;
   const { responsiveState, gap, windowSize, infoBoxPixelWidth } = useContext(
-    ResponsiveTopicMapContext
+    ResponsiveTopicMapContext,
   );
 
   const overlappingHeaders = [];
@@ -34,9 +34,9 @@ const InfoBox = (props) => {
   const isActive = () => true; // //itemFilterFunction({ filterState });
   let actualWidth = 500;
 
-  if (responsiveState === 'normal') {
+  if (responsiveState === "normal") {
     actualWidth = infoBoxPixelWidth;
-  } else if (responsiveState === 'small') {
+  } else if (responsiveState === "small") {
     actualWidth = windowSize.width - gap;
   }
 
@@ -46,24 +46,24 @@ const InfoBox = (props) => {
         if (isActive(route)) {
           overlappingHeaders.push(
             <div
-              key={'overlapping.' + route.name}
+              key={"overlapping." + route.name}
               style={{
                 width: actualWidth,
                 paddingBottom: 3,
                 paddingLeft:
                   (selectedFeature.properties.routen.length - counter + 1) * 10,
-                cursor: 'pointer', //is a hand
+                cursor: "pointer", //is a hand
               }}
               onClick={() => {
                 console.log(
-                  'setSelectedFeatureByPredicate',
-                  setSelectedFeatureByPredicate
+                  "setSelectedFeatureByPredicate",
+                  setSelectedFeatureByPredicate,
                 );
 
                 setSelectedFeatureByPredicate(
                   (feature) => {
                     return (
-                      feature?.properties?.typ === 'route' &&
+                      feature?.properties?.typ === "route" &&
                       feature?.properties?.id === route.id
                     );
                   },
@@ -72,20 +72,20 @@ const InfoBox = (props) => {
                       fitBoundsForCollection(
                         allFeatures.filter(
                           (f) =>
-                            f.properties.typ === 'route' &&
-                            f.properties.id === route.id
-                        )
+                            f.properties.typ === "route" &&
+                            f.properties.id === route.id,
+                        ),
                       );
                       setTimeout(() => {
                         setSelectedFeatureByPredicate((feature) => {
                           return (
-                            feature?.properties?.typ === 'route' &&
+                            feature?.properties?.typ === "route" &&
                             feature?.properties?.id === route.id
                           );
                         });
                       }, 200);
                     }
-                  }
+                  },
                 );
               }}
             >
@@ -93,12 +93,12 @@ const InfoBox = (props) => {
                 headerColor={
                   getColorConsideringSeondarySelection(
                     route,
-                    secondarySelection
-                  ).string() || 'grey'
+                    secondarySelection,
+                  ).string() || "grey"
                 }
-                content={'Klimaroute ' + route.name}
+                content={"Klimaroute " + route.name}
               ></InfoBoxHeader>
-            </div>
+            </div>,
           );
         }
         counter++;
@@ -109,7 +109,7 @@ const InfoBox = (props) => {
     const NEXT = 1;
     const PREV = -1;
     const select = (direction, order, getType, getId = (obj) => obj) => {
-      console.log('select');
+      console.log("select");
 
       const orderNum = [];
       for (const obj of order) {
@@ -125,7 +125,7 @@ const InfoBox = (props) => {
       let orderCounter = 0;
       const orderIndexOfSelectedFeature = doubleOrder.findIndex(
         (tester) =>
-          currentTarget.typ === tester.typ && currentTarget.id === tester.id
+          currentTarget.typ === tester.typ && currentTarget.id === tester.id,
       );
       let hitIndex;
       //prepare the next id
@@ -163,11 +163,11 @@ const InfoBox = (props) => {
       if (hitIndex !== undefined) {
         setSelectedFeatureByPredicate((feature) => {
           console.log(
-            'setSelectedFeatureByPredicate',
+            "setSelectedFeatureByPredicate",
             feature?.properties?.id.toString(),
             doubleOrder[hitIndex].id,
             feature?.properties?.typ === doubleOrder[hitIndex].typ &&
-              feature?.properties?.id.toString() === doubleOrder[hitIndex].id
+              feature?.properties?.id.toString() === doubleOrder[hitIndex].id,
           );
 
           return (
@@ -178,19 +178,19 @@ const InfoBox = (props) => {
       }
     };
 
-    if (selectedFeature?.properties?.typ === 'route') {
+    if (selectedFeature?.properties?.typ === "route") {
       //if a route is the selected element
       config = {
         displaySecondaryInfoAction: props.moreDataAvailable,
-        city: 'Wuppertal',
+        city: "Wuppertal",
         navigator: {
           noun: {
-            singular: 'Klimaroute',
-            plural: 'Klimarouten',
+            singular: "Klimaroute",
+            plural: "Klimarouten",
           },
         },
-        noCurrentFeatureTitle: 'Keine Klimarouten gefunden',
-        noCurrentFeatureContent: '',
+        noCurrentFeatureTitle: "Keine Klimarouten gefunden",
+        noCurrentFeatureContent: <InfoBoxTextContent />,
         getTotalNumberOfItems: () => {
           return Object.values(itemsDictionary.routen).length;
         },
@@ -198,17 +198,17 @@ const InfoBox = (props) => {
           featureCollection.filter(
             (feature) =>
               feature.preventSelection !== true &&
-              feature.properties.typ === 'route'
+              feature.properties.typ === "route",
           ).length,
         next: () => {
-          select(NEXT, Object.keys(itemsDictionary.routen), () => 'route');
+          select(NEXT, Object.keys(itemsDictionary.routen), () => "route");
         },
         previous: () => {
-          select(PREV, Object.keys(itemsDictionary.routen), () => 'route');
+          select(PREV, Object.keys(itemsDictionary.routen), () => "route");
         },
         fitAll: () => {
           fitBoundsForCollection(
-            allFeatures.filter((f) => f.properties.typ === 'route')
+            allFeatures.filter((f) => f.properties.typ === "route"),
           );
         },
       };
@@ -216,22 +216,22 @@ const InfoBox = (props) => {
       //if a ort or aussichtspunkt is the selected element
       config = {
         displaySecondaryInfoAction: props.moreDataAvailable,
-        city: 'Wuppertal',
+        city: "Wuppertal",
         navigator: {
           noun: {
-            singular: 'Station auf dieser Route',
-            plural: 'Stationen auf dieser Route',
+            singular: "Station auf dieser Route",
+            plural: "Stationen auf dieser Route",
           },
         },
-        noCurrentFeatureTitle: 'Keine Stationen gefunden',
-        noCurrentFeatureContent: '',
+        noCurrentFeatureTitle: "Keine Stationen gefunden",
+        noCurrentFeatureContent: <InfoBoxTextContent />,
 
         getTotalNumberOfItems: (items) => {
           if (secondarySelection?.id) {
             return itemsDictionary.stationenInRouten[secondarySelection.id]
               .length;
           } else {
-            return '';
+            return "";
           }
         },
 
@@ -242,13 +242,13 @@ const InfoBox = (props) => {
                 feature.preventSelection !== true &&
                 feature.properties.routen &&
                 feature.properties.routen.filter(
-                  (r) => r.id === secondarySelection.id
-                ).length > 0
+                  (r) => r.id === secondarySelection.id,
+                ).length > 0,
             );
 
             return featuresThatCount.length;
           } else {
-            return '';
+            return "";
           }
         },
         next: () => {
@@ -256,13 +256,13 @@ const InfoBox = (props) => {
             NEXT,
             itemsDictionary.stationenInRouten[secondarySelection.id],
             (obj) => {
-              if (obj.typ === 'angebot') {
-                return 'ort';
+              if (obj.typ === "angebot") {
+                return "ort";
               } else {
                 return obj.typ;
               }
             },
-            (obj) => obj.id
+            (obj) => obj.id,
           );
         },
         previous: () => {
@@ -270,27 +270,27 @@ const InfoBox = (props) => {
             PREV,
             itemsDictionary.stationenInRouten[secondarySelection.id],
             (obj) => {
-              if (obj.typ === 'angebot') {
-                return 'ort';
+              if (obj.typ === "angebot") {
+                return "ort";
               } else {
                 return obj.typ;
               }
             },
 
-            (obj) => obj.id
+            (obj) => obj.id,
           );
         },
         fitAll: () => {
           fitBoundsForCollection(
             allFeatures.filter(
               (f) =>
-                f.properties.typ === 'ort' &&
+                f.properties.typ === "ort" &&
                 itemsDictionary.stationenInRouten[
                   secondarySelection.id
                 ].findIndex(
-                  (agb) => agb.id === f.properties.id && agb.typ === 'angebot'
-                ) > -1
-            )
+                  (agb) => agb.id === f.properties.id && agb.typ === "angebot",
+                ) > -1,
+            ),
           );
         },
       };
@@ -304,15 +304,15 @@ const InfoBox = (props) => {
   } else {
     boxConfig = {
       displaySecondaryInfoAction: props.moreDataAvailable,
-      city: 'Wuppertal',
+      city: "Wuppertal",
       navigator: {
         noun: {
-          singular: 'Klimaort',
-          plural: 'Klimaorte',
+          singular: "Klimaort",
+          plural: "Klimaorte",
         },
       },
-      noCurrentFeatureTitle: 'Keine Klimaorte gefunden',
-      noCurrentFeatureContent: '',
+      noCurrentFeatureTitle: "Keine Klimaorte gefunden",
+      noCurrentFeatureContent: <InfoBoxTextContent />,
     };
   }
   return (
