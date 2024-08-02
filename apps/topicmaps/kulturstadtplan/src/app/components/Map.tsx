@@ -15,6 +15,12 @@ import {
 import Menu from "./Menu";
 import Icon from "react-cismap/commons/Icon";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
+import {
+  searchTextPlaceholder,
+  MenuTooltip,
+  InfoBoxTextContent,
+  InfoBoxTextTitle,
+} from "@carma-collab/wuppertal/kulturstadtplan";
 
 const Map = () => {
   const [gazData, setGazData] = useState([]);
@@ -22,11 +28,15 @@ const Map = () => {
     setSelectedFeatureByPredicate,
     setClusteringOptions,
     setFilterState,
-  } = useContext<typeof FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
-  const { markerSymbolSize } = useContext<typeof TopicMapStylingContext>(TopicMapStylingContext);
-  const { clusteringOptions, itemsDictionary } = useContext<typeof FeatureCollectionContext>(
-    FeatureCollectionContext,
+  } = useContext<typeof FeatureCollectionDispatchContext>(
+    FeatureCollectionDispatchContext,
   );
+  const { markerSymbolSize } = useContext<typeof TopicMapStylingContext>(
+    TopicMapStylingContext,
+  );
+  const { clusteringOptions, itemsDictionary } = useContext<
+    typeof FeatureCollectionContext
+  >(FeatureCollectionContext);
   const { setAppMenuActiveMenuSection, setAppMenuVisible } =
     useContext<typeof UIDispatchContext>(UIDispatchContext);
 
@@ -63,7 +73,7 @@ const Map = () => {
       modalMenu={<Menu />}
       locatorControl={true}
       photoLightBox
-      gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
+      gazetteerSearchPlaceholder={searchTextPlaceholder}
       gazetteerHitTrigger={(hits) => {
         if ((Array.isArray(hits) && hits[0]?.more?.pid) || hits[0]?.more?.kid) {
           const gazId = hits[0]?.more?.pid || hits[0]?.more?.kid;
@@ -72,7 +82,7 @@ const Map = () => {
           );
         }
       }}
-      applicationMenuTooltipString="Mein Kulturstadtplan | Einstellungen | Kompaktanleitung"
+      applicationMenuTooltipString={<MenuTooltip />}
       infoBox={
         <GenericInfoBoxFromFeature
           pixelwidth={350}
@@ -84,29 +94,12 @@ const Map = () => {
                 plural: "POIs",
               },
             },
-            noFeatureTitle: "Keine POI gefunden!",
+            noFeatureTitle: <InfoBoxTextTitle />,
             noCurrentFeatureContent: (
-              <p>
-                Für mehr POI Ansicht mit <Icon name="minus-square" />{" "}
-                verkleinern. Um nach Themenfeldern zu filtern, das
-                <a
-                  onClick={() => {
-                    setAppMenuVisible(true);
-                    setAppMenuActiveMenuSection("filter");
-                  }}
-                  className="renderAsLink"
-                >
-                  {" "}
-                  Men&uuml;&nbsp;
-                  <Icon
-                    name="bars"
-                    style={{
-                      color: "black",
-                    }}
-                  />{" "}
-                  &ouml;ffnen.
-                </a>
-              </p>
+              <InfoBoxTextContent
+                setAppMenuVisible={setAppMenuVisible}
+                setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+              />
             ),
           }}
         />

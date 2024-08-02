@@ -52,6 +52,9 @@
         "libraries/collaboration/carma-wuppertal-collab/src/kita-finder/index.ts"
       ],
       "@carma-collab/wuppertal/klimaorte": ["libraries/collaboration/carma-wuppertal-collab/src/klimaorte/index.ts"],
+      "@carma-collab/wuppertal/kulturstadtplan": [
+        "libraries/collaboration/carma-wuppertal-collab/src/kulturstadtplan/index.ts"
+      ],
       "@carma-collab/wuppertal/stadtplan": ["libraries/collaboration/carma-wuppertal-collab/src/stadtplan/index.ts"],
       "@carma-collab/wuppertal/starkregengefahrenkarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/starkregengefahrenkarte/index.jsx"
