@@ -139,7 +139,7 @@ declare module "react-cismap/contexts/UIContextProvider" {
 
 declare module "react-cismap/tools/uiHelper" {
   const getActionLinksForFeature: (feature: any, options: any) => any;
-  const getSymbolSVGGetter: (svgCode: string, svgBadgeDimension: {width: number, height: number}) => any;
+  const getSymbolSVGGetter: (svgCode: string, svgBadgeDimension: {width: number | string, height: number | string}) => any;
 }
 
 /* TOPICMAPS */
