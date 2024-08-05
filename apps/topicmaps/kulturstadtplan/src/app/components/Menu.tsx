@@ -12,6 +12,7 @@ import {
   MenuTitle,
   KompaktanleitungSection,
 } from "@carma-collab/wuppertal/kulturstadtplan";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 
 const Menu = () => {
   const { filteredItems, shownFeatures } = useContext<
@@ -62,6 +63,13 @@ const Menu = () => {
           />,
           <DefaultSettingsPanel key="settings" />,
           <KompaktanleitungSection />,
+          <Section
+            key="digiTal"
+            sectionKey="digiTal"
+            sectionTitle={"DigiTal Zwilling"}
+            sectionBsStyle="warning"
+            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
+          ></Section>,
         ]}
       />
     </CustomizationContextProvider>
