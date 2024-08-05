@@ -16,10 +16,17 @@ import { getStatus } from "./helper/convertItemToFeature";
 import { getGazData } from "./helper/getGazData";
 import MyMenu from "./Menu";
 import InfoPanel from "./SecondaryInfo";
+import {
+  searchTextPlaceholder,
+  MenuTooltip,
+  InfoBoxTextContent,
+} from "@carma-collab/wuppertal/luftmessstationen";
 
 function Comp() {
   const [gazData, setGazData] = useState([]);
-  const { setSelectedFeatureByPredicate } = useContext(FeatureCollectionDispatchContext);
+  const { setSelectedFeatureByPredicate } = useContext(
+    FeatureCollectionDispatchContext,
+  );
   // const { items, filteredItems, allFeatures } = useContext(FeatureCollectionContext);
 
   // console.log("allFeatures", allFeatures);
@@ -34,8 +41,8 @@ function Comp() {
       locatorControl={true}
       gazData={gazData}
       modalMenu={<MyMenu />}
-      applicationMenuTooltipString={"Filter | Einstellungen | Anleitung"}
-      gazetteerSearchPlaceholder='Stadtteil | Adresse | POI'
+      applicationMenuTooltipString={<MenuTooltip />}
+      gazetteerSearchPlaceholder={searchTextPlaceholder}
       infoBox={
         <GenericInfoBoxFromFeature
           pixelwidth={350}
@@ -50,19 +57,21 @@ function Comp() {
               },
             },
             noCurrentFeatureTitle: "Keine Messtationen gefunden",
-            noCurrentFeatureContent: "",
+            noCurrentFeatureContent: <InfoBoxTextContent />,
           }}
         />
       }
       secondaryInfo={<InfoPanel />}
       gazetteerHitTrigger={(hits) => {
         if (Array.isArray(hits) && hits[0]?.more?.mid) {
-          setSelectedFeatureByPredicate((feature) => feature.properties.id === hits[0].more.mid);
+          setSelectedFeatureByPredicate(
+            (feature) => feature.properties.id === hits[0].more.mid,
+          );
         }
       }}
     >
       <ContactButton
-        title='Rückfrage zu den Messwerten'
+        title="Rückfrage zu den Messwerten"
         action={() => {
           let link = document.createElement("a");
           link.setAttribute("type", "hidden");
@@ -70,9 +79,13 @@ function Comp() {
 
           let mailToHref =
             "mailto:luftreinhaltung@stadt.wuppertal.de?subject=Rückfrage zu Messwerten&body=" +
-            encodeURI(`Sehr geehrte Damen und Herren,${br}${br} zu der Luftmessstationskarte `) +
+            encodeURI(
+              `Sehr geehrte Damen und Herren,${br}${br} zu der Luftmessstationskarte `,
+            ) +
             encodeURI(`auf${br}${br}`) +
-            `${window.location.href.replace(/&/g, "%26").replace(/#/g, "%23")}` +
+            `${window.location.href
+              .replace(/&/g, "%26")
+              .replace(/#/g, "%23")}` +
             encodeURI(
               `${br}` +
                 `${br}` +
@@ -80,7 +93,7 @@ function Comp() {
                 `${br}${br}${br}${br}` +
                 `Mit freundlichen Grüßen${br}` +
                 `${br}` +
-                `${br}`
+                `${br}`,
             );
           document.body.appendChild(link);
           link.href = mailToHref;
