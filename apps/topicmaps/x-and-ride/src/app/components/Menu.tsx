@@ -4,20 +4,22 @@ import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectio
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import Section from "react-cismap/topicmaps/menu/Section";
 import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
-import Introduction from "./menu/Introduction";
-import HelpSection from "./menu/HelpSection";
 import FilterUI from "./menu/FilterUI";
-import Footer from "./menu/Footer";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import {
   MenuTitle,
   MenuIntroduction,
   KompaktanleitungSection,
   MenuFooter,
 } from "@carma-collab/wuppertal/x-and-ride";
+import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
+
 const Menu = () => {
   const { filteredItems, shownFeatures } = useContext<
     typeof FeatureCollectionContext
   >(FeatureCollectionContext);
+  const { setAppMenuActiveMenuSection } =
+    useContext<typeof UIDispatchContext>(UIDispatchContext);
 
   const getFilterHeader = () => {
     const count = filteredItems?.length || 0;
@@ -38,9 +40,19 @@ const Menu = () => {
     <CustomizationContextProvider customizations={{}}>
       <ModalApplicationMenu
         menuIcon={"bars"}
-        menuTitle={"Filter, Einstellungen und Kompaktanleitung"}
-        menuFooter={<Footer />}
-        menuIntroduction={<Introduction />}
+        menuTitle={<MenuTitle />}
+        menuFooter={
+          <MenuFooter
+            title="TopicMaps Wuppertal"
+            version={"Version 1.23.0)"}
+            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+          />
+        }
+        menuIntroduction={
+          <MenuIntroduction
+            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+          />
+        }
         menuSections={[
           <Section
             key="filter"
@@ -50,7 +62,16 @@ const Menu = () => {
             sectionContent={<FilterUI />}
           />,
           <DefaultSettingsPanel key="settings" />,
-          <HelpSection />,
+          <KompaktanleitungSection
+            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+          />,
+          <Section
+            key="digiTal"
+            sectionKey="digiTal"
+            sectionTitle={"DigiTal Zwilling"}
+            sectionBsStyle="warning"
+            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
+          ></Section>,
         ]}
       />
     </CustomizationContextProvider>

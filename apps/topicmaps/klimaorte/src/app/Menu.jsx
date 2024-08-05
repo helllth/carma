@@ -5,12 +5,10 @@ import {
 } from "react-cismap/contexts/FeatureCollectionContextProvider";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import { getSimpleHelpForTM } from "react-cismap/tools/uiHelper";
-import { Link } from "react-scroll";
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import Section from "react-cismap/topicmaps/menu/Section";
 import FilterPanel from "react-cismap/topicmaps/menu/FilterPanel";
 import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
-import ConfigurableDocBlocks from "react-cismap/topicmaps/ConfigurableDocBlocks";
 import CustomizationContextProvider from "react-cismap/contexts/CustomizationContextProvider";
 import {
   MenuIntroduction,
@@ -30,6 +28,8 @@ import {
 import { getSymbolSVGGetter } from "react-cismap/tools/uiHelper";
 import { featureSamples4Icons } from "./helper/iconFactory";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+
 export const getFilterInfo = (items) => {
   let kategorien = [];
   const katValues = [];
@@ -389,6 +389,13 @@ const MyMenu = () => {
             previewFeatureCollection={previewFeatureCollection}
           />,
           <KompaktanleitungSection />,
+          <Section
+            key="digiTal"
+            sectionKey="digiTal"
+            sectionTitle={"DigiTal Zwilling"}
+            sectionBsStyle="warning"
+            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
+          ></Section>,
         ]}
       />
     </CustomizationContextProvider>
