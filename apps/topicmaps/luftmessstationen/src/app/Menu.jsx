@@ -12,15 +12,22 @@ import FilterPanel from "react-cismap/topicmaps/menu/FilterPanel";
 import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
 import ConfigurableDocBlocks from "react-cismap/topicmaps/ConfigurableDocBlocks";
 import { LOOKUP } from "./helper/constants";
-import MenuFooter from "./MenuFooter";
 import CustomizationContextProvider from "react-cismap/contexts/CustomizationContextProvider";
 import Icon from "react-cismap/commons/Icon";
-
+import {
+  KompaktanleitungSection,
+  MenuTitle,
+  MenuIntroduction,
+  MenuFooter,
+} from "@carma-collab/wuppertal/luftmessstationen";
 const MyMenu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
-  const { filterState, filterMode, filteredItems, shownFeatures } =
-    useContext(FeatureCollectionContext);
-  const { setFilterState, setFilterMode } = useContext(FeatureCollectionDispatchContext);
+  const { filterState, filterMode, filteredItems, shownFeatures } = useContext(
+    FeatureCollectionContext,
+  );
+  const { setFilterState, setFilterMode } = useContext(
+    FeatureCollectionDispatchContext,
+  );
 
   const { items } = useContext(FeatureCollectionContext);
 
@@ -48,7 +55,13 @@ const MyMenu = () => {
   const filterConfiguration = {
     mode: "list", // list or tabs
     resetedFilter: {
-      stations: ["unauffaellig", "auffaellig", "warnend", "inaktiv", "abgebaut"],
+      stations: [
+        "unauffaellig",
+        "auffaellig",
+        "warnend",
+        "inaktiv",
+        "abgebaut",
+      ],
     },
     filterMode: "gibtnureinen",
     filters: [
@@ -303,23 +316,29 @@ NO₂-Messwerte von ca. vier Wochen.
             content: (
               <div>
                 <p>
-                  Im Bereich &quot;<strong>Messstationen der Luftqualität</strong>&quot; können Sie
-                  im Anwendungsmenü <Icon name='bars' /> die in der Karte angezeigten
-                  Luftmessstationen so ausdünnen, dass nur die für Sie interessanten Stationen übrig
-                  bleiben. Standardmäßig sind die Einstellungen hier so gesetzt, dass alle
-                  verfügbaren Luftmessstationen angezeigt werden.
+                  Im Bereich &quot;
+                  <strong>Messstationen der Luftqualität</strong>&quot; können
+                  Sie im Anwendungsmenü <Icon name="bars" /> die in der Karte
+                  angezeigten Luftmessstationen so ausdünnen, dass nur die für
+                  Sie interessanten Stationen übrig bleiben. Standardmäßig sind
+                  die Einstellungen hier so gesetzt, dass alle verfügbaren
+                  Luftmessstationen angezeigt werden.
                 </p>
                 <p>
-                  Mit den Optionsgruppen &quot;<strong>aktive Messstationen</strong>&quot; und
-                  &quot;<strong>inaktive Messstationen</strong>&quot; können Sie die Kartenanzeige
-                  auf Luftmessstationen beschränken, die im letzten verfügbaren Messzeitraum
-                  NO₂-Messwerte lieferten (ggf. kann ein temporärer Messausfall vorliegen) oder bei
-                  denen es sich um abmontierte Stationen handelt (ggf. werden in der Vergangenheit
-                  erfasste Messwerte im Datenblatt präsentiert). Die Unterteilung (Klassifizierung)
-                  der Stationen in der Optionsgruppe &quot;<strong>aktive Messstationen</strong>
-                  &quot; wird anhand des NO₂-Messwertes vorgenommen: unauffällig grün (≦ 35 µg/m³),
-                  auffällig gelb (&gt; 35 µg/m³), warnend rot (&gt; 40 µg/m³); temporärer Ausfall
-                  türkis (siehe auch Abschnitt{" "}
+                  Mit den Optionsgruppen &quot;
+                  <strong>aktive Messstationen</strong>&quot; und &quot;
+                  <strong>inaktive Messstationen</strong>&quot; können Sie die
+                  Kartenanzeige auf Luftmessstationen beschränken, die im
+                  letzten verfügbaren Messzeitraum NO₂-Messwerte lieferten (ggf.
+                  kann ein temporärer Messausfall vorliegen) oder bei denen es
+                  sich um abmontierte Stationen handelt (ggf. werden in der
+                  Vergangenheit erfasste Messwerte im Datenblatt präsentiert).
+                  Die Unterteilung (Klassifizierung) der Stationen in der
+                  Optionsgruppe &quot;<strong>aktive Messstationen</strong>
+                  &quot; wird anhand des NO₂-Messwertes vorgenommen: unauffällig
+                  grün (≦ 35 µg/m³), auffällig gelb (&gt; 35 µg/m³), warnend rot
+                  (&gt; 40 µg/m³); temporärer Ausfall türkis (siehe auch
+                  Abschnitt{" "}
                   <Link
                     to={"Hintergrund"}
                     containerId={"myMenu"}
@@ -330,14 +349,18 @@ NO₂-Messwerte von ca. vier Wochen.
                   ) .
                 </p>
                 <p>
-                  Ihre Einstellungen werden direkt in der blauen Titelzeile des Bereichs &quot;
-                  <strong>Messstationen der Luftqualität</strong>&quot; und in dem Donut-Diagramm,
-                  das Sie rechts neben oder unter den Filteroptionen finden, ausgewertet. Die
-                  Titelzeile zeigt die Gesamtanzahl der Luftmessstationen, die den von Ihnen
-                  gesetzten Filterbedingungen entsprechen. Das Donut-Diagramm zeigt zusätzlich die
-                  Verteilung der klassifizierten Luftmessstationen (unauffällige, auffällige,
-                  warnende Stationen; Stationen mit Messausfall; abmontierte Stationen). Bewegen Sie
-                  dazu den Mauszeiger auf eines der farbigen Segmente des Diagramms.
+                  Ihre Einstellungen werden direkt in der blauen Titelzeile des
+                  Bereichs &quot;
+                  <strong>Messstationen der Luftqualität</strong>&quot; und in
+                  dem Donut-Diagramm, das Sie rechts neben oder unter den
+                  Filteroptionen finden, ausgewertet. Die Titelzeile zeigt die
+                  Gesamtanzahl der Luftmessstationen, die den von Ihnen
+                  gesetzten Filterbedingungen entsprechen. Das Donut-Diagramm
+                  zeigt zusätzlich die Verteilung der klassifizierten
+                  Luftmessstationen (unauffällige, auffällige, warnende
+                  Stationen; Stationen mit Messausfall; abmontierte Stationen).
+                  Bewegen Sie dazu den Mauszeiger auf eines der farbigen
+                  Segmente des Diagramms.
                 </p>
               </div>
             ),
@@ -359,42 +382,42 @@ NO₂-Messwerte von ca. vier Wochen.
         inKartePositionieren: {
           listWithSymbols: (
             <p>
-              Durch das in der Auswahlliste vorangestellte Symbol erkennen Sie, ob es sich bei einem
-              Treffer um einen{" "}
+              Durch das in der Auswahlliste vorangestellte Symbol erkennen Sie,
+              ob es sich bei einem Treffer um einen{" "}
               <NW>
-                <Icon name='circle' /> Stadtbezirk
+                <Icon name="circle" /> Stadtbezirk
               </NW>
               , ein{" "}
               <NW>
-                <Icon name='pie-chart' /> Quartier
+                <Icon name="pie-chart" /> Quartier
               </NW>
               , eine{" "}
               <NW>
-                <Icon name='home' /> Adresse
+                <Icon name="home" /> Adresse
               </NW>
               , eine{" "}
               <NW>
-                <Icon name='road' /> Straße ohne Hausnummern
+                <Icon name="road" /> Straße ohne Hausnummern
               </NW>
               , einen{" "}
               <NW>
-                <Icon name='tag' /> POI
+                <Icon name="tag" /> POI
               </NW>
               , die{" "}
               <NW>
-                <Icon name='tags' /> alternative Bezeichnung eines POI
+                <Icon name="tags" /> alternative Bezeichnung eines POI
               </NW>
               , eine{" "}
               <NW>
-                <Icon name='child' /> Kindertageseinrichtung
+                <Icon name="child" /> Kindertageseinrichtung
               </NW>
               , eine{" "}
               <NW>
-                <Icon name='graduation-cap' /> Schule
+                <Icon name="graduation-cap" /> Schule
               </NW>{" "}
               oder eine{" "}
               <NW>
-                <Icon name='cloudscale' /> Luftmessstation
+                <Icon name="cloudscale" /> Luftmessstation
               </NW>{" "}
               handelt.
             </p>
@@ -404,54 +427,25 @@ NO₂-Messwerte von ca. vier Wochen.
     >
       <ModalApplicationMenu
         menuIcon={"bars"}
-        menuTitle={"Filter, Einstellungen und Kompaktanleitung"}
-        menuFooter={<MenuFooter />}
+        menuTitle={<MenuTitle />}
+        menuFooter={
+          <MenuFooter
+            title="Luftmessstationskarte Wuppertal"
+            version={"v1.0.10"}
+            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+          />
+        }
         menuIntroduction={
-          <span>
-            Benutzen Sie die Auswahlmöglichkeiten unter{" "}
-            <Link
-              className='useAClassNameToRenderProperLink'
-              to='filter'
-              containerId='myMenu'
-              smooth={true}
-              delay={100}
-              onClick={() => setAppMenuActiveMenuSection("filter")}
-            >
-              Messstationen der Luftqualität
-            </Link>
-            , um die in der Karte angezeigten Luftmessstationen für Stickstoffdioxid (NO₂) auf die
-            für Sie relevanten Stationen zu beschränken. Über{" "}
-            <Link
-              className='useAClassNameToRenderProperLink'
-              to='settings'
-              containerId='myMenu'
-              smooth={true}
-              delay={100}
-              onClick={() => setAppMenuActiveMenuSection("settings")}
-            >
-              Einstellungen
-            </Link>{" "}
-            können Sie die Darstellung der Hintergrundkarte und der Stationen an Ihre Vorlieben
-            anpassen. Wählen Sie die{" "}
-            <Link
-              className='useAClassNameToRenderProperLink'
-              to='help'
-              containerId='myMenu'
-              smooth={true}
-              delay={100}
-              onClick={() => setAppMenuActiveMenuSection("help")}
-            >
-              Kompaktanleitung
-            </Link>{" "}
-            für detailliertere Bedienungsinformationen.
-          </span>
+          <MenuIntroduction
+            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+          />
         }
         menuSections={[
           <Section
-            key='filter'
-            sectionKey='filter'
+            key="filter"
+            sectionKey="filter"
             sectionTitle={getFilterHeader()}
-            sectionBsStyle='primary'
+            sectionBsStyle="primary"
             sectionContent={
               <div>
                 {/* <div>
@@ -465,14 +459,15 @@ NO₂-Messwerte von ca. vier Wochen.
                 </div> */}
                 <FilterPanel filterConfiguration={filterConfiguration} />
                 <div>
-                  Die Filterung bezieht sich auf die Angaben zu einer Messstation im letzten
-                  Kalendermonat (letzte monatliche Datenerhebung). Wenn Sie weitergehende
-                  Informationen wünschen, können Sie eine Auswahl von Messwerten/Jahresmittelwerten
-                  im Datenblatt einer Messstation einsehen oder vollständigen Datenzugriff im
-                  Open-Data-Portal der Stadt Wuppertal erhalten. Die entsprechenden Links finden Sie
-                  im Abschnitt{" "}
+                  Die Filterung bezieht sich auf die Angaben zu einer
+                  Messstation im letzten Kalendermonat (letzte monatliche
+                  Datenerhebung). Wenn Sie weitergehende Informationen wünschen,
+                  können Sie eine Auswahl von Messwerten/Jahresmittelwerten im
+                  Datenblatt einer Messstation einsehen oder vollständigen
+                  Datenzugriff im Open-Data-Portal der Stadt Wuppertal erhalten.
+                  Die entsprechenden Links finden Sie im Abschnitt{" "}
                   <a
-                    className='renderWithoutHref'
+                    className="renderWithoutHref"
                     onClick={() => setAppMenuActiveMenuSection("help")}
                   >
                     Datengrundlage
@@ -483,17 +478,11 @@ NO₂-Messwerte von ca. vier Wochen.
             }
           />,
           <DefaultSettingsPanel
-            previewMapPosition='lat=51.2607860760692&lng=7.164304562911684&title&zoom=9'
+            previewMapPosition="lat=51.2607860760692&lng=7.164304562911684&title&zoom=9"
             previewMapClusteringOptions={undefined}
-            key='settings'
+            key="settings"
           />,
-          <Section
-            key='help'
-            sectionKey='help'
-            sectionTitle='Kompaktanleitung'
-            sectionBsStyle='default'
-            sectionContent={<ConfigurableDocBlocks configs={helpConfig} />}
-          />,
+          <KompaktanleitungSection />,
         ]}
       />
     </CustomizationContextProvider>
