@@ -1,38 +1,44 @@
-import { useContext } from 'react';
-import CustomizationContextProvider from 'react-cismap/contexts/CustomizationContextProvider';
-import { FeatureCollectionContext } from 'react-cismap/contexts/FeatureCollectionContextProvider';
-import ModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
-import Section from 'react-cismap/topicmaps/menu/Section';
-import DefaultSettingsPanel from 'react-cismap/topicmaps/menu/DefaultSettingsPanel';
-
-import Introduction from './menu/Introduction';
-import HelpSection from './menu/HelpSection';
-import FilterUI from './menu/FilterUI';
-import Footer from './menu/Footer';
-
+import { useContext } from "react";
+import CustomizationContextProvider from "react-cismap/contexts/CustomizationContextProvider";
+import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
+import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
+import Section from "react-cismap/topicmaps/menu/Section";
+import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
+import Introduction from "./menu/Introduction";
+import HelpSection from "./menu/HelpSection";
+import FilterUI from "./menu/FilterUI";
+import Footer from "./menu/Footer";
+import {
+  MenuTitle,
+  MenuIntroduction,
+  KompaktanleitungSection,
+  MenuFooter,
+} from "@carma-collab/wuppertal/x-and-ride";
 const Menu = () => {
-  const { filteredItems, shownFeatures } = useContext<typeof FeatureCollectionContext>(FeatureCollectionContext);
+  const { filteredItems, shownFeatures } = useContext<
+    typeof FeatureCollectionContext
+  >(FeatureCollectionContext);
 
   const getFilterHeader = () => {
     const count = filteredItems?.length || 0;
 
     let term;
     if (count === 1) {
-      term = 'Angebot';
+      term = "Angebot";
     } else {
-      term = 'Angebote';
+      term = "Angebote";
     }
 
     return `Filtern (${count} ${term} gefunden, davon ${
-      shownFeatures?.length || '0'
+      shownFeatures?.length || "0"
     } in der Karte)`;
   };
 
   return (
     <CustomizationContextProvider customizations={{}}>
       <ModalApplicationMenu
-        menuIcon={'bars'}
-        menuTitle={'Filter, Einstellungen und Kompaktanleitung'}
+        menuIcon={"bars"}
+        menuTitle={"Filter, Einstellungen und Kompaktanleitung"}
         menuFooter={<Footer />}
         menuIntroduction={<Introduction />}
         menuSections={[

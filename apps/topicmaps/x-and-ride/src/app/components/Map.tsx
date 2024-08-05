@@ -1,29 +1,37 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from "react";
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
-} from 'react-cismap/contexts/FeatureCollectionContextProvider';
-import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
-import FeatureCollection from 'react-cismap/FeatureCollection';
-import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
-import { getGazData } from '../../helper/gazData';
-import { getPoiClusterIconCreatorFunction } from '../../helper/styler';
-import Icon from 'react-cismap/commons/Icon';
+} from "react-cismap/contexts/FeatureCollectionContextProvider";
+import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
+import FeatureCollection from "react-cismap/FeatureCollection";
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
+import { getGazData } from "../../helper/gazData";
+import { getPoiClusterIconCreatorFunction } from "../../helper/styler";
 import {
   UIContext,
   UIDispatchContext,
-} from 'react-cismap/contexts/UIContextProvider';
-import Menu from './Menu';
-import SecondaryInfoModal from './menu/SecondaryInfoModal';
-
+} from "react-cismap/contexts/UIContextProvider";
+import Menu from "./Menu";
+import SecondaryInfoModal from "./menu/SecondaryInfoModal";
+import {
+  searchTextPlaceholder,
+  MenuTooltip,
+  InfoBoxTextTitle,
+  InfoBoxTextContent,
+} from "@carma-collab/wuppertal/x-and-ride";
 const Map = () => {
   const [gazData, setGazData] = useState([]);
-  const { setClusteringOptions } = useContext<typeof FeatureCollectionDispatchContext>(FeatureCollectionDispatchContext);
-  const { markerSymbolSize } = useContext<typeof TopicMapStylingContext>(TopicMapStylingContext);
-  const { clusteringOptions, selectedFeature } = useContext<typeof FeatureCollectionContext>(
-    FeatureCollectionContext
+  const { setClusteringOptions } = useContext<
+    typeof FeatureCollectionDispatchContext
+  >(FeatureCollectionDispatchContext);
+  const { markerSymbolSize } = useContext<typeof TopicMapStylingContext>(
+    TopicMapStylingContext,
   );
+  const { clusteringOptions, selectedFeature } = useContext<
+    typeof FeatureCollectionContext
+  >(FeatureCollectionContext);
   const { secondaryInfoVisible } = useContext<typeof UIContext>(UIContext);
   const {
     setAppMenuActiveMenuSection,
@@ -50,44 +58,26 @@ const Map = () => {
       modalMenu={<Menu />}
       locatorControl={true}
       photoLightBox
-      gazetteerSearchPlaceholder="P+R | B+R | Stadtteil | Adresse | POI"
-      applicationMenuTooltipString="Filter | Einstellungen | Kompaktanleitung"
+      gazetteerSearchPlaceholder={searchTextPlaceholder}
+      applicationMenuTooltipString={<MenuTooltip />}
       infoBox={
         <GenericInfoBoxFromFeature
           pixelwidth={350}
           config={{
             displaySecondaryInfoAction: true,
-            city: 'Wuppertal',
+            city: "Wuppertal",
             navigator: {
               noun: {
-                singular: 'Anlage',
-                plural: 'Anlagen',
+                singular: "Anlage",
+                plural: "Anlagen",
               },
             },
-            noFeatureTitle: 'Keine Anlagen gefunden!',
+            noFeatureTitle: <InfoBoxTextTitle />,
             noCurrentFeatureContent: (
-              <p>
-                Für mehr Anlagen Ansicht mit <Icon name="minus-square" />{' '}
-                verkleinern oder mit untenstehendem Link alle Treffer der
-                aktuellen Filterung anzeigen. Ggf. Filtereinstellungen im
-                <a
-                  onClick={() => {
-                    setAppMenuVisible(true);
-                    setAppMenuActiveMenuSection('filter');
-                  }}
-                  className="renderAsLink"
-                >
-                  {' '}
-                  Anwendungsmenü
-                  <Icon
-                    name="bars"
-                    style={{
-                      color: 'black',
-                    }}
-                  />{' '}
-                </a>
-                zurücksetzen
-              </p>
+              <InfoBoxTextContent
+                setAppMenuVisible={setAppMenuVisible}
+                setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+              />
             ),
           }}
         />
