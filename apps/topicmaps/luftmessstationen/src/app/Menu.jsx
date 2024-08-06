@@ -18,9 +18,12 @@ import {
   KompaktanleitungSection,
   MenuTitle,
   MenuIntroduction,
-  MenuFooter,
 } from "@carma-collab/wuppertal/luftmessstationen";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import {
+  GenericDigitalTwinReferenceTextComponent,
+  MenuFooter,
+} from "@carma-collab/wuppertal/commons";
+import { getApplicationVersion } from "./version";
 
 const MyMenu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
@@ -432,8 +435,7 @@ NO₂-Messwerte von ca. vier Wochen.
         menuTitle={<MenuTitle />}
         menuFooter={
           <MenuFooter
-            title="Luftmessstationskarte Wuppertal"
-            version={"v1.0.10"}
+            version={getApplicationVersion()}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }
