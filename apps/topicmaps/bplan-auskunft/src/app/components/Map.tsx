@@ -20,6 +20,7 @@ import { useSearchParams } from "react-router-dom";
 import L from "leaflet";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 import type { UnknownAction } from "redux";
+import { getApplicationVersion } from "./version";
 
 const Map = () => {
   const dispatch = useDispatch();
@@ -89,7 +90,7 @@ const Map = () => {
       ref={refRoutedMap}
       gazetteerSearchControl={true}
       backgroundlayers={"uwBPlan|wupp-plan-live@20"}
-      modalMenu={<Modal visible={undefined} />}
+      modalMenu={<Modal visible={true} version={getApplicationVersion()} />}
       locationChangedHandler={(location) => {
         const newParams = { ...paramsToObject(searchParams), ...location };
         setSearchParams(newParams);
