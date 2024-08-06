@@ -15,7 +15,7 @@ import {
   KompaktanleitungSection,
 } from "@carma-collab/wuppertal/x-and-ride";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
-import { getApplicationVersion } from "./version";
+import { getApplicationVersion } from "../../version";
 
 const Menu = () => {
   const { filteredItems, shownFeatures } = useContext<
