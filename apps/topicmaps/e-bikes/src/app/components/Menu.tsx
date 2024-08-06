@@ -11,11 +11,17 @@ import {
   MenuTitle,
 } from "@carma-collab/wuppertal/e-bikes";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
-
+import {
+  GenericDigitalTwinReferenceTextComponent,
+  MenuFooter,
+} from "@carma-collab/wuppertal/commons";
+import { getApplicationVersion } from "./version";
 const Menu = () => {
-  const { filteredItems, shownFeatures } = useContext<typeof FeatureCollectionContext>(FeatureCollectionContext);
-  const { setAppMenuActiveMenuSection } = useContext<typeof UIDispatchContext>(UIDispatchContext);
+  const { filteredItems, shownFeatures } = useContext<
+    typeof FeatureCollectionContext
+  >(FeatureCollectionContext);
+  const { setAppMenuActiveMenuSection } =
+    useContext<typeof UIDispatchContext>(UIDispatchContext);
   const getFilterHeader = () => {
     const count = filteredItems?.length || 0;
 
@@ -36,7 +42,12 @@ const Menu = () => {
       <ModalApplicationMenu
         menuIcon={"bars"}
         menuTitle={<MenuTitle />}
-        // menuFooter={<MenuFooter />}
+        menuFooter={
+          <MenuFooter
+            version={getApplicationVersion()}
+            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+          />
+        }
         menuIntroduction={
           <MenuIntroduction
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
