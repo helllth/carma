@@ -7,12 +7,15 @@ import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPan
 import FilterUI from "./menu/FilterUI";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import {
-  MenuFooter,
   MenuIntroduction,
   MenuTitle,
   KompaktanleitungSection,
 } from "@carma-collab/wuppertal/kulturstadtplan";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import {
+  GenericDigitalTwinReferenceTextComponent,
+  MenuFooter,
+} from "@carma-collab/wuppertal/commons";
+import { getApplicationVersion } from "./version";
 
 const Menu = () => {
   const { filteredItems, shownFeatures } = useContext<
@@ -43,8 +46,7 @@ const Menu = () => {
         menuTitle={<MenuTitle />}
         menuFooter={
           <MenuFooter
-            title="TopicMaps Wuppertal"
-            version={"Version 1.23.0"}
+            version={getApplicationVersion()}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }
