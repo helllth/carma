@@ -8,14 +8,17 @@ import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import Section from "react-cismap/topicmaps/menu/Section";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import {
+  GenericDigitalTwinReferenceTextComponent,
+  MenuFooter,
+} from "@carma-collab/wuppertal/commons";
 import FilterUI from "./FilterUI";
 import {
   MenuTitle,
-  MenuFooter,
   MenuIntroduction,
   KompaktanleitungSection,
 } from "@carma-collab/wuppertal/kita-finder";
+import { getApplicationVersion } from "./version";
 
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];
@@ -64,8 +67,7 @@ const Menu = () => {
         menuTitle={<MenuTitle />}
         menuFooter={
           <MenuFooter
-            title="Kita-Finder Wuppertal"
-            version={"xyz"}
+            version={getApplicationVersion()}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }
