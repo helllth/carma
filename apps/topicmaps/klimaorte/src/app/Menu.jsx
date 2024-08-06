@@ -12,7 +12,6 @@ import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPan
 import CustomizationContextProvider from "react-cismap/contexts/CustomizationContextProvider";
 import {
   MenuIntroduction,
-  MenuFooter,
   MenuTitle,
   KompaktanleitungSection,
 } from "@carma-collab/wuppertal/klimaorte";
@@ -28,7 +27,11 @@ import {
 import { getSymbolSVGGetter } from "react-cismap/tools/uiHelper";
 import { featureSamples4Icons } from "./helper/iconFactory";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import {
+  GenericDigitalTwinReferenceTextComponent,
+  MenuFooter,
+} from "@carma-collab/wuppertal/commons";
+import { getApplicationVersion } from "./version";
 
 export const getFilterInfo = (items) => {
   let kategorien = [];
@@ -344,7 +347,12 @@ const MyMenu = () => {
       <ModalApplicationMenu
         menuIcon={"bars"}
         menuTitle={<MenuTitle appMode={appMode} />}
-        menuFooter={<MenuFooter />}
+        menuFooter={
+          <MenuFooter
+            version={getApplicationVersion()}
+            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+          />
+        }
         menuIntroduction={
           <MenuIntroduction
             appMode={appMode}
