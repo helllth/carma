@@ -1,19 +1,11 @@
 import React, { useContext, useMemo } from "react";
 import Icon from "react-cismap/commons/Icon";
 import CustomizationContextProvider from "react-cismap/contexts/CustomizationContextProvider";
-import {
-  FeatureCollectionContext,
-  FeatureCollectionDispatchContext,
-} from "react-cismap/contexts/FeatureCollectionContextProvider";
+import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
-import ConfigurableDocBlocks from "react-cismap/topicmaps/ConfigurableDocBlocks";
-import GenericHelpTextForMyLocation from "react-cismap/topicmaps/docBlocks/GenericHelpTextForMyLocation";
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import Section from "react-cismap/topicmaps/menu/Section";
-import LicenseLuftbildkarte from "react-cismap/topicmaps/wuppertal/LicenseLuftbildkarte";
-import LicenseStadtplanTagNacht from "react-cismap/topicmaps/wuppertal/LicenseStadtplanTagNacht";
-import { Link } from "react-scroll";
-
+import { MenuFooter } from "@carma-collab/wuppertal/commons";
 import FilterUI from "./FilterUI";
 import FilterRowUI from "./FilterRowUI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -39,7 +31,6 @@ import {
 } from "react-bootstrap";
 import {
   MenuTitle,
-  MenuFooter,
   MenuIntroduction,
   SectionTitleGLB,
   SectionTitleKen,
@@ -49,6 +40,7 @@ import {
   KompaktanleitungSection,
 } from "@carma-collab/wuppertal/ehrenamtskarte";
 import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import { getApplicationVersion } from "./version";
 
 const Menu = ({ bookmarks, setBookmarks }) => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
@@ -91,7 +83,12 @@ const Menu = ({ bookmarks, setBookmarks }) => {
       <ModalApplicationMenu
         menuIcon={"bars"}
         menuTitle={<MenuTitle />}
-        menuFooter={<MenuFooter />}
+        menuFooter={
+          <MenuFooter
+            version={getApplicationVersion()}
+            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+          />
+        }
         menuIntroduction={
           <MenuIntroduction
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
