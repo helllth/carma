@@ -8,7 +8,11 @@ import { getBadSVG } from "./helper/helper";
 import { getColorForProperties } from "./helper/styler";
 import { KompaktanleitungSection } from "@carma-collab/wuppertal/baederkarte";
 import { getApplicationVersion } from "./version";
-import { MenuFooter } from "@carma-collab/wuppertal/commons";
+import {
+  MenuFooter,
+  GenericDigitalTwinReferenceTextComponent,
+} from "@carma-collab/wuppertal/commons";
+import Section from "react-cismap/topicmaps/menu/Section";
 
 const Menu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
@@ -101,6 +105,13 @@ const Menu = () => {
             oeffentlichesVereinsbadSVG={oeffentlichesVereinsbadSVG}
             nichtOeffentlichesVereinsbadSVG={nichtOeffentlichesVereinsbadSVG}
           />,
+          <Section
+            key="digiTal"
+            sectionKey="digiTal"
+            sectionTitle={"DigiTal Zwilling"}
+            sectionBsStyle="warning"
+            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
+          ></Section>,
         ]}
       />
     </CustomizationContextProvider>
