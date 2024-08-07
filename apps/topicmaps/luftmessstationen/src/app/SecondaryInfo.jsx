@@ -13,8 +13,8 @@ import { LOOKUP, MONTHS, opendataLinkSections } from "./helper/constants";
 import Color from "color";
 import Icon from "react-cismap/commons/Icon";
 import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopicMapContextProvider";
-import { getApplicationVersion } from "./version";
 import { version as reactCismapVersion } from "react-cismap/meta";
+import { getApplicationVersion } from "../version";
 
 ReactChartkick.addAdapter(Chart);
 

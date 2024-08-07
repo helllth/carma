@@ -1,5 +1,5 @@
-import { getApplicationVersion } from "../version";
 import { version as reactCismapVersion } from "react-cismap/meta";
+import { getApplicationVersion } from "../../version";
 
 export default function Footer() {
   return (
