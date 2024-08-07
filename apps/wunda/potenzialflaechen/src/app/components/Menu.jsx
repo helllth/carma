@@ -9,26 +9,25 @@ import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPan
 import FilterPanel from "react-cismap/topicmaps/menu/FilterPanel";
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import Section from "react-cismap/topicmaps/menu/Section";
-import { Link } from "react-scroll";
-
-import MenuFooter from "./MenuFooter";
-import Ueberblick from "./onlinehelpsections/010_Ueberblick";
-import Fachdatenquellen from "./onlinehelpsections/020_Fachdatenquellen";
-import Hintergrundkarten from "./onlinehelpsections/030_Hintergrundkarte";
-import Kartendarstellung from "./onlinehelpsections/040_Kartendarstellung";
-import FlaechenAuswaehlen from "./onlinehelpsections/050_FlaechenAuswaehlen";
-import Datenblattansicht from "./onlinehelpsections/052_Datenblattansicht";
-import Steckbriefe from "./onlinehelpsections/054_Steckbriefe";
-import InKartePositionieren from "./onlinehelpsections/060_InKartePositionieren";
-import MeinStandort from "./onlinehelpsections/070_MeinStandort";
-import Filterung from "./onlinehelpsections/080_Filterung";
-import AnmeldungUndOfflineBenutzung from "./onlinehelpsections/090_AnmeldungUndOfflineBenutzung";
+import {
+  MenuTitle,
+  MenuIntroduction,
+  KompaktanleitungSection,
+} from "@carma-collab/wuppertal/potenzialflaechen-online";
+import {
+  MenuFooter,
+  GenericDigitalTwinReferenceTextComponent,
+} from "@carma-collab/wuppertal/commons";
+import { getApplicationVersion } from "../version";
 
 const MyMenu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
-  const { filterState, filterMode, filteredItems, shownFeatures } =
-    useContext(FeatureCollectionContext);
-  const { setFilterState, setFilterMode } = useContext(FeatureCollectionDispatchContext);
+  const { filterState, filterMode, filteredItems, shownFeatures } = useContext(
+    FeatureCollectionContext,
+  );
+  const { setFilterState, setFilterMode } = useContext(
+    FeatureCollectionDispatchContext,
+  );
 
   const { items } = useContext(FeatureCollectionContext);
 
@@ -109,171 +108,43 @@ const MyMenu = () => {
   return (
     <ModalApplicationMenu
       menuIcon={"bars"}
-      menuTitle={"Filter, Einstellungen und Kompaktanleitung"}
+      menuTitle={<MenuTitle />}
       menuIntroduction={
-        <span>
-          Benutzen Sie die Filtermöglichkeiten unter{" "}
-          <Link
-            className='useAClassNameToRenderProperLink'
-            to='filter'
-            containerId='myMenu'
-            smooth={true}
-            delay={100}
-            onClick={() => setAppMenuActiveMenuSection("filter")}
-          >
-            Meine Potenzialflächen
-          </Link>
-          , um die in der Karte angezeigten Potenzialflächen auf die für Sie relevanten Themen zu
-          beschränken. Über{" "}
-          <Link
-            className='useAClassNameToRenderProperLink'
-            to='settings'
-            containerId='myMenu'
-            smooth={true}
-            delay={100}
-            onClick={() => setAppMenuActiveMenuSection("settings")}
-          >
-            Einstellungen
-          </Link>{" "}
-          können Sie die Darstellung der Hintergrundkarte an Ihre Interessen anpassen. Wählen Sie
-          die{" "}
-          <Link
-            className='useAClassNameToRenderProperLink'
-            to='help'
-            containerId='myMenu'
-            smooth={true}
-            delay={100}
-            onClick={() => setAppMenuActiveMenuSection("help")}
-          >
-            Kompaktanleitung
-          </Link>{" "}
-          für detailliertere Bedienungsinformationen.
-        </span>
+        <MenuIntroduction
+          setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+        />
       }
       menuSections={[
         <Section
-          key='filter'
-          sectionKey='filter'
+          key="filter"
+          sectionKey="filter"
           sectionTitle={getFilterHeader()}
-          sectionBsStyle='primary'
-          sectionContent={<FilterPanel filterConfiguration={filterConfiguration} />}
+          sectionBsStyle="primary"
+          sectionContent={
+            <FilterPanel filterConfiguration={filterConfiguration} />
+          }
         />,
         <DefaultSettingsPanel
-          key='settings'
+          key="settings"
           skipFilterTitleSettings={true}
           skipClusteringSettings={true}
           skipSymbolsizeSetting={true}
         />,
-
+        <KompaktanleitungSection />,
         <Section
-          key='help'
-          sectionKey='help'
-          sectionTitle='Kompaktanleitung'
-          sectionBsStyle='default'
-          sectionContent={
-            <ConfigurableDocBlocks
-              configs={[
-                {
-                  type: "FAQS",
-                  configs: [
-                    {
-                      title: "Überblick",
-                      bsStyle: "secondary",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <Ueberblick />,
-                      },
-                    },
-                    {
-                      title: "Fachdatenquellen",
-                      bsStyle: "secondary",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <Fachdatenquellen />,
-                      },
-                    },
-                    {
-                      title: "Hintergrundkarte",
-                      bsStyle: "secondary",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <Hintergrundkarten />,
-                      },
-                    },
-                    {
-                      title: "Kartendarstellung der Potenzialflächen",
-                      bsStyle: "secondary",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <Kartendarstellung />,
-                      },
-                    },
-                    /*----------------------------------------------------------------------------------------------------------------------*/
-                    {
-                      title: "Flächen auswählen und abfragen",
-                      bsStyle: "success",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <FlaechenAuswaehlen />,
-                      },
-                    },
-                    {
-                      title: "Datenblattansicht",
-                      bsStyle: "success",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <Datenblattansicht />,
-                      },
-                    },
-                    {
-                      title: "Steckbriefe",
-                      bsStyle: "success",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <Steckbriefe />,
-                      },
-                    },
-                    {
-                      title: "In Karte positionieren",
-                      bsStyle: "success",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <InKartePositionieren />,
-                      },
-                    },
-                    {
-                      title: "Mein Standort",
-                      bsStyle: "success",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <MeinStandort />,
-                      },
-                    },
-                    /*----------------------------------------------------------------------------------------------------------------------*/
-                    {
-                      title: 'Filterung ("Meine Potenzialflächen")',
-                      bsStyle: "warning",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <Filterung />,
-                      },
-                    },
-                    {
-                      title: "Anmeldung und Offline-Benutzung",
-                      bsStyle: "warning",
-                      contentBlockConf: {
-                        type: "REACTCOMP",
-                        content: <AnmeldungUndOfflineBenutzung />,
-                      },
-                    },
-                  ],
-                },
-              ]}
-            />
-          }
-        />,
+          key="digiTal"
+          sectionKey="digiTal"
+          sectionTitle={"DigiTal Zwilling"}
+          sectionBsStyle="warning"
+          sectionContent={<GenericDigitalTwinReferenceTextComponent />}
+        ></Section>,
       ]}
-      menuFooter={<MenuFooter />}
+      menuFooter={
+        <MenuFooter
+          version={getApplicationVersion()}
+          setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+        />
+      }
     />
   );
 };

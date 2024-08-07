@@ -17,6 +17,12 @@ import FeatureCollection from "./components/FeatureCollection";
 import InfoBox from "./components/InfoBox";
 import MyMenu from "./components/Menu";
 import InfoPanel from "./components/SecondaryInfo";
+import {
+  searchTextPlaceholder,
+  MenuTooltip,
+  InfoBoxTextTitle,
+  InfoBoxTextContent,
+} from "@carma-collab/wuppertal/potenzialflaechen-online";
 
 // import consolere from "console-remote-client";
 
@@ -39,15 +45,17 @@ export const appKey = "Potenzialflaechen.Online.Wuppertal";
 
 function PotenzialflaechenOnlineMap({ gazData, jwt, setJWT, setLoginInfo }) {
   const { setSelectedFeatureByPredicate, setFilterState } = useContext(
-    FeatureCollectionDispatchContext
+    FeatureCollectionDispatchContext,
   );
   const { zoomToFeature } = useContext(TopicMapDispatchContext);
   const { history } = useContext(TopicMapContext);
-  const { setAppMenuActiveMenuSection, setAppMenuVisible } = useContext(UIDispatchContext);
+  const { setAppMenuActiveMenuSection, setAppMenuVisible } =
+    useContext(UIDispatchContext);
 
   useEffect(() => {
     const handleCleanStart = (search) => {
-      const foundCleanStart = new URLSearchParams(search).get("cleanStart") != null;
+      const foundCleanStart =
+        new URLSearchParams(search).get("cleanStart") != null;
       if (foundCleanStart === true) {
         let newSearch = removeQueryPart(search, "cleanStart");
         history.push(newSearch);
@@ -67,11 +75,12 @@ function PotenzialflaechenOnlineMap({ gazData, jwt, setJWT, setLoginInfo }) {
   return (
     <TopicMapComponent
       mapStyle={{ backgroundColor: "white" }}
-      applicationMenuTooltipString='Filter | Einstellungen | Anleitung'
+      applicationMenuTooltipString={<MenuTooltip />}
       gazData={gazData}
       homeZoom={13}
       maxZoom={22}
       locatorControl={true}
+      gazetteerSearchPlaceholder={searchTextPlaceholder}
       modalMenu={<MyMenu />}
       infoBox={
         <InfoBox
@@ -85,8 +94,8 @@ function PotenzialflaechenOnlineMap({ gazData, jwt, setJWT, setLoginInfo }) {
                 plural: "Potenzialflächen",
               },
             },
-            noCurrentFeatureTitle: "Keine Potenzialflächen gefunden",
-            noCurrentFeatureContent: "",
+            noCurrentFeatureTitle: <InfoBoxTextTitle />,
+            noCurrentFeatureContent: <InfoBoxTextContent />,
           }}
         />
       }
@@ -95,7 +104,8 @@ function PotenzialflaechenOnlineMap({ gazData, jwt, setJWT, setLoginInfo }) {
         if (Array.isArray(hits) && hits[0]?.more?.pid) {
           setSelectedFeatureByPredicate((feature) => {
             try {
-              const check = parseInt(feature.properties.id) === hits[0].more.pid;
+              const check =
+                parseInt(feature.properties.id) === hits[0].more.pid;
               if (check === true) {
                 zoomToFeature(feature);
               }
@@ -107,7 +117,11 @@ function PotenzialflaechenOnlineMap({ gazData, jwt, setJWT, setLoginInfo }) {
         }
       }}
     >
-      <FeatureCollection jwt={jwt} setJWT={setJWT} setLoginInfo={setLoginInfo} />
+      <FeatureCollection
+        jwt={jwt}
+        setJWT={setJWT}
+        setLoginInfo={setLoginInfo}
+      />
       {/* <LogSelection /> */}
     </TopicMapComponent>
   );

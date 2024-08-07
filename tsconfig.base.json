@@ -58,6 +58,9 @@
       "@carma-collab/wuppertal/luftmessstationen": [
         "libraries/collaboration/carma-wuppertal-collab/src/luftmessstationen/index.ts"
       ],
+      "@carma-collab/wuppertal/potenzialflaechen-online": [
+        "libraries/collaboration/carma-wuppertal-collab/src/potenzialflaechen-online/index.ts"
+      ],
       "@carma-collab/wuppertal/stadtplan": ["libraries/collaboration/carma-wuppertal-collab/src/stadtplan/index.ts"],
       "@carma-collab/wuppertal/starkregengefahrenkarte": [
         "libraries/collaboration/carma-wuppertal-collab/src/starkregengefahrenkarte/index.jsx"
