@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import MultiToggleButton from '../MultiToggleButton';
+import MultiToggleButton from "../MultiToggleButton";
 
 const itemFilterFunction = ({ filterState, filterMode }) => {
   return (item) => {
@@ -15,7 +15,7 @@ const itemFilterFunction = ({ filterState, filterMode }) => {
       }
       return result;
     } else {
-      console.log('no filterstate, no filtering');
+      console.log("no filterstate, no filtering");
 
       return true;
     }
@@ -28,41 +28,41 @@ export const createFilterRows = (
   lebenslagen,
   toggleFilter,
   filterState,
-  setFilterState
+  setFilterState,
 ) => {
   let appsMap = new Map();
 
   let llOptions = [];
 
   for (let ll of lebenslagen) {
-    llOptions.push({ label: ll, cat: 'lebenslage', value: ll });
+    llOptions.push({ label: ll, cat: "lebenslage", value: ll });
     for (const app of apps) {
-      if (app.on.indexOf(ll) !== -1) {
+      if (app?.on?.indexOf(ll) !== -1) {
         appsMap.set(ll, app);
       }
     }
   }
   let rows = [];
   for (let item of lebenslagen) {
-    let buttonValue = 'two'; // neutral state
+    let buttonValue = "two"; // neutral state
 
-    if (filterState?.positiv.indexOf(item) !== -1) {
-      buttonValue = 'one';
-    } else if (filterState?.negativ.indexOf(item) !== -1) {
-      buttonValue = 'three';
+    if (filterState?.positiv?.indexOf(item) !== -1) {
+      buttonValue = "one";
+    } else if (filterState?.negativ?.indexOf(item) !== -1) {
+      buttonValue = "three";
     }
 
     let footnote;
     if (appsMap.has(item)) {
-      footnote = ' *'; //(<div title="Themenspezifische Karte verfügbar"> *</div>);
+      footnote = " *"; //(<div title="Themenspezifische Karte verfügbar"> *</div>);
     }
     let cb = (
-      <div key={'div1.' + item} style={{ display: 'flex' }}>
+      <div key={"div1." + item} style={{ display: "flex" }}>
         <div
-          key={'div2.' + item}
+          key={"div2." + item}
           style={{
-            whiteSpace: 'nowrap',
-            flex: '50%',
+            whiteSpace: "nowrap",
+            flex: "50%",
           }}
         >
           {item}
@@ -71,21 +71,21 @@ export const createFilterRows = (
 
         <MultiToggleButton
           style={{
-            flex: '50%',
+            flex: "50%",
           }}
-          key={'mtbutton.lebenslagen.' + item}
+          key={"mtbutton.lebenslagen." + item}
           value={buttonValue}
           valueChanged={(selectedValue) => {
-            if (selectedValue === 'one') {
-              toggleFilter('positiv', item, filterState, setFilterState);
-            } else if (selectedValue === 'three') {
-              toggleFilter('negativ', item, filterState, setFilterState);
+            if (selectedValue === "one") {
+              toggleFilter("positiv", item, filterState, setFilterState);
+            } else if (selectedValue === "three") {
+              toggleFilter("negativ", item, filterState, setFilterState);
             } else {
               //deselect existing selection
-              if (buttonValue === 'one') {
-                toggleFilter('positiv', item, setFilterState);
-              } else if (buttonValue === 'three') {
-                toggleFilter('negativ', item, filterState, setFilterState);
+              if (buttonValue === "one") {
+                toggleFilter("positiv", item, setFilterState);
+              } else if (buttonValue === "three") {
+                toggleFilter("negativ", item, filterState, setFilterState);
               }
             }
           }}
@@ -104,17 +104,17 @@ export const toggleFilter = (kind, filter, filterState, setFilterState) => {
     filterGroupSet.delete(filter);
   } else {
     filterGroupSet.add(filter);
-    if (kind === 'positiv') {
-      if (newFilterState?.negativ.indexOf(filter) !== -1) {
-        let otherFilterGroupSet = new Set(newFilterState['negativ']);
+    if (kind === "positiv") {
+      if (newFilterState?.negativ?.indexOf(filter) !== -1) {
+        let otherFilterGroupSet = new Set(newFilterState["negativ"]);
         otherFilterGroupSet.delete(filter);
-        newFilterState['negativ'] = Array.from(otherFilterGroupSet);
+        newFilterState["negativ"] = Array.from(otherFilterGroupSet);
       }
     } else {
-      if (newFilterState?.positiv.indexOf(filter) !== -1) {
-        let otherFilterGroupSet = new Set(newFilterState['positiv']);
+      if (newFilterState?.positiv?.indexOf(filter) !== -1) {
+        let otherFilterGroupSet = new Set(newFilterState["positiv"]);
         otherFilterGroupSet.delete(filter);
-        newFilterState['positiv'] = Array.from(otherFilterGroupSet);
+        newFilterState["positiv"] = Array.from(otherFilterGroupSet);
       }
     }
   }
@@ -135,7 +135,7 @@ export const setAllLebenslagenToFilter = (
   kind,
   lebenslagen,
   filterState,
-  setFilterState
+  setFilterState,
 ) => {
   const newFilterState = { ...filterState };
   newFilterState[kind] = lebenslagen;
