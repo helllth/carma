@@ -23,7 +23,7 @@ import {
   GenericDigitalTwinReferenceTextComponent,
   MenuFooter,
 } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "./version";
+import { getApplicationVersion } from "../version";
 
 const MyMenu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);

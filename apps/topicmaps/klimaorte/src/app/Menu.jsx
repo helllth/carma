@@ -31,7 +31,7 @@ import {
   GenericDigitalTwinReferenceTextComponent,
   MenuFooter,
 } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "./version";
+import { getApplicationVersion } from "../version";
 
 export const getFilterInfo = (items) => {
   let kategorien = [];

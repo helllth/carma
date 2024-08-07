@@ -7,12 +7,12 @@ import { Link } from "react-scroll";
 import { getBadSVG } from "./helper/helper";
 import { getColorForProperties } from "./helper/styler";
 import { KompaktanleitungSection } from "@carma-collab/wuppertal/baederkarte";
-import { getApplicationVersion } from "./version";
 import {
   MenuFooter,
   GenericDigitalTwinReferenceTextComponent,
 } from "@carma-collab/wuppertal/commons";
 import Section from "react-cismap/topicmaps/menu/Section";
+import { getApplicationVersion } from "../version";
 
 const Menu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);

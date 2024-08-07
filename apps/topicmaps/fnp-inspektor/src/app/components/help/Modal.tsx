@@ -16,7 +16,7 @@ import {
 import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import Section from "react-cismap/topicmaps/menu/Section";
 import { MenuFooter } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "./version";
+import { getApplicationVersion } from "../../../version";
 
 const Modal = () => {
   const { setAppMenuActiveMenuSection } =

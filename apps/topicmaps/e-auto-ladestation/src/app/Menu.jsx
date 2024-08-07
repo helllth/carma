@@ -19,7 +19,8 @@ import {
   MenuFooter,
   GenericDigitalTwinReferenceTextComponent,
 } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "./version";
+import { getApplicationVersion } from "../version";
+
 const Menu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const { filteredItems, shownFeatures, filterState, itemsDictionary } =

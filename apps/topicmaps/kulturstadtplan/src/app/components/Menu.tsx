@@ -15,7 +15,7 @@ import {
   GenericDigitalTwinReferenceTextComponent,
   MenuFooter,
 } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "./version";
+import { getApplicationVersion } from "../../version";
 
 const Menu = () => {
   const { filteredItems, shownFeatures } = useContext<

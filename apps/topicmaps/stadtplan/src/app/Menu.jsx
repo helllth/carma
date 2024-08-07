@@ -22,13 +22,13 @@ import {
   GenericDigitalTwinReferenceTextComponent,
   MenuFooter,
 } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "./version";
 import FilterUI from "./FilterUI";
 import {
   KompaktanleitungSection,
   MenuTitle,
   MenuIntroduction,
 } from "@carma-collab/wuppertal/stadtplan";
+import { getApplicationVersion } from "../version";
 
 const apps = [
   {

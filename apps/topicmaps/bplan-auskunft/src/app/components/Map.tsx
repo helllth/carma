@@ -20,7 +20,7 @@ import { useSearchParams } from "react-router-dom";
 import L from "leaflet";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 import type { UnknownAction } from "redux";
-import { getApplicationVersion } from "./version";
+import { getApplicationVersion } from "../../version";
 
 const Map = () => {
   const dispatch = useDispatch();

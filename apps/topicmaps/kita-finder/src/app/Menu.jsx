@@ -18,7 +18,7 @@ import {
   MenuIntroduction,
   KompaktanleitungSection,
 } from "@carma-collab/wuppertal/kita-finder";
-import { getApplicationVersion } from "./version";
+import { getApplicationVersion } from "../version";
 
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];

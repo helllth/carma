@@ -40,7 +40,7 @@ import {
   KompaktanleitungSection,
 } from "@carma-collab/wuppertal/ehrenamtskarte";
 import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "./version";
+import { getApplicationVersion } from "../version";
 
 const Menu = ({ bookmarks, setBookmarks }) => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
