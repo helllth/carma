@@ -1,73 +1,73 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { MappingConstants } from 'react-cismap';
-import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
-import { md5FetchText } from 'react-cismap/tools/fetching';
-import EnviroMetricMap from '@cismet-dev/react-cismap-envirometrics-maps/EnviroMetricMap';
-import { getGazDataForTopicIds } from 'react-cismap/tools/gazetteerHelper';
+import React, { useContext, useEffect, useState } from "react";
+import { MappingConstants } from "react-cismap";
+import TopicMapContextProvider from "react-cismap/contexts/TopicMapContextProvider";
+import { md5FetchText } from "react-cismap/tools/fetching";
+import EnviroMetricMap from "@cismet-dev/react-cismap-envirometrics-maps/EnviroMetricMap";
+import { getGazDataForTopicIds } from "react-cismap/tools/gazetteerHelper";
 
-import GenericModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
-import { version as cismapEnvirometricsVersion } from '@cismet-dev/react-cismap-envirometrics-maps/meta';
-import CrossTabCommunicationControl from 'react-cismap/CrossTabCommunicationControl';
-import CrossTabCommunicationContextProvider from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
+import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
+import { version as cismapEnvirometricsVersion } from "@cismet-dev/react-cismap-envirometrics-maps/meta";
+import CrossTabCommunicationControl from "react-cismap/CrossTabCommunicationControl";
+import CrossTabCommunicationContextProvider from "react-cismap/contexts/CrossTabCommunicationContextProvider";
 
-import config from './config';
+import config from "./config";
 
-import { getApplicationVersion } from './version';
-import NotesDisplay from './NotesDisplay';
-import { EnviroMetricMapContext } from '@cismet-dev/react-cismap-envirometrics-maps/EnviroMetricMapContextProvider';
-import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
-import { getCollabedHelpComponentConfig } from '@carma-collab/wuppertal/hochwassergefahrenkarte';
+import { getApplicationVersion } from "./version";
+import NotesDisplay from "./NotesDisplay";
+import { EnviroMetricMapContext } from "@cismet-dev/react-cismap-envirometrics-maps/EnviroMetricMapContextProvider";
+import StyledWMSTileLayer from "react-cismap/StyledWMSTileLayer";
+import { getCollabedHelpComponentConfig } from "@carma-collab/wuppertal/hochwassergefahrenkarte";
 
 function App() {
   const reactCismapEnvirometricsVersion = cismapEnvirometricsVersion;
   const version = getApplicationVersion();
   const [hochwasserschutz, setHochwasserschutz] = useState(true);
 
-  const email = 'hochwasser@stadt.wuppertal.de';
+  const email = "hochwasser@stadt.wuppertal.de";
   const [gazData, setGazData] = useState([]);
   const [hinweisData, setHinweisData] = useState([]);
 
   const getGazData = async (setData) => {
-    const prefix = 'GazDataForHochwasserkarteByCismet';
+    const prefix = "GazDataForHochwasserkarteByCismet";
     const sources = {};
 
     sources.geps = await md5FetchText(
       prefix,
-      'https://wunda-geoportal.cismet.de/data/3857/geps.json'
+      "https://wunda-geoportal.cismet.de/data/3857/geps.json",
     );
     sources.geps_reverse = await md5FetchText(
       prefix,
-      'https://wunda-geoportal.cismet.de/data/3857/geps_reverse.json'
+      "https://wunda-geoportal.cismet.de/data/3857/geps_reverse.json",
     );
     sources.adressen = await md5FetchText(
       prefix,
-      'https://wunda-geoportal.cismet.de/data/3857/adressen.json'
+      "https://wunda-geoportal.cismet.de/data/3857/adressen.json",
     );
     sources.bezirke = await md5FetchText(
       prefix,
-      'https://wunda-geoportal.cismet.de/data/3857/bezirke.json'
+      "https://wunda-geoportal.cismet.de/data/3857/bezirke.json",
     );
     sources.quartiere = await md5FetchText(
       prefix,
-      'https://wunda-geoportal.cismet.de/data/3857/quartiere.json'
+      "https://wunda-geoportal.cismet.de/data/3857/quartiere.json",
     );
     sources.pois = await md5FetchText(
       prefix,
-      'https://wunda-geoportal.cismet.de/data/3857/pois.json'
+      "https://wunda-geoportal.cismet.de/data/3857/pois.json",
     );
     sources.kitas = await md5FetchText(
       prefix,
-      'https://wunda-geoportal.cismet.de/data/3857/kitas.json'
+      "https://wunda-geoportal.cismet.de/data/3857/kitas.json",
     );
 
     const gazData = getGazDataForTopicIds(sources, [
-      'geps',
-      'geps_reverse',
-      'pois',
-      'kitas',
-      'quartiere',
-      'bezirke',
-      'adressen',
+      "geps",
+      "geps_reverse",
+      "pois",
+      "kitas",
+      "quartiere",
+      "bezirke",
+      "adressen",
     ]);
 
     setData(gazData);
@@ -84,7 +84,7 @@ function App() {
       token="floodingAndRainhazardSyncWupp"
     >
       <TopicMapContextProvider
-        appKey={'Hochwasserkarte.Story.Wuppertal'}
+        appKey={"Hochwasserkarte.Story.Wuppertal"}
         referenceSystem={MappingConstants.crs3857}
         referenceSystemDefinition={MappingConstants.proj4crs3857def}
         // baseLayerConf={wuppertalConfig.overridingBaseLayerConf}
@@ -94,7 +94,7 @@ function App() {
           appMenu={
             <GenericModalApplicationMenu
               {...getCollabedHelpComponentConfig({
-                versionString: '#' + version,
+                versionString: version,
                 reactCismapRHMVersion: reactCismapEnvirometricsVersion,
 
                 email,
@@ -144,9 +144,9 @@ const StateAwareChildren = () => {
         conf.simulations[state.selectedSimulation].gefaehrdungsLayer && (
           <StyledWMSTileLayer
             key={
-              'rainHazardMap.depthLayer' +
+              "rainHazardMap.depthLayer" +
               conf.simulations[state.selectedSimulation].gefaehrdungsLayer +
-              '.' +
+              "." +
               state.selectedBackground
             }
             url={conf.modelWMS}
