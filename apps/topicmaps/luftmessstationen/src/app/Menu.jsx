@@ -18,11 +18,9 @@ import {
   KompaktanleitungSection,
   MenuTitle,
   MenuIntroduction,
+  Footer,
 } from "@carma-collab/wuppertal/luftmessstationen";
-import {
-  GenericDigitalTwinReferenceTextComponent,
-  MenuFooter,
-} from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
 
 const MyMenu = () => {
@@ -434,7 +432,7 @@ NO₂-Messwerte von ca. vier Wochen.
         menuIcon={"bars"}
         menuTitle={<MenuTitle />}
         menuFooter={
-          <MenuFooter
+          <Footer
             version={getApplicationVersion()}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />

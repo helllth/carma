@@ -10,11 +10,9 @@ import {
   MenuIntroduction,
   MenuTitle,
   KompaktanleitungSection,
+  Footer,
 } from "@carma-collab/wuppertal/kulturstadtplan";
-import {
-  GenericDigitalTwinReferenceTextComponent,
-  MenuFooter,
-} from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../../version";
 
 const Menu = () => {
@@ -45,7 +43,7 @@ const Menu = () => {
         menuIcon={"bars"}
         menuTitle={<MenuTitle />}
         menuFooter={
-          <MenuFooter
+          <Footer
             version={getApplicationVersion()}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />

@@ -9,12 +9,10 @@ import {
   KompaktanleitungSection,
   MenuIntroduction,
   MenuTitle,
+  Footer,
 } from "@carma-collab/wuppertal/e-bikes";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
-import {
-  GenericDigitalTwinReferenceTextComponent,
-  MenuFooter,
-} from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../../version";
 
 const Menu = () => {
@@ -44,7 +42,7 @@ const Menu = () => {
         menuIcon={"bars"}
         menuTitle={<MenuTitle />}
         menuFooter={
-          <MenuFooter
+          <Footer
             version={getApplicationVersion()}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />

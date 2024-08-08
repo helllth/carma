@@ -5,7 +5,6 @@ import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectio
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import Section from "react-cismap/topicmaps/menu/Section";
-import { MenuFooter } from "@carma-collab/wuppertal/commons";
 import FilterUI from "./FilterUI";
 import FilterRowUI from "./FilterRowUI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,6 +37,7 @@ import {
   SectionTitleMerkliste,
   TextInMerkliste,
   KompaktanleitungSection,
+  Footer,
 } from "@carma-collab/wuppertal/ehrenamtskarte";
 import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
@@ -84,7 +84,7 @@ const Menu = ({ bookmarks, setBookmarks }) => {
         menuIcon={"bars"}
         menuTitle={<MenuTitle />}
         menuFooter={
-          <MenuFooter
+          <Footer
             version={getApplicationVersion()}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />

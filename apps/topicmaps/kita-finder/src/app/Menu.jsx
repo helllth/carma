@@ -8,15 +8,13 @@ import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import Section from "react-cismap/topicmaps/menu/Section";
-import {
-  GenericDigitalTwinReferenceTextComponent,
-  MenuFooter,
-} from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import FilterUI from "./FilterUI";
 import {
   MenuTitle,
   MenuIntroduction,
   KompaktanleitungSection,
+  Footer,
 } from "@carma-collab/wuppertal/kita-finder";
 import { getApplicationVersion } from "../version";
 
@@ -66,7 +64,7 @@ const Menu = () => {
         menuIcon={"bars"}
         menuTitle={<MenuTitle />}
         menuFooter={
-          <MenuFooter
+          <Footer
             version={getApplicationVersion()}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />

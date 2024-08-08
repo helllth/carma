@@ -14,6 +14,7 @@ import {
   MenuIntroduction,
   MenuTitle,
   KompaktanleitungSection,
+  Footer,
 } from "@carma-collab/wuppertal/klimaorte";
 import Icon from "react-cismap/commons/Icon";
 import previewFeatureCollection from "./helper/previewFC";
@@ -27,10 +28,7 @@ import {
 import { getSymbolSVGGetter } from "react-cismap/tools/uiHelper";
 import { featureSamples4Icons } from "./helper/iconFactory";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
-import {
-  GenericDigitalTwinReferenceTextComponent,
-  MenuFooter,
-} from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
 
 export const getFilterInfo = (items) => {
@@ -348,7 +346,7 @@ const MyMenu = () => {
         menuIcon={"bars"}
         menuTitle={<MenuTitle appMode={appMode} />}
         menuFooter={
-          <MenuFooter
+          <Footer
             version={getApplicationVersion()}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />

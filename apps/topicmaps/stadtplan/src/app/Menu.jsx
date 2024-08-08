@@ -18,15 +18,13 @@ import Section from "react-cismap/topicmaps/menu/Section";
 import LicenseLuftbildkarte from "react-cismap/topicmaps/wuppertal/LicenseLuftbildkarte";
 import LicenseStadtplanTagNacht from "react-cismap/topicmaps/wuppertal/LicenseStadtplanTagNacht";
 import { Link } from "react-scroll";
-import {
-  GenericDigitalTwinReferenceTextComponent,
-  MenuFooter,
-} from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import FilterUI from "./FilterUI";
 import {
   KompaktanleitungSection,
   MenuTitle,
   MenuIntroduction,
+  Footer,
 } from "@carma-collab/wuppertal/stadtplan";
 import { getApplicationVersion } from "../version";
 
@@ -154,7 +152,7 @@ const Menu = () => {
         menuIcon={"bars"}
         menuTitle={<MenuTitle />}
         menuFooter={
-          <MenuFooter
+          <Footer
             version={getApplicationVersion()}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />

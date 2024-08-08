@@ -13,11 +13,9 @@ import {
   MenuTitle,
   MenuIntroduction,
   KompaktanleitungSection,
+  Footer,
 } from "@carma-collab/wuppertal/potenzialflaechen-online";
-import {
-  MenuFooter,
-  GenericDigitalTwinReferenceTextComponent,
-} from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
 
 const MyMenu = () => {
@@ -140,7 +138,7 @@ const MyMenu = () => {
         ></Section>,
       ]}
       menuFooter={
-        <MenuFooter
+        <Footer
           version={getApplicationVersion()}
           setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
         />

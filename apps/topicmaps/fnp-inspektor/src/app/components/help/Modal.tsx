@@ -12,10 +12,10 @@ import {
   DokumenteBetrachten,
   DokumenteHerunterladen,
   MenuTitle,
+  Footer,
 } from "@carma-collab/wuppertal/fnp-inspektor";
 import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import Section from "react-cismap/topicmaps/menu/Section";
-import { MenuFooter } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../../../version";
 
 const Modal = () => {
@@ -52,7 +52,7 @@ const Modal = () => {
         ></Section>,
       ]}
       menuFooter={
-        <MenuFooter
+        <Footer
           version={getApplicationVersion()}
           setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
         />

@@ -6,11 +6,11 @@ import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMe
 import { Link } from "react-scroll";
 import { getBadSVG } from "./helper/helper";
 import { getColorForProperties } from "./helper/styler";
-import { KompaktanleitungSection } from "@carma-collab/wuppertal/baederkarte";
 import {
-  MenuFooter,
-  GenericDigitalTwinReferenceTextComponent,
-} from "@carma-collab/wuppertal/commons";
+  KompaktanleitungSection,
+  Footer,
+} from "@carma-collab/wuppertal/baederkarte";
+import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import Section from "react-cismap/topicmaps/menu/Section";
 import { getApplicationVersion } from "../version";
 
@@ -62,9 +62,8 @@ const Menu = () => {
         menuIcon={"bars"}
         menuTitle={"Einstellungen und Kompaktanleitung"}
         menuFooter={
-          <MenuFooter
+          <Footer
             version={getApplicationVersion()}
-            title="Bäderkarte Wuppertal"
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }
