@@ -16,7 +16,7 @@ import {
   MenuIntroduction,
   Footer,
 } from "@carma-collab/wuppertal/e-auto-ladestation";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
 
 const Menu = () => {
@@ -84,13 +84,7 @@ const Menu = () => {
             onlineSVG={onlineSVG}
             offlineSVG={offlineSVG}
           />,
-          <Section
-            key="digiTal"
-            sectionKey="digiTal"
-            sectionTitle={"DigiTal Zwilling"}
-            sectionBsStyle="warning"
-            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
-          ></Section>,
+          <GenericDigitalTwinReferenceSection />,
         ]}
       />
     </CustomizationContextProvider>

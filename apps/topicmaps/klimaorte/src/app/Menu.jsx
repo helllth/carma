@@ -28,7 +28,7 @@ import {
 import { getSymbolSVGGetter } from "react-cismap/tools/uiHelper";
 import { featureSamples4Icons } from "./helper/iconFactory";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
 
 export const getFilterInfo = (items) => {
@@ -395,13 +395,7 @@ const MyMenu = () => {
             previewFeatureCollection={previewFeatureCollection}
           />,
           <KompaktanleitungSection />,
-          <Section
-            key="digiTal"
-            sectionKey="digiTal"
-            sectionTitle={"DigiTal Zwilling"}
-            sectionBsStyle="warning"
-            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
-          ></Section>,
+          <GenericDigitalTwinReferenceSection />,
         ]}
       />
     </CustomizationContextProvider>

@@ -12,7 +12,7 @@ import {
   Footer,
 } from "@carma-collab/wuppertal/e-bikes";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../../version";
 
 const Menu = () => {
@@ -62,13 +62,7 @@ const Menu = () => {
           />,
           <DefaultSettingsPanel key="settings" />,
           <KompaktanleitungSection />,
-          <Section
-            key="digiTal"
-            sectionKey="digiTal"
-            sectionTitle={"DigiTal Zwilling"}
-            sectionBsStyle="warning"
-            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
-          ></Section>,
+          <GenericDigitalTwinReferenceSection />,
         ]}
       />
     </CustomizationContextProvider>

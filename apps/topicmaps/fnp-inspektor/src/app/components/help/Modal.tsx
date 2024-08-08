@@ -14,8 +14,7 @@ import {
   MenuTitle,
   Footer,
 } from "@carma-collab/wuppertal/fnp-inspektor";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
-import Section from "react-cismap/topicmaps/menu/Section";
+import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../../../version";
 
 const Modal = () => {
@@ -43,13 +42,7 @@ const Modal = () => {
         />,
         <DokumenteBetrachten />,
         <DokumenteHerunterladen />,
-        <Section
-          key="digiTal"
-          sectionKey="digiTal"
-          sectionTitle={"DigiTal Zwilling"}
-          sectionBsStyle="warning"
-          sectionContent={<GenericDigitalTwinReferenceTextComponent />}
-        ></Section>,
+        <GenericDigitalTwinReferenceSection />,
       ]}
       menuFooter={
         <Footer

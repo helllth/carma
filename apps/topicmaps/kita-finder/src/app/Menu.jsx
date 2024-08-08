@@ -8,7 +8,7 @@ import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import Section from "react-cismap/topicmaps/menu/Section";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import FilterUI from "./FilterUI";
 import {
   MenuTitle,
@@ -84,13 +84,7 @@ const Menu = () => {
           />,
           <DefaultSettingsPanel key="settings" />,
           <KompaktanleitungSection />,
-          <Section
-            key="digiTal"
-            sectionKey="digiTal"
-            sectionTitle={"DigiTal Zwilling"}
-            sectionBsStyle="warning"
-            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
-          ></Section>,
+          <GenericDigitalTwinReferenceSection />,
         ]}
       />
     </CustomizationContextProvider>
