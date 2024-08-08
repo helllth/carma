@@ -68,7 +68,7 @@ const Menu = () => {
           <Section
             key="digiTal"
             sectionKey="digiTal"
-            sectionTitle={"DigiTal Zwilling"}
+            sectionTitle={"Urbaner Digitaler Zwilling"}
             sectionBsStyle="warning"
             sectionContent={<GenericDigitalTwinReferenceTextComponent />}
           ></Section>,
