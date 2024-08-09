@@ -6,9 +6,11 @@ import {
   faQuestion,
   faSquareArrowUpRight,
   faSquareEnvelope,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Modal, Accordion, Card, Table } from 'react-bootstrap';
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button, Modal, Accordion, Card, Table } from "react-bootstrap";
+import { SecondaryInfoFooter } from "@carma-collab/wuppertal/x-and-ride";
+import { getApplicationVersion } from "../../../version";
 
 const SecondaryInfoModal = ({ feature, setOpen }) => {
   const close = () => {
@@ -18,10 +20,10 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
 
   const properties = feature.properties;
   const groupingFunction = (obj) => {
-    if (obj.schluessel === 'P') {
-      return 'P+R';
+    if (obj.schluessel === "P") {
+      return "P+R";
     } else {
-      return 'B+R';
+      return "B+R";
     }
   };
   let foto;
@@ -29,9 +31,9 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
     foto = properties.foto;
   }
 
-  let plaetze_label = 'Plätze';
+  let plaetze_label = "Plätze";
   if (properties.ueberdachung === true) {
-    plaetze_label = 'überdachter Plätze';
+    plaetze_label = "überdachter Plätze";
   }
 
   return (
@@ -48,27 +50,27 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
       <Modal.Header>
         <Modal.Title>
           <FontAwesomeIcon
-            icon={properties.schluessel === 'B' ? faBicycle : faCar}
+            icon={properties.schluessel === "B" ? faBicycle : faCar}
           />
           {` Datenblatt: ${groupingFunction(properties)} ${properties.name}`}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body id="myMenu" key={'prbr.secondaryInfo'}>
-        <div style={{ width: '100%', minHeight: 250 }}>
+      <Modal.Body id="myMenu" key={"prbr.secondaryInfo"}>
+        <div style={{ width: "100%", minHeight: 250 }}>
           {foto !== undefined && (
             <img
               alt="Bild"
               style={{
                 paddingLeft: 10,
                 paddingRight: 10,
-                float: 'right',
-                paddingBottom: '5px',
+                float: "right",
+                paddingBottom: "5px",
               }}
               src={foto}
               width="250"
             />
           )}
-          <div style={{ padding: '10px', paddingTop: '0px' }}>
+          <div style={{ padding: "10px", paddingTop: "0px" }}>
             <div style={{ marginBottom: 10 }}>{properties.beschreibung}</div>
 
             <div style={{ marginBottom: 10 }}>
@@ -77,8 +79,8 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
 
             {properties.anbindung_schwebebahn === true && (
               <p>
-                Die Anlage ist an die Schwebebahn angebunden und befindet sich{' '}
-                {properties.inUZ === true ? 'innerhalb' : 'außerhalb'} einer
+                Die Anlage ist an die Schwebebahn angebunden und befindet sich{" "}
+                {properties.inUZ === true ? "innerhalb" : "außerhalb"} einer
                 Umweltzone.
               </p>
             )}
@@ -94,15 +96,15 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
         </div>
         {(properties.bahnlinien.length > 0 ||
           properties.buslinien.length > 0) && (
-          <Accordion style={{ marginBottom: 6 }} defaultActiveKey={'0'}>
-            <Card style={{ backgroundColor: '#bce8f1' }}>
+          <Accordion style={{ marginBottom: 6 }} defaultActiveKey={"0"}>
+            <Card style={{ backgroundColor: "#bce8f1" }}>
               <Card.Header>
                 <Accordion.Toggle as={Button} variant="link" eventKey="0">
                   ÖPNV
                 </Accordion.Toggle>
               </Card.Header>
               <Accordion.Collapse eventKey="0">
-                <Card.Body style={{ backgroundColor: 'white' }}>
+                <Card.Body style={{ backgroundColor: "white" }}>
                   {properties.bahnlinien.length > 0 && (
                     <div style={{ marginBottom: 6, fontSize: 20 }}>
                       <b>Bahnlinien</b>
@@ -122,7 +124,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
                     return (
                       <span style={{ marginBottom: 0 }}>
                         {linie}
-                        {i !== properties.buslinien.length - 1 && ', '}
+                        {i !== properties.buslinien.length - 1 && ", "}
                       </span>
                     );
                   })}
@@ -131,27 +133,27 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
             </Card>
           </Accordion>
         )}
-        <Accordion style={{ marginBottom: 6 }} defaultActiveKey={'2'}>
-          <Card style={{ backgroundColor: '#d6e9c6' }}>
+        <Accordion style={{ marginBottom: 6 }} defaultActiveKey={"2"}>
+          <Card style={{ backgroundColor: "#d6e9c6" }}>
             <Card.Header>
               <Accordion.Toggle as={Button} variant="link" eventKey="2">
                 Fahrplanauskunft
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="2">
-              <Card.Body style={{ backgroundColor: 'white' }}>
+              <Card.Body style={{ backgroundColor: "white" }}>
                 <a
-                  style={{ textDecoration: 'none' }}
+                  style={{ textDecoration: "none" }}
                   href={`http://efa.vrr.de/wswstd/XSLT_TRIP_REQUEST2?language=de&sessionID=0&odvMacro=true&commonMacro=true&lineRestriction=403&SpEncId=0&type_origin=any&type_destination=any&useRealtime=1&nameInfo_origin=invalid&nameInfo_destination=invalid&name_origin=${properties.haltestellenname}&name_destination=`}
                   target="_fahrplanauskunft"
                 >
-                  <table style={{ width: '100%' }}>
+                  <table style={{ width: "100%" }}>
                     <tbody>
                       <tr>
                         <td
                           style={{
-                            textAlign: 'left',
-                            verticalAlign: 'top',
+                            textAlign: "left",
+                            verticalAlign: "top",
                             paddingRight: 10,
                           }}
                         >
@@ -161,8 +163,8 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
                           </h4>
                           <img
                             alt="Bild"
-                            style={{ paddingBottom: '5px' }}
-                            src={urlPrefix + '/images/logo-vrr.png'}
+                            style={{ paddingBottom: "5px" }}
+                            src={urlPrefix + "/images/logo-vrr.png"}
                             width="80"
                           />
                         </td>
@@ -176,59 +178,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
         </Accordion>
       </Modal.Body>
       <Modal.Footer>
-        <table
-          style={{
-            width: '100%',
-          }}
-        >
-          <tbody>
-            <tr>
-              <td
-                style={{
-                  textAlign: 'left',
-                  verticalAlign: 'bottom',
-                  paddingRight: '30px',
-                }}
-              >
-                <div>
-                  <span style={{ fontSize: '11px' }}>
-                    <div>
-                      <b>TopicMaps Wuppertal</b> (Version 1.22.3):{' '}
-                      <a href="https://cismet.de/" target="_cismet">
-                        cismet GmbH
-                      </a>{' '}
-                      auf Basis von{' '}
-                      <a href="http://leafletjs.com/" target="_more">
-                        Leaflet
-                      </a>{' '}
-                      und{' '}
-                      <a href="https://cismet.de/#refs" target="_cismet">
-                        cids | WuNDa
-                      </a>{' '}
-                      |{' '}
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="https://cismet.de/datenschutzerklaerung.html"
-                      >
-                        Datenschutzerklärung (Privacy Policy)
-                      </a>
-                    </div>
-                  </span>
-                </div>
-              </td>
-              <td>
-                <Button
-                  id="cmdCloseModalApplicationMenu"
-                  type="submit"
-                  onClick={close}
-                >
-                  Ok
-                </Button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <SecondaryInfoFooter close={close} version={getApplicationVersion()} />
       </Modal.Footer>
     </Modal>
   );

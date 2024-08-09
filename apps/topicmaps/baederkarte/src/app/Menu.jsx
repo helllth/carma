@@ -10,8 +10,7 @@ import {
   KompaktanleitungSection,
   Footer,
 } from "@carma-collab/wuppertal/baederkarte";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
-import Section from "react-cismap/topicmaps/menu/Section";
+import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
 
 const Menu = () => {
@@ -104,13 +103,7 @@ const Menu = () => {
             oeffentlichesVereinsbadSVG={oeffentlichesVereinsbadSVG}
             nichtOeffentlichesVereinsbadSVG={nichtOeffentlichesVereinsbadSVG}
           />,
-          <Section
-            key="digiTal"
-            sectionKey="digiTal"
-            sectionTitle={"DigiTal Zwilling"}
-            sectionBsStyle="warning"
-            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
-          ></Section>,
+          <GenericDigitalTwinReferenceSection />,
         ]}
       />
     </CustomizationContextProvider>

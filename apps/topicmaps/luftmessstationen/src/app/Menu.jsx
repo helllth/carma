@@ -20,7 +20,7 @@ import {
   MenuIntroduction,
   Footer,
 } from "@carma-collab/wuppertal/luftmessstationen";
-import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
+import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
 
 const MyMenu = () => {
@@ -485,13 +485,7 @@ NO₂-Messwerte von ca. vier Wochen.
             key="settings"
           />,
           <KompaktanleitungSection />,
-          <Section
-            key="digiTal"
-            sectionKey="digiTal"
-            sectionTitle={"DigiTal Zwilling"}
-            sectionBsStyle="warning"
-            sectionContent={<GenericDigitalTwinReferenceTextComponent />}
-          ></Section>,
+          <GenericDigitalTwinReferenceSection />,
         ]}
       />
     </CustomizationContextProvider>
