@@ -1,4 +1,4 @@
-import { faStar as regularFaStar } from '@fortawesome/free-regular-svg-icons';
+import { faStar as regularFaStar } from "@fortawesome/free-regular-svg-icons";
 import {
   faCircleInfo,
   faCircleMinus,
@@ -11,13 +11,13 @@ import {
   faSquareUpRight,
   faStar,
   faTrash,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Modal, Spin } from 'antd';
-import { useEffect, useState } from 'react';
-import { InfoOutlined } from '@ant-design/icons';
-import type { Item, Layer } from '../helper/types';
-import { extractVectorStyles } from '../helper/layerHelper';
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button, Modal, Spin } from "antd";
+import { useEffect, useState } from "react";
+import { InfoOutlined } from "@ant-design/icons";
+import type { Item, Layer, LayerProps } from "../helper/types";
+import { extractVectorStyles } from "../helper/layerHelper";
 
 interface LayerItemProps {
   setAdditionalLayers: any;
@@ -37,7 +37,7 @@ const LibItem = ({
   const [hovered, setHovered] = useState(false);
   const [isFavourite, setIsFavourite] = useState(false);
   const [isActiveLayer, setIsActiveLayer] = useState(false);
-  const [thumbUrl, setThumbUrl] = useState('');
+  const [thumbUrl, setThumbUrl] = useState("");
   const [collectionImages, setCollectionImages] = useState<string[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [forceWMS, setForceWMS] = useState(false);
@@ -45,33 +45,32 @@ const LibItem = ({
   const description = layer.description;
   const keywords = layer.keywords;
   const tags =
-    layer.type === 'collection'
+    layer.type === "collection"
       ? layer.layers.map((l) => l.title)
-      : layer.type === 'link'
+      : layer.type === "link"
       ? layer.tags
       : layer?.tags?.slice(1);
 
   const name = layer.name;
-  // @ts-expect-error tbd
   const service = layer.service;
 
   const box = layer.pictureBoundingBox || [];
 
   const thumbnail = thumbnails?.find(
-    (element) => element?.name === name + '_' + service?.name
+    (element: { name: string }) => element?.name === name + "_" + service?.name,
   );
 
   const url = `${
     service?.url
   }?service=WMS&request=GetMap&layers=${encodeURIComponent(
-    name
+    name,
   )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=800903.8186576363,6669199.149176236,802126.8111101991,6670013.681258901`;
-  let bboxUrl = '';
+  let bboxUrl = "";
   if (layer.pictureBoundingBox) {
     bboxUrl = `${
-      service.url
+      service?.url
     }?service=WMS&request=GetMap&layers=${encodeURIComponent(
-      name
+      name,
     )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=${
       box[0]
     },${box[1]},${box[2]},${box[3]}`;
@@ -98,7 +97,10 @@ const LibItem = ({
   }, [activeLayers]);
 
   useEffect(() => {
-    const getImgUrl = async (response, url, onFinish?) => {
+    const getImgUrl = async (
+      response: Response,
+      onFinish?: (imgUrl: string) => void,
+    ) => {
       const blob = await response.blob();
       const imgUrl = URL.createObjectURL(blob);
       let reader = new FileReader();
@@ -109,7 +111,7 @@ const LibItem = ({
       reader.onloadend = () => {
         data = reader.result;
         if (blob.size > 757) {
-          setThumbnail({ data, name: name + '_' + service.name });
+          setThumbnail({ data, name: name + "_" + service?.name });
         }
       };
       if (onFinish) {
@@ -119,56 +121,59 @@ const LibItem = ({
       }
     };
 
-    const getCollectionImages = async (collection) => {
+    const getCollectionImages = async (collection: { layers: Layer[] }) => {
       const layers = collection.layers;
       let urls = [];
       let imgUrls: string[] = [];
       if (layers.length > 3) {
-        urls = layers.slice(0, 4).map((layer) => {
+        urls = layers.slice(0, 4).map((layer: Layer) => {
           const thumbnail = thumbnails.find(
-            (element) =>
+            (element: { name: string }) =>
               element?.name ===
-              layer.other.name + '_' + layer.other.service?.name
+              layer?.other?.name + "_" + layer?.other?.service?.name,
           );
+          let props = layer.props as LayerProps;
 
           if (thumbnail?.data) {
             imgUrls.push(thumbnail.data);
             return null;
           }
 
-          return `${layer.props.url.slice(
+          return `${props.url.slice(
             0,
-            -1
+            -1,
           )}?service=WMS&request=GetMap&layers=${encodeURIComponent(
-            layer.props.name
+            props.name,
           )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=800903.8186576363,6669199.149176236,802126.8111101991,6670013.681258901`;
         });
       } else {
-        urls = layers.map((layer) => {
+        urls = layers.map((layer: Layer) => {
           const thumbnail = thumbnails.find(
-            (element) =>
+            (element: { name: string }) =>
               element?.name ===
-              layer.other.name + '_' + layer.other.service?.name
+              layer?.other?.name + "_" + layer?.other?.service?.name,
           );
+          let props = layer.props as LayerProps;
 
           if (thumbnail?.data) {
             imgUrls.push(thumbnail.data);
             return null;
           }
 
-          return `${layer.props.url.slice(
+          return `${props.url.slice(
             0,
-            -1
+            -1,
           )}?service=WMS&request=GetMap&layers=${encodeURIComponent(
-            layer.props.name
+            props.name,
           )}&styles=&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&type=wms&cssFilter=undefined&width=512&height=341&srs=EPSG%3A3857&bbox=800903.8186576363,6669199.149176236,802126.8111101991,6670013.681258901`;
         });
       }
-      urls.forEach(async (url) => {
+      // @ts-ignore
+      urls.forEach(async (url: string) => {
         if (url) {
           const response = await fetch(url);
 
-          getImgUrl(response, url, (imgUrl) => {
+          getImgUrl(response, (imgUrl: string) => {
             imgUrls.push(imgUrl);
           });
         }
@@ -183,18 +188,18 @@ const LibItem = ({
           setThumbUrl(thumbnail.data);
         } else {
           fetch(bboxUrl).then((response) => {
-            getImgUrl(response, bboxUrl);
+            getImgUrl(response);
           });
         }
       } else {
-        if (layer.type === 'collection') {
+        if (layer.type === "collection") {
           getCollectionImages(layer);
         } else {
           if (thumbnail?.data) {
             setThumbUrl(thumbnail.data);
           } else {
             fetch(url).then((response) => {
-              getImgUrl(response, url);
+              getImgUrl(response);
             });
           }
         }
@@ -213,13 +218,13 @@ const LibItem = ({
       setForceWMS(false);
     };
 
-    document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('keyup', onKeyUp);
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keyup", onKeyUp);
 
     return () => {
-      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener("keydown", onKeyDown);
 
-      document.removeEventListener('keyup', onKeyUp);
+      document.removeEventListener("keyup", onKeyUp);
     };
   }, []);
 
@@ -231,29 +236,29 @@ const LibItem = ({
     >
       <div className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]">
         {isLoading && (
-          <div style={{ position: 'absolute', left: '50%' }}>
+          <div style={{ position: "absolute", left: "50%" }}>
             <Spin />
           </div>
         )}
 
-        {(thumbUrl && layer.type !== 'collection') || layer.thumbnail ? (
+        {(thumbUrl && layer.type !== "collection") || layer.thumbnail ? (
           <img
             src={layer.thumbnail ? layer.thumbnail : thumbUrl}
             alt={title}
             loading="lazy"
             className={`object-cover relative h-full overflow-clip w-[calc(130%+7.2px)] ${
-              hovered && 'scale-110'
+              hovered && "scale-110"
             } transition-all duration-200`}
             onLoad={(e) => {
               setIsLoading(false);
             }}
           />
-        ) : layer.type === 'collection' ? (
+        ) : layer.type === "collection" ? (
           <div
             className={`overflow-clip ${
               collectionImages.length > 3
-                ? 'grid grid-cols-2'
-                : 'flex flex-col h-full'
+                ? "grid grid-cols-2"
+                : "flex flex-col h-full"
             }`}
           >
             {collectionImages.map((imgUrl, i) => {
@@ -264,7 +269,7 @@ const LibItem = ({
                   alt={title}
                   loading="lazy"
                   className={`object-cover relative overflow-clip w-[calc(130%+7.2px)] ${
-                    hovered && 'scale-110'
+                    hovered && "scale-110"
                   } transition-all duration-200`}
                 />
               );
@@ -288,7 +293,7 @@ const LibItem = ({
           />
           // <StarOutlined className="absolute right-1 top-1 text-3xl text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.9)]" />
         )}
-        {layer.type === 'link' ? (
+        {layer.type === "link" ? (
           <a
             className="absolute left-1 top-1 text-3xl cursor-pointer z-50 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
             href={layer.url}
@@ -296,7 +301,7 @@ const LibItem = ({
           >
             <FontAwesomeIcon icon={faExternalLinkAlt} />
           </a>
-        ) : layer.type === 'collection' ? (
+        ) : layer.type === "collection" ? (
           <>
             <FontAwesomeIcon
               onClick={handleLayerClick}
@@ -319,7 +324,7 @@ const LibItem = ({
         <InfoOutlined className="absolute right-1 bottom-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50" />
         {hovered && (
           <div className="flex flex-col items-center gap-2 absolute top-0 w-full h-full justify-center p-8 px-10">
-            {layer.type === 'link' ? (
+            {layer.type === "link" ? (
               <a
                 className="w-36 bg-gray-100 hover:no-underline text-black hover:text-neutral-600 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
                 href={layer.url}
@@ -333,7 +338,7 @@ const LibItem = ({
                   Öffnen
                 </>
               </a>
-            ) : layer.type === 'collection' ? (
+            ) : layer.type === "collection" ? (
               <>
                 <button
                   className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
@@ -342,14 +347,14 @@ const LibItem = ({
                   <FontAwesomeIcon
                     icon={faSquareUpRight}
                     className="text-lg mr-2"
-                  />{' '}
+                  />{" "}
                   Anwenden
                 </button>
                 <button
                   className="w-36 bg-gray-100 hover:bg-gray-50 rounded-md py-2 flex text-center items-center px-2"
                   onClick={() => setOpenDeleteModal(true)}
                 >
-                  <FontAwesomeIcon icon={faTrash} className="text-lg mr-2" />{' '}
+                  <FontAwesomeIcon icon={faTrash} className="text-lg mr-2" />{" "}
                   Löschen
                 </button>
               </>
@@ -363,7 +368,7 @@ const LibItem = ({
                     <FontAwesomeIcon
                       icon={faCircleMinus}
                       className="text-lg mr-2"
-                    />{' '}
+                    />{" "}
                     Entfernen
                   </>
                 ) : (
@@ -371,7 +376,7 @@ const LibItem = ({
                     <FontAwesomeIcon
                       icon={faCirclePlus}
                       className="text-lg mr-2"
-                    />{' '}
+                    />{" "}
                     Hinzufügen
                   </>
                 )}
@@ -395,13 +400,13 @@ const LibItem = ({
                 {title.substring(0, hightlightTextIndexes[0])}
                 <span
                   style={{
-                    backgroundColor: 'rgba(240, 215, 139, 0.8)',
-                    padding: '0 0.08em',
+                    backgroundColor: "rgba(240, 215, 139, 0.8)",
+                    padding: "0 0.08em",
                   }}
                 >
                   {title.substring(
                     hightlightTextIndexes[0],
-                    hightlightTextIndexes[1] + 1
+                    hightlightTextIndexes[1] + 1,
                   )}
                 </span>
 
@@ -420,16 +425,16 @@ const LibItem = ({
         </div>
         <p
           className="text-base line-clamp-3 h-[66px]"
-          style={{ color: 'rgba(0,0,0,0.7)' }}
+          style={{ color: "rgba(0,0,0,0.7)" }}
         >
           {match && match.length > 1 ? match[1].trim() : description}
         </p>
         <p
-          style={{ color: 'rgba(0,0,0,0.5)', fontSize: '0.875rem' }}
+          style={{ color: "rgba(0,0,0,0.5)", fontSize: "0.875rem" }}
           className="mb-0 h-10 line-clamp-2"
         >
           {tags?.map((tag, i) => (
-            <span key={'tag_' + tag + '_' + i}>
+            <span key={"tag_" + tag + "_" + i}>
               <span>{tag}</span>
               {i + 1 < tags.length && <span> · </span>}
             </span>

@@ -1,7 +1,7 @@
 export type LayerConfig = {
   name: string;
   url?: string;
-  type?: 'topicmaps';
+  type?: "topicmaps";
 };
 
 export type LayerProps = {
@@ -27,40 +27,40 @@ export type Layer = {
   // legend?: { Format: string; OnlineResource: string; size: [number, number] }[];
 } & (
   | {
-      layerType: 'wmts' | 'wmts-nt';
+      layerType: "wmts" | "wmts-nt";
       props: LayerProps;
     }
   | vectorProps
 );
 
 type Link = {
-  type: 'link';
+  type: "link";
   url: string;
 };
 
 type Collection = {
-  type: 'collection';
+  type: "collection";
   layers: Layer[];
 };
 
 export type wmsProps = {
-  layerType: 'wmts' | 'wmts-nt';
+  layerType: "wmts" | "wmts-nt";
   props: XMLLayer;
 };
 
 export type vectorProps = {
-  layerType: 'vector';
+  layerType: "vector";
   props: {
     style: string;
   };
 };
 
 type tmpLayer = {
-  type: 'layer';
+  type: "layer";
 } & (wmsProps | vectorProps);
 
 type Feature = {
-  type: 'feature';
+  type: "feature";
 };
 
 export type Config = {
@@ -77,6 +77,7 @@ export type Item = {
   keywords?: string[];
   icon?: string;
   alternativeIcon?: string;
+  service?: { name: string; url: string };
   name: string;
   pictureBoundingBox?: [number, number, number, number];
   id: string;
