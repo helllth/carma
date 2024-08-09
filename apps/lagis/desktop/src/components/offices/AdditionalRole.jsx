@@ -10,12 +10,14 @@ import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { verwaltung } from "@carma-collab/wuppertal/lagis-desktop";
+
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(customParseFormat);
 const columns = [
   {
-    title: "Dienststelle",
+    title: verwaltung.zusatzlicheRollen.dienststelleCol,
     dataIndex: "agency",
     render: (title, record, rowIndex) => (
       <div className="flex items-center">
@@ -33,7 +35,7 @@ const columns = [
     sorter: (a, b) => compare(a.agency, b.agency),
   },
   {
-    title: "Rolle",
+    title: verwaltung.zusatzlicheRollen.rolleCol,
     dataIndex: "rolle",
     sorter: (a, b) => compare(a.agency, b.agency),
   },
@@ -125,7 +127,7 @@ const AdditionalRole = ({
       className="shadow-md overflow-auto"
     >
       <InfoBlock
-        title="Zusätzliche Rollen"
+        title={verwaltung.zusatzlicheRollen.tableTitle}
         controlBar={
           <ToggleModal
             section="Verwaltungsbereiche"

@@ -10,10 +10,10 @@ import { compare, defaultLinksColor } from "../../core/tools/helper";
 import { HistoryOutlined } from "@ant-design/icons";
 import { Modal, Table } from "antd";
 import "../../components/ui/control-board/toggle.css";
-import Item from "antd/es/list/Item";
+import { verwaltung } from "@carma-collab/wuppertal/lagis-desktop";
 const columns = [
   {
-    title: "Dienststelle",
+    title: verwaltung.dienststellen.dienststelleCol,
     dataIndex: "agency",
     render: (title, record, rowIndex) => (
       <div className="flex items-center">
@@ -30,7 +30,7 @@ const columns = [
     sorter: (a, b) => compare(a.type, b.type),
   },
   {
-    title: "Fläche in m²",
+    title: verwaltung.dienststellen.flacheCol,
     dataIndex: "area",
     sorter: (a, b) => compare(a.agency, b.agency),
   },
@@ -177,7 +177,7 @@ const Agencies = ({
       className="shadow-md"
     >
       <InfoBlock
-        title="Dienststellen"
+        title={verwaltung.dienststellen.tableTitle}
         extraActions={
           history.length > 0 ? (
             <HistoryOutlined onClick={() => setIsModalOpen(!isModalOpen)} />
@@ -224,7 +224,7 @@ const Agencies = ({
         </div>
       </InfoBlock>
       <Modal
-        title="Historie der Verwaltungsbereiche"
+        title={verwaltung.dienststellen.modalTitle}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}

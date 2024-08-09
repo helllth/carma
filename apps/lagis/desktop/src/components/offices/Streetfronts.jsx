@@ -11,18 +11,20 @@ import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { compare } from "../../core/tools/helper";
+import { verwaltung } from "@carma-collab/wuppertal/lagis-desktop";
+
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(customParseFormat);
 const columns = [
   {
-    title: "Straße",
+    title: verwaltung.strassen.strasseCol,
     dataIndex: "street",
     sorter: (a, b) => compare(a.street, b.street),
   },
 
   {
-    title: "Länge (in m)",
+    title: verwaltung.strassen.lange,
     dataIndex: "length",
     sorter: (a, b) => compare(a.length, b.length),
   },
@@ -93,7 +95,7 @@ const Streetfronts = ({
 
     setActiveRow(copyRow);
     setStreetfronts(
-      streetfronts?.map((obj) => (obj.id === copyRow.id ? copyRow : obj))
+      streetfronts?.map((obj) => (obj.id === copyRow.id ? copyRow : obj)),
     );
   };
   useEffect(() => {
@@ -116,7 +118,7 @@ const Streetfronts = ({
       }
     >
       <InfoBlock
-        title="Straßenfronten"
+        title={verwaltung.strassen.tableTitle}
         controlBar={
           <ToggleModal
             section="Verwaltungsbereiche"

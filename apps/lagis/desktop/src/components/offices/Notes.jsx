@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import InfoBlock from "../ui/Blocks/InfoBlock";
 import { Input, Checkbox } from "antd";
 import CustomNotes from "../ui/notes/CustomNotes";
+import { verwaltung } from "@carma-collab/wuppertal/lagis-desktop";
+
 const { TextArea } = Input;
 const mockExtractor = (input) => {
   return "";
@@ -33,9 +35,11 @@ const Notes = ({
       }
     >
       <InfoBlock
-        title="Bemerkungen"
+        title={verwaltung.bemerkungen.tableTitle}
         extraActions={
-          <Checkbox checked={data.ifBemerkungSperre}>Sperre</Checkbox>
+          <Checkbox checked={data.ifBemerkungSperre}>
+            {verwaltung.bemerkungen.checkbox}
+          </Checkbox>
         }
         controlBar={<Checkbox onChange={onChange}>Sperre</Checkbox>}
       >
