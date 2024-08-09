@@ -13,42 +13,43 @@ import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { mipa } from "@carma-collab/wuppertal/lagis-desktop";
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(customParseFormat);
 const columns = [
   {
-    title: "Lage",
+    title: mipa.mipaTable.lageCol,
     dataIndex: "lage",
     sorter: (a, b) => compare(a.lage, b.lage),
   },
   {
-    title: "Aktenzeichen",
+    title: mipa.mipaTable.aktenzeichenCol,
     dataIndex: "aktenzeichen",
     sorter: (a, b) => compare(a.aktenzeichen, b.aktenzeichen),
   },
   {
-    title: "Flaeche m2",
+    title: mipa.mipaTable.flaecheCol,
     dataIndex: "flaeche",
     sorter: (a, b) => compare(a.flaeche, b.flaeche),
   },
   {
-    title: "Nutzung",
+    title: mipa.mipaTable.nutzungCol,
     dataIndex: "nutzung",
     sorter: (a, b) => compare(a.nutzung, b.nutzung),
   },
   {
-    title: "Vertragsbegin",
+    title: mipa.mipaTable.vertragsbeginCol,
     dataIndex: "vertragsbegin",
     sorter: (a, b) => compare(a.vertragsbegin, b.vertragsbegin),
   },
   {
-    title: "Vertragsende",
+    title: mipa.mipaTable.vertragsendeCol,
     dataIndex: "vertragsende",
     sorter: (a, b) => compare(a.vertragsende, b.vertragsende),
   },
   {
-    title: "Merkmale",
+    title: mipa.mipaTable.merkmaleCol,
     dataIndex: "merkmale",
     id: "merkmale",
     render: (merkmale) => (
@@ -197,7 +198,7 @@ const RentBlock = ({
     >
       <div className="h-[60%]">
         <InfoBlock
-          title="Miet und Pachtverträge"
+          title={mipa.mipaTable.tableTitle}
           controlBar={
             <ToggleModal
               section="Vermietung / Verpachtung"
@@ -274,7 +275,7 @@ const RentBlock = ({
       <div className="h-[40%] flex gap-4 overflow-auto">
         <div className="w-full">
           <InfoBlock
-            title="Bemerkung"
+            title={mipa.bemerkung.title}
             controlBar={
               <ToggleModal onlyEdit={true} section="Bemerkung">
                 <ModalForm
@@ -301,7 +302,7 @@ const RentBlock = ({
         </div>
         <div className="w-full">
           <InfoBlock
-            title="Querverweise"
+            title={mipa.querverweise.title}
             controlBar={
               <ToggleModal onlyEdit={true} section="Querverweise">
                 <ModalForm
