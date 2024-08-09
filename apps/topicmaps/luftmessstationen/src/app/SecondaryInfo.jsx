@@ -15,6 +15,7 @@ import Icon from "react-cismap/commons/Icon";
 import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopicMapContextProvider";
 import { version as reactCismapVersion } from "react-cismap/meta";
 import { getApplicationVersion } from "../version";
+import { SecondaryInfoFooter } from "@carma-collab/wuppertal/luftmessstationen";
 
 ReactChartkick.addAdapter(Chart);
 
@@ -455,7 +456,7 @@ const InfoPanel = () => {
           </div>
         }
         subSections={subSections}
-        footer={footer}
+        footer={<SecondaryInfoFooter version={getApplicationVersion()} />}
       />
     );
   } else {

@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
 import SecondaryInfoPanelSection from "react-cismap/topicmaps/SecondaryInfoPanelSection";
 import SecondaryInfo from "react-cismap/topicmaps/SecondaryInfo";
-import Footer from "./Footer";
+import { SecondaryInfoFooter } from "@carma-collab/wuppertal/klimaorte";
+import { getApplicationVersion } from "../../version";
 
 const InfoPanel = () => {
   const { selectedFeature, items } = useContext(FeatureCollectionContext);
@@ -19,7 +20,7 @@ const InfoPanel = () => {
     (testItem) =>
       testItem.typ === "ort" &&
       testItem?.standort.id === item.standort?.id &&
-      testItem.id !== item.id
+      testItem.id !== item.id,
   );
   //data structure for "weitere Angebote"
   // gruppenwechsel for thema
@@ -139,7 +140,7 @@ const InfoPanel = () => {
           </table>
         </div>
         {/* <pre>{JSON.stringify(addOffers, null, 2)}</pre> */}
-      </SecondaryInfoPanelSection>
+      </SecondaryInfoPanelSection>,
     );
   }
 
@@ -188,7 +189,7 @@ const InfoPanel = () => {
         </div>
       }
       subSections={subSections}
-      footer={<Footer />}
+      footer={<SecondaryInfoFooter version={getApplicationVersion()} />}
     />
   );
 };

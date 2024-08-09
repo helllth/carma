@@ -4,10 +4,12 @@ import {
   faQuestion,
   faSquareArrowUpRight,
   faSquareEnvelope,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Modal, Accordion, Card, Table } from 'react-bootstrap';
-import { getConnectorImageUrl } from './helper/helper';
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button, Modal, Accordion, Card, Table } from "react-bootstrap";
+import { getConnectorImageUrl } from "./helper/helper";
+import { SecondaryInfoFooter } from "@carma-collab/wuppertal/e-auto-ladestation";
+import { getApplicationVersion } from "../version";
 
 const SecondaryInfoModal = ({ feature, setOpen }) => {
   const close = () => {
@@ -23,24 +25,24 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
   let links = [];
   if (ladestation?.betreiber?.telefon) {
     links.push(
-      <a href={'tel:' + ladestation?.betreiber?.telefon}>
+      <a href={"tel:" + ladestation?.betreiber?.telefon}>
         <FontAwesomeIcon
           icon={faPhoneFlip}
-          style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+          style={{ color: "grey", width: "26px", textAlign: "center" }}
           size="2x"
         />
-      </a>
+      </a>,
     );
   }
   if (ladestation?.betreiber?.email) {
     links.push(
-      <a href={'mailto:' + ladestation?.betreiber?.email} target="_blank">
+      <a href={"mailto:" + ladestation?.betreiber?.email} target="_blank">
         <FontAwesomeIcon
           icon={faSquareEnvelope}
-          style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+          style={{ color: "grey", width: "26px", textAlign: "center" }}
           size="2x"
         />
-      </a>
+      </a>,
     );
   }
   if (ladestation?.betreiber?.homepage) {
@@ -48,10 +50,10 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
       <a href={ladestation?.betreiber?.homepage} target="_blank">
         <FontAwesomeIcon
           icon={faSquareArrowUpRight}
-          style={{ color: 'grey', width: '26px', textAlign: 'center' }}
+          style={{ color: "grey", width: "26px", textAlign: "center" }}
           size="2x"
         />
-      </a>
+      </a>,
     );
   }
 
@@ -63,7 +65,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
     ladestation.steckerverbindungen.forEach((v, index) => {
       for (let i = 0; i < v.anzahl; ++i) {
         let imageUrl =
-          'https://wunda-geoportal.cismet.de/' +
+          "https://wunda-geoportal.cismet.de/" +
           getConnectorImageUrl(v.steckdosentypkey);
         let image;
 
@@ -75,7 +77,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
               width="50"
               onError={({ currentTarget }) => {
                 currentTarget.onerror = null; // prevents looping
-                currentTarget.src = '/images/emob/dynamic/unknown.png';
+                currentTarget.src = "/images/emob/dynamic/unknown.png";
               }}
             />
           );
@@ -83,23 +85,23 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
           image = <FontAwesomeIcon icon={faQuestion} />;
         }
         steckerverbindungenTableArr.push(
-          <tr key={index + '.' + i}>
+          <tr key={index + "." + i}>
             <td
               style={{
-                verticalAlign: 'middle',
-                textAlign: 'center',
+                verticalAlign: "middle",
+                textAlign: "center",
               }}
             >
               {image}
             </td>
-            <td style={{ verticalAlign: 'middle' }}>{v.steckdosentyp}</td>
-            <td style={{ verticalAlign: 'middle' }}>
+            <td style={{ verticalAlign: "middle" }}>{v.steckdosentyp}</td>
+            <td style={{ verticalAlign: "middle" }}>
               {v.leistung}kW
               {v.strom && v.spannung ? ` (${v.strom}A, ${v.spannung}V)` : ``}
               {v.strom && !v.spannung ? ` (${v.strom}A)` : ``}
               {!v.strom && v.spannung ? ` (${v.spannung}V)` : ``}
             </td>
-          </tr>
+          </tr>,
         );
       }
     });
@@ -124,22 +126,22 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
           {` Datenblatt: Ladestation ${ladestation.name}`}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body id="myMenu" key={'prbr.secondaryInfo'}>
-        <div style={{ width: '100%', minHeight: 250 }}>
+      <Modal.Body id="myMenu" key={"prbr.secondaryInfo"}>
+        <div style={{ width: "100%", minHeight: 250 }}>
           {foto !== undefined && (
             <img
               alt="Bild"
               style={{
                 paddingLeft: 10,
                 paddingRight: 10,
-                float: 'right',
-                paddingBottom: '5px',
+                float: "right",
+                paddingBottom: "5px",
               }}
               src={foto}
               width="250"
             />
           )}
-          <div style={{ fontSize: '115%', padding: '10px', paddingTop: '0px' }}>
+          <div style={{ fontSize: "115%", padding: "10px", paddingTop: "0px" }}>
             <div>
               <b>Adresse:</b>
             </div>
@@ -155,17 +157,17 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
             </div>
           </div>
         </div>
-        <Accordion style={{ marginBottom: 6 }} defaultActiveKey={'0'}>
-          <Card style={{ backgroundColor: '#bce8f1' }}>
+        <Accordion style={{ marginBottom: 6 }} defaultActiveKey={"0"}>
+          <Card style={{ backgroundColor: "#bce8f1" }}>
             <Card.Header>
               <Accordion.Toggle as={Button} variant="link" eventKey="0">
                 {ladestation.online === true
-                  ? 'Lademöglichkeit verfügbar (online)'
-                  : 'Lademöglichkeit momentan nicht verfügbar (offline)'}
+                  ? "Lademöglichkeit verfügbar (online)"
+                  : "Lademöglichkeit momentan nicht verfügbar (offline)"}
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="0">
-              <Card.Body style={{ backgroundColor: 'white' }}>
+              <Card.Body style={{ backgroundColor: "white" }}>
                 <div>
                   <b>Ladepunkte:</b> {ladestation.ladeplaetze}
                 </div>
@@ -180,7 +182,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
                   >
                     <tbody>{steckerverbindungenTableArr}</tbody>
                   </Table>
-                  <div style={{ textAlign: 'right' }}>
+                  <div style={{ textAlign: "right" }}>
                     <a
                       href="https://github.com/cismet/wupp-topic-maps/blob/feature/039-winter-2019-dev-sprint/public/images/emob/"
                       target="_license"
@@ -193,29 +195,29 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
                   <b>Strom:</b> {ladestation.stromart}
                 </div>
                 <div>
-                  <b>Schnellladestation:</b>{' '}
-                  {ladestation.schnellladestation === true ? 'Ja' : 'Nein'}
+                  <b>Schnellladestation:</b>{" "}
+                  {ladestation.schnellladestation === true ? "Ja" : "Nein"}
                 </div>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
         </Accordion>
-        <Accordion style={{ marginBottom: 6 }} defaultActiveKey={'1'}>
-          <Card style={{ backgroundColor: '#faebcc' }}>
+        <Accordion style={{ marginBottom: 6 }} defaultActiveKey={"1"}>
+          <Card style={{ backgroundColor: "#faebcc" }}>
             <Card.Header>
               <Accordion.Toggle as={Button} variant="link" eventKey="1">
                 Bezahlen
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="1">
-              <Card.Body style={{ backgroundColor: 'white' }}>
+              <Card.Body style={{ backgroundColor: "white" }}>
                 <div>
-                  <b>Authentifizierung:</b>{' '}
-                  {ladestation.authentifizierung.join(' / ')}
+                  <b>Authentifizierung:</b>{" "}
+                  {ladestation.authentifizierung.join(" / ")}
                 </div>
                 <div>
-                  <b>Ladekosten:</b>{' '}
-                  {ladestation.ladekosten.startsWith('http') ? (
+                  <b>Ladekosten:</b>{" "}
+                  {ladestation.ladekosten.startsWith("http") ? (
                     <a href={ladestation.ladekosten} target="_ladekosten">
                       in anderem Fenster anschauen
                     </a>
@@ -230,28 +232,28 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
             </Accordion.Collapse>
           </Card>
         </Accordion>
-        <Accordion style={{ marginBottom: 6 }} defaultActiveKey={'2'}>
-          <Card style={{ backgroundColor: '#d6e9c6' }}>
+        <Accordion style={{ marginBottom: 6 }} defaultActiveKey={"2"}>
+          <Card style={{ backgroundColor: "#d6e9c6" }}>
             <Card.Header>
               <Accordion.Toggle as={Button} variant="link" eventKey="2">
                 Betreiber
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="2">
-              <Card.Body style={{ backgroundColor: 'white' }}>
+              <Card.Body style={{ backgroundColor: "white" }}>
                 <div
                   style={{
                     paddingLeft: 10,
                     paddingRight: 10,
-                    float: 'right',
-                    paddingBottom: '5px',
+                    float: "right",
+                    paddingBottom: "5px",
                   }}
                 >
                   {links}
                 </div>
                 <div>{ladestation?.betreiber?.name}</div>
                 <div>
-                  {ladestation?.betreiber?.strasse}{' '}
+                  {ladestation?.betreiber?.strasse}{" "}
                   {ladestation?.betreiber?.hausnummer}
                 </div>
                 <div>
@@ -264,60 +266,7 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
         </Accordion>
       </Modal.Body>
       <Modal.Footer>
-        <table
-          style={{
-            width: '100%',
-          }}
-        >
-          <tbody>
-            <tr>
-              <td
-                style={{
-                  textAlign: 'left',
-                  verticalAlign: 'bottom',
-                  paddingRight: '30px',
-                }}
-              >
-                <div>
-                  <span style={{ fontSize: '11px' }}>
-                    <div>
-                      <b>TopicMaps Wuppertal</b> (Version 1.22.3):{' '}
-                      <a href="https://cismet.de/" target="_cismet">
-                        cismet GmbH
-                      </a>{' '}
-                      auf Basis von{' '}
-                      <a href="http://leafletjs.com/" target="_more">
-                        Leaflet
-                      </a>{' '}
-                      und{' '}
-                      <a href="https://cismet.de/#refs" target="_cismet">
-                        cids | WuNDa
-                      </a>{' '}
-                      |{' '}
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="https://cismet.de/datenschutzerklaerung.html"
-                      >
-                        Datenschutzerklärung (Privacy Policy)
-                      </a>
-                    </div>
-                  </span>
-                </div>
-              </td>
-              <td>
-                <Button
-                  id="cmdCloseModalApplicationMenu"
-                  bsStyle="primary"
-                  type="submit"
-                  onClick={close}
-                >
-                  Ok
-                </Button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <SecondaryInfoFooter close={close} version={getApplicationVersion()} />
       </Modal.Footer>
     </Modal>
   );
