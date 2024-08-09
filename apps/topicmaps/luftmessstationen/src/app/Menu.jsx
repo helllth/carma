@@ -19,6 +19,8 @@ import {
   MenuTitle,
   MenuIntroduction,
   Footer,
+  getFilterHeader,
+  FilterStyle,
 } from "@carma-collab/wuppertal/luftmessstationen";
 import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
@@ -40,20 +42,20 @@ const MyMenu = () => {
   const themenValues = [];
   const topicMapTitle = "Luftmessstationskarte Wuppertal";
 
-  const getFilterHeader = () => {
-    const count = filteredItems?.length || 0;
+  // const getFilterHeader = () => {
+  //   const count = filteredItems?.length || 0;
 
-    let term;
-    if (count === 1) {
-      term = "Standort";
-    } else {
-      term = "Standorte";
-    }
+  //   let term;
+  //   if (count === 1) {
+  //     term = "Standort";
+  //   } else {
+  //     term = "Standorte";
+  //   }
 
-    return `Messstationen der Luftqualität (${count} ${term} gefunden, davon ${
-      shownFeatures?.length || "0"
-    } in der Karte)`;
-  };
+  //   return `Messstationen der Luftqualität (${count} ${term} gefunden, davon ${
+  //     shownFeatures?.length || "0"
+  //   } in der Karte)`;
+  // };
 
   const filterConfiguration = {
     mode: "list", // list or tabs
@@ -446,8 +448,11 @@ NO₂-Messwerte von ca. vier Wochen.
           <Section
             key="filter"
             sectionKey="filter"
-            sectionTitle={getFilterHeader()}
-            sectionBsStyle="primary"
+            sectionTitle={getFilterHeader(
+              filteredItems?.length,
+              shownFeatures?.length,
+            )}
+            sectionBsStyle={FilterStyle}
             sectionContent={
               <div>
                 {/* <div>

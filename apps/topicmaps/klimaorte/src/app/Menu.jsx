@@ -15,6 +15,8 @@ import {
   MenuTitle,
   KompaktanleitungSection,
   Footer,
+  getFilterHeader,
+  FilterStyle,
 } from "@carma-collab/wuppertal/klimaorte";
 import Icon from "react-cismap/commons/Icon";
 import previewFeatureCollection from "./helper/previewFC";
@@ -203,20 +205,20 @@ const MyMenu = () => {
     ),
   };
 
-  const getFilterHeader = () => {
-    const count = filteredItems?.length || 0;
+  // const getFilterHeader = () => {
+  //   const count = filteredItems?.length || 0;
 
-    let term;
-    if (count === 1) {
-      term = "Standort";
-    } else {
-      term = "Standorte";
-    }
+  //   let term;
+  //   if (count === 1) {
+  //     term = "Standort";
+  //   } else {
+  //     term = "Standorte";
+  //   }
 
-    return `Meine Klimaorte (${count} ${term} gefunden, davon ${
-      shownFeatures?.length || "0"
-    } in der Karte)`;
-  };
+  //   return `Meine Klimaorte (${count} ${term} gefunden, davon ${
+  //     shownFeatures?.length || "0"
+  //   } in der Karte)`;
+  // };
   const configurableDocBlocks = getSimpleHelpForTM(topicMapTitle, simpleHelp);
 
   configurableDocBlocks[0].configs.splice(6, 0, {
@@ -362,8 +364,11 @@ const MyMenu = () => {
             <Section
               key="filter"
               sectionKey="filter"
-              sectionTitle={getFilterHeader()}
-              sectionBsStyle="primary"
+              sectionTitle={getFilterHeader(
+                filteredItems?.length,
+                shownFeatures?.length,
+              )}
+              sectionBsStyle={FilterStyle}
               sectionContent={
                 <>
                   <FilterPanel filterConfiguration={filterConfiguration} />

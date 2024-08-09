@@ -15,6 +15,8 @@ import {
   KompaktanleitungSection,
   MenuIntroduction,
   Footer,
+  getFilterHeader,
+  FilterStyle,
 } from "@carma-collab/wuppertal/e-auto-ladestation";
 import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
@@ -29,20 +31,20 @@ const Menu = () => {
   const onlineSVG = getSymbolSVG(24, "#003B80", "pr", "onlineSVGinHELP");
   const offlineSVG = getSymbolSVG(24, "#888A87", "pr", "offlineSVGinHELP");
 
-  const getFilterHeader = () => {
-    const count = filteredItems?.length || 0;
+  // const getFilterHeader = () => {
+  //   const count = filteredItems?.length || 0;
 
-    let term;
-    if (count === 1) {
-      term = "Ladestation";
-    } else {
-      term = "Ladestationen";
-    }
+  //   let term;
+  //   if (count === 1) {
+  //     term = "Ladestation";
+  //   } else {
+  //     term = "Ladestationen";
+  //   }
 
-    return `Filter (${count} ${term} gefunden, davon ${
-      shownFeatures?.length || "0"
-    } in der Karte)`;
-  };
+  //   return `Filter (${count} ${term} gefunden, davon ${
+  //     shownFeatures?.length || "0"
+  //   } in der Karte)`;
+  // };
 
   const steckertypes = useMemo(
     () => itemsDictionary?.steckerverbindungen || [],
@@ -69,8 +71,11 @@ const Menu = () => {
           <Section
             key="filter"
             sectionKey="filter"
-            sectionTitle={getFilterHeader()}
-            sectionBsStyle="primary"
+            sectionTitle={getFilterHeader(
+              filteredItems?.length,
+              shownFeatures?.length,
+            )}
+            sectionBsStyle={FilterStyle}
             sectionContent={
               <FilterUI
                 filter={filterState}

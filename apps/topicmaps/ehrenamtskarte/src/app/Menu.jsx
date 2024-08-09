@@ -38,6 +38,8 @@ import {
   TextInMerkliste,
   KompaktanleitungSection,
   Footer,
+  getFilterHeader,
+  FilterStyle,
 } from "@carma-collab/wuppertal/ehrenamtskarte";
 import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
@@ -63,20 +65,20 @@ const Menu = ({ bookmarks, setBookmarks }) => {
     [itemsDictionary],
   );
 
-  const getFilterHeader = () => {
-    const count = filteredItems?.length || 0;
+  // const getFilterHeader = () => {
+  //   const count = filteredItems?.length || 0;
 
-    let term;
-    if (count === 1) {
-      term = "Angebot";
-    } else {
-      term = "Angebote";
-    }
+  //   let term;
+  //   if (count === 1) {
+  //     term = "Angebot";
+  //   } else {
+  //     term = "Angebote";
+  //   }
 
-    return `Filtern (${count} ${term} gefunden, davon ${
-      shownFeatures?.length || "0"
-    } in der Karte)`;
-  };
+  //   return `Filtern (${count} ${term} gefunden, davon ${
+  //     shownFeatures?.length || "0"
+  //   } in der Karte)`;
+  // };
 
   return (
     <CustomizationContextProvider customizations={{}}>
@@ -98,8 +100,11 @@ const Menu = ({ bookmarks, setBookmarks }) => {
           <Section
             key="filter"
             sectionKey="filter"
-            sectionTitle={getFilterHeader()}
-            sectionBsStyle="primary"
+            sectionTitle={getFilterHeader(
+              filteredItems?.length,
+              shownFeatures?.length,
+            )}
+            sectionBsStyle={FilterStyle}
             sectionContent={<FilterUI />}
           />,
           globalbereiche.length > 0 && (
