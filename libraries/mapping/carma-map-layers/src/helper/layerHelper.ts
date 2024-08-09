@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { WMSCapabilitiesJSON } from 'wms-capabilities';
-import { serviceConfig } from './config';
-import type { Item, XMLLayer, Layer } from './types';
+import type { WMSCapabilitiesJSON } from "wms-capabilities";
+import { serviceConfig } from "./config";
+import type { Item, XMLLayer, Layer, Config } from "./types";
 
 export const flattenLayer = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   layer: any,
-  parentTitles = [],
-  url: string
+  parentTitles: string[] = [],
+  url: string,
 ) => {
-  const layerTitle = layer.Title;
+  const layerTitle = layer.Title as string;
   const layerTags = [...parentTitles, layerTitle];
 
   const flattenedLayer: any = {
     Title: layerTitle,
-    Name: layer.Name ? layer.Name : '',
+    Name: layer.Name ? layer.Name : "",
     Abstract: layer.Abstract,
     tags: layerTags,
     srs: layer.SRS,
@@ -35,7 +35,7 @@ export const flattenLayer = (
         childLayers.push(...flattennedSubLayer.layers);
         delete flattennedSubLayer.layers;
       }
-      if (flattennedSubLayer.Name !== '') {
+      if (flattennedSubLayer.Name !== "") {
         childLayers.push(flattennedSubLayer);
       }
     });
@@ -48,12 +48,12 @@ export const flattenLayer = (
 export const extractVectorStyles = (keywords: string[]) => {
   let vectorObject: any = null;
   keywords.forEach((keyword) => {
-    if (keyword.startsWith('carmaConf://')) {
+    if (keyword.startsWith("carmaConf://")) {
       const objectString = keyword.slice(12);
-      let colonIndex = objectString.indexOf(':');
-      const property = objectString.split(':')[0];
+      let colonIndex = objectString.indexOf(":");
+      const property = objectString.split(":")[0];
       let value =
-        colonIndex !== -1 ? objectString.substring(colonIndex + 1).trim() : '';
+        colonIndex !== -1 ? objectString.substring(colonIndex + 1).trim() : "";
       const object = { [property]: value };
       vectorObject = object;
     }
@@ -62,10 +62,11 @@ export const extractVectorStyles = (keywords: string[]) => {
   return vectorObject;
 };
 
-export const createBaseConfig = (layers) => {
-  const result = {};
+export const createBaseConfig = (layers: XMLLayer[]) => {
+  const result: Record<string, Item[]> = {};
   layers.forEach((item) => {
     result[item.Title] = {
+      // @ts-ignore
       layers: item.layers.map((layer) => ({ name: layer.Name })),
     };
   });
@@ -74,11 +75,11 @@ export const createBaseConfig = (layers) => {
   return null;
 };
 
-const getLeafLayers = (layer, leafLayers = []) => {
+const getLeafLayers = (layer: any, leafLayers: Layer[] = []) => {
   // Check if the layer has sub-layers
   if (layer.Layer && Array.isArray(layer.Layer) && layer.Layer.length > 0) {
     // Recursively check each sub-layer
-    layer.Layer.forEach((subLayer) => getLeafLayers(subLayer, leafLayers));
+    layer.Layer.forEach((subLayer: any) => getLeafLayers(subLayer, leafLayers));
   } else {
     // If no sub-layers, it's a leaf layer, add it to the list
     leafLayers.push(layer);
@@ -86,14 +87,14 @@ const getLeafLayers = (layer, leafLayers = []) => {
   return leafLayers;
 };
 
-export const getAllLeafLayers = (capabilities) => {
+export const getAllLeafLayers = (capabilities: WMSCapabilitiesJSON) => {
   const rootLayer = capabilities.Capability.Layer;
   return getLeafLayers(rootLayer);
 };
 
-export const findDifferences = (array1, array2) => {
+export const findDifferences = (array1: XMLLayer[], array2: Item[]) => {
   const missingInConfig = array1.filter(
-    (layer1) => !array2.some((layer2) => layer2.name === layer1.Name)
+    (layer1) => !array2.some((layer2) => layer2.name === layer1.Name),
   );
 
   return {
@@ -108,10 +109,10 @@ const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
       description: layer.Abstract,
       tags: layer.tags,
       keywords: layer.KeywordList,
-      id: serviceName + ':' + layer.Name,
+      id: serviceName + ":" + layer.Name,
       name: layer.Name,
-      type: 'layer',
-      layerType: 'wmts',
+      type: "layer",
+      layerType: "wmts",
       props: { ...layer },
     };
 
@@ -126,7 +127,7 @@ export const getLayerStructure = ({
   wms,
   serviceName,
 }: {
-  config;
+  config: any;
   wms?: WMSCapabilitiesJSON;
   serviceName: string;
 }) => {
@@ -154,7 +155,7 @@ export const getLayerStructure = ({
           const wmsLayer = findLayerAndAddTags(
             wms.Capability.Layer,
             layer.name,
-            []
+            [],
           );
           foundLayer = wmsLayerToGenericItem(wmsLayer, serviceName);
         } else {
@@ -163,7 +164,7 @@ export const getLayerStructure = ({
         if (foundLayer) {
           if (wms) {
             // @ts-expect-error fix typing
-            foundLayer.props['url'] =
+            foundLayer.props["url"] =
               wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
           }
           let tags = foundLayer.tags;
@@ -179,19 +180,20 @@ export const getLayerStructure = ({
 
     if (wms && serviceName === services[categoryConfig.serviceName].name) {
       const missingInConfig = findDifferences(
+        // @ts-ignore
         getAllLeafLayers(wms),
-        categoryConfig.layers
+        categoryConfig.layers,
       );
 
       for (const layer of missingInConfig.missingInConfig) {
         const wmsLayer = findLayerAndAddTags(
           wms.Capability.Layer,
           layer.Name,
-          []
+          [],
         );
         let foundLayer = wmsLayerToGenericItem(wmsLayer, serviceName);
         if (foundLayer) {
-          foundLayer.props['url'] =
+          foundLayer.props["url"] =
             wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
 
           let tags = foundLayer.tags;
@@ -200,7 +202,8 @@ export const getLayerStructure = ({
             ...foundLayer,
             ...layer,
             tags,
-            service: services[categoryConfig.serviceName],
+            // @ts-ignore
+            service: services[categoryConfig.serviceName as string],
           };
 
           if (foundLayer) {
@@ -217,17 +220,17 @@ export const getLayerStructure = ({
   return structure;
 };
 
-export const mergeStructures = (structure1, structure2) => {
-  let mergedObj = {};
+export const mergeStructures = (structure1: any, structure2: any) => {
+  let mergedObj: Record<string, any> = {};
 
-  structure1.forEach((obj) => {
+  structure1.forEach((obj: any) => {
     if (!mergedObj[obj.Title]) {
       mergedObj[obj.Title] = { Title: obj.Title, layers: [] };
     }
     mergedObj[obj.Title].layers.push(...obj.layers);
   });
 
-  structure2.forEach((obj) => {
+  structure2.forEach((obj: any) => {
     if (!mergedObj[obj.Title]) {
       mergedObj[obj.Title] = { Title: obj.Title, layers: [] };
     }
@@ -238,7 +241,11 @@ export const mergeStructures = (structure1, structure2) => {
   return mergedArray;
 };
 
-export const findLayerAndAddTags = (layer, name, tagsToAdd) => {
+export const findLayerAndAddTags = (
+  layer: any,
+  name: string,
+  tagsToAdd: string[],
+) => {
   if (layer.Name === name) {
     if (!layer.Tags) {
       layer.tags = [];
@@ -248,7 +255,7 @@ export const findLayerAndAddTags = (layer, name, tagsToAdd) => {
   }
   if (layer.Layer) {
     for (const subLayer of layer.Layer) {
-      const foundLayer = findLayerAndAddTags(subLayer, name, [
+      const foundLayer: any = findLayerAndAddTags(subLayer, name, [
         ...tagsToAdd,
         layer.Title,
       ]);
