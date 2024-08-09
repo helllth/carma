@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faX } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDebounce } from '@uidotdev/usehooks';
-import { Button, Input, Modal, Spin } from 'antd';
-import Fuse from 'fuse.js';
-import { useEffect, useState } from 'react';
-import { InView } from 'react-intersection-observer';
-import WMSCapabilities from 'wms-capabilities';
-import { baseConfig as config, serviceConfig } from '../helper/config';
+import { faX } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDebounce } from "@uidotdev/usehooks";
+import { Button, Input, Modal, Spin } from "antd";
+import Fuse from "fuse.js";
+import { useEffect, useState } from "react";
+import { InView } from "react-intersection-observer";
+import WMSCapabilities from "wms-capabilities";
+import { baseConfig as config, serviceConfig } from "../helper/config";
 import {
   findDifferences,
   findLayerAndAddTags,
@@ -15,13 +15,13 @@ import {
   getAllLeafLayers,
   getLayerStructure,
   mergeStructures,
-} from '../helper/layerHelper';
-import LayerTabs from './LayerTabs';
-import LibItem from './LibItem';
-import './input.css';
-import './modal.css';
-import type { Item, Layer } from '../helper/types';
-import { isEqual } from 'lodash';
+} from "../helper/layerHelper";
+import LayerTabs from "./LayerTabs";
+import LibItem from "./LibItem";
+import "./input.css";
+import "./modal.css";
+import type { Item, Layer } from "../helper/types";
+import { isEqual } from "lodash";
 const { Search } = Input;
 
 // @ts-expect-error tbd
@@ -49,9 +49,9 @@ const LibModal = ({
   const [layers, setLayers] = useState<any[]>([]);
   const [allLayers, setAllLayers] = useState<any[]>([]);
   const services = serviceConfig;
-  const [inViewCategory, setInViewCategory] = useState('');
+  const [inViewCategory, setInViewCategory] = useState("");
   const [allCategoriesInView, setAllCategoriesInView] = useState<string[]>([]);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [showItems, setShowItems] = useState(false);
   const [tmpCustomCategories, setTmpCustomCategories] = useState<
@@ -59,23 +59,23 @@ const LibModal = ({
   >([]);
   const debouncedSearchTerm = useDebounce(searchValue, 300);
 
-  const checkDifferences = (url, configName) => {
-    fetch(`${url}?service=WMS&request=GetCapabilities&version=1.1.1`)
-      .then((response) => {
-        return response.text();
-      })
-      .then((text) => {
-        const result = parser.toJSON(text);
-        console.log('xxx result', getAllLeafLayers(result));
-        console.log('xxx configName', config[configName]);
-        console.log(
-          'xxx findDifferences',
-          findDifferences(getAllLeafLayers(result), config[configName].layers)
-        );
-      });
-  };
+  // const checkDifferences = (url, configName) => {
+  //   fetch(`${url}?service=WMS&request=GetCapabilities&version=1.1.1`)
+  //     .then((response) => {
+  //       return response.text();
+  //     })
+  //     .then((text) => {
+  //       const result = parser.toJSON(text);
+  //       console.log('xxx result', getAllLeafLayers(result));
+  //       console.log('xxx configName', config[configName]);
+  //       console.log(
+  //         'xxx findDifferences',
+  //         findDifferences(getAllLeafLayers(result), config[configName].layers)
+  //       );
+  //     });
+  // };
 
-  const search = (value) => {
+  const search = (value: string) => {
     setIsSearching(true);
     if (value) {
       const results = fuse.search(value);
@@ -111,9 +111,9 @@ const LibModal = ({
   const flattenedLayers = allLayers.flatMap((obj) => obj.layers);
   const fuse = new Fuse(flattenedLayers, {
     keys: [
-      { name: 'title', weight: 2 },
-      { name: 'description', weight: 1 },
-      { name: 'keywords', weight: 1 },
+      { name: "title", weight: 2 },
+      { name: "description", weight: 1 },
+      { name: "keywords", weight: 1 },
     ],
     shouldSort: false,
     includeMatches: true,
@@ -143,7 +143,7 @@ const LibModal = ({
     });
   };
 
-  const getNumberOfLayers = (layers) => {
+  const getNumberOfLayers = (layers: { layers: Layer[] }[]) => {
     let numberOfLayers = 0;
     layers.forEach((category) => {
       numberOfLayers += category.layers.length;
@@ -156,7 +156,7 @@ const LibModal = ({
     for (let key in services) {
       if (services[key].url) {
         fetch(
-          `${services[key].url}?service=WMS&request=GetCapabilities&version=1.1.1`
+          `${services[key].url}?service=WMS&request=GetCapabilities&version=1.1.1`,
         )
           .then((response) => {
             return response.text();
@@ -173,23 +173,35 @@ const LibModal = ({
                 const mergedLayer = mergeStructures(tmpLayer, newLayers);
 
                 newLayers = mergedLayer;
-                setLayers([...customCategories, ...newLayers]);
-                setAllLayers([...customCategories, ...newLayers]);
+                let tmp = [];
+                if (customCategories) {
+                  tmp = [...customCategories, ...newLayers];
+                } else {
+                  tmp = newLayers;
+                }
+                setLayers(tmp);
+                setAllLayers(tmp);
               } else {
                 getDataFromJson(result);
               }
             }
           });
       } else {
-        if (services[key].type === 'topicmaps') {
+        if (services[key].type === "topicmaps") {
           const tmpLayer = getLayerStructure({
             config,
             serviceName: services[key].name,
           });
           const mergedLayer = mergeStructures(tmpLayer, newLayers);
           newLayers = mergedLayer;
-          setLayers([...customCategories, ...newLayers]);
-          setAllLayers([...customCategories, ...newLayers]);
+          let tmp = [];
+          if (customCategories) {
+            tmp = [...customCategories, ...newLayers];
+          } else {
+            tmp = newLayers;
+          }
+          setLayers(tmp);
+          setAllLayers(tmp);
         } else {
           const tmpLayer = getLayerStructure({
             config,
@@ -197,8 +209,14 @@ const LibModal = ({
           });
           const mergedLayer = mergeStructures(tmpLayer, newLayers);
           newLayers = mergedLayer;
-          setLayers([...customCategories, ...newLayers]);
-          setAllLayers([...customCategories, ...newLayers]);
+          let tmp = [];
+          if (customCategories) {
+            tmp = [...customCategories, ...newLayers];
+          } else {
+            tmp = newLayers;
+          }
+          setLayers(tmp);
+          setAllLayers(tmp);
         }
       }
     }
@@ -214,7 +232,7 @@ const LibModal = ({
 
       let updatedLayers = layers.map((category) => {
         const title = category.Title;
-        customCategories.forEach((customCategory) => {
+        customCategories?.forEach((customCategory) => {
           if (customCategory.Title === title) {
             category.layers = customCategory.layers;
           }
@@ -241,7 +259,7 @@ const LibModal = ({
         setOpen(false);
       }}
       footer={<></>}
-      width={'100%'}
+      width={"100%"}
       closeIcon={false}
       wrapClassName="h-full"
       className="h-[90%]"
@@ -249,8 +267,8 @@ const LibModal = ({
       <div
         className="w-full h-full flex flex-col bg-[#f2f2f2]"
         style={{
-          maxHeight: 'calc(100vh - 200px)',
-          minHeight: 'calc(100vh - 200px)',
+          maxHeight: "calc(100vh - 200px)",
+          minHeight: "calc(100vh - 200px)",
         }}
       >
         <div className="sticky top-0 px-6 pt-6">
@@ -338,7 +356,7 @@ const LibModal = ({
                         } else {
                           const updatedCategoriesInView =
                             allCategoriesInView.filter(
-                              (item) => item !== entry.target.id
+                              (item) => item !== entry.target.id,
                             );
                           setAllCategoriesInView(updatedCategoriesInView);
                           if (inViewCategory === entry.target.id && i > 0) {
@@ -357,7 +375,7 @@ const LibModal = ({
                         {category?.Title}
                       </p>
                       <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-2 gap-8 mb-4">
-                        {category?.layers?.map((layer: any, i) => (
+                        {category?.layers?.map((layer: any, i: number) => (
                           <LibItem
                             setAdditionalLayers={setAdditionalLayers}
                             layer={layer}
