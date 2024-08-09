@@ -11,12 +11,14 @@ import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { kassenzeichen } from "@carma-collab/wuppertal/lagis-desktop";
+
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(customParseFormat);
 const columns = [
   {
-    title: "Kassenzeichen",
+    title: kassenzeichen.kassenzeichenTable.kassenzeichenCol,
     dataIndex: "kassenzeichen",
     render: (record, fields) => (
       <div>
@@ -29,7 +31,7 @@ const columns = [
     sorter: (a, b) => compare(a.kassenzeichen, b.kassenzeichen),
   },
   {
-    title: "Zugeordnet am",
+    title: kassenzeichen.kassenzeichenTable.zugeordnetCol,
     dataIndex: "zugeordnet",
     sorter: (a, b) => compare(a.zugeordnet, b.zugeordnet),
   },
@@ -81,7 +83,7 @@ const TransactionNumber = ({
   };
   const deleteRow = () => {
     const updatedArray = transaction.filter(
-      (row) => row.key !== activeRow?.key
+      (row) => row.key !== activeRow?.key,
     );
     setTransaction(updatedArray);
     if (activeRow?.key === transaction[0].key) {
@@ -101,7 +103,7 @@ const TransactionNumber = ({
 
     setActiveRow(copyRow);
     setTransaction(
-      transaction.map((obj) => (obj.key === copyRow.key ? copyRow : obj))
+      transaction.map((obj) => (obj.key === copyRow.key ? copyRow : obj)),
     );
   };
   useEffect(() => {
@@ -115,7 +117,7 @@ const TransactionNumber = ({
       style={isStory ? storyStyle : { height: "100%", borderRadius: "6px" }}
     >
       <InfoBlock
-        title="Kassenzeicheninformationen"
+        title={kassenzeichen.kassenzeichenTable.tableTitle}
         controlBar={
           <ToggleModal
             section="Kassenzeichen"
