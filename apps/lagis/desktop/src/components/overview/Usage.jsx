@@ -5,6 +5,8 @@ import "./style.css";
 import { Link } from "react-router-dom";
 import { buildUrlParams } from "../../core/tools/helper";
 import { defaultLinksColor } from "../../core/tools/helper";
+import { overview } from "@carma-collab/wuppertal/lagis-desktop";
+
 const mockExtractor = (input) => {
   return { numberOfUsages: "1", color: "#F31630" };
 };
@@ -21,8 +23,8 @@ const DashboardUsage = ({
     <div className="dashboard-tile">
       {data.color === defaultLinksColor ? (
         <OverviewCard
-          title="Nutzung"
-          subtitle="& Anlagenbuchhaltung"
+          title={overview.nutzungTitle}
+          subtitle={overview.nutzungSubtitle}
           icon={<PieChartOutlined style={{ color: defaultLinksColor }} />}
         >
           <div
@@ -40,8 +42,8 @@ const DashboardUsage = ({
       ) : (
         <Link to={`/nutzung?${buildUrlParams(parametersForLink)}`}>
           <OverviewCard
-            title="Nutzung"
-            subtitle="& Anlagenbuchhaltung"
+            title={overview.nutzungTitle}
+            subtitle={overview.nutzungSubtitle}
             ifDefaultColor={false}
             icon={<PieChartOutlined style={{ color: data.color }} />}
           >

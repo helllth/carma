@@ -5,6 +5,8 @@ import OverviewCard from "../ui/OverviewCard";
 import { Link } from "react-router-dom";
 import { buildUrlParams } from "../../core/tools/helper";
 import { defaultLinksColor } from "../../core/tools/helper";
+import { overview } from "@carma-collab/wuppertal/lagis-desktop";
+
 const mockExtractor = (input) => {
   return { numberOfDocuments: "1", color: "#389EFD" };
 };
@@ -22,7 +24,7 @@ const DashboardTransaction = ({
     <div className="dashboard-tile">
       {data.color === defaultLinksColor ? (
         <OverviewCard
-          title="Kassenzeichen"
+          title={overview.kassenzeichenTitle}
           icon={<PayCircleOutlined style={{ color: defaultLinksColor }} />}
         >
           <div
@@ -42,7 +44,7 @@ const DashboardTransaction = ({
       ) : (
         <Link to={`/kassenzeichen?${buildUrlParams(parametersForLink)}`}>
           <OverviewCard
-            title="Kassenzeichen"
+            title={overview.kassenzeichenTitle}
             ifDefaultColor={false}
             icon={<PayCircleOutlined style={{ color: data.color }} />}
           >

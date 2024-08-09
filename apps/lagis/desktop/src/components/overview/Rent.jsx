@@ -5,6 +5,8 @@ import "./style.css";
 import { Link } from "react-router-dom";
 import { buildUrlParams } from "../../core/tools/helper";
 import { defaultLinksColor } from "../../core/tools/helper";
+import { overview } from "@carma-collab/wuppertal/lagis-desktop";
+
 const mockExtractor = (input) => {
   return { numberOfRents: "7", color: "#5D5FEF" };
 };
@@ -21,7 +23,7 @@ const DashboardRent = ({
     <div className="dashboard-tile">
       {data.color === defaultLinksColor ? (
         <OverviewCard
-          title="Miet und Pachtverträge"
+          title={overview.mipaTitle}
           icon={<DollarOutlined style={{ color: defaultLinksColor }} />}
         >
           <div
@@ -43,7 +45,7 @@ const DashboardRent = ({
       ) : (
         <Link to={`/miet?${buildUrlParams(parametersForLink)}`}>
           <OverviewCard
-            title="Miet und Pachtverträge"
+            title={overview.mipaTitle}
             icon={<DollarOutlined style={{ color: data.color }} />}
             ifDefaultColor={false}
           >

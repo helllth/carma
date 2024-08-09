@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { buildUrlParams } from "../../core/tools/helper";
 import { defaultLinksColor } from "../../core/tools/helper";
 import { HistoryOutlined } from "@ant-design/icons";
+import { overview } from "@carma-collab/wuppertal/lagis-desktop";
 
 const mockExtractor = (input) => {
   return [
@@ -28,8 +29,8 @@ const DashboardOffices = ({
       {data.currentOffices.length > 0 ? (
         <Link to={`/verwaltungsbereiche?${buildUrlParams(parametersForLink)}`}>
           <OverviewCard
-            title="Verwaltungsbereiche"
-            subtitle="& Rollen"
+            title={overview.verwaltungTitle}
+            subtitle={overview.verwaltungTitleSubtitle}
             icon={
               <div className="flex items-center">
                 {data.history > 0 ? (
@@ -101,8 +102,8 @@ const DashboardOffices = ({
         </Link>
       ) : (
         <OverviewCard
-          title="Verwaltungsbereiche"
-          subtitle="& Rollen"
+          title={overview.verwaltungTitle}
+          subtitle={overview.verwaltungTitleSubtitle}
           icon={<FolderOpenOutlined style={{ color: defaultLinksColor }} />}
         >
           <div className="flex flex-col mt-auto">

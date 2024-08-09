@@ -5,6 +5,8 @@ import OverviewCard from "../ui/OverviewCard";
 import { Link } from "react-router-dom";
 import { buildUrlParams } from "../../core/tools/helper";
 import { defaultLinksColor } from "../../core/tools/helper";
+import { overview } from "@carma-collab/wuppertal/lagis-desktop";
+
 const mockExtractor = (input) => {
   return { numberOfDocuments: "3", color: "#180E53" };
 };
@@ -22,7 +24,7 @@ const DashboardDMS = ({
       {data.color === defaultLinksColor ? (
         <OverviewCard
           style={{ height }}
-          title="DMS"
+          title={overview.dmsTitle}
           icon={<FilePdfOutlined style={{ color: defaultLinksColor }} />}
         >
           <div
@@ -43,7 +45,7 @@ const DashboardDMS = ({
         <Link to={`/dms?${buildUrlParams(parametersForLink)}`}>
           <OverviewCard
             style={{ height }}
-            title="DMS"
+            title={overview.dmsTitle}
             icon={<FilePdfOutlined style={{ color: data.color }} />}
             ifDefaultColor={false}
           >

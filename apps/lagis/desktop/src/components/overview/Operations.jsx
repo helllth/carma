@@ -5,6 +5,8 @@ import OverviewCard from "../ui/OverviewCard";
 import { Link } from "react-router-dom";
 import { buildUrlParams } from "../../core/tools/helper";
 import { defaultLinksColor } from "../../core/tools/helper";
+import { overview } from "@carma-collab/wuppertal/lagis-desktop";
+
 const mockExtractor = (input) => {
   return { numberOfOperations: "4", color: "#FF7A00" };
 };
@@ -21,7 +23,7 @@ const DashboarOperations = ({
     <div className="dashboard-tile">
       {data.color === defaultLinksColor ? (
         <OverviewCard
-          title="Vorgänge"
+          title={overview.vorgangeTitle}
           icon={<SwapRightOutlined style={{ color: defaultLinksColor }} />}
         >
           <div
@@ -41,7 +43,7 @@ const DashboarOperations = ({
       ) : (
         <Link to={`/vorgange?${buildUrlParams(parametersForLink)}`}>
           <OverviewCard
-            title="Vorgänge"
+            title={overview.vorgangeTitle}
             icon={<SwapRightOutlined style={{ color: data.color }} />}
             ifDefaultColor={false}
           >

@@ -5,6 +5,7 @@ import "./style.css";
 import { Link } from "react-router-dom";
 import { buildUrlParams } from "../../core/tools/helper";
 import { defaultLinksColor } from "../../core/tools/helper";
+import { overview } from "@carma-collab/wuppertal/lagis-desktop";
 const mockExtractor = (input) => {
   return { numberOfRights: "3", color: "#EF5DA8" };
 };
@@ -22,8 +23,8 @@ const DashboardRights = ({
     <div className="dashboard-tile">
       {data.color === defaultLinksColor ? (
         <OverviewCard
-          title="Rechte & Belastungen"
-          subtitle="& Dienstbarkeiten, Baulasten"
+          title={overview.rebeTitle}
+          subtitle={overview.rebeSubtitle}
           icon={
             <SettingOutlined
               className="min-[1257px]:text-[19px] min-[1357px]:text-[26px]"

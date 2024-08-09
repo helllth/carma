@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { buildUrlParams } from "../../core/tools/helper";
 import { DashOutlined } from "@ant-design/icons";
 import { defaultLinksColor } from "../../core/tools/helper";
+import { overview } from "@carma-collab/wuppertal/lagis-desktop";
+
 const mockExtractor = (input) => {
   return { number: "4", color: "#FFD029" };
 };
@@ -22,7 +24,7 @@ const DashboardHistory = ({
     <div className="dashboard-tile">
       {data === undefined ? (
         <OverviewCard
-          title="Historie"
+          title={overview.historieTitle}
           icon={<FieldTimeOutlined style={{ color: defaultLinksColor }} />}
         >
           <div
@@ -46,7 +48,7 @@ const DashboardHistory = ({
       ) : (
         <Link to={`/historie?${buildUrlParams(parametersForLink)}`}>
           <OverviewCard
-            title="Historie"
+            title={overview.historieTitle}
             icon={<FieldTimeOutlined style={{ color: "#FFD029" }} />}
             ifDefaultColor={false}
           >
