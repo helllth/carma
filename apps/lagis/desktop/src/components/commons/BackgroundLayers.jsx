@@ -1,10 +1,11 @@
 import CismapLayer from "react-cismap/CismapLayer";
 import StyledWMSTileLayer from "react-cismap/StyledWMSTileLayer";
 import MapLibreLayer from "react-cismap/vector/MapLibreLayer";
+import { drawerTextsHelper } from "@carma-collab/wuppertal/lagis-desktop";
 
 export const configuration = {
   liegenschaftskarteGrau: {
-    title: "Liegenschaftskarte (grau)",
+    title: drawerTextsHelper.liegenschaftskarteGrauOpt,
     conf: {
       type: "wmts",
       url: "http://s10221.wuppertal-intra.de:7098/alkis/services",
@@ -19,7 +20,7 @@ export const configuration = {
     },
   },
   liegenschaftskarteBunt: {
-    title: "Liegenschaftskarte (bunt)",
+    title: drawerTextsHelper.liegenschaftskarteBuntOpt,
     conf: {
       type: "wmts",
       url: "http://s10221.wuppertal-intra.de:7098/alkis/services",
@@ -32,7 +33,7 @@ export const configuration = {
     },
   },
   trueOrtho: {
-    title: "True Orthofoto",
+    title: drawerTextsHelper.trueOrthoOpt,
     conf: {
       type: "wms",
       url: "https://maps.wuppertal.de/deegree/wms",
@@ -45,7 +46,7 @@ export const configuration = {
     },
   },
   lbk: {
-    title: "Luftbildkarte",
+    title: drawerTextsHelper.lbkOpt,
     conf: [
       {
         type: "wmts",
@@ -84,7 +85,7 @@ export const configuration = {
     ],
   },
   stadtplanGrau: {
-    title: "Stadtplan (grau)",
+    title: drawerTextsHelper.stadtplanGrauOpt,
     conf: {
       type: "vector",
       style: "https://omt.map-hosting.de/styles/cismet-light/style.json",
@@ -94,7 +95,7 @@ export const configuration = {
     },
   },
   stadtplan: {
-    title: "Stadtplan (bunt)",
+    title: drawerTextsHelper.stadtplanOpt,
     conf: {
       type: "vector",
       style: "https://omt.map-hosting.de/styles/osm-bright-grey/style.json",

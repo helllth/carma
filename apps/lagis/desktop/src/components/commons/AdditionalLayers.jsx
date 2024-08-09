@@ -6,13 +6,14 @@ import { reproject } from "reproject";
 import { projectionData } from "react-cismap/constants/gis";
 import proj4 from "proj4";
 import getArea from "@turf/area";
+import { drawerTextsHelper } from "@carma-collab/wuppertal/lagis-desktop";
 
 const getWGS84GeoJSON = (geoJSON) => {
   try {
     const reprojectedGeoJSON = reproject(
       geoJSON,
       projectionData["25832"].def,
-      proj4.WGS84
+      proj4.WGS84,
     );
 
     return reprojectedGeoJSON;
@@ -60,7 +61,7 @@ const createFeatureArray = (data) => {
 
     coordinates = concat(
       coordinates,
-      flatten(landparcel.geom.geo_field.coordinates)
+      flatten(landparcel.geom.geo_field.coordinates),
     );
     feature.geometry.coordinates = coordinates;
     result.push(feature);
@@ -72,7 +73,7 @@ const createFeatureArray = (data) => {
 export const configuration = {
   abt9: {
     initialActive: false,
-    title: "Abteilung 9",
+    title: drawerTextsHelper.abtOpt,
     conf: {
       type: "wmts",
       url: "http://s10221.wuppertal-intra.de:8099/abt9_flst/services",
@@ -86,7 +87,7 @@ export const configuration = {
   },
   baulastnachweis: {
     initialActive: false,
-    title: "Baulastnachweis",
+    title: drawerTextsHelper.baulastnachweisOpt,
     conf: {
       type: "wmts",
       url: "http://s10221.wuppertal-intra.de:8056/baulasten/services",
@@ -100,7 +101,7 @@ export const configuration = {
   },
   stadtFstck: {
     initialActive: false,
-    title: "Städt. Flurstücke",
+    title: drawerTextsHelper.stadtFstckOpt,
     conf: {
       type: "wmts",
       url: "http://s10221.wuppertal-intra.de:7098/stadt-flurstuecke/services",
@@ -114,7 +115,7 @@ export const configuration = {
   },
   alkisLandparcels: {
     initialActive: false,
-    title: "Flurstücke",
+    title: drawerTextsHelper.alkisLandparcels,
     conf: {
       type: "graphql",
       referenceSystemDefinition: MappingConstants.proj4crs3857def,

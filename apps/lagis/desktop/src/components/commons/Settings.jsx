@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-
 import {
   getSyncLandparcel,
   setSyncLandparcel,
@@ -12,11 +11,10 @@ import {
   setAdditionalLayerOpacities,
   getAdditionalLayerOpacities,
 } from "../../store/slices/ui";
-
 import { configuration as additionalLayerConfigurations } from "./AdditionalLayers";
 import { configuration as backgroundLayerConfigurations } from "./BackgroundLayers";
-
 import { Checkbox, Radio, Slider, Switch } from "antd";
+import { drawerTextsHelper } from "@carma-collab/wuppertal/lagis-desktop";
 
 const SettingsRow = ({ onClick, title, children }) => {
   return (
@@ -102,17 +100,17 @@ const Settings = () => {
   return (
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-2">
-        <h3>Allgemein</h3>
+        <h3>{drawerTextsHelper.allgemeinTitle}</h3>
         <SettingsRow
           onClick={() => dispatch(setSyncLandparcel(!syncKassenzeichen))}
-          title="Flurstück mit Java Anwendung synchronisieren"
+          title={drawerTextsHelper.synchronisierenText}
         >
           <Switch className="w-fit" checked={syncKassenzeichen} />
         </SettingsRow>
       </div>
       <div className="flex flex-col gap-2">
-        <h3>Karte</h3>
-        <h4>Optionale Layer</h4>
+        <h3>{drawerTextsHelper.karteTitle}</h3>
+        <h4>{drawerTextsHelper.optionaleTitle}</h4>
         {Object.keys(additionalLayerConfigurations).map(
           (layerConfKey, index) => {
             const layerConf = additionalLayerConfigurations[layerConfKey];
@@ -139,10 +137,10 @@ const Settings = () => {
                 }}
               />
             );
-          }
+          },
         )}
 
-        <h4>Hintergrund</h4>
+        <h4>{drawerTextsHelper.hintergrundTitle}</h4>
         <Radio.Group
           onChange={(e) => {
             dispatch(setActiveBackgroundLayer(e.target.value));
@@ -165,7 +163,7 @@ const Settings = () => {
                     }}
                   />
                 );
-              }
+              },
             )}
           </div>
         </Radio.Group>
