@@ -11,6 +11,8 @@ import {
   MenuTitle,
   KompaktanleitungSection,
   Footer,
+  getFilterHeader,
+  FilterStyle,
 } from "@carma-collab/wuppertal/kulturstadtplan";
 import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../../version";
@@ -22,20 +24,20 @@ const Menu = () => {
   const { setAppMenuActiveMenuSection } =
     useContext<typeof UIDispatchContext>(UIDispatchContext);
 
-  const getFilterHeader = () => {
-    const count = filteredItems?.length || 0;
+  // const getFilterHeader = () => {
+  //   const count = filteredItems?.length || 0;
 
-    let term;
-    if (count === 1) {
-      term = "Angebot";
-    } else {
-      term = "Angebote";
-    }
+  //   let term;
+  //   if (count === 1) {
+  //     term = "Angebot";
+  //   } else {
+  //     term = "Angebote";
+  //   }
 
-    return `Filtern (${count} ${term} gefunden, davon ${
-      shownFeatures?.length || "0"
-    } in der Karte)`;
-  };
+  //   return `Filtern (${count} ${term} gefunden, davon ${
+  //     shownFeatures?.length || "0"
+  //   } in der Karte)`;
+  // };
 
   return (
     <CustomizationContextProvider customizations={{}}>
@@ -57,8 +59,11 @@ const Menu = () => {
           <Section
             key="filter"
             sectionKey="filter"
-            sectionTitle={getFilterHeader()}
-            sectionBsStyle="primary"
+            sectionTitle={getFilterHeader(
+              filteredItems?.length,
+              shownFeatures?.length,
+            )}
+            sectionBsStyle={FilterStyle}
             sectionContent={<FilterUI />}
           />,
           <DefaultSettingsPanel key="settings" />,
