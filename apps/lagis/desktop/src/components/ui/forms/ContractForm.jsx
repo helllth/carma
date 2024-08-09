@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Col, Form, Input, Row, Divider } from "antd";
+import { vorgange } from "@carma-collab/wuppertal/lagis-desktop";
+
 const { TextArea } = Input;
 const ContractForm = ({ activeRow, setShowButton, setModalOpen }) => {
   const [componentDisabled, setComponentDisabled] = useState(true);
@@ -34,7 +36,7 @@ const ContractForm = ({ activeRow, setShowButton, setModalOpen }) => {
               name="voreigentümer"
               label={
                 <span style={{ fontSize: "14px", marginBottom: "8px" }}>
-                  Voreigentümer
+                  {vorgange.vertragsdaten.voreigentumerLabel}
                 </span>
               }
               className={inputStile}
@@ -47,7 +49,7 @@ const ContractForm = ({ activeRow, setShowButton, setModalOpen }) => {
               name="auflassung"
               label={
                 <span style={{ fontSize: "14px", marginBottom: "8px" }}>
-                  Auflassung
+                  {vorgange.vertragsdaten.auflassungLabel}
                 </span>
               }
               className={inputStile}
@@ -63,7 +65,7 @@ const ContractForm = ({ activeRow, setShowButton, setModalOpen }) => {
               name="eintragung"
               label={
                 <span style={{ fontSize: "14px", marginBottom: "8px" }}>
-                  Eintragung
+                  {vorgange.vertragsdaten.eintragungLabel}
                 </span>
               }
               className={inputStile}
@@ -81,7 +83,7 @@ const ContractForm = ({ activeRow, setShowButton, setModalOpen }) => {
               name="bemerkung"
               label={
                 <span style={{ fontSize: "14px", marginBottom: "8px" }}>
-                  Bemerkung
+                  {vorgange.vertragsdaten.bemerkung}
                 </span>
               }
               className={inputStile}

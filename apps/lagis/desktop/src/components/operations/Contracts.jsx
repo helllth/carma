@@ -7,25 +7,26 @@ import DocsIcons from "../ui/Blocks/DocsIcons";
 import { nanoid } from "@reduxjs/toolkit";
 import { useState, useEffect } from "react";
 import { compare } from "../../core/tools/helper";
+import { vorgange } from "@carma-collab/wuppertal/lagis-desktop";
 
 const columns = [
   {
-    title: "Vertragsart",
+    title: vorgange.vorgangeTable.vertragsartCol,
     dataIndex: "vertragsart",
     sorter: (a, b) => compare(a.vertragsart, b.vertragsart),
   },
   {
-    title: "Nummer",
+    title: vorgange.vorgangeTable.nummerCol,
     dataIndex: "nummer",
     sorter: (a, b) => compare(a.nummer, b.nummer),
   },
   {
-    title: "Quadratmeterpreis",
+    title: vorgange.vorgangeTable.quadratmeterpreisCol,
     dataIndex: "quadratmeterpreis",
     sorter: (a, b) => compare(a.quadratmeterpreis, b.quadratmeterpreis),
   },
   {
-    title: "Kaufpreis (i. NK)",
+    title: vorgange.vorgangeTable.kaufpreisCol,
     dataIndex: "kaufpreis",
     sorter: (a, b) => compare(a.kaufpreis, b.kaufpreis),
   },
@@ -74,7 +75,7 @@ const Contracts = ({
     };
     setActiveRow(copyRow);
     setContracts(
-      contracts.map((obj) => (obj.id === copyRow.id ? copyRow : obj))
+      contracts.map((obj) => (obj.id === copyRow.id ? copyRow : obj)),
     );
   };
   const isStory = false;
@@ -100,7 +101,7 @@ const Contracts = ({
       className="shadow-md overflow-auto h-full"
     >
       <InfoBlock
-        title="Vorgänge"
+        title={vorgange.vorgangeTable.vorgangeTitle}
         controlBar={
           <ToggleModal
             section="Verträge"

@@ -7,7 +7,8 @@ import ModalForm from "../ui/forms/ModalForm";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
-import customParseFormat from "dayjs/plugin/customParseFormat";
+import { vorgange } from "@carma-collab/wuppertal/lagis-desktop";
+
 const ContractData = ({ dataIn, extractor, activeDataId }) => {
   const [contracts, setContracts] = useState([]);
   const [activeRow, setActiveRow] = useState();
@@ -23,7 +24,7 @@ const ContractData = ({ dataIn, extractor, activeDataId }) => {
     };
     setActiveRow(copyRow);
     setContracts(
-      contracts.map((obj) => (obj.id === copyRow.id ? copyRow : obj))
+      contracts.map((obj) => (obj.id === copyRow.id ? copyRow : obj)),
     );
   };
   useEffect(() => {
@@ -41,7 +42,7 @@ const ContractData = ({ dataIn, extractor, activeDataId }) => {
   return (
     <div className="contract-data h-full w-full shadow-md">
       <InfoBlock
-        title="Vertragsdaten"
+        title={vorgange.vertragsdaten.title}
         controlBar={
           <ToggleModal onlyEdit={true}>
             <ModalForm

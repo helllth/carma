@@ -13,6 +13,8 @@ import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { vorgange } from "@carma-collab/wuppertal/lagis-desktop";
+
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(customParseFormat);
@@ -30,15 +32,15 @@ const columns = [
 ];
 const columnsCosts = [
   {
-    title: "Kostenart",
+    title: vorgange.qkb.kostenartCol,
     dataIndex: "kostenart",
   },
   {
-    title: "Betrag",
+    title: vorgange.qkb.betragCol,
     dataIndex: "betrag",
   },
   {
-    title: "Anweisung",
+    title: vorgange.qkb.anweisungCol,
     dataIndex: "anweisung",
   },
 ];
@@ -162,7 +164,7 @@ const CrossReferences = ({
     updatedObject.betrag = updatedObject.betrag.format("DD.MM.YYYY");
     updatedObject.anweisung = updatedObject.anweisung.format("DD.MM.YYYY");
     setKosten(
-      kosten.map((k) => (k.id === updatedObject.id ? updatedObject : k))
+      kosten.map((k) => (k.id === updatedObject.id ? updatedObject : k)),
     );
   };
   const handleEditActiveResolution = (updatedObject) => {
@@ -197,7 +199,7 @@ const CrossReferences = ({
     };
     setActiveRow(copyRow);
     setDataContract(
-      dataContract.map((obj) => (obj.id === copyRow.id ? copyRow : obj))
+      dataContract.map((obj) => (obj.id === copyRow.id ? copyRow : obj)),
     );
   };
 
@@ -221,7 +223,7 @@ const CrossReferences = ({
       }}
     >
       <InfoBlock
-        title="QKB"
+        title={vorgange.qkb.title}
         controlBar={
           <ToggleModal
             section={
@@ -270,10 +272,14 @@ const CrossReferences = ({
           onChange={(activeKey) => setActiveTab(activeKey)}
           className="overflow-hidden"
         >
-          <TabPane tab="Querverweise" key="1">
+          <TabPane tab={vorgange.qkb.querverweiseTitle} key="1">
             <CustomNotes currentText={querverweise?.join("\n")} />
           </TabPane>
-          <TabPane tab="Kosten" key="2" className="overflow-y-auto">
+          <TabPane
+            tab={vorgange.qkb.kostenTitle}
+            key="2"
+            className="overflow-y-auto"
+          >
             <div className="flex">
               <TableCustom
                 columns={columnsCosts}
