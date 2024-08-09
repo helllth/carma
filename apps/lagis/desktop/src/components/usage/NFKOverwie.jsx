@@ -8,14 +8,16 @@ import { Button, Tag } from "antd";
 import { useState, useEffect } from "react";
 import { nanoid } from "@reduxjs/toolkit";
 import { compare, formatPrice } from "../../core/tools/helper";
+import { nutzung } from "@carma-collab/wuppertal/lagis-desktop";
+
 const columns = [
   {
-    title: "Anlageklasse",
+    title: nutzung.overviewTable.anlageklasseCol,
     dataIndex: "anlageklasse",
     sorter: (a, b) => compare(a.anlageklasse, b.anlageklasse),
   },
   {
-    title: "Summe",
+    title: nutzung.overviewTable.summeCol,
     dataIndex: "summe",
     sorter: (a, b) => compare(a.summe, b.summe),
   },
@@ -93,7 +95,7 @@ const NFKOverwie = ({
       className="shadow-md overflow-auto"
     >
       <InfoBlock
-        title="NKF Overview"
+        title={nutzung.overviewTable.tableTitle}
         titleAction={
           <Tag
             bordered={false}

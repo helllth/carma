@@ -12,19 +12,21 @@ import {
   IssuesCloseOutlined,
   FlagOutlined,
 } from "@ant-design/icons";
+import { nutzung } from "@carma-collab/wuppertal/lagis-desktop";
+
 const columns = [
   {
-    title: "Nutzung Nr",
+    title: nutzung.nutzungTable.nutzungCol,
     dataIndex: "nutzung",
     sorter: (a, b) => compare(a.nutzung, b.nutzung),
   },
   {
-    title: "Buchungs-Nr",
+    title: nutzung.nutzungTable.buchungsCol,
     dataIndex: "buchungs",
     sorter: (a, b) => compare(a.buchungs, b.buchungs),
   },
   {
-    title: "Anlageklasse",
+    title: nutzung.nutzungTable.anlageklasseCol,
     dataIndex: "anlageklasse",
     sorter: (a, b) => compare(a.anlageklasse, b.anlageklasse),
   },
@@ -33,32 +35,32 @@ const columns = [
   //   dataIndex: "nutzungsart",
   // },
   {
-    title: "Nutzungsarten-Bezeichnung",
+    title: nutzung.nutzungTable.bezeichnungCol,
     dataIndex: "bezeichnung",
     sorter: (a, b) => compare(a.bezeichnung, b.bezeichnung),
   },
   {
-    title: "Fläche/m2",
+    title: nutzung.nutzungTable.flacheCol,
     dataIndex: "fläche",
     sorter: (a, b) => compare(a.fläche, b.fläche),
   },
   {
-    title: "m2 Preis",
+    title: nutzung.nutzungTable.preisCol,
     dataIndex: "preis",
     sorter: (a, b) => compare(a.preis, b.preis),
   },
   {
-    title: "Gesamtpreis",
+    title: nutzung.nutzungTable.gesamtpreisCol,
     dataIndex: "gesamtpreis",
     sorter: (a, b) => compare(a.gesamtpreis, b.gesamtpreis),
   },
   {
-    title: "Stille Reserve",
+    title: nutzung.nutzungTable.stilleCol,
     dataIndex: "stille",
     sorter: (a, b) => compare(a.stille, b.stille),
   },
   {
-    title: "Buchwert",
+    title: nutzung.nutzungTable.buchwertCol,
     dataIndex: "buchwert",
     render: (record) => (
       <div className="flex items-center justify-center">
@@ -72,7 +74,7 @@ const columns = [
     sorter: (a, b) => compare(a.buchwert, b.buchwert),
   },
   {
-    title: "Bemerkung",
+    title: nutzung.nutzungTable.bemerkungCol,
     dataIndex: "bemerkung",
     sorter: (a, b) => compare(a.bemerkung, b.bemerkung),
   },
@@ -196,7 +198,7 @@ const UsageBlock = ({
       className="shadow-md overflow-auto"
     >
       <InfoBlock
-        title="Nutzung"
+        title={nutzung.nutzungTable.tableTitle}
         controlBar={
           <ToggleModal
             section="Nutzung"
