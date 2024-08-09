@@ -11,12 +11,13 @@ import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { rebe } from "@carma-collab/wuppertal/lagis-desktop";
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(customParseFormat);
 const columns = [
   {
-    title: "Farbe",
+    title: rebe.rebeTable.farbeCol,
     dataIndex: "farbe",
     render: (title, record, rowIndex) => (
       <div className="flex items-center">
@@ -34,38 +35,38 @@ const columns = [
     sorter: (a, b) => compare(a.recht, b.recht),
   },
   {
-    title: "ist Recht",
+    title: rebe.rebeTable.rechtCol,
     dataIndex: "recht",
     render: (record) => <Switch size="small" checked={record} />,
     sorter: (a, b) => compare(a.recht, b.recht),
   },
   {
-    title: "Art",
+    title: rebe.rebeTable.artCol,
     dataIndex: "art",
     sorter: (a, b) => compare(a.art, b.art),
   },
   {
-    title: "Art des Rechts",
+    title: rebe.rebeTable.artrechtCol,
     dataIndex: "artrecht",
     sorter: (a, b) => compare(a.artrecht, b.artrecht),
   },
   {
-    title: "Nummer",
+    title: rebe.rebeTable.nummerCol,
     dataIndex: "nummer",
     sorter: (a, b) => compare(a.nummer, b.nummer),
   },
   {
-    title: "Eintragung",
+    title: rebe.rebeTable.eintragungCol,
     dataIndex: "eintragung",
     sorter: (a, b) => compare(a.eintragung, b.eintragung),
   },
   {
-    title: "Löschung",
+    title: rebe.rebeTable.loschungCol,
     dataIndex: "loschung",
     sorter: (a, b) => compare(a.loschung, b.loschung),
   },
   {
-    title: "Bemerkung",
+    title: rebe.rebeTable.bemerkungCol,
     dataIndex: "bemerkung",
     sorter: (a, b) => compare(a.bemerkung, b.bemerkung),
   },
@@ -184,7 +185,7 @@ const RightsAndEncumbrances = ({
       className="shadow-md w-full"
     >
       <InfoBlock
-        title="Rechte und Belastungen"
+        title={rebe.rebeTable.tableTitle}
         controlBar={
           <ToggleModal
             section="Rechte und Belastungen"
