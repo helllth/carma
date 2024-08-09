@@ -16,29 +16,29 @@ import {
   FileTextOutlined,
 } from "@ant-design/icons";
 import { compare } from "../../core/tools/helper";
-import { Link } from "react-router-dom";
+import { dms as dmsHelper } from "@carma-collab/wuppertal/lagis-desktop";
 
 const columns = [
   {
-    title: "Name",
+    title: dmsHelper.dmsTable.nameCol,
     dataIndex: "name",
     id: "name",
     sorter: (a, b) => compare(a.bemerkung, b.bemerkung),
   },
   {
-    title: "Dateiname",
+    title: dmsHelper.dmsTable.fileCol,
     dataIndex: "file",
     id: "file",
     sorter: (a, b) => compare(a.bemerkung, b.bemerkung),
   },
   {
-    title: "Beschreibung",
+    title: dmsHelper.dmsTable.beschreibungCol,
     dataIndex: "beschreibung",
     id: "beschreibung",
     sorter: (a, b) => compare(a.bemerkung, b.bemerkung),
   },
   {
-    title: "Vorschau",
+    title: dmsHelper.dmsTable.beschreibungCol,
     dataIndex: "vorschau",
     id: "vorschau",
     render: (record, data) => (
@@ -177,6 +177,7 @@ const DmsBlock = ({
       setActiveRow(data[0]);
     }
   }, [dataIn]);
+
   return (
     <div
       className="shadow-md h-full overflow-auto"
@@ -187,7 +188,7 @@ const DmsBlock = ({
       }
     >
       <InfoBlock
-        title="Dokumenten Management System"
+        title={dmsHelper.dmsTable.tableTitle}
         controlBar={
           <ToggleModal
             section="Kassenzeichen"
