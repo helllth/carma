@@ -2,6 +2,8 @@ import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { historie } from "@carma-collab/wuppertal/lagis-desktop";
+
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 dayjs.extend(customParseFormat);
@@ -33,10 +35,10 @@ export function informationenBlockExtractor(dataIn) {
       informationenObject.letzterStadtbesitz = "Keine Angabe";
     } else {
       const letzterStadtbesitzDate = dayjs(
-        informationenData.datum_letzter_stadtbesitz
+        informationenData.datum_letzter_stadtbesitz,
       ).toDate();
       const formattedLetzterStadtbesitz = dayjs(letzterStadtbesitzDate).format(
-        "DD.MM.YYYY"
+        "DD.MM.YYYY",
       );
 
       informationenObject.letzterStadtbesitz =
@@ -45,13 +47,16 @@ export function informationenBlockExtractor(dataIn) {
           : formattedLetzterStadtbesitz;
     }
     return {
-      origin: { title: "Entstehung", data: informationenObject.entstehung },
+      origin: {
+        title: historie.informationen.entstehungLabel,
+        data: informationenObject.entstehung,
+      },
       historicalSince: {
-        title: "Historisch seit",
+        title: historie.informationen.historischLabel,
         data: informationenObject.historicalSince,
       },
       lastOwnership: {
-        title: "Letzter Stadtbesitz",
+        title: historie.informationen.stadtbesitzLabel,
         data: informationenObject.letzterStadtbesitz,
       },
     };

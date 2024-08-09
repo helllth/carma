@@ -9,6 +9,8 @@ import {
 } from "../../store/slices/lagis";
 import { Checkbox } from "antd";
 import { useEffect } from "react";
+import { historie } from "@carma-collab/wuppertal/lagis-desktop";
+
 const mockExtractor = (input) => {
   return {
     options: ["Historie halten"],
@@ -63,10 +65,10 @@ const OptionHistory = ({
             }
       }
     >
-      <InfoBlock title="Optionen">
+      <InfoBlock title={historie.optionen.title}>
         <div className="mt-4 ml-[13px]">
           <Checkbox onChange={onChange} checked={historieHalten}>
-            Historie halten
+            {historie.optionen.haltenitle}
           </Checkbox>
         </div>
       </InfoBlock>

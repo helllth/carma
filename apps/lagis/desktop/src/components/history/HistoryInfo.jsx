@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import InfoBlock from "../ui/Blocks/InfoBlock";
 import { Row, Col } from "antd";
+import { historie } from "@carma-collab/wuppertal/lagis-desktop";
 const mockExtractor = (input) => {
   return {
     origin: { title: "Entstehung", data: "02.05.2023" },
@@ -35,7 +36,7 @@ const HistoryInfo = ({
             }
       }
     >
-      <InfoBlock title="Informationen">
+      <InfoBlock title={historie.informationen.title}>
         {content.map((name, idx) => {
           return (
             <div

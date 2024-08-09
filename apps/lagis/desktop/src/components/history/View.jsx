@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import InfoBlock from "../ui/Blocks/InfoBlock";
 import { InputNumber, Select } from "antd";
-
+import { historie } from "@carma-collab/wuppertal/lagis-desktop";
 const mockExtractor = (input) => {
   return {
     successor: [
@@ -54,7 +54,7 @@ const View = ({
             }
       }
     >
-      <InfoBlock title="Darstellung">
+      <InfoBlock title={historie.darstellung.title}>
         <div className="flex flex-col p-4">
           <div className="mt-1 flex gap-2">
             <Select
