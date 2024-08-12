@@ -9,6 +9,7 @@ import { getColorForProperties } from "./helper/styler";
 import {
   KompaktanleitungSection,
   Footer,
+  MenuIntroduction,
 } from "@carma-collab/wuppertal/baederkarte";
 import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
@@ -67,32 +68,9 @@ const Menu = () => {
           />
         }
         menuIntroduction={
-          <span>
-            Über{" "}
-            <Link
-              className="useAClassNameToRenderProperLink"
-              to="filter"
-              containerId="myMenu"
-              smooth={true}
-              delay={100}
-              onClick={() => setAppMenuActiveMenuSection("settings")}
-            >
-              Einstellungen
-            </Link>{" "}
-            können Sie die Darstellung der Hintergrundfkarte und der Bäder an
-            Ihre Vorlieben anpassen. Wählen Sie{" "}
-            <Link
-              className="useAClassNameToRenderProperLink"
-              to="settings"
-              containerId="myMenu"
-              smooth={true}
-              delay={100}
-              onClick={() => setAppMenuActiveMenuSection("help")}
-            >
-              Kompaktanleitung
-            </Link>{" "}
-            für detailliertere Bedienungsinformationen.
-          </span>
+          <MenuIntroduction
+            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+          />
         }
         menuSections={[
           <DefaultSettingsPanel key="settings" />,
