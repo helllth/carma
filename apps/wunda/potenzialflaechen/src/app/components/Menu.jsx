@@ -14,6 +14,8 @@ import {
   MenuIntroduction,
   KompaktanleitungSection,
   Footer,
+  getFilterHeader,
+  FilterStyle,
 } from "@carma-collab/wuppertal/potenzialflaechen-online";
 import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
 import { getApplicationVersion } from "../version";
@@ -88,20 +90,20 @@ const MyMenu = () => {
     setFilterMode("kampagnen");
   }
 
-  const getFilterHeader = () => {
-    const count = filteredItems?.length || 0;
+  // const getFilterHeader = () => {
+  //   const count = filteredItems?.length || 0;
 
-    let term;
-    if (count === 1) {
-      term = "Fläche";
-    } else {
-      term = "Flächen";
-    }
+  //   let term;
+  //   if (count === 1) {
+  //     term = "Fläche";
+  //   } else {
+  //     term = "Flächen";
+  //   }
 
-    return `Meine Potenzialflächen (${count} ${term} gefunden, davon ${
-      shownFeatures?.length || "0"
-    } in der Karte)`;
-  };
+  //   return `Meine Potenzialflächen (${count} ${term} gefunden, davon ${
+  //     shownFeatures?.length || "0"
+  //   } in der Karte)`;
+  // };
 
   return (
     <ModalApplicationMenu
@@ -116,8 +118,11 @@ const MyMenu = () => {
         <Section
           key="filter"
           sectionKey="filter"
-          sectionTitle={getFilterHeader()}
-          sectionBsStyle="primary"
+          sectionTitle={getFilterHeader(
+            filteredItems?.length,
+            shownFeatures?.length,
+          )}
+          sectionBsStyle={FilterStyle}
           sectionContent={
             <FilterPanel filterConfiguration={filterConfiguration} />
           }
