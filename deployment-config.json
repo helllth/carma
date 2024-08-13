@@ -42,8 +42,8 @@
       "deployment": {
         "manual": {
           "pages": {
-            "org": "carma-dev-deployments",
-            "prj": "topicmaps-xandride"
+            "org": "digital-twin-wuppertal-live",
+            "prj": "xandride"
           }
         },
         "auto": {
