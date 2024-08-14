@@ -24,6 +24,7 @@
       "@nx/react/typings/styled-jsx.d.ts"
     ],
     "paths": {
+      "#/*": ["./*"],
       "@carma-apps/envirometrics": ["libraries/appframeworks/envirometrics/src/index.ts"],
       "@carma-apps/topicmaps": ["libraries/appframeworks/topicmaps/src/index.ts"],
       "@carma-collab/wuppertal/baederkarte": [
@@ -76,11 +77,13 @@
       "@carma-mapping/cesium-engine/utils": ["libraries/mapping/engines/cesium/src/lib/utils/index.ts"],
       "@carma-mapping/cesium-widget-engine": ["libraries/mapping/engines/cesium-widget/src/index.ts"],
       "@carma-mapping/components": ["libraries/mapping/carma-map-components/src/index.ts"],
+      "@carma-mapping/fuzzy-search": ["libraries/mapping/fuzzy-search/src/index.ts"],
       "@carma-mapping/layers": ["libraries/mapping/carma-map-layers/src/index.ts"],
       "@carma-mapping/leaflet-engine": ["libraries/mapping/engines/leaflet/src/index.ts"],
       "@carma-mapping/map-controls-layout": ["libraries/mapping/carma-map-control-layout/src/index.ts"],
       "@carma-mapping/maplibre-engine": ["libraries/mapping/engines/maplibre/src/index.ts"],
       "@carma-mapping/utils": ["libraries/mapping/carma-map-utils/src/index.ts"]
-    }
+    },
+    "skipLibCheck": true
   }
 }
