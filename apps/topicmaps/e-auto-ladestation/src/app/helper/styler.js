@@ -1,11 +1,11 @@
-import Color from 'color';
-import ColorHash from 'color-hash';
-import createSVGPie from 'create-svg-pie';
-import L from 'leaflet';
-import queryString from 'query-string';
-import createElement from 'svg-create-element';
+import Color from "color";
+import ColorHash from "color-hash";
+import createSVGPie from "create-svg-pie";
+import L from "leaflet";
+import queryString from "query-string";
+import createElement from "svg-create-element";
 
-import { POI_COLORS, constants } from './constants';
+import { POI_COLORS, constants } from "./constants";
 
 const fallbackSVG = `
     <svg xmlns="http://www.w3.org/2000/svg" width="311.668" height="311.668">
@@ -16,10 +16,9 @@ const fallbackSVG = `
 
 export const getColorForProperties = (properties) => {
   if (properties.online === true) {
-    return '#003D7D';
+    return "#003D7D";
   } else {
-    console.log('xxx properties', properties);
-    return '#888A87';
+    return "#888A87";
   }
 };
 
@@ -51,7 +50,7 @@ export const getPoiClusterIconCreatorFunction = ({
 
     let canvasSize = (svgSize / 3.0) * 5.0;
 
-    let background = createElement('svg', {
+    let background = createElement("svg", {
       width: canvasSize,
       height: canvasSize,
       viewBox: `0 0 ${canvasSize} ${canvasSize}`,
@@ -59,71 +58,71 @@ export const getPoiClusterIconCreatorFunction = ({
 
     //Kleiner Kreis in der Mitte
     // (blau wenn selektion)
-    let innerCircleColor = '#ffffff';
+    let innerCircleColor = "#ffffff";
     if (containsSelection) {
-      innerCircleColor = 'rgb(67, 149, 254)';
+      innerCircleColor = "rgb(67, 149, 254)";
     }
 
     //inner circle
     pie.appendChild(
-      createElement('circle', {
+      createElement("circle", {
         cx: r,
         cy: r,
         r: svgSize / 3.0,
-        'stroke-width': 0,
-        opacity: '0.5',
+        "stroke-width": 0,
+        opacity: "0.5",
         fill: innerCircleColor,
-      })
+      }),
     );
 
     background.appendChild(pie);
 
     // Umrandung
     background.appendChild(
-      createElement('circle', {
+      createElement("circle", {
         cx: canvasSize / 2.0,
         cy: canvasSize / 2.0,
         r: r,
-        'stroke-width': 2,
-        stroke: '#000000',
-        opacity: '0.5',
-        fill: 'none',
-      })
+        "stroke-width": 2,
+        stroke: "#000000",
+        opacity: "0.5",
+        fill: "none",
+      }),
     );
 
     if (inCart) {
       background
         .appendChild(
-          createElement('text', {
-            x: '50%',
-            y: '50%',
-            'text-anchor': 'middle',
-            'font-family': 'FontAwesome',
-            fill: '#fff',
-            'font-size': '26',
-            dy: '.4em',
-            opacity: '0.5',
-          })
+          createElement("text", {
+            x: "50%",
+            y: "50%",
+            "text-anchor": "middle",
+            "font-family": "FontAwesome",
+            fill: "#fff",
+            "font-size": "26",
+            dy: ".4em",
+            opacity: "0.5",
+          }),
         )
-        .appendChild(document.createTextNode('\uf005'));
+        .appendChild(document.createTextNode("\uf005"));
     }
 
     background
       .appendChild(
-        createElement('text', {
-          x: '50%',
-          y: '50%',
-          'text-anchor': 'middle',
-          dy: '.3em',
-        })
+        createElement("text", {
+          x: "50%",
+          y: "50%",
+          "text-anchor": "middle",
+          dy: ".3em",
+        }),
       )
       .appendChild(document.createTextNode(childCount));
 
-    pie.setAttribute('x', (canvasSize - r * 2) / 2.0);
-    pie.setAttribute('y', (canvasSize - r * 2) / 2.0);
+    pie.setAttribute("x", (canvasSize - r * 2) / 2.0);
+    pie.setAttribute("y", (canvasSize - r * 2) / 2.0);
 
     var divIcon = L.divIcon({
-      className: 'leaflet-data-marker',
+      className: "leaflet-data-marker",
       html:
         background.outerHTML ||
         new XMLSerializer().serializeToString(background), //IE11 Compatibility
@@ -139,7 +138,7 @@ export const getFeatureStyler = (
   colorizer = getColorForProperties,
   appMode,
   secondarySelection,
-  additionalStylingInfo
+  additionalStylingInfo,
 ) => {
   const poiColors = additionalStylingInfo?.poiColors || POI_COLORS;
 

@@ -107,8 +107,6 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
     });
   }
 
-  console.log(ladestation);
-
   return (
     <Modal
       style={{
