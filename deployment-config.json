@@ -23,8 +23,8 @@
       "deployment": {
         "manual": {
           "pages": {
-            "org": "carma-dev-deployments",
-            "prj": "topicmaps-kulturstadtplan"
+            "org": "digital-twin-wuppertal-live",
+            "prj": "kulturstadtplan"
           }
         },
         "auto": {
@@ -290,7 +290,7 @@
         "manual": {
           "pages": {
             "org": "digital-twin-wuppertal-live",
-            "prj": "e-auto-ladestationen"
+            "prj": "elektromobilitaet"
           }
         },
         "auto": {
