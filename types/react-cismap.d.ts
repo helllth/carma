@@ -138,6 +138,7 @@ declare module "react-cismap/contexts/UIContextProvider" {
 
 declare module "react-cismap/tools/fetching" {
   export const md5FetchText: (prefix: string, url: string) => Promise<string>;
+  export const fetchJSON: (url: string) => Promise<string>;
 }
 
 declare module "react-cismap/tools/gazetteerHelper" {
@@ -146,7 +147,10 @@ declare module "react-cismap/tools/gazetteerHelper" {
 
 declare module "react-cismap/tools/uiHelper" {
   const getActionLinksForFeature: (feature: any, options: any) => any;
-  const getSymbolSVGGetter: (svgCode: string, svgBadgeDimension: {width: number | string, height: number | string}) => any;
+  const getSymbolSVGGetter: (
+    svgCode: string,
+    svgBadgeDimension: { width: number | string; height: number | string },
+  ) => any;
 }
 
 /* TOPICMAPS */
