@@ -1,10 +1,17 @@
+import React, { useEffect, useState, useRef } from "react";
+import Fuse from "fuse.js";
+import { AutoComplete, Button, Checkbox } from "antd";
+import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
+import "./fuzzy-search.css";
 import "./fuzzy-search.css";
 import IconComp from "react-cismap/commons/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { location-dot } from '@fortawesome/free-solid-svg-icons';
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "antd";
-const renderTitle = (category: string): JSX.Element => {
+import L from "leaflet";
+
+const renderTitle = (category: string) => {
   let title = "???";
   switch (category) {
     case "pois":
@@ -32,19 +39,46 @@ const renderTitle = (category: string): JSX.Element => {
   return <span>{title}</span>;
 };
 
-const joinNumberLetter = (name) => name.replace(/(\d+)\s([a-zA-Z])/g, "$1$2");
+interface MoreData {
+  zl: number;
+  pid: number;
+}
 
-const renderItem = (address) => {
-  const addressLabel = buildAddressWithIconUI(address);
+interface SearchResultItem {
+  sorter: number;
+  string: string;
+  glyph: string;
+  x: number;
+  y: number;
+  more: MoreData;
+  type: string;
+  xSearchData: string;
+}
+
+interface SearchResult {
+  item: SearchResultItem;
+  refIndex: number;
+  score: string;
+}
+
+const joinNumberLetter = (name: string) =>
+  name.replace(/(\d+)\s([a-zA-Z])/g, "$1$2");
+
+const renderItem = (address: SearchResultItem) => {
+  const addressLabel = buildAddressWithIconUI(address, false);
   return {
     key: address.sorter,
     value: address.string,
-    label: joinNumberLetter(addressLabel),
+    label: addressLabel,
     sData: address,
   };
 };
 
-function buildAddressWithIconUI(addresObj, showScore = false, score) {
+function buildAddressWithIconUI(
+  addresObj: SearchResultItem,
+  showScore = false,
+  score = "",
+) {
   let icon;
   if (addresObj.glyph === "pie-chart") {
     icon = "chart-pie";
@@ -73,7 +107,7 @@ function buildAddressWithIconUI(addresObj, showScore = false, score) {
   return streetLabel;
 }
 
-const generateOptions = (results, showScore = false) => {
+const generateOptions = (results: SearchResult[], showScore = false) => {
   return results.map((result, idx) => {
     const streetLabel = buildAddressWithIconUI(
       result.item,
@@ -89,8 +123,17 @@ const generateOptions = (results, showScore = false) => {
   });
 };
 
-const mapDataToSearchResult = (data) => {
-  const splittedCategories = {};
+interface Option {
+  label: any;
+  options: any[];
+}
+
+interface SplittedCategories {
+  [category: string]: any[];
+}
+
+const mapDataToSearchResult = (data: SearchResult[]) => {
+  const splittedCategories: SplittedCategories = {};
 
   data.forEach((item) => {
     const address = item.item;
@@ -103,10 +146,10 @@ const mapDataToSearchResult = (data) => {
     }
   });
 
-  const prepareOptions = [];
+  const prepareOptions: Option[] = [];
 
   Object.keys(splittedCategories).forEach((item) => {
-    let optionItem = {};
+    let optionItem: Option = { label: "", options: [] };
 
     if (!optionItem.hasOwnProperty(item)) {
       optionItem.label = renderTitle(item);
@@ -149,18 +192,34 @@ const preps = [
 const articles = ["der", "die", "das", "den", "dem", "des"];
 const stopwords = [...preps, ...articles];
 
+type SearchGazetteerProps = {
+  gazData?: any;
+  setGazetteerHit: (hit: any) => void;
+  gazetteerHit: any;
+  mapRef?: L.Map;
+  // cesiumRef?: Viewer;
+  //overlayFeature: any;
+  setOverlayFeature: (feature: any) => void;
+  //crs?: string;
+  referenceSystem: any;
+  referenceSystemDefinition: any;
+  pixelwidth?: number;
+  ifShowCategories?: boolean;
+  // marker3dStyle?: ModelAsset;
+};
+
 export function libFuzzySearch({
   gazData,
   setGazetteerHit,
-  gazetteerHit,
+  // gazetteerHit,
+  // overlayFeature,
   mapRef,
-  overlayFeature,
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
   pixelwidth = 300,
   ifShowCategories: standardSearch = false,
-}) {
+}: SearchGazetteerProps) {
   const [options, setOptions] = useState([]);
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
   const _gazetteerHitTrigger = undefined;
@@ -189,8 +248,8 @@ export function libFuzzySearch({
   const [fireScrollEvent, setFireScrollEvent] = useState(null);
 
   const handleSearchAutoComplete = (value) => {
-    let ifShowScore = null;
-    let showSortedResults = null;
+    let ifShowScore = false;
+    let showSortedResults = false;
     let defaultLimit = 3;
     let defaultCut = 0.4;
     if (allGazeteerData.length > 0 && fuseInstance) {
