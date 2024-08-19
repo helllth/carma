@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "antd";
 import L from "leaflet";
+import { IFuseOptions } from "fuse.js";
 
 const renderTitle = (category: string) => {
   let title = "???";
@@ -208,6 +209,10 @@ type SearchGazetteerProps = {
   // marker3dStyle?: ModelAsset;
 };
 
+interface FuseKey {
+  xSearchData: string;
+}
+
 export function libFuzzySearch({
   gazData,
   setGazetteerHit,
@@ -240,7 +245,7 @@ export function libFuzzySearch({
       _gazetteerHitTrigger,
     );
   };
-  const [fuseInstance, setFuseInstance] = useState(null);
+  const [fuseInstance, setFuseInstance] = useState<Fuse<FuseKey> | null>(null);
   const [searchResult, setSearchResult] = useState([]);
   const [allGazeteerData, setAllGazeteerData] = useState([]);
   const [value, setValue] = useState("");
