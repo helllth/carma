@@ -2,7 +2,7 @@ import { md5FetchJSON, md5FetchText } from 'react-cismap/tools/fetching';
 import { getGazDataForTopicIds } from 'react-cismap/tools/gazetteerHelper';
 
 import { host } from '../constants/bplaene';
-import { ENDPOINT } from '#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/types';
+import { ENDPOINT } from 'types/search';
 
 export const getGazData = async (setGazData) => {
   const prefix = 'GazData';
