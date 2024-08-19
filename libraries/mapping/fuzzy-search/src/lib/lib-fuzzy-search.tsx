@@ -226,7 +226,7 @@ interface FuseKey {
   xSearchData: string;
 }
 
-export function libFuzzySearch({
+export function LibFuzzySearch({
   gazData,
   setGazetteerHit,
   // gazetteerHit,
