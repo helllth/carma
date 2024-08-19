@@ -56,10 +56,21 @@ interface SearchResultItem {
   xSearchData: string;
 }
 
-interface SearchResult {
-  item: SearchResultItem;
+interface SearchResult<T> {
+  item: T;
   refIndex: number;
-  score: string;
+  score?: number;
+}
+
+interface Option {
+  key: number;
+  label: JSX.Element;
+  value: string;
+  sData: SearchResultItem;
+}
+
+interface SplittedCategories {
+  [category: string]: any[];
 }
 
 const joinNumberLetter = (name: string) =>
@@ -78,7 +89,7 @@ const renderItem = (address: SearchResultItem) => {
 function buildAddressWithIconUI(
   addresObj: SearchResultItem,
   showScore = false,
-  score = "",
+  score?: number,
 ) {
   let icon;
   if (addresObj.glyph === "pie-chart") {
@@ -108,7 +119,10 @@ function buildAddressWithIconUI(
   return streetLabel;
 }
 
-const generateOptions = (results: SearchResult[], showScore = false) => {
+const generateOptions = (
+  results: SearchResult<SearchResultItem>[],
+  showScore = false,
+) => {
   return results.map((result, idx) => {
     const streetLabel = buildAddressWithIconUI(
       result.item,
@@ -124,16 +138,7 @@ const generateOptions = (results: SearchResult[], showScore = false) => {
   });
 };
 
-interface Option {
-  label: any;
-  options: any[];
-}
-
-interface SplittedCategories {
-  [category: string]: any[];
-}
-
-const mapDataToSearchResult = (data: SearchResult[]) => {
+const mapDataToSearchResult = (data: SearchResult<SearchResultItem>) => {
   const splittedCategories: SplittedCategories = {};
 
   data.forEach((item) => {
@@ -225,7 +230,7 @@ export function libFuzzySearch({
   pixelwidth = 300,
   ifShowCategories: standardSearch = false,
 }: SearchGazetteerProps) {
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState<Option[]>([]);
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
   const _gazetteerHitTrigger = undefined;
   const inputStyle = {
@@ -245,7 +250,8 @@ export function libFuzzySearch({
       _gazetteerHitTrigger,
     );
   };
-  const [fuseInstance, setFuseInstance] = useState<Fuse<FuseKey> | null>(null);
+  const [fuseInstance, setFuseInstance] =
+    useState<Fuse<SearchResultItem> | null>(null);
   const [searchResult, setSearchResult] = useState([]);
   const [allGazeteerData, setAllGazeteerData] = useState([]);
   const [value, setValue] = useState("");
