@@ -233,7 +233,7 @@ export function libFuzzySearch({
     borderTopLeftRadius: 0,
   };
   const autoCompleteRef = useRef(null);
-  const dropdownContainerRef = useRef(null);
+  const dropdownContainerRef = useRef<HTMLDivElement>(null);
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
       hit,
@@ -387,31 +387,43 @@ export function libFuzzySearch({
       const antdDrapdownSelect = dropdownContainerRef.current.querySelector(
         ".rc-virtual-list-holder",
       );
-      const inputWidth = document.querySelector(
+      const inputElement = document.querySelector(
         ".ant-select-selection-search-input",
-      ).scrollWidth;
+      );
 
-      holderInner.style.width = inputWidth + 10 + "px";
+      // TODO check whether scroll finder works or not
 
-      if (holderInner) {
-        const handleScroll = (event) => {
-          setFireScrollEvent(event.target.scrollTop);
-        };
-        antdDrapdownSelect.addEventListener("scroll", handleScroll);
+      if (
+        inputElement &&
+        antdDrapdownSelect &&
+        listHolder instanceof HTMLElement
+      ) {
+        // It is original way to get scrollWidth
+        // const inputWidth = inputElement.scrollWidth.scrollWidth;
+        const inputWidth = inputElement.scrollWidth;
 
-        let biggestItem = inputWidth;
+        if (holderInner instanceof HTMLElement) {
+          holderInner.style.width = inputWidth + 10 + "px";
 
-        allItems.forEach((item) => {
-          const itemWidth = item.scrollWidth;
-          if (itemWidth > biggestItem) biggestItem = itemWidth;
-        });
+          const handleScroll = (event) => {
+            setFireScrollEvent(event.target.scrollTop);
+          };
+          antdDrapdownSelect.addEventListener("scroll", handleScroll);
 
-        const isOverflowing = biggestItem > inputWidth;
-        if (isOverflowing) {
-          listHolder.style.width = holderInner.scrollWidth + "px";
-          holderInner.style.width = holderInner.scrollWidth + 10 + "px";
-        } else {
-          listHolder.style.removeProperty("width");
+          let biggestItem = inputWidth;
+
+          allItems.forEach((item) => {
+            const itemWidth = item.scrollWidth;
+            if (itemWidth > biggestItem) biggestItem = itemWidth;
+          });
+
+          const isOverflowing = biggestItem > inputWidth;
+          if (isOverflowing) {
+            listHolder.style.width = holderInner.scrollWidth + "px";
+            holderInner.style.width = holderInner.scrollWidth + 10 + "px";
+          } else {
+            listHolder.style.removeProperty("width");
+          }
         }
       }
     }
