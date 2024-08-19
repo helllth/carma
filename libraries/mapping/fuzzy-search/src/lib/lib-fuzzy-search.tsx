@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
+import type { RefObject } from "react";
 import Fuse from "fuse.js";
 import { AutoComplete, Button, Checkbox } from "antd";
 import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
@@ -205,7 +206,8 @@ type SearchGazetteerProps = {
   gazData?: any;
   setGazetteerHit: (hit: any) => void;
   gazetteerHit: any;
-  mapRef?: L.Map;
+  // mapRef?: L.Map;
+  mapRef?: RefObject<L.Map>;
   // cesiumRef?: Viewer;
   //overlayFeature: any;
   setOverlayFeature: (feature: any) => void;
@@ -243,6 +245,9 @@ export function libFuzzySearch({
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
   const internalGazetteerHitTrigger = (hit) => {
+    if (!mapRef) {
+      return false;
+    }
     builtInGazetteerHitTrigger(
       hit,
       mapRef.current.leafletMap.leafletElement,
