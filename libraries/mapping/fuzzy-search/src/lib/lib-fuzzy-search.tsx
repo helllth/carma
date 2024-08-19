@@ -11,6 +11,7 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "antd";
 import L from "leaflet";
 import { IFuseOptions } from "fuse.js";
+import { BaseSelectRef } from "rc-select";
 
 const renderTitle = (category: string) => {
   let title = "???";
@@ -239,7 +240,7 @@ export function libFuzzySearch({
     width: "calc(100% - 32px)",
     borderTopLeftRadius: 0,
   };
-  const autoCompleteRef = useRef(null);
+  const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
