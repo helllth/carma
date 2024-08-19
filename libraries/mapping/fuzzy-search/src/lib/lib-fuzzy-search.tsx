@@ -261,46 +261,51 @@ export function libFuzzySearch({
       const hash = window.location.hash;
       const queryString = hash.includes("?") ? hash.split("?")[1] : "";
       const searchParams = new URLSearchParams(queryString);
-      const distance = searchParams.get("distance");
-      const threshold = searchParams.get("threshold");
-      const score = searchParams.get("score");
-      const sort = searchParams.get("sort");
-      const limit = searchParams.get("limit");
-      const cut = searchParams.get("cut");
+      // const distance = searchParams.get("distance");
+      // const threshold = searchParams.get("threshold");
+      // const score = searchParams.get("score");
+      // const sort = searchParams.get("sort");
+      // const limit = searchParams.get("limit");
+      // const cut = searchParams.get("cut");
 
-      if (sort && sort === "true") {
-        showSortedResults = true;
-      } else {
-        showSortedResults = false;
-      }
-      if (score && score === "true") {
-        ifShowScore = true;
-      } else {
-        ifShowScore = false;
-      }
-      if (limit && parseFloat(limit) !== defaultLimit) {
-        defaultLimit = parseFloat(limit);
-      }
-      if (distance !== fuseInstance.options.distance && distance) {
-        fuseInstance.options.distance = parseFloat(distance);
-      }
+      // if (sort && sort === "true") {
+      //   showSortedResults = true;
+      // } else {
+      //   showSortedResults = false;
+      // }
+      // if (score && score === "true") {
+      //   ifShowScore = true;
+      // } else {
+      //   ifShowScore = false;
+      // }
+      // if (limit && parseFloat(limit) !== defaultLimit) {
+      //   defaultLimit = parseFloat(limit);
+      // }
+      // if (distance !== fuseInstance.options.distance && distance) {
+      //   fuseInstance.options.distance = parseFloat(distance);
+      // }
 
-      if (threshold && threshold !== fuseInstance.options.threshold) {
-        fuseInstance.options.threshold = parseFloat(threshold);
-      }
-      if (cut) {
-        defaultCut = parseFloat(cut);
-      }
+      // if (threshold && threshold !== fuseInstance.options.threshold) {
+      //   fuseInstance.options.threshold = parseFloat(threshold);
+      // }
+      // if (cut) {
+      //   defaultCut = parseFloat(cut);
+      // }
 
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
 
       let resultWithRoundScore = result.map((r) => {
-        return {
-          ...r,
-          score: r.score.toFixed(1),
-        };
+        if (r.score) {
+          return {
+            ...r,
+            score: r.score.toFixed(1),
+          };
+        } else {
+          return r;
+        }
       });
+
       if (showSortedResults) {
         resultWithRoundScore.sort(customSort);
       }
