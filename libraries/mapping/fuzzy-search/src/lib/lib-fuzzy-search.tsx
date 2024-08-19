@@ -67,6 +67,7 @@ interface Option {
   label: JSX.Element;
   value: string;
   sData: SearchResultItem;
+  options?: Option[];
 }
 
 interface SplittedCategories {
@@ -138,35 +139,36 @@ const generateOptions = (
   });
 };
 
-const mapDataToSearchResult = (data: SearchResult<SearchResultItem>) => {
-  const splittedCategories: SplittedCategories = {};
+// TODO type the function
+// const mapDataToSearchResult = (data: SearchResult<SearchResultItem>[]) => {
+//   const splittedCategories: { [key: string]: Option[] } = {};
 
-  data.forEach((item) => {
-    const address = item.item;
-    const catName = address.type;
+//   data.forEach((item) => {
+//     const address = item.item;
+//     const catName = address.type;
 
-    if (splittedCategories.hasOwnProperty(catName)) {
-      splittedCategories[catName].push(renderItem(address));
-    } else {
-      splittedCategories[catName] = [renderItem(address)];
-    }
-  });
+//     if (splittedCategories.hasOwnProperty(catName)) {
+//       splittedCategories[catName].push(renderItem(address));
+//     } else {
+//       splittedCategories[catName] = [renderItem(address)];
+//     }
+//   });
 
-  const prepareOptions: Option[] = [];
+//   const prepareOptions = [];
 
-  Object.keys(splittedCategories).forEach((item) => {
-    let optionItem: Option = { label: "", options: [] };
+//   Object.keys(splittedCategories).forEach((item) => {
+//     let optionItem = {};
 
-    if (!optionItem.hasOwnProperty(item)) {
-      optionItem.label = renderTitle(item);
-      optionItem.options = splittedCategories[item];
-    }
+//     if (!optionItem.hasOwnProperty(item)) {
+//       optionItem.label = renderTitle(item);
+//       optionItem.options = splittedCategories[item];
+//     }
 
-    prepareOptions.push(optionItem);
-  });
+//     prepareOptions.push(optionItem);
+//   });
 
-  return prepareOptions;
-};
+//   return prepareOptions;
+// };
 
 const preps = [
   "an",
@@ -327,8 +329,8 @@ export function libFuzzySearch({
       if (!showCategories) {
         setOptions(generateOptions(resultWithRoundScore, ifShowScore));
       } else {
-        const groupedResults = mapDataToSearchResult(result);
-        setSearchResult(groupedResults);
+        // const groupedResults = mapDataToSearchResult(result);
+        // setSearchResult(groupedResults);
       }
     }
   };
