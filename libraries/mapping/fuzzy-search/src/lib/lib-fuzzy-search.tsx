@@ -305,7 +305,7 @@ export function libFuzzySearch({
         if (r.score) {
           return {
             ...r,
-            score: r.score.toFixed(1),
+            score: Number(r.score.toFixed(1)),
           };
         } else {
           return r;
