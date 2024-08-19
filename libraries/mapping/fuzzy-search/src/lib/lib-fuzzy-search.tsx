@@ -354,9 +354,12 @@ export function libFuzzySearch({
       const distance = searchParams.get("distance");
       const threshold = searchParams.get("threshold");
 
+      const distanceValue = distance !== null ? parseInt(distance) : 100;
+      const thresholdValue = threshold !== null ? parseFloat(threshold) : 0.5;
+
       const fuseAddressesOptions = {
-        distance: !isNaN(parseInt(distance)) ? parseInt(distance) : 100,
-        threshold: !isNaN(parseFloat(threshold)) ? parseFloat(threshold) : 0.5,
+        distance: !isNaN(distanceValue) ? distanceValue : 100,
+        threshold: !isNaN(thresholdValue) ? thresholdValue : 0.5,
         useExtendedSearch: true,
         keys: ["xSearchData"],
         includeScore: true,
