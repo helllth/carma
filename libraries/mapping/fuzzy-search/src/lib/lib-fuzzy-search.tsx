@@ -206,8 +206,11 @@ type SearchGazetteerProps = {
   gazData?: any;
   setGazetteerHit: (hit: any) => void;
   gazetteerHit: any;
-  // mapRef?: L.Map;
-  mapRef?: RefObject<L.Map>;
+  mapRef?: RefObject<{
+    leafletMap?: {
+      leafletElement: L.Map;
+    };
+  }>;
   // cesiumRef?: Viewer;
   //overlayFeature: any;
   setOverlayFeature: (feature: any) => void;
@@ -250,7 +253,7 @@ export function libFuzzySearch({
     }
     builtInGazetteerHitTrigger(
       hit,
-      mapRef.current.leafletMap.leafletElement,
+      mapRef?.current?.leafletMap?.leafletElement,
       referenceSystem,
       referenceSystemDefinition,
       setGazetteerHit,
