@@ -10,16 +10,13 @@ import { BaseSelectRef } from "rc-select";
 import {
   customSort,
   generateOptions,
-  GruppedOptions,
   limitSearchResult,
   mapDataToSearchResult,
-  Option,
   prepareGazData,
   removeStopwords,
-  SearchGazetteerProps,
-  SearchResultItem,
   stopwords,
-} from "../tools/fuzzySearchHelper";
+} from "../utils/fuzzySearchHelper";
+import { SearchResultItem, SearchResult, Option, GruppedOptions } from "..";
 
 export function LibFuzzySearch({
   gazData,
