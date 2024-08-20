@@ -151,7 +151,7 @@ const InfoPanel = () => {
   return (
     <SecondaryInfo
       titleIconName="info-circle"
-      title={"Datenblatt: " + item.kategorien.join(", ")}
+      title={"Datenblatt: " + item.info.title}
       mainSection={
         <div style={{ width: "100%", minHeight: minHeight4MainSextion }}>
           {foto !== undefined && (
