@@ -139,36 +139,41 @@ const generateOptions = (
   });
 };
 
+interface GruppedOptions {
+  label?: JSX.Element;
+  options?: Option[];
+}
+
 // TODO type the function
-// const mapDataToSearchResult = (data: SearchResult<SearchResultItem>[]) => {
-//   const splittedCategories: { [key: string]: Option[] } = {};
+const mapDataToSearchResult = (data: SearchResult<SearchResultItem>[]) => {
+  const splittedCategories: { [key: string]: Option[] } = {};
 
-//   data.forEach((item) => {
-//     const address = item.item;
-//     const catName = address.type;
+  data.forEach((item) => {
+    const address = item.item;
+    const catName = address.type;
 
-//     if (splittedCategories.hasOwnProperty(catName)) {
-//       splittedCategories[catName].push(renderItem(address));
-//     } else {
-//       splittedCategories[catName] = [renderItem(address)];
-//     }
-//   });
+    if (splittedCategories.hasOwnProperty(catName)) {
+      splittedCategories[catName].push(renderItem(address));
+    } else {
+      splittedCategories[catName] = [renderItem(address)];
+    }
+  });
 
-//   const prepareOptions = [];
+  const prepareOptions: GruppedOptions[] = [];
 
-//   Object.keys(splittedCategories).forEach((item) => {
-//     let optionItem = {};
+  Object.keys(splittedCategories).forEach((item) => {
+    let optionItem: GruppedOptions = {};
 
-//     if (!optionItem.hasOwnProperty(item)) {
-//       optionItem.label = renderTitle(item);
-//       optionItem.options = splittedCategories[item];
-//     }
+    if (!optionItem.hasOwnProperty(item)) {
+      optionItem.label = renderTitle(item);
+      optionItem.options = splittedCategories[item];
+    }
 
-//     prepareOptions.push(optionItem);
-//   });
+    prepareOptions.push(optionItem);
+  });
 
-//   return prepareOptions;
-// };
+  return prepareOptions;
+};
 
 const preps = [
   "an",
@@ -257,7 +262,7 @@ export function LibFuzzySearch({
   };
   const [fuseInstance, setFuseInstance] =
     useState<Fuse<SearchResultItem> | null>(null);
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState<GruppedOptions[]>([]);
   const [allGazeteerData, setAllGazeteerData] = useState([]);
   const [value, setValue] = useState("");
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
@@ -332,8 +337,8 @@ export function LibFuzzySearch({
       if (!showCategories) {
         setOptions(generateOptions(resultWithRoundScore, ifShowScore));
       } else {
-        // const groupedResults = mapDataToSearchResult(result);
-        // setSearchResult(groupedResults);
+        const groupedResults = mapDataToSearchResult(result);
+        setSearchResult(groupedResults);
       }
     }
   };
