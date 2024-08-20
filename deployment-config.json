@@ -421,14 +421,16 @@
         "manual": {
           "pages": {
             "org": "carma-dev-deployments",
-            "prj": "verdis-desktop"
+            "prj": "verdis-desktop",
+            "baseUrl": "/verdis-desktop"
           }
         },
         "auto": {
           "dev": {
             "pages": {
               "org": "carma-dev-deployments",
-              "prj": "verdis-desktop"
+              "prj": "verdis-desktop",
+              "baseUrl": "/verdis-desktop"
             }
           }
         }
