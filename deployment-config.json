@@ -436,6 +436,27 @@
         }
       },
       "projectPath": "./dist/apps/verdis/desktop"
+    },
+    "lagis-desktop": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "lagis-desktop",
+            "baseUrl": "/lagis-desktop"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "lagis-desktop",
+              "baseUrl": "/lagis-desktop"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/apps/lagis/desktop"
     }
   }
 }
