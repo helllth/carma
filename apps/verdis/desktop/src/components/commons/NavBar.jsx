@@ -1,13 +1,4 @@
-import {
-  AutoComplete,
-  Avatar,
-  Button,
-  Drawer,
-  Input,
-  Switch,
-  Tooltip,
-} from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LogoutOutlined } from "@ant-design/icons";
 import {
   fa3,
   faBroom,
@@ -17,21 +8,16 @@ import {
   faTag,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  ClockCircleOutlined,
-  CommentOutlined,
-  LoadingOutlined,
-  LogoutOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Avatar, Button, Drawer, Tooltip } from "antd";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Link,
   useLocation,
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { storeJWT, storeLogin } from "../../store/slices/auth";
 import { getKassenzeichen, resetStates } from "../../store/slices/search";
 import {
@@ -39,12 +25,11 @@ import {
   getShowFrontDetails,
   getShowSeepageDetails,
   getShowSurfaceDetails,
-  setShowChat,
 } from "../../store/slices/settings";
-import PdfCreator from "../ui/PdfCreator";
-import Settings from "./Settings";
 import SearchBar from "../search/SearchBar";
 import GrundBuch from "../ui/GrundBuch";
+import PdfCreator from "../ui/PdfCreator";
+import Settings from "./Settings";
 
 const logoSrc = "/logo.svg";
 
@@ -65,7 +50,7 @@ const navLinks = (urlParams) => {
       href: constructQueryString(
         showSurfaceDetails
           ? "/versiegelteFlaechen/details"
-          : "/versiegelteFlaechen"
+          : "/versiegelteFlaechen",
       ),
       icon: (
         <Tooltip title="Versiegelte Flächen" placement="bottom">
@@ -77,7 +62,7 @@ const navLinks = (urlParams) => {
       title: "Straßenreinigung",
       hrefWithoutQuery: "/strassenreinigung",
       href: constructQueryString(
-        showFrontDetails ? "/strassenreinigung/details" : "/strassenreinigung"
+        showFrontDetails ? "/strassenreinigung/details" : "/strassenreinigung",
       ),
       icon: (
         <Tooltip title="Straßenreinigung" placement="bottom">
@@ -101,7 +86,7 @@ const navLinks = (urlParams) => {
       href: constructQueryString(
         showSeepageDetails
           ? "/versickerungsgenehmigungen/details"
-          : "/versickerungsgenehmigungen"
+          : "/versickerungsgenehmigungen",
       ),
       icon: (
         <Tooltip title="Versickerungsgenehmigungen" placement="bottom">
@@ -115,6 +100,7 @@ const navLinks = (urlParams) => {
 const NavBar = ({ width = "100%", height = 73, style, inStory }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const urlPrefix = window.location.origin + window.location.pathname;
 
   const location = useLocation();
   const showChat = useSelector(getShowChat);
@@ -151,7 +137,7 @@ const NavBar = ({ width = "100%", height = 73, style, inStory }) => {
             className="flex gap-2 items-center h-full cursor-pointer"
             onClick={() => navigate("/" + `?${urlParams}`)}
           >
-            <img src={logoSrc} alt="Logo" className="h-10" />
+            <img src={urlPrefix + logoSrc} alt="Logo" className="h-10" />
             <span
               className={`${
                 location.pathname === "/" ? "text-primary" : ""
