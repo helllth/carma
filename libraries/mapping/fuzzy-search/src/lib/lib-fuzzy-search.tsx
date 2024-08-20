@@ -49,12 +49,12 @@ export function LibFuzzySearch({
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
   const internalGazetteerHitTrigger = (hit) => {
-    if (!mapRef) {
+    if (!mapRef || !mapRef.current) {
       return false;
     }
     builtInGazetteerHitTrigger(
       hit,
-      mapRef?.current?.leafletMap?.leafletElement,
+      mapRef.current.leafletMap?.leafletElement,
       referenceSystem,
       referenceSystemDefinition,
       setGazetteerHit,
