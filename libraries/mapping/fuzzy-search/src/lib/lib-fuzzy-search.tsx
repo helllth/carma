@@ -144,7 +144,6 @@ interface GruppedOptions {
   options?: Option[];
 }
 
-// TODO type the function
 const mapDataToSearchResult = (data: SearchResult<SearchResultItem>[]) => {
   const splittedCategories: { [key: string]: Option[] } = {};
 
@@ -412,15 +411,11 @@ export function LibFuzzySearch({
         ".ant-select-selection-search-input",
       );
 
-      // TODO check whether scroll finder works or not
-
       if (
         inputElement &&
         antdDrapdownSelect &&
         listHolder instanceof HTMLElement
       ) {
-        // It is original way to get scrollWidth
-        // const inputWidth = inputElement.scrollWidth.scrollWidth;
         const inputWidth = inputElement.scrollWidth;
 
         if (holderInner instanceof HTMLElement) {
