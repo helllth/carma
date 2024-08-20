@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import Fuse from "fuse.js";
-import { AutoComplete, Button, Checkbox } from "antd";
+import Fuse, { IFuseOptions } from "fuse.js";
+import { AutoComplete, Button } from "antd";
 import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
 import "./fuzzy-search.css";
 import IconComp from "react-cismap/commons/Icon";
@@ -16,7 +16,16 @@ import {
   removeStopwords,
   stopwords,
 } from "../utils/fuzzySearchHelper";
-import { SearchResultItem, SearchResult, Option, GruppedOptions } from "..";
+import {
+  SearchResultItem,
+  SearchGazetteerProps,
+  Option,
+  GruppedOptions,
+} from "..";
+
+interface FuseWithOption<T> extends Fuse<T> {
+  options?: IFuseOptions<T>;
+}
 
 export function LibFuzzySearch({
   gazData,
@@ -54,7 +63,7 @@ export function LibFuzzySearch({
     );
   };
   const [fuseInstance, setFuseInstance] =
-    useState<Fuse<SearchResultItem> | null>(null);
+    useState<FuseWithOption<SearchResultItem> | null>(null);
   const [searchResult, setSearchResult] = useState<GruppedOptions[]>([]);
   const [allGazeteerData, setAllGazeteerData] = useState([]);
   const [value, setValue] = useState("");
@@ -90,11 +99,19 @@ export function LibFuzzySearch({
       if (limit && parseFloat(limit) !== defaultLimit) {
         defaultLimit = parseFloat(limit);
       }
-      if (distance !== fuseInstance.options.distance && distance) {
+      if (
+        fuseInstance.options &&
+        Number(distance) !== fuseInstance.options.distance &&
+        distance
+      ) {
         fuseInstance.options.distance = parseFloat(distance);
       }
 
-      if (threshold && threshold !== fuseInstance.options.threshold) {
+      if (
+        fuseInstance.options &&
+        threshold &&
+        Number(threshold) !== fuseInstance.options.threshold
+      ) {
         fuseInstance.options.threshold = parseFloat(threshold);
       }
       if (cut) {
