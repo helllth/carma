@@ -9,9 +9,7 @@ import IconComp from "react-cismap/commons/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { location-dot } from '@fortawesome/free-solid-svg-icons';
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { Tooltip } from "antd";
 import L from "leaflet";
-import { IFuseOptions } from "fuse.js";
 import { BaseSelectRef } from "rc-select";
 
 const renderTitle = (category: string) => {
@@ -222,10 +220,6 @@ type SearchGazetteerProps = {
   // marker3dStyle?: ModelAsset;
 };
 
-interface FuseKey {
-  xSearchData: string;
-}
-
 export function LibFuzzySearch({
   gazData,
   setGazetteerHit,
@@ -278,36 +272,36 @@ export function LibFuzzySearch({
       const hash = window.location.hash;
       const queryString = hash.includes("?") ? hash.split("?")[1] : "";
       const searchParams = new URLSearchParams(queryString);
-      // const distance = searchParams.get("distance");
-      // const threshold = searchParams.get("threshold");
-      // const score = searchParams.get("score");
-      // const sort = searchParams.get("sort");
-      // const limit = searchParams.get("limit");
-      // const cut = searchParams.get("cut");
+      const distance = searchParams.get("distance");
+      const threshold = searchParams.get("threshold");
+      const score = searchParams.get("score");
+      const sort = searchParams.get("sort");
+      const limit = searchParams.get("limit");
+      const cut = searchParams.get("cut");
 
-      // if (sort && sort === "true") {
-      //   showSortedResults = true;
-      // } else {
-      //   showSortedResults = false;
-      // }
-      // if (score && score === "true") {
-      //   ifShowScore = true;
-      // } else {
-      //   ifShowScore = false;
-      // }
-      // if (limit && parseFloat(limit) !== defaultLimit) {
-      //   defaultLimit = parseFloat(limit);
-      // }
-      // if (distance !== fuseInstance.options.distance && distance) {
-      //   fuseInstance.options.distance = parseFloat(distance);
-      // }
+      if (sort && sort === "true") {
+        showSortedResults = true;
+      } else {
+        showSortedResults = false;
+      }
+      if (score && score === "true") {
+        ifShowScore = true;
+      } else {
+        ifShowScore = false;
+      }
+      if (limit && parseFloat(limit) !== defaultLimit) {
+        defaultLimit = parseFloat(limit);
+      }
+      if (distance !== fuseInstance.options.distance && distance) {
+        fuseInstance.options.distance = parseFloat(distance);
+      }
 
-      // if (threshold && threshold !== fuseInstance.options.threshold) {
-      //   fuseInstance.options.threshold = parseFloat(threshold);
-      // }
-      // if (cut) {
-      //   defaultCut = parseFloat(cut);
-      // }
+      if (threshold && threshold !== fuseInstance.options.threshold) {
+        fuseInstance.options.threshold = parseFloat(threshold);
+      }
+      if (cut) {
+        defaultCut = parseFloat(cut);
+      }
 
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
@@ -581,6 +575,7 @@ function customSort(a, b) {
 }
 
 function limitSearchResult(searchRes, limit, cut = 0.4) {
+  console.log("xxx", searchRes[0].score);
   let limitedScore = searchRes[0].score < cut ? searchRes[0].score : cut;
   let countOfCategories = 1;
   searchRes.forEach((r) => {
