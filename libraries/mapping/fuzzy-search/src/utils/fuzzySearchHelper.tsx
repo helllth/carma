@@ -186,7 +186,6 @@ export function customSort(a, b) {
   }
 }
 export function limitSearchResult(searchRes, limit, cut = 0.4) {
-  console.log("xxx", searchRes[0].score);
   let limitedScore = searchRes[0].score < cut ? searchRes[0].score : cut;
   let countOfCategories = 1;
   searchRes.forEach((r) => {

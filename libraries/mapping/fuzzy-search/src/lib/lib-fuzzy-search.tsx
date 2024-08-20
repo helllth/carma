@@ -85,7 +85,6 @@ export function LibFuzzySearch({
       const sort = searchParams.get("sort");
       const limit = searchParams.get("limit");
       const cut = searchParams.get("cut");
-
       if (sort && sort === "true") {
         showSortedResults = true;
       } else {
@@ -99,6 +98,7 @@ export function LibFuzzySearch({
       if (limit && parseFloat(limit) !== defaultLimit) {
         defaultLimit = parseFloat(limit);
       }
+
       if (
         fuseInstance.options &&
         Number(distance) !== fuseInstance.options.distance &&
