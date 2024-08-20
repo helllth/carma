@@ -13,7 +13,7 @@ import FeatureCollection from "react-cismap/FeatureCollection";
 import { MappingConstants } from "react-cismap";
 import convertItemToFeature from "./helper/convertItemToFeature";
 import { md5FetchText, fetchJSON } from "react-cismap/tools/fetching";
-import { LibFuzzySearch } from "@carma-mapping/lib-fuzzy-search";
+import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 
 import {
   getFeatureStyler,

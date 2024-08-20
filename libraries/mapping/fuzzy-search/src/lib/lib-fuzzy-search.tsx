@@ -3,7 +3,7 @@ import type { RefObject } from "react";
 import Fuse from "fuse.js";
 import { AutoComplete, Button, Checkbox } from "antd";
 import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
-import "./fuzzy-search.css";
+// import "./fuzzy-search.css";
 import "./fuzzy-search.css";
 import IconComp from "react-cismap/commons/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -616,3 +616,5 @@ function customSortDigit(a, b) {
     return newA.localeCompare(newB);
   }
 }
+
+export default LibFuzzySearch;
