@@ -1,24 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-
-import ProjSingleGeoJson from "react-cismap/ProjSingleGeoJson";
 import { getGazDataForTopicIds } from "react-cismap/tools/gazetteerHelper";
-import SearchComponent from "./components/SearchComponent.jsx";
 import TopicMapContextProvider from "react-cismap/contexts/TopicMapContextProvider";
 import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
-
-import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
 import GazetteerSearchComponent from "react-cismap/GazetteerSearchComponent";
-import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
-import FeatureCollection from "react-cismap/FeatureCollection";
-import { MappingConstants } from "react-cismap";
-import convertItemToFeature from "./helper/convertItemToFeature";
-import { md5FetchText, fetchJSON } from "react-cismap/tools/fetching";
+import { md5FetchText } from "react-cismap/tools/fetching";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
-
-import {
-  getFeatureStyler,
-  getPoiClusterIconCreatorFunction,
-} from "./helper/styler";
 
 const host = "https://wupp-topicmaps-data.cismet.de";
 
