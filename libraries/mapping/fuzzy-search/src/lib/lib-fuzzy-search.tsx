@@ -21,7 +21,9 @@ import {
   SearchGazetteerProps,
   Option,
   GruppedOptions,
+  MapConsumer,
 } from "..";
+import { builtInGazetteerHitTrigger as builtCesiumGazetteerHitTrigger } from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/tools/gazetteerHelper";
 
 interface FuseWithOption<T> extends Fuse<T> {
   options?: IFuseOptions<T>;
@@ -33,10 +35,12 @@ export function LibFuzzySearch({
   // gazetteerHit,
   // overlayFeature,
   mapRef,
+  cesiumRef,
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
   pixelwidth = 300,
+  marker3dStyle,
   ifShowCategories: standardSearch = false,
 }: SearchGazetteerProps) {
   const [options, setOptions] = useState<Option[]>([]);
@@ -49,18 +53,28 @@ export function LibFuzzySearch({
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
   const internalGazetteerHitTrigger = (hit) => {
-    if (!mapRef || !mapRef.current) {
+    if (!mapRef) {
       return false;
     }
-    builtInGazetteerHitTrigger(
-      hit,
-      mapRef.current.leafletMap?.leafletElement,
-      referenceSystem,
-      referenceSystemDefinition,
-      setGazetteerHit,
-      setOverlayFeature,
-      _gazetteerHitTrigger,
-    );
+    if (!cesiumRef) {
+      builtInGazetteerHitTrigger(
+        hit,
+        mapRef.current?.leafletMap?.leafletElement,
+        referenceSystem,
+        referenceSystemDefinition,
+        setGazetteerHit,
+        setOverlayFeature,
+        _gazetteerHitTrigger,
+      );
+    } else {
+      const mapConsumers: MapConsumer[] = [];
+      cesiumRef && mapConsumers.push(cesiumRef);
+      mapRef && mapConsumers.push(mapRef);
+      builtCesiumGazetteerHitTrigger(hit, mapConsumers, {
+        setGazetteerHit,
+        marker3dStyle,
+      });
+    }
   };
   const [fuseInstance, setFuseInstance] =
     useState<FuseWithOption<SearchResultItem> | null>(null);
