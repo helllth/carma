@@ -1,5 +1,4 @@
-/* @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'); */
-/* You can add global styles to this file, and also import other style files */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
 html {
   font-size: 14px;
 }
@@ -13,9 +12,6 @@ h5 {
 h6 {
   font-size: 12px;
 }
-/* .leaflet-container a {
-      color:rgba(0, 0, 0);
-    }  */
 
 .form-label {
   font-weight: 700;
@@ -28,7 +24,6 @@ h6 {
 *:active {
   outline: none;
   box-shadow: none !important;
-  /* -webkit-appearance: none; */
 }
 
 btn:focus,
@@ -94,16 +89,6 @@ a:hover {
   background-color: rgba(255, 90, 0, 0.28);
 }
 
-/* .Select-menu { max-height: 350px;} */
-
-/* fixes an issue on mac os where no scrollbars beeing shown and a mousewheel action is translated in a zoom command */
-/* Just a test to make sure that we have the right element*/
-/*
-    .dropdown-menu {
-      background-color: #f00;   
-    }
-    */
-
 .dropdown-menu::-webkit-scrollbar {
   -webkit-appearance: none;
 }
@@ -127,10 +112,6 @@ a:hover {
   border-radius: 8px;
 }
 
-/* 
-    fix for https://github.com/cismet/wupp/issues/1477
-    */
-
 .rbt-input-wrapper > div > div {
   width: 100% !important;
 }
@@ -138,27 +119,6 @@ a:hover {
   width: 100% !important;
 }
 
-/*
-    https://stackoverflow.com/questions/27028927/fade-in-leaflet-markers-when-added
-    
-    .leaflet-marker-icon,
-    .leaflet-marker-shadow {
-    -webkit-animation: fadein 1s; 
-    -moz-animation: fadein 1s; 
-    -ms-animation: fadein 1s; 
-    -o-animation: fadein 1s; 
-    animation: fadein 1s;
-    }
-    */
-
-/*
-    .cismap-hauptnutzung-highlighter {
-      opacity: 0.5;
-    animation-name: fadeInOpacity;
-    animation-iteration-count: 1;
-    animation-timing-function: ease-in;
-    animation-duration: 2s;
-    } */
 @keyframes fadeInOpacity {
   0% {
     opacity: 1;
@@ -167,13 +127,6 @@ a:hover {
     opacity: 0.5;
   }
 }
-/* .cismap-hauptnutzung-highlighter {
-      -webkit-animation: fadeout 3s; 
-      -moz-animation: fadeout 3s; 
-      -ms-animation: fadeout 3s; 
-      -o-animation: fadeout 3s; 
-      animation: fadeout 3s;
-    } */
 
 @keyframes fadein {
   from {
