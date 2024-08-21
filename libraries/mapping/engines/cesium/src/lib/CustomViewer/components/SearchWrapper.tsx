@@ -26,14 +26,14 @@ const SearchWrapper: FC<SearchWrapperProps> = ({ viewer }) => {
     //   //gazData={[]}
     //   gazetteerHit={hit ?? undefined}
     //   setGazetteerHit={(hit) => {
-    //     console.info('gazatteer on hit not implented', hit);
+    //     console.info("gazatteer on hit not implented", hit);
     //   }}
     //   cesiumRef={ctx}
     //   setOverlayFeature={handleSetOverlayFeature}
     //   //referenceSystem={null}
     //   //referenceSystemDefinition={null}
     //   pixelwidth={300}
-    //   marker3dStyle={models ? models['MarkerFacingFixed'] : undefined}
+    //   marker3dStyle={models ? models["MarkerFacingFixed"] : undefined}
     //   //overlayFeature={null}
     // />
     <LibFuzzySearch

@@ -2,16 +2,6 @@ import L from "leaflet";
 import type { RefObject } from "react";
 import { Viewer } from "cesium";
 
-export type ModelAsset = {
-  uri: string;
-  scale: number;
-  isCameraFacing?: boolean;
-  rotation?: boolean | number;
-  fixedScale?: boolean;
-  anchorOffset?: { x?: number; y?: number; z?: number };
-  hasAnimation?: boolean;
-};
-
 type mapRefType = RefObject<{
   current: { leafletMap: { leafletElement: L.Map } };
 }>;
