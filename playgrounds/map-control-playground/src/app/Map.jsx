@@ -1,43 +1,26 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import {
-  ControlLayout,
   Control,
-  Main,
   ControlButtonStyler,
+  ControlLayout,
+  Main,
 } from "@carma-mapping/map-controls-layout";
 import {
-  MenuOutlined,
-  MinusOutlined,
-  PlusOutlined,
-  SettingFilled,
-  ShrinkOutlined,
-} from "@ant-design/icons";
-import { Divider } from "antd";
+  faCompress,
+  faExpand,
+  faHouseChimney,
+  faLocationArrow,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext, useEffect, useRef, useState } from "react";
 import GazetteerSearchComponent from "react-cismap/GazetteerSearchComponent";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCompress, faExpand } from "@fortawesome/free-solid-svg-icons";
-
-const iconPadding = {
-  backgroundColor: "#fff",
-  border: "2px solid rgba(0, 0, 0, .23)",
-  borderRadius: "4px",
-  width: "34px",
-  height: "34px",
-  textAlign: "center",
-  cursor: "pointer",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  fontSize: "18px",
-};
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
 
 const Map = () => {
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(null);
   const [layoutHeight, setLayoutHeight] = useState(null);
-  const [resonsiveCollapse, setResonsiveCollapse] = useState(null);
 
   const { routedMapRef } = useContext(TopicMapContext);
 
@@ -51,13 +34,7 @@ const Map = () => {
   }, [containerRef, layoutHeight]);
 
   return (
-    <ControlLayout
-      onResponsiveCollapse={(collapseEvent) => {
-        setResonsiveCollapse(collapseEvent);
-      }}
-      onHeightResize={setLayoutHeight}
-      ifStorybook={false}
-    >
+    <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
       <Control position="topleft" order={10}>
         <ControlButtonStyler
           onClick={() => {
@@ -77,7 +54,6 @@ const Map = () => {
       <Control position="topleft" order={20}>
         <ControlButtonStyler
           onClick={() => {
-            // make full screen
             if (document.fullscreenElement) {
               document.exitFullscreen();
             } else {
@@ -90,27 +66,25 @@ const Map = () => {
           />
         </ControlButtonStyler>
       </Control>
-      <Control position="topright" order={30}>
+      <Control position="topleft" order={30}>
         <ControlButtonStyler>
-          <MenuOutlined />
+          <FontAwesomeIcon icon={faLocationArrow} />
+        </ControlButtonStyler>
+      </Control>
+      <Control position="topleft" order={40}>
+        <ControlButtonStyler
+          onClick={() =>
+            routedMapRef.leafletMap.leafletElement.flyTo(
+              [51.272570027476256, 7.199918031692506],
+              14,
+            )
+          }
+        >
+          <FontAwesomeIcon icon={faHouseChimney} />
         </ControlButtonStyler>
       </Control>
       <Control position="bottomleft" order={10} fullCollapseWidth={true}>
         <GazetteerSearchComponent />
-      </Control>
-      <Control position="bottomright" order={10} fullCollapseWidth={true}>
-        <div
-          style={{
-            width: "300px",
-            background: "white",
-            height: "80px",
-            padding: "4px",
-            fontSize: "12px",
-            opacity: "0.9",
-          }}
-        >
-          Info Box
-        </div>
       </Control>
       <Main ref={containerRef}>
         <TopicMapComponent
