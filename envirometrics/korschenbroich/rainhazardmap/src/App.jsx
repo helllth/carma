@@ -1,31 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import { MappingConstants } from 'react-cismap';
-import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
-import HeavyRainHazardMap from '@cismet-dev/react-cismap-envirometrics-maps/HeavyRainHazardMap';
-import GenericModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
-import { md5FetchJSON } from 'react-cismap/tools/fetching';
-import config from './config';
-import { getApplicationVersion } from './version';
+import React, { useEffect, useState } from "react";
+import { MappingConstants } from "react-cismap";
+import TopicMapContextProvider from "react-cismap/contexts/TopicMapContextProvider";
+import HeavyRainHazardMap from "@cismet-dev/react-cismap-envirometrics-maps/HeavyRainHazardMap";
+import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
+import { md5FetchJSON } from "react-cismap/tools/fetching";
+import config from "./config";
+import { getApplicationVersion } from "./version";
+import CismapLayer from "react-cismap/CismapLayer";
+import "./notification.css";
+
+import { notification } from "antd";
 // import NotesDisplay from './NotesDisplay';
-import { getCollabedHelpComponentConfig } from './collab-texts';
+import { getCollabedHelpComponentConfig } from "./collab-texts";
 
 function App() {
-  const email = 'yvonne.tuerks@korschenbroich.de';
+  const email = "yvonne.tuerks@korschenbroich.de";
+  const [hinweisShown, setHinweisShown] = useState(false);
+
   const [gazData, setGazData] = useState([]);
   const version = getApplicationVersion();
   const getGazData = async (setGazData, url) => {
-    const prefix = 'GazDataForStarkregengefahrenkarteByCismet';
+    const prefix = "GazDataForStarkregengefahrenkarteByCismet";
     const data = await md5FetchJSON(prefix, url);
     setGazData(data || []);
   };
 
   useEffect(() => {
-    getGazData(setGazData, '/data/adressen_korschenbroich.json');
+    getGazData(setGazData, "/data/adressen_korschenbroich.json");
   }, []);
+
+  const openNotification = (selectedFeature) => {
+    api.open({
+      message: (
+        <span>
+          <b>Schachtbezeichnung: {selectedFeature.properties.Bezeichnun}</b>
+        </span>
+      ),
+      description:
+        "Schachtdeckelhöhe [m ü. NHN]:" + selectedFeature.properties.OKSchachtd,
+      duration: 0,
+    });
+  };
+  console.log("notification", notification);
 
   return (
     <TopicMapContextProvider
-      appKey={'cismetRainhazardMap.Korschenbroich'}
+      appKey={"cismetRainhazardMap.Korschenbroich"}
       referenceSystem={MappingConstants.crs3857}
       referenceSystemDefinition={MappingConstants.proj4crs3857def}
       infoBoxPixelWidth={370}
@@ -36,8 +56,8 @@ function App() {
         appMenu={
           <GenericModalApplicationMenu
             {...getCollabedHelpComponentConfig({
-              versionString: '#' + version,
-              reactCismapRHMVersion: '_',
+              versionString: "#" + version,
+              reactCismapRHMVersion: "_",
 
               email,
             })}
@@ -52,7 +72,57 @@ function App() {
         documentTitle="AIS Korschenbroich"
         gazData={gazData}
       >
-        {/* <NotesDisplay hinweisData={hinweisData} /> */}
+        {/* {contextHolder} */}
+
+        <CismapLayer
+          {...{
+            type: "vector",
+            style: "https://tiles.cismet.de/kanal_kb_abschnitte/style.json",
+            pane: "additionalLayers4",
+            opacity: 1,
+            maxSelectionCount: 1,
+            onSelectionChanged: (e) => {
+              if (e.hits === undefined) {
+                notification.destroy("SchachtInfoDisplay");
+              } else {
+                const selectedFeature = e.hits[0];
+                // console.log(
+                //   "xxxy selectedFeature",
+                //   JSON.stringify(selectedFeature, null, 2),
+                //   selectedFeature,
+                // );
+                if (
+                  selectedFeature &&
+                  selectedFeature.source === "kanal-knoten-source"
+                ) {
+                  notification.destroy("SchachtInfoDisplay");
+
+                  notification.info({
+                    key: "SchachtInfoDisplay",
+                    style: { width: 430, marginTop: 30, marginRight: -13 },
+                    duration: 0,
+                    showProgress: true,
+                    message: (
+                      <span>
+                        <b>
+                          Schachtbezeichnung:{" "}
+                          {selectedFeature.properties.Bezeichnun}
+                        </b>
+                      </span>
+                    ),
+                    description:
+                      "Schachtdeckelhöhe [m ü. NHN]:" +
+                      selectedFeature.properties.OKSchachtd,
+                    placement: "topRight",
+                    onClose: () => {
+                      setHinweisShown(false);
+                    },
+                  });
+                }
+              }
+            },
+          }}
+        />
       </HeavyRainHazardMap>
     </TopicMapContextProvider>
   );
