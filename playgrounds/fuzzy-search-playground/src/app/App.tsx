@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { getGazDataForTopicIds } from "react-cismap/tools/gazetteerHelper";
+import SearchComponent from "./components/SearchComponent.jsx";
 import TopicMapContextProvider from "react-cismap/contexts/TopicMapContextProvider";
 import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
 import GazetteerSearchComponent from "react-cismap/GazetteerSearchComponent";
 import { md5FetchText } from "react-cismap/tools/fetching";
-import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 
 const host = "https://wupp-topicmaps-data.cismet.de";
 
@@ -29,10 +29,6 @@ export const getGazData = async (
   );
   sources.pois = await md5FetchText(prefix, host + "/data/3857/pois.json");
   sources.kitas = await md5FetchText(prefix, host + "/data/3857/kitas.json");
-  // sources.bpklimastandorte = await md5FetchText(
-  //   prefix,
-  //   host + '/data/3857/bpklimastandorte.json'
-  // );
 
   const gazData = getGazDataForTopicIds(sources, topics);
 
@@ -64,8 +60,7 @@ export function App() {
     <TopicMapContextProvider>
       <TopicMapComponent
         gazData={gazData}
-        // gazetteerSearchComponent={SearchComponent}
-        gazetteerSearchComponent={LibFuzzySearch}
+        gazetteerSearchComponent={SearchComponent}
         _gazetteerSearchComponent={GazetteerSearchComponent}
       ></TopicMapComponent>
     </TopicMapContextProvider>
