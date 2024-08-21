@@ -24,6 +24,12 @@ import {
   MapConsumer,
 } from "..";
 import { builtInGazetteerHitTrigger as builtCesiumGazetteerHitTrigger } from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/tools/gazetteerHelper";
+import {
+  gazDataPrefix,
+  sourcesConfig,
+  stopwords as stpwordsCesium,
+} from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/config";
+import { getGazData } from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/utils";
 
 interface FuseWithOption<T> extends Fuse<T> {
   options?: IFuseOptions<T>;
@@ -188,6 +194,14 @@ export function LibFuzzySearch({
     if (gazData) {
       const allModifiedData = prepareGazData(gazData);
       setAllGazeteerData(allModifiedData);
+    } else {
+      console.info("no gazeteerdata defined, fetching gazData", sourcesConfig);
+      const setDataCallback = (data) => {
+        // setData(data);
+        setAllGazeteerData(prepareGazData(data));
+      };
+      Array.isArray(sourcesConfig) &&
+        getGazData(sourcesConfig, gazDataPrefix, setDataCallback);
     }
   }, [gazData]);
 
