@@ -290,7 +290,6 @@ export function LibFuzzySearch({
   return (
     <div
       style={{
-        marginTop: "20px",
         width: pixelwidth,
         display: "flex",
       }}
