@@ -260,7 +260,23 @@ jobs:
           echo "SRC_MD5_SHORT=${srcMD5short}" >> $GITHUB_ENV
           echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV
           echo "CONTAINER_IMAGE=${containerImage}" >> $GITHUB_ENV
+          echo "TARGET=auto.${branch}" >> $GITHUB_ENV
         shell: bash
+      - name: Create version.json if it doesn't exist
+        run: |
+          if [[ ! -f "$SRC_PATH/version.json" ]]; then
+            echo '{"version": "0.0.0"}' > "$SRC_PATH/version.json"
+          fi
+        shell: bash
+      - name: Add further info to version.json
+        run: |
+          jq --arg md5 "$SRC_MD5" --arg triggered "$TARGET" \
+          '. + {md5: $md5, triggered: $triggered}' \
+          "$SRC_PATH/version.json" > /tmp/version.json
+
+          mv /tmp/version.json "$SRC_PATH/version.json"
+        shell: bash
+
       - name: Debug Outputs
         run: |
           echo -----------------------------------
