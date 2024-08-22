@@ -12,15 +12,15 @@ import CrossTabCommunicationContextProvider from "react-cismap/contexts/CrossTab
 
 import config from "./config";
 
-import { getApplicationVersion } from "./version";
 import NotesDisplay from "./NotesDisplay";
 import { EnviroMetricMapContext } from "@cismet-dev/react-cismap-envirometrics-maps/EnviroMetricMapContextProvider";
 import StyledWMSTileLayer from "react-cismap/StyledWMSTileLayer";
 import { getCollabedHelpComponentConfig } from "@carma-collab/wuppertal/hochwassergefahrenkarte";
-
+import { getApplicationVersion } from "@carma-commons/utils";
+import versionData from "./version.json";
 function App() {
+  const version = getApplicationVersion(versionData);
   const reactCismapEnvirometricsVersion = cismapEnvirometricsVersion;
-  const version = getApplicationVersion();
   const [hochwasserschutz, setHochwasserschutz] = useState(true);
 
   const email = "hochwasser@stadt.wuppertal.de";
