@@ -83,6 +83,11 @@ const Map = () => {
           <FontAwesomeIcon icon={faHouseChimney} />
         </ControlButtonStyler>
       </Control>
+      <Control position="topleft" order={50}>
+        <ControlButtonStyler>
+          <img src="measure.png" alt="Measure" style={{ width: "30px" }} />
+        </ControlButtonStyler>
+      </Control>
       <Control position="bottomleft" order={10} fullCollapseWidth={true}>
         <GazetteerSearchComponent />
       </Control>
