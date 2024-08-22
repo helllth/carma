@@ -357,6 +357,7 @@ jobs:
         run: |
           config=$(cat deployment-config.json) 
           project_name="${{ github.event.inputs.project-name }}"
+          target="${{ github.event.inputs.target }}"
           deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.repo')
           baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.base')
           orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.pages.org // "null"')
@@ -389,7 +390,7 @@ jobs:
           echo "SRC_MD5_SHORT=${srcMD5short}" >> $GITHUB_ENV
           echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV
           echo "CONTAINER_IMAGE=${containerImage}" >> $GITHUB_ENV
-          echo "TARGET=${github.event.inputs.target}" >> $GITHUB_ENV
+          echo "TARGET=${target}" >> $GITHUB_ENV
 
         shell: bash
       - name: Create the version number
