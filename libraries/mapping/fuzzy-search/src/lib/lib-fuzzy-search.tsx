@@ -2,7 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import type { IFuseOptions } from "fuse.js";
 import Fuse from "fuse.js";
 import { AutoComplete, Button } from "antd";
-// import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
+//@ts-expect-error TODO Replace with carmaHitTrigger
+import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
 import "./fuzzy-search.css";
 import IconComp from "react-cismap/commons/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,7 +18,7 @@ import {
   prepareGazData,
   removeStopwords,
   stopwords,
-  builtInGazetteerHitTrigger,
+  builtInGazetteerHitTrigger as carmaGazetteerHitTrigger,
 } from "./utils/fuzzySearchHelper";
 import {
   SearchResultItem,
@@ -57,17 +58,27 @@ export function LibFuzzySearch({
   const mapConsumers: MapConsumer[] = [];
   mapRef && mapConsumers.push(mapRef);
 
+  // const internalGazetteerHitTrigger = (hit) => {
+  //   carmaGazetteerHitTrigger(
+  //     hit,
+  //     mapConsumers,
+  //     {
+  //       setGazetteerHit,
+  //     },
+  //     // referenceSystem,
+  //     // referenceSystemDefinition,
+  //     // setGazetteerHit,
+  //     // setOverlayFeature,
+  //     // _gazetteerHitTrigger,
+  //   );
+  // };
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
       hit,
-      mapConsumers,
-      {
-        setGazetteerHit,
-      },
-      // referenceSystem,
-      // referenceSystemDefinition,
-      // setGazetteerHit,
-      // setOverlayFeature,
+      referenceSystem,
+      referenceSystemDefinition,
+      setGazetteerHit,
+      setOverlayFeature,
       // _gazetteerHitTrigger,
     );
   };

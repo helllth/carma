@@ -35,6 +35,7 @@ import {
   invertedPolygonHierarchy,
   removeGroundPrimitiveById,
 } from "./cesium";
+import { DEFAULT_SRC_PROJ } from "../config";
 
 export const renderTitle = (category: string) => {
   let title = "???";
@@ -513,11 +514,11 @@ export const builtInGazetteerHitTrigger = (
     // TODO extend hitobject with parsed and derived data
     const hitObject = Object.assign({}, hit[0]); //Change the Zoomlevel of the map
 
-    const { crs } = hitObject;
+    const crs = hitObject.crs ?? DEFAULT_SRC_PROJ;
     console.log("xxx crs", hitObject);
 
     let refSystemConverter = proj4ConverterLookup[crs];
-    if (!refSystemConverter) {
+    if (!refSystemConverter && crs !== undefined) {
       console.log("create new proj4 converter for", crs);
       refSystemConverter = proj4(`EPSG:${crs}`);
       proj4ConverterLookup[crs] = refSystemConverter;

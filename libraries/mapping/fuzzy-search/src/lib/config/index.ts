@@ -3,6 +3,7 @@ import type { ENDPOINT } from "types/search";
 
 export const host = "https://wupp-topicmaps-data.cismet.de";
 export const DEFAULT_PROJ = "3857";
+export const DEFAULT_SRC_PROJ = "25832";
 
 const createUrl = (endpoint: ENDPOINT, crs: string = DEFAULT_PROJ) =>
   `${host}/data/${crs}/${endpoint}.json`;

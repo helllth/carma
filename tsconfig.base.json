@@ -24,7 +24,6 @@
       "@nx/react/typings/styled-jsx.d.ts"
     ],
     "paths": {
-      "#/*": ["./*"],
       "@carma-apps/envirometrics": ["libraries/appframeworks/envirometrics/src/index.ts"],
       "@carma-apps/topicmaps": ["libraries/appframeworks/topicmaps/src/index.ts"],
       "@carma-collab/wuppertal/baederkarte": [

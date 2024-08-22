@@ -4,7 +4,8 @@ import TopicMapContextProvider from "react-cismap/contexts/TopicMapContextProvid
 import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
 import { md5FetchText } from "react-cismap/tools/fetching";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
-// import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
+import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
+import { suppressReactCismapErrors } from "@carma-commons/utils";
 
 const host = "https://wupp-topicmaps-data.cismet.de";
 
@@ -35,6 +36,8 @@ export const getGazData = async (
   setGazData(gazData);
 };
 
+suppressReactCismapErrors();
+
 export function App() {
   const [gazetteerHit, setGazetteerHit] = useState(null);
   const [overlayFeature, setOverlayFeature] = useState(null);
@@ -55,7 +58,7 @@ export function App() {
       <TopicMapComponent
         gazData={gazData}
         gazetteerSearchComponent={LibFuzzySearch}
-        // infoBox={<GenericInfoBoxFromFeature />}
+        infoBox={<GenericInfoBoxFromFeature />}
       ></TopicMapComponent>
     </TopicMapContextProvider>
   );
