@@ -94,7 +94,7 @@ export type GazDataItem = {
   crs: string;
 };
 
-export type PayloadItem = {
+export type PayloadItemType = {
   s?: string;
   g?: string;
   x?: number;

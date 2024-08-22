@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from "react";
-import Fuse, { IFuseOptions } from "fuse.js";
+import type { IFuseOptions } from "fuse.js";
+import Fuse from "fuse.js";
 import { AutoComplete, Button } from "antd";
 // import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
 import "./fuzzy-search.css";
 import IconComp from "react-cismap/commons/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { BaseSelectRef } from "rc-select";
+import type { BaseSelectRef } from "rc-select";
 import {
   customSort,
   generateOptions,
