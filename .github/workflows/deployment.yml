@@ -453,7 +453,10 @@ jobs:
           echo "SRC_MD5: $SRC_MD5"
           echo "CONTAINER_IMAGE: $CONTAINER_IMAGE"
           echo -----------------------------------
-      - name: Set version
+      - name: Debug version.json
+        run: |
+          cat $SRC_PATH/version.json
+      - name: Set version (deprecated)
         run: |
           if [[ -f "$SRC_PATH/version.js" ]]; then
             sed -i "s/%APPLICATION_VERSION%/$SRC_MD5_SHORT/" $SRC_PATH/version.js
@@ -464,24 +467,13 @@ jobs:
               echo "No version.js file found. Version information will not be updated."
             fi
           fi
-      - name: Set hash
+      - name: Set hash (deprecated)
         run: |
           if [[ -f "$SRC_PATH/version.js" ]]; then
             sed -i "s/%APPLICATION_HASH%/$SRC_MD5/" $SRC_PATH/version.js
           else
             if [[ -f "$SRC_PATH/app/version.js" ]]; then
               sed -i "s/%APPLICATION_HASH%/$SRC_MD5/" $SRC_PATH/app/version.js
-            else
-              echo "No version.js file found. Hash information will not be updated."
-            fi
-          fi
-      - name: debug log version.js
-        run: |
-          if [[ -f "$SRC_PATH/version.js" ]]; then
-            cat $SRC_PATH/version.js
-          else
-            if [[ -f "$SRC_PATH/app/version.js" ]]; then
-              cat $SRC_PATH/app/version.js
             else
               echo "No version.js file found. Hash information will not be updated."
             fi
