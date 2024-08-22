@@ -514,6 +514,7 @@ export const builtInGazetteerHitTrigger = (
     const hitObject = Object.assign({}, hit[0]); //Change the Zoomlevel of the map
 
     const { crs } = hitObject;
+    console.log("xxx crs", hitObject);
 
     let refSystemConverter = proj4ConverterLookup[crs];
     if (!refSystemConverter) {

@@ -23,6 +23,7 @@ import {
   SearchGazetteerProps,
   Option,
   GruppedOptions,
+  MapConsumer,
 } from "..";
 import { gazDataPrefix, sourcesConfig } from "./config";
 
@@ -51,11 +52,18 @@ export function LibFuzzySearch({
   };
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
+
+  const mapConsumers: MapConsumer[] = [];
+  mapRef && mapConsumers.push(mapRef);
+
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
       hit,
-      mapRef.current?.leafletMap?.leafletElement,
-      referenceSystem,
+      mapConsumers,
+      {
+        setGazetteerHit,
+      },
+      // referenceSystem,
       // referenceSystemDefinition,
       // setGazetteerHit,
       // setOverlayFeature,
