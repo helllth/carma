@@ -6,12 +6,14 @@ on:
   workflow_dispatch:
     inputs:
       project-name:
-        description: 'Please enter a project name'
+        description: "Please enter a project name"
         required: true
-
+      version-manipulator:
+        description: "Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease (Will change the version number of the project.)"
+        required: false
       target:
         type: choice
-        description: 'Where should I deploy?'
+        description: "Where should I deploy?"
         options:
           - live
           - dev
@@ -44,13 +46,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: 'recursive' # Fetch all submodules recursively
+          submodules: "recursive" # Fetch all submodules recursively
       - name: Update Submodules
         run: git submodule update --remote --recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
       - name: add cismet-dev registry secret to .npmrc
         shell: bash
         run: |
@@ -172,13 +174,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: 'recursive' # Fetch all submodules recursively
+          submodules: "recursive" # Fetch all submodules recursively
       - name: Update Submodules
         run: git submodule update --remote --recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
       - name: Read project config
         id: read_project_config
         run: echo "::set-output name=config::$(cat deployment-config.json)"
@@ -345,7 +347,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: 'recursive' # Fetch all submodules recursively
+          submodules: "recursive" # Fetch all submodules recursively
       - name: Update Submodules
         run: git submodule update --remote --recursive
       - name: add cismet-dev registry secret to .npmrc
@@ -391,6 +393,39 @@ jobs:
           echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV
           echo "CONTAINER_IMAGE=${containerImage}" >> $GITHUB_ENV
 
+        shell: bash
+      - name: Create the version number
+        id: update_version_number
+        run: |
+          if [[ -f "$SRC_PATH/version.json" ]]; then
+            if [[ -n "${{ github.event.inputs.version-manipulator }}" ]]; then
+              cp "$SRC_PATH/version.json" /tmp/package.json
+              cd /tmp
+              npm version ${{ github.event.inputs.version-manipulator }} --no-git-tag-version --allow-same-version
+              cd -
+              cp /tmp/package.json "$SRC_PATH/version.json"
+              echo "version_changed=true" >> $GITHUB_ENV
+            else
+              echo "No version-manipulator input provided. Version information will not be updated."
+              echo "version_changed=false" >> $GITHUB_ENV
+            fi
+          else
+            echo "No version.json file found. Version information will not be updated."
+            echo "version_changed=false" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Commit version.json changes
+        if: env.version_changed == 'true'
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+          git add "$SRC_PATH/version.json"
+          git commit -m "Update version.json based on ${{ github.event.inputs.version-manipulator }}"
+          git push
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
       - name: Debug Outputs
         run: |
