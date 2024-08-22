@@ -7,7 +7,7 @@ export const getApplicationVersion = () => {
   if (versionData.triggered === "live") {
     return "v" + v;
   } else if (versionData.triggered) {
-    return versionData.triggered + " v" + v + "++ (" + versionData.md5.substring(0, 4) + ")";
+    return versionData.triggered + " v" + v + "++ (#" + versionData.md5.substring(0, 4) + ")";
   } else {
     return "v" + v + "++ (dev-hot-reload)";
   }
