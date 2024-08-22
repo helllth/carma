@@ -1,9 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { getGazDataForTopicIds } from "react-cismap/tools/gazetteerHelper";
-import SearchComponent from "./components/SearchComponent.jsx";
 import TopicMapContextProvider from "react-cismap/contexts/TopicMapContextProvider";
 import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
-import GazetteerSearchComponent from "react-cismap/GazetteerSearchComponent";
 import { md5FetchText } from "react-cismap/tools/fetching";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 
@@ -37,12 +35,6 @@ export const getGazData = async (
 };
 
 export function App() {
-  const mapStyle = {
-    height: 600,
-    cursor: "pointer",
-  };
-  let urlSearchParams = new URLSearchParams(window.location.href);
-  const mapRef = useRef(null);
   const [gazetteerHit, setGazetteerHit] = useState(null);
   const [overlayFeature, setOverlayFeature] = useState(null);
   const [gazData, setGazData] = useState([]);
@@ -61,8 +53,7 @@ export function App() {
     <TopicMapContextProvider>
       <TopicMapComponent
         gazData={gazData}
-        gazetteerSearchComponent={SearchComponent}
-        _gazetteerSearchComponent={GazetteerSearchComponent}
+        gazetteerSearchComponent={LibFuzzySearch}
       ></TopicMapComponent>
     </TopicMapContextProvider>
   );
