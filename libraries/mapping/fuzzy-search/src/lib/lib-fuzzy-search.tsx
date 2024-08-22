@@ -15,27 +15,18 @@ import {
   prepareGazData,
   removeStopwords,
   stopwords,
-} from "../utils/fuzzySearchHelper";
+} from "./utils/fuzzySearchHelper";
 import {
   SearchResultItem,
   SearchGazetteerProps,
   Option,
   GruppedOptions,
-  MapConsumer,
 } from "..";
-import {
-  builtInGazetteerHitTrigger as builtCesiumGazetteerHitTrigger,
-  INVERTED_SELECTED_POLYGON_ID,
-  SELECTED_POLYGON_ID,
-} from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/tools/gazetteerHelper";
 import {
   gazDataPrefix,
   sourcesConfig,
-  stopwords as stpwordsCesium,
 } from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/config";
 import { getGazData } from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/utils";
-import { removeMarker } from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/tools/cesium3dMarker";
-import { removeGroundPrimitiveById } from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/tools/cesium";
 
 interface FuseWithOption<T> extends Fuse<T> {
   options?: IFuseOptions<T>;
@@ -47,7 +38,6 @@ export function LibFuzzySearch({
   // gazetteerHit,
   // overlayFeature,
   mapRef,
-  cesiumRef,
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
@@ -65,25 +55,15 @@ export function LibFuzzySearch({
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
   const internalGazetteerHitTrigger = (hit) => {
-    if (!cesiumRef) {
-      builtInGazetteerHitTrigger(
-        hit,
-        mapRef.current?.leafletMap?.leafletElement,
-        referenceSystem,
-        referenceSystemDefinition,
-        setGazetteerHit,
-        setOverlayFeature,
-        _gazetteerHitTrigger,
-      );
-    } else {
-      const mapConsumers: MapConsumer[] = [];
-      cesiumRef && mapConsumers.push(cesiumRef);
-      mapRef && mapConsumers.push(mapRef);
-      builtCesiumGazetteerHitTrigger(hit, mapConsumers, {
-        setGazetteerHit,
-        marker3dStyle,
-      });
-    }
+    builtInGazetteerHitTrigger(
+      hit,
+      mapRef.current?.leafletMap?.leafletElement,
+      referenceSystem,
+      referenceSystemDefinition,
+      setGazetteerHit,
+      setOverlayFeature,
+      _gazetteerHitTrigger,
+    );
   };
   const [fuseInstance, setFuseInstance] =
     useState<FuseWithOption<SearchResultItem> | null>(null);
@@ -321,12 +301,6 @@ export function LibFuzzySearch({
           setSearchResult([]);
           setOverlayFeature(null);
           setCleanBtnDisable(true);
-          if (cesiumRef) {
-            removeMarker(cesiumRef);
-            cesiumRef.entities.removeById(SELECTED_POLYGON_ID);
-            //cesiumRef.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
-            removeGroundPrimitiveById(cesiumRef, INVERTED_SELECTED_POLYGON_ID);
-          }
         }}
         disabled={cleanBtnDisable}
       />

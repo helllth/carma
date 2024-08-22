@@ -1,4 +1,4 @@
-import { SearchResultItem, SearchResult, Option, GruppedOptions } from "..";
+import { SearchResultItem, SearchResult, Option, GruppedOptions } from "../..";
 export const renderTitle = (category: string) => {
   let title = "???";
   switch (category) {
