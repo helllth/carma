@@ -10,6 +10,7 @@ import { BaseSelectRef } from "rc-select";
 import {
   customSort,
   generateOptions,
+  getGazData,
   limitSearchResult,
   mapDataToSearchResult,
   prepareGazData,
@@ -22,7 +23,6 @@ import {
   Option,
   GruppedOptions,
 } from "..";
-import { getGazData } from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/utils";
 import { gazDataPrefix, sourcesConfig } from "./config";
 
 interface FuseWithOption<T> extends Fuse<T> {
