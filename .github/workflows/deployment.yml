@@ -162,7 +162,7 @@ jobs:
     if: ${{ needs.determine_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == ''  && needs.determine_projects.outputs.project_list != '[]' }}
 
     permissions:
-      contents: read
+      contents: write
       pages: write
       id-token: write
     strategy:
@@ -334,13 +334,11 @@ jobs:
         run: |
           INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}-latest" npx nx run ${{ matrix.project }}:container
         shell: bash
-
   single_build:
     runs-on: ubuntu-latest
-
     if: ${{ github.event.inputs.project-name != '' }}
     permissions:
-      contents: read
+      contents: write
       pages: write
       id-token: write
     steps:
