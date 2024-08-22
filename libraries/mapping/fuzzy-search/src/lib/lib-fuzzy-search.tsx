@@ -22,11 +22,8 @@ import {
   Option,
   GruppedOptions,
 } from "..";
-import {
-  gazDataPrefix,
-  sourcesConfig,
-} from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/config";
 import { getGazData } from "#/libraries/mapping/engines/cesium/src/lib/components/SearchGazetteer/utils";
+import { gazDataPrefix, sourcesConfig } from "./config";
 
 interface FuseWithOption<T> extends Fuse<T> {
   options?: IFuseOptions<T>;
