@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import Fuse, { IFuseOptions } from "fuse.js";
 import { AutoComplete, Button } from "antd";
-import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
+// import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
 import "./fuzzy-search.css";
 import IconComp from "react-cismap/commons/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,6 +16,7 @@ import {
   prepareGazData,
   removeStopwords,
   stopwords,
+  builtInGazetteerHitTrigger,
 } from "./utils/fuzzySearchHelper";
 import {
   SearchResultItem,
@@ -39,7 +40,6 @@ export function LibFuzzySearch({
   referenceSystem,
   referenceSystemDefinition,
   pixelwidth = 300,
-  marker3dStyle,
   ifShowCategories: standardSearch = false,
 }: SearchGazetteerProps) {
   const [options, setOptions] = useState<Option[]>([]);
@@ -56,10 +56,10 @@ export function LibFuzzySearch({
       hit,
       mapRef.current?.leafletMap?.leafletElement,
       referenceSystem,
-      referenceSystemDefinition,
-      setGazetteerHit,
-      setOverlayFeature,
-      _gazetteerHitTrigger,
+      // referenceSystemDefinition,
+      // setGazetteerHit,
+      // setOverlayFeature,
+      // _gazetteerHitTrigger,
     );
   };
   const [fuseInstance, setFuseInstance] =
