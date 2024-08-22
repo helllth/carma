@@ -3,11 +3,13 @@ const APPHASH = "#%APPLICATION_HASH%";
 import versionData from "./version.json";
 
 export const getApplicationVersion = () => {
-  /*eslint-disable no-useless-concat*/
-  if (APPVERSION === "%APPLICATION" + "_" + "VERSION%") {
-    return versionData.version + " (dev-hot-reload)";
+  let v = versionData.version;
+  if (versionData.triggered === "live") {
+    return v;
+  } else if (versionData.triggered === "dev") {
+    return "dev " + v + " (" + versionData.md5.substring(0, 4) + ")";
   } else {
-    return APPVERSION;
+    return v + " (dev-hot-reload)";
   }
 };
 export const getApplicationHash = () => {
