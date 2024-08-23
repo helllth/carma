@@ -442,16 +442,14 @@
         "manual": {
           "pages": {
             "org": "carma-dev-deployments",
-            "prj": "lagis-desktop",
-            "baseUrl": "/lagis-desktop"
+            "prj": "lagis-desktop"
           }
         },
         "auto": {
           "dev": {
             "pages": {
               "org": "carma-dev-deployments",
-              "prj": "lagis-desktop",
-              "baseUrl": "/lagis-desktop"
+              "prj": "lagis-desktop"
             }
           }
         }
