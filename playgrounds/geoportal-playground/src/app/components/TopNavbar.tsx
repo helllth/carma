@@ -61,12 +61,12 @@ const TopNavbar = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const mode = useSelector(getMode);
   const menuTourRef = useOverlayHelper('Menüleiste', {
-    containerPos: 'left',
-    contentPos: 'right',
+    containerPos: 'center',
+    contentPos: 'center',
   });
-  const hintagroundTourRef = useOverlayHelper('Hintergrund', {
-    containerPos: 'bottom',
-    contentPos: 'left',
+  const hintergrundTourRef = useOverlayHelper('Hintergrund', {
+    containerPos: 'center',
+    contentPos: 'center',
   });
 
   const extractVectorStyles = (keywords: string[]) => {
@@ -315,7 +315,7 @@ const TopNavbar = () => {
         </Tooltip>
       </div>
       <div className="flex items-center gap-6">
-        <div className="lg:flex hidden" ref={hintagroundTourRef}>
+        <div className="lg:flex hidden" ref={hintergrundTourRef}>
           <Radio.Group
             value={backgroundLayer.id}
             onChange={(e) => {
