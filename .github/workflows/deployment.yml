@@ -7,7 +7,6 @@ on:
     inputs:
       project-name:
         description: "Please enter a project name"
-        required: true
       version-manipulator:
         description: "Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease (Will change the version number of the project.)"
         required: false
