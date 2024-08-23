@@ -11,9 +11,10 @@ import {
   faEyeSlash,
   faF,
   faFileExport,
+  faBookOpenReader,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
 import { LayerLib, Item, Layer } from '@carma-mapping/layers';
@@ -34,10 +35,16 @@ import {
 } from '../store/slices/mapping';
 import Share from './Share';
 import './switch.css';
-import { getShowLayerButtons, setShowLayerButtons } from '../store/slices/ui';
+import {
+  getShowLayerButtons,
+  setShowLayerButtons,
+  setMode,
+  getMode,
+} from '../store/slices/ui';
 import { cn } from '../helper/helper';
 import Save from './Save';
 import { layerMap } from '../helper/layer';
+import useOverlayHelper from '../hooks/useOverlayHelper';
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,6 +59,15 @@ const TopNavbar = () => {
   const savedLayerConfigs = useSelector(getSavedLayerConfigs);
 
   const [messageApi, contextHolder] = message.useMessage();
+  const mode = useSelector(getMode);
+  const menuTourRef = useOverlayHelper('Menüleiste', {
+    containerPos: 'center',
+    contentPos: 'center',
+  });
+  const hintergrundTourRef = useOverlayHelper('Hintergrund', {
+    containerPos: 'center',
+    contentPos: 'center',
+  });
 
   const extractVectorStyles = (keywords: string[]) => {
     let vectorObject = null;
@@ -78,7 +94,7 @@ const TopNavbar = () => {
   const updateLayers = (
     layer: Item,
     deleteItem: boolean = false,
-    forceWMS: boolean = false
+    forceWMS: boolean = false,
   ) => {
     let newLayer: Layer;
 
@@ -217,8 +233,10 @@ const TopNavbar = () => {
           </p>
         </div>
       </div>
-
-      <div className="flex items-center gap-6 absolute left-1/2 -ml-[98px]">
+      <div
+        ref={menuTourRef}
+        className="flex items-center gap-6 absolute left-1/2 -ml-[98px]"
+      >
         <Tooltip title="Refresh">
           <button
             onClick={() => {
@@ -272,6 +290,22 @@ const TopNavbar = () => {
             </button>
           </Popover>
         </Tooltip>
+        <Tooltip title="Hilfe Overlay">
+          <Popover trigger="click" placement="bottom">
+            <button
+              className="hover:text-gray-600 text-xl"
+              onClick={() => {
+                if (mode === 'default') {
+                  dispatch(setMode('tour'));
+                } else {
+                  dispatch(setMode('default'));
+                }
+              }}
+            >
+              <FontAwesomeIcon icon={faBookOpenReader} />
+            </button>
+          </Popover>
+        </Tooltip>
         <Tooltip title="Teilen">
           <Popover trigger="click" placement="bottom" content={<Share />}>
             <button className="hover:text-gray-600 text-xl">
@@ -280,15 +314,14 @@ const TopNavbar = () => {
           </Popover>
         </Tooltip>
       </div>
-
       <div className="flex items-center gap-6">
-        <div className="lg:flex hidden">
+        <div className="lg:flex hidden" ref={hintergrundTourRef}>
           <Radio.Group
             value={backgroundLayer.id}
             onChange={(e) => {
               if (e.target.value === 'karte') {
                 dispatch(
-                  setBackgroundLayer({ ...selectedMapLayer, id: 'karte' })
+                  setBackgroundLayer({ ...selectedMapLayer, id: 'karte' }),
                 );
               } else {
                 dispatch(
@@ -306,7 +339,7 @@ const TopNavbar = () => {
                       url: layerMap[e.target.value].url,
                     },
                     layers: layerMap[e.target.value].layers,
-                  })
+                  }),
                 );
               }
             }}
