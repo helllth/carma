@@ -206,10 +206,6 @@ const TopNavbar = () => {
     }
   };
 
-  useEffect(() => {
-    dispatch(setMode('tour'));
-  }, []);
-
   return (
     <div className="h-16 w-full flex items-center relative justify-between py-2 px-[12px]">
       {contextHolder}
