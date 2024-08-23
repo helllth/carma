@@ -56,7 +56,7 @@ export function App() {
   return (
     <TopicMapContextProvider>
       <TopicMapComponent
-        gazData={gazData}
+        // gazData={gazData}
         gazetteerSearchComponent={LibFuzzySearch}
         infoBox={<GenericInfoBoxFromFeature />}
       ></TopicMapComponent>
