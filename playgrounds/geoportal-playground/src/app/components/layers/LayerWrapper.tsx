@@ -36,7 +36,7 @@ import useOverlayHelper from '../../hooks/useOverlayHelper';
 
 const LayerWrapper = () => {
   const layerButtonTour = useOverlayHelper('Layer Buttons', {
-    containerPos: 'over',
+    containerPos: 'top',
     contentPos: 'center',
   });
   const dispatch = useDispatch();

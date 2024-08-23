@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setMode } from '../store/slices/ui';
 import type {
-  ConteinerPosType,
   OverlayHelperConfig,
-  ContentPosType,
+  PositionOverlayHelper,
 } from '../hooks/useOverlayHelper';
 
 type OverlayHelperHightlighterProps = { configs: OverlayHelperConfig[] };
@@ -18,11 +17,9 @@ const OverlayHelperHightlighter = ({
     configs.forEach((currentItem) => {
       const { el, message, containerPos, contentPos } = currentItem;
       const rect = el.getBoundingClientRect();
-      console.log('xxx el from hook', currentItem);
       const pos = getContainerPosition(containerPos);
       const contPos = getElementPosition(contentPos);
 
-      console.log('yyy rect', pos);
       setHightlightRects((prev) => [
         ...prev,
         { rect, message, pos, contentPos, contPos },
@@ -84,10 +81,10 @@ const OverlayHelperHightlighter = ({
 
 export default OverlayHelperHightlighter;
 
-function getContainerPosition(alignment: ConteinerPosType) {
+function getContainerPosition(alignment: PositionOverlayHelper) {
   let styleElement: { [key: string]: string } = {};
   switch (alignment) {
-    case 'over':
+    case 'center':
       styleElement.transform = 'translate(0, 0)';
       break;
     case 'top':
@@ -109,7 +106,7 @@ function getContainerPosition(alignment: ConteinerPosType) {
   return styleElement;
 }
 
-function getElementPosition(alignment: ContentPosType) {
+function getElementPosition(alignment: PositionOverlayHelper) {
   let styleElement: { [key: string]: string | number } = {};
   switch (alignment) {
     case 'center':

@@ -61,12 +61,12 @@ const TopNavbar = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const mode = useSelector(getMode);
   const menuTourRef = useOverlayHelper('Menüleiste', {
-    containerPos: 'bottom',
-    contentPos: 'center',
+    containerPos: 'left',
+    contentPos: 'right',
   });
   const hintagroundTourRef = useOverlayHelper('Hintergrund', {
-    containerPos: 'left',
-    contentPos: 'center',
+    containerPos: 'bottom',
+    contentPos: 'left',
   });
 
   const extractVectorStyles = (keywords: string[]) => {

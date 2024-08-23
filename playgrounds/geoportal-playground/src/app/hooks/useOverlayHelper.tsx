@@ -1,38 +1,45 @@
-import {
-  useEffect,
-  useState,
-  createContext,
-  useContext,
-  useLayoutEffect,
-} from 'react';
+import { useState, createContext, useContext, useLayoutEffect } from 'react';
 import OverlayHelperHightlighter from '../components/OverlayHelperHightlighter';
 import { useSelector } from 'react-redux';
 import { getMode } from '../store/slices/ui';
-const OverlayTourContext = createContext({
+
+type OverlayTourAction = (arg: OverlayHelperConfig) => void;
+
+type OverlayTourContext = {
+  configs: OverlayHelperConfig[];
+  addConfig: OverlayTourAction;
+  removeConfig: OverlayTourAction;
+};
+
+const OverlayTourContext = createContext<OverlayTourContext>({
   configs: [],
   addConfig: (arg) => {},
   removeConfig: (arg) => {},
 });
 
-export type ConteinerPosType = 'over' | 'top' | 'left' | 'right' | 'bottom';
-export type ContentPosType = 'center' | 'top' | 'left' | 'right' | 'bottom';
+export type PositionOverlayHelper =
+  | 'center'
+  | 'top'
+  | 'left'
+  | 'right'
+  | 'bottom';
 
 export interface OverlayHelperConfig {
   el: HTMLElement;
   message: string;
-  containerPos: ConteinerPosType;
-  contentPos: ContentPosType;
+  containerPos: PositionOverlayHelper;
+  contentPos: PositionOverlayHelper;
 }
 
 export type PlacementOverlayHelper = {
-  containerPos: ConteinerPosType;
-  contentPos: ContentPosType;
+  containerPos?: PositionOverlayHelper;
+  contentPos?: PositionOverlayHelper;
 };
 
 const useOverlayHelper = (
   content: string,
   placementSettings: PlacementOverlayHelper = {
-    containerPos: 'over',
+    containerPos: 'center',
     contentPos: 'center',
   },
 ) => {
@@ -63,8 +70,6 @@ export default useOverlayHelper;
 export const OverlayTourProvider = ({ children }) => {
   const [configs, setConfigs] = useState<OverlayHelperConfig[]>([]);
   const mode = useSelector(getMode);
-
-  useEffect(() => {}, [configs]);
 
   const addConfig = (config) => {
     setConfigs((prevConfigs) => [...prevConfigs, config]);
