@@ -12,16 +12,16 @@ const OverlayHelperHightlighter = ({
   const dispatch = useDispatch();
   useEffect(() => {
     configs.forEach((currentItem) => {
-      const { el, message, container, element } = currentItem;
+      const { el, message, containerPos, contentPos } = currentItem;
       const rect = el.getBoundingClientRect();
       console.log('xxx el from hook', currentItem);
-      const pos = getContainerPosition(container);
-      const contPos = getElementPosition(element);
+      const pos = getContainerPosition(containerPos);
+      const contPos = getElementPosition(contentPos);
 
       console.log('yyy rect', pos);
       setHightlightRects((prev) => [
         ...prev,
-        { rect, message, pos, element, contPos },
+        { rect, message, pos, contentPos, contPos },
       ]);
     });
   }, [configs]);

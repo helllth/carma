@@ -35,7 +35,7 @@ import SecondaryView from './SecondaryView';
 import useOverlayHelper from '../../hooks/useOverlayHelper';
 
 const LayerWrapper = () => {
-  const layerButtonTour = useOverlayHelper('Layer Buttons', 'center', 'bottom');
+  const layerButtonTour = useOverlayHelper('Layer Buttons');
   const dispatch = useDispatch();
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
   const layers = useSelector(getLayers);

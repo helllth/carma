@@ -62,8 +62,8 @@ const TopNavbar = () => {
   const mode = useSelector(getMode);
   const menuTourRef = useOverlayHelper('Menüleiste');
   const hintagroundTourRef = useOverlayHelper('Hintergrund', {
-    container: 'left',
-    element: 'center',
+    containerPos: 'left',
+    contentPos: 'center',
   });
 
   const extractVectorStyles = (keywords: string[]) => {

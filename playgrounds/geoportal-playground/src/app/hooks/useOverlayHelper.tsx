@@ -17,33 +17,33 @@ const OverlayTourContext = createContext({
 export interface OverlayHelperConfig {
   el: HTMLElement;
   message: string;
-  container: string;
-  element: string;
+  containerPos: string;
+  contentPos: string;
 }
 
 export type PlacementOverlayHelper = {
-  container: string;
-  element: string;
+  containerPos: string;
+  contentPos: string;
 };
 
 const useOverlayHelper = (
   content: string,
   placementSettings: PlacementOverlayHelper = {
-    container: 'center',
-    element: 'center',
+    containerPos: 'center',
+    contentPos: 'center',
   },
 ) => {
   const [ref, setRef] = useState<HTMLElement | null>(null);
   const { addConfig, removeConfig } = useContext(OverlayTourContext);
-  const { container, element } = placementSettings;
+  const { containerPos, contentPos } = placementSettings;
   useLayoutEffect(() => {
     if (!ref) return;
 
     const config: OverlayHelperConfig = {
       el: ref,
       message: content,
-      container,
-      element,
+      containerPos,
+      contentPos,
     };
     console.log('yyy hook ref');
     addConfig(config);
