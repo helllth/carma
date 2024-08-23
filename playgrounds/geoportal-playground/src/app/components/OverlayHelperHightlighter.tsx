@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setMode } from '../store/slices/ui';
 import type { OverlayHelperConfig } from '../hooks/useOverlayHelper';
-import { off } from 'process';
 
 type OverlayHelperHightlighterProps = { configs: OverlayHelperConfig[] };
 
@@ -13,16 +12,16 @@ const OverlayHelperHightlighter = ({
   const dispatch = useDispatch();
   useEffect(() => {
     configs.forEach((currentItem) => {
-      const { el, message, placement, contentPlacement } = currentItem;
+      const { el, message, container, element } = currentItem;
       const rect = el.getBoundingClientRect();
       console.log('xxx el from hook', currentItem);
-      const pos = getElementPosition(placement);
-      const contPos = getContentPosition(contentPlacement);
+      const pos = getContainerPosition(container);
+      const contPos = getElementPosition(element);
 
       console.log('yyy rect', pos);
       setHightlightRects((prev) => [
         ...prev,
-        { rect, message, pos, contentPlacement, contPos },
+        { rect, message, pos, element, contPos },
       ]);
     });
   }, [configs]);
@@ -70,7 +69,7 @@ const OverlayHelperHightlighter = ({
               style={{
                 position: 'absolute',
                 border: '1px solid red',
-                // top: contentPlacement.top,
+                // top: element.top,
                 // left: '50%',
                 // top: '50%',
                 // transform: 'translate(-50%, -50%)',
@@ -88,7 +87,7 @@ const OverlayHelperHightlighter = ({
 
 export default OverlayHelperHightlighter;
 
-function getElementPosition(alignment: string) {
+function getContainerPosition(alignment: string) {
   let styleElement: { [key: string]: string } = {};
   switch (alignment) {
     case 'center':
@@ -113,7 +112,7 @@ function getElementPosition(alignment: string) {
   return styleElement;
 }
 
-function getContentPosition(alignment) {
+function getElementPosition(alignment) {
   let styleElement: { [key: string]: string | number } = {};
   switch (alignment) {
     case 'center':

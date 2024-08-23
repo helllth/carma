@@ -61,7 +61,10 @@ const TopNavbar = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const mode = useSelector(getMode);
   const menuTourRef = useOverlayHelper('Menüleiste');
-  const hintagroundTourRef = useOverlayHelper('Hintergrund', 'left', 'left');
+  const hintagroundTourRef = useOverlayHelper('Hintergrund', {
+    container: 'left',
+    element: 'center',
+  });
 
   const extractVectorStyles = (keywords: string[]) => {
     let vectorObject = null;
