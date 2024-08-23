@@ -5,7 +5,8 @@ import HeavyRainHazardMap from "@cismet-dev/react-cismap-envirometrics-maps/Heav
 import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import { md5FetchJSON } from "react-cismap/tools/fetching";
 import config from "./config";
-import { getApplicationVersion } from "./version";
+import versionData from "./version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 import CismapLayer from "react-cismap/CismapLayer";
 import "./notification.css";
 
@@ -18,7 +19,7 @@ function App() {
   const [hinweisShown, setHinweisShown] = useState(false);
 
   const [gazData, setGazData] = useState([]);
-  const version = getApplicationVersion();
+  const version = getApplicationVersion(versionData);
   const getGazData = async (setGazData, url) => {
     const prefix = "GazDataForStarkregengefahrenkarteByCismet";
     const data = await md5FetchJSON(prefix, url);
@@ -56,7 +57,7 @@ function App() {
         appMenu={
           <GenericModalApplicationMenu
             {...getCollabedHelpComponentConfig({
-              versionString: "#" + version,
+              versionString: version,
               reactCismapRHMVersion: "_",
 
               email,

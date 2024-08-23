@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
 import SecondaryInfoPanelSection from "react-cismap/topicmaps/SecondaryInfoPanelSection";
 import SecondaryInfo from "react-cismap/topicmaps/SecondaryInfo";
-import { getApplicationVersion } from "./version";
+import versionData from "../../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 import { version as reactCismapVersion } from "react-cismap/meta";
 
 const InfoPanel = () => {
@@ -13,25 +14,25 @@ const InfoPanel = () => {
     <div style={{ fontSize: "11px" }}>
       <div>
         <b>
-          {document.title} v{getApplicationVersion()}
+          {document.title} v{getApplicationVersion(versionData)}
         </b>
         :{" "}
-        <a href='https://cismet.de/' target='_cismet'>
+        <a href="https://cismet.de/" target="_cismet">
           cismet GmbH
         </a>{" "}
         auf Basis von{" "}
-        <a href='http://leafletjs.com/' target='_more'>
+        <a href="http://leafletjs.com/" target="_more">
           Leaflet
         </a>{" "}
         und{" "}
-        <a href='https://cismet.de/#refs' target='_cismet'>
+        <a href="https://cismet.de/#refs" target="_cismet">
           cids | react-cismap v{reactCismapVersion}
         </a>{" "}
         |{" "}
         <a
-          target='_blank'
-          rel='noopener noreferrer'
-          href='https://cismet.de/datenschutzerklaerung.html'
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://cismet.de/datenschutzerklaerung.html"
         >
           Datenschutzerklärung (Privacy Policy)
         </a>
@@ -41,11 +42,15 @@ const InfoPanel = () => {
   if (angebot !== undefined) {
     let foto;
     if (angebot.bild !== undefined) {
-      foto = "https://www.wuppertal.de/geoportal/standort_klima/fotos/" + angebot.bild;
+      foto =
+        "https://www.wuppertal.de/geoportal/standort_klima/fotos/" +
+        angebot.bild;
     }
 
     const weitereAngebote = items.filter(
-      (testItem) => testItem?.standort.id === angebot.standort.id && testItem.id !== angebot.id
+      (testItem) =>
+        testItem?.standort.id === angebot.standort.id &&
+        testItem.id !== angebot.id,
     );
     //data structure for "weitere Angebote"
     // gruppenwechsel for thema
@@ -60,8 +65,8 @@ const InfoPanel = () => {
 
     const subSections = [
       <SecondaryInfoPanelSection
-        key='standort'
-        bsStyle='info'
+        key="standort"
+        bsStyle="info"
         header={"Standort: " + angebot?.standort?.name}
       >
         <div style={{ fontSize: "115%", padding: "10px", paddingTop: "0px" }}>
@@ -104,9 +109,9 @@ const InfoPanel = () => {
     if (weitereAngebote.length > 0) {
       subSections.push(
         <SecondaryInfoPanelSection
-          key='weitereAngebote'
-          header='Weitere Angebote an diesem Standort:'
-          bsStyle='success'
+          key="weitereAngebote"
+          header="Weitere Angebote an diesem Standort:"
+          bsStyle="success"
         >
           <div style={{ fontSize: "115%", padding: "10px", paddingTop: "0px" }}>
             <table border={0} style={{ xwidth: "100%" }}>
@@ -139,12 +144,22 @@ const InfoPanel = () => {
                     <>
                       {separator}
                       <tr style={{ paddingBottom: 10 }} key={"addAng" + index}>
-                        <td style={{ verticalAlign: "top", padding: 5 }} key={"addAng.L." + index}>
+                        <td
+                          style={{ verticalAlign: "top", padding: 5 }}
+                          key={"addAng.L." + index}
+                        >
                           {key}:
                         </td>
-                        <td style={{ verticalAlign: "top", padding: 5 }} key={"addAng.R." + index}>
+                        <td
+                          style={{ verticalAlign: "top", padding: 5 }}
+                          key={"addAng.R." + index}
+                        >
                           {addOffers[key].map((val, index) => {
-                            return <div key={"kategorien." + index}>{val.join(", ")}</div>;
+                            return (
+                              <div key={"kategorien." + index}>
+                                {val.join(", ")}
+                              </div>
+                            );
                           })}
                         </td>
                       </tr>
@@ -155,7 +170,7 @@ const InfoPanel = () => {
             </table>
           </div>
           {/* <pre>{JSON.stringify(addOffers, null, 2)}</pre> */}
-        </SecondaryInfoPanelSection>
+        </SecondaryInfoPanelSection>,
       );
     }
 
@@ -165,13 +180,13 @@ const InfoPanel = () => {
     }
     return (
       <SecondaryInfo
-        titleIconName='info-circle'
+        titleIconName="info-circle"
         title={"Datenblatt: " + angebot.kategorien.join(", ")}
         mainSection={
           <div style={{ width: "100%", minHeight: minHeight4MainSextion }}>
             {foto !== undefined && (
               <img
-                alt='Bild'
+                alt="Bild"
                 style={{
                   paddingLeft: 10,
                   paddingRight: 10,
@@ -179,10 +194,12 @@ const InfoPanel = () => {
                   paddingBottom: "5px",
                 }}
                 src={foto}
-                width='250'
+                width="250"
               />
             )}
-            <div style={{ fontSize: "115%", padding: "10px", paddingTop: "0px" }}>
+            <div
+              style={{ fontSize: "115%", padding: "10px", paddingTop: "0px" }}
+            >
               {angebot.beschreibung && (
                 <b>
                   {angebot.beschreibung}

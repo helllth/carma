@@ -9,7 +9,8 @@ import { md5FetchJSON } from "react-cismap/tools/fetching";
 import CrossTabCommunicationControl from "react-cismap/CrossTabCommunicationControl";
 import CrossTabCommunicationContextProvider from "react-cismap/contexts/CrossTabCommunicationContextProvider";
 import config from "./config";
-import { getApplicationVersion } from "./version";
+import versionData from "./version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 import NotesDisplay from "./NotesDisplay";
 import { getCollabedHelpComponentConfig } from "@carma-collab/wuppertal/starkregengefahrenkarte";
 
@@ -17,7 +18,7 @@ function App() {
   const email = "starkregen@stadt.wuppertal.de";
   const [gazData, setGazData] = useState([]);
   const [hinweisData, setHinweisData] = useState([]);
-  const version = getApplicationVersion();
+  const version = getApplicationVersion(versionData);
 
   const getGazData = async (setData) => {
     const prefix = "GazDataForStarkregengefahrenkarteByCismet";

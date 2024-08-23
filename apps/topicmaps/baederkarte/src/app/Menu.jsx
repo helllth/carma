@@ -12,7 +12,8 @@ import {
   MenuIntroduction,
 } from "@carma-collab/wuppertal/baederkarte";
 import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "../version";
+import versionData from "../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const Menu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
@@ -63,7 +64,7 @@ const Menu = () => {
         menuTitle={"Einstellungen und Kompaktanleitung"}
         menuFooter={
           <Footer
-            version={getApplicationVersion()}
+            version={getApplicationVersion(versionData)}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }

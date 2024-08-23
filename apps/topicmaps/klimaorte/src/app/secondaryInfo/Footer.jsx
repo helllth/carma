@@ -1,12 +1,13 @@
 import { version as reactCismapVersion } from "react-cismap/meta";
-import { getApplicationVersion } from "../../version";
+import versionData from "../../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 export default function Footer() {
   return (
     <div style={{ fontSize: "11px" }}>
       <div>
         <b>
-          {document.title} v{getApplicationVersion()}
+          {document.title} v{getApplicationVersion(versionData)}
         </b>
         :{" "}
         <a href="https://cismet.de/" target="_cismet">

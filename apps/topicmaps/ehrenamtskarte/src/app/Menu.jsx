@@ -42,7 +42,8 @@ import {
   FilterStyle,
 } from "@carma-collab/wuppertal/ehrenamtskarte";
 import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "../version";
+import versionData from "../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const Menu = ({ bookmarks, setBookmarks }) => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
@@ -87,7 +88,7 @@ const Menu = ({ bookmarks, setBookmarks }) => {
         menuTitle={<MenuTitle />}
         menuFooter={
           <Footer
-            version={getApplicationVersion()}
+            version={getApplicationVersion(versionData)}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }

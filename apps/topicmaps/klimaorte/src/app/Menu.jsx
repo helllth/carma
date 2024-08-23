@@ -31,7 +31,8 @@ import { getSymbolSVGGetter } from "react-cismap/tools/uiHelper";
 import { featureSamples4Icons } from "./helper/iconFactory";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "../version";
+import versionData from "../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 export const getFilterInfo = (items) => {
   let kategorien = [];
@@ -349,7 +350,7 @@ const MyMenu = () => {
         menuTitle={<MenuTitle appMode={appMode} />}
         menuFooter={
           <Footer
-            version={getApplicationVersion()}
+            version={getApplicationVersion(versionData)}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }
