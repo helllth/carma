@@ -31,21 +31,21 @@ export interface OverlayHelperConfig {
   contentPos: PositionOverlayHelper;
 }
 
-export type PlacementOverlayHelper = {
+export type OptionsOverlayHelper = {
   containerPos?: PositionOverlayHelper;
   contentPos?: PositionOverlayHelper;
 };
 
 const useOverlayHelper = (
   content: string,
-  placementSettings: PlacementOverlayHelper = {
+  options: OptionsOverlayHelper = {
     containerPos: 'center',
     contentPos: 'center',
   },
 ) => {
   const [ref, setRef] = useState<HTMLElement | null>(null);
   const { addConfig, removeConfig } = useContext(OverlayTourContext);
-  const { containerPos, contentPos } = placementSettings;
+  const { containerPos, contentPos } = options;
   useLayoutEffect(() => {
     if (!ref) return;
 
