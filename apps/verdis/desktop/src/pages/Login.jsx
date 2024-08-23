@@ -55,41 +55,6 @@ const Page = () => {
             </a>
           </span>
         </div>
-        {/* 
-        <div>
-           <span>
-            VerDIS Desktop {version}
-            <br></br>
-            powered by{" "}
-            <a href="https://cismet.de/" target="_cismet">
-              cismet GmbH
-            </a>{" "}
-            auf Basis von{" "}
-            <a href="http://leafletjs.com/" target="_cismet">
-              Leaflet
-            </a>{" "}
-            und{" "}
-            <a href="https://github.com/cismet/carma" target="_cismet">
-              carma
-            </a>{" "}
-            |{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://cismet.de/datenschutzerklaerung.html"
-            >
-              Datenschutzerklärung
-            </a>{" "}
-            |{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://cismet.de/impressum.html"
-            >
-              Impressum
-            </a>
-          </span>
-        </div> */}
       </div>
     </div>
   );
