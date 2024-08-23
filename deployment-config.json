@@ -361,7 +361,7 @@
       },
       "projectPath": "./dist/playgrounds/vector"
     },
-    "rainhazardmap-korschenbroich": {
+    "--switched-off--rainhazardmap-korschenbroich": {
       "deployment": {
         "manual": {
           "container": {
