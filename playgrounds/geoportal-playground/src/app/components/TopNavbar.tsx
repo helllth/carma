@@ -44,7 +44,7 @@ import {
 import { cn } from '../helper/helper';
 import Save from './Save';
 import { layerMap } from '../helper/layer';
-import useOverlayHelper from '../hooks/useOverlayHelper.jsx';
+import useOverlayHelper from '../hooks/useOverlayHelper';
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
