@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setMode } from '../store/slices/ui';
-import type { OverlayHelperConfig } from '../hooks/useOverlayHelper';
+import type {
+  ConteinerPosType,
+  OverlayHelperConfig,
+  ContentPosType,
+} from '../hooks/useOverlayHelper';
 
 type OverlayHelperHightlighterProps = { configs: OverlayHelperConfig[] };
 
@@ -55,24 +59,17 @@ const OverlayHelperHightlighter = ({
               position: 'absolute',
               top: rect.top,
               left: rect.left,
-              // transform: 'translate(-100%, 0)',
-              // bottom: rect.bottom,
-              // right: rect.right,
               width: rect.width,
               height: rect.height,
               color: 'white',
-              border: '1px solid yellow',
+              // border: '1px solid yellow',
               ...pos,
             }}
           >
             <span
               style={{
                 position: 'absolute',
-                border: '1px solid red',
-                // top: element.top,
-                // left: '50%',
-                // top: '50%',
-                // transform: 'translate(-50%, -50%)',
+                // border: '1px solid red',
                 ...contPos,
               }}
             >
@@ -87,10 +84,10 @@ const OverlayHelperHightlighter = ({
 
 export default OverlayHelperHightlighter;
 
-function getContainerPosition(alignment: string) {
+function getContainerPosition(alignment: ConteinerPosType) {
   let styleElement: { [key: string]: string } = {};
   switch (alignment) {
-    case 'center':
+    case 'over':
       styleElement.transform = 'translate(0, 0)';
       break;
     case 'top':
@@ -112,7 +109,7 @@ function getContainerPosition(alignment: string) {
   return styleElement;
 }
 
-function getElementPosition(alignment) {
+function getElementPosition(alignment: ContentPosType) {
   let styleElement: { [key: string]: string | number } = {};
   switch (alignment) {
     case 'center':

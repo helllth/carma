@@ -60,7 +60,10 @@ const TopNavbar = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
   const mode = useSelector(getMode);
-  const menuTourRef = useOverlayHelper('Menüleiste');
+  const menuTourRef = useOverlayHelper('Menüleiste', {
+    containerPos: 'bottom',
+    contentPos: 'center',
+  });
   const hintagroundTourRef = useOverlayHelper('Hintergrund', {
     containerPos: 'left',
     contentPos: 'center',
@@ -203,9 +206,9 @@ const TopNavbar = () => {
     }
   };
 
-  // useEffect(() => {
-  //   dispatch(setMode('tour'));
-  // }, []);
+  useEffect(() => {
+    dispatch(setMode('tour'));
+  }, []);
 
   return (
     <div className="h-16 w-full flex items-center relative justify-between py-2 px-[12px]">

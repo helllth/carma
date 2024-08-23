@@ -14,22 +14,25 @@ const OverlayTourContext = createContext({
   removeConfig: (arg) => {},
 });
 
+export type ConteinerPosType = 'over' | 'top' | 'left' | 'right' | 'bottom';
+export type ContentPosType = 'center' | 'top' | 'left' | 'right' | 'bottom';
+
 export interface OverlayHelperConfig {
   el: HTMLElement;
   message: string;
-  containerPos: string;
-  contentPos: string;
+  containerPos: ConteinerPosType;
+  contentPos: ContentPosType;
 }
 
 export type PlacementOverlayHelper = {
-  containerPos: string;
-  contentPos: string;
+  containerPos: ConteinerPosType;
+  contentPos: ContentPosType;
 };
 
 const useOverlayHelper = (
   content: string,
   placementSettings: PlacementOverlayHelper = {
-    containerPos: 'center',
+    containerPos: 'over',
     contentPos: 'center',
   },
 ) => {
@@ -45,7 +48,6 @@ const useOverlayHelper = (
       containerPos,
       contentPos,
     };
-    console.log('yyy hook ref');
     addConfig(config);
 
     return () => {
