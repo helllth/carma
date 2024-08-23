@@ -1,19 +1,22 @@
-import React from 'react';
-import { Input, Button, message } from 'antd';
-import wupperwurm from '../../assets/wupperwurm.svg';
-import './style.css';
-import { useSelector, useDispatch } from 'react-redux';
-import { getAuthLoading, login } from '../../store/slices/auth';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import useDevSecrets from '../../core/hooks/useDevSecrets';
+import React from "react";
+import { Input, Button, message } from "antd";
+import wupperwurm from "../../assets/wupperwurm.svg";
+import "./style.css";
+import { useSelector, useDispatch } from "react-redux";
+import { getAuthLoading, login } from "../../store/slices/auth";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useDevSecrets from "../../core/hooks/useDevSecrets";
 // import packageJson from "../../../package.json";
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import versionData from "../../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
-const packageJson = { version: '?.?.?' };
+const packageJson = { version: "?.?.?" };
 
 const LoginPage = () => {
   const { user: devSecretUser, pw: devSecretPassword } = useDevSecrets();
+  const version = getApplicationVersion(versionData);
 
   const loading = useSelector(getAuthLoading);
   const dispatch = useDispatch();
@@ -30,8 +33,8 @@ const LoginPage = () => {
 
   const info = () => {
     messageApi.open({
-      type: 'error',
-      content: 'Bei der Anmeldung ist ein Fehler aufgetreten.',
+      type: "error",
+      content: "Bei der Anmeldung ist ein Fehler aufgetreten.",
     });
   };
 
@@ -53,7 +56,7 @@ const LoginPage = () => {
               <div className="flex flex-col gap-6 w-full">
                 <h3
                   className="border-b-2 border-0 w-fit border-solid"
-                  style={{ color: '#1677ff', marginBottom: '8px' }}
+                  style={{ color: "#1677ff", marginBottom: "8px" }}
                 >
                   Anmeldung
                 </h3>
@@ -62,13 +65,13 @@ const LoginPage = () => {
                   type="email"
                   onChange={loginHandle}
                   prefix={<UserOutlined />}
-                  style={{ marginBottom: '20px' }}
+                  style={{ marginBottom: "20px" }}
                 />
                 <Input.Password
                   placeholder="Passwort"
                   onChange={passwordnHandle}
                   prefix={<LockOutlined />}
-                  style={{ marginBottom: '20px' }}
+                  style={{ marginBottom: "20px" }}
                 />
                 <Button
                   type="primary"
@@ -91,39 +94,39 @@ const LoginPage = () => {
               <span>Vermessung, Katasteramt und Geodaten</span>
               <span>102.23 Kommunalservice Liegenschaftskataster</span>
             </div>
-            <div className="absolute bottom-6 right-6 text-white/80 font-semibold flex flex-col gap-2 items-end">
+            <div className="absolute bottom-6 right-6 text-white/80 font-semibold flex flex-col gap-2 items-end  text-right">
               <span>
-                LagIS Desktop v:{packageJson?.version}{' '}
-                <a
-                  href="https://cismet.de"
-                  className="text-white/50 no-underline"
-                >
+                LagIS Desktop {version}
+                <br></br>
+                powered by{" "}
+                <a href="https://cismet.de/" target="_cismet">
                   cismet GmbH
-                </a>{' '}
-                auf Basis von
-              </span>
-              <span>
-                <a
-                  href="https://leafletjs.com/"
-                  className="text-white/50 no-underline"
-                >
+                </a>{" "}
+                auf Basis von{" "}
+                <a href="http://leafletjs.com/" target="_cismet">
                   Leaflet
-                </a>{' '}
-                und{' '}
+                </a>{" "}
+                und{" "}
+                <a href="https://github.com/cismet/carma" target="_cismet">
+                  carma
+                </a>{" "}
+                <br></br>
                 <a
-                  href="https://cismet.de/#refs"
-                  className="text-white/50 no-underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://cismet.de/datenschutzerklaerung.html"
                 >
-                  cids | react cismap v
-                  {/* {packageJson?.dependencies['react-cismap'].slice(1)} | */}
+                  Datenschutzerklärung
+                </a>{" "}
+                |{" "}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://cismet.de/impressum.html"
+                >
+                  Impressum
                 </a>
               </span>
-              <a
-                href="https://cismet.de/datenschutzerklaerung.html"
-                className="text-white/50 no-underline"
-              >
-                Datenschutzerklärung (Privacy Policy)
-              </a>
             </div>
           </div>
         </div>

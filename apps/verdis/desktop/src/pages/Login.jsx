@@ -1,9 +1,11 @@
-import Login from '../components/authentication/Login';
+import Login from "../components/authentication/Login";
 // import packageJson from "../../package.json";
-import wupperwurm from '../assets/wupperwurm.svg';
-const packageJson = { version: '?.?.?' };
+import wupperwurm from "../assets/wupperwurm.svg";
+import versionData from "../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const Page = () => {
+  const version = getApplicationVersion(versionData);
   return (
     <div className="h-screen">
       <div className="w-full flex h-full items-center justify-center bg-rain relative bg-cover">
@@ -19,37 +21,75 @@ const Page = () => {
           <span>Vermessung, Katasteramt und Geodaten</span>
           <span>102.23 Kommunalservice Liegenschaftskataster</span>
         </div>
-        <div className="absolute bottom-6 right-6 text-white/80 font-semibold flex flex-col gap-2 items-end">
+        <div className="absolute bottom-6 right-6 text-white/80 font-semibold flex flex-col gap-2 items-end text-right">
           <span>
-            VerDIS Desktop v:{packageJson.version}{' '}
-            <a href="https://cismet.de" className="text-white/50 no-underline">
+            VerDIS Desktop {version}
+            <br></br>
+            powered by{" "}
+            <a href="https://cismet.de/" target="_cismet">
               cismet GmbH
-            </a>{' '}
-            auf Basis von
-          </span>
-          <span>
-            <a
-              href="https://leafletjs.com/"
-              className="text-white/50 no-underline"
-            >
+            </a>{" "}
+            auf Basis von{" "}
+            <a href="http://leafletjs.com/" target="_cismet">
               Leaflet
-            </a>{' '}
-            und{' '}
+            </a>{" "}
+            und{" "}
+            <a href="https://github.com/cismet/carma" target="_cismet">
+              carma
+            </a>{" "}
+            <br></br>
             <a
-              href="https://cismet.de/#refs"
-              className="text-white/50 no-underline"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://cismet.de/datenschutzerklaerung.html"
             >
-              cids | react cismap v
-              {/* {packageJson.dependencies['react-cismap'].slice(1)} | */}
+              Datenschutzerklärung
+            </a>{" "}
+            |{" "}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://cismet.de/impressum.html"
+            >
+              Impressum
             </a>
           </span>
-          <a
-            href="https://cismet.de/datenschutzerklaerung.html"
-            className="text-white/50 no-underline"
-          >
-            Datenschutzerklärung (Privacy Policy)
-          </a>
         </div>
+        {/* 
+        <div>
+           <span>
+            VerDIS Desktop {version}
+            <br></br>
+            powered by{" "}
+            <a href="https://cismet.de/" target="_cismet">
+              cismet GmbH
+            </a>{" "}
+            auf Basis von{" "}
+            <a href="http://leafletjs.com/" target="_cismet">
+              Leaflet
+            </a>{" "}
+            und{" "}
+            <a href="https://github.com/cismet/carma" target="_cismet">
+              carma
+            </a>{" "}
+            |{" "}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://cismet.de/datenschutzerklaerung.html"
+            >
+              Datenschutzerklärung
+            </a>{" "}
+            |{" "}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://cismet.de/impressum.html"
+            >
+              Impressum
+            </a>
+          </span>
+        </div> */}
       </div>
     </div>
   );
