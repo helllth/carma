@@ -18,7 +18,8 @@ import {
   FilterStyle,
 } from "@carma-collab/wuppertal/potenzialflaechen-online";
 import { GenericDigitalTwinReferenceTextComponent } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "../version";
+import versionData from "../../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const MyMenu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
@@ -144,7 +145,7 @@ const MyMenu = () => {
       ]}
       menuFooter={
         <Footer
-          version={getApplicationVersion()}
+          version={getApplicationVersion(versionData)}
           setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
         />
       }

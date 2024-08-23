@@ -56,3 +56,4 @@ envirometrics/korschenbroich/rainhazardmap/public/data/adressen_korschenbroich.j
 envirometrics/korschenbroich/rainhazardmap/public/data/adressen_korschenbroich.json.md5
 
 .npmrc
+deployment-config copy.json

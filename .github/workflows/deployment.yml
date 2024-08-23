@@ -6,16 +6,17 @@ on:
   workflow_dispatch:
     inputs:
       project-name:
-        description: 'Please enter a project name'
+        description: "Please enter a project name"
         required: true
-
+      version-manipulator:
+        description: "Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease (Will change the version number of the project.)"
+        required: false
       target:
         type: choice
-        description: 'Where should I deploy?'
+        description: "Where should I deploy?"
         options:
           - live
           - dev
-
       create-docker-image:
         type: boolean
         description: Create a Docker image? 🐳
@@ -44,13 +45,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: 'recursive' # Fetch all submodules recursively
+          submodules: "recursive" # Fetch all submodules recursively
       - name: Update Submodules
         run: git submodule update --remote --recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
       - name: add cismet-dev registry secret to .npmrc
         shell: bash
         run: |
@@ -160,7 +161,7 @@ jobs:
     if: ${{ needs.determine_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == ''  && needs.determine_projects.outputs.project_list != '[]' }}
 
     permissions:
-      contents: read
+      contents: write
       pages: write
       id-token: write
     strategy:
@@ -172,13 +173,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: 'recursive' # Fetch all submodules recursively
+          submodules: "recursive" # Fetch all submodules recursively
       - name: Update Submodules
         run: git submodule update --remote --recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
       - name: Read project config
         id: read_project_config
         run: echo "::set-output name=config::$(cat deployment-config.json)"
@@ -259,7 +260,23 @@ jobs:
           echo "SRC_MD5_SHORT=${srcMD5short}" >> $GITHUB_ENV
           echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV
           echo "CONTAINER_IMAGE=${containerImage}" >> $GITHUB_ENV
+          echo "TARGET=auto.${branch}" >> $GITHUB_ENV
         shell: bash
+      - name: Create version.json if it doesn't exist
+        run: |
+          if [[ ! -f "$SRC_PATH/version.json" ]]; then
+            echo '{"version": "0.0.0"}' > "$SRC_PATH/version.json"
+          fi
+        shell: bash
+      - name: Add further info to version.json
+        run: |
+          jq --arg md5 "$SRC_MD5" --arg triggered "$TARGET" \
+          '. + {md5: $md5, triggered: $triggered}' \
+          "$SRC_PATH/version.json" > /tmp/version.json
+
+          mv /tmp/version.json "$SRC_PATH/version.json"
+        shell: bash
+
       - name: Debug Outputs
         run: |
           echo -----------------------------------
@@ -272,7 +289,10 @@ jobs:
           echo "SRC_MD5: $SRC_MD5"
           echo "CONTAINER_IMAGE: $CONTAINER_IMAGE"
           echo -----------------------------------
-      - name: Set version
+      - name: Debug version.json
+        run: |
+          cat $SRC_PATH/version.json
+      - name: Set version (deprectated)
         run: |
           if [[ -f "$SRC_PATH/version.js" ]]; then
             sed -i "s/%APPLICATION_VERSION%/$SRC_MD5_SHORT/" $SRC_PATH/version.js
@@ -283,24 +303,13 @@ jobs:
               echo "No version.js file found. Version information will not be updated."
             fi
           fi
-      - name: Set hash
+      - name: Set hash (deprecated)
         run: |
           if [[ -f "$SRC_PATH/version.js" ]]; then
             sed -i "s/%APPLICATION_HASH%/$SRC_MD5/" $SRC_PATH/version.js
           else
             if [[ -f "$SRC_PATH/app/version.js" ]]; then
               sed -i "s/%APPLICATION_HASH%/$SRC_MD5/" $SRC_PATH/app/version.js
-            else
-              echo "No version.js file found. Hash information will not be updated."
-            fi
-          fi
-      - name: debug log version.js
-        run: |
-          if [[ -f "$SRC_PATH/version.js" ]]; then
-            cat $SRC_PATH/version.js
-          else
-            if [[ -f "$SRC_PATH/app/version.js" ]]; then
-              cat $SRC_PATH/app/version.js
             else
               echo "No version.js file found. Hash information will not be updated."
             fi
@@ -332,20 +341,18 @@ jobs:
         run: |
           INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}-latest" npx nx run ${{ matrix.project }}:container
         shell: bash
-
   single_build:
     runs-on: ubuntu-latest
-
     if: ${{ github.event.inputs.project-name != '' }}
     permissions:
-      contents: read
+      contents: write
       pages: write
       id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: 'recursive' # Fetch all submodules recursively
+          submodules: "recursive" # Fetch all submodules recursively
       - name: Update Submodules
         run: git submodule update --remote --recursive
       - name: add cismet-dev registry secret to .npmrc
@@ -358,6 +365,7 @@ jobs:
         run: |
           config=$(cat deployment-config.json) 
           project_name="${{ github.event.inputs.project-name }}"
+          target="${{ github.event.inputs.target }}"
           deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.repo')
           baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.base')
           orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual.pages.org // "null"')
@@ -390,8 +398,57 @@ jobs:
           echo "SRC_MD5_SHORT=${srcMD5short}" >> $GITHUB_ENV
           echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV
           echo "CONTAINER_IMAGE=${containerImage}" >> $GITHUB_ENV
+          echo "TARGET=${target}" >> $GITHUB_ENV
 
         shell: bash
+      - name: Create the version number
+        id: update_version_number
+        run: |
+          if [[ -f "$SRC_PATH/version.json" ]]; then
+            if [[ -n "${{ github.event.inputs.version-manipulator }}" ]]; then
+              cp "$SRC_PATH/version.json" /tmp/package.json
+              cd /tmp
+              npm version ${{ github.event.inputs.version-manipulator }} --no-git-tag-version --allow-same-version
+              cd -
+              cp /tmp/package.json "$SRC_PATH/version.json"
+              echo "version_changed=true" >> $GITHUB_ENV
+            else
+              echo "No version-manipulator input provided. Version information will not be updated."
+              echo "version_changed=false" >> $GITHUB_ENV
+            fi
+          else
+            echo "No version.json file found. Version information will not be updated."
+            echo "version_changed=false" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Commit version.json changes
+        if: env.version_changed == 'true'
+        run: |
+          git config --global user.email "902348742+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+
+          git add "$SRC_PATH/version.json"
+          git commit -m "Update version.json based on ${{ github.event.inputs.version-manipulator }}"
+          git push origin dev
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+      - name: Create version.json if it doesn't exist
+        run: |
+          if [[ ! -f "$SRC_PATH/version.json" ]]; then
+            echo '{"version": "0.0.0"}' > "$SRC_PATH/version.json"
+          fi
+        shell: bash
+      - name: Add further info to version.json
+        run: |
+          jq --arg md5 "$SRC_MD5" --arg triggered "$TARGET" \
+          '. + {md5: $md5, triggered: $triggered}' \
+          "$SRC_PATH/version.json" > /tmp/version.json
+
+          mv /tmp/version.json "$SRC_PATH/version.json"
+        shell: bash
+
       - name: Debug Outputs
         run: |
           echo -----------------------------------
@@ -404,7 +461,10 @@ jobs:
           echo "SRC_MD5: $SRC_MD5"
           echo "CONTAINER_IMAGE: $CONTAINER_IMAGE"
           echo -----------------------------------
-      - name: Set version
+      - name: Debug version.json
+        run: |
+          cat $SRC_PATH/version.json
+      - name: Set version (deprecated)
         run: |
           if [[ -f "$SRC_PATH/version.js" ]]; then
             sed -i "s/%APPLICATION_VERSION%/$SRC_MD5_SHORT/" $SRC_PATH/version.js
@@ -415,24 +475,13 @@ jobs:
               echo "No version.js file found. Version information will not be updated."
             fi
           fi
-      - name: Set hash
+      - name: Set hash (deprecated)
         run: |
           if [[ -f "$SRC_PATH/version.js" ]]; then
             sed -i "s/%APPLICATION_HASH%/$SRC_MD5/" $SRC_PATH/version.js
           else
             if [[ -f "$SRC_PATH/app/version.js" ]]; then
               sed -i "s/%APPLICATION_HASH%/$SRC_MD5/" $SRC_PATH/app/version.js
-            else
-              echo "No version.js file found. Hash information will not be updated."
-            fi
-          fi
-      - name: debug log version.js
-        run: |
-          if [[ -f "$SRC_PATH/version.js" ]]; then
-            cat $SRC_PATH/version.js
-          else
-            if [[ -f "$SRC_PATH/app/version.js" ]]; then
-              cat $SRC_PATH/app/version.js
             else
               echo "No version.js file found. Hash information will not be updated."
             fi

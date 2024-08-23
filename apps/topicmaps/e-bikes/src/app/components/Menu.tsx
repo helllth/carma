@@ -15,7 +15,8 @@ import {
 } from "@carma-collab/wuppertal/e-bikes";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "../../version";
+import versionData from "../../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const Menu = () => {
   const { filteredItems, shownFeatures } = useContext<
@@ -45,7 +46,7 @@ const Menu = () => {
         menuTitle={<MenuTitle />}
         menuFooter={
           <Footer
-            version={getApplicationVersion()}
+            version={getApplicationVersion(versionData)}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }

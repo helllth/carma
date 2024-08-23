@@ -26,7 +26,8 @@ import {
   MenuIntroduction,
   Footer,
 } from "@carma-collab/wuppertal/stadtplan";
-import { getApplicationVersion } from "../version";
+import versionData from "../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const apps = [
   {
@@ -153,7 +154,7 @@ const Menu = () => {
         menuTitle={<MenuTitle />}
         menuFooter={
           <Footer
-            version={getApplicationVersion()}
+            version={getApplicationVersion(versionData)}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }

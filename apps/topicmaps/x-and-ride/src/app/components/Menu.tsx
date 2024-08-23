@@ -15,7 +15,8 @@ import {
   FilterStyle,
 } from "@carma-collab/wuppertal/x-and-ride";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
-import { getApplicationVersion } from "../../version";
+import versionData from "../../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const Menu = () => {
   const { filteredItems, shownFeatures } = useContext<
@@ -46,7 +47,7 @@ const Menu = () => {
         menuTitle={<MenuTitle />}
         menuFooter={
           <Footer
-            version={getApplicationVersion()}
+            version={getApplicationVersion(versionData)}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }
@@ -63,7 +64,8 @@ const Menu = () => {
               filteredItems?.length,
               shownFeatures?.length,
             )}
-            sectionBsStyle={FilterStyle}ç
+            sectionBsStyle={FilterStyle}
+            ç
             sectionContent={<FilterUI />}
           />,
           <DefaultSettingsPanel key="settings" />,

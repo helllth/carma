@@ -18,7 +18,8 @@ import {
   getFilterHeader,
   FilterStyle,
 } from "@carma-collab/wuppertal/kita-finder";
-import { getApplicationVersion } from "../version";
+import versionData from "../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];
@@ -67,7 +68,7 @@ const Menu = () => {
         menuTitle={<MenuTitle />}
         menuFooter={
           <Footer
-            version={getApplicationVersion()}
+            version={getApplicationVersion(versionData)}
             setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
           />
         }

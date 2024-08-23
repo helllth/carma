@@ -9,7 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Modal, Accordion, Card, Table } from "react-bootstrap";
 import { getConnectorImageUrl } from "./helper/helper";
 import { SecondaryInfoFooter } from "@carma-collab/wuppertal/e-auto-ladestation";
-import { getApplicationVersion } from "../version";
+import versionData from "../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const SecondaryInfoModal = ({ feature, setOpen }) => {
   const close = () => {
@@ -264,7 +265,10 @@ const SecondaryInfoModal = ({ feature, setOpen }) => {
         </Accordion>
       </Modal.Body>
       <Modal.Footer>
-        <SecondaryInfoFooter close={close} version={getApplicationVersion()} />
+        <SecondaryInfoFooter
+          close={close}
+          version={getApplicationVersion(versionData)}
+        />
       </Modal.Footer>
     </Modal>
   );

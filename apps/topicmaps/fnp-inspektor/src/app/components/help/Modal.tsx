@@ -15,7 +15,8 @@ import {
   Footer,
 } from "@carma-collab/wuppertal/fnp-inspektor";
 import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
-import { getApplicationVersion } from "../../../version";
+import versionData from "../../../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const Modal = () => {
   const { setAppMenuActiveMenuSection } =
@@ -46,7 +47,7 @@ const Modal = () => {
       ]}
       menuFooter={
         <Footer
-          version={getApplicationVersion()}
+          version={getApplicationVersion(versionData)}
           setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
         />
       }

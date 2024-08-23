@@ -3,7 +3,8 @@ import { FeatureCollectionContext } from "react-cismap/contexts/FeatureCollectio
 import SecondaryInfoPanelSection from "react-cismap/topicmaps/SecondaryInfoPanelSection";
 import SecondaryInfo from "react-cismap/topicmaps/SecondaryInfo";
 import { SecondaryInfoFooter } from "@carma-collab/wuppertal/klimaorte";
-import { getApplicationVersion } from "../../version";
+import versionData from "../../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 
 const InfoPanel = () => {
   const { selectedFeature, items } = useContext(FeatureCollectionContext);
@@ -189,7 +190,9 @@ const InfoPanel = () => {
         </div>
       }
       subSections={subSections}
-      footer={<SecondaryInfoFooter version={getApplicationVersion()} />}
+      footer={
+        <SecondaryInfoFooter version={getApplicationVersion(versionData)} />
+      }
     />
   );
 };
