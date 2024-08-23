@@ -9,7 +9,7 @@ const OverlayHelperHightlighter = ({ configs, children }) => {
     configs.forEach((currentItem) => {
       const { el, message, placement, contentPlacement } = currentItem;
       const rect = el.getBoundingClientRect(placement);
-
+      console.log('xxx el from hook', currentItem);
       const pos = getElementPosition(placement);
       const contPos = getContentPosition(contentPlacement);
 
@@ -56,14 +56,14 @@ const OverlayHelperHightlighter = ({ configs, children }) => {
               width: rect.width,
               height: rect.height,
               color: 'white',
-              // border: '1px solid yellow',
+              border: '1px solid yellow',
               ...pos,
             }}
           >
             <span
               style={{
                 position: 'absolute',
-                // border: '1px solid red',
+                border: '1px solid red',
                 // top: contentPlacement.top,
                 // left: '50%',
                 // top: '50%',
@@ -115,19 +115,23 @@ function getContentPosition(alignment) {
       styleElement.left = '50%';
       styleElement.transform = 'translate(-50%, -50%)';
       break;
-    // case 'top':
-    //   styleElement.transform = 'translate(0, -100%)';
-    //   break;
+    case 'top':
+      styleElement.top = '0';
+      styleElement.transform = 'translate(50%, 0)';
+      break;
     case 'left':
-      styleElement.top = 0;
+      styleElement.top = '50%';
+      styleElement.transform = 'translate(0, -50%)';
       styleElement.left = 0;
       break;
     case 'right':
-      styleElement.top = 0;
+      styleElement.top = '50%';
+      styleElement.transform = 'translate(0, -50%)';
       styleElement.right = 0;
       break;
     case 'bottom':
       styleElement.bottom = 0;
+      styleElement.transform = 'translate(50%, 0)';
       break;
     default:
       console.log('yyy content position');

@@ -14,7 +14,7 @@ import {
   faBookOpenReader,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { UIDispatchContext } from 'react-cismap/contexts/UIContextProvider';
 
 import { LayerLib, Item, Layer } from '@carma-mapping/layers';
@@ -61,11 +61,7 @@ const TopNavbar = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const mode = useSelector(getMode);
   const menuTourRef = useOverlayHelper('Menüleiste');
-  const hintagroundTourRef = useOverlayHelper(
-    'Hintergrund',
-    'center',
-    'center',
-  );
+  const hintagroundTourRef = useOverlayHelper('Hintergrund', 'left', 'left');
 
   const extractVectorStyles = (keywords: string[]) => {
     let vectorObject = null;
@@ -203,6 +199,10 @@ const TopNavbar = () => {
       }
     }
   };
+
+  // useEffect(() => {
+  //   dispatch(setMode('tour'));
+  // }, []);
 
   return (
     <div className="h-16 w-full flex items-center relative justify-between py-2 px-[12px]">

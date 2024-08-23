@@ -35,7 +35,7 @@ import SecondaryView from './SecondaryView';
 import useOverlayHelper from '../../hooks/useOverlayHelper';
 
 const LayerWrapper = () => {
-  const layerButtonTour = useOverlayHelper('Layer Buttons', 'center');
+  const layerButtonTour = useOverlayHelper('Layer Buttons', 'center', 'bottom');
   const dispatch = useDispatch();
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
   const layers = useSelector(getLayers);
@@ -68,7 +68,7 @@ const LayerWrapper = () => {
   };
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 2 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 2 } }),
   );
 
   return (
@@ -94,7 +94,7 @@ const LayerWrapper = () => {
             {showLeftScrollButton && (
               <div
                 className={cn(
-                  'absolute left-14 top-0.5 bg-neutral-100 w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
+                  'absolute left-14 top-0.5 bg-neutral-100 w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow',
                 )}
                 role="button"
                 onClick={() => {
@@ -110,7 +110,7 @@ const LayerWrapper = () => {
             {showRightScrollButton && (
               <div
                 className={cn(
-                  'absolute -right-7 top-0.5 bg-neutral-100 w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow'
+                  'absolute -right-7 top-0.5 bg-neutral-100 w-fit min-w-max flex items-center gap-2 px-3 rounded-3xl h-8 z-[99999999] button-shadow',
                 )}
                 role="button"
                 onClick={() => {
