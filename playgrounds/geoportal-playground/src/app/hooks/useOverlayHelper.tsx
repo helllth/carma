@@ -10,24 +10,31 @@ import { useSelector } from 'react-redux';
 import { getMode } from '../store/slices/ui';
 const OverlayTourContext = createContext({
   configs: [],
-  addConfig: () => {},
-  removeConfig: () => {},
+  addConfig: (arg) => {},
+  removeConfig: (arg) => {},
 });
 
+export interface OverlayHelperConfig {
+  el: HTMLElement;
+  message: string;
+  placement: string;
+  contentPlacement: string;
+}
+
 const useOverlayHelper = (
-  content,
-  elementPlacement = 'center',
-  contentPlacement = 'center'
+  content: string,
+  container: string = 'center',
+  contentPlacement: string = 'center',
 ) => {
-  const [ref, setRef] = useState(null);
+  const [ref, setRef] = useState<HTMLElement | null>(null);
   const { addConfig, removeConfig } = useContext(OverlayTourContext);
   useLayoutEffect(() => {
     if (!ref) return;
 
-    const config = {
+    const config: OverlayHelperConfig = {
       el: ref,
       message: content,
-      placement: elementPlacement,
+      placement: container,
       contentPlacement,
     };
     console.log('yyy hook ref');
@@ -44,7 +51,7 @@ const useOverlayHelper = (
 export default useOverlayHelper;
 
 export const OverlayTourProvider = ({ children }) => {
-  const [configs, setConfigs] = useState([]);
+  const [configs, setConfigs] = useState<OverlayHelperConfig[]>([]);
   const mode = useSelector(getMode);
 
   useEffect(() => {}, [configs]);
