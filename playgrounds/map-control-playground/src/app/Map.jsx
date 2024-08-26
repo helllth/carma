@@ -37,20 +37,24 @@ const Map = () => {
   return (
     <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
       <Control position="topleft" order={10}>
-        <ControlButtonStyler
-          onClick={() => {
-            routedMapRef.leafletMap.leafletElement.zoomIn();
-          }}
-        >
-          <PlusOutlined />
-        </ControlButtonStyler>
-        <ControlButtonStyler
-          onClick={() => {
-            routedMapRef.leafletMap.leafletElement.zoomOut();
-          }}
-        >
-          <MinusOutlined />
-        </ControlButtonStyler>
+        <div className="flex flex-col">
+          <ControlButtonStyler
+            onClick={() => {
+              routedMapRef.leafletMap.leafletElement.zoomIn();
+            }}
+            className="!border-b-0 !rounded-b-none"
+          >
+            <PlusOutlined />
+          </ControlButtonStyler>
+          <ControlButtonStyler
+            onClick={() => {
+              routedMapRef.leafletMap.leafletElement.zoomOut();
+            }}
+            className="!rounded-t-none"
+          >
+            <MinusOutlined />
+          </ControlButtonStyler>
+        </div>
       </Control>
       <Control position="topleft" order={20}>
         <ControlButtonStyler
@@ -86,7 +90,7 @@ const Map = () => {
       </Control>
       <Control position="topleft" order={50}>
         <ControlButtonStyler>
-          <img src="measure.png" alt="Measure" style={{ width: "30px" }} />
+          <img src="measure.png" alt="Measure" className="w-6" />
         </ControlButtonStyler>
       </Control>
       <Control position="topleft" order={60}>
