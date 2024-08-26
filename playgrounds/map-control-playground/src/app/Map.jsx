@@ -21,6 +21,7 @@ const Map = () => {
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(null);
   const [layoutHeight, setLayoutHeight] = useState(null);
+  const [mode, setMode] = useState("2D");
 
   const { routedMapRef } = useContext(TopicMapContext);
 
@@ -88,18 +89,42 @@ const Map = () => {
           <img src="measure.png" alt="Measure" style={{ width: "30px" }} />
         </ControlButtonStyler>
       </Control>
+      <Control position="topleft" order={60}>
+        <ControlButtonStyler
+          onClick={() => {
+            setMode(mode === "2D" ? "3D" : "2D");
+          }}
+        >
+          {mode === "2D" ? "3D" : "2D"}
+        </ControlButtonStyler>
+      </Control>
       <Control position="bottomleft" order={10} fullCollapseWidth={true}>
         <GazetteerSearchComponent />
       </Control>
       <Main ref={containerRef}>
-        <TopicMapComponent
-          locatorControl={false}
-          gazetteerSearchControl={false}
-          hamburgerMenu={false}
-          zoomControls={false}
-          fullScreenControl={false}
-          mapStyle={containerWidth}
-        />
+        {mode === "2D" ? (
+          <TopicMapComponent
+            locatorControl={false}
+            gazetteerSearchControl={false}
+            hamburgerMenu={false}
+            zoomControls={false}
+            fullScreenControl={false}
+            mapStyle={containerWidth}
+          />
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <p>3D Map kommt hierhin</p>
+          </div>
+        )}
       </Main>
     </ControlLayout>
   );
