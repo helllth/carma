@@ -216,7 +216,8 @@ export const GeoportalMap = () => {
               )
             }
           >
-            {getBackgroundLayers({ layerString: backgroundLayer.layers })}
+            {backgroundLayer.visible &&
+              getBackgroundLayers({ layerString: backgroundLayer.layers })}
             {focusMode && <PaleOverlay />}
             {layers.map((layer, i) => {
               if (layer.visible) {

@@ -99,6 +99,9 @@ const slice = createSlice({
       state,
       action: PayloadAction<{ id: string; visible: boolean }>,
     ) {
+      if (action.payload.id === state.backgroundLayer.id) {
+        state.backgroundLayer.visible = action.payload.visible;
+      }
       const newLayers = state.layers.map((obj) => {
         if (obj.id === action.payload.id) {
           return {
