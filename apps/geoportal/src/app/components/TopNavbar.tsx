@@ -11,6 +11,7 @@ import {
   faEyeSlash,
   faF,
   faFileExport,
+  faBookOpenReader,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
@@ -36,7 +37,12 @@ import {
   setLayers,
 } from "../store/slices/mapping";
 import "./switch.css";
-import { getShowLayerButtons, setShowLayerButtons } from "../store/slices/ui";
+import {
+  getMode,
+  getShowLayerButtons,
+  setMode,
+  setShowLayerButtons,
+} from "../store/slices/ui";
 import { cn } from "../helper/helper";
 import { layerMap } from "../config";
 import { Save, Share, extractVectorStyles } from "@carma-apps/portals";
@@ -54,8 +60,8 @@ const TopNavbar = () => {
   const showLayerButtons = useSelector(getShowLayerButtons);
   const focusMode = useSelector(getFocusMode);
   const savedLayerConfigs = useSelector(getSavedLayerConfigs);
+  const mode = useSelector(getMode);
   const [messageApi, contextHolder] = message.useMessage();
-
 
   const updateLayers = (
     layer: Item,
@@ -200,7 +206,7 @@ const TopNavbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-6 absolute left-1/2 -ml-[98px]">
+      <div className="flex items-center gap-6 absolute left-1/2 -ml-[140px]">
         <Tooltip title="Refresh">
           <button
             onClick={() => {
@@ -234,8 +240,9 @@ const TopNavbar = () => {
           <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
         </Tooltip>
         <Tooltip
-          title={`Layer Buttons ${showLayerButtons ? "ausblenden" : "anzeigen"
-            }`}
+          title={`Layer Buttons ${
+            showLayerButtons ? "ausblenden" : "anzeigen"
+          }`}
         >
           <button
             className="text-xl hover:text-gray-600"
@@ -249,12 +256,33 @@ const TopNavbar = () => {
             />
           </button>
         </Tooltip>
+        <Tooltip title="Hilfe Overlay">
+          <Popover trigger="click" placement="bottom">
+            <button
+              className="hover:text-gray-600 text-xl"
+              onClick={() => {
+                if (mode === "default") {
+                  dispatch(setMode("tour"));
+                } else {
+                  dispatch(setMode("default"));
+                }
+              }}
+            >
+              <FontAwesomeIcon icon={faBookOpenReader} />
+            </button>
+          </Popover>
+        </Tooltip>
         <Tooltip title="Speichern">
           <Popover
             trigger="click"
             placement="bottom"
             content={
-              <Save layers={activeLayers} storeConfigAction={(config) => dispatch(appendSavedLayerConfig(config))} />
+              <Save
+                layers={activeLayers}
+                storeConfigAction={(config) =>
+                  dispatch(appendSavedLayerConfig(config))
+                }
+              />
             }
           >
             <button className="hover:text-gray-600 text-xl">
