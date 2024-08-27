@@ -164,7 +164,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                   showInfoText ? 0 : 80,
                 );
               }}
-              className="relative fa-stack mt-1"
+              className="relative fa-stack"
             >
               <hr className="h-0.5 absolute -top-[9px] right-[3px] bg-black border-0 w-full" />
               <FontAwesomeIcon
