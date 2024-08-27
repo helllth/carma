@@ -58,6 +58,7 @@ export const GeoportalMap = () => {
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
   const [locationProps, setLocationProps] = useState(0);
   const [mapMode, setMapMode] = useState("2D");
+  const urlPrefix = window.location.origin + window.location.pathname;
 
   useEffect(() => {
     getGazData(setGazData);
@@ -151,7 +152,9 @@ export const GeoportalMap = () => {
             >
               <img
                 src={
-                  mode === "measurement" ? "measure-active.png" : "measure.png"
+                  urlPrefix + mode === "measurement"
+                    ? "measure-active.png"
+                    : "measure.png"
                 }
                 alt="Measure"
                 className="w-6"
