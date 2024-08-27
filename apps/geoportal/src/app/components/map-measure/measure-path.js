@@ -78,6 +78,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     currenLine: null,
     polygonMode: false,
     measurementMode: false,
+    startDrawing: false,
   },
 
   drawingPolygons: function (map) {
@@ -138,6 +139,10 @@ L.Control.MeasurePolygon = L.Control.extend({
       "icon_lineActive",
       "icon_lineInactive",
     );
+  },
+
+  startDrawing: function () {
+    this.options.startDrawing = true;
   },
 
   saveShapeHandler: function (layer, distance = null, area = null, map) {
@@ -256,6 +261,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     iconsWrapper.appendChild(linesContainer);
 
     iconsWrapper.appendChild(modeBtn);
+
     L.DomEvent.on(
       modeBtn,
       "click",

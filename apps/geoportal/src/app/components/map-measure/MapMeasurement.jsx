@@ -42,6 +42,7 @@ import {
 } from "../../store/slices/measurements";
 
 import { getMode, toggletModeMeasuremen } from "../../store/slices/ui";
+import { getStartDrawing } from "../../store/slices/mapping";
 
 const MapMeasurement = (props) => {
   const { routedMapRef } = useContext(TopicMapContext);
@@ -55,6 +56,7 @@ const MapMeasurement = (props) => {
   const visibleShapes = useSelector(getVisibleShapes);
   const moveToShape = useSelector(getMoveToShape);
   const mode = useSelector(getMode);
+  const startDrawing = useSelector(getStartDrawing);
 
   const [measureControl, setMeasureControl] = useState(null);
   const [visiblePolylines, setVisiblePolylines] = useState();
@@ -64,7 +66,7 @@ const MapMeasurement = (props) => {
     if (routedMapRef && !measureControl) {
       const mapExample = routedMapRef.leafletMap.leafletElement;
       const customOptions = {
-        position: "topleft",
+        position: "topright",
         icon_lineActive: makeMeasureActiveIcon,
         icon_lineInactive: makeMeasureIcon,
         icon_polygonActive: polygonActiveIcon,
@@ -188,6 +190,12 @@ const MapMeasurement = (props) => {
       dispatch(setLastVisibleShapeActive());
     }
   }, [drawingShape]);
+
+  useEffect(() => {
+    if (startDrawing && measureControl) {
+      measureControl.drawingLines(routedMapRef.leafletMap.leafletElement);
+    }
+  }, [startDrawing]);
 
   const saveShapeHandler = (layer) => {
     dispatch(addShape(layer));

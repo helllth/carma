@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getGazData, paramsToObject } from "../helper/helper.ts";
 import {
   getBackgroundLayer,
@@ -9,16 +9,15 @@ import {
   getShowFullscreenButton,
   getShowHamburgerMenu,
   getShowLocatorButton,
+  setStartDrawing,
 } from "../store/slices/mapping.ts";
 import LayerWrapper from "./layers/LayerWrapper.tsx";
 import InfoBoxMeasurement from "./map-measure/InfoBoxMeasurement.jsx";
 import PaleOverlay from "react-cismap/PaleOverlay";
-import StyledWMSTileLayer from "react-cismap/StyledWMSTileLayer";
 import { useSearchParams } from "react-router-dom";
 import { getBackgroundLayers } from "../helper/layer.tsx";
-import { getMode, getShowLayerButtons } from "../store/slices/ui.ts";
+import { getMode, getShowLayerButtons, setMode } from "../store/slices/ui.ts";
 import CismapLayer from "react-cismap/CismapLayer";
-import { namedStyles, defaultLayerConfig } from "../config/index.ts";
 import {
   Control,
   ControlButtonStyler,
@@ -42,6 +41,7 @@ export const GeoportalMap = () => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
   const layers = useSelector(getLayers);
   const backgroundLayer = useSelector(getBackgroundLayer);
   const mode = useSelector(getMode);
@@ -52,7 +52,6 @@ export const GeoportalMap = () => {
   const focusMode = useSelector(getFocusMode);
   const [urlParams, setUrlParams] = useSearchParams();
   const [layoutHeight, setLayoutHeight] = useState(null);
-  const containerRef = useRef(null);
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
   const [locationProps, setLocationProps] = useState(0);
   const [mapMode, setMapMode] = useState("2D");
@@ -134,9 +133,32 @@ export const GeoportalMap = () => {
         </ControlButtonStyler>
       </Control>
       <Control position="topleft" order={50}>
-        <ControlButtonStyler>
-          <img src="measure.png" alt="Measure" className="w-6" />
-        </ControlButtonStyler>
+        <div className="flex items-center gap-4">
+          <ControlButtonStyler
+            onClick={() => {
+              dispatch(
+                setMode(mode === "measurement" ? "default" : "measurement"),
+              );
+            }}
+          >
+            <img
+              src={
+                mode === "measurement" ? "measure-active.png" : "measure.png"
+              }
+              alt="Measure"
+              className="w-6"
+            />
+          </ControlButtonStyler>
+          {mode === "measurement" && (
+            <ControlButtonStyler
+              onClick={() => {
+                dispatch(setStartDrawing(true));
+              }}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </ControlButtonStyler>
+          )}
+        </div>
       </Control>
       <Control position="topleft" order={60}>
         <ControlButtonStyler
@@ -232,9 +254,6 @@ const LocateControlComponent = ({ startLocate = 0 }) => {
       const lc = (L.control as LocateControl)
         .locate({
           position: "topright",
-          strings: {
-            title: "demo location",
-          },
           flyTo: true,
           drawMarker: false,
           icon: "custom_icon",

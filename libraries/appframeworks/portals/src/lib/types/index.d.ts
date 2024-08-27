@@ -6,11 +6,11 @@ export type VectorObject = Record<string, string>;
 export type GeoportalCollection = {
   title: string;
   description: string;
-  type: "collection",
+  type: "collection";
   layers: Layer[];
-  thumbnail: any
+  thumbnail: any;
   id: string;
-}
+};
 
 export type LayerInfo = {
   title: string;
@@ -76,7 +76,7 @@ export type NamedLayers = {
 interface CismetDefaults {
   wms: Omit<CismapLayerProps, "type">;
   vector: {};
-};
+}
 
 export interface LayerConfig {
   namedStyles?: NamedStyles;
@@ -132,4 +132,5 @@ export interface MappingState extends LayerState {
   showMeasurementButton: boolean;
   showHamburgerMenu: boolean;
   focusMode: boolean;
+  startDrawing: boolean;
 }

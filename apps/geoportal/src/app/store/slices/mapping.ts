@@ -3,7 +3,12 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 import { layerMap } from "../../config";
 import type { Layer } from "@carma-mapping/layers";
-import type { BackgroundLayer, LayerState, MappingState, SavedLayerConfig } from "@carma-apps/portals";
+import type {
+  BackgroundLayer,
+  LayerState,
+  MappingState,
+  SavedLayerConfig,
+} from "@carma-apps/portals";
 
 const initialState: MappingState = {
   layers: [],
@@ -46,6 +51,7 @@ const initialState: MappingState = {
   showMeasurementButton: true,
   showHamburgerMenu: false,
   focusMode: false,
+  startDrawing: false,
 };
 
 const slice = createSlice({
@@ -151,6 +157,9 @@ const slice = createSlice({
     setFocusMode(state, action: PayloadAction<boolean>) {
       state.focusMode = action.payload;
     },
+    setStartDrawing(state, action: PayloadAction<boolean>) {
+      state.startDrawing = action.payload;
+    },
   },
 });
 
@@ -176,6 +185,7 @@ export const {
   setShowMeasurementButton,
   setShowHamburgerMenu,
   setFocusMode,
+  setStartDrawing,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -233,4 +243,8 @@ export const getShowHamburgerMenu = (state: RootState) => {
 
 export const getFocusMode = (state: RootState) => {
   return state.mapping.focusMode;
+};
+
+export const getStartDrawing = (state: RootState) => {
+  return state.mapping.startDrawing;
 };

@@ -112,6 +112,7 @@ function App({ published }: { published?: boolean }) {
         {!published && <TopNavbar />}
         {/* <HomeButton /> */}
         {/* {showMeasurementButton && <MapMeasurement />} */}
+        <MapMeasurement />
         <GeoportalMap />
       </div>
     </TopicMapContextProvider>
