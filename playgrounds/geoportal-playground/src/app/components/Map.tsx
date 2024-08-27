@@ -81,7 +81,7 @@ const Map = () => {
           )
         }
       >
-        {getBackgroundLayers({ layerString: backgroundLayer.layers })}
+        {backgroundLayer.visible && getBackgroundLayers({ layerString: backgroundLayer.layers })}
         {focusMode && <PaleOverlay />}
         {showLayerButtons && <LayerWrapper />}
         {layers.map((layer, i) => {
