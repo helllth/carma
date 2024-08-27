@@ -77,7 +77,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
       onClick={() => {
         dispatch(setSelectedLayerIndex(-2));
       }}
-      className="absolute top-14 w-full pl-20 pr-20 z-[999]"
+      className="absolute top-14 w-full z-[999]"
     >
       <div className="w-full flex items-center justify-center">
         <div
@@ -128,15 +128,12 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                   id="icon"
                 />
               )}
-              <label className="mb-0 text-base font-medium pt-1" htmlFor="icon">
+              <label className="mb-0 text-base" htmlFor="icon">
                 {layer.title}
               </label>
             </div>
             <div className="w-full flex items-center gap-2">
-              <label
-                className="mb-0 text-base font-medium"
-                htmlFor="opacity-slider"
-              >
+              <label className="mb-0 text-[15px]" htmlFor="opacity-slider">
                 Transparenz:
               </label>
               <Slider
@@ -155,7 +152,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                 min={0}
                 max={1}
                 step={0.1}
-                className="w-2/3"
+                className="w-2/3 pt-1"
                 id="opacity-slider"
               />
             </div>
@@ -167,15 +164,15 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                   showInfoText ? 0 : 80,
                 );
               }}
-              className="relative fa-stack mt-1"
+              className="relative fa-stack"
             >
-              <hr className="h-0.5 absolute -top-4 right-[3px] bg-black border-0 w-full" />
+              <hr className="h-0.5 absolute -top-[9px] right-[3px] bg-black border-0 w-full" />
               <FontAwesomeIcon
                 className="text-base pr-[5px]"
                 icon={showInfo ? faArrowUp : faArrowDown}
               />
               {!showInfo && (
-                <hr className="h-0.5 absolute top-[3px] right-[3px] bg-black border-0 w-full" />
+                <hr className="h-0.5 absolute top-[7px] right-[3px] bg-black border-0 w-full" />
               )}
             </button>
           </div>

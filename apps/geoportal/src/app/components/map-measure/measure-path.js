@@ -78,6 +78,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     currenLine: null,
     polygonMode: false,
     measurementMode: false,
+    startDrawing: false,
   },
 
   drawingPolygons: function (map) {
@@ -138,6 +139,10 @@ L.Control.MeasurePolygon = L.Control.extend({
       "icon_lineActive",
       "icon_lineInactive",
     );
+  },
+
+  startDrawing: function () {
+    this.options.startDrawing = true;
   },
 
   saveShapeHandler: function (layer, distance = null, area = null, map) {
@@ -229,12 +234,12 @@ L.Control.MeasurePolygon = L.Control.extend({
   onAdd: function (map) {
     const linesContainer = L.DomUtil.create(
       "div",
-      "leaflet-bar leaflet-control m-container",
+      "leaflet-bar leaflet-control dont-show m-container",
     );
 
     const modeBtn = L.DomUtil.create(
       "div",
-      "leaflet-bar leaflet-control m-container hide-draw-btn draw-custom-button",
+      "leaflet-bar leaflet-control dont-show m-container hide-draw-btn draw-custom-button",
       linesContainer,
     );
 
@@ -256,6 +261,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     iconsWrapper.appendChild(linesContainer);
 
     iconsWrapper.appendChild(modeBtn);
+
     L.DomEvent.on(
       modeBtn,
       "click",
