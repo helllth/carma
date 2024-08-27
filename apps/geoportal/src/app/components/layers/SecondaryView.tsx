@@ -77,7 +77,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
       onClick={() => {
         dispatch(setSelectedLayerIndex(-2));
       }}
-      className="absolute top-14 w-full pl-20 pr-20 z-[999]"
+      className="absolute top-14 w-full z-[999]"
     >
       <div className="w-full flex items-center justify-center">
         <div

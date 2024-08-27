@@ -171,6 +171,9 @@ export const GeoportalMap = () => {
           {mapMode === "2D" ? "3D" : "2D"}
         </ControlButtonStyler>
       </Control>
+      <Control position="topcenter" order={10}>
+        <LayerWrapper />
+      </Control>
       <Main ref={wrapperRef}>
         {mapMode === "2D" ? (
           <TopicMapComponent
@@ -201,7 +204,7 @@ export const GeoportalMap = () => {
           >
             {getBackgroundLayers({ layerString: backgroundLayer.layers })}
             {focusMode && <PaleOverlay />}
-            {showLayerButtons && <LayerWrapper />}
+            {/* {showLayerButtons && <LayerWrapper />} */}
             {layers.map((layer, i) => {
               if (layer.visible) {
                 switch (layer.layerType) {

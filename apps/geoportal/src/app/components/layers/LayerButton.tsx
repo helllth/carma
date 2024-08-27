@@ -171,6 +171,7 @@ const LayerButton = ({
                       : faEyeSlash
                     : faX
                 }
+                className="text-xs pt-0.5"
               />
             </button>
           </>
