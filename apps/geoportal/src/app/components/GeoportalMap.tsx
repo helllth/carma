@@ -77,145 +77,143 @@ export const GeoportalMap = () => {
   }, []);
 
   return (
-    <div className="h-full w-full" ref={wrapperRef}>
-      <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
-        <Control position="topleft" order={10}>
-          <div className="flex flex-col">
-            <ControlButtonStyler
-              onClick={() => {
-                routedMapRef.leafletMap.leafletElement.zoomIn();
-              }}
-              className="!border-b-0 !rounded-b-none"
-            >
-              <FontAwesomeIcon icon={faPlus} />
-            </ControlButtonStyler>
-            <ControlButtonStyler
-              onClick={() => {
-                routedMapRef.leafletMap.leafletElement.zoomOut();
-              }}
-              className="!rounded-t-none"
-            >
-              <FontAwesomeIcon icon={faMinus} />
-            </ControlButtonStyler>
-          </div>
-        </Control>
-        <Control position="topleft" order={20}>
+    <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
+      <Control position="topleft" order={10}>
+        <div className="flex flex-col">
           <ControlButtonStyler
             onClick={() => {
-              if (document.fullscreenElement) {
-                document.exitFullscreen();
-              } else {
-                document.documentElement.requestFullscreen();
-              }
+              routedMapRef.leafletMap.leafletElement.zoomIn();
             }}
+            className="!border-b-0 !rounded-b-none"
           >
-            <FontAwesomeIcon
-              icon={document.fullscreenElement ? faCompress : faExpand}
-            />
+            <FontAwesomeIcon icon={faPlus} />
           </ControlButtonStyler>
-        </Control>
-        <Control position="topleft" order={30}>
-          <ControlButtonStyler
-            onClick={() => setLocationProps((prev) => prev + 1)}
-          >
-            <FontAwesomeIcon icon={faLocationArrow} />
-          </ControlButtonStyler>
-          <LocateControlComponent startLocate={locationProps} />
-        </Control>
-        <Control position="topleft" order={40}>
-          <ControlButtonStyler
-            onClick={() =>
-              routedMapRef.leafletMap.leafletElement.flyTo(
-                [51.272570027476256, 7.199918031692506],
-                18,
-              )
-            }
-          >
-            <FontAwesomeIcon icon={faHouseChimney} />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topleft" order={50}>
-          <ControlButtonStyler>
-            <img src="measure.png" alt="Measure" className="w-6" />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topleft" order={60}>
           <ControlButtonStyler
             onClick={() => {
-              setMapMode(mapMode === "2D" ? "3D" : "2D");
+              routedMapRef.leafletMap.leafletElement.zoomOut();
             }}
+            className="!rounded-t-none"
           >
-            {mapMode === "2D" ? "3D" : "2D"}
+            <FontAwesomeIcon icon={faMinus} />
           </ControlButtonStyler>
-        </Control>
-        <Main ref={containerRef}>
-          <TopicMapComponent
-            gazData={gazData}
-            hamburgerMenu={showHamburgerMenu}
-            locatorControl={false}
-            fullScreenControl={false}
-            zoomControls={false}
-            mapStyle={{ width, height }}
-            leafletMapProps={{ editable: true }}
-            minZoom={5}
-            backgroundlayers="empty"
-            mappingBoundsChanged={(boundingbox) => {
-              // console.log('xxx bbox', createWMSBbox(boundingbox));
-            }}
-            locationChangedHandler={(location) => {
-              const newParams = { ...paramsToObject(urlParams), ...location };
-              setUrlParams(newParams);
-            }}
-            gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
-            infoBox={
-              mode === "measurement" ? (
-                <InfoBoxMeasurement key={mode} />
-              ) : (
-                <div></div>
-              )
+        </div>
+      </Control>
+      <Control position="topleft" order={20}>
+        <ControlButtonStyler
+          onClick={() => {
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            } else {
+              document.documentElement.requestFullscreen();
             }
-          >
-            {getBackgroundLayers({ layerString: backgroundLayer.layers })}
-            {focusMode && <PaleOverlay />}
-            {showLayerButtons && <LayerWrapper />}
-            {layers.map((layer, i) => {
-              if (layer.visible) {
-                switch (layer.layerType) {
-                  case "wmts":
-                    return (
-                      <CismapLayer
-                        key={`${focusMode}_${i}_${layer.id}`}
-                        url={layer.props.url}
-                        maxZoom={26}
-                        layers={layer.props.name}
-                        format="image/png"
-                        tiled={true}
-                        transparent="true"
-                        pane="additionalLayers1"
-                        opacity={layer.opacity.toFixed(1) || 0.7}
-                        type={"wmts"}
-                      />
-                    );
-                  case "vector":
-                    return (
-                      <CismapLayer
-                        key={`${focusMode}_${i}_${layer.id}_${layer.opacity}`}
-                        style={layer.props.style}
-                        maxZoom={26}
-                        pane={`additionalLayers${i}`}
-                        opacity={layer.opacity || 0.7}
-                        type="vector"
-                      />
-                    );
-                }
-              } else {
-                return <></>;
+          }}
+        >
+          <FontAwesomeIcon
+            icon={document.fullscreenElement ? faCompress : faExpand}
+          />
+        </ControlButtonStyler>
+      </Control>
+      <Control position="topleft" order={30}>
+        <ControlButtonStyler
+          onClick={() => setLocationProps((prev) => prev + 1)}
+        >
+          <FontAwesomeIcon icon={faLocationArrow} />
+        </ControlButtonStyler>
+        <LocateControlComponent startLocate={locationProps} />
+      </Control>
+      <Control position="topleft" order={40}>
+        <ControlButtonStyler
+          onClick={() =>
+            routedMapRef.leafletMap.leafletElement.flyTo(
+              [51.272570027476256, 7.199918031692506],
+              18,
+            )
+          }
+        >
+          <FontAwesomeIcon icon={faHouseChimney} />
+        </ControlButtonStyler>
+      </Control>
+      <Control position="topleft" order={50}>
+        <ControlButtonStyler>
+          <img src="measure.png" alt="Measure" className="w-6" />
+        </ControlButtonStyler>
+      </Control>
+      <Control position="topleft" order={60}>
+        <ControlButtonStyler
+          onClick={() => {
+            setMapMode(mapMode === "2D" ? "3D" : "2D");
+          }}
+        >
+          {mapMode === "2D" ? "3D" : "2D"}
+        </ControlButtonStyler>
+      </Control>
+      <Main ref={wrapperRef}>
+        <TopicMapComponent
+          gazData={gazData}
+          hamburgerMenu={showHamburgerMenu}
+          locatorControl={false}
+          fullScreenControl={false}
+          zoomControls={false}
+          mapStyle={{ width, height }}
+          leafletMapProps={{ editable: true }}
+          minZoom={5}
+          backgroundlayers="empty"
+          mappingBoundsChanged={(boundingbox) => {
+            // console.log('xxx bbox', createWMSBbox(boundingbox));
+          }}
+          locationChangedHandler={(location) => {
+            const newParams = { ...paramsToObject(urlParams), ...location };
+            setUrlParams(newParams);
+          }}
+          gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
+          infoBox={
+            mode === "measurement" ? (
+              <InfoBoxMeasurement key={mode} />
+            ) : (
+              <div></div>
+            )
+          }
+        >
+          {getBackgroundLayers({ layerString: backgroundLayer.layers })}
+          {focusMode && <PaleOverlay />}
+          {showLayerButtons && <LayerWrapper />}
+          {layers.map((layer, i) => {
+            if (layer.visible) {
+              switch (layer.layerType) {
+                case "wmts":
+                  return (
+                    <CismapLayer
+                      key={`${focusMode}_${i}_${layer.id}`}
+                      url={layer.props.url}
+                      maxZoom={26}
+                      layers={layer.props.name}
+                      format="image/png"
+                      tiled={true}
+                      transparent="true"
+                      pane="additionalLayers1"
+                      opacity={layer.opacity.toFixed(1) || 0.7}
+                      type={"wmts"}
+                    />
+                  );
+                case "vector":
+                  return (
+                    <CismapLayer
+                      key={`${focusMode}_${i}_${layer.id}_${layer.opacity}`}
+                      style={layer.props.style}
+                      maxZoom={26}
+                      pane={`additionalLayers${i}`}
+                      opacity={layer.opacity || 0.7}
+                      type="vector"
+                    />
+                  );
               }
-            })}
-          </TopicMapComponent>
-        </Main>
-      </ControlLayout>
-    </div>
+            } else {
+              return <></>;
+            }
+          })}
+        </TopicMapComponent>
+      </Main>
+    </ControlLayout>
   );
 };
 
