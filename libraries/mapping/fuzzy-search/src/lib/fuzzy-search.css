@@ -85,3 +85,7 @@
 .ant-select-item-option-content {
   overflow: visible !important;
 }
+
+.ant-btn-icon {
+  margin-right: 0% !important;
+}
