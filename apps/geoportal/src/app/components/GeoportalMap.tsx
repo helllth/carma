@@ -84,17 +84,17 @@ export const GeoportalMap = () => {
             onClick={() => {
               routedMapRef.leafletMap.leafletElement.zoomIn();
             }}
-            className="!border-b-0 !rounded-b-none"
+            className="!border-b-0 !rounded-b-none font-bold !z-[9999999]"
           >
-            <FontAwesomeIcon icon={faPlus} />
+            <FontAwesomeIcon icon={faPlus} className="text-base" />
           </ControlButtonStyler>
           <ControlButtonStyler
             onClick={() => {
               routedMapRef.leafletMap.leafletElement.zoomOut();
             }}
-            className="!rounded-t-none"
+            className="!rounded-t-none !border-t-[1px]"
           >
-            <FontAwesomeIcon icon={faMinus} />
+            <FontAwesomeIcon icon={faMinus} className="text-base" />
           </ControlButtonStyler>
         </div>
       </Control>
@@ -117,7 +117,7 @@ export const GeoportalMap = () => {
         <ControlButtonStyler
           onClick={() => setLocationProps((prev) => prev + 1)}
         >
-          <FontAwesomeIcon icon={faLocationArrow} />
+          <FontAwesomeIcon icon={faLocationArrow} className="text-2xl" />
         </ControlButtonStyler>
         <LocateControlComponent startLocate={locationProps} />
       </Control>
@@ -130,7 +130,7 @@ export const GeoportalMap = () => {
             )
           }
         >
-          <FontAwesomeIcon icon={faHouseChimney} />
+          <FontAwesomeIcon icon={faHouseChimney} className="text-lg" />
         </ControlButtonStyler>
       </Control>
       <Control position="topleft" order={50}>
@@ -166,6 +166,7 @@ export const GeoportalMap = () => {
           onClick={() => {
             setMapMode(mapMode === "2D" ? "3D" : "2D");
           }}
+          className="font-semibold"
         >
           {mapMode === "2D" ? "3D" : "2D"}
         </ControlButtonStyler>
