@@ -45,7 +45,6 @@ function App({ published }: { published?: boolean }) {
   const [syncToken, setSyncToken] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const allowUiChanges = useSelector(getAllowUiChanges);
-  const showMeasurementButton = useSelector(getShowMeasurementButton);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -110,8 +109,6 @@ function App({ published }: { published?: boolean }) {
     <TopicMapContextProvider>
       <div className="flex flex-col h-screen w-full">
         {!published && <TopNavbar />}
-        {/* <HomeButton /> */}
-        {/* {showMeasurementButton && <MapMeasurement />} */}
         <MapMeasurement />
         <GeoportalMap />
       </div>
