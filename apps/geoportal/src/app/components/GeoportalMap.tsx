@@ -152,9 +152,12 @@ export const GeoportalMap = () => {
             >
               <img
                 src={
-                  urlPrefix + mode === "measurement"
-                    ? "measure-active.png"
-                    : "measure.png"
+                  urlPrefix +
+                  `${
+                    mode === "measurement"
+                      ? "measure-active.png"
+                      : "measure.png"
+                  }`
                 }
                 alt="Measure"
                 className="w-6"
