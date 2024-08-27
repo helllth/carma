@@ -9,6 +9,7 @@ import {
   getShowFullscreenButton,
   getShowHamburgerMenu,
   getShowLocatorButton,
+  getShowMeasurementButton,
   setStartDrawing,
 } from "../store/slices/mapping.ts";
 import LayerWrapper from "./layers/LayerWrapper.tsx";
@@ -50,6 +51,7 @@ export const GeoportalMap = () => {
   const showFullscreenButton = useSelector(getShowFullscreenButton);
   const showLocatorButton = useSelector(getShowLocatorButton);
   const showHamburgerMenu = useSelector(getShowHamburgerMenu);
+  const showMeasurementButton = useSelector(getShowMeasurementButton);
   const focusMode = useSelector(getFocusMode);
   const [urlParams, setUrlParams] = useSearchParams();
   const [layoutHeight, setLayoutHeight] = useState(null);
@@ -99,26 +101,30 @@ export const GeoportalMap = () => {
         </div>
       </Control>
       <Control position="topleft" order={20}>
-        <ControlButtonStyler
-          onClick={() => {
-            if (document.fullscreenElement) {
-              document.exitFullscreen();
-            } else {
-              document.documentElement.requestFullscreen();
-            }
-          }}
-        >
-          <FontAwesomeIcon
-            icon={document.fullscreenElement ? faCompress : faExpand}
-          />
-        </ControlButtonStyler>
+        {showFullscreenButton && (
+          <ControlButtonStyler
+            onClick={() => {
+              if (document.fullscreenElement) {
+                document.exitFullscreen();
+              } else {
+                document.documentElement.requestFullscreen();
+              }
+            }}
+          >
+            <FontAwesomeIcon
+              icon={document.fullscreenElement ? faCompress : faExpand}
+            />
+          </ControlButtonStyler>
+        )}
       </Control>
       <Control position="topleft" order={30}>
-        <ControlButtonStyler
-          onClick={() => setLocationProps((prev) => prev + 1)}
-        >
-          <FontAwesomeIcon icon={faLocationArrow} className="text-2xl" />
-        </ControlButtonStyler>
+        {showLocatorButton && (
+          <ControlButtonStyler
+            onClick={() => setLocationProps((prev) => prev + 1)}
+          >
+            <FontAwesomeIcon icon={faLocationArrow} className="text-2xl" />
+          </ControlButtonStyler>
+        )}
         <LocateControlComponent startLocate={locationProps} />
       </Control>
       <Control position="topleft" order={40}>
@@ -134,32 +140,34 @@ export const GeoportalMap = () => {
         </ControlButtonStyler>
       </Control>
       <Control position="topleft" order={50}>
-        <div className="flex items-center gap-4">
-          <ControlButtonStyler
-            onClick={() => {
-              dispatch(
-                setMode(mode === "measurement" ? "default" : "measurement"),
-              );
-            }}
-          >
-            <img
-              src={
-                mode === "measurement" ? "measure-active.png" : "measure.png"
-              }
-              alt="Measure"
-              className="w-6"
-            />
-          </ControlButtonStyler>
-          {mode === "measurement" && (
+        {showMeasurementButton && (
+          <div className="flex items-center gap-4">
             <ControlButtonStyler
               onClick={() => {
-                dispatch(setStartDrawing(true));
+                dispatch(
+                  setMode(mode === "measurement" ? "default" : "measurement"),
+                );
               }}
             >
-              <FontAwesomeIcon icon={faPlus} />
+              <img
+                src={
+                  mode === "measurement" ? "measure-active.png" : "measure.png"
+                }
+                alt="Measure"
+                className="w-6"
+              />
             </ControlButtonStyler>
-          )}
-        </div>
+            {mode === "measurement" && (
+              <ControlButtonStyler
+                onClick={() => {
+                  dispatch(setStartDrawing(true));
+                }}
+              >
+                <FontAwesomeIcon icon={faPlus} />
+              </ControlButtonStyler>
+            )}
+          </div>
+        )}
       </Control>
       <Control position="topleft" order={60}>
         <ControlButtonStyler
@@ -172,7 +180,7 @@ export const GeoportalMap = () => {
         </ControlButtonStyler>
       </Control>
       <Control position="topcenter" order={10}>
-        <LayerWrapper />
+        {showLayerButtons && <LayerWrapper />}
       </Control>
       <Main ref={wrapperRef}>
         {mapMode === "2D" ? (
@@ -204,7 +212,6 @@ export const GeoportalMap = () => {
           >
             {getBackgroundLayers({ layerString: backgroundLayer.layers })}
             {focusMode && <PaleOverlay />}
-            {/* {showLayerButtons && <LayerWrapper />} */}
             {layers.map((layer, i) => {
               if (layer.visible) {
                 switch (layer.layerType) {
