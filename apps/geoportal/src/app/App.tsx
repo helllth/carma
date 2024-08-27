@@ -110,8 +110,8 @@ function App({ published }: { published?: boolean }) {
     <TopicMapContextProvider>
       <div className="flex flex-col h-screen w-full">
         {!published && <TopNavbar />}
-        <HomeButton />
-        {showMeasurementButton && <MapMeasurement />}
+        {/* <HomeButton /> */}
+        {/* {showMeasurementButton && <MapMeasurement />} */}
         <GeoportalMap />
       </div>
     </TopicMapContextProvider>
