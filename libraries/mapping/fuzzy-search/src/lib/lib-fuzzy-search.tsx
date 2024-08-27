@@ -74,7 +74,9 @@ export function LibFuzzySearch({
   const internalGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
       hit,
-      mapRef.current.leafletMap.leafletElement,
+      mapRef.current
+        ? mapRef.current.leafletMap.leafletElement
+        : mapRef.leafletMap.leafletElement,
       referenceSystem,
       referenceSystemDefinition,
       setGazetteerHit,
