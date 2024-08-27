@@ -215,7 +215,7 @@ const Info = ({ description, legend }: InfoProps) => {
       )}
       <hr className="h-px my-0 bg-gray-300 border-0 w-full" />
       {isBaseLayer ? (
-        <div className="flex flex-col h-full gap-2">
+        <div className="flex flex-col h-full overflow-auto gap-2">
           <Tabs
             animated={false}
             items={[
@@ -254,7 +254,7 @@ const Info = ({ description, legend }: InfoProps) => {
             onDragEnd={handleDragEnd}
             modifiers={[restrictToVerticalAxis]}
           >
-            <div className="h-full overflow-auto flex flex-col gap-2">
+            <div className="h-full overflow-auto max-h-full flex flex-col gap-2">
               <SortableContext
                 items={layers}
                 strategy={verticalListSortingStrategy}
