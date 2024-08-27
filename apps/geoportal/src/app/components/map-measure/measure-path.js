@@ -234,12 +234,12 @@ L.Control.MeasurePolygon = L.Control.extend({
   onAdd: function (map) {
     const linesContainer = L.DomUtil.create(
       "div",
-      "leaflet-bar leaflet-control m-container",
+      "leaflet-bar leaflet-control dont-show m-container",
     );
 
     const modeBtn = L.DomUtil.create(
       "div",
-      "leaflet-bar leaflet-control m-container hide-draw-btn draw-custom-button",
+      "leaflet-bar leaflet-control dont-show m-container hide-draw-btn draw-custom-button",
       linesContainer,
     );
 

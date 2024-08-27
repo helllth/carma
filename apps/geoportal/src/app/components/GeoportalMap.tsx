@@ -35,6 +35,7 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import type LocateControl from "leaflet.locatecontrol";
+import "./leaflet.css";
 
 export const GeoportalMap = () => {
   const [gazData, setGazData] = useState([]);
