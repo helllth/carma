@@ -513,9 +513,9 @@ const config = {
   ],
   backgrounds: [
     {
-      layerkey: 'rvrGrundriss@100|trueOrtho2022@75|rvrSchriftNT@100',
-      src: mixedBG,
-      title: 'Luftbildkarte',
+      layerkey: 'wupp-plan-live@40',
+      src: citymapBG,
+      title: 'Stadtplan',
     },
     {
       layerkey: 'hillshade|bplan_abkg@30|rvrGrundriss@20',
@@ -523,10 +523,12 @@ const config = {
       title: 'Top. Karte',
     },
     {
-      layerkey: 'wupp-plan-live@40',
-      src: citymapBG,
-      title: 'Stadtplan',
+      layerkey: 'rvrGrundriss@100|trueOrtho2022@75|rvrSchriftNT@100',
+      src: mixedBG,
+      title: 'Luftbildkarte',
     },
+
+
   ],
   heightsLegend: [
     { title: '20 cm', lt: 0.1, bg: '#AFCFF9' },
