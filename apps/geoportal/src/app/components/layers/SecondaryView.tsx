@@ -3,6 +3,8 @@ import {
   faArrowUp,
   faChevronLeft,
   faChevronRight,
+  faEye,
+  faEyeSlash,
   faInfo,
   faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +17,7 @@ import { cn } from "../../helper/helper";
 import type { SliderSingleProps } from "antd";
 import {
   changeOpacity,
+  changeVisibility,
   getBackgroundLayer,
   getLayers,
   getSelectedLayerIndex,
@@ -156,6 +159,18 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                 id="opacity-slider"
               />
             </div>
+            <button
+              className="hover:text-gray-500 text-gray-600 flex items-center justify-center"
+              onClick={(e) => {
+                if (layer.visible) {
+                  dispatch(changeVisibility({ id: layer.id, visible: false }));
+                } else {
+                  dispatch(changeVisibility({ id: layer.id, visible: true }));
+                }
+              }}
+            >
+              <FontAwesomeIcon icon={layer.visible ? faEye : faEyeSlash} />
+            </button>
             <button
               onClick={() => {
                 dispatch(setShowInfo(!showInfo));
