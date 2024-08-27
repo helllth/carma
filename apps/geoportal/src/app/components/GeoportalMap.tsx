@@ -40,11 +40,16 @@ import "./leaflet.css";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
 import ProjSingleGeoJson from "react-cismap/ProjSingleGeoJson";
+import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
+import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
+import ProjSingleGeoJson from "react-cismap/ProjSingleGeoJson";
 
 export const GeoportalMap = () => {
   const [gazData, setGazData] = useState([]);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
+  const [gazetteerHit, setGazetteerHit] = useState(null);
+  const [overlayFeature, setOverlayFeature] = useState(null);
   const [gazetteerHit, setGazetteerHit] = useState(null);
   const [overlayFeature, setOverlayFeature] = useState(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -60,6 +65,12 @@ export const GeoportalMap = () => {
   const focusMode = useSelector(getFocusMode);
   const [urlParams, setUrlParams] = useSearchParams();
   const [layoutHeight, setLayoutHeight] = useState(null);
+  const {
+    routedMapRef,
+    referenceSystem,
+    referenceSystemDefinition,
+    maskingPolygon,
+  } = useContext<typeof TopicMapContext>(TopicMapContext);
   const {
     routedMapRef,
     referenceSystem,
@@ -88,6 +99,8 @@ export const GeoportalMap = () => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  console.log("xxx", gazetteerHit);
 
   console.log("xxx", gazetteerHit);
 
@@ -212,6 +225,17 @@ export const GeoportalMap = () => {
           placeholder="Stadtteil | Adresse | POI"
         />
       </Control>
+      <Control position="bottomleft" order={10}>
+        <LibFuzzySearch
+          gazData={gazData}
+          mapRef={routedMapRef}
+          referenceSystem={referenceSystem}
+          referenceSystemDefinition={referenceSystemDefinition}
+          gazetteerHit={gazetteerHit}
+          setGazetteerHit={setGazetteerHit}
+          setOverlayFeature={setOverlayFeature}
+        />
+      </Control>
       <Main ref={wrapperRef}>
         {mapMode === "2D" ? (
           <TopicMapComponent
@@ -233,6 +257,8 @@ export const GeoportalMap = () => {
             }}
             // gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
             gazetteerSearchComponent={<></>}
+            // gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
+            gazetteerSearchComponent={<></>}
             infoBox={
               mode === "measurement" ? (
                 <InfoBoxMeasurement key={mode} />
@@ -241,8 +267,6 @@ export const GeoportalMap = () => {
               )
             }
           >
-            {backgroundLayer.visible &&
-              getBackgroundLayers({ layerString: backgroundLayer.layers })}
             {overlayFeature && (
               <ProjSingleGeoJson
                 key={JSON.stringify(overlayFeature)}
@@ -256,6 +280,7 @@ export const GeoportalMap = () => {
               key={"gazHit" + JSON.stringify(gazetteerHit)}
               gazetteerHit={gazetteerHit}
             />
+            {getBackgroundLayers({ layerString: backgroundLayer.layers })}
             {focusMode && <PaleOverlay />}
             {layers.map((layer, i) => {
               if (layer.visible) {
