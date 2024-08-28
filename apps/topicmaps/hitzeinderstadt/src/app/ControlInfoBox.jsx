@@ -67,7 +67,9 @@ const InfoBox = ({
         Kombinierbare Modellberechnungen (Stand 02/2019) von durch Hitze
         belasteten oder stark belasteten Arealen (IST-Zustand) sowie
         Zukunftsszenario für 2050 bis 2060{" "}
-        <a onClick={() => showModalMenu("szenarien")}>(mehr)</a>
+        <a onClick={() => showModalMenu("szenarien")} className="renderAsLink">
+          (mehr)
+        </a>
         {/* <a>
   			<Icon style={{ paddingLeft: 3, fontSize: 16 }} name="info-circle" />
   		</a> */}
@@ -228,8 +230,8 @@ const InfoBox = ({
   //         debugBorder={0}
   //         tableStyle={{ margin: 0 }}
   //         fixedRow={false}
-  alwaysVisibleDiv = { alwaysVisibleDiv };
-  collapsibleDiv = { collapsibleDiv };
+  // alwaysVisibleDiv = { alwaysVisibleDiv };
+  // collapsibleDiv = { collapsibleDiv };
   //         onClick={(e) => e.stopPropagation()}
   //       />
   //     </div>
