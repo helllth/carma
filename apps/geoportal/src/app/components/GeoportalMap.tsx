@@ -209,6 +209,7 @@ export const GeoportalMap = () => {
           gazetteerHit={gazetteerHit}
           setGazetteerHit={setGazetteerHit}
           setOverlayFeature={setOverlayFeature}
+          placeholder="Stadtteil | Adresse | POI"
         />
       </Control>
       <Main ref={wrapperRef}>
