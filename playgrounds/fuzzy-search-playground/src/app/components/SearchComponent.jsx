@@ -1,34 +1,34 @@
-import { useEffect, useState, useRef } from 'react';
-import Fuse from 'fuse.js';
-import { AutoComplete, Button, Checkbox } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
-import { builtInGazetteerHitTrigger } from 'react-cismap/tools/gazetteerHelper';
-import './fuzzy-search.css';
-import IconComp from 'react-cismap/commons/Icon';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useState, useRef } from "react";
+import Fuse from "fuse.js";
+import { AutoComplete, Button, Checkbox } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
+import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
+import "./fuzzy-search.css";
+import IconComp from "react-cismap/commons/Icon";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { location-dot } from '@fortawesome/free-solid-svg-icons';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { Tooltip } from 'antd';
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { Tooltip } from "antd";
 const renderTitle = (category) => {
-  let title = '???';
+  let title = "???";
   switch (category) {
-    case 'pois':
-      title = 'POIS';
+    case "pois":
+      title = "POIS";
       break;
-    case 'bpklimastandorte':
-      title = 'Klimastandorte';
+    case "bpklimastandorte":
+      title = "Klimastandorte";
       break;
-    case 'kitas':
-      title = 'Kitas';
+    case "kitas":
+      title = "Kitas";
       break;
-    case 'bezirke':
-      title = 'Bezirke';
+    case "bezirke":
+      title = "Bezirke";
       break;
-    case 'quartiere':
-      title = 'Quartiere';
+    case "quartiere":
+      title = "Quartiere";
       break;
-    case 'adressen':
-      title = 'Adressen';
+    case "adressen":
+      title = "Adressen";
       break;
     default:
       title = category;
@@ -37,7 +37,7 @@ const renderTitle = (category) => {
   return <span>{title}</span>;
 };
 
-const joinNumberLetter = (name) => name.replace(/(\d+)\s([a-zA-Z])/g, '$1$2');
+const joinNumberLetter = (name) => name.replace(/(\d+)\s([a-zA-Z])/g, "$1$2");
 
 const renderItem = (address) => {
   const addressLabel = buildAddressWithIconUI(address);
@@ -51,22 +51,22 @@ const renderItem = (address) => {
 
 function buildAddressWithIconUI(addresObj, showScore = false, score) {
   let icon;
-  if (addresObj.glyph === 'pie-chart') {
-    icon = 'chart-pie';
+  if (addresObj.glyph === "pie-chart") {
+    icon = "chart-pie";
   } else {
     icon = addresObj.glyph;
   }
   const streetLabel = (
-    <div style={{ paddingLeft: '0.3rem' }}>
-      <span style={{ marginRight: '0.4rem' }}>
-        <i className={icon && 'fas ' + 'fa-' + icon}></i>
-        {'  '}
+    <div style={{ paddingLeft: "0.3rem" }}>
+      <span style={{ marginRight: "0.4rem" }}>
+        <i className={icon && "fas " + "fa-" + icon}></i>
+        {"  "}
       </span>
       <span>
         {showScore ? (
           <span>
             <span>{joinNumberLetter(addresObj.string)}</span>
-            <span style={{ color: 'gray' }}> ({score})</span>
+            <span style={{ color: "gray" }}> ({score})</span>
           </span>
         ) : (
           joinNumberLetter(addresObj.string)
@@ -83,7 +83,7 @@ const generateOptions = (results, showScore = false) => {
     const streetLabel = buildAddressWithIconUI(
       result.item,
       showScore,
-      result.score
+      result.score,
     );
     return {
       key: result.item.sorter,
@@ -125,33 +125,33 @@ const mapDataToSearchResult = (data) => {
 };
 
 const preps = [
-  'an',
-  'auf',
-  'hinter',
-  'neben',
-  'über',
-  'unter',
-  'vor',
-  'zwischen',
-  'durch',
-  'für',
-  'gegen',
-  'ohne',
-  'um',
-  'mit',
-  'bei',
-  'nach',
-  'in',
-  'von',
-  'zu',
-  'aus',
-  'bis',
-  'seit',
-  'anstatt',
-  'außerhalb',
-  'innerhalb',
+  "an",
+  "auf",
+  "hinter",
+  "neben",
+  "über",
+  "unter",
+  "vor",
+  "zwischen",
+  "durch",
+  "für",
+  "gegen",
+  "ohne",
+  "um",
+  "mit",
+  "bei",
+  "nach",
+  "in",
+  "von",
+  "zu",
+  "aus",
+  "bis",
+  "seit",
+  "anstatt",
+  "außerhalb",
+  "innerhalb",
 ];
-const articles = ['der', 'die', 'das', 'den', 'dem', 'des'];
+const articles = ["der", "die", "das", "den", "dem", "des"];
 const stopwords = [...preps, ...articles];
 
 function SearchComponent({
@@ -170,9 +170,15 @@ function SearchComponent({
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
   const _gazetteerHitTrigger = undefined;
   const inputStyle = {
-    width: 'calc(100% - 32px)',
+    width: "calc(100% - 32px)",
     borderTopLeftRadius: 0,
   };
+  const hash = window.location.hash;
+
+  const queryString = hash.includes("?") ? hash.split("?")[1] : "";
+  const searchParams = new URLSearchParams(queryString);
+  const prepoHandling =
+    searchParams.get("prepoHandling") === "true" ? true : false;
   const autoCompleteRef = useRef(null);
   const dropdownContainerRef = useRef(null);
   const internalGazetteerHitTrigger = (hit) => {
@@ -183,13 +189,13 @@ function SearchComponent({
       referenceSystemDefinition,
       setGazetteerHit,
       setOverlayFeature,
-      _gazetteerHitTrigger
+      _gazetteerHitTrigger,
     );
   };
   const [fuseInstance, setFuseInstance] = useState(null);
   const [searchResult, setSearchResult] = useState([]);
   const [allGazeteerData, setAllGazeteerData] = useState([]);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
   const [fireScrollEvent, setFireScrollEvent] = useState(null);
 
@@ -200,21 +206,21 @@ function SearchComponent({
     let defaultCut = 0.4;
     if (allGazeteerData.length > 0 && fuseInstance) {
       const hash = window.location.hash;
-      const queryString = hash.includes('?') ? hash.split('?')[1] : '';
+      const queryString = hash.includes("?") ? hash.split("?")[1] : "";
       const searchParams = new URLSearchParams(queryString);
-      const distance = searchParams.get('distance');
-      const threshold = searchParams.get('threshold');
-      const score = searchParams.get('score');
-      const sort = searchParams.get('sort');
-      const limit = searchParams.get('limit');
-      const cut = searchParams.get('cut');
+      const distance = searchParams.get("distance");
+      const threshold = searchParams.get("threshold");
+      const score = searchParams.get("score");
+      const sort = searchParams.get("sort");
+      const limit = searchParams.get("limit");
+      const cut = searchParams.get("cut");
 
-      if (sort && sort === 'true') {
+      if (sort && sort === "true") {
         showSortedResults = true;
       } else {
         showSortedResults = false;
       }
-      if (score && score === 'true') {
+      if (score && score === "true") {
         ifShowScore = true;
       } else {
         ifShowScore = false;
@@ -233,8 +239,8 @@ function SearchComponent({
         defaultCut = parseFloat(cut);
       }
 
-      const removeStopWords = removeStopwords(value, stopwords);
-      const result = fuseInstance.search(removeStopWords);
+      const removedStopWords = removeStopwords(value, stopwords, prepoHandling);
+      const result = fuseInstance.search(removedStopWords);
 
       let resultWithRoundScore = result.map((r) => {
         return {
@@ -250,7 +256,7 @@ function SearchComponent({
         resultWithRoundScore = limitSearchResult(
           resultWithRoundScore,
           defaultLimit,
-          defaultCut
+          defaultCut,
         );
       }
 
@@ -273,7 +279,7 @@ function SearchComponent({
   const handleOnSelect = (option) => {
     setCleanBtnDisable(false);
     internalGazetteerHitTrigger([option.sData]);
-    if (option.sData.type === 'bezirke' || option.sData.type === 'quartiere') {
+    if (option.sData.type === "bezirke" || option.sData.type === "quartiere") {
       setGazetteerHit(null);
     } else {
       setGazetteerHit(option.sData);
@@ -282,24 +288,24 @@ function SearchComponent({
 
   useEffect(() => {
     if (gazData) {
-      const allModifiedData = prepareGazData(gazData);
+      const allModifiedData = prepareGazData(gazData, prepoHandling);
       setAllGazeteerData(allModifiedData);
     }
-  }, [gazData]);
+  }, [gazData, prepoHandling]);
 
   useEffect(() => {
     if (!fuseInstance && allGazeteerData.length > 0) {
       const hash = window.location.hash;
-      const queryString = hash.includes('?') ? hash.split('?')[1] : '';
+      const queryString = hash.includes("?") ? hash.split("?")[1] : "";
       const searchParams = new URLSearchParams(queryString);
-      const distance = searchParams.get('distance');
-      const threshold = searchParams.get('threshold');
+      const distance = searchParams.get("distance");
+      const threshold = searchParams.get("threshold");
 
       const fuseAddressesOptions = {
         distance: !isNaN(parseInt(distance)) ? parseInt(distance) : 100,
         threshold: !isNaN(parseFloat(threshold)) ? parseFloat(threshold) : 0.5,
         useExtendedSearch: true,
-        keys: ['xSearchData'],
+        keys: ["xSearchData"],
         includeScore: true,
       };
 
@@ -312,30 +318,30 @@ function SearchComponent({
   useEffect(() => {
     if (dropdownContainerRef.current) {
       const allItems = dropdownContainerRef.current.querySelectorAll(
-        '.ant-select-item-option-content'
+        ".ant-select-item-option-content",
       );
 
       const holderInner = dropdownContainerRef.current.querySelector(
-        '.rc-virtual-list-holder-inner'
+        ".rc-virtual-list-holder-inner",
       );
       const listHolder = dropdownContainerRef.current.querySelector(
-        '.rc-virtual-list-holder > div:first-child'
+        ".rc-virtual-list-holder > div:first-child",
       );
 
       const antdDrapdownSelect = dropdownContainerRef.current.querySelector(
-        '.rc-virtual-list-holder'
+        ".rc-virtual-list-holder",
       );
       const inputWidth = document.querySelector(
-        '.ant-select-selection-search-input'
+        ".ant-select-selection-search-input",
       ).scrollWidth;
 
-      holderInner.style.width = inputWidth + 10 + 'px';
+      holderInner.style.width = inputWidth + 10 + "px";
 
       if (holderInner) {
         const handleScroll = (event) => {
           setFireScrollEvent(event.target.scrollTop);
         };
-        antdDrapdownSelect.addEventListener('scroll', handleScroll);
+        antdDrapdownSelect.addEventListener("scroll", handleScroll);
 
         let biggestItem = inputWidth;
 
@@ -346,10 +352,10 @@ function SearchComponent({
 
         const isOverflowing = biggestItem > inputWidth;
         if (isOverflowing) {
-          listHolder.style.width = holderInner.scrollWidth + 'px';
-          holderInner.style.width = holderInner.scrollWidth + 10 + 'px';
+          listHolder.style.width = holderInner.scrollWidth + "px";
+          holderInner.style.width = holderInner.scrollWidth + 10 + "px";
         } else {
-          listHolder.style.removeProperty('width');
+          listHolder.style.removeProperty("width");
         }
       }
     }
@@ -359,15 +365,15 @@ function SearchComponent({
     setSfStandardSearch(e.target.checked);
     setOptions([]);
     setSearchResult([]);
-    setValue('');
+    setValue("");
   };
 
   return (
     <div
       style={{
-        marginTop: '20px',
+        marginTop: "20px",
         width: pixelwidth,
-        display: 'flex',
+        display: "flex",
       }}
       className="fuzzy-search-container"
     >
@@ -377,7 +383,7 @@ function SearchComponent({
             <FontAwesomeIcon
               icon={faLocationDot}
               style={{
-                fontSize: '16px',
+                fontSize: "16px",
                 // color: '#1d93d4',
               }}
             />
@@ -387,12 +393,12 @@ function SearchComponent({
         }
         className={
           cleanBtnDisable
-            ? 'clear-fuzzy-button clear-fuzzy-button__active'
-            : 'clear-fuzzy-button clear-fuzzy-button__active'
+            ? "clear-fuzzy-button clear-fuzzy-button__active"
+            : "clear-fuzzy-button clear-fuzzy-button__active"
         }
         onClick={() => {
           setGazetteerHit(null);
-          setValue('');
+          setValue("");
           setOptions([]);
           setSearchResult([]);
           setOverlayFeature(null);
@@ -405,7 +411,7 @@ function SearchComponent({
           ref={autoCompleteRef}
           options={options}
           style={inputStyle}
-          onSearch={(value) => handleSearchAutoComplete(value)}
+          onSearch={(value) => handleSearchAutoComplete(value, prepoHandling)}
           onChange={(value) => setValue(value)}
           placeholder="Wohin?"
           value={value}
@@ -445,22 +451,30 @@ function SearchComponent({
 
 export default SearchComponent;
 
-function removeStopwords(text, stopwords) {
-  const words = text.split(' ');
-  const placeholderWords = words.map((word) => {
-    if (stopwords.includes(word.toLowerCase())) {
-      // Replace each character in the word with an underscore
-      return '_'.repeat(word.length);
-    }
-    return word;
-  });
-  return placeholderWords.join(' ');
+function removeStopwords(text, stopwords, prepoHandling) {
+  if (prepoHandling === true) {
+    const words = text.split(" ");
+    const placeholderWords = words.map((word) => {
+      if (stopwords.includes(word.toLowerCase())) {
+        // Replace each character in the word with an underscore
+        return "_".repeat(word.length);
+      }
+      return word;
+    });
+    return placeholderWords.join(" ");
+  } else {
+    return text;
+  }
 }
 
-function prepareGazData(data) {
+function prepareGazData(data, prepoHandling) {
   const modifiedData = data.map((item) => {
     const searchData = item?.string;
-    const stringWithoutStopWords = removeStopwords(searchData, stopwords);
+    const stringWithoutStopWords = removeStopwords(
+      searchData,
+      stopwords,
+      prepoHandling,
+    );
     const address = {
       ...item,
       xSearchData: joinNumberLetter(stringWithoutStopWords),
