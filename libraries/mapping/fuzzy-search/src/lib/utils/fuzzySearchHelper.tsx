@@ -340,7 +340,6 @@ export const getGazData = async (
   prefix: string,
   setGazData: (gazData: GazDataItem[]) => void,
 ) => {
-  console.info("getGazData config", sourcesConfig);
   await Promise.all(
     sourcesConfig.map(async (config) => {
       (config as SourceWithPayload).payload = await md5FetchText(
@@ -350,11 +349,7 @@ export const getGazData = async (
     }),
   );
 
-  console.log("sourcesConfig", sourcesConfig);
-
   const gazData = getGazDataFromSources(sourcesConfig as SourceWithPayload[]);
-
-  console.log("gazData", gazData && gazData.length > 0 ? gazData[0] : gazData);
 
   setGazData(gazData);
 };
