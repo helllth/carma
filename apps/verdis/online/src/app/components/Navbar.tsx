@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCloudUploadAlt,
   faCloudDownloadAlt,
@@ -8,7 +8,7 @@ import {
   faChartPie,
   faUser,
   faPowerOff,
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Navbar,
   Nav,
@@ -19,12 +19,12 @@ import {
   Popover,
   Overlay,
   Container,
-} from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getKassenzeichen,
   getNumberOfPendingChanges,
-} from '../../store/slices/kassenzeichen';
+} from "../../store/slices/kassenzeichen";
 import {
   CLOUDSTORAGESTATES,
   getUiState,
@@ -33,14 +33,15 @@ import {
   toggleChartElements,
   toggleContactElement,
   toggleInfoElements,
-} from '../../store/slices/ui';
-import { colorDraft } from '../../utils/kassenzeichenHelper';
-import Waiting from './Waiting';
-import { useRef } from 'react';
-import './navbar.css';
-import { logout } from '../../store/slices/auth';
-import type { OverlayTriggerType } from 'react-bootstrap/esm/OverlayTrigger';
-import type { UnknownAction } from 'redux';
+} from "../../store/slices/ui";
+import { colorDraft } from "../../utils/kassenzeichenHelper";
+import Waiting from "./Waiting";
+import { useRef } from "react";
+import "./navbar.css";
+import { logout } from "../../store/slices/auth";
+import { tooltips } from "@carma-collab/wuppertal/verdis-online";
+import type { OverlayTriggerType } from "react-bootstrap/esm/OverlayTrigger";
+import type { UnknownAction } from "redux";
 
 const VerdisOnlineAppNavbar = () => {
   const dispatch = useDispatch();
@@ -49,35 +50,35 @@ const VerdisOnlineAppNavbar = () => {
   const uiState = useSelector(getUiState);
 
   const crCounter = getNumberOfPendingChanges(kassenzeichen);
-  let kasszLabel = 'Kassenzeichen: ';
-  let lblDownLoadFeb = 'Flächenerfassungsbogen herunterladen (PDF)';
+  let kasszLabel = "Kassenzeichen: ";
+  let lblDownLoadFeb = "Flächenerfassungsbogen herunterladen (PDF)";
   let lblInfo = uiState.infoElementsEnabled
-    ? 'Flächeninfo ausblenden'
-    : 'Flächeninfo einblenden';
+    ? tooltips.flachenInfoTooltip.ausblenden
+    : tooltips.flachenInfoTooltip.einblenden;
   let lblChart = uiState.chartElementsEnabled
-    ? 'Diagramm ausblenden'
-    : 'Diagramm einblenden';
+    ? tooltips.diagrammTooltip.ausblenden
+    : tooltips.diagrammTooltip.einblenden;
   let lblContact = uiState.contactElementEnabled
-    ? 'Ansprechpartner ausblenden'
-    : 'Ansprechpartner einblenden';
-  let lblExit = 'VerDIS-online beenden';
+    ? tooltips.ansprechpartner.ausblenden
+    : tooltips.ansprechpartner.einblenden;
+  let lblExit = "VerDIS-online beenden";
   let menuIsHidden = false;
 
-  let ttTriggerOn: OverlayTriggerType[] = ['hover', 'focus'];
+  let ttTriggerOn: OverlayTriggerType[] = ["hover", "focus"];
   let ttTriggerOff: OverlayTriggerType[] = [];
   let kassenzeichennummer;
   if (kassenzeichen.kassenzeichennummer8) {
     kassenzeichennummer =
-      ' (' + kasszLabel + kassenzeichen.kassenzeichennummer8 + ')';
+      " (" + kasszLabel + kassenzeichen.kassenzeichennummer8 + ")";
   } else {
-    kassenzeichennummer = '';
+    kassenzeichennummer = "";
   }
 
   let pdfIconStyle;
   if (uiState.febBlob !== null) {
-    pdfIconStyle = { color: 'white' };
+    pdfIconStyle = { color: "white" };
   } else {
-    pdfIconStyle = { color: 'grey' };
+    pdfIconStyle = { color: "grey" };
   }
 
   return (
@@ -85,11 +86,11 @@ const VerdisOnlineAppNavbar = () => {
       <Navbar
         style={{
           marginBottom: 0,
-          backgroundImage: 'linear-gradient(to bottom, #3c3c3c 0, #222 100%)',
-          backgroundRepeat: 'repeat-x',
+          backgroundImage: "linear-gradient(to bottom, #3c3c3c 0, #222 100%)",
+          backgroundRepeat: "repeat-x",
           borderRadius: 4,
-          backgroundColor: '#222',
-          borderColor: '#080808',
+          backgroundColor: "#222",
+          borderColor: "#080808",
           padding: 0,
         }}
       >
@@ -105,13 +106,13 @@ const VerdisOnlineAppNavbar = () => {
             <>
               <Navbar.Brand
                 style={{
-                  color: '#9d9d9d',
-                  textShadow: '0 -1px 0 rgba(0, 0, 0, .25)',
+                  color: "#9d9d9d",
+                  textShadow: "0 -1px 0 rgba(0, 0, 0, .25)",
                 }}
               >
                 <a
                   id="verdis_online_brand"
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                   // onClick={this.fitBounds}
                 >
                   VerDIS-online{kassenzeichennummer}
@@ -124,7 +125,7 @@ const VerdisOnlineAppNavbar = () => {
           <Navbar.Collapse>
             <ul
               className="nav navbar-right navbar-nav ml-auto"
-              style={{ listStyle: 'none' }}
+              style={{ listStyle: "none" }}
             >
               <li role="presentation">
                 <a
@@ -132,14 +133,14 @@ const VerdisOnlineAppNavbar = () => {
                   role="button"
                   onClick={() => dispatch(showSettings({ visible: true }))}
                   style={{
-                    color: '#9d9d9d',
-                    backgroundColor: 'transparent',
-                    position: 'relative',
-                    display: 'block',
-                    padding: '10px 15px',
-                    lineHeight: '20px',
-                    paddingTop: '15px',
-                    paddingBottom: '15px',
+                    color: "#9d9d9d",
+                    backgroundColor: "transparent",
+                    position: "relative",
+                    display: "block",
+                    padding: "10px 15px",
+                    lineHeight: "20px",
+                    paddingTop: "15px",
+                    paddingBottom: "15px",
                   }}
                 >
                   Hilfe & Einstellungen
@@ -153,17 +154,17 @@ const VerdisOnlineAppNavbar = () => {
                   }
                   role="button"
                   style={{
-                    color: '#9d9d9d',
-                    backgroundColor: 'transparent',
-                    position: 'relative',
-                    display: 'block',
-                    padding: '10px 15px',
-                    lineHeight: '20px',
-                    paddingTop: '15px',
-                    paddingBottom: '15px',
+                    color: "#9d9d9d",
+                    backgroundColor: "transparent",
+                    position: "relative",
+                    display: "block",
+                    padding: "10px 15px",
+                    lineHeight: "20px",
+                    paddingTop: "15px",
+                    paddingBottom: "15px",
                   }}
                 >
-                  Änderungswünsche{' '}
+                  Änderungswünsche{" "}
                   {uiState.changeRequestsEditMode === true &&
                     crCounter.crDraftCounter > 0 && (
                       <Badge style={{ backgroundColor: colorDraft }}>
@@ -181,18 +182,18 @@ const VerdisOnlineAppNavbar = () => {
                   href="#"
                   role="button"
                   style={{
-                    color: '#9d9d9d',
-                    backgroundColor: 'transparent',
-                    position: 'relative',
-                    display: 'block',
-                    padding: '10px 15px',
-                    lineHeight: '20px',
-                    paddingTop: '15px',
-                    paddingBottom: '15px',
+                    color: "#9d9d9d",
+                    backgroundColor: "transparent",
+                    position: "relative",
+                    display: "block",
+                    padding: "10px 15px",
+                    lineHeight: "20px",
+                    paddingTop: "15px",
+                    paddingBottom: "15px",
                   }}
                 >
                   <FontAwesomeIcon icon={faFilePdf} style={pdfIconStyle} />
-                  {menuIsHidden ? '   ' + lblDownLoadFeb : ''}
+                  {menuIsHidden ? "   " + lblDownLoadFeb : ""}
                 </a>
               </li>
               <OverlayTrigger
@@ -206,25 +207,25 @@ const VerdisOnlineAppNavbar = () => {
               >
                 <li
                   role="presentation"
-                  className={uiState.infoElementsEnabled ? 'active' : ''}
+                  className={uiState.infoElementsEnabled ? "active" : ""}
                 >
                   <a
                     // href="#"
                     role="button"
                     style={{
-                      color: '#9d9d9d',
-                      backgroundColor: 'transparent',
-                      position: 'relative',
-                      display: 'block',
-                      padding: '10px 15px',
-                      lineHeight: '20px',
-                      paddingTop: '15px',
-                      paddingBottom: '15px',
+                      color: "#9d9d9d",
+                      backgroundColor: "transparent",
+                      position: "relative",
+                      display: "block",
+                      padding: "10px 15px",
+                      lineHeight: "20px",
+                      paddingTop: "15px",
+                      paddingBottom: "15px",
                     }}
                     onClick={() => dispatch(toggleInfoElements({}))}
                   >
                     <FontAwesomeIcon icon={faInfoCircle} />
-                    {menuIsHidden ? '   ' + lblInfo : ''}
+                    {menuIsHidden ? "   " + lblInfo : ""}
                   </a>
                 </li>
               </OverlayTrigger>
@@ -239,25 +240,25 @@ const VerdisOnlineAppNavbar = () => {
               >
                 <li
                   role="presentation"
-                  className={uiState.chartElementsEnabled ? 'active' : ''}
+                  className={uiState.chartElementsEnabled ? "active" : ""}
                 >
                   <a
                     // href="#"
                     role="button"
                     style={{
-                      color: '#9d9d9d',
-                      backgroundColor: 'transparent',
-                      position: 'relative',
-                      display: 'block',
-                      padding: '10px 15px',
-                      lineHeight: '20px',
-                      paddingTop: '15px',
-                      paddingBottom: '15px',
+                      color: "#9d9d9d",
+                      backgroundColor: "transparent",
+                      position: "relative",
+                      display: "block",
+                      padding: "10px 15px",
+                      lineHeight: "20px",
+                      paddingTop: "15px",
+                      paddingBottom: "15px",
                     }}
                     onClick={() => dispatch(toggleChartElements({}))}
                   >
                     <FontAwesomeIcon icon={faChartPie} />
-                    {menuIsHidden ? '   ' + lblChart : ''}
+                    {menuIsHidden ? "   " + lblChart : ""}
                   </a>
                 </li>
               </OverlayTrigger>
@@ -272,25 +273,25 @@ const VerdisOnlineAppNavbar = () => {
               >
                 <li
                   role="presentation"
-                  className={uiState.contactElementEnabled ? 'active' : ''}
+                  className={uiState.contactElementEnabled ? "active" : ""}
                 >
                   <a
                     // href="#"
                     role="button"
                     style={{
-                      color: '#9d9d9d',
-                      backgroundColor: 'transparent',
-                      position: 'relative',
-                      display: 'block',
-                      padding: '10px 15px',
-                      lineHeight: '20px',
-                      paddingTop: '15px',
-                      paddingBottom: '15px',
+                      color: "#9d9d9d",
+                      backgroundColor: "transparent",
+                      position: "relative",
+                      display: "block",
+                      padding: "10px 15px",
+                      lineHeight: "20px",
+                      paddingTop: "15px",
+                      paddingBottom: "15px",
                     }}
                     onClick={() => dispatch(toggleContactElement({}))}
                   >
                     <FontAwesomeIcon icon={faUser} />
-                    {menuIsHidden ? '   ' + lblContact : ''}
+                    {menuIsHidden ? "   " + lblContact : ""}
                   </a>
                 </li>
               </OverlayTrigger>
@@ -308,19 +309,21 @@ const VerdisOnlineAppNavbar = () => {
                     // href="#"
                     role="button"
                     style={{
-                      color: '#9d9d9d',
-                      backgroundColor: 'transparent',
-                      position: 'relative',
-                      display: 'block',
-                      padding: '10px 15px',
-                      lineHeight: '20px',
-                      paddingTop: '15px',
-                      paddingBottom: '15px',
+                      color: "#9d9d9d",
+                      backgroundColor: "transparent",
+                      position: "relative",
+                      display: "block",
+                      padding: "10px 15px",
+                      lineHeight: "20px",
+                      paddingTop: "15px",
+                      paddingBottom: "15px",
                     }}
-                    onClick={() => dispatch(logout() as unknown as UnknownAction)}
+                    onClick={() =>
+                      dispatch(logout() as unknown as UnknownAction)
+                    }
                   >
                     <FontAwesomeIcon icon={faPowerOff} />
-                    {menuIsHidden ? '   ' + lblExit : ''}
+                    {menuIsHidden ? "   " + lblExit : ""}
                   </a>
                 </li>
               </OverlayTrigger>
@@ -372,11 +375,11 @@ const VerdisOnlineAppNavbar = () => {
       </Navbar>
       <Waiting
         key={
-          'Waiting.visible.' +
+          "Waiting.visible." +
           uiState.waitingVisible +
-          ' ...message.' +
+          " ...message." +
           uiState.waitingMessage +
-          ' ...type.' +
+          " ...type." +
           uiState.waitingType
         }
       />

@@ -69,7 +69,7 @@
         "libraries/collaboration/carma-wuppertal-collab/src/starkregengefahrenkarte/index.jsx"
       ],
       "@carma-collab/wuppertal/verdis-online": [
-        "libraries/collaboration/carma-wuppertal-collab/src/verdis-online/index.jsx"
+        "libraries/collaboration/carma-wuppertal-collab/src/verdis-online/index.ts"
       ],
       "@carma-collab/wuppertal/x-and-ride": ["libraries/collaboration/carma-wuppertal-collab/src/x-and-ride/index.ts"],
       "@carma-commons/debug": ["libraries/commons/debug/src/index.ts"],
