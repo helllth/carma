@@ -1,21 +1,26 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { useDispatch, useSelector } from 'react-redux';
-import { getUiState, showChangeRequests } from '../../../store/slices/ui';
-import ModalApplicationMenu from 'react-cismap/topicmaps/menu/ModalApplicationMenu';
-import Section from 'react-cismap/topicmaps/menu/Section';
-import Introduction from './CR05Introduction';
+import { useDispatch, useSelector } from "react-redux";
+import { getUiState, showChangeRequests } from "../../../store/slices/ui";
+import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
+import Section from "react-cismap/topicmaps/menu/Section";
+import Introduction from "./CR05Introduction";
 import {
   getKassenzeichen,
   getNumberOfPendingChanges,
-} from '../../../store/slices/kassenzeichen';
-import CRConversation from '../conversations/CRConversation';
-import { useState } from 'react';
-import ConversationInput from '../conversations/ConversationInput';
-import CR20DocumentsPanel from './CR20DocumentsPanel';
-import { Button } from 'react-bootstrap';
-import Toggle from 'react-bootstrap-toggle';
-import './toggle.css';
+} from "../../../store/slices/kassenzeichen";
+import CRConversation from "../conversations/CRConversation";
+import { useState } from "react";
+import ConversationInput from "../conversations/ConversationInput";
+import CR20DocumentsPanel from "./CR20DocumentsPanel";
+import { Button } from "react-bootstrap";
+import Toggle from "react-bootstrap-toggle";
+import "./toggle.css";
+import {
+  AnderungswunscheIntroductionAus,
+  anderungswunscheSimpleTexts,
+  AnderungswunscheHint,
+} from "@carma-collab/wuppertal/verdis-online";
 
 const CR00MainComponent = ({ localErrorMessages = [] }) => {
   const uiState = useSelector(getUiState);
@@ -23,14 +28,10 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
   const dispatch = useDispatch();
   const [hideSystemMessages, setHideSystemMessages] = useState(false);
 
-  const draftHint = `Bitte beachten Sie, dass Änderungswünsche,
-	Anmerkungen und Ihre hochgeladenen Dokumente
-	erst für den Sachbearbeiter sichtbar werden,
-	wenn sie die Änderungen freigegeben/entsperrt
-	und eingereicht haben.`;
+  const draftHint = anderungswunscheSimpleTexts.draftHint;
 
   const { crDraftCounter } = getNumberOfPendingChanges(
-    kassenzeichen.aenderungsanfrage
+    kassenzeichen.aenderungsanfrage,
   );
 
   const crMessages =
@@ -58,8 +59,8 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
 
   return (
     <ModalApplicationMenu
-      menuIcon={'edit'}
-      menuTitle={'Änderungswünsche und Kommentare'}
+      menuIcon={"edit"}
+      menuTitle={anderungswunscheSimpleTexts.andrTitle}
       // menuFooter={<></>}
       menuIntroduction={<Introduction />}
       visible={uiState.changeRequestsMenuVisible}
@@ -88,20 +89,20 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
                     <td>
                       <div
                         style={{
-                          verticalAlign: 'middle',
-                          textAlign: 'right',
+                          verticalAlign: "middle",
+                          textAlign: "right",
                         }}
                       >
-                        Systemnachrichten einblenden:{' '}
+                        Systemnachrichten einblenden:{" "}
                         <Toggle
                           onClick={() => {
                             setHideSystemMessages(!hideSystemMessages);
                           }}
-                          on={'Ein'}
-                          off={'Aus'}
+                          on={"Ein"}
+                          off={"Aus"}
                           offstyle="danger"
                           onstyle="success"
-                          size={'xs'}
+                          size={"xs"}
                           active={!hideSystemMessages}
                           style={{ padding: 10 }}
                         />
@@ -129,11 +130,11 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
                 key="sectionKey1"
                 sectionKey="sectionKey1"
                 sectionTitle={
-                  'Ihre Änderungsvorschläge' +
+                  "Ihre Änderungsvorschläge" +
                   (changerequestBezeichnungsArray !== undefined &&
                   changerequestBezeichnungsArray.length > 0
-                    ? ' (' + changerequestBezeichnungsArray.length + ')'
-                    : '')
+                    ? " (" + changerequestBezeichnungsArray.length + ")"
+                    : "")
                 }
                 sectionBsStyle="warning"
                 sectionContent={<p>keine Änderungsvorschläge vorhanden</p>}
@@ -141,7 +142,7 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
               <Section
                 key="sectionKey2"
                 sectionKey="sectionKey2"
-                sectionTitle={'Ihre Anmerkungen in der Karte'}
+                sectionTitle={"Ihre Anmerkungen in der Karte"}
                 sectionBsStyle="success"
                 sectionContent={<></>}
               />,
@@ -149,39 +150,31 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
                 key="sectionKey2"
                 sectionKey="sectionKey2"
                 sectionTitle={
-                  'Ihre Dokumente' +
-                  (documents.length > 0 ? ' (' + documents.length + ')' : '')
+                  "Ihre Dokumente" +
+                  (documents.length > 0 ? " (" + documents.length + ")" : "")
                 }
                 sectionBsStyle="danger"
                 sectionContent={<CR20DocumentsPanel documents={documents} />}
               />,
               <table
                 style={{
-                  width: '100%',
+                  width: "100%",
                 }}
               >
                 <tbody>
                   <tr>
                     <td
                       style={{
-                        textAlign: 'left',
-                        verticalAlign: 'top',
-                        paddingRight: '30px',
+                        textAlign: "left",
+                        verticalAlign: "top",
+                        paddingRight: "30px",
                       }}
                     >
                       <p>
                         {crDraftCounter > 0 && <b>{draftHint}</b>}
                         {!(crDraftCounter > 0) && <span>{draftHint}</span>}
                       </p>
-                      <p>
-                        Sollten sich nach Abschluss der Bearbeitung Änderungen
-                        gegenüber der bisherigen Gebührenerhebung ergeben,
-                        erhalten Sie einen Änderungsbescheid durch das
-                        Steueramt. Eine Veranlagung findet ggf. rückwirkend
-                        statt. Maßgebend ist das Datum des Luftbilds, in dem die
-                        Änderung feststellbar ist, aber längsten das laufende
-                        und die 4 vorhergegangenen Jahre.
-                      </p>
+                      <AnderungswunscheHint />
                     </td>
                     <td />
                   </tr>
@@ -197,11 +190,7 @@ const CR00MainComponent = ({ localErrorMessages = [] }) => {
             ]
           : [
               <div>
-                <p style={{ textAlign: 'left' }}>
-                  Wenn Sie den Änderungsmodus aktivieren, erscheinen in diesem
-                  Dialog die Steuerelemente mit denen Sie Ihre Änderungen
-                  anlegen können und weitere Hilfsinformationen erhalten.
-                </p>
+                <AnderungswunscheIntroductionAus />
                 {/* <Button
                   className="pull-left"
                   id="cmdCloseModalApplicationMenu"
