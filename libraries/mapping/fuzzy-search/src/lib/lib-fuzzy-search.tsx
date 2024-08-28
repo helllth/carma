@@ -43,6 +43,7 @@ export function LibFuzzySearch({
   referenceSystemDefinition,
   pixelwidth = 300,
   ifShowCategories: standardSearch = false,
+  placeholder = "Wohin?",
 }: SearchGazetteerProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
@@ -330,7 +331,7 @@ export function LibFuzzySearch({
           style={inputStyle}
           onSearch={(value) => handleSearchAutoComplete(value)}
           onChange={(value) => setValue(value)}
-          placeholder="Wohin?"
+          placeholder={placeholder}
           value={value}
           onSelect={(value, option) => handleOnSelect(option)}
           defaultActiveFirstOption={true}
@@ -348,7 +349,7 @@ export function LibFuzzySearch({
           popupMatchSelectWidth={500}
           style={inputStyle}
           onSearch={(value) => handleSearchAutoComplete(value)}
-          placeholder="Wohin?"
+          placeholder={placeholder}
           options={searchResult}
           onSelect={(value, option) => handleOnSelect(option)}
           value={value}

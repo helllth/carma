@@ -26,6 +26,7 @@ export type SearchGazetteerProps = {
   pixelwidth?: number;
   ifShowCategories?: boolean;
   marker3dStyle?: ModelAsset;
+  placeholder?: string;
 };
 
 export type MapConsumer = L.Map | Viewer;
