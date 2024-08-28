@@ -1,17 +1,18 @@
-import { Alert, AlertContainer } from 'react-bs-notifier';
-import { Form, FormGroup, Row, Col, Button, Container } from 'react-bootstrap';
-import Loadable from 'react-loading-overlay-ts';
-import MaskedFormControl from 'react-bootstrap-maskedinput';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getKassenzeichenbySTAC } from '../../store/slices/kassenzeichen';
-import { getLoginInProgress, getLoginInfoText } from '../../store/slices/auth';
-import { useNavigate } from 'react-router-dom';
-import { getConfData, getUiState } from '../../store/slices/ui';
-import type { UnknownAction } from 'redux';
+import { Alert, AlertContainer } from "react-bs-notifier";
+import { Form, FormGroup, Row, Col, Button, Container } from "react-bootstrap";
+import Loadable from "react-loading-overlay-ts";
+import MaskedFormControl from "react-bootstrap-maskedinput";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getKassenzeichenbySTAC } from "../../store/slices/kassenzeichen";
+import { getLoginInProgress, getLoginInfoText } from "../../store/slices/auth";
+import { useNavigate } from "react-router-dom";
+import { getConfData, getUiState } from "../../store/slices/ui";
+import { Kontaktinformationen } from "@carma-collab/wuppertal/verdis-online";
+import type { UnknownAction } from "redux";
 
 const VerdisOnlineLanding = () => {
-  const [stac, setStac] = useState('');
+  const [stac, setStac] = useState("");
   const [loginAlertVisible, setLoginAlertVisible] = useState(false);
   const [connectionProblem, setConnectionProblem] = useState(false);
   const dispatch = useDispatch();
@@ -21,16 +22,16 @@ const VerdisOnlineLanding = () => {
   const navigate = useNavigate();
   const uiState = useSelector(getUiState);
   let landingStyle = {
-    backgroundColor: 'red',
+    backgroundColor: "red",
     height: uiState.height,
-    width: '100%',
-    background: "url('/images/" + 'background.jpg' + "')",
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
+    width: "100%",
+    background: "url('/images/" + "background.jpg" + "')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
   };
   const panelStyle = {
-    backgroundColor: 'rgba(255,255,255,1)',
+    backgroundColor: "rgba(255,255,255,1)",
     border: 0,
     paddingLeft: 40,
     paddingRight: 40,
@@ -46,25 +47,25 @@ const VerdisOnlineLanding = () => {
   const handleStacChange = (rawStac) => {
     setStac(rawStac);
     if (rawStac) {
-      console.log('xxx', rawStac);
-      let stac = rawStac.trim().replace(/[- ]/g, '');
+      console.log("xxx", rawStac);
+      let stac = rawStac.trim().replace(/[- ]/g, "");
       if (stac.length === 12) {
         dispatch(
           getKassenzeichenbySTAC(stac, (success) => {
             if (success === true) {
               setTimeout(() => {
-                const verificationCode = '';
-                let verificationCodeSuffix = '';
+                const verificationCode = "";
+                let verificationCodeSuffix = "";
                 if (verificationCode) {
                   verificationCodeSuffix =
-                    '?emailVerificationCode=' + verificationCode;
+                    "?emailVerificationCode=" + verificationCode;
                 }
-                navigate('/meinkassenzeichen' + verificationCodeSuffix);
+                navigate("/meinkassenzeichen" + verificationCodeSuffix);
               }, 100);
             } else {
               setTimeout(() => {
-                setStac('');
-                navigate('/');
+                setStac("");
+                navigate("/");
                 setLoginAlertVisible(true);
               }, 1000);
             }
@@ -75,49 +76,49 @@ const VerdisOnlineLanding = () => {
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: "relative" }}>
       <div
         style={{
-          position: 'absolute',
-          top: '0px',
-          left: '0px',
-          width: '100%',
-          height: '200px',
-          backgroundColor: 'rgba(0,0,0,0.4)',
+          position: "absolute",
+          top: "0px",
+          left: "0px",
+          width: "100%",
+          height: "200px",
+          backgroundColor: "rgba(0,0,0,0.4)",
         }}
       />
       <div
         style={{
-          position: 'absolute',
-          bottom: '0px',
-          left: '0px',
-          width: '100%',
-          height: '250px',
-          backgroundColor: 'rgba(0,0,0,0.4)',
+          position: "absolute",
+          bottom: "0px",
+          left: "0px",
+          width: "100%",
+          height: "250px",
+          backgroundColor: "rgba(0,0,0,0.4)",
         }}
       />
       <div
         style={{
-          position: 'absolute',
-          bottom: '0px',
-          left: '0px',
-          width: '100%',
+          position: "absolute",
+          bottom: "0px",
+          left: "0px",
+          width: "100%",
 
-          backgroundColor: 'rgba(0,0,0,0)',
+          backgroundColor: "rgba(0,0,0,0)",
         }}
       >
         <div
           style={{
-            fontSize: '9px',
-            textAlign: 'right',
-            color: 'rgba(256,256,256,0.5)',
+            fontSize: "9px",
+            textAlign: "right",
+            color: "rgba(256,256,256,0.5)",
             margin: 4,
           }}
         >
           {/* {getVersion()} */}
         </div>
       </div>
-      <div style={{ width: '100%', height: '100%', position: 'absolute' }}>
+      <div style={{ width: "100%", height: "100%", position: "absolute" }}>
         <AlertContainer position="top-right">
           <div>
             {connectionProblem && (
@@ -153,7 +154,7 @@ const VerdisOnlineLanding = () => {
                   <div key={message.key}>
                     {
                       <Alert
-                        key={'alert' + message.key}
+                        key={"alert" + message.key}
                         type={message.type}
                         timeout={message.timeout}
                         headline={message.headline}
@@ -172,7 +173,7 @@ const VerdisOnlineLanding = () => {
         <Container>
           <Row className="show-grid">
             <Col xs={12} md={12}>
-              <h1 style={{ color: 'white' }}>
+              <h1 style={{ color: "white" }}>
                 <img alt="" width={180} src="/images/wuppertal-white.svg" />
               </h1>
               {/* {getVersion() === "dev-hot-reload" &&
@@ -204,8 +205,8 @@ const VerdisOnlineLanding = () => {
                                             </Button>
                                         </span>
                                     )} */}
-              <h2 style={{ color: 'white' }}>VerDIS - online</h2>
-              <h3 style={{ color: 'white' }}>
+              <h2 style={{ color: "white" }}>VerDIS - online</h2>
+              <h3 style={{ color: "white" }}>
                 Versiegelungsdaten | Flächenentwässerung
               </h3>
             </Col>
@@ -215,7 +216,7 @@ const VerdisOnlineLanding = () => {
             <Col xs={6} md={6}>
               <div
                 style={{
-                  position: 'fixed',
+                  position: "fixed",
                   top: uiState.height - 200,
                 }}
               >
@@ -225,7 +226,7 @@ const VerdisOnlineLanding = () => {
                       ...panelStyle,
                       marginBottom: 20,
                       borderRadius: 4,
-                      boxShadow: '0 1px 2px rgba(0, 0, 0, .05)',
+                      boxShadow: "0 1px 2px rgba(0, 0, 0, .05)",
                     }}
                   >
                     <div style={{ padding: 15 }}>
@@ -240,13 +241,13 @@ const VerdisOnlineLanding = () => {
                       >
                         <FormGroup controlId="stacInput">
                           <MaskedFormControl
-                            key={'MaskedFormControl.with'}
+                            key={"MaskedFormControl.with"}
                             style={{
-                              height: '50px',
-                              border: '1px solid #9999992',
-                              padding: '5px',
-                              fontSize: '24px',
-                              fontFamily: 'monospace',
+                              height: "50px",
+                              border: "1px solid #9999992",
+                              padding: "5px",
+                              fontSize: "24px",
+                              fontFamily: "monospace",
                             }}
                             placeholderChar=" "
                             type="text"
@@ -268,25 +269,11 @@ const VerdisOnlineLanding = () => {
             <Col xs={5} md={5}>
               <div
                 style={{
-                  position: 'fixed',
+                  position: "fixed",
                   top: uiState.height - 200,
                 }}
               >
-                <h4 style={{ color: 'white' }}>Stadt Wuppertal</h4>
-                <h4 style={{ color: 'white' }}>
-                  Vermessung, Katasteramt und Geodaten
-                </h4>
-                <h4 style={{ color: 'white' }}>
-                  102.23 Kommunalservice Liegenschaftskataster
-                </h4>
-                <h4 style={{ color: 'white' }}>
-                  <a
-                    style={{ color: 'white' }}
-                    href="mailto:regengeld@stadt.wuppertal.de"
-                  >
-                    regengeld@stadt.wuppertal.de
-                  </a>
-                </h4>
+                <Kontaktinformationen />
               </div>
             </Col>
           </Row>
