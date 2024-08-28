@@ -125,8 +125,8 @@ const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
       name: layer.Name,
       type: "layer",
       layerType: "wmts",
-      maxZoom: scaleHintToZoom(layer?.ScaleHint?.max),
-      minZoom: scaleHintToZoom(layer?.ScaleHint?.min),
+      maxZoom: scaleHintToZoom(layer?.ScaleHint?.min),
+      minZoom: scaleHintToZoom(layer?.ScaleHint?.max),
       props: { ...layer },
     };
 
