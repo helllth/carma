@@ -63,7 +63,7 @@ const TopNavbar = () => {
   const mode = useSelector(getMode);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const updateLayers = (
+  const updateLayers = async (
     layer: Item,
     deleteItem: boolean = false,
     forceWMS: boolean = false,
@@ -93,6 +93,15 @@ const TopNavbar = () => {
     if (layer.type === "layer") {
       const vectorObject = extractVectorStyles(layer.keywords);
       if (vectorObject && !forceWMS) {
+        const zoom = await fetch(vectorObject.vectorStyle)
+          .then((response) => {
+            return response.json();
+          })
+          .then((result) => {
+            return {
+              minZoom: result.sources["poi-source"].minzoom,
+            };
+          });
         newLayer = {
           title: layer.title,
           id: layer.id,
@@ -102,6 +111,7 @@ const TopNavbar = () => {
           visible: true,
           props: {
             style: vectorObject.vectorStyle,
+            minZoom: zoom?.minZoom,
           },
           other: {
             ...layer,
