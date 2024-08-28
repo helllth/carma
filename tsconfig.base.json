@@ -16,7 +16,6 @@
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",
-    //"typeRoots": ["node_modules", "node_modules/@types", "types"],
     "types": [
       "vite/client",
       "node",
