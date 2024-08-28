@@ -1,12 +1,13 @@
-import { useSelector } from 'react-redux';
-import { PieChart, Pie, Legend, Cell, Tooltip } from 'recharts';
-import { getKassenzeichen } from '../../store/slices/kassenzeichen';
+import { useSelector } from "react-redux";
+import { PieChart, Pie, Legend, Cell, Tooltip } from "recharts";
+import { getKassenzeichen } from "../../store/slices/kassenzeichen";
 import {
   anschlussgradLookupByAbk,
   flaechenartLookupByAbk,
   veranlagungsgrundlage,
-} from '../../utils/kassenzeichenHelper';
-import { getColorFromFlaechenArt } from '../../utils/kassenzeichenMappingTools';
+} from "../../utils/kassenzeichenHelper";
+import { getColorFromFlaechenArt } from "../../utils/kassenzeichenMappingTools";
+import { panelTitles } from "@carma-collab/wuppertal/verdis-online";
 
 interface PanelProps {
   orientation: string;
@@ -16,8 +17,8 @@ const KassenzeichenFlaechenChartPanel = ({ orientation }: PanelProps) => {
   const kassenzeichen = useSelector(getKassenzeichen);
 
   const styleOverride = {
-    marginBottom: '5px',
-    width: '100%',
+    marginBottom: "5px",
+    width: "100%",
   };
 
   const getCorrectArea = (flaeche) => {
@@ -56,12 +57,12 @@ const KassenzeichenFlaechenChartPanel = ({ orientation }: PanelProps) => {
       if (sumFA) {
         statsFA.set(
           flaeche.flaecheninfo.flaechenart.art,
-          getCorrectArea(flaeche) * factor + sumFA
+          getCorrectArea(flaeche) * factor + sumFA,
         );
       } else {
         statsFA.set(
           flaeche.flaecheninfo.flaechenart.art,
-          getCorrectArea(flaeche) * factor
+          getCorrectArea(flaeche) * factor,
         );
       }
       total += getCorrectArea(flaeche) * factor;
@@ -76,21 +77,22 @@ const KassenzeichenFlaechenChartPanel = ({ orientation }: PanelProps) => {
     statsFAData.push(o);
   }
 
-  if (orientation === 'vertical') {
+  if (orientation === "vertical") {
     return (
       <div
         style={{
           ...styleOverride,
           minHeight: 20,
-          backgroundColor: '#f5f5f5',
-          border: '1px solid #e3e3e3',
+          backgroundColor: "#f5f5f5",
+          border: "1px solid #e3e3e3",
           padding: 9,
           borderRadius: 3,
-          height: 'auto',
+          height: "auto",
         }}
       >
         <h4>
-          Veranlagung: {Math.floor(total).toLocaleString('de-DE')} m&sup2;
+          {panelTitles.kassenzeichenTitleChart}{" "}
+          {Math.floor(total).toLocaleString("de-DE")} m&sup2;
         </h4>
         <PieChart width={210} height={240}>
           <Pie
@@ -104,7 +106,7 @@ const KassenzeichenFlaechenChartPanel = ({ orientation }: PanelProps) => {
             {statsFAData.map((entry) => {
               return (
                 <Cell
-                  key={'color.for.' + entry.name}
+                  key={"color.for." + entry.name}
                   fill={getColorFromFlaechenArt(entry.name)}
                 />
               );
@@ -113,7 +115,7 @@ const KassenzeichenFlaechenChartPanel = ({ orientation }: PanelProps) => {
           <Legend />
           <Tooltip
             formatter={(value: number) =>
-              Math.floor(value).toLocaleString('de-DE') + ' m²'
+              Math.floor(value).toLocaleString("de-DE") + " m²"
             }
           />
         </PieChart>
@@ -122,7 +124,7 @@ const KassenzeichenFlaechenChartPanel = ({ orientation }: PanelProps) => {
   } else {
     return (
       <div style={styleOverride}>
-        <h4>Statistik: {total.toLocaleString('de-DE')} m&sup2;</h4>
+        <h4>Statistik: {total.toLocaleString("de-DE")} m&sup2;</h4>
         <PieChart width={140} height={100}>
           <Pie
             data={statsFAData}
@@ -135,14 +137,14 @@ const KassenzeichenFlaechenChartPanel = ({ orientation }: PanelProps) => {
             {statsFAData.map((entry) => {
               return (
                 <Cell
-                  key={'color.for.' + entry.name}
+                  key={"color.for." + entry.name}
                   fill={getColorFromFlaechenArt(entry.name)}
                 />
               );
             })}
           </Pie>
           <Tooltip
-            formatter={(value) => value.toLocaleString('de-DE') + ' m²'}
+            formatter={(value) => value.toLocaleString("de-DE") + " m²"}
           />
         </PieChart>
       </div>
