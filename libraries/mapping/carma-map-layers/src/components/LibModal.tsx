@@ -90,7 +90,7 @@ export const LibModal = ({
         const newLayers: any[] = [];
 
         results.forEach((result) => {
-          if (category.Title === result.item.tags[0]) {
+          if (category.Title === result.item?.tags?.[0]) {
             newLayers.push({
               ...result.item,
               highlight: result.matches,
