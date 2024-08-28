@@ -1,9 +1,24 @@
 // import { stopwords } from "./stopwords.de-de";
-import type { ENDPOINT } from "types/search";
 
 export const host = "https://wupp-topicmaps-data.cismet.de";
 export const DEFAULT_PROJ = "3857";
 export const DEFAULT_SRC_PROJ = "25832";
+
+export type ENDPOINT =
+  | "adressen"
+  | "aenderungsv"
+  | "bezirke"
+  | "bpklimastandorte"
+  | "bplaene"
+  | "ebikes"
+  | "emob"
+  | "geps"
+  | "geps_reverse"
+  | "kitas"
+  | "prbr"
+  | "no2"
+  | "quartiere"
+  | "pois";
 
 const createUrl = (endpoint: ENDPOINT, crs: string = DEFAULT_PROJ) =>
   `${host}/data/${crs}/${endpoint}.json`;
