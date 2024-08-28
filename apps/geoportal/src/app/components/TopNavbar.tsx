@@ -121,6 +121,7 @@ const TopNavbar = () => {
                 url: layer.props.url,
                 legend: layer.props.Style[0].LegendURL,
                 name: layer.props.Name,
+                maxZoom: layer.maxZoom,
               },
               other: {
                 ...layer,
