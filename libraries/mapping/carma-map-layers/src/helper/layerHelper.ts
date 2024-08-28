@@ -109,9 +109,9 @@ const scaleHintToZoom = (scaleHint: number) => {
 
   const C = 156543.03;
 
-  const maxZoom = Math.log2(C / scaleHint);
+  const zoom = Math.log2(C / scaleHint);
 
-  return Math.round(Math.round(maxZoom * 10) / 10);
+  return Math.round(zoom);
 };
 
 const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
@@ -126,6 +126,7 @@ const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
       type: "layer",
       layerType: "wmts",
       maxZoom: scaleHintToZoom(layer?.ScaleHint?.max),
+      minZoom: scaleHintToZoom(layer?.ScaleHint?.min),
       props: { ...layer },
     };
 
