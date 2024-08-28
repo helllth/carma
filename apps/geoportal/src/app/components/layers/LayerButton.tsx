@@ -121,8 +121,8 @@ const LayerButton = ({
             : showSettings
             ? "bg-white"
             : "bg-neutral-200",
-          zoom <= layer.props.maxZoom && "opacity-50",
-          zoom >= layer.props.minZoom && "opacity-50",
+          zoom >= layer.props.maxZoom && "opacity-50",
+          zoom <= layer.props.minZoom && "opacity-50",
         )}
       >
         {iconName ? (
