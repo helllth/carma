@@ -106,14 +106,12 @@ const scaleHintToZoom = (scaleHint: number) => {
   if (!scaleHint) {
     return undefined;
   }
-  const equatorLength = 40075016.68557849; // in meters
-  const tileSize = 256; // pixels
-  const initialResolution = equatorLength / tileSize; // 156543.03392804097 meters/pixel at zoom 0
-  const dpi = 96; // typical DPI
 
-  const maxZoom = Math.log2((initialResolution * dpi) / scaleHint);
+  const C = 156543.03;
 
-  return maxZoom;
+  const maxZoom = Math.log2(C / scaleHint);
+
+  return Math.round(Math.round(maxZoom * 10) / 10);
 };
 
 const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
