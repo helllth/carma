@@ -1,21 +1,23 @@
-import AmKanalAngeschlossen from '../app/components/kurzinfos/anschlussgrad/AmKanalAngeschlossen';
-import DirekteinleitungInVerrohrtesGewaesser from '../app/components/kurzinfos/anschlussgrad/DirekteinleitungInVerrohrtesGewaesser';
-import DirekteinleitungOffenesGewaesser from '../app/components/kurzinfos/anschlussgrad/DirekteinleitungOffenesGewaesser';
-import Versickernd from '../app/components/kurzinfos/anschlussgrad/Versickernd';
-import VersickerungsanlageMitNotueberlauf from '../app/components/kurzinfos/anschlussgrad/VersickerungsanlageMitNotueberlauf';
-import Dachflaeche from '../app/components/kurzinfos/flaechenart/Dachflaeche';
-import Gruendachflaeche from '../app/components/kurzinfos/flaechenart/Gruendachflaeche';
-import Oekopflaster from '../app/components/kurzinfos/flaechenart/Oekopflaster';
-import StaedtStrassenflaeche from '../app/components/kurzinfos/flaechenart/StaedtStrassenflaeche';
-import StaedtStrassenflaecheOekopflaster from '../app/components/kurzinfos/flaechenart/StaedtStrassenflaecheOekopflaster';
-import VersiegelteFlaeche from '../app/components/kurzinfos/flaechenart/VersiegelteFlaeche';
+import {
+  AmKanalAngeschlossen,
+  DirekteinleitungInVerrohrtesGewaesser,
+  DirekteinleitungOffenesGewaesser,
+  VersickerungsanlageMitNotueberlauf,
+  Versickernd,
+  Dachflaeche,
+  Gruendachflaeche,
+  Oekopflaster,
+  StaedtStrassenflaeche,
+  VersiegelteFlaeche,
+  StaedtStrassenflaecheOekopflaster,
+} from "@carma-collab/wuppertal/verdis-online";
 
-export const colorUnchanged = 'black';
-export const colorChanged = '#436F8C';
-export const colorNeededProof = '#B55959';
-export const colorAccepted = '#3D7844';
-export const colorRejected = '#B11623';
-export const colorDraft = '#BD9546';
+export const colorUnchanged = "black";
+export const colorChanged = "#436F8C";
+export const colorNeededProof = "#B55959";
+export const colorAccepted = "#3D7844";
+export const colorRejected = "#B11623";
+export const colorDraft = "#BD9546";
 
 const getMergedFlaechenObject = (flaeche, flaechenCR) => {
   let ret = JSON.parse(JSON.stringify(flaeche));
@@ -66,7 +68,7 @@ export const getMergedFlaeche = (flaecheOrFlaechenfeature, flaechenCR) => {
 };
 
 export const getLinkForDoc = (doc) => {
-  return 'https://wuppertal.regengeld.de/anhang/' + doc.uuid + '_' + doc.name;
+  return "https://wuppertal.regengeld.de/anhang/" + doc.uuid + "_" + doc.name;
 };
 
 export const getCRsForFeature = (kassenzeichen, flaechenFeature) => {
@@ -130,73 +132,73 @@ export const veranlagungsgrundlage = [
     flaechenart: 6,
     anschlussgrad: 3,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 1,
     anschlussgrad: 2,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 2,
     anschlussgrad: 2,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 3,
     anschlussgrad: 2,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 4,
     anschlussgrad: 2,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 5,
     anschlussgrad: 2,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 6,
     anschlussgrad: 2,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 1,
     anschlussgrad: 3,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 2,
     anschlussgrad: 3,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 3,
     anschlussgrad: 3,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 4,
     anschlussgrad: 3,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   {
     flaechenart: 5,
     anschlussgrad: 3,
     veranlagungsschluessel: 0,
-    bezeichner: '999-Rest',
+    bezeichner: "999-Rest",
   },
   // {
   //     flaechenart: 2,
@@ -214,13 +216,13 @@ export const veranlagungsgrundlage = [
     flaechenart: 6,
     anschlussgrad: 4,
     veranlagungsschluessel: 0.35,
-    bezeichner: '740-VFS',
+    bezeichner: "740-VFS",
   },
   {
     flaechenart: 2,
     anschlussgrad: 5,
     veranlagungsschluessel: 0.5,
-    bezeichner: '715-GDF',
+    bezeichner: "715-GDF",
   },
   // {
   //     flaechenart: 1,
@@ -238,127 +240,127 @@ export const veranlagungsgrundlage = [
     flaechenart: 1,
     anschlussgrad: 4,
     veranlagungsschluessel: 0.4,
-    bezeichner: '731-Va-über',
+    bezeichner: "731-Va-über",
   },
   {
     flaechenart: 3,
     anschlussgrad: 4,
     veranlagungsschluessel: 0.4,
-    bezeichner: '731-Va-über',
+    bezeichner: "731-Va-über",
   },
   {
     flaechenart: 4,
     anschlussgrad: 4,
     veranlagungsschluessel: 0.4,
-    bezeichner: '731-Va-über',
+    bezeichner: "731-Va-über",
   },
   {
     flaechenart: 2,
     anschlussgrad: 1,
     veranlagungsschluessel: 0.5,
-    bezeichner: '715-GDF',
+    bezeichner: "715-GDF",
   },
   {
     flaechenart: 5,
     anschlussgrad: 4,
     veranlagungsschluessel: 0.5,
-    bezeichner: '740-VFS',
+    bezeichner: "740-VFS",
   },
   {
     flaechenart: 4,
     anschlussgrad: 5,
     veranlagungsschluessel: 0.7,
-    bezeichner: '725-LVF',
+    bezeichner: "725-LVF",
   },
   {
     flaechenart: 6,
     anschlussgrad: 1,
     veranlagungsschluessel: 0.7,
-    bezeichner: '740-VFS',
+    bezeichner: "740-VFS",
   },
   {
     flaechenart: 4,
     anschlussgrad: 1,
     veranlagungsschluessel: 0.7,
-    bezeichner: '725-LVF',
+    bezeichner: "725-LVF",
   },
   {
     flaechenart: 6,
     anschlussgrad: 5,
     veranlagungsschluessel: 0.7,
-    bezeichner: '740-VFS',
+    bezeichner: "740-VFS",
   },
   {
     flaechenart: 7,
     anschlussgrad: 5,
     veranlagungsschluessel: 1,
-    bezeichner: 'VV-750',
+    bezeichner: "VV-750",
   },
   {
     flaechenart: 3,
     anschlussgrad: 1,
     veranlagungsschluessel: 1,
-    bezeichner: '720-VF',
+    bezeichner: "720-VF",
   },
   {
     flaechenart: 1,
     anschlussgrad: 5,
     veranlagungsschluessel: 1,
-    bezeichner: '710-DF',
+    bezeichner: "710-DF",
   },
   {
     flaechenart: 5,
     anschlussgrad: 1,
     veranlagungsschluessel: 1,
-    bezeichner: '740-VFS',
+    bezeichner: "740-VFS",
   },
   {
     flaechenart: 3,
     anschlussgrad: 5,
     veranlagungsschluessel: 1,
-    bezeichner: '720-VF',
+    bezeichner: "720-VF",
   },
   {
     flaechenart: 5,
     anschlussgrad: 5,
     veranlagungsschluessel: 1,
-    bezeichner: '740-VFS',
+    bezeichner: "740-VFS",
   },
   {
     flaechenart: 7,
     anschlussgrad: 1,
     veranlagungsschluessel: 1,
-    bezeichner: 'VV-750',
+    bezeichner: "VV-750",
   },
   {
     flaechenart: 7,
     anschlussgrad: 2,
     veranlagungsschluessel: 1,
-    bezeichner: 'VV-750',
+    bezeichner: "VV-750",
   },
   {
     flaechenart: 7,
     anschlussgrad: 3,
     veranlagungsschluessel: 1,
-    bezeichner: 'VV-750',
+    bezeichner: "VV-750",
   },
   {
     flaechenart: 7,
     anschlussgrad: 4,
     veranlagungsschluessel: 1,
-    bezeichner: 'VV-750',
+    bezeichner: "VV-750",
   },
   {
     flaechenart: 1,
     anschlussgrad: 1,
     veranlagungsschluessel: 1,
-    bezeichner: '710-DF',
+    bezeichner: "710-DF",
   },
   {
     flaechenart: 2,
     anschlussgrad: 4,
     veranlagungsschluessel: 0.3,
-    bezeichner: '735-GDF-V',
+    bezeichner: "735-GDF-V",
   },
 ];
 
@@ -373,11 +375,11 @@ export const flaechenartLookupByAbk = {
 };
 
 export const anschlussgradLookupByAbk = {
-  'angeschl.': 1,
-  'vers.': 2,
-  'direkt OG': 3,
-  'Va-Über': 4,
-  'Bach verrohrt': 5,
+  "angeschl.": 1,
+  "vers.": 2,
+  "direkt OG": 3,
+  "Va-Über": 4,
+  "Bach verrohrt": 5,
 };
 
 export const getOverlayTextForFlaeche = (flaeche, flaechenCR) => {
@@ -401,26 +403,26 @@ export const getInfoTextForFlaechenart = (flaeche) => {
   }
 
   switch (switcher) {
-    case 'Dachfläche':
+    case "Dachfläche":
       flaechenart = <Dachflaeche />;
       break;
-    case 'Gründach':
+    case "Gründach":
       flaechenart = <Gruendachflaeche />;
       break;
-    case 'versiegelte Fläche':
+    case "versiegelte Fläche":
       flaechenart = <VersiegelteFlaeche />;
       break;
-    case 'städtische Straßenfläche':
+    case "städtische Straßenfläche":
       flaechenart = <StaedtStrassenflaeche />;
       break;
-    case 'leicht versiegelte Straßenfläche':
+    case "leicht versiegelte Straßenfläche":
       flaechenart = <StaedtStrassenflaecheOekopflaster />;
       break;
-    case 'leicht versiegelte Fläche':
+    case "leicht versiegelte Fläche":
       flaechenart = <Oekopflaster />;
       break;
     default:
-      throw new Error('unbekannte Flächenart: ' + switcher);
+      throw new Error("unbekannte Flächenart: " + switcher);
   }
 
   return flaechenart;
@@ -436,23 +438,23 @@ export const getInfoTextForAnschlussgrad = (flaeche) => {
     switcher = flaeche.flaecheninfo.anschlussgrad.grad_abkuerzung;
   }
   switch (switcher) {
-    case 'angeschl.':
+    case "angeschl.":
       anschlussgrad = <AmKanalAngeschlossen />;
       break;
-    case 'vers.':
+    case "vers.":
       anschlussgrad = <Versickernd />;
       break;
-    case 'direkt OG':
+    case "direkt OG":
       anschlussgrad = <DirekteinleitungOffenesGewaesser />;
       break;
-    case 'Va-Über':
+    case "Va-Über":
       anschlussgrad = <VersickerungsanlageMitNotueberlauf />;
       break;
-    case 'Bach verrohrt':
+    case "Bach verrohrt":
       anschlussgrad = <DirekteinleitungInVerrohrtesGewaesser />;
       break;
     default:
-      throw new Error('unbekannte Anschlussgrad: ' + switcher);
+      throw new Error("unbekannte Anschlussgrad: " + switcher);
   }
 
   return anschlussgrad;
