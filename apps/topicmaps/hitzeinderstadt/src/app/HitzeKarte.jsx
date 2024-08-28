@@ -211,15 +211,7 @@ const Hitzekarte = () => {
         return (
           <StyledWMSTileLayer
             // ref={(c) => (this.modelLayer = c)}
-            key={
-              "heatmap.bgMap" +
-              selectedBackgroundIndex +
-              "." +
-              "heatmap.simlayer" +
-              simulations[simulationIndex].layer +
-              "heatmap.selSims" +
-              selSimString
-            }
+            key={simulationIndex}
             url={
               simulations[simulationIndex].debugUrl ||
               "https://maps.wuppertal.de/umwelt"
