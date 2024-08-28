@@ -1,31 +1,32 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { Alert } from 'react-bootstrap';
-import Navbar from './Navbar';
-import Waiting from './Waiting';
-import Map from './Map';
-import ContactPanel from './ContactPanel';
-import { useDispatch, useSelector } from 'react-redux';
-import { getKassenzeichen } from '../../store/slices/kassenzeichen';
-import KassenzeichenPanel from './KassenzeichenPanel';
-import KassenzeichenFlaechenChartPanel from './KassenzeichenFlaechenChartPanel';
+import { Alert } from "react-bootstrap";
+import Navbar from "./Navbar";
+import Waiting from "./Waiting";
+import Map from "./Map";
+import ContactPanel from "./ContactPanel";
+import { useDispatch, useSelector } from "react-redux";
+import { getKassenzeichen } from "../../store/slices/kassenzeichen";
+import KassenzeichenPanel from "./KassenzeichenPanel";
+import KassenzeichenFlaechenChartPanel from "./KassenzeichenFlaechenChartPanel";
 import {
   getCRsForFlaeche,
   getOverlayTextForFlaeche,
   hasAttachment,
   kassenzeichenFlaechenSorter,
-} from '../../utils/kassenzeichenHelper';
-import FlaechenPanel from './FlaechenPanel';
+} from "../../utils/kassenzeichenHelper";
+import FlaechenPanel from "./FlaechenPanel";
 import {
   getHeight,
   getUiState,
   toggleInfoElements,
-} from '../../store/slices/ui';
-import { getMapping } from '../../store/slices/mapping';
-import HelpAndSettings from '../components/helpandsettings/Menu00MainComponent';
-import ChangeRequests from '../components/changerequests/CR00MainComponent';
-import { getStac } from '../../store/slices/auth';
-import { useNavigate } from 'react-router-dom';
+} from "../../store/slices/ui";
+import { getMapping } from "../../store/slices/mapping";
+import HelpAndSettings from "../components/helpandsettings/Menu00MainComponent";
+import ChangeRequests from "../components/changerequests/CR00MainComponent";
+import { getStac } from "../../store/slices/auth";
+import { useNavigate } from "react-router-dom";
+import { KassenzeichenViewerGefahrensignal } from "@carma-collab/wuppertal/verdis-online";
 
 const KassenzeichenViewer = () => {
   const kassenzeichen = useSelector(getKassenzeichen);
@@ -37,7 +38,7 @@ const KassenzeichenViewer = () => {
   const dispatch = useDispatch();
 
   if (!stac) {
-    navigate('/');
+    navigate("/");
   }
 
   let flaechenPanelRefs = {};
@@ -46,9 +47,9 @@ const KassenzeichenViewer = () => {
 
   const isFlaecheSelected = (flaeche) => {
     return (
-      mapping.featureCollection !== 'undefined' &&
+      mapping.featureCollection !== "undefined" &&
       mapping.featureCollection.length > 0 &&
-      mapping.selectedIndex !== 'undefined' &&
+      mapping.selectedIndex !== "undefined" &&
       mapping.featureCollection.length > mapping.selectedIndex &&
       mapping.featureCollection[mapping.selectedIndex] &&
       mapping.featureCollection[mapping.selectedIndex]?.properties.id ===
@@ -66,9 +67,9 @@ const KassenzeichenViewer = () => {
 
   const switchToBottomWhenSmallerThan = 900;
   const detailsStyle = {
-    backgroundColor: '#EEE',
-    padding: '5px 5px 5px 5px',
-    overflow: 'auto',
+    backgroundColor: "#EEE",
+    padding: "5px 5px 5px 5px",
+    overflow: "auto",
   };
 
   let crDraftCounter = 0;
@@ -78,7 +79,7 @@ const KassenzeichenViewer = () => {
     draftAlert = (
       <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: 60,
           right: 285,
           zIndex: 500,
@@ -93,12 +94,7 @@ const KassenzeichenViewer = () => {
             dispatch(toggleInfoElements({}));
           }}
         >
-          <h5>
-            <b>Sie haben momentan nicht eingereichte Änderungen.</b> Bitte
-            beachten Sie, dass Änderungswünsche, Anmerkungen und Ihre
-            hochgeladenen Dokumente erst für den Sachbearbeiter sichtbar werden,
-            wenn sie die Änderungen freigegeben/entsperrt und eingereicht haben.
-          </h5>
+          <KassenzeichenFlaechenChartPanel />
         </Alert>
       </div>
     );
@@ -110,7 +106,7 @@ const KassenzeichenViewer = () => {
     proofAlert = (
       <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: crDraftCounter > 0 ? 195 : 60,
           right: 285,
           zIndex: 500,
@@ -200,9 +196,9 @@ const KassenzeichenViewer = () => {
     <div>
       <div
         style={Object.assign({}, detailsStyle, {
-          height: mapHeight + 'px',
-          width: verticalPanelWidth + 'px',
-          float: 'right',
+          height: mapHeight + "px",
+          width: verticalPanelWidth + "px",
+          float: "right",
         })}
       >
         {contactPanel}
@@ -217,13 +213,13 @@ const KassenzeichenViewer = () => {
   if (
     selectedFlaeche !== undefined &&
     selectedFlaeche !== null &&
-    selectedFlaeche.properties.type !== 'annotation' &&
+    selectedFlaeche.properties.type !== "annotation" &&
     uiState.infoElementsEnabled
   ) {
     flaechenInfoOverlay = (
       <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 0,
           left: 20,
           zIndex: 500,
@@ -240,7 +236,7 @@ const KassenzeichenViewer = () => {
         >
           {getOverlayTextForFlaeche(
             selectedFlaeche.properties,
-            undefined
+            undefined,
             // this.props.uiState.changeRequestsEditMode === true
             //     ? getCRsForFlaeche(this.props.kassenzeichen, {
             //           flaechenbezeichnung: selectedFlaeche.properties.bez
