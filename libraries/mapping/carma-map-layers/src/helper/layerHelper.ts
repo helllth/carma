@@ -102,6 +102,18 @@ export const findDifferences = (array1: XMLLayer[], array2: Item[]) => {
   };
 };
 
+const scaleHintToZoom = (scaleHint: number) => {
+  if (!scaleHint) {
+    return undefined;
+  }
+
+  const C = 156543.03;
+
+  const zoom = Math.log2(C / scaleHint);
+
+  return Math.round(zoom);
+};
+
 const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
   if (layer) {
     let item: Item = {
@@ -113,6 +125,8 @@ const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
       name: layer.Name,
       type: "layer",
       layerType: "wmts",
+      maxZoom: scaleHintToZoom(layer?.ScaleHint?.min),
+      minZoom: scaleHintToZoom(layer?.ScaleHint?.max),
       props: { ...layer },
     };
 

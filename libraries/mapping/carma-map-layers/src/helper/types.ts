@@ -7,6 +7,8 @@ export type LayerConfig = {
 export type LayerProps = {
   url: string;
   name: string;
+  maxZoom?: number;
+  minZoom?: number;
   legend?: {
     format: string;
     OnlineResource: string;
@@ -52,6 +54,8 @@ export type vectorProps = {
   layerType: "vector";
   props: {
     style: string;
+    maxZoom?: number;
+    minZoom?: number;
   };
 };
 
@@ -80,6 +84,8 @@ export type Item = {
   service?: { name: string; url: string };
   name: string;
   pictureBoundingBox?: [number, number, number, number];
+  maxZoom?: number;
+  minZoom?: number;
   id: string;
 } & (tmpLayer | Link | Feature | Collection);
 

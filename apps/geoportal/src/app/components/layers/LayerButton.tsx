@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Layer } from "@carma-mapping/layers";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import { useDispatch, useSelector } from "react-redux";
 import { cn } from "../../helper/helper";
@@ -26,6 +26,7 @@ import { getShowLayerHideButtons } from "../../store/slices/ui";
 import { iconColorMap, iconMap } from "./items";
 import "./tabs.css";
 import { useSearchParams } from "react-router-dom";
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 // import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
@@ -49,6 +50,7 @@ const LayerButton = ({
     threshold: 0.99,
   });
   const dispatch = useDispatch();
+  const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showLayerHideButtons = useSelector(getShowLayerHideButtons);
   const showLeftScrollButton = useSelector(getShowLeftScrollButton);
@@ -67,6 +69,7 @@ const LayerButton = ({
     : layer.other?.icon;
 
   const style = { transform: CSS.Translate.toString(transform) };
+  const zoom = routedMapRef?.leafletMap?.leafletElement.getZoom();
 
   useEffect(() => {
     if (!inView && index === 0) {
@@ -118,6 +121,8 @@ const LayerButton = ({
             : showSettings
             ? "bg-white"
             : "bg-neutral-200",
+          zoom >= layer.props.maxZoom && "opacity-50",
+          zoom <= layer.props.minZoom && "opacity-50",
         )}
       >
         {iconName ? (
