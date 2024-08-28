@@ -102,6 +102,20 @@ export const findDifferences = (array1: XMLLayer[], array2: Item[]) => {
   };
 };
 
+const scaleHintToZoom = (scaleHint: number) => {
+  if (!scaleHint) {
+    return undefined;
+  }
+  const equatorLength = 40075016.68557849; // in meters
+  const tileSize = 256; // pixels
+  const initialResolution = equatorLength / tileSize; // 156543.03392804097 meters/pixel at zoom 0
+  const dpi = 96; // typical DPI
+
+  const maxZoom = Math.log2((initialResolution * dpi) / scaleHint);
+
+  return maxZoom;
+};
+
 const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
   if (layer) {
     let item: Item = {
@@ -113,6 +127,7 @@ const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
       name: layer.Name,
       type: "layer",
       layerType: "wmts",
+      maxZoom: scaleHintToZoom(layer?.ScaleHint?.max),
       props: { ...layer },
     };
 
