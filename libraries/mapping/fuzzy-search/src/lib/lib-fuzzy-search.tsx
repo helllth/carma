@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import type { IFuseOptions } from "fuse.js";
 import Fuse from "fuse.js";
 import { AutoComplete, Button } from "antd";
-//@ts-expect-error TODO Replace with carmaHitTrigger
 import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
 import "./fuzzy-search.css";
 import IconComp from "react-cismap/commons/Icon";
