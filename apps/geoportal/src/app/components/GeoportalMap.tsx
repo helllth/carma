@@ -89,8 +89,6 @@ export const GeoportalMap = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log("xxx", gazetteerHit);
-
   return (
     <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
       <Control position="topleft" order={10}>
