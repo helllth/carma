@@ -63,7 +63,7 @@ const InfoBox = ({
 
   const collapsibleDiv = (
     <div>
-      <p style={{ marginBottom: 5 }}>
+      <p style={{ marginBottom: 5, fontSize: "12px" }}>
         Kombinierbare Modellberechnungen (Stand 02/2019) von durch Hitze
         belasteten oder stark belasteten Arealen (IST-Zustand) sowie
         Zukunftsszenario für 2050 bis 2060{" "}
@@ -118,7 +118,7 @@ const InfoBox = ({
                 textAlign: "center",
                 paddingLeft: "0px",
                 paddingTop: "0px",
-                paddingBottom: "0px",
+                paddingBottom: "8px",
               }}
             >
               <table
@@ -158,7 +158,8 @@ const InfoBox = ({
                 textAlign: "center",
                 paddingLeft: "0px",
                 paddingTop: "0px",
-                paddingBottom: "0px",
+                paddingBottom: "12px",
+                paddingRight: "4px",
               }}
             >
               {backgrounds.map((item, index) => {
