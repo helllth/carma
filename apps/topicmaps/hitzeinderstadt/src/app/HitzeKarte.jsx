@@ -116,7 +116,7 @@ const Hitzekarte = () => {
       }
       let label = (
         <a
-          style={{ textDecoration: "none" }}
+          style={{ textDecoration: "none", fontSize: "13px" }}
           onClick={() => {
             setSelectedSimulations((prevSelected) => {
               let updatedSelection;
