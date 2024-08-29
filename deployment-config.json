@@ -359,7 +359,7 @@
           }
         }
       },
-      "projectPath": "./dist/apps/topicmaps/baederkarte"
+      "projectPath": "./dist/apps/topicmaps/hitzeinderstadt"
     },
     "cesium-playground": {
       "deployment": {
