@@ -42,7 +42,7 @@ import {
 } from "../../store/slices/measurements";
 
 import { getMode, toggletModeMeasuremen } from "../../store/slices/ui";
-import { getStartDrawing } from "../../store/slices/mapping";
+import { getStartDrawing, setStartDrawing } from "../../store/slices/mapping";
 
 const MapMeasurement = (props) => {
   const { routedMapRef } = useContext(TopicMapContext);
@@ -223,6 +223,7 @@ const MapMeasurement = (props) => {
 
   const drawingStatusHandler = (status) => {
     dispatch(setDrawingShape(status));
+    dispatch(setStartDrawing(status));
   };
 
   const drawingShapeHandler = (draw) => {
