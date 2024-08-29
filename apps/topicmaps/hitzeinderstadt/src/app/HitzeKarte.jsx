@@ -19,6 +19,7 @@ import ControlInfoBox from "./ControlInfoBox";
 import ResponsiveInfoBox from "react-cismap/topicmaps/ResponsiveInfoBox";
 import StyledWMSTileLayer from "react-cismap/StyledWMSTileLayer";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
+import CismapLayer from "react-cismap/CismapLayer";
 
 const parseSimulationsFromURL = (search) => {
   const params = new URLSearchParams(search);
@@ -47,27 +48,20 @@ const Hitzekarte = () => {
   });
   const simulations = [
     {
-      layer: "Hitze-Ist",
-      debugLayer: "kst_baubloecke",
-      debugUrl: "https://maps.wuppertal.de/gebiet",
+      layer: "https://tiles.cismet.de/hitzeinsel/style.json",
       longname: "Hitzeinsel im IST-Zustand",
       name: "Hitzebelastung",
       opacity: 0.8,
       subtitle: "",
     },
     {
-      debugUrl: "https://maps.wuppertal.de/gebiet",
-      debugLayer: "kst_quartiere",
-      layer: "Hitze-Stark-Ist",
-      longname: "starke Hitzeinsel im IST-Zustand",
+      layer: "https://tiles.cismet.de/starke_hitzeinsel/style.json",
       name: "starke Hitzebelastung",
       opacity: 0.8,
       subtitle: "",
     },
     {
-      debugUrl: "https://maps.wuppertal.de/gebiet",
-      debugLayer: "gitter_500",
-      layer: "Hitze-2050",
+      layer: "https://tiles.cismet.de/ausweitung_hitzeinsel/style.json",
       longname: "Ausweitung der Hitzeinsel im Zukunftsszenario 2050",
       name: "Zukunftsszenario 2050-2060",
       opacity: 0.8,
@@ -160,6 +154,7 @@ const Hitzekarte = () => {
   return (
     <TopicMapComponent
       backgroundlayers={backgrounds[validBackgroundIndex].layerkey}
+      // backgroundlayers="empty"
       infoBox={
         <ControlInfoBox
           pixelwidth={340}
@@ -206,27 +201,37 @@ const Hitzekarte = () => {
       }}
       applicationMenuTooltipString={<MenuTooltip />}
     >
+      {/* <TileLayer
+        maxNativeZoom={20}
+        maxZoom={22}
+        url={`https://geodaten.metropoleruhr.de/spw2?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=spw2_light&STYLE=default&FORMAT=image/png&TILEMATRIXSET=webmercator_hq&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}`}
+      /> */}
       {selectedSimulations.map((simulationIndex) => {
         const selSimString = JSON.stringify(selectedSimulations);
         return (
-          <StyledWMSTileLayer
-            // ref={(c) => (this.modelLayer = c)}
-            key={simulationIndex}
-            url={
-              simulations[simulationIndex].debugUrl ||
-              "https://maps.wuppertal.de/umwelt"
-            }
-            layers={
-              simulations[simulationIndex].debugLayer ||
-              simulations[simulationIndex].layer
-            }
-            version="1.1.1"
-            transparent="true"
-            format="image/png"
-            tiled="true"
-            styles="default"
-            maxZoom={19}
-            opacity={simulations[simulationIndex].opacity}
+          <CismapLayer
+            // type="vector"
+            // key={simulationIndex}
+            // style={
+            //   simulations[simulationIndex].debugUrl ||
+            //   "https://maps.wuppertal.de/umwelt"
+            // }
+            // pane={"additionalLayers" + simulationIndex}
+            // layers={
+            //   simulations[simulationIndex].debugLayer ||
+            //   simulations[simulationIndex].layer
+            // }
+            // opacity={simulations[simulationIndex].opacity}
+            {...{
+              type: "vector",
+              style: simulations[simulationIndex].layer,
+              pane: "additionalLayers" + simulationIndex,
+              opacity: simulations[simulationIndex].opacity,
+
+              // onLayerClick: (e) => {
+              //   console.log("xxx onLayerClick", e);
+              // },
+            }}
           />
         );
       })}

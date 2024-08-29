@@ -24,12 +24,12 @@ function App() {
   return (
     <TopicMapContextProvider
       appKey="carma.apps.topicmaps.HitzeInderStadt"
-      // referenceSystemDefinition={MappingConstants.proj4crs3857def}
-      // mapEPSGCode="3857"
-      // referenceSystem={MappingConstants.crs3857}
-      referenceSystemDefinition={MappingConstants.proj4crs25832def}
-      mapEPSGCode="25832"
-      referenceSystem={MappingConstants.crs25832}
+      referenceSystemDefinition={MappingConstants.proj4crs3857def}
+      mapEPSGCode="3857"
+      referenceSystem={MappingConstants.crs3857}
+      // referenceSystemDefinition={MappingConstants.proj4crs25832def}
+      // mapEPSGCode="25832"
+      // referenceSystem={MappingConstants.crs25832}
     >
       <HitzeKarte />
     </TopicMapContextProvider>
