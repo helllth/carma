@@ -98,8 +98,12 @@ const TopNavbar = () => {
             return response.json();
           })
           .then((result) => {
+            const minZoom =
+              result.sources["poi-source"]?.minzoom ||
+              result.sources["vector-tiles"]?.minzoom ||
+              9;
             return {
-              minZoom: result.sources["poi-source"].minzoom,
+              minZoom,
             };
           });
         newLayer = {
