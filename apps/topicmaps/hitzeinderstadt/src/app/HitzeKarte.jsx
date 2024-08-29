@@ -210,19 +210,8 @@ const Hitzekarte = () => {
         const selSimString = JSON.stringify(selectedSimulations);
         return (
           <CismapLayer
-            // type="vector"
-            // key={simulationIndex}
-            // style={
-            //   simulations[simulationIndex].debugUrl ||
-            //   "https://maps.wuppertal.de/umwelt"
-            // }
-            // pane={"additionalLayers" + simulationIndex}
-            // layers={
-            //   simulations[simulationIndex].debugLayer ||
-            //   simulations[simulationIndex].layer
-            // }
-            // opacity={simulations[simulationIndex].opacity}
             {...{
+              key: "heatmodellayer." + simulationIndex,
               type: "vector",
               style: simulations[simulationIndex].layer,
               pane: "additionalLayers" + simulationIndex,
