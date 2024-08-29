@@ -77,7 +77,7 @@ const Hitzekarte = () => {
   const [simulationLabels, setSimulationLabels] = useState([]);
   const backgrounds = [
     {
-      layerkey: "wupp-plan-live@90",
+      layerkey: "wupp-plan-live-tiles-3857@90",
       src: citymapBG,
       title: "Stadtplan",
     },
@@ -88,7 +88,7 @@ const Hitzekarte = () => {
       title: "Luftbildkarte",
     },
     {
-      layerkey: "hillshade|bplan_abkg@30|wupp-plan-live@20",
+      layerkey: "hillshade|bplan_abkg@30|wupp-plan-live-tiles-3857@20",
       src: topoBG,
       title: "Top. Karte",
     },
