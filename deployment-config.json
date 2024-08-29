@@ -342,6 +342,25 @@
       },
       "projectPath": "./dist/apps/topicmaps/baederkarte"
     },
+    "hitzeinderstadt": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "topicmaps-hitzeinderstadt-wuppertal"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "topicmaps-hitzeinderstadt-wuppertal"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/baederkarte"
+    },
     "cesium-playground": {
       "deployment": {
         "manual": {
