@@ -1581,7 +1581,7 @@ export const baseConfig = {
   TopicMaps: {
     ...topicMapsConfig,
   },
-  VectorMaps: {
-    ...vectorConfig,
-  },
+  // VectorMaps: {
+  //   ...vectorConfig,
+  // },
 };
