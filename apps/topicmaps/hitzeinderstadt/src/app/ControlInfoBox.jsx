@@ -56,14 +56,14 @@ const InfoBox = ({
   );
 
   let alwaysVisibleDiv = (
-    <h4 style={{ margin: 0 }}>
+    <h4 style={{ marginTop: 8 }}>
       <FontAwesomeIcon icon={faSun} /> Hitzebelastungen in Wuppertal
     </h4>
   );
 
   const collapsibleDiv = (
     <div>
-      <p style={{ marginBottom: 5, fontSize: "12px" }}>
+      <p style={{ marginTop: -5, marginBottom: 5, fontSize: "12px" }}>
         Kombinierbare Modellberechnungen (Stand 02/2019) von durch Hitze
         belasteten oder stark belasteten Arealen (IST-Zustand) sowie
         Zukunftsszenario für 2050 bis 2060{" "}
@@ -88,7 +88,8 @@ const InfoBox = ({
               <h5
                 style={{
                   textAlign: "center",
-                  margin: "4px",
+                  marginTop: "4px",
+                  marginBottom: "1px",
                 }}
               >
                 <b>Modellberechnung</b>
@@ -99,13 +100,14 @@ const InfoBox = ({
                 textAlign: "center",
                 paddingLeft: "0px",
                 paddingTop: "0px",
-                paddingBottom: "5px",
+                paddingBottom: "0px",
               }}
             >
               <h5
                 style={{
                   textAlign: "center",
-                  margin: "4px",
+                  marginTop: "4px",
+                  marginBottom: "1px",
                 }}
               >
                 <b>Karte</b>
@@ -203,40 +205,6 @@ const InfoBox = ({
       collapsibleDiv={collapsibleDiv}
     />
   );
-
-  //   return (
-  //     <div
-  //       id="giveittoleaflet"
-  //       onClick={(e) => {
-  //         if (mapRef) {
-  //           let point = L.point(e.clientX, e.clientY); // x=0,y=0
-  //           let latlng = mapRef.containerPointToLatLng(point);
-  //           mapClickListener({ latlng });
-  //         }
-  //       }}
-  //       style={{ cursor: mapCursor }}
-  //     >
-  //       {/* {infoCompButton} */}
-  //       {legendTable}
-  //       <CollapsibleWell
-  //         collapsed={minified}
-  //         setCollapsed={minify}
-  //         style={{
-  //           pointerEvents: "auto",
-  //           // padding: 0,
-  //           // paddingLeft: 9,
-  //           // paddingTop: 9,
-  //           // paddingBottom: 9
-  //         }}
-  //         debugBorder={0}
-  //         tableStyle={{ margin: 0 }}
-  //         fixedRow={false}
-  // alwaysVisibleDiv = { alwaysVisibleDiv };
-  // collapsibleDiv = { collapsibleDiv };
-  //         onClick={(e) => e.stopPropagation()}
-  //       />
-  //     </div>
-  //   );
 };
 
 export default InfoBox;
