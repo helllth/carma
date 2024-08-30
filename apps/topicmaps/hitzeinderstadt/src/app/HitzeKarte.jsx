@@ -9,13 +9,7 @@ import {
   removeQueryPart,
   modifyQueryPart,
 } from "react-cismap/tools/routingHelper";
-
-import {
-  searchTextPlaceholder,
-  MenuTooltip,
-} from "@carma-collab/wuppertal/kita-finder";
 import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
-
 import ControlInfoBox from "./ControlInfoBox";
 import ResponsiveInfoBox from "react-cismap/topicmaps/ResponsiveInfoBox";
 import StyledWMSTileLayer from "react-cismap/StyledWMSTileLayer";
@@ -23,7 +17,12 @@ import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 import CismapLayer from "react-cismap/CismapLayer";
 import { getApplicationVersion } from "@carma-commons/utils";
 import versionData from "../version.json";
-import { getCollabedHelpComponentConfig } from "@carma-collab/wuppertal/hochwassergefahrenkarte";
+// import { getCollabedHelpComponentConfig } from "@carma-collab/wuppertal/hochwassergefahrenkarte";
+import {
+  getCollabedHelpComponentConfig,
+  searchTextPlaceholder,
+  tooltipText,
+} from "@carma-collab/wuppertal/hitzeinderstadt";
 
 const parseSimulationsFromURL = (search) => {
   const params = new URLSearchParams(search);
@@ -216,7 +215,7 @@ const Hitzekarte = () => {
           );
         }
       }}
-      applicationMenuTooltipString={<MenuTooltip />}
+      applicationMenuTooltipString={tooltipText}
     >
       {/* <TileLayer
         maxNativeZoom={20}
