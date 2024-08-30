@@ -80,8 +80,8 @@
       "deployment": {
         "manual": {
           "pages": {
-            "org": "carma-dev-deployments",
-            "prj": "topicmaps-e-bikes"
+            "org": "digital-twin-wuppertal-live",
+            "prj": "ebikes"
           }
         },
         "auto": {
