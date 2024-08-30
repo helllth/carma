@@ -163,6 +163,7 @@ const Hitzekarte = () => {
   return (
     <TopicMapComponent
       backgroundlayers={backgrounds[validBackgroundIndex].layerkey}
+      applicationMenuIconname="info"
       // backgroundlayers="empty"
       infoBox={
         <ControlInfoBox
