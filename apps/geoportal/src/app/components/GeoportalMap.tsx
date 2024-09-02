@@ -76,6 +76,7 @@ import {
   objectToFeature,
 } from "./feature-info/featureInfoHelper.ts";
 import { LayerProps } from "@carma-mapping/layers";
+import InfoBoxHeader from "react-cismap/topicmaps/InfoBoxHeader";
 
 enum MapMode {
   _2D = "2D",
@@ -100,6 +101,7 @@ export const GeoportalMap = () => {
   const [overlayFeature, setOverlayFeature] = useState(null);
   const [pos, setPos] = useState<[number, number] | null>(null);
   const [selectedFeature, setSelectedFeature] = useState(null);
+  const [secondaryInfoBoxElements, setSecondaryInfoBoxElements] = useState([]);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const container3dMapRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -361,6 +363,8 @@ export const GeoportalMap = () => {
                 type: string;
               }) => {
                 if (mode === "featureInfo") {
+                  setSelectedFeature(null);
+                  let tempSelectedFeature = null;
                   const pos = proj4(
                     proj4.defs("EPSG:4326") as unknown as string,
                     proj4crs25832def,
@@ -370,7 +374,7 @@ export const GeoportalMap = () => {
                   setPos([e.latlng.lat, e.latlng.lng]);
 
                   if (layers && pos[0] && pos[1]) {
-                    let layer = layers[0];
+                    const overlappingHeaders = [];
 
                     layers.forEach(async (testLayer) => {
                       const props = testLayer.props as LayerProps;
@@ -416,11 +420,21 @@ export const GeoportalMap = () => {
                               : "";
                           });
 
-                        if (selectedFeature && output) {
+                        if (!tempSelectedFeature && output) {
                           setSelectedFeature(objectToFeature(output, result));
+                          tempSelectedFeature = objectToFeature(output, result);
+                        }
+                        if (tempSelectedFeature && output) {
+                          overlappingHeaders.push(
+                            <div>
+                              <InfoBoxHeader>Test</InfoBoxHeader>
+                            </div>,
+                          );
                         }
                       }
                     });
+
+                    setSecondaryInfoBoxElements(overlappingHeaders);
                   }
                 }
               }}
