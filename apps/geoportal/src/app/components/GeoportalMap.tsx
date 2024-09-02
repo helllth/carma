@@ -12,7 +12,10 @@ import {
   getShowMeasurementButton,
   setStartDrawing,
 } from "../store/slices/mapping.ts";
-import { getCollabedHelpComponentConfig } from "@carma-collab/wuppertal/geoportal";
+import {
+  getCollabedHelpComponentConfig,
+  tooltipText,
+} from "@carma-collab/wuppertal/geoportal";
 import versionData from "../version.json";
 import { getApplicationVersion } from "@carma-commons/utils";
 import LayerWrapper from "./layers/LayerWrapper.tsx";
@@ -92,8 +95,6 @@ export const GeoportalMap = () => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  console.log("xxx", gazetteerHit);
 
   return (
     <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
@@ -227,6 +228,7 @@ export const GeoportalMap = () => {
                 })}
               />
             }
+            applicationMenuTooltipString={tooltipText}
             hamburgerMenu={showHamburgerMenu}
             locatorControl={false}
             fullScreenControl={false}
