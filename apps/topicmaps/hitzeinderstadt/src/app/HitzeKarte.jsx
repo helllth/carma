@@ -21,6 +21,7 @@ import versionData from "../version.json";
 import {
   getCollabedHelpComponentConfig,
   tooltipText,
+  searchTextPlaceholder,
 } from "@carma-collab/wuppertal/hitzeinderstadt";
 
 const parseSimulationsFromURL = (search) => {
