@@ -1131,6 +1131,11 @@ export const baseConfig = {
       },
       {
         name: "poi_kirchen",
+        keywords: [
+          "carmaconf://infoBoxMapping:title: p.strasse + ', ' + p.ort",
+          "carmaconf://infoBoxMapping:subtitle: p.info",
+          "carmaconf://infoBoxMapping:header:p.geographicidentifier",
+        ],
       },
       {
         name: "poi_krankenhaeuser",

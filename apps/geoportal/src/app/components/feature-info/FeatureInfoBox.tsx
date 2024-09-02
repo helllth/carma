@@ -1,16 +1,16 @@
 import InfoBox from "react-cismap/topicmaps/InfoBox";
 
-const FeatureInfoBox = () => {
+const FeatureInfoBox = ({ selectedFeature }) => {
   return (
     <InfoBox
       pixelwidth={350}
-      //   currentFeature={selectedFeature}
+      currentFeature={selectedFeature}
       hideNavigator={true}
-      header="kjshd"
+      header="Informationen"
       headerColor="#ff0000"
-      //   {...selectedFeature?.properties}
-      noCurrentFeatureTitle="nix da"
-      noCurrentFeatureContent="nix da"
+      {...selectedFeature?.properties}
+      noCurrentFeatureTitle="Auf die Karte klicken um Informationen abzurufen"
+      noCurrentFeatureContent=""
       //   links={links}
     />
   );

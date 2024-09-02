@@ -71,6 +71,11 @@ import type { LatLng, Point } from "leaflet";
 import proj4 from "proj4";
 import { proj4crs25832def } from "react-cismap/constants/gis";
 import ExtraMarker from "react-cismap/ExtraMarker";
+import {
+  getLeafNodes,
+  objectToFeature,
+} from "./feature-info/featureInfoHelper.ts";
+import { LayerProps } from "@carma-mapping/layers";
 
 enum MapMode {
   _2D = "2D",
@@ -94,6 +99,8 @@ export const GeoportalMap = () => {
   const [gazetteerHit, setGazetteerHit] = useState(null);
   const [overlayFeature, setOverlayFeature] = useState(null);
   const [pos, setPos] = useState<[number, number] | null>(null);
+  const [jsonOutput, setJSONOutput] = useState("");
+  const [selectedFeature, setSelectedFeature] = useState(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const container3dMapRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -345,7 +352,7 @@ export const GeoportalMap = () => {
                 const newParams = { ...paramsToObject(urlParams), ...location };
                 setUrlParams(newParams);
               }}
-              onclick={(e: {
+              onclick={async (e: {
                 containerPoint: Point;
                 latlng: LatLng;
                 layerPoint: Point;
@@ -362,6 +369,52 @@ export const GeoportalMap = () => {
                   );
 
                   setPos([e.latlng.lat, e.latlng.lng]);
+
+                  if (layers && pos[0] && pos[1]) {
+                    let layer = layers[0];
+                    const props = layer.props as LayerProps;
+                    const minimalBoxSize = 1;
+                    const url =
+                      props.url +
+                      `?SERVICE=WMS&request=GetFeatureInfo&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&width=10&height=10&srs=EPSG%3A25832&` +
+                      `bbox=` +
+                      `${pos[0] - minimalBoxSize},` +
+                      `${pos[1] - minimalBoxSize},` +
+                      `${pos[0] + minimalBoxSize},` +
+                      `${pos[1] + minimalBoxSize}&` +
+                      `x=5&y=5&` +
+                      `layers=${props.name}&` +
+                      `feature_count=100&QUERY_LAYERS=${props.name}&`;
+
+                    let output = "";
+
+                    await fetch(url)
+                      .then((response) => response.text())
+                      .then((data) => {
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(data, "text/xml");
+                        const content =
+                          xmlDoc.getElementsByTagName("gml:featureMember")[0];
+
+                        setJSONOutput(
+                          content?.outerHTML ? getLeafNodes(content) : "",
+                        );
+
+                        output = content?.outerHTML
+                          ? getLeafNodes(content)
+                          : "";
+                      });
+
+                    let result = "";
+                    layer.other.keywords.forEach((keyword) => {
+                      const extracted = keyword.split(
+                        "carmaconf://infoBoxMapping:",
+                      )[1];
+                      result += extracted + "\n";
+                    });
+
+                    setSelectedFeature(objectToFeature(output, result));
+                  }
                 }
               }}
               gazetteerSearchComponent={<></>}
