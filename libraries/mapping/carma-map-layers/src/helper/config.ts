@@ -109,13 +109,21 @@ export const config = {
           784621.3180330665, 6660622.321170634, 794304.9340539448,
           6666636.959833823,
         ],
+        keywords: [
+          'carmaconf://infoBoxMapping:subtitle: "Berechneter Dauerschallpegel: " + p.value + " Dezibel (A)"',
+          'carmaconf://infoBoxMapping:header: "Straßenverkehrslärm "',
+        ],
       },
       {
         name: "laerm2016:STR_RAST_NGT",
-        Title: "2016 Straßenverkehrslärm (LNIGHT)",
+        Title: "2016 Straßenverkehrslärm (LNIGHTtttt)",
         pictureBoundingBox: [
           784621.3180330665, 6660622.321170634, 794304.9340539448,
           6666636.959833823,
+        ],
+        keywords: [
+          'carmaconf://infoBoxMapping:subtitle: "Berechneter Dauerschallpegel: " + p.value + " Dezibel (A)"',
+          'carmaconf://infoBoxMapping:header: "Straßenverkehrslärm "',
         ],
       },
       {
@@ -842,6 +850,10 @@ export const baseConfig = {
         pictureBoundingBox: [
           784621.3180330665, 6660622.321170634, 794304.9340539448,
           6666636.959833823,
+        ],
+        keywords: [
+          'carmaconf://infoBoxMapping:subtitle: "Berechneter Dauerschallpegel: " + p.value + " Dezibel (A)"',
+          'carmaconf://infoBoxMapping:header: "Straßenverkehrslärm "',
         ],
       },
       {
