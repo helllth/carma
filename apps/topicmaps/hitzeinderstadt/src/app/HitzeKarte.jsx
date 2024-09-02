@@ -20,7 +20,6 @@ import versionData from "../version.json";
 // import { getCollabedHelpComponentConfig } from "@carma-collab/wuppertal/hochwassergefahrenkarte";
 import {
   getCollabedHelpComponentConfig,
-  searchTextPlaceholder,
   tooltipText,
 } from "@carma-collab/wuppertal/hitzeinderstadt";
 

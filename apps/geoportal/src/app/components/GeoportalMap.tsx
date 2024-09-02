@@ -12,6 +12,9 @@ import {
   getShowMeasurementButton,
   setStartDrawing,
 } from "../store/slices/mapping.ts";
+import { getCollabedHelpComponentConfig } from "@carma-collab/wuppertal/geoportal";
+import versionData from "../version.json";
+import { getApplicationVersion } from "@carma-commons/utils";
 import LayerWrapper from "./layers/LayerWrapper.tsx";
 import InfoBoxMeasurement from "./map-measure/InfoBoxMeasurement.jsx";
 import PaleOverlay from "react-cismap/PaleOverlay";
@@ -40,6 +43,7 @@ import "./leaflet.css";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
 import ProjSingleGeoJson from "react-cismap/ProjSingleGeoJson";
+import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 
 export const GeoportalMap = () => {
   const [gazData, setGazData] = useState([]);
@@ -69,7 +73,7 @@ export const GeoportalMap = () => {
   const [locationProps, setLocationProps] = useState(0);
   const [mapMode, setMapMode] = useState("2D");
   const urlPrefix = window.location.origin + window.location.pathname;
-
+  const version = getApplicationVersion(versionData);
   useEffect(() => {
     getGazData(setGazData);
   }, []);
@@ -216,6 +220,13 @@ export const GeoportalMap = () => {
         {mapMode === "2D" ? (
           <TopicMapComponent
             gazData={gazData}
+            modalMenu={
+              <GenericModalApplicationMenu
+                {...getCollabedHelpComponentConfig({
+                  versionString: version,
+                })}
+              />
+            }
             hamburgerMenu={showHamburgerMenu}
             locatorControl={false}
             fullScreenControl={false}
