@@ -42,6 +42,7 @@ import {
   faCompress,
   faExpand,
   faHouseChimney,
+  faInfo,
   faLocationArrow,
   faMinus,
   faPlus,
@@ -65,6 +66,11 @@ import { TweakpaneProvider } from "@carma-commons/debug";
 import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import { Tooltip } from "antd";
 import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
+import FeatureInfoBox from "./feature-info/FeatureInfoBox.tsx";
+import type { LatLng, Point } from "leaflet";
+import proj4 from "proj4";
+import { proj4crs25832def } from "react-cismap/constants/gis";
+import ExtraMarker from "react-cismap/ExtraMarker";
 
 enum MapMode {
   _2D = "2D",
@@ -87,6 +93,7 @@ export const GeoportalMap = () => {
   const [width, setWidth] = useState(0);
   const [gazetteerHit, setGazetteerHit] = useState(null);
   const [overlayFeature, setOverlayFeature] = useState(null);
+  const [pos, setPos] = useState<[number, number] | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const container3dMapRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -159,8 +166,6 @@ export const GeoportalMap = () => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  console.log("xxx Render Geoportal", gazetteerHit);
 
   return (
     <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
@@ -273,6 +278,21 @@ export const GeoportalMap = () => {
           </ControlButtonStyler>
         </Control>
       )}
+      <Control position="topleft" order={60}>
+        <ControlButtonStyler
+          onClick={() => {
+            dispatch(
+              setMode(mode === "featureInfo" ? "default" : "featureInfo"),
+            );
+          }}
+          className="font-semibold"
+        >
+          <FontAwesomeIcon
+            icon={faInfo}
+            className={mode === "featureInfo" ? "text-orange-700" : ""}
+          />
+        </ControlButtonStyler>
+      </Control>
       <Control position="topcenter" order={10}>
         {showLayerButtons && <LayerWrapper />}
       </Control>
@@ -325,7 +345,25 @@ export const GeoportalMap = () => {
                 const newParams = { ...paramsToObject(urlParams), ...location };
                 setUrlParams(newParams);
               }}
-              // gazetteerSearchPlaceholder="Stadtteil | Adresse | POI"
+              onclick={(e: {
+                containerPoint: Point;
+                latlng: LatLng;
+                layerPoint: Point;
+                originalEvent: PointerEvent;
+                sourceTarget: HTMLElement;
+                target: HTMLElement;
+                type: string;
+              }) => {
+                if (mode === "featureInfo") {
+                  const pos = proj4(
+                    proj4.defs("EPSG:4326") as unknown as string,
+                    proj4crs25832def,
+                    [e.latlng.lng, e.latlng.lat],
+                  );
+
+                  setPos([e.latlng.lat, e.latlng.lng]);
+                }
+              }}
               gazetteerSearchComponent={<></>}
               infoBox={
                 mode === "measurement" ? (
@@ -385,9 +423,14 @@ export const GeoportalMap = () => {
                   return <></>;
                 }
               })}
+              {pos && mode === "featureInfo" && (
+                <ExtraMarker
+                  markerOptions={{ markerColor: "cyan", spin: false }}
+                  position={pos}
+                />
+              )}
             </TopicMapComponent>
           </div>
-
           {allow3d && (
             <TweakpaneProvider>
               <CustomViewerContextProvider
