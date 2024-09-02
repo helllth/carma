@@ -16,7 +16,7 @@ import {
   getCollabedHelpComponentConfig,
   tooltipText,
 } from "@carma-collab/wuppertal/geoportal";
-import versionData from "../version.json";
+import versionData from "../../version.json";
 import { getApplicationVersion } from "@carma-commons/utils";
 import LayerWrapper from "./layers/LayerWrapper.tsx";
 import InfoBoxMeasurement from "./map-measure/InfoBoxMeasurement.jsx";
