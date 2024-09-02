@@ -94,9 +94,9 @@ L.Control.MeasurePolygon = L.Control.extend({
     });
 
     L.drawLocal.draw.handlers.polygon.tooltip.start =
-      "Klicken Sie um die Messung zu starten";
+      "Klicken, um den Startpunkt der Messung zu setzen.";
     L.drawLocal.draw.handlers.polygon.tooltip.cont =
-      "Klicken Sie, um mit dem Zeichnen der Form fortzufahren";
+      "Klicken (ggf. mehrmals), um die nächsten Punkte des Linienzuges zu setzen.";
     L.drawLocal.draw.handlers.polygon.tooltip.end = `Zum Beenden auf den letzten angelegt Punkt klicken.
       Zum Messen einer Fläche auf den ersten angeleten.
       Punkt klicken und die Fläche so schließen`;
@@ -129,9 +129,9 @@ L.Control.MeasurePolygon = L.Control.extend({
 `;
 
     L.drawLocal.draw.handlers.polyline.tooltip.start =
-      "Klicken Sie um die Messung zu starten";
+      "Klicken, um den Startpunkt der Messung zu setzen.";
     L.drawLocal.draw.handlers.polyline.tooltip.cont =
-      "Klicken Sie, um mit dem Zeichnen der Linie fortzufahren";
+      "Klicken (ggf. mehrmals), um die nächsten Punkte des Linienzuges zu setzen.";
     L.drawLocal.draw.handlers.polyline.tooltip.end = tooltipContent;
 
     this._toggleMeasure(
@@ -352,7 +352,7 @@ L.Control.MeasurePolygon = L.Control.extend({
           const area = this.calculateArea(latLngArray);
           if (e.target.customHandle === 0 && firsHovering) {
             this.options.cbUpdateAreaOfDrawingMeasurement(area);
-            L.drawLocal.draw.handlers.polyline.tooltip.end = `Punkt klicken um die Fläche zu schließen`;
+            L.drawLocal.draw.handlers.polyline.tooltip.end = `Den Startpunkt anklicken, um das Polygon zu schließen.`;
           }
           firsHovering = true;
         });

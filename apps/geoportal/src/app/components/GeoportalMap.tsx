@@ -47,6 +47,7 @@ import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
 import ProjSingleGeoJson from "react-cismap/ProjSingleGeoJson";
 import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
+import { Tooltip } from "antd";
 
 export const GeoportalMap = () => {
   const [gazData, setGazData] = useState([]);
@@ -160,34 +161,38 @@ export const GeoportalMap = () => {
       <Control position="topleft" order={50}>
         {showMeasurementButton && (
           <div className="flex items-center gap-4">
-            <ControlButtonStyler
-              onClick={() => {
-                dispatch(
-                  setMode(mode === "measurement" ? "default" : "measurement"),
-                );
-              }}
-            >
-              <img
-                src={
-                  urlPrefix +
-                  `${
-                    mode === "measurement"
-                      ? "measure-active.png"
-                      : "measure.png"
-                  }`
-                }
-                alt="Measure"
-                className="w-6"
-              />
-            </ControlButtonStyler>
-            {mode === "measurement" && (
+            <Tooltip title="Strecke / Fläche messen" placement="right">
               <ControlButtonStyler
                 onClick={() => {
-                  dispatch(setStartDrawing(true));
+                  dispatch(
+                    setMode(mode === "measurement" ? "default" : "measurement"),
+                  );
                 }}
               >
-                <FontAwesomeIcon icon={faPlus} />
+                <img
+                  src={
+                    urlPrefix +
+                    `${
+                      mode === "measurement"
+                        ? "measure-active.png"
+                        : "measure.png"
+                    }`
+                  }
+                  alt="Measure"
+                  className="w-6"
+                />
               </ControlButtonStyler>
+            </Tooltip>
+            {mode === "measurement" && (
+              <Tooltip title="Neue Messung" placement="right">
+                <ControlButtonStyler
+                  onClick={() => {
+                    dispatch(setStartDrawing(true));
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </ControlButtonStyler>
+              </Tooltip>
             )}
           </div>
         )}
