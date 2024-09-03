@@ -360,7 +360,7 @@ export const topicMapsConfig: Config = {
       type: "link",
       thumbnail:
         "https://www.wuppertal.de/geoportal/signaturen/Fotos_POI/Fotostrecke_Schwebo/Schwebodrom_Aussenansicht.jpg",
-      url: "https://wunda-geoportal.cismet.de/#/kulturstadtplan",
+      url: "https://digital-twin-wuppertal-live.github.io/kulturstadtplan/",
     },
     {
       id: "wuppTopic_baeder",
@@ -371,7 +371,7 @@ export const topicMapsConfig: Config = {
       type: "link",
       thumbnail:
         "https://images.unsplash.com/photo-1558617320-e695f0d420de?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      url: "https://wunda-geoportal.cismet.de/#/baeder",
+      url: "https://digital-twin-wuppertal-live.github.io/baederkarte/",
     },
     {
       id: "wuppTopic_ebike",
@@ -383,7 +383,7 @@ export const topicMapsConfig: Config = {
       thumbnail:
         "https://www.wuppertal.de/geoportal/emobil/raeder/fotos/akku_bauhaus_lichtscheid.jpg",
 
-      url: "https://wunda-geoportal.cismet.de/#/ebikes",
+      url: "https://digital-twin-wuppertal-live.github.io/ebikes/",
     },
     {
       id: "wuppTopic_ehrenamt",
@@ -406,7 +406,7 @@ export const topicMapsConfig: Config = {
       thumbnail:
         "https://www.wuppertal.de/geoportal/emobil/autos/fotos/fertighauswelt.jpg",
 
-      url: "https://wunda-geoportal.cismet.de/#/elektromobilitaet?title",
+      url: "https://digital-twin-wuppertal-live.github.io/elektromobilitaet/",
     },
     {
       id: "wuppTopic_kitas",
@@ -429,7 +429,7 @@ export const topicMapsConfig: Config = {
       type: "link",
       thumbnail:
         "https://www.wuppertal.de/geoportal/prbr/fotos/foto_bahnhof_barmen.jpg",
-      url: "https://wunda-geoportal.cismet.de/#/xandride",
+      url: "https://digital-twin-wuppertal-live.github.io/xandride/",
     },
     {
       id: "wuppTopic_wasserstoff",
@@ -451,7 +451,7 @@ export const topicMapsConfig: Config = {
       type: "link",
       thumbnail:
         "https://www.wuppertal.de/geoportal/luftmessstationen/fotos/MP31",
-      url: "https://topicmaps-wuppertal.github.io/luftmessstationen/",
+      url: "https://digital-twin-wuppertal-live.github.io/luftmessstationen/",
     },
     {
       id: "wuppTopic_klimaorte",
