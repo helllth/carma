@@ -5,7 +5,7 @@ import {
   Math as CeMath,
   HeadingPitchRange,
   EasingFunction,
-} from 'cesium';
+} from "cesium";
 
 /**
  * Rotates and tilts the Cesium camera around the center of the screen.
@@ -30,7 +30,7 @@ export function animateInterpolateHeadingPitchRange(
     delay?: number; // ms
     onComplete?: () => void;
     easing?: (time: number) => number;
-  } = {}
+  } = {},
 ) {
   const { heading, pitch, range } = hpr;
 
@@ -65,7 +65,7 @@ export function animateInterpolateHeadingPitchRange(
     const orientation = new HeadingPitchRange(
       currentHeading,
       currentPitch,
-      currentRange
+      currentRange,
     );
 
     // Update the camera's orientation

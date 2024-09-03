@@ -3,7 +3,7 @@ import {
   useEffect,
   ReactNode,
   MouseEvent as ReactMouseEvent,
-} from 'react';
+} from "react";
 
 type ResizeableContainer = {
   minLeft?: number;
@@ -43,15 +43,15 @@ export const ResizeableContainer = ({
 
   useEffect(() => {
     if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
     } else {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     }
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging]);
@@ -59,22 +59,22 @@ export const ResizeableContainer = ({
   return (
     <div
       style={{
-        position: 'fixed',
+        position: "fixed",
         top: 0,
         left: `${iframePadding}vw`,
         right: 0,
         bottom: 0,
-        overflow: 'hidden',
+        overflow: "hidden",
         zIndex: 100,
-        pointerEvents: 'none',
+        pointerEvents: "none",
       }}
     >
       <div
         style={{
-          position: 'relative',
+          position: "relative",
           left: `-${iframePadding}vw`,
-          height: '100vh',
-          width: '100vw',
+          height: "100vh",
+          width: "100vw",
         }}
       >
         {children}
@@ -83,15 +83,15 @@ export const ResizeableContainer = ({
         <div
           onMouseDown={handleMouseDown}
           style={{
-            position: 'absolute',
-            pointerEvents: 'auto',
+            position: "absolute",
+            pointerEvents: "auto",
             top: 0,
             left: 0,
             zIndex: 101,
-            width: '20px',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            cursor: 'ew-resize',
+            width: "20px",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            cursor: "ew-resize",
           }}
         />
       )}

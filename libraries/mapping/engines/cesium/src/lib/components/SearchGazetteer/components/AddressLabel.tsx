@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC } from "react";
 
 interface AddressLabelProps {
   address: any;
@@ -6,16 +6,16 @@ interface AddressLabelProps {
 
 const AddressLabel: FC<AddressLabelProps> = ({ address }) => {
   let icon;
-  if (address.glyph === 'pie-chart') {
-    icon = 'chart-pie';
+  if (address.glyph === "pie-chart") {
+    icon = "chart-pie";
   } else {
     icon = address.glyph;
   }
   return (
     <div>
       <span>
-        <i className={icon && 'fas ' + 'fa-' + icon}></i>
-        {'  '}
+        <i className={icon && "fas " + "fa-" + icon}></i>
+        {"  "}
       </span>
       <span>{address.string}</span>
     </div>

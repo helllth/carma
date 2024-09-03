@@ -2,7 +2,7 @@ export {
   CustomViewerContextProvider,
   CustomViewerContext,
   useCustomViewerContext,
-} from './components/CustomViewerContextProvider';
+} from "./components/CustomViewerContextProvider";
 
 export {
   useViewerDataSources,
@@ -14,4 +14,4 @@ export {
   useShowPrimaryTileset,
   useGlobeBaseColor,
   useTilesetOpacity,
-} from './slices/viewer';
+} from "./slices/viewer";

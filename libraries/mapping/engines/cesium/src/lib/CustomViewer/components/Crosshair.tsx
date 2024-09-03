@@ -8,9 +8,9 @@ type CrosshairProps = {
 };
 
 const Crosshair = ({
-  lineColor = '#fff',
+  lineColor = "#fff",
   lineOpacity = 0.5,
-  circleColor = '#ddd',
+  circleColor = "#ddd",
   circleOpacity = 1,
   circleSize = 20,
   width = 1,
@@ -19,10 +19,10 @@ const Crosshair = ({
     <div
       className="crosshair"
       style={{
-        position: 'absolute',
-        pointerEvents: 'none',
-        width: '100%',
-        height: '100%',
+        position: "absolute",
+        pointerEvents: "none",
+        width: "100%",
+        height: "100%",
         top: 0,
         left: 0,
       }}
@@ -30,41 +30,41 @@ const Crosshair = ({
       <div
         className=" horizontal"
         style={{
-          position: 'absolute',
-          top: '50%',
-          width: '100%',
+          position: "absolute",
+          top: "50%",
+          width: "100%",
           height: width,
           backgroundColor: lineColor,
           opacity: lineOpacity,
-          transform: 'translateY(-50%)',
-          mixBlendMode: 'difference',
+          transform: "translateY(-50%)",
+          mixBlendMode: "difference",
         }}
       />
       <div
         className="crosshair-line vertical"
         style={{
-          position: 'absolute',
-          left: '50%',
-          height: '100%',
+          position: "absolute",
+          left: "50%",
+          height: "100%",
           width: width,
           backgroundColor: lineColor,
           opacity: lineOpacity,
-          transform: 'translateX(-50%)',
-          mixBlendMode: 'difference',
+          transform: "translateX(-50%)",
+          mixBlendMode: "difference",
         }}
       />
       <div
         style={{
-          position: 'absolute',
-          borderRadius: '50%',
-          left: '50%',
-          top: '50%',
+          position: "absolute",
+          borderRadius: "50%",
+          left: "50%",
+          top: "50%",
           height: circleSize,
           width: circleSize,
           backgroundColor: circleColor,
           opacity: circleOpacity,
-          transform: 'translate(-50%, -50%)',
-          mixBlendMode: 'multiply',
+          transform: "translate(-50%, -50%)",
+          mixBlendMode: "multiply",
         }}
       ></div>
     </div>

@@ -1,14 +1,14 @@
-import { useState, useEffect, FC } from 'react';
-import { Cesium3DTileset as Resium3dTileset, useCesium } from 'resium';
+import { useState, useEffect, FC } from "react";
+import { Cesium3DTileset as Resium3dTileset, useCesium } from "resium";
 import {
   Cesium3DTileFeature,
   Cesium3DTileStyle,
   ClassificationType,
   Color,
-} from 'cesium';
-import { useClickActionTileset } from './hooks';
+} from "cesium";
+import { useClickActionTileset } from "./hooks";
 
-import { TilesetConfig } from '../../..';
+import { TilesetConfig } from "../../..";
 
 interface ByTilesetClassifier {
   debug?: boolean;
@@ -35,11 +35,11 @@ const ByTilesetClassifier: FC<ByTilesetClassifier> = ({
   const clickData = useClickActionTileset(
     viewer,
     tileset.url,
-    setSelectedFeature
+    setSelectedFeature,
   );
 
   useEffect(() => {
-    console.log('HOOK: selectedFeature');
+    console.log("HOOK: selectedFeature");
     if (selectedFeature === null) {
       // console.log('selectedFeature is null');
     } else {

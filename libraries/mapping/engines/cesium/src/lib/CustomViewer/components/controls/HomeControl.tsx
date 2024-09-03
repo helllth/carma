@@ -1,10 +1,13 @@
-import { ReactNode, MouseEvent, useEffect, useState } from 'react';
-import { useCesium } from 'resium';
-import OnMapButton from './OnMapButton';
-import { BoundingSphere, Cartesian3 } from 'cesium';
-import { faHouseUser } from '@fortawesome/free-solid-svg-icons';
-import { setIsAnimating, useViewerHome } from '../../../CustomViewerContextProvider/slices/viewer';
-import { useDispatch } from 'react-redux';
+import { ReactNode, MouseEvent, useEffect, useState } from "react";
+import { useCesium } from "resium";
+import OnMapButton from "./OnMapButton";
+import { BoundingSphere, Cartesian3 } from "cesium";
+import { faHouseUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  setIsAnimating,
+  useViewerHome,
+} from "../../../CustomViewerContextProvider/slices/viewer";
+import { useDispatch } from "react-redux";
 
 type HomeProps = {
   children?: ReactNode;
@@ -20,7 +23,7 @@ const HomeControl = (props: HomeProps) => {
     viewer &&
       homePosition &&
       setHomePos(
-        new Cartesian3(homePosition.x, homePosition.y, homePosition.z)
+        new Cartesian3(homePosition.x, homePosition.y, homePosition.z),
       );
   }, [viewer, homePosition]);
 

@@ -1,14 +1,14 @@
-import { useEffect, useRef } from 'react';
-import { useCesium } from 'resium';
+import { useEffect, useRef } from "react";
+import { useCesium } from "resium";
 
-import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import StyledWMSTileLayer from 'react-cismap/StyledWMSTileLayer';
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+import StyledWMSTileLayer from "react-cismap/StyledWMSTileLayer";
 
 import {
   useShowPrimaryTileset,
   useViewerIsMode2d,
-} from '../../CustomViewerContextProvider/slices/viewer';
-import { leafletToCesiumCamera } from '../../utils';
+} from "../../CustomViewerContextProvider/slices/viewer";
+import { leafletToCesiumCamera } from "../../utils";
 
 // TODO sync this setting across app
 const DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION = 1000;
@@ -28,14 +28,14 @@ export const TopicMap = ({ forceShow = false } = {}) => {
       const handleFocus = () => (isFocused.current = true);
       const handleBlur = () => (isFocused.current = false);
 
-      node.addEventListener('focusin', handleFocus);
-      node.addEventListener('focusout', handleBlur);
-      node.addEventListener('wheel', handleFocus, true);
+      node.addEventListener("focusin", handleFocus);
+      node.addEventListener("focusout", handleBlur);
+      node.addEventListener("wheel", handleFocus, true);
 
       return () => {
-        node.removeEventListener('focusin', handleFocus);
-        node.removeEventListener('focusout', handleBlur);
-        node.removeEventListener('wheel', handleFocus);
+        node.removeEventListener("focusin", handleFocus);
+        node.removeEventListener("focusout", handleBlur);
+        node.removeEventListener("wheel", handleFocus);
       };
     }
     return;
@@ -46,7 +46,7 @@ export const TopicMap = ({ forceShow = false } = {}) => {
     lng: number;
     zoom: number;
   }) => {
-    console.log('handleLeafletLocationChange', event, isFocused.current);
+    console.log("handleLeafletLocationChange", event, isFocused.current);
     if (!isFocused.current) {
       return;
     }
@@ -60,17 +60,17 @@ export const TopicMap = ({ forceShow = false } = {}) => {
 
   useEffect(() => {
     if (primaryLayerRef.current && primaryLayerRef.current.leafletElement) {
-      console.log('tileLayerRef1.current', primaryLayerRef.current);
+      console.log("tileLayerRef1.current", primaryLayerRef.current);
       primaryLayerRef.current.leafletElement.setOpacity(isPrimaryStyle ? 1 : 0);
     }
     if (secondaryLayerRef.current && secondaryLayerRef.current.leafletElement) {
       secondaryLayerRef.current.leafletElement.setOpacity(
-        isPrimaryStyle ? 0 : 1
+        isPrimaryStyle ? 0 : 1,
       );
     }
   }, [isPrimaryStyle]);
 
-  console.log('RENDER: TopicMap isMode2d', isMode2d);
+  console.log("RENDER: TopicMap isMode2d", isMode2d);
 
   return (
     <div
@@ -78,7 +78,7 @@ export const TopicMap = ({ forceShow = false } = {}) => {
       style={{
         opacity: isMode2d || forceShow ? 1 : 0,
         transition: `opacity ${DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION}ms ease-in-out`,
-        pointerEvents: isMode2d || forceShow ? 'auto' : 'none',
+        pointerEvents: isMode2d || forceShow ? "auto" : "none",
       }}
       //className={isMode2d ? 'fade-in' : 'fade-out'}
     >
@@ -98,14 +98,14 @@ export const TopicMap = ({ forceShow = false } = {}) => {
             ref: primaryLayerRef,
             //url: 'https://maps.wuppertal.de/karten',
             //layers: 'R102:trueortho2022',
-            url: 'https://www.wms.nrw.de/geobasis/wms_nw_dop',
-            layers: 'nw_dop_rgb',
-            type: 'wms',
-            format: 'image/png',
+            url: "https://www.wms.nrw.de/geobasis/wms_nw_dop",
+            layers: "nw_dop_rgb",
+            type: "wms",
+            format: "image/png",
             tiled: true,
             maxZoom: 22,
-            version: '1.1.1',
-            pane: 'backgroundLayers',
+            version: "1.1.1",
+            pane: "backgroundLayers",
             opacity: 1,
           }}
         ></StyledWMSTileLayer>
@@ -113,10 +113,10 @@ export const TopicMap = ({ forceShow = false } = {}) => {
         <StyledWMSTileLayer
           {...{
             ref: secondaryLayerRef,
-            type: 'wmts',
-            url: 'https://geodaten.metropoleruhr.de/spw2/service',
-            layers: 'spw2_graublau',
-            version: '1.3.0',
+            type: "wmts",
+            url: "https://geodaten.metropoleruhr.de/spw2/service",
+            layers: "spw2_graublau",
+            version: "1.3.0",
             tileSize: 512,
             transparent: true,
             opacity: 0,

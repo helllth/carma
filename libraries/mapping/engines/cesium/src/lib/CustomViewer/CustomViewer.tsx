@@ -5,7 +5,7 @@ import {
   useContext,
   useEffect,
   useState,
-} from 'react';
+} from "react";
 import {
   Color,
   HeadingPitchRange,
@@ -14,24 +14,24 @@ import {
   PerspectiveFrustum,
   Rectangle,
   OrthographicFrustum,
-} from 'cesium';
-import { Viewer as ResiumViewer } from 'resium';
+} from "cesium";
+import { Viewer as ResiumViewer } from "resium";
 
 import {
   useShowSecondaryTileset,
   useViewerHome,
   useViewerHomeOffset,
   useViewerIsMode2d,
-} from '../CustomViewerContextProvider/slices/viewer';
-import { BaseTilesets } from './components/BaseTilesets';
-import { encodeScene, replaceHashRoutedHistory, setLeafletView } from './utils';
-import { useLocation } from 'react-router-dom';
-import useInitializeViewer from './hooks';
-import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
-import { useTweakpaneCtx } from '@carma-commons/debug';
-import { resolutionFractions } from '../utils';
+} from "../CustomViewerContextProvider/slices/viewer";
+import { BaseTilesets } from "./components/BaseTilesets";
+import { encodeScene, replaceHashRoutedHistory, setLeafletView } from "./utils";
+import { useLocation } from "react-router-dom";
+import useInitializeViewer from "./hooks";
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
+import { useTweakpaneCtx } from "@carma-commons/debug";
+import { resolutionFractions } from "../utils";
 
-import { formatFractions } from '../utils/formatters';
+import { formatFractions } from "../utils/formatters";
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -94,7 +94,8 @@ function CustomViewer(props: CustomViewerProps) {
   const [viewer, setViewer] = useState<Viewer | null>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const topicMapContext: any = useContext<typeof TopicMapContext>(TopicMapContext);
+  const topicMapContext: any =
+    useContext<typeof TopicMapContext>(TopicMapContext);
 
   const [isUserAction, setIsUserAction] = useState(false);
   // DEV TWEAKPANE
@@ -103,7 +104,7 @@ function CustomViewer(props: CustomViewerProps) {
 
   useTweakpaneCtx(
     {
-      title: 'Camera Settings',
+      title: "Camera Settings",
     },
     {
       get fov() {
@@ -140,24 +141,24 @@ function CustomViewer(props: CustomViewerProps) {
 
     [
       {
-        name: 'fov',
-        label: 'FOV',
+        name: "fov",
+        label: "FOV",
         min: Math.PI / 400,
         max: Math.PI,
         step: 0.01,
         format: (v) => `${parseFloat(CeMath.toDegrees(v).toFixed(2))}°`,
       },
       {
-        name: 'orthographic',
-        label: 'Orthographic',
-        type: 'boolean',
+        name: "orthographic",
+        label: "Orthographic",
+        type: "boolean",
       },
-    ]
+    ],
   );
 
   useTweakpaneCtx(
     {
-      title: 'Scene Settings',
+      title: "Scene Settings",
     },
     {
       get viewportLimitDebug() {
@@ -176,7 +177,7 @@ function CustomViewer(props: CustomViewerProps) {
         // Find the closest value in the array to the current resolutionScale and return its index
         const currentValue = viewer ? viewer.resolutionScale : 1;
         const closestIndex = resolutionFractions.findIndex(
-          (value) => value === currentValue
+          (value) => value === currentValue,
         );
         return closestIndex !== -1
           ? closestIndex
@@ -192,16 +193,16 @@ function CustomViewer(props: CustomViewerProps) {
     },
 
     [
-      { name: 'viewportLimit', min: 1.5, max: 10, step: 0.5 },
-      { name: 'viewportLimitDebug' },
+      { name: "viewportLimit", min: 1.5, max: 10, step: 0.5 },
+      { name: "viewportLimitDebug" },
       {
-        name: 'resolutionScale',
+        name: "resolutionScale",
         min: 0, // The minimum index
         max: resolutionFractions.length - 1, // The maximum index
         step: 1, // Step by index
         format: (v: number) => formatFractions(resolutionFractions[v]),
       },
-    ]
+    ],
   );
   useEffect(() => {
     if (!viewer) return;
@@ -209,7 +210,7 @@ function CustomViewer(props: CustomViewerProps) {
     const canvas = viewer.canvas;
 
     // Ensure the canvas can receive focus
-    canvas.setAttribute('tabindex', '0');
+    canvas.setAttribute("tabindex", "0");
 
     // Event handlers
     const handleFocus = () => setIsUserAction(true);
@@ -220,17 +221,17 @@ function CustomViewer(props: CustomViewerProps) {
     };
 
     // Add event listeners
-    canvas.addEventListener('focus', handleFocus);
-    canvas.addEventListener('blur', handleBlur);
-    canvas.addEventListener('mousedown', handleMouseDown);
-    canvas.addEventListener('mousemove', handleMouseDown); // Track mouse move as interaction
+    canvas.addEventListener("focus", handleFocus);
+    canvas.addEventListener("blur", handleBlur);
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("mousemove", handleMouseDown); // Track mouse move as interaction
 
     // Cleanup event listeners on unmount
     return () => {
-      canvas.removeEventListener('focus', handleFocus);
-      canvas.removeEventListener('blur', handleBlur);
-      canvas.removeEventListener('mousedown', handleMouseDown);
-      canvas.removeEventListener('mousemove', handleMouseDown);
+      canvas.removeEventListener("focus", handleFocus);
+      canvas.removeEventListener("blur", handleBlur);
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("mousemove", handleMouseDown);
     };
   }, [viewer]);
 
@@ -247,17 +248,16 @@ function CustomViewer(props: CustomViewerProps) {
   useEffect(() => {
     if (viewer && enableLocationHashUpdate) {
       console.log(
-        'HOOK: update Hash, route or style changed',
-        isSecondaryStyle
+        "HOOK: update Hash, route or style changed",
+        isSecondaryStyle,
       );
       replaceHashRoutedHistory(
         encodeScene(viewer, { isSecondaryStyle }),
-        location.pathname
+        location.pathname,
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewer, enableLocationHashUpdate, location.pathname, isSecondaryStyle]);
-
 
   useEffect(() => {
     if (viewer && containerRef?.current) {
@@ -277,7 +277,7 @@ function CustomViewer(props: CustomViewerProps) {
 
   useEffect(() => {
     if (viewer) {
-      console.log('HOOK: globe setting changed');
+      console.log("HOOK: globe setting changed");
       // set the globe props
       //Object.assign(scene.globe, globeProps);
       Object.entries(globeProps).forEach(([key, value]) => {
@@ -290,32 +290,32 @@ function CustomViewer(props: CustomViewerProps) {
 
   useEffect(() => {
     if (viewer) {
-      console.log('HOOK: viewer changed intit scene settings');
+      console.log("HOOK: viewer changed intit scene settings");
       viewer.imageryLayers.removeAll();
       viewer.scene.screenSpaceCameraController.enableCollisionDetection = true;
     }
   }, [viewer]);
 
   useEffect(() => {
-    console.log('HOOK: viewer changed', isSecondaryStyle);
+    console.log("HOOK: viewer changed", isSecondaryStyle);
     if (!viewer) return;
 
     // remove default imagery
 
     const moveEndListener = async () => {
       if (viewer.camera.position) {
-        console.log('LISTENER: moveEndListener', isSecondaryStyle);
+        console.log("LISTENER: moveEndListener", isSecondaryStyle);
         const encodedScene = encodeScene(viewer, { isSecondaryStyle });
 
         // let TopicMap/leaflet handle the view change in 2d Mode
         !isMode2d && replaceHashRoutedHistory(encodedScene, location.pathname);
 
-        if (isUserAction && (!isMode2d)) {
+        if (isUserAction && !isMode2d) {
           // remove roll from camera orientation
           const rollDeviation =
             Math.abs(CeMath.TWO_PI - viewer.camera.roll) % CeMath.TWO_PI;
           if (rollDeviation > 0.02) {
-            console.log('LISTENER HOOK: flyTo reset roll', rollDeviation);
+            console.log("LISTENER HOOK: flyTo reset roll", rollDeviation);
             const duration = Math.min(rollDeviation, 1);
             viewer.camera.flyTo({
               destination: viewer.camera.position,
@@ -330,7 +330,7 @@ function CustomViewer(props: CustomViewerProps) {
           // preload 2D view
           const leaflet =
             topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
-          console.log('leaflet', leaflet, topicMapContext?.routedMapRef);
+          console.log("leaflet", leaflet, topicMapContext?.routedMapRef);
           leaflet && setLeafletView(viewer, leaflet, { animate: false });
         }
       }
@@ -349,7 +349,7 @@ function CustomViewer(props: CustomViewerProps) {
     isUserAction,
   ]);
 
-  console.log('RENDER: CustomViewer');
+  console.log("RENDER: CustomViewer");
 
   return (
     <ResiumViewer

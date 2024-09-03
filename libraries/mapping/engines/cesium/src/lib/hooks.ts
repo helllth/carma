@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 import {
   ScreenSpaceEventHandler,
@@ -11,9 +11,9 @@ import {
   Cesium3DTileset,
   ColorBlendMode,
   Color,
-} from 'cesium';
-import { useCesium } from 'resium';
-import { useShowSecondaryTileset } from './CustomViewerContextProvider/slices/viewer';
+} from "cesium";
+import { useCesium } from "resium";
+import { useShowSecondaryTileset } from "./CustomViewerContextProvider/slices/viewer";
 
 export type ClickData = {
   id: string | null;
@@ -25,7 +25,7 @@ export type ClickData = {
 export const useClickActionFootprints = (
   viewer: Viewer | undefined,
   idProperty: string,
-  setSelectedEntity: (id: string | null) => void
+  setSelectedEntity: (id: string | null) => void,
 ) => {
   const [clickData, setClickData] = useState<ClickData | null>(null);
 
@@ -102,7 +102,7 @@ export const useSecondaryStyleTilesetClickHandler = () => {
 
   useEffect(() => {
     if (!viewer || !isSecondaryStyle) return;
-    console.log('HOOK: useGLTFTilesetClickHandler');
+    console.log("HOOK: useGLTFTilesetClickHandler");
 
     let selectedObject; // Store the currently selected feature
     let lastColor;
@@ -118,13 +118,13 @@ export const useSecondaryStyleTilesetClickHandler = () => {
       }
 
       const pickedObject = viewer.scene.pick(movement.position);
-      console.log('SCENE PICK: secondary', pickedObject);
+      console.log("SCENE PICK: secondary", pickedObject);
       if (!pickedObject) return;
 
       if (pickedObject.primitive instanceof Cesium3DTileset) {
         // console.log('Cesium3DTileset', pickedObject);
         const { _batchId, _content } = pickedObject;
-        console.log('Cesium3DTileFeature', _batchId);
+        console.log("Cesium3DTileFeature", _batchId);
         const feature = _content.getFeature(_batchId);
         if (feature instanceof Cesium3DTileFeature) {
           lastColor = feature.color;

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 import {
   CesiumWidget,
   Cesium3DTileset,
@@ -15,12 +15,12 @@ import {
   HeadingPitchRange,
   OrthographicFrustum,
   ClippingPlaneCollection,
-} from 'cesium';
-import { generateRingFromDegrees } from './utils';
-import { CUSTOM_SHADERS_DEFINITIONS } from './shaders';
+} from "cesium";
+import { generateRingFromDegrees } from "./utils";
+import { CUSTOM_SHADERS_DEFINITIONS } from "./shaders";
 
-import type { FC, ReactNode } from 'react';
-import type { LatLngRadians, LatLngRecord } from 'types/common-geo';
+import type { FC, ReactNode } from "react";
+import type { LatLngRadians, LatLngRecord } from "types/common-geo";
 
 const unlit = new CustomShader(CUSTOM_SHADERS_DEFINITIONS.UNLIT);
 
@@ -90,7 +90,7 @@ export const Widget: FC<{
     const cartesian3 = Cartesian3.fromDegrees(
       position.longitude,
       position.latitude,
-      position.height
+      position.height,
     );
     setCartesian(cartesian3);
 
@@ -101,7 +101,7 @@ export const Widget: FC<{
     if (!tileset) {
       const loadTilesetAsync = () => {
         (async () => {
-          console.log('Loading tileset:', tilesetUrl);
+          console.log("Loading tileset:", tilesetUrl);
           const newTileset = await Cesium3DTileset.fromUrl(tilesetUrl, {
             //maximumScreenSpaceError: 4,
             //baseScreenSpaceError: 128,
@@ -120,7 +120,7 @@ export const Widget: FC<{
     }
     return () => {
       if (tileset) {
-        console.log('HOOK: Destroying tileset');
+        console.log("HOOK: Destroying tileset");
         tileset.destroy();
         setTileset(null);
       }
@@ -129,7 +129,7 @@ export const Widget: FC<{
 
   useEffect(() => {
     if (tileset && widget) {
-      console.log('HOOK: Tileset added to scene:', tileset);
+      console.log("HOOK: Tileset added to scene:", tileset);
       widget.scene.primitives.add(tileset);
       return () => {
         if (widget) {
@@ -176,7 +176,7 @@ export const Widget: FC<{
     }
     return () => {
       if (widget) {
-        console.log('HOOK: Destroying widget');
+        console.log("HOOK: Destroying widget");
         widget.destroy();
         setWidget(null);
       }
@@ -227,8 +227,8 @@ export const Widget: FC<{
           new HeadingPitchRange(
             widget.scene.camera.heading + increment,
             widget.scene.camera.pitch,
-            0
-          )
+            0,
+          ),
         );
         lastTime = now;
         animationFrameId = requestAnimationFrame(updateHeading);
@@ -254,25 +254,25 @@ export const Widget: FC<{
         if (clipPolygon && clipPolygon.length > 2) {
           clippingPolygon = new ClippingPolygon({
             positions: clipPolygon.map((coord: LatLngRecord) =>
-              Cartesian3.fromDegrees(coord.longitude, coord.latitude)
+              Cartesian3.fromDegrees(coord.longitude, coord.latitude),
             ),
           });
-          console.info('Clipping polygon created', clippingPolygon);
+          console.info("Clipping polygon created", clippingPolygon);
         } else if (clipRadius) {
-          console.info('Creating clipping circle:', clipRadius);
+          console.info("Creating clipping circle:", clipRadius);
           const ringCoords = generateRingFromDegrees(
             { longitude: position.longitude, latitude: position.latitude },
-            clipRadius ?? 100
+            clipRadius ?? 100,
           );
 
           clippingPolygon = new ClippingPolygon({
             positions: ringCoords.map((coord: LatLngRadians) =>
-              Cartesian3.fromRadians(coord.lngRad, coord.latRad)
+              Cartesian3.fromRadians(coord.lngRad, coord.latRad),
             ),
           });
         }
 
-        console.info('Clipping polygon created', clippingPolygon);
+        console.info("Clipping polygon created", clippingPolygon);
 
         if (clippingPolygon) {
           clippingPolygonCollection = new ClippingPolygonCollection({
@@ -317,7 +317,7 @@ export const Widget: FC<{
     return;
   }, [debug, cartesian, widget]);
 
-  console.log('Render CustomCesiumWidget', position, range);
+  console.log("Render CustomCesiumWidget", position, range);
 
   return (
     <div
@@ -325,7 +325,7 @@ export const Widget: FC<{
       style={{
         width: `${pixelSize.width}px`,
         height: `${pixelSize.height}px`,
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
       }}
     >
       {children}

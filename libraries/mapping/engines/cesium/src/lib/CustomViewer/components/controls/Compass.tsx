@@ -1,16 +1,16 @@
-import { MouseEvent, ReactNode } from 'react';
-import { faCompass } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useCesium } from 'resium';
-import OnMapButton from './OnMapButton';
+import { MouseEvent, ReactNode } from "react";
+import { faCompass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCesium } from "resium";
+import OnMapButton from "./OnMapButton";
 import {
   Cartesian3,
   Cartographic,
   Math as CeMath,
   defined,
   Cartesian2,
-} from 'cesium';
-import { pickViewerCanvasCenter } from '../../../utils';
+} from "cesium";
+import { pickViewerCanvasCenter } from "../../../utils";
 
 type CompassProps = {
   children?: ReactNode;
@@ -27,21 +27,21 @@ export const Compass = (props: CompassProps) => {
     if (viewer) {
       const windowPosition = new Cartesian2(
         viewer.canvas.clientWidth / 2,
-        viewer.canvas.clientHeight / 2
+        viewer.canvas.clientHeight / 2,
       );
       const horizonTest = viewer.camera.pickEllipsoid(windowPosition);
       let destination = viewer.camera.position;
       if (defined(horizonTest)) {
-        console.log('scene center below horizon');
+        console.log("scene center below horizon");
         //const pos = getCanvasCenter(viewer);
         const { scenePosition, coordinates } = pickViewerCanvasCenter(viewer, {
           getCoordinates: true,
         });
-        console.log('pick compass', coordinates, scenePosition);
+        console.log("pick compass", coordinates, scenePosition);
         if (scenePosition && coordinates) {
           const distance = Cartesian3.distance(
             scenePosition,
-            viewer.camera.position
+            viewer.camera.position,
           );
           const cartographic = coordinates;
           const longitude = CeMath.toDegrees(cartographic.longitude);
@@ -49,11 +49,11 @@ export const Compass = (props: CompassProps) => {
           destination = Cartesian3.fromDegrees(
             longitude,
             latitude,
-            cartographic.height + Math.max(distance, MIN_TOP_DOWN_DISTANCE)
+            cartographic.height + Math.max(distance, MIN_TOP_DOWN_DISTANCE),
           );
         }
       } else {
-        console.info('scene above horizon, using camera position as reference');
+        console.info("scene above horizon, using camera position as reference");
         // use camera position if horizon is not visible
         // bump up the camera a bit if too close too ground
         const cartographic = Cartographic.fromCartesian(viewer.camera.position);
@@ -62,7 +62,7 @@ export const Compass = (props: CompassProps) => {
         destination = Cartesian3.fromDegrees(
           longitude,
           latitude,
-          cartographic.height + MIN_TOP_DOWN_DISTANCE
+          cartographic.height + MIN_TOP_DOWN_DISTANCE,
         );
       }
 

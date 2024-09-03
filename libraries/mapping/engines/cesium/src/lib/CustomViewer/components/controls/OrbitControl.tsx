@@ -1,16 +1,16 @@
-import { ReactNode, MouseEvent, useEffect } from 'react';
-import { faSync } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useCallback, useRef } from 'react';
-import { useCesium } from 'resium';
-import OnMapButton from './OnMapButton';
-import { Cartesian3, Color, Matrix4, Transforms, Viewer } from 'cesium';
+import { ReactNode, MouseEvent, useEffect } from "react";
+import { faSync } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCallback, useRef } from "react";
+import { useCesium } from "resium";
+import OnMapButton from "./OnMapButton";
+import { Cartesian3, Color, Matrix4, Transforms, Viewer } from "cesium";
 import {
   toggleIsAnimating,
   useViewerIsAnimating,
-} from '../../../CustomViewerContextProvider/slices/viewer';
-import { useDispatch } from 'react-redux';
-import { pickViewerCanvasCenter } from '../../../utils';
+} from "../../../CustomViewerContextProvider/slices/viewer";
+import { useDispatch } from "react-redux";
+import { pickViewerCanvasCenter } from "../../../utils";
 
 // TODO use config/context
 const DEFAULT_ROTATION_SPEED = 0.005;
@@ -20,7 +20,7 @@ type SpinningControlProps = {
   children?: ReactNode;
 };
 
-const orbitCenterPointId = 'orbitCenterPoint';
+const orbitCenterPointId = "orbitCenterPoint";
 
 const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
   const { viewer } = useCesium();
@@ -30,7 +30,7 @@ const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
   const dispatch = useDispatch();
 
   const orbitListener = useCallback(() => {
-    console.log('CALLBACK: orbiting');
+    console.log("CALLBACK: orbiting");
     const point = orbitPointRef.current;
     if (!viewer || !point) return;
 
@@ -85,7 +85,7 @@ const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
 
   useEffect(() => {
     if (!isAnimating && viewer) {
-      console.log('stop orbiting by state', orbitPointRef.current);
+      console.log("stop orbiting by state", orbitPointRef.current);
       viewer.clock.onTick.removeEventListener(orbitListener);
       viewer.camera.constrainedAxis = undefined;
       showCenterPoint && viewer.entities.removeById(orbitCenterPointId);

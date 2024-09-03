@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes, ReactNode } from "react";
 
 type ControlGroupProps = HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
@@ -12,8 +12,8 @@ const ControlContainer = (props: ControlGroupProps) => {
       {...otherProps}
       className={
         useLeafletElements
-          ? 'leaflet-bar leaflet-control'
-          : 'leafletlike-container leaflet-control'
+          ? "leaflet-bar leaflet-control"
+          : "leafletlike-container leaflet-control"
       }
     >
       {children}

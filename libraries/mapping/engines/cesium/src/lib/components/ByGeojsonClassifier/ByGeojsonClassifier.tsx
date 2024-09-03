@@ -1,7 +1,7 @@
 import {
   GeoJsonDataSource as ResiumGeoJsonDataSource,
   useCesium,
-} from 'resium';
+} from "resium";
 import {
   ClassificationType,
   Color,
@@ -9,13 +9,13 @@ import {
   ConstantProperty,
   defined,
   GeoJsonDataSource,
-} from 'cesium';
+} from "cesium";
 
-import { useShowPrimaryTileset } from '../../CustomViewerContextProvider/slices/viewer';
-import { useSelectAndHighlightGeoJsonEntity } from './hooks';
-import { SELECTABLE_TRANSPARENT_MATERIAL } from '../../utils';
-import { GeoJsonConfig } from '../../..';
-import { FC } from 'react';
+import { useShowPrimaryTileset } from "../../CustomViewerContextProvider/slices/viewer";
+import { useSelectAndHighlightGeoJsonEntity } from "./hooks";
+import { SELECTABLE_TRANSPARENT_MATERIAL } from "../../utils";
+import { GeoJsonConfig } from "../../..";
+import { FC } from "react";
 
 interface ByGeoJsonClassifier {
   debug?: boolean;
@@ -27,7 +27,7 @@ interface ByGeoJsonClassifier {
 const HIGHLIGHT_COLOR = Color.YELLOW;
 
 const HIGHLIGHT_MATERIAL = new ColorMaterialProperty(
-  HIGHLIGHT_COLOR.withAlpha(0.6)
+  HIGHLIGHT_COLOR.withAlpha(0.6),
 );
 
 const ByGeoJsonClassifier: FC<ByGeoJsonClassifier> = ({

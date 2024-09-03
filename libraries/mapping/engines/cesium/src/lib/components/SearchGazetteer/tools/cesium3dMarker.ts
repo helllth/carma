@@ -8,8 +8,8 @@ import {
   Model,
   Cartographic,
   Math as CeMath,
-} from 'cesium';
-import { ModelAsset } from '../types.d';
+} from "cesium";
+import { ModelAsset } from "../types.d";
 
 let preRenderListener: () => void;
 
@@ -26,26 +26,26 @@ let markerModel: Model | null = null;
 let lastTime: number | null = null;
 let animatonSpeed = 0.001;
 
-const markerId = 'selected3dmarker';
+const markerId = "selected3dmarker";
 
 export const addMarker = async (
   viewer: Viewer,
   pos: Cartographic,
-  model: ModelAsset
+  model: ModelAsset,
 ) => {
-  console.log('addMarker', pos, model);
+  console.log("addMarker", pos, model);
 
   const posCart = Cartesian3.fromRadians(
     pos.longitude,
     pos.latitude,
-    pos.height
+    pos.height,
   );
   const scale = model?.scale || 1;
   const offset = model?.anchorOffset || { x: 0, y: 0, z: 0 };
   const offsetZ = offset.z || 0;
   const modelMatrix = Transforms.eastNorthUpToFixedFrame(posCart);
   const translation = Matrix4.fromTranslation(
-    new Cartesian3(0, 0, offsetZ * scale)
+    new Cartesian3(0, 0, offsetZ * scale),
   );
   Matrix4.multiply(modelMatrix, translation, modelMatrix);
   entityData.model = model;
@@ -82,14 +82,14 @@ const updateMarker = (viewer: Viewer) => {
       if (model.fixedScale) {
         const dist = Cartesian3.distance(
           viewer.camera.position,
-          new Cartesian3(modelMatrix[12], modelMatrix[13], modelMatrix[14])
+          new Cartesian3(modelMatrix[12], modelMatrix[13], modelMatrix[14]),
         );
         if (dist) {
           scale = new Cartesian3(dist / 1000, dist / 1000, dist / 1000);
           translation = new Cartesian3(
             0,
             0,
-            (model.scale * dist) / (1000 * 0.5)
+            (model.scale * dist) / (1000 * 0.5),
           ); // offset to scale from bottom
         }
       } else {
@@ -99,19 +99,19 @@ const updateMarker = (viewer: Viewer) => {
       if (rotation) {
         const RotationQuaternion = Quaternion.fromAxisAngle(
           Cartesian3.UNIT_Z,
-          (rotation === true ? 1 : rotation) * animatonSpeed * deltaTime
+          (rotation === true ? 1 : rotation) * animatonSpeed * deltaTime,
         );
 
         const rotationMatrix = Matrix4.fromTranslationQuaternionRotationScale(
           translation,
           RotationQuaternion,
-          scale
+          scale,
         );
         const updatedModelMatrix = Matrix4.clone(animatedModelMatrix);
         Matrix4.multiply(
           updatedModelMatrix,
           rotationMatrix,
-          updatedModelMatrix
+          updatedModelMatrix,
         );
         entityData.animatedModelMatrix = updatedModelMatrix;
         markerModel.modelMatrix = updatedModelMatrix;
@@ -119,18 +119,18 @@ const updateMarker = (viewer: Viewer) => {
         const cameraHeading = viewer.camera.heading;
         const rotationQuaternion = Quaternion.fromAxisAngle(
           Cartesian3.UNIT_Z,
-          -cameraHeading - CeMath.PI_OVER_TWO
+          -cameraHeading - CeMath.PI_OVER_TWO,
         );
         const rotationMatrix = Matrix4.fromTranslationQuaternionRotationScale(
           translation,
           rotationQuaternion,
-          scale
+          scale,
         );
         const updatedModelMatrix = Matrix4.clone(modelMatrix);
         Matrix4.multiply(
           updatedModelMatrix,
           rotationMatrix,
-          updatedModelMatrix
+          updatedModelMatrix,
         );
         entityData.animatedModelMatrix = updatedModelMatrix;
         if (markerModel) {

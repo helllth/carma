@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useCesium } from 'resium';
-import { CesiumTerrainProvider, Color, Viewer } from 'cesium';
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useCesium } from "resium";
+import { CesiumTerrainProvider, Color, Viewer } from "cesium";
 import {
   setShowPrimaryTileset,
   setShowSecondaryTileset,
-} from '../../CustomViewerContextProvider/slices/viewer';
-import { SceneStyles } from '../../..';
-import { useCustomViewerContext } from '../../CustomViewerContextProvider/components/CustomViewerContextProvider';
+} from "../../CustomViewerContextProvider/slices/viewer";
+import { SceneStyles } from "../../..";
+import { useCustomViewerContext } from "../../CustomViewerContextProvider/components/CustomViewerContextProvider";
 
 // TODO move combined common setup out of here
 
 const setupPrimaryStyle = (
   viewer: Viewer,
-  { terrainProvider, imageryLayer }
+  { terrainProvider, imageryLayer },
 ) => {
   (async () => {
     viewer.scene.globe.baseColor = Color.DARKGRAY;
@@ -36,7 +36,7 @@ const setupPrimaryStyle = (
 
 export const setupSecondaryStyle = (
   viewer: Viewer,
-  { terrainProvider, imageryLayer }
+  { terrainProvider, imageryLayer },
 ) => {
   if (!viewer) return;
   (async () => {
@@ -68,7 +68,7 @@ export const useSceneStyleToggle = (style?: keyof SceneStyles) => {
 
   // TODO initial style set by parameter
   const [isPrimaryStyle, setIsPrimaryStyle] = useState(true);
-  console.log('HOOK: useSceneStyleToggle', style);
+  console.log("HOOK: useSceneStyleToggle", style);
   const customViewerContext = useCustomViewerContext();
 
   useEffect(() => {

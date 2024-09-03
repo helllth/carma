@@ -1,23 +1,23 @@
-import { useEffect, useState } from 'react';
-import Fuse from 'fuse.js';
-import L from 'leaflet';
-import { AutoComplete, Button } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
-import AddressLabel from './components/AddressLabel';
-import { ModelAsset, OptionItem } from './types.d';
-import Title from './components/Title';
-import { gazDataPrefix, sourcesConfig, stopwords } from './config';
-import { getGazData, prepareGazData, removeStopwords } from './utils';
-import './topicMaps.css';
+import { useEffect, useState } from "react";
+import Fuse from "fuse.js";
+import L from "leaflet";
+import { AutoComplete, Button } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
+import AddressLabel from "./components/AddressLabel";
+import { ModelAsset, OptionItem } from "./types.d";
+import Title from "./components/Title";
+import { gazDataPrefix, sourcesConfig, stopwords } from "./config";
+import { getGazData, prepareGazData, removeStopwords } from "./utils";
+import "./topicMaps.css";
 import {
   builtInGazetteerHitTrigger,
   INVERTED_SELECTED_POLYGON_ID,
   MapConsumer,
   SELECTED_POLYGON_ID,
-} from './tools/gazetteerHelper';
-import { Viewer } from 'cesium';
-import { removeMarker } from './tools/cesium3dMarker';
-import { removeGroundPrimitiveById } from './tools/cesium';
+} from "./tools/gazetteerHelper";
+import { Viewer } from "cesium";
+import { removeMarker } from "./tools/cesium3dMarker";
+import { removeGroundPrimitiveById } from "./tools/cesium";
 
 const renderItem = (address) => {
   return {
@@ -57,7 +57,7 @@ const mapDataToSearchResult = (data) => {
 
       return [...acc, optionItem];
     },
-    []
+    [],
   );
 
   return prepareOptions;
@@ -100,8 +100,8 @@ export function SearchGazetteer({
 
   // const _gazetteerHitTrigger = undefined;
   const inputStyle = {
-    width: 'calc(100% - 32px)',
-    borderRadius: '2px',
+    width: "calc(100% - 32px)",
+    borderRadius: "2px",
   };
 
   const mapConsumers: MapConsumer[] = [];
@@ -119,10 +119,10 @@ export function SearchGazetteer({
 
   const [searchResult, setSearchResult] = useState<OptionItem[]>([]);
   const [allGazeteerData, setAllGazeteerData] = useState<readonly any[] | null>(
-    null
+    null,
   );
-  const [value, setValue] = useState('');
-  const [typeaheadPartValue, setTypeaheadPartValue] = useState('');
+  const [value, setValue] = useState("");
+  const [typeaheadPartValue, setTypeaheadPartValue] = useState("");
 
   const handleSearchAutoComplete = (value) => {
     if (allGazeteerData && allGazeteerData.length > 0) {
@@ -130,7 +130,7 @@ export function SearchGazetteer({
         distance: 100,
         useExtendedSearch: true,
         threshold: 0.5,
-        keys: ['xSearchData'],
+        keys: ["xSearchData"],
       };
       const fuse = new Fuse(allGazeteerData, fuseAddressesOptions);
       const result = fuse.search(removeStopwords(value, stopwords));
@@ -140,16 +140,16 @@ export function SearchGazetteer({
         const groupedResults = mapDataToSearchResult(result);
         setSearchResult(groupedResults);
       }
-      if (result.length > 0 && value !== '') {
+      if (result.length > 0 && value !== "") {
         setTypeaheadPartValue(result[0].item.string);
       }
     }
   };
 
   const handleOnSelect = (option) => {
-    console.log('Handle Selected Option', option);
+    console.log("Handle Selected Option", option);
     internalGazetteerHitTrigger([option.sData]);
-    if (option.sData.type === 'bezirke' || option.sData.type === 'quartiere') {
+    if (option.sData.type === "bezirke" || option.sData.type === "quartiere") {
       setGazetteerHit(null);
     } else {
       setGazetteerHit(option.sData);
@@ -157,9 +157,9 @@ export function SearchGazetteer({
   };
 
   useEffect(() => {
-    console.log('HOOK: gazData', gazData);
+    console.log("HOOK: gazData", gazData);
     if (!gazData) {
-      console.info('no gazeteerdata defined, fetching gazData', sourcesConfig);
+      console.info("no gazeteerdata defined, fetching gazData", sourcesConfig);
       const setDataCallback = (data) => {
         setData(data);
         setAllGazeteerData(prepareGazData(data, stopwords));
@@ -178,13 +178,13 @@ export function SearchGazetteer({
     setSfStandardSearch(e.target.checked);
     setOptions([]);
     setSearchResult([]);
-    setValue('');
+    setValue("");
   };
 
   const handleOnClose = () => {
     //console.log('On CLose', null);
     setGazetteerHit(null);
-    setValue('');
+    setValue("");
     setOptions([]);
     setSearchResult([]);
     if (cesiumRef) {
@@ -199,7 +199,7 @@ export function SearchGazetteer({
   return (
     <form
       style={{
-        display: 'flex',
+        display: "flex",
         //marginTop: '20px',
         width: pixelwidth,
       }}

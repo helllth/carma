@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { MouseEvent, ReactNode } from 'react';
-import { useCesium } from 'resium';
+import { MouseEvent, ReactNode } from "react";
+import { useCesium } from "resium";
 
 type ZoomControlsProps = {
   children?: ReactNode;
@@ -23,7 +23,7 @@ const ZoomControls = (props: ZoomControlsProps) => {
     const ellipsoid = scene.globe.ellipsoid;
 
     const cameraHeight = ellipsoid.cartesianToCartographic(
-      camera.position
+      camera.position,
     ).height;
     const moveRate = cameraHeight * MOVERATE_FACTOR;
     camera.moveForward(moveRate);
@@ -37,7 +37,7 @@ const ZoomControls = (props: ZoomControlsProps) => {
     const ellipsoid = scene.globe.ellipsoid;
 
     const cameraHeight = ellipsoid.cartesianToCartographic(
-      camera.position
+      camera.position,
     ).height;
     const moveRate = cameraHeight * MOVERATE_FACTOR;
     camera.moveBackward(moveRate);

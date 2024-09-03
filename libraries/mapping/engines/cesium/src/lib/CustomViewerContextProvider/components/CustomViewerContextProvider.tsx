@@ -1,17 +1,17 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext } from "react";
 
-import { ReactNode } from 'react';
-import { Provider } from 'react-redux';
+import { ReactNode } from "react";
+import { Provider } from "react-redux";
 
-import { setupStore } from '../store';
+import { setupStore } from "../store";
 import {
   CesiumTerrainProvider,
   EllipsoidTerrainProvider,
   ImageryLayer,
   WebMapServiceImageryProvider,
   WebMapTileServiceImageryProvider,
-} from 'cesium';
-import { ModelAsset, ViewerState } from '../../..';
+} from "cesium";
+import { ModelAsset, ViewerState } from "../../..";
 
 type CustomViewerContextType = {
   terrainProvider: Promise<CesiumTerrainProvider> | null;
@@ -58,13 +58,13 @@ export const CustomViewerContextProvider = ({
   const store = setupStore(viewerState);
 
   const imageryProvider = new WebMapServiceImageryProvider(
-    providerConfig.imageryProvider
+    providerConfig.imageryProvider,
   );
 
   const values = {
     ellipsoidTerrainProvider: new EllipsoidTerrainProvider(),
     terrainProvider: CesiumTerrainProvider.fromUrl(
-      providerConfig.terrainProvider.url
+      providerConfig.terrainProvider.url,
     ),
     imageryLayer: new ImageryLayer(imageryProvider),
     models: providerConfig.models,

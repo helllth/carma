@@ -1,5 +1,5 @@
-import CustomViewer from './CustomViewer';
-import CustomViewerPlayground from './CustomViewerPlayground';
+import CustomViewer from "./CustomViewer";
+import CustomViewerPlayground from "./CustomViewerPlayground";
 
 export { CustomViewer };
 export { CustomViewerPlayground };

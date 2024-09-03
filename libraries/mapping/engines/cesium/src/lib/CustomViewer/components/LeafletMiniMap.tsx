@@ -1,17 +1,17 @@
-import { useEffect, useRef } from 'react';
-import { useCesium } from 'resium';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import { useEffect, useRef } from "react";
+import { useCesium } from "resium";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
-import { Color, Entity, PolygonGraphics } from 'cesium';
-import camera_png from './camera.png';
-import { makeLeafletMarkerRotatable } from './LeafletMiniMap.utils';
-import { polygonHierarchyFromPolygonCoords } from '../../components/SearchGazetteer/tools/cesium';
+import { Color, Entity, PolygonGraphics } from "cesium";
+import camera_png from "./camera.png";
+import { makeLeafletMarkerRotatable } from "./LeafletMiniMap.utils";
+import { polygonHierarchyFromPolygonCoords } from "../../components/SearchGazetteer/tools/cesium";
 import {
   cameraToCartographicDegrees,
   getViewerViewportPolygonRing,
   rectangleToExtentDegrees,
-} from '../../utils';
+} from "../../utils";
 
 //TODO sync time externally if needed
 const DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION = 1000;
@@ -95,12 +95,12 @@ export const LeafletMiniMap = ({
           ],
         ],
         {
-          color: 'rgba(120, 120, 100, 1)',
+          color: "rgba(120, 120, 100, 1)",
           weight: 1,
           opacity: 1,
-          fillColor: 'white',
+          fillColor: "white",
           fillOpacity: 0.2,
-        }
+        },
       );
 
       const lMap = mapInstanceRef.current;
@@ -155,11 +155,11 @@ export const LeafletMiniMap = ({
             });
 
             const viewEntity = new Entity({
-              id: 'viewEntity',
+              id: "viewEntity",
               polygon: cesiumPolygon,
             });
 
-            viewer.entities.removeById('viewEntity');
+            viewer.entities.removeById("viewEntity");
             viewer.entities.add(viewEntity);
           }
         }
@@ -187,7 +187,7 @@ export const LeafletMiniMap = ({
       return () => {
         viewer.camera.moveEnd.removeEventListener(handleOnChanged);
         viewer.camera.changed.removeEventListener(handleOnChanged);
-        viewer.entities.removeById('viewEntity');
+        viewer.entities.removeById("viewEntity");
         viewPolygon.removeFrom(lMap);
         camMarker.removeFrom(lMap);
         lRect.removeFrom(lMap);
@@ -202,24 +202,24 @@ export const LeafletMiniMap = ({
     viewportLimitResolutionFactor,
   ]);
 
-  console.log('RENDER: MiniMap');
+  console.log("RENDER: MiniMap");
 
   return (
     <div
       //ref={mapContainerRef}
       style={{
-        position: 'absolute',
+        position: "absolute",
         zIndex: 100,
         right: 30,
         bottom: 30,
         opacity: 1,
         transition: `opacity ${DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION}ms ease-in-out`,
-        pointerEvents: 'none',
-        width: '20vw',
-        height: '15vw',
+        pointerEvents: "none",
+        width: "20vw",
+        height: "15vw",
       }}
     >
-      <div ref={mapContainerRef} style={{ height: '100%', width: '100%' }} />
+      <div ref={mapContainerRef} style={{ height: "100%", width: "100%" }} />
     </div>
   );
 };

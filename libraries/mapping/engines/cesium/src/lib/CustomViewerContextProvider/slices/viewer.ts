@@ -1,9 +1,9 @@
-import { createSelector, createSlice} from '@reduxjs/toolkit';
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Cartesian3, Color } from 'cesium';
-import { useSelector } from 'react-redux';
-import { ColorInput, RootState, ViewerState } from '../../..';
-import { colorToArray, isColorRgbaArray } from '../../utils';
+import { Cartesian3, Color } from "cesium";
+import { useSelector } from "react-redux";
+import { ColorInput, RootState, ViewerState } from "../../..";
+import { colorToArray, isColorRgbaArray } from "../../utils";
 
 const defaultState: ViewerState = {
   isAnimating: false,
@@ -35,7 +35,7 @@ const defaultState: ViewerState = {
 };
 
 const slice = createSlice({
-  name: 'viewer',
+  name: "viewer",
   initialState: defaultState,
   reducers: {
     setIsAnimating: (state: ViewerState, action: PayloadAction<boolean>) => {
@@ -50,13 +50,13 @@ const slice = createSlice({
     },
     setShowPrimaryTileset: (
       state: ViewerState,
-      action: PayloadAction<boolean>
+      action: PayloadAction<boolean>,
     ) => {
       state.showPrimaryTileset = action.payload;
     },
     setShowSecondaryTileset: (
       state: ViewerState,
-      action: PayloadAction<boolean>
+      action: PayloadAction<boolean>,
     ) => {
       state.showSecondaryTileset = action.payload;
     },
@@ -67,9 +67,9 @@ const slice = createSlice({
     setGlobeBaseColor: (
       state: ViewerState,
       action: PayloadAction<{
-        style: keyof ViewerState['sceneStyles'];
+        style: keyof ViewerState["sceneStyles"];
         color: ColorInput;
-      }>
+      }>,
     ) => {
       const { style, color } = action.payload;
 
@@ -82,7 +82,7 @@ const slice = createSlice({
     },
     setHomePosition: (
       state: ViewerState,
-      action: PayloadAction<Cartesian3>
+      action: PayloadAction<Cartesian3>,
     ) => {
       const { x, y, z } = action.payload;
       state.homePosition = { x, y, z };
@@ -107,17 +107,17 @@ const selectViewerDataSources = (state: RootState) => state.viewer.dataSources;
 
 const selectViewerHome = createSelector(
   (state: RootState) => state.viewer.homePosition,
-  (xyz) => (xyz ? new Cartesian3(xyz.x, xyz.y, xyz.z) : null)
+  (xyz) => (xyz ? new Cartesian3(xyz.x, xyz.y, xyz.z) : null),
 );
 
 const selectViewerHomeOffset = createSelector(
   (state: RootState) => state.viewer.homeOffset,
-  (xyz) => (xyz ? new Cartesian3(xyz.x, xyz.y, xyz.z) : null)
+  (xyz) => (xyz ? new Cartesian3(xyz.x, xyz.y, xyz.z) : null),
 );
 
 const selectViewerSceneGlobalBaseColor = createSelector(
   (state: RootState) => state.viewer.sceneStyles.default.globe.baseColor,
-  (baseColor) => new Color(...baseColor)
+  (baseColor) => new Color(...baseColor),
 );
 
 export const useViewerIsAnimating = () => useSelector(selectViewerIsAnimating);

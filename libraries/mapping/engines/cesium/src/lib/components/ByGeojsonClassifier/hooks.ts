@@ -1,4 +1,4 @@
-import { pickFromClampedGeojson } from '../../utils';
+import { pickFromClampedGeojson } from "../../utils";
 import {
   Color,
   ColorMaterialProperty,
@@ -7,11 +7,11 @@ import {
   ScreenSpaceEventHandler,
   ScreenSpaceEventType,
   Viewer,
-} from 'cesium';
-import { useEffect, useRef } from 'react';
+} from "cesium";
+import { useEffect, useRef } from "react";
 const restoreMaterial = (
   entity: Entity,
-  originalMaterials: Map<Entity, MaterialProperty>
+  originalMaterials: Map<Entity, MaterialProperty>,
 ) => {
   const m = originalMaterials.get(entity);
   if (m) {
@@ -27,7 +27,7 @@ export const useSelectAndHighlightGeoJsonEntity = (
     highlightMaterial?: ColorMaterialProperty;
     isPrimaryStyle?: boolean;
     selectedEntityId?: string | null; // TODO restore selection on mount
-  }
+  },
 ) => {
   const handler = useRef<ScreenSpaceEventHandler | null>(null);
   const highlightEntity = useRef<Entity | null>(null);
@@ -43,7 +43,7 @@ export const useSelectAndHighlightGeoJsonEntity = (
     let originalMaterials;
     if (viewer) {
       originalMaterials = new Map<Entity, MaterialProperty>();
-      console.log('HOOK ByGeoJsonClassifier add ScreenSpaceEventHandler');
+      console.log("HOOK ByGeoJsonClassifier add ScreenSpaceEventHandler");
       handler.current = new ScreenSpaceEventHandler(viewer.scene.canvas);
 
       const perEntityAction = (entity: Entity) => {
@@ -80,7 +80,7 @@ export const useSelectAndHighlightGeoJsonEntity = (
         // last picked object is the top one we need for highlighting
         const lastGroundPrimitive = pickFromClampedGeojson(
           viewer,
-          event.position
+          event.position,
         );
         if (lastGroundPrimitive) {
           hasPick = true;

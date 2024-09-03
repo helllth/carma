@@ -1,10 +1,10 @@
-import { MouseEvent, ReactNode } from 'react';
-import { faCubes, faTreeCity } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import OnMapButton from './OnMapButton';
-import { useShowPrimaryTileset } from '../../../CustomViewerContextProvider/slices/viewer';
-import { SceneStyles } from '../../../..';
-import { useSceneStyleToggle } from '../baseTileset.hook';
+import { MouseEvent, ReactNode } from "react";
+import { faCubes, faTreeCity } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import OnMapButton from "./OnMapButton";
+import { useShowPrimaryTileset } from "../../../CustomViewerContextProvider/slices/viewer";
+import { SceneStyles } from "../../../..";
+import { useSceneStyleToggle } from "../baseTileset.hook";
 
 type SceneStyleToggleProps = {
   children?: ReactNode;
@@ -24,8 +24,8 @@ export const SceneStyleToggle = (props: SceneStyleToggleProps) => {
     <OnMapButton
       title={
         isPrimaryStyle
-          ? 'Wechsel zur vereinfachten Ansicht'
-          : 'Wechsel zur realistischen Ansicht'
+          ? "Wechsel zur vereinfachten Ansicht"
+          : "Wechsel zur realistischen Ansicht"
       }
       onClick={handleToggle}
     >

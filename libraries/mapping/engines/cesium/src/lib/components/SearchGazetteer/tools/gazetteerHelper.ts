@@ -1,8 +1,8 @@
 // adapted from react-cismap/tools/gazetteerHelper
 
-import L from 'leaflet';
-import proj4 from 'proj4';
-import { PROJ4_CONVERTERS } from './geo';
+import L from "leaflet";
+import proj4 from "proj4";
+import { PROJ4_CONVERTERS } from "./geo";
 import {
   BoundingSphere,
   Cartesian3,
@@ -17,13 +17,13 @@ import {
   PolygonGeometry,
   Scene,
   Viewer,
-} from 'cesium';
+} from "cesium";
 import {
   GazDataItem,
   ModelAsset,
   PayloadItem,
   SourceWithPayload,
-} from '../types.d';
+} from "../types.d";
 import {
   polygonHierarchyFromPolygonCoords,
   getHeadingPitchRangeFromZoom,
@@ -31,13 +31,13 @@ import {
   distanceFromZoomLevel,
   invertedPolygonHierarchy,
   removeGroundPrimitiveById,
-} from './cesium';
-import { addMarker, removeMarker } from './cesium3dMarker';
+} from "./cesium";
+import { addMarker, removeMarker } from "./cesium3dMarker";
 
 const proj4ConverterLookup = {};
 const DEFAULT_ZOOM_LEVEL = 16;
-export const SELECTED_POLYGON_ID = 'searchgaz-highlight-polygon';
-export const INVERTED_SELECTED_POLYGON_ID = 'searchgaz-inverted-polygon';
+export const SELECTED_POLYGON_ID = "searchgaz-highlight-polygon";
+export const INVERTED_SELECTED_POLYGON_ID = "searchgaz-inverted-polygon";
 
 type Coord = { lat: number; lon: number };
 // type MapType = 'leaflet' | 'cesium';
@@ -83,13 +83,13 @@ const CesiumMapActions = {
             //console.log('done');
             const pos = await getPositionWithHeightAsync(
               scene,
-              Cartographic.fromDegrees(lon, lat)
+              Cartographic.fromDegrees(lon, lat),
             );
 
             const targetWithHeight = Cartesian3.fromRadians(
               pos.longitude,
               pos.latitude,
-              pos.height
+              pos.height,
             );
 
             const hprEnd = getHeadingPitchRangeFromZoom(zoom, 0, -45);
@@ -100,10 +100,10 @@ const CesiumMapActions = {
                 offset: hprEnd,
                 duration: 3,
                 //easingFunction: EasingFunction.SINUSOIDAL_OUT
-              }
+              },
             );
           },
-        }
+        },
       );
     }
   },
@@ -120,12 +120,15 @@ const getPosInWGS84 = ({ x, y }, refSystem: proj4.Converter) => {
   };
 };
 
-const getRingInWGS84 = (coords: (string | number)[][], refSystem: proj4.Converter) =>
+const getRingInWGS84 = (
+  coords: (string | number)[][],
+  refSystem: proj4.Converter,
+) =>
   coords
-    .map((c) => c.map((v) => (typeof v === 'string' ? parseFloat(v) : v)))
+    .map((c) => c.map((v) => (typeof v === "string" ? parseFloat(v) : v)))
     .filter(
       (coords) =>
-        !coords.some((c) => isNaN(c) || c === Infinity || c === -Infinity)
+        !coords.some((c) => isNaN(c) || c === Infinity || c === -Infinity),
     )
     .map((coord) => PROJ4_CONVERTERS.CRS4326.forward(refSystem.inverse(coord)));
 
@@ -133,11 +136,11 @@ const getRingInWGS84 = (coords: (string | number)[][], refSystem: proj4.Converte
 const getUrlFromSearchParams = () => {
   let url: string | null = null;
   const logGazetteerHit = new URLSearchParams(window.location.href).get(
-    'logGazetteerHits'
+    "logGazetteerHits",
   );
 
-  if (logGazetteerHit === '' || logGazetteerHit === 'true') {
-    url = window.location.href.split('?')[0]; // console.log(url + '?gazHit=' + window.btoa(JSON.stringify(hit[0])));
+  if (logGazetteerHit === "" || logGazetteerHit === "true") {
+    url = window.location.href.split("?")[0]; // console.log(url + '?gazHit=' + window.btoa(JSON.stringify(hit[0])));
   }
   return url;
 };
@@ -167,7 +170,7 @@ export const builtInGazetteerHitTrigger = (
     suppressMarker,
     mapActions = { leaflet: {}, cesium: {} },
     marker3dStyle,
-  }: GazetteerOptions = defaultGazetteerOptions
+  }: GazetteerOptions = defaultGazetteerOptions,
 ) => {
   if (hit !== undefined && hit.length !== undefined && hit.length > 0) {
     const lAction = (mapActions.leaflet = {
@@ -190,37 +193,37 @@ export const builtInGazetteerHitTrigger = (
 
     let refSystemConverter = proj4ConverterLookup[crs];
     if (!refSystemConverter) {
-      console.log('create new proj4 converter for', crs);
+      console.log("create new proj4 converter for", crs);
       refSystemConverter = proj4(`EPSG:${crs}`);
       proj4ConverterLookup[crs] = refSystemConverter;
     }
 
     const hasPolygon =
-      hitObject.more?.g?.type === 'Polygon' &&
+      hitObject.more?.g?.type === "Polygon" &&
       hitObject.more?.g?.coordinates?.length > 0;
 
     const pos = getPosInWGS84(hitObject, refSystemConverter); //console.log(pos)
     const zoom = hitObject.more.zl ?? DEFAULT_ZOOM_LEVEL;
     const polygon = hasPolygon
       ? hitObject.more.g.coordinates.map((ring) =>
-          getRingInWGS84(ring, refSystemConverter)
+          getRingInWGS84(ring, refSystemConverter),
         )
       : null;
     console.log(
-      'hitObject',
+      "hitObject",
       hitObject,
       hitObject.more.zl,
       crs,
       hitObject.crs,
       pos,
       zoom,
-      polygon
+      polygon,
     );
 
     // console.log(mapConsumers, mapActions, pos, zoom);
 
     mapConsumers.forEach(async (mapElement) => {
-      console.log('mapElement', mapElement);
+      console.log("mapElement", mapElement);
       if (mapElement instanceof Viewer) {
         const viewer = mapElement;
         //console.log('lookAt', mapElement, pos, zoom);
@@ -231,7 +234,7 @@ export const builtInGazetteerHitTrigger = (
         removeGroundPrimitiveById(viewer, INVERTED_SELECTED_POLYGON_ID);
         const posHeight = await getPositionWithHeightAsync(
           viewer.scene,
-          Cartographic.fromDegrees(pos.lon, pos.lat)
+          Cartographic.fromDegrees(pos.lon, pos.lat),
         );
 
         if (polygon) {
@@ -260,7 +263,9 @@ export const builtInGazetteerHitTrigger = (
             geometry: invertedPolygonGeometry,
             id: INVERTED_SELECTED_POLYGON_ID,
             attributes: {
-              color: ColorGeometryInstanceAttribute.fromColor(Color.GRAY.withAlpha(0.66)),
+              color: ColorGeometryInstanceAttribute.fromColor(
+                Color.GRAY.withAlpha(0.66),
+              ),
             },
           });
 
@@ -283,7 +288,7 @@ export const builtInGazetteerHitTrigger = (
       } else if (mapElement instanceof L.Map) {
         lAction.panTo(mapElement, pos);
       } else {
-        console.warn('Unsupported map type', mapElement);
+        console.warn("Unsupported map type", mapElement);
       }
     });
 
@@ -339,7 +344,7 @@ export const builtInGazetteerHitTrigger = (
     }, 200);
     */
   } else {
-    console.info('unhandled hit:', hit);
+    console.info("unhandled hit:", hit);
   }
 };
 
@@ -354,32 +359,32 @@ const dummyItem = {
 };
 
 export const getGazDataFromSources = (
-  sources: SourceWithPayload[]
+  sources: SourceWithPayload[],
 ): GazDataItem[] => {
   let sorter = 0;
   const gazData: GazDataItem[] = [];
 
   sources.forEach((source) => {
     const { topic, payload, crs, url } = source;
-    if (typeof payload !== 'string') {
-      console.warn('payload is not a string', topic, url, payload);
+    if (typeof payload !== "string") {
+      console.warn("payload is not a string", topic, url, payload);
       return;
     }
 
     const items = JSON.parse(payload);
     items.forEach(
       ({
-        s: string = '',
-        g: glyph = '',
+        s: string = "",
+        g: glyph = "",
         x,
         y,
         m: more = {},
-        n = '',
+        n = "",
         nr,
         z,
       }: PayloadItem = dummyItem) => {
         if (x === undefined || y === undefined) {
-          console.info('missing coordinates', topic, url, payload);
+          console.info("missing coordinates", topic, url, payload);
           return;
         }
 
@@ -395,37 +400,37 @@ export const getGazDataFromSources = (
         };
 
         switch (topic) {
-          case 'aenderungsv':
-            g.overlay = 'F';
+          case "aenderungsv":
+            g.overlay = "F";
             break;
-          case 'adressen':
-            if (nr !== '' && nr !== 0) {
-              g.string += ' ' + nr;
+          case "adressen":
+            if (nr !== "" && nr !== 0) {
+              g.string += " " + nr;
             }
-            if (z !== '') {
-              g.string += ' ' + z;
+            if (z !== "") {
+              g.string += " " + z;
             }
             break;
-          case 'bplaene':
-            g.overlay = 'B';
+          case "bplaene":
+            g.overlay = "B";
             break;
-          case 'ebikes':
+          case "ebikes":
             g.string = n;
-            g.glyph = more.id?.startsWith('V') ? 'bicycle' : 'charging-station';
+            g.glyph = more.id?.startsWith("V") ? "bicycle" : "charging-station";
             break;
-          case 'emob':
+          case "emob":
             g.string = n;
             break;
-          case 'geps':
-            g.glyph = 'code-fork';
+          case "geps":
+            g.glyph = "code-fork";
             break;
-          case 'geps_reverse':
-            g.glyph = 'code-fork';
+          case "geps_reverse":
+            g.glyph = "code-fork";
             break;
-          case 'no2':
-            g.glyphPrefix = 'fab ';
+          case "no2":
+            g.glyphPrefix = "fab ";
             break;
-          case 'prbr':
+          case "prbr":
             g.string = n;
             break;
           default:
@@ -433,7 +438,7 @@ export const getGazDataFromSources = (
         }
 
         gazData.push(g);
-      }
+      },
     );
   });
 

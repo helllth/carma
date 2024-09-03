@@ -1,3 +1,3 @@
-import { SearchGazetteer } from './SearchGazetteer';
+import { SearchGazetteer } from "./SearchGazetteer";
 export { SearchGazetteer };
 export default SearchGazetteer;

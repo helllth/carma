@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 import {
   ScreenSpaceEventHandler,
@@ -8,7 +8,7 @@ import {
   Cesium3DTileFeature,
   Cartesian2,
   Cartesian3,
-} from 'cesium';
+} from "cesium";
 
 export type ClickTilesetData = {
   feature: Cesium3DTileFeature | null;
@@ -21,13 +21,13 @@ export const useClickActionTileset = (
   viewer: Viewer | undefined,
   url: string,
   setSelectedFeature: (feature: Cesium3DTileFeature | null) => void,
-  drillPickLimit = 5
+  drillPickLimit = 5,
 ) => {
   const [clickData, setClickData] = useState<ClickTilesetData | null>(null);
   //const url = useViewerDataSources().tileset.url;
 
   useEffect(() => {
-    console.log('HOOK: useClickActionTileset');
+    console.log("HOOK: useClickActionTileset");
     if (!viewer?.scene || !viewer?.canvas) return;
     const { canvas, scene } = viewer;
 
@@ -55,7 +55,7 @@ export const useClickActionTileset = (
 
       if (defined(feature)) {
         if (feature instanceof Cesium3DTileFeature) {
-                    const propertyIds = feature.getPropertyIds();
+          const propertyIds = feature.getPropertyIds();
           const properties = propertyIds.reduce((acc, propertyId) => {
             return {
               ...acc,

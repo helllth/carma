@@ -1,17 +1,17 @@
-import { Cartographic, Math as CeMath } from 'cesium';
+import { Cartographic, Math as CeMath } from "cesium";
 
-import type { LatLngRadians, LatLngRecord } from 'types/common-geo';
+import type { LatLngRadians, LatLngRecord } from "types/common-geo";
 
 export const EARTH_RADIUS = 6371008.7714;
 
 export const generateRingFromDegrees = (
   centerDeg: LatLngRecord,
   radiusInMeters: number,
-  samples: number = 24
+  samples: number = 24,
 ): LatLngRadians[] => {
   const center = Cartographic.fromDegrees(
     centerDeg.longitude,
-    centerDeg.latitude
+    centerDeg.latitude,
   );
   const points: LatLngRadians[] = [];
 

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Cesium3DTileset as Resium3DTileset, useCesium } from 'resium';
+import { useEffect, useState } from "react";
+import { Cesium3DTileset as Resium3DTileset, useCesium } from "resium";
 import {
   setShowPrimaryTileset,
   setShowSecondaryTileset,
@@ -7,21 +7,21 @@ import {
   useShowSecondaryTileset,
   useTilesetOpacity,
   useViewerDataSources,
-} from '../../CustomViewerContextProvider/slices/viewer';
+} from "../../CustomViewerContextProvider/slices/viewer";
 import {
   Cesium3DTileset,
   CustomShader,
   ShadowMode,
   viewerCesium3DTilesInspectorMixin,
-} from 'cesium';
-import { useSecondaryStyleTilesetClickHandler } from '../../hooks';
-import { useTweakpaneCtx } from '@carma-commons/debug';
+} from "cesium";
+import { useSecondaryStyleTilesetClickHandler } from "../../hooks";
+import { useTweakpaneCtx } from "@carma-commons/debug";
 import {
   CUSTOM_SHADERS_DEFINITIONS,
   CustomShaderKeys as k,
-} from '../../shaders';
+} from "../../shaders";
 
-import { create3DTileStyle } from '../../utils';
+import { create3DTileStyle } from "../../utils";
 
 const preloadWhenHidden = true;
 let enableDebugWireframe = false;
@@ -29,16 +29,16 @@ let maximumScreenSpaceError = 8; // 16 is default but quite Low Quality
 
 const customShaderKeys = {
   clay: k.CLAY,
-  'unlit enhanced': k.UNLIT,
+  "unlit enhanced": k.UNLIT,
   unlit: k.UNLIT_BASE,
-  'unlit fog': k.UNLIT_FOG,
+  "unlit fog": k.UNLIT_FOG,
   monochrome: k.MONOCHROME,
   undefined: k.UNDEFINED,
 };
 
 const DEFAULT_MESH_SHADER_KEY = k.UNLIT;
 const DEFAULT_MESH_SHADER = new CustomShader(
-  CUSTOM_SHADERS_DEFINITIONS[DEFAULT_MESH_SHADER_KEY]
+  CUSTOM_SHADERS_DEFINITIONS[DEFAULT_MESH_SHADER_KEY],
 );
 
 export const BaseTilesets = () => {
@@ -50,7 +50,7 @@ export const BaseTilesets = () => {
   const [tsB, setTsB] = useState<Cesium3DTileset | null>(null);
   const [showTileInspector, setShowTileInspector] = useState(false);
   const [customShaderKey, setCustomShaderKey] = useState(
-    DEFAULT_MESH_SHADER_KEY
+    DEFAULT_MESH_SHADER_KEY,
   );
   const [customMeshShader, setCustomMeshShader] = useState<
     undefined | CustomShader
@@ -76,7 +76,7 @@ export const BaseTilesets = () => {
 
   const { folderCallback } = useTweakpaneCtx(
     {
-      title: 'Base Tilesets',
+      title: "Base Tilesets",
     },
     {
       get customShaderKey() {
@@ -143,16 +143,16 @@ export const BaseTilesets = () => {
     },
 
     [
-      { name: 'customShaderKey', options: customShaderKeys },
-      { name: 'enableDebugWireframe' },
-      { name: 'showPrimary' },
-      { name: 'showSecondary' },
-      { name: 'maximumScreenSpaceError', min: 1, max: 16, step: 1 },
-    ]
+      { name: "customShaderKey", options: customShaderKeys },
+      { name: "enableDebugWireframe" },
+      { name: "showPrimary" },
+      { name: "showSecondary" },
+      { name: "maximumScreenSpaceError", min: 1, max: 16, step: 1 },
+    ],
   );
 
   useEffect(() => {
-    console.log('HOOK BaseTilesets: showPrimary', showPrimary);
+    console.log("HOOK BaseTilesets: showPrimary", showPrimary);
     if (tsA) {
       // workaround to toggle tileset visibility,
       // resium does not seem to forward the show prop after first initialization
@@ -174,9 +174,9 @@ export const BaseTilesets = () => {
           // TILE INSPECTOR MIXIN cant be removed once added
 
           const button = folder.addButton({
-            title: 'Show Tile Inspector',
+            title: "Show Tile Inspector",
           });
-          button.on('click', () => {
+          button.on("click", () => {
             if (viewer) {
               viewer.extend(viewerCesium3DTilesInspectorMixin);
               setShowTileInspector(true);

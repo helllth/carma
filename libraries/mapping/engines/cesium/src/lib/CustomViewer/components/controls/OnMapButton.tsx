@@ -5,9 +5,9 @@
    but to leverage the leaflet css classes and style nesting as-is, we are using an anchor tag
 */
 
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactNode, MouseEvent, HTMLAttributes } from 'react';
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReactNode, MouseEvent, HTMLAttributes } from "react";
 
 type OnMapButtonProps = HTMLAttributes<HTMLAnchorElement> & {
   icon?: IconDefinition;
@@ -36,7 +36,7 @@ const OnMapButton = (props: OnMapButtonProps) => {
       title={title}
       role="button"
       aria-label={ariaLabel ?? title}
-      aria-disabled={disabled === true ? 'true' : 'false'}
+      aria-disabled={disabled === true ? "true" : "false"}
       onClick={disabled === true ? undefined : onClick}
     >
       {icon && <FontAwesomeIcon icon={icon} />}

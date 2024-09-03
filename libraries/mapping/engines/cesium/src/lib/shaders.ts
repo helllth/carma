@@ -1,12 +1,12 @@
-import { LightingModel } from 'cesium';
+import { LightingModel } from "cesium";
 
 export enum CustomShaderKeys {
-  CLAY = 'CLAY',
-  UNLIT = 'UNLIT',
-  UNLIT_BASE = 'UNLIT_BASE',
-  UNLIT_FOG = 'UNLIT_FOG',
-  UNDEFINED = 'UNDEFINED',
-  MONOCHROME = 'MONOCHROME',
+  CLAY = "CLAY",
+  UNLIT = "UNLIT",
+  UNLIT_BASE = "UNLIT_BASE",
+  UNLIT_FOG = "UNLIT_FOG",
+  UNDEFINED = "UNDEFINED",
+  MONOCHROME = "MONOCHROME",
 }
 
 export const CUSTOM_SHADERS_DEFINITIONS = {

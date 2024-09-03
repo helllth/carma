@@ -1,5 +1,5 @@
-import L, { Marker, LatLng, IconOptions, Icon } from 'leaflet';
-import type { MarkerOptions, DivIcon, PointExpression } from 'leaflet';
+import L, { Marker, LatLng, IconOptions, Icon } from "leaflet";
+import type { MarkerOptions, DivIcon, PointExpression } from "leaflet";
 
 interface RotatableMarkerOptions {
   rotationOrigin?: string;
@@ -7,7 +7,7 @@ interface RotatableMarkerOptions {
   icon: Icon<IconOptions> | DivIcon | undefined;
 }
 
-interface RotatableMarker extends Omit<Marker, 'on'> {
+interface RotatableMarker extends Omit<Marker, "on"> {
   options: RotatableMarkerOptions;
   _applyRotation(): void;
   _icon: HTMLElement;
@@ -31,10 +31,10 @@ export const makeLeafletMarkerRotatable = (
     }
     this.options.rotationOrigin = (this.options.rotationOrigin ||
       iconAnchor ||
-      'center bottom') as any;
+      "center bottom") as any;
     this.options.rotationAngle = this.options.rotationAngle || 0;
 
-    this.on('drag', function (e) {
+    this.on("drag", function (e) {
       (e.target as RotatableMarker)._applyRotation();
     });
   });
@@ -51,7 +51,7 @@ export const makeLeafletMarkerRotatable = (
 
     _applyRotation: function (this: RotatableMarker) {
       if (this.options.rotationAngle) {
-        this._icon.style[L.DomUtil.TRANSFORM + 'Origin'] =
+        this._icon.style[L.DomUtil.TRANSFORM + "Origin"] =
           this.options.rotationOrigin;
         this._icon.style[
           L.DomUtil.TRANSFORM

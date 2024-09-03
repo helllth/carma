@@ -1,30 +1,30 @@
-import ControlContainer from './controls/ControlContainer';
-import ControlGroup from './controls/ControlGroup';
-import HomeControl from './controls/HomeControl';
-import LockCenterControl from './controls/LockCenterControl';
-import OrbitControl from './controls/OrbitControl';
-import ZoomControls from './controls/ZoomControls';
+import ControlContainer from "./controls/ControlContainer";
+import ControlGroup from "./controls/ControlGroup";
+import HomeControl from "./controls/HomeControl";
+import LockCenterControl from "./controls/LockCenterControl";
+import OrbitControl from "./controls/OrbitControl";
+import ZoomControls from "./controls/ZoomControls";
 
-import Compass from './controls/Compass';
-import SceneStyleToggle from './controls/SceneStyleToggle';
-import MapTypeSwitcher from './controls/MapTypeSwitcher';
+import Compass from "./controls/Compass";
+import SceneStyleToggle from "./controls/SceneStyleToggle";
+import MapTypeSwitcher from "./controls/MapTypeSwitcher";
 import {
   useViewerHome,
   useViewerIsMode2d,
-} from '../../CustomViewerContextProvider/slices/viewer';
+} from "../../CustomViewerContextProvider/slices/viewer";
 const ControlsUI = ({ showHome = true, showOrbit = true, searchComponent }) => {
   const home = useViewerHome();
   const isMode2d = useViewerIsMode2d();
 
   return (
-    <div className={'leaflet-control-container'}>
+    <div className={"leaflet-control-container"}>
       <ControlContainer position="topleft">
         <div
           style={{
             //opacity: isMode2d ? 0 : 1,
-            animation: isMode2d ? 'fadeout 1s' : 'fadein 1s',
-            animationFillMode: 'forwards',
-            visibility: isMode2d ? 'hidden' : 'visible',
+            animation: isMode2d ? "fadeout 1s" : "fadein 1s",
+            animationFillMode: "forwards",
+            visibility: isMode2d ? "hidden" : "visible",
           }}
         >
           <ZoomControls />

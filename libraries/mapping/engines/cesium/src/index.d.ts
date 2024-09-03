@@ -1,6 +1,6 @@
 // TODO consolidate with rest of libs
 
-import { hashcodecs } from './lib/CustomViewer/utils';
+import { hashcodecs } from "./lib/CustomViewer/utils";
 
 type Translation = {
   x: number;
@@ -40,7 +40,7 @@ export interface MarkerData {
   model?: ModelAsset;
 }
 
-export interface Marker3dData extends Omit<MarkerData, 'model'> {
+export interface Marker3dData extends Omit<MarkerData, "model"> {
   model: ModelAsset;
   modelMatrix: Matrix4;
   animatedModelMatrix?: Matrix4;
@@ -133,12 +133,12 @@ export type ColorInput = ColorRgbaArray | Color;
 type HashKey = keyof typeof hashcodecs;
 
 type CodecKeys = {
-  [K in HashKey]: (typeof hashcodecs)[K]['key'];
+  [K in HashKey]: (typeof hashcodecs)[K]["key"];
 };
 
 export type FlatDecodedSceneHash = {
   [K in CodecKeys[keyof CodecKeys]]?: ReturnType<
-    (typeof hashcodecs)[HashKey]['decode']
+    (typeof hashcodecs)[HashKey]["decode"]
   >;
 };
 

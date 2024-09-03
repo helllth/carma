@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { titleMap } from '../utils';
+import { FC } from "react";
+import { titleMap } from "../utils";
 
 interface TitleProps {
   category: string;

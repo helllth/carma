@@ -1,25 +1,25 @@
-import { titleMapConfig } from './config';
+import { titleMapConfig } from "./config";
 import {
   GazDataItem,
   SourceConfig,
   SourceWithPayload,
   StopWords,
-} from './types.d';
-import { md5FetchText } from './tools/fetching';
-import { getGazDataFromSources } from './tools/gazetteerHelper';
+} from "./types.d";
+import { md5FetchText } from "./tools/fetching";
+import { getGazDataFromSources } from "./tools/gazetteerHelper";
 export const titleMap = new Map(Object.entries(titleMapConfig));
 
 export function removeStopwords(text, stopwords: StopWords) {
-  const words = text.split(' ');
+  const words = text.split(" ");
   const placeholderWords = words.map((word) => {
     // Check if the word is in the stopwords array (case insensitive)
     if (stopwords.includes(word.toLowerCase())) {
       // Replace each character in the word with an underscore
-      return '_'.repeat(word.length);
+      return "_".repeat(word.length);
     }
     return word;
   });
-  return placeholderWords.join(' ');
+  return placeholderWords.join(" ");
 }
 
 export function prepareGazData(data, stopwords: StopWords) {
@@ -38,23 +38,23 @@ export function prepareGazData(data, stopwords: StopWords) {
 export const getGazData = async (
   sourcesConfig: SourceConfig[],
   prefix: string,
-  setGazData: (gazData: GazDataItem[]) => void
+  setGazData: (gazData: GazDataItem[]) => void,
 ) => {
-  console.info('getGazData config', sourcesConfig);
+  console.info("getGazData config", sourcesConfig);
   await Promise.all(
     sourcesConfig.map(async (config) => {
       (config as SourceWithPayload).payload = await md5FetchText(
         prefix,
-        config.url
+        config.url,
       );
-    })
+    }),
   );
 
-  console.log('sourcesConfig', sourcesConfig);
+  console.log("sourcesConfig", sourcesConfig);
 
   const gazData = getGazDataFromSources(sourcesConfig as SourceWithPayload[]);
 
-  console.log('gazData', gazData && gazData.length > 0 ? gazData[0] : gazData);
+  console.log("gazData", gazData && gazData.length > 0 ? gazData[0] : gazData);
 
   setGazData(gazData);
 };

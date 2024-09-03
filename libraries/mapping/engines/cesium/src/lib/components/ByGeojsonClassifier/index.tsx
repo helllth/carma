@@ -1,3 +1,3 @@
-import ByGeojsonClassifier from './ByGeojsonClassifier';
+import ByGeojsonClassifier from "./ByGeojsonClassifier";
 export { ByGeojsonClassifier };
 export default ByGeojsonClassifier;

@@ -1,5 +1,5 @@
-export { CustomCesiumWidget } from './lib/CustomCesiumWidget';
-export { CustomViewer, CustomViewerPlayground } from './lib/CustomViewer';
+export { CustomCesiumWidget } from "./lib/CustomCesiumWidget";
+export { CustomViewer, CustomViewerPlayground } from "./lib/CustomViewer";
 export {
   CustomViewerContextProvider,
   useCustomViewerContext,
@@ -11,12 +11,12 @@ export {
   useShowSecondaryTileset,
   useShowPrimaryTileset,
   useGlobeBaseColor,
-} from './lib/CustomViewerContextProvider';
+} from "./lib/CustomViewerContextProvider";
 
-export { ByGeojsonClassifier } from './lib/components/ByGeojsonClassifier';
-export { ByTilesetClassifier } from './lib/components/ByTilesetClassifier';
-export { MarkerContainer } from './lib/components/MarkerContainer';
-export { SearchGazetteer } from './lib/components/SearchGazetteer';
+export { ByGeojsonClassifier } from "./lib/components/ByGeojsonClassifier";
+export { ByTilesetClassifier } from "./lib/components/ByTilesetClassifier";
+export { MarkerContainer } from "./lib/components/MarkerContainer";
+export { SearchGazetteer } from "./lib/components/SearchGazetteer";
 
 // Re-export all the types as workaround
-export * from './index.d';
+export * from "./index.d";

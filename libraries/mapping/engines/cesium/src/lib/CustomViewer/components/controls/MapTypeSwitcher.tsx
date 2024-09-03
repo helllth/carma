@@ -1,6 +1,6 @@
-import { MouseEvent, ReactNode, useContext, useState } from 'react';
-import { useCesium } from 'resium';
-import OnMapButton from './OnMapButton';
+import { MouseEvent, ReactNode, useContext, useState } from "react";
+import { useCesium } from "resium";
+import OnMapButton from "./OnMapButton";
 import {
   Cartesian3,
   Cartographic,
@@ -8,23 +8,23 @@ import {
   defined,
   HeadingPitchRange,
   Viewer,
-} from 'cesium';
-import { useDispatch } from 'react-redux';
+} from "cesium";
+import { useDispatch } from "react-redux";
 import {
   useViewerIsMode2d,
   setIsMode2d,
-} from '../../../CustomViewerContextProvider/slices/viewer';
-import { setLeafletView } from '../../utils';
+} from "../../../CustomViewerContextProvider/slices/viewer";
+import { setLeafletView } from "../../utils";
 import {
   cesiumCenterPixelSizeToLeafletZoom,
   getTopDownCameraDeviationAngle,
   pickViewerCanvasCenter,
-} from '../../../utils';
+} from "../../../utils";
 
-import { TopicMapContext } from 'react-cismap/contexts/TopicMapContextProvider';
-import { animateInterpolateHeadingPitchRange } from '../../../utils/cesiumAnimations';
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
+import { animateInterpolateHeadingPitchRange } from "../../../utils/cesiumAnimations";
 
-import { CameraPositionAndOrientation } from '../../../..';
+import { CameraPositionAndOrientation } from "../../../..";
 
 // TODO sync
 const DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION = 1000;
@@ -48,7 +48,8 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   // TODO provide mapFramework context via props for UI?
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const topicMapContext: any = useContext<typeof TopicMapContext>(TopicMapContext);
+  const topicMapContext: any =
+    useContext<typeof TopicMapContext>(TopicMapContext);
   const leaflet = topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
 
   const transitionToMode2d = (viewer: Viewer) => {
@@ -79,7 +80,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
         height = cartographic.height + distance;
       }
     } else {
-      console.info('scene above horizon, using camera position as reference');
+      console.info("scene above horizon, using camera position as reference");
       // use camera position if horizon is not visible
       const cartographic = Cartographic.fromCartesian(viewer.camera.position);
       longitude = CeMath.toDegrees(cartographic.longitude);
@@ -92,9 +93,9 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
     // don't store camera position if pitch is near nadir
     if (Math.abs(viewer.camera.pitch + Math.PI / 2) > 0.05) {
       console.log(
-        'last camera pitch',
+        "last camera pitch",
         viewer.camera.pitch,
-        viewer.camera.pitch + Math.PI / 2
+        viewer.camera.pitch + Math.PI / 2,
       );
       setPrevCamera3d({
         position: viewer.camera.position.clone(),
@@ -115,7 +116,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
       const currentZoom = cesiumCenterPixelSizeToLeafletZoom(viewer).value;
 
       if (currentZoom === null) {
-        console.error('could not determine current zoom level');
+        console.error("could not determine current zoom level");
       } else {
         // go to the next integer zoom level
         // smaller values is further away
@@ -143,7 +144,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
       setIsTransitioning(false);
     };
 
-    console.log('duration', distance);
+    console.log("duration", distance);
 
     if (hasGroundPos) {
       // rotate around the groundposition at center
@@ -155,11 +156,11 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
           {
             duration: duration * 1000,
             onComplete,
-          }
-        )
+          },
+        ),
       );
     } else {
-      console.info('rotate around camera position not implemented yet');
+      console.info("rotate around camera position not implemented yet");
       setIsTransitioning(false);
       /*
            // TODO implement this
@@ -196,7 +197,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
             true
         ) {
           console.log(
-            'camera position unchanged, skipping 2d to 3d transition animation'
+            "camera position unchanged, skipping 2d to 3d transition animation",
           );
           setIsTransitioning(false);
           return;
@@ -222,11 +223,11 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
 
   return (
     <OnMapButton
-      title={isMode2d ? 'zur 3D Ansicht wechseln' : 'zur 2D Ansicht wechseln'}
+      title={isMode2d ? "zur 3D Ansicht wechseln" : "zur 2D Ansicht wechseln"}
       onClick={handleSwitchMapMode}
       disabled={isTransitioning}
     >
-      {isMode2d ? '3D' : '2D'}
+      {isMode2d ? "3D" : "2D"}
     </OnMapButton>
   );
 };

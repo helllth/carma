@@ -1,3 +1,3 @@
-import ByTilesetClassifier from './ByTilesetClassifier';
+import ByTilesetClassifier from "./ByTilesetClassifier";
 export { ByTilesetClassifier };
 export default ByTilesetClassifier;

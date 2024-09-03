@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes, ReactNode } from "react";
 type ControlContainerProps = HTMLAttributes<HTMLDivElement> & {
   position: string;
   children: ReactNode;
@@ -6,16 +6,16 @@ type ControlContainerProps = HTMLAttributes<HTMLDivElement> & {
 
 const getPosClass = (pos: string) => {
   switch (pos) {
-    case 'topleft':
-      return 'leaflet-top leaflet-left';
-    case 'topright':
-      return 'leaflet-top leaflet-right';
-    case 'bottomleft':
-      return 'leaflet-bottom leaflet-left';
-    case 'bottomright':
-      return 'leaflet-bottom leaflet-right';
+    case "topleft":
+      return "leaflet-top leaflet-left";
+    case "topright":
+      return "leaflet-top leaflet-right";
+    case "bottomleft":
+      return "leaflet-bottom leaflet-left";
+    case "bottomright":
+      return "leaflet-bottom leaflet-right";
     default:
-      return 'leaflet-control';
+      return "leaflet-control";
   }
 };
 
