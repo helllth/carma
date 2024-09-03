@@ -340,6 +340,7 @@ export const GeoportalMap = () => {
             dispatch(setSelectedFeature(null));
             dispatch(setSecondaryInfoBoxElements([]));
             dispatch(setFeatures([]));
+            setPos(null);
           }}
           className="font-semibold"
         >
