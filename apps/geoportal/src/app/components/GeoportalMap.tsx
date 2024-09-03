@@ -72,6 +72,7 @@ import proj4 from "proj4";
 import { proj4crs25832def } from "react-cismap/constants/gis";
 import ExtraMarker from "react-cismap/ExtraMarker";
 import {
+  functionToFeature,
   getLeafNodes,
   objectToFeature,
 } from "./feature-info/featureInfoHelper.ts";
@@ -432,9 +433,16 @@ export const GeoportalMap = () => {
                               : "";
                           });
 
-                        if (!tempSelectedFeature && output) {
-                          setSelectedFeature(objectToFeature(output, result));
-                          tempSelectedFeature = objectToFeature(output, result);
+                      if (output) {
+                        const feature = result.includes("function")
+                          ? functionToFeature(output, result)
+                          : objectToFeature(output, result);
+                        dispatch(addFeature(feature));
+
+                        if (!tempSelectedFeature) {
+                          dispatch(setSelectedFeature(feature));
+                          tempSelectedFeature = feature;
+                          return;
                         }
                         if (tempSelectedFeature && output) {
                           overlappingHeaders.push(

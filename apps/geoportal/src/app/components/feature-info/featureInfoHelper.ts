@@ -41,3 +41,14 @@ export const objectToFeature = (jsonOutput: any, code: string) => {
 
   return { properties };
 };
+
+export const functionToFeature = (output: any, code: string) => {
+  let codeFunction = eval("(" + code + ")");
+  const tmpInfo = codeFunction(output);
+
+  const properties = {
+    ...tmpInfo,
+  };
+
+  return { properties };
+};

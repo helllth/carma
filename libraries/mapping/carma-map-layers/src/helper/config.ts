@@ -852,8 +852,7 @@ export const baseConfig = {
           6666636.959833823,
         ],
         keywords: [
-          'carmaconf://infoBoxMapping:subtitle: "Berechneter Dauerschallpegel: " + p.value + " Dezibel (A)"',
-          'carmaconf://infoBoxMapping:header: "Straßenverkehrslärm "',
+          'carmaconf://infoBoxMapping:function createInfoBoxInfo(p) { const value = p.value === "-9999" ? "Kein Wert verfügbar!" : Math.round(p.value * 10) / 10 + " Dezibel (A)"; const info = { title: "Berechneter Dauerschallpegel: " + value, header: "Straßenverkehrslärm", }; return info; }',
         ],
       },
       {
