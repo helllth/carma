@@ -5,6 +5,8 @@ import { getContainerPosition, getElementPosition } from "./utils/helper";
 export function LibHelperOverlay({
   configs,
   closeOverlay,
+  transparency = 0.8,
+  color = "black",
 }: OverlayHelperHightlighterProps) {
   const [hightlightRects, setHightlightRects] = useState<HighlightRect[]>([]);
   useEffect(() => {
@@ -33,8 +35,8 @@ export function LibHelperOverlay({
         zIndex: 1000,
         width: "100vw",
         height: "100vh",
-        background: "black",
-        opacity: 0.8,
+        background: color,
+        opacity: transparency,
       }}
       onClick={() => closeOverlay()}
     >

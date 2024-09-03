@@ -116,6 +116,8 @@ function App({ published }: { published?: boolean }) {
     <OverlayTourProvider
       showOverlay={mode === "tour" ? true : false}
       closeOverlay={() => dispatch(setMode("default"))}
+      transparency={0.8}
+      color="black"
     >
       <TopicMapContextProvider>
         <div className="flex flex-col h-screen w-full">

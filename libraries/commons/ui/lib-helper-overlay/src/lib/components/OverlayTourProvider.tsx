@@ -18,6 +18,8 @@ export const OverlayTourProvider = ({
   closeOverlay = () => {
     console.log("close callback");
   },
+  transparency = 0.8,
+  color = "black",
 }: OverlayTourProviderProps) => {
   const [configs, setConfigs] = useState<OverlayHelperConfig[]>([]);
 
@@ -33,7 +35,12 @@ export const OverlayTourProvider = ({
     <OverlayTourContext.Provider value={{ configs, addConfig, removeConfig }}>
       {children}
       {showOverlay && (
-        <LibHelperOverlay configs={configs} closeOverlay={closeOverlay} />
+        <LibHelperOverlay
+          configs={configs}
+          closeOverlay={closeOverlay}
+          transparency={transparency}
+          color={color}
+        />
       )}
     </OverlayTourContext.Provider>
   );

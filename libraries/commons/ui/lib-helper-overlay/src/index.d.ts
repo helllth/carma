@@ -1,6 +1,8 @@
 export type OverlayHelperHightlighterProps = {
   configs: OverlayHelperConfig[];
   closeOverlay: () => void;
+  transparency?: number;
+  color?: string;
 };
 
 export type OverlayTourAction = (arg: OverlayHelperConfig) => void;
@@ -44,4 +46,6 @@ export type OverlayTourProviderProps = {
   children: JSX.Element;
   showOverlay: boolean;
   closeOverlay: () => void;
+  transparency?: number;
+  color?: string;
 };
