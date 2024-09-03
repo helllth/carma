@@ -202,6 +202,12 @@ export const GeoportalMap = () => {
     let isSame = true;
     let layerType = "";
 
+    if (layers.length === 0) {
+      dispatch(setSecondaryInfoBoxElements([]));
+      dispatch(setFeatures([]));
+      dispatch(setSelectedFeature(null));
+    }
+
     layers.forEach((layer, i) => {
       if (i === 0) {
         layerType = layer.layerType;
@@ -574,7 +580,7 @@ export const GeoportalMap = () => {
                     );
                 }
               }})}
-              {pos && mode === "featureInfo" && (
+              {pos && mode === "featureInfo" && layers.length > 0 && (
                 <ExtraMarker
                   markerOptions={{ markerColor: "cyan", spin: false }}
                   position={pos}

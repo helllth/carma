@@ -7,11 +7,13 @@ import {
   updateSecondaryInfoBoxElements,
 } from "../../store/slices/features";
 import { useDispatch, useSelector } from "react-redux";
+import { getLayers } from "../../store/slices/mapping";
 
 const FeatureInfoBox = () => {
   const dispatch = useDispatch();
   const selectedFeature = useSelector(getSelectedFeature);
   const secondaryInfoBoxElements = useSelector(getSecondaryInfoBoxElements);
+  const numOfLayers = useSelector(getLayers).length;
 
   const featureHeaders = secondaryInfoBoxElements.map((feature) => {
     return (
@@ -43,7 +45,11 @@ const FeatureInfoBox = () => {
       header="Informationen"
       headerColor="#0078a8"
       {...selectedFeature?.properties}
-      noCurrentFeatureTitle="Auf die Karte klicken um Informationen abzurufen"
+      noCurrentFeatureTitle={
+        numOfLayers > 0
+          ? "Auf die Karte klicken um Informationen abzurufen"
+          : "Layer hinzufügen um Informationen abrufen zu können"
+      }
       noCurrentFeatureContent=""
       secondaryInfoBoxElements={featureHeaders}
       //   links={links}
