@@ -1,3 +1,5 @@
+import { LayerProps } from "@carma-mapping/layers";
+
 export const getLeafNodes = (node, result: any = {}): any => {
   if (node.nodeType === Node.ELEMENT_NODE) {
     const children = Array.from(node.children);
@@ -51,4 +53,54 @@ export const functionToFeature = (output: any, code: string) => {
   };
 
   return { properties };
+};
+
+export const createUrl = (baseUrl, pos, minimalBoxSize, layerName) => {
+  const url =
+    baseUrl +
+    `?SERVICE=WMS&request=GetFeatureInfo&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&width=10&height=10&srs=EPSG%3A25832&` +
+    `bbox=` +
+    `${pos[0] - minimalBoxSize},` +
+    `${pos[1] - minimalBoxSize},` +
+    `${pos[0] + minimalBoxSize},` +
+    `${pos[1] + minimalBoxSize}&` +
+    `x=5&y=5&` +
+    `layers=${layerName}&` +
+    `feature_count=100&QUERY_LAYERS=${layerName}&`;
+
+  return url;
+};
+
+export const getFeatureForLayer = async (layer, pos) => {
+  const props = layer.props as LayerProps;
+  const minimalBoxSize = 1;
+  const url = createUrl(props.url, pos, minimalBoxSize, props.name);
+
+  let output = "";
+
+  let result = "";
+  layer.other.keywords.forEach((keyword) => {
+    const extracted = keyword.split("carmaconf://infoBoxMapping:")[1];
+    result += extracted + "\n";
+  });
+
+  if (result) {
+    await fetch(url)
+      .then((response) => response.text())
+      .then((data) => {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(data, "text/xml");
+        const content = xmlDoc.getElementsByTagName("gml:featureMember")[0];
+
+        output = content?.outerHTML ? getLeafNodes(content) : "";
+      });
+
+    if (output) {
+      const feature = result.includes("function")
+        ? functionToFeature(output, result)
+        : objectToFeature(output, result);
+
+      return feature;
+    }
+  }
 };

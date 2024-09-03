@@ -72,7 +72,9 @@ import proj4 from "proj4";
 import { proj4crs25832def } from "react-cismap/constants/gis";
 import ExtraMarker from "react-cismap/ExtraMarker";
 import {
+  createUrl,
   functionToFeature,
+  getFeatureForLayer,
   getLeafNodes,
   objectToFeature,
 } from "./feature-info/featureInfoHelper.ts";
@@ -109,6 +111,7 @@ export const GeoportalMap = () => {
   const [gazetteerHit, setGazetteerHit] = useState(null);
   const [overlayFeature, setOverlayFeature] = useState(null);
   const [pos, setPos] = useState<[number, number] | null>(null);
+  const [isSameLayerTypes, setIsSameLayerTypes] = useState(true);
   const selectedFeature = useSelector(getSelectedFeature);
   const features = useSelector(getFeatures);
   const secondaryInfoBoxElements = useSelector(getSecondaryInfoBoxElements);
@@ -194,6 +197,22 @@ export const GeoportalMap = () => {
       }
     }
   }, [mode]);
+
+  useEffect(() => {
+    let isSame = true;
+    let layerType = "";
+
+    layers.forEach((layer, i) => {
+      if (i === 0) {
+        layerType = layer.layerType;
+      }
+      if (layer.layerType !== layerType) {
+        isSame = false;
+      }
+    });
+
+    setIsSameLayerTypes(isSame);
+  }, [layers]);
 
   return (
     <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
@@ -523,9 +542,9 @@ export const GeoportalMap = () => {
                         maxSelectionCount={0}
                         onSelectionChanged={(e: { hits: any[]; hit: any }) => {
                           if (e.hits) {
-                            const selectedFeature = e.hits[0];
+                            const selectedVectorFeature = e.hits[0];
 
-                            const properties = selectedFeature.properties;
+                            const properties = selectedVectorFeature.properties;
                             let result = "";
                             layer.other.keywords.forEach((keyword) => {
                               const extracted = keyword.split(
@@ -540,8 +559,6 @@ export const GeoportalMap = () => {
                               const feature = result.includes("function")
                                 ? functionToFeature(properties, result)
                                 : objectToFeature(properties, result);
-
-                              console.log("xxx feature", feature);
 
                               if (selectedFeature) {
                                 dispatch(
