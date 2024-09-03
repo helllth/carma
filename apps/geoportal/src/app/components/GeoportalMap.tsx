@@ -337,6 +337,9 @@ export const GeoportalMap = () => {
             dispatch(
               setMode(mode === "featureInfo" ? "default" : "featureInfo"),
             );
+            dispatch(setSelectedFeature(null));
+            dispatch(setSecondaryInfoBoxElements([]));
+            dispatch(setFeatures([]));
           }}
           className="font-semibold"
         >
@@ -408,7 +411,6 @@ export const GeoportalMap = () => {
                 type: string;
               }) => {
                 if (mode === "featureInfo") {
-                  dispatch(setSelectedFeature(null));
                   dispatch(setSecondaryInfoBoxElements([]));
                   dispatch(setFeatures([]));
                   const tmpSecondaryInfoBoxElements = [];
@@ -419,77 +421,67 @@ export const GeoportalMap = () => {
                     [e.latlng.lng, e.latlng.lat],
                   );
 
-                  setPos([e.latlng.lat, e.latlng.lng]);
+                  if (layers[layers.length - 1].layerType === "wmts") {
+                    setPos([e.latlng.lat, e.latlng.lng]);
+                  }
 
                   if (layers && pos[0] && pos[1]) {
                     const overlappingHeaders = [];
 
-                    layers.forEach(async (testLayer) => {
-                      const props = testLayer.props as LayerProps;
-                      const minimalBoxSize = 1;
-                      const url =
-                        props.url +
-                        `?SERVICE=WMS&request=GetFeatureInfo&format=image%2Fpng&transparent=true&version=1.1.1&tiled=true&width=10&height=10&srs=EPSG%3A25832&` +
-                        `bbox=` +
-                        `${pos[0] - minimalBoxSize},` +
-                        `${pos[1] - minimalBoxSize},` +
-                        `${pos[0] + minimalBoxSize},` +
-                        `${pos[1] + minimalBoxSize}&` +
-                        `x=5&y=5&` +
-                        `layers=${props.name}&` +
-                        `feature_count=100&QUERY_LAYERS=${props.name}&`;
+                    layers.forEach(async (testLayer, i) => {
+                      if (
+                        !isSameLayerTypes &&
+                        i === layers.length - 1 &&
+                        testLayer.layerType === "wmts"
+                      ) {
+                        const feature = await getFeatureForLayer(
+                          testLayer,
+                          pos,
+                        );
 
-                      let output = "";
+                        if (feature) {
+                          dispatch(addFeature(feature));
 
-                      let result = "";
-                      testLayer.other.keywords.forEach((keyword) => {
-                        const extracted = keyword.split(
-                          "carmaconf://infoBoxMapping:",
-                        )[1];
-                        result += extracted + "\n";
-                      });
-
-                      if (result) {
-                        await fetch(url)
-                          .then((response) => response.text())
-                          .then((data) => {
-                            const parser = new DOMParser();
-                            const xmlDoc = parser.parseFromString(
-                              data,
-                              "text/xml",
+                          if (!tempSelectedFeature) {
+                            dispatch(setSelectedFeature(feature));
+                            tempSelectedFeature = feature;
+                            return;
+                          }
+                          if (tempSelectedFeature) {
+                            dispatch(
+                              setSecondaryInfoBoxElements([
+                                ...tmpSecondaryInfoBoxElements,
+                                feature,
+                              ]),
                             );
-                            const content =
-                              xmlDoc.getElementsByTagName(
-                                "gml:featureMember",
-                              )[0];
-
-                            output = content?.outerHTML
-                              ? getLeafNodes(content)
-                              : "";
-                          });
-
-                      if (output) {
-                        const feature = result.includes("function")
-                          ? functionToFeature(output, result)
-                          : objectToFeature(output, result);
-                        dispatch(addFeature(feature));
-
-                        if (!tempSelectedFeature) {
-                          dispatch(setSelectedFeature(feature));
-                          tempSelectedFeature = feature;
-                          return;
+                            tmpSecondaryInfoBoxElements.push(feature);
+                          }
                         }
-                        if (tempSelectedFeature && output) {
-                          overlappingHeaders.push(
-                            <div>
-                              <InfoBoxHeader>Test</InfoBoxHeader>
-                            </div>,
-                          );
+                      } else if (isSameLayerTypes) {
+                        const feature = await getFeatureForLayer(
+                          testLayer,
+                          pos,
+                        );
+                        if (feature) {
+                          dispatch(addFeature(feature));
+
+                          if (!tempSelectedFeature) {
+                            dispatch(setSelectedFeature(feature));
+                            tempSelectedFeature = feature;
+                            return;
+                          }
+                          if (tempSelectedFeature) {
+                            dispatch(
+                              setSecondaryInfoBoxElements([
+                                ...tmpSecondaryInfoBoxElements,
+                                feature,
+                              ]),
+                            );
+                            tmpSecondaryInfoBoxElements.push(feature);
+                          }
                         }
                       }
                     });
-
-                    setSecondaryInfoBoxElements(overlappingHeaders);
                   }
                 }
               }}
@@ -497,6 +489,8 @@ export const GeoportalMap = () => {
               infoBox={
                 mode === "measurement" ? (
                   <InfoBoxMeasurement key={mode} />
+                ) : mode === "featureInfo" ? (
+                  <FeatureInfoBox />
                 ) : (
                   <div></div>
                 )
@@ -513,73 +507,78 @@ export const GeoportalMap = () => {
                   mapRef={routedMapRef}
                 />
               )}
-            <GazetteerHitDisplay
-              key={"gazHit" + JSON.stringify(gazetteerHit)}
-              gazetteerHit={gazetteerHit}
-            />
-            {focusMode && <PaleOverlay />}
-            {layers.map((layer, i) => {
-              if (layer.visible) {
-                switch (layer.layerType) {
-                  case "wmts":
-                    return (
-                      <CismapLayer
-                        key={`${focusMode}_${i}_${layer.id}`}
-                        url={layer.props.url}
-                        maxZoom={26}
-                        layers={layer.props.name}
-                        format="image/png"
-                        tiled={true}
-                        transparent="true"
-                        pane="additionalLayers1"
-                        opacity={layer.opacity.toFixed(1) || 0.7}
-                        type={"wmts"}
-                      />
-                    );
-                  case "vector":
-                    return (
-                      <CismapLayer
-                        key={`${focusMode}_${i}_${layer.id}_${layer.opacity}`}
-                        style={layer.props.style}
-                        maxZoom={26}
-                        pane={`additionalLayers${i}`}
-                        opacity={layer.opacity || 0.7}
-                        type="vector"
-                        maxSelectionCount={0}
-                        onSelectionChanged={(e: { hits: any[]; hit: any }) => {
-                          if (e.hits) {
-                            const selectedVectorFeature = e.hits[0];
+              <GazetteerHitDisplay
+                key={"gazHit" + JSON.stringify(gazetteerHit)}
+                gazetteerHit={gazetteerHit}
+              />
+              {focusMode && <PaleOverlay />}
+              {layers.map((layer, i) => {
+                if (layer.visible) {
+                  switch (layer.layerType) {
+                    case "wmts":
+                      return (
+                        <CismapLayer
+                          key={`${focusMode}_${i}_${layer.id}`}
+                          url={layer.props.url}
+                          maxZoom={26}
+                          layers={layer.props.name}
+                          format="image/png"
+                          tiled={true}
+                          transparent="true"
+                          pane="additionalLayers1"
+                          opacity={layer.opacity.toFixed(1) || 0.7}
+                          type={"wmts"}
+                        />
+                      );
+                    case "vector":
+                      return (
+                        <CismapLayer
+                          key={`${focusMode}_${i}_${layer.id}_${layer.opacity}`}
+                          style={layer.props.style}
+                          maxZoom={26}
+                          pane={`additionalLayers${i}`}
+                          opacity={layer.opacity || 0.7}
+                          type="vector"
+                          maxSelectionCount={0}
+                          onSelectionChanged={(e: {
+                            hits: any[];
+                            hit: any;
+                          }) => {
+                            if (e.hits) {
+                              const selectedVectorFeature = e.hits[0];
 
-                            const properties = selectedVectorFeature.properties;
-                            let result = "";
-                            layer.other.keywords.forEach((keyword) => {
-                              const extracted = keyword.split(
-                                "carmaconf://infoBoxMapping:",
-                              )[1];
-                              if (extracted) {
-                                result += extracted + "\n";
-                              }
-                            });
+                              const properties =
+                                selectedVectorFeature.properties;
+                              let result = "";
+                              layer.other.keywords.forEach((keyword) => {
+                                const extracted = keyword.split(
+                                  "carmaconf://infoBoxMapping:",
+                                )[1];
+                                if (extracted) {
+                                  result += extracted + "\n";
+                                }
+                              });
 
-                            if (result) {
-                              const feature = result.includes("function")
-                                ? functionToFeature(properties, result)
-                                : objectToFeature(properties, result);
+                              if (result) {
+                                const feature = result.includes("function")
+                                  ? functionToFeature(properties, result)
+                                  : objectToFeature(properties, result);
 
-                              if (selectedFeature) {
-                                dispatch(
-                                  setSecondaryInfoBoxElements([feature]),
-                                );
-                              } else {
-                                dispatch(setSelectedFeature(feature));
+                                if (selectedFeature) {
+                                  dispatch(
+                                    setSecondaryInfoBoxElements([feature]),
+                                  );
+                                } else {
+                                  dispatch(setSelectedFeature(feature));
+                                }
                               }
                             }
-                          }
-                        }}
-                      />
-                    );
+                          }}
+                        />
+                      );
+                  }
                 }
-              }})}
+              })}
               {pos && mode === "featureInfo" && layers.length > 0 && (
                 <ExtraMarker
                   markerOptions={{ markerColor: "cyan", spin: false }}
