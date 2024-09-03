@@ -100,6 +100,7 @@ const LayerButton = ({
         leafletLayer.options?.layers === layer.other?.name
       ) {
         leafletLayer.on("tileerror", () => {
+          console.log("xxx tileerror", leafletLayer);
           setError(true);
         });
 
@@ -134,7 +135,7 @@ const LayerButton = ({
         {...listeners}
         {...attributes}
         className={cn(
-          "w-fit min-w-max flex items-center gap-2 px-3 rounded-[10px] h-8 z-[99999999] button-shadow",
+          "w-fit min-w-max relative flex items-center gap-2 px-3 rounded-[10px] h-8 z-[99999999] button-shadow",
           selectedLayerIndex === -2
             ? layer.visible
               ? "bg-white"
@@ -144,7 +145,6 @@ const LayerButton = ({
             : "bg-neutral-200",
           zoom >= layer.props.maxZoom && "opacity-50",
           zoom <= layer.props.minZoom && "opacity-50",
-          error && "border-red-700 border-solid border-[1px]",
         )}
       >
         {iconName ? (
@@ -172,6 +172,14 @@ const LayerButton = ({
           />
         )}
         <span className="text-base sm:hidden">{layersLength} Layer</span>
+        {error && (
+          <div
+            className="absolute bottom-0.5 left-0 flex"
+            style={{ width: buttonRef.current?.clientWidth + "px" }}
+          >
+            <div className="w-full mx-3 h-[1px] rounded-lg bg-red-500" />
+          </div>
+        )}
         {!background && (
           <>
             <span className="text-base">{title}</span>
