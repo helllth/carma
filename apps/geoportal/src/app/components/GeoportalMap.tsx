@@ -375,7 +375,7 @@ export const GeoportalMap = () => {
                           key={`${focusMode}_${i}_${layer.id}_${layer.opacity}`}
                           style={layer.props.style}
                           maxZoom={26}
-                          pane={`additionalLayers${i}`}
+                          pane={`additionalLayers${i + 1}`}
                           opacity={layer.opacity || 0.7}
                           type="vector"
                         />
