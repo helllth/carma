@@ -76,7 +76,15 @@ import {
   objectToFeature,
 } from "./feature-info/featureInfoHelper.ts";
 import { LayerProps } from "@carma-mapping/layers";
-import InfoBoxHeader from "react-cismap/topicmaps/InfoBoxHeader";
+import {
+  addFeature,
+  getFeatures,
+  getSecondaryInfoBoxElements,
+  getSelectedFeature,
+  setFeatures,
+  setSecondaryInfoBoxElements,
+  setSelectedFeature,
+} from "../store/slices/features.ts";
 
 enum MapMode {
   _2D = "2D",
@@ -100,8 +108,9 @@ export const GeoportalMap = () => {
   const [gazetteerHit, setGazetteerHit] = useState(null);
   const [overlayFeature, setOverlayFeature] = useState(null);
   const [pos, setPos] = useState<[number, number] | null>(null);
-  const [selectedFeature, setSelectedFeature] = useState(null);
-  const [secondaryInfoBoxElements, setSecondaryInfoBoxElements] = useState([]);
+  const selectedFeature = useSelector(getSelectedFeature);
+  const features = useSelector(getFeatures);
+  const secondaryInfoBoxElements = useSelector(getSecondaryInfoBoxElements);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const container3dMapRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -363,7 +372,10 @@ export const GeoportalMap = () => {
                 type: string;
               }) => {
                 if (mode === "featureInfo") {
-                  setSelectedFeature(null);
+                  dispatch(setSelectedFeature(null));
+                  dispatch(setSecondaryInfoBoxElements([]));
+                  dispatch(setFeatures([]));
+                  const tmpSecondaryInfoBoxElements = [];
                   let tempSelectedFeature = null;
                   const pos = proj4(
                     proj4.defs("EPSG:4326") as unknown as string,

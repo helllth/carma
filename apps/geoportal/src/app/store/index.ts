@@ -3,6 +3,7 @@ import mappingSlice from "./slices/mapping";
 import layersSlice from "./slices/layers";
 import uiSlice from "./slices/ui";
 import measurementsSlice from "./slices/measurements";
+import featuresSlice from "./slices/features";
 import { createLogger } from "redux-logger";
 import { persistReducer } from "redux-persist";
 import localForage from "localforage";
@@ -89,12 +90,19 @@ const measurementsConfig = {
   whitelist: ["shapes"],
 };
 
+const featuresConfig = {
+  key: "@" + APP_KEY + "." + STORAGE_PREFIX + ".app.features",
+  storage: localForage,
+  whitelist: [],
+};
+
 const store = configureStore({
   reducer: {
     mapping: persistReducer(mappingConfig, mappingSlice.reducer),
     ui: persistReducer(uiConfig, uiSlice.reducer),
     layers: persistReducer(layersConfig, layersSlice.reducer),
     measurements: persistReducer(measurementsConfig, measurementsSlice.reducer),
+    features: persistReducer(featuresConfig, featuresSlice.reducer),
   },
   devTools: devToolsEnabled === true && inProduction === false,
   middleware,
