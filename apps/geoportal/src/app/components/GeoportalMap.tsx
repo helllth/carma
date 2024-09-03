@@ -458,7 +458,7 @@ export const GeoportalMap = () => {
                             tmpSecondaryInfoBoxElements.push(feature);
                           }
                         }
-                      } else if (isSameLayerTypes) {
+                      } else if (isSameLayerTypes && layers.length > 1) {
                         const feature = await getFeatureForLayer(
                           testLayer,
                           pos,
@@ -480,6 +480,33 @@ export const GeoportalMap = () => {
                             );
                             tmpSecondaryInfoBoxElements.push(feature);
                           }
+                        }
+                      } else if (layers.length === 1) {
+                        const feature = await getFeatureForLayer(
+                          testLayer,
+                          pos,
+                        );
+                        if (feature) {
+                          dispatch(addFeature(feature));
+
+                          if (!tempSelectedFeature) {
+                            dispatch(setSelectedFeature(feature));
+                            tempSelectedFeature = feature;
+                            return;
+                          }
+                          if (tempSelectedFeature) {
+                            dispatch(
+                              setSecondaryInfoBoxElements([
+                                ...tmpSecondaryInfoBoxElements,
+                                feature,
+                              ]),
+                            );
+                            tmpSecondaryInfoBoxElements.push(feature);
+                          }
+                        } else {
+                          dispatch(setSelectedFeature(null));
+                          dispatch(setSecondaryInfoBoxElements([]));
+                          dispatch(setFeatures([]));
                         }
                       }
                     });
