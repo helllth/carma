@@ -308,7 +308,7 @@ function CustomViewer(props: CustomViewerProps) {
         const encodedScene = encodeScene(viewer, { isSecondaryStyle });
 
         // let TopicMap/leaflet handle the view change in 2d Mode
-        !isMode2d && replaceHashRoutedHistory(encodedScene, location.pathname);
+        !isMode2d && enableLocationHashUpdate && replaceHashRoutedHistory(encodedScene, location.pathname);
 
         if (isUserAction && !isMode2d) {
           // remove roll from camera orientation
