@@ -113,8 +113,8 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
           >
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
-          <div className="flex items-center h-8 gap-6">
-            <div className="w-1/4 min-w-max truncate flex items-center gap-2">
+          <div className="flex items-center w-full h-8 gap-6">
+            <div className="w-1/4 flex items-center gap-2">
               {icon === "ortho" ? (
                 <div style={{ height: 14, width: 14 }}>
                   <img
@@ -131,7 +131,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                   id="icon"
                 />
               )}
-              <label className="mb-0 text-base" htmlFor="icon">
+              <label className="mb-0 text-base w-full truncate" htmlFor="icon">
                 {layer.title}
               </label>
             </div>
