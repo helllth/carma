@@ -12,6 +12,7 @@ import {
   faF,
   faFileExport,
   faBookOpenReader,
+  faRotateRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
@@ -223,17 +224,17 @@ const TopNavbar = () => {
       </div>
 
       <div className="flex items-center gap-6 absolute left-1/2 -ml-[140px]">
-        <Tooltip title="Refresh">
+        <Tooltip title="Aktualisieren">
           <button
             onClick={() => {
               window.location.reload();
             }}
             className="text-xl hover:text-gray-600"
           >
-            <FontAwesomeIcon icon={faRedo} />
+            <FontAwesomeIcon icon={faRotateRight} />
           </button>
         </Tooltip>
-        <Tooltip title="Layer">
+        <Tooltip title="Kartenebenen hinzufügen">
           <FontAwesomeIcon
             icon={faLayerGroup}
             onClick={() => {
@@ -242,7 +243,11 @@ const TopNavbar = () => {
             className="cursor-pointer text-xl"
           />
         </Tooltip>
-        <Tooltip title="Fokus">
+        <Tooltip
+          title={`Hintergrundkarte ${
+            focusMode ? "zurücksetzen" : "abschwächen"
+          }`}
+        >
           <button
             className={cn("text-xl", focusMode ? "text-blue-500" : "")}
             onClick={() => {
@@ -252,11 +257,8 @@ const TopNavbar = () => {
             <FontAwesomeIcon icon={faF} />
           </button>
         </Tooltip>
-        <Tooltip title="Drucken">
-          <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
-        </Tooltip>
         <Tooltip
-          title={`Layer Buttons ${
+          title={`Kartensteuerelemente ${
             showLayerButtons ? "ausblenden" : "anzeigen"
           }`}
         >
@@ -271,22 +273,6 @@ const TopNavbar = () => {
               icon={showLayerButtons ? faEye : faEyeSlash}
             />
           </button>
-        </Tooltip>
-        <Tooltip title="Hilfe Overlay">
-          <Popover trigger="click" placement="bottom">
-            <button
-              className="hover:text-gray-600 text-xl"
-              onClick={() => {
-                if (mode === "default") {
-                  dispatch(setMode("tour"));
-                } else {
-                  dispatch(setMode("default"));
-                }
-              }}
-            >
-              <FontAwesomeIcon icon={faBookOpenReader} />
-            </button>
-          </Popover>
         </Tooltip>
         <Tooltip title="Speichern">
           <Popover
@@ -303,6 +289,25 @@ const TopNavbar = () => {
           >
             <button className="hover:text-gray-600 text-xl">
               <FontAwesomeIcon icon={faFileExport} />
+            </button>
+          </Popover>
+        </Tooltip>
+        <Tooltip title="Drucken">
+          <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
+        </Tooltip>
+        <Tooltip title={`Hilfe ${mode === "tour" ? "ausblenden" : "anzeigen"}`}>
+          <Popover trigger="click" placement="bottom">
+            <button
+              className="hover:text-gray-600 text-xl"
+              onClick={() => {
+                if (mode === "default") {
+                  dispatch(setMode("tour"));
+                } else {
+                  dispatch(setMode("default"));
+                }
+              }}
+            >
+              <FontAwesomeIcon icon={faBookOpenReader} />
             </button>
           </Popover>
         </Tooltip>
