@@ -63,6 +63,7 @@ const TopNavbar = () => {
   const savedLayerConfigs = useSelector(getSavedLayerConfigs);
   const mode = useSelector(getMode);
   const [messageApi, contextHolder] = message.useMessage();
+  const baseUrl = window.location.origin + window.location.pathname;
 
   const updateLayers = async (
     layer: Item,
@@ -235,13 +236,18 @@ const TopNavbar = () => {
           </button>
         </Tooltip>
         <Tooltip title="Kartenebenen hinzufügen">
-          <FontAwesomeIcon
-            icon={faLayerGroup}
+          <button
             onClick={() => {
               setIsModalOpen(true);
             }}
-            className="cursor-pointer text-xl"
-          />
+            className="h-[24.5px]"
+          >
+            <img
+              src={baseUrl + "icons/add-layers.png"}
+              alt="Kartenebenen hinzufügen"
+              className="h-5 mb-0.5 cursor-pointer"
+            />
+          </button>
         </Tooltip>
         <Tooltip
           title={`Hintergrundkarte ${
@@ -249,12 +255,19 @@ const TopNavbar = () => {
           }`}
         >
           <button
-            className={cn("text-xl", focusMode ? "text-blue-500" : "")}
+            className="h-[24.5px]"
             onClick={() => {
               dispatch(setFocusMode(!focusMode));
             }}
           >
-            <FontAwesomeIcon icon={faF} />
+            <img
+              src={
+                baseUrl +
+                `${focusMode ? "icons/focus-on.png" : "icons/focus-off.png"}`
+              }
+              alt="Kartenebenen hinzufügen"
+              className="h-5 mb-0.5 cursor-pointer"
+            />
           </button>
         </Tooltip>
         <Tooltip
