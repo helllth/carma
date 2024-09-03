@@ -185,6 +185,16 @@ export const GeoportalMap = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    if (document.getElementById("routedMap")) {
+      if (mode === "featureInfo") {
+        document.getElementById("routedMap").style.cursor = "crosshair";
+      } else {
+        document.getElementById("routedMap").style.cursor = "pointer";
+      }
+    }
+  }, [mode]);
+
   return (
     <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
       <Control position="topleft" order={10}>
@@ -478,45 +488,73 @@ export const GeoportalMap = () => {
                   mapRef={routedMapRef}
                 />
               )}
-              <GazetteerHitDisplay
-                key={"gazHit" + JSON.stringify(gazetteerHit)}
-                gazetteerHit={gazetteerHit}
-              />
-              {focusMode && <PaleOverlay />}
-              {layers.map((layer, i) => {
-                if (layer.visible) {
-                  switch (layer.layerType) {
-                    case "wmts":
-                      return (
-                        <CismapLayer
-                          key={`${focusMode}_${i}_${layer.id}`}
-                          url={layer.props.url}
-                          maxZoom={26}
-                          layers={layer.props.name}
-                          format="image/png"
-                          tiled={true}
-                          transparent="true"
-                          pane="additionalLayers1"
-                          opacity={layer.opacity.toFixed(1) || 0.7}
-                          type={"wmts"}
-                        />
-                      );
-                    case "vector":
-                      return (
-                        <CismapLayer
-                          key={`${focusMode}_${i}_${layer.id}_${layer.opacity}`}
-                          style={layer.props.style}
-                          maxZoom={26}
-                          pane={`additionalLayers${i + 1}`}
-                          opacity={layer.opacity || 0.7}
-                          type="vector"
-                        />
-                      );
-                  }
-                } else {
-                  return <></>;
+            <GazetteerHitDisplay
+              key={"gazHit" + JSON.stringify(gazetteerHit)}
+              gazetteerHit={gazetteerHit}
+            />
+            {focusMode && <PaleOverlay />}
+            {layers.map((layer, i) => {
+              if (layer.visible) {
+                switch (layer.layerType) {
+                  case "wmts":
+                    return (
+                      <CismapLayer
+                        key={`${focusMode}_${i}_${layer.id}`}
+                        url={layer.props.url}
+                        maxZoom={26}
+                        layers={layer.props.name}
+                        format="image/png"
+                        tiled={true}
+                        transparent="true"
+                        pane="additionalLayers1"
+                        opacity={layer.opacity.toFixed(1) || 0.7}
+                        type={"wmts"}
+                      />
+                    );
+                  case "vector":
+                    return (
+                      <CismapLayer
+                        key={`${focusMode}_${i}_${layer.id}_${layer.opacity}`}
+                        style={layer.props.style}
+                        maxZoom={26}
+                        pane={`additionalLayers${i}`}
+                        opacity={layer.opacity || 0.7}
+                        type="vector"
+                        maxSelectionCount={0}
+                        onSelectionChanged={(e: { hits: any[]; hit: any }) => {
+                          if (mode === "featureInfo" && e.hits) {
+                            const selectedFeature = e.hits[0];
+
+                            const properties = selectedFeature.properties;
+                            let result = "";
+                            layer.other.keywords.forEach((keyword) => {
+                              const extracted = keyword.split(
+                                "carmaconf://infoBoxMapping:",
+                              )[1];
+                              if (extracted) {
+                                result += extracted + "\n";
+                              }
+                            });
+
+                            if (result) {
+                              const feature = result.includes("function")
+                                ? functionToFeature(properties, result)
+                                : objectToFeature(properties, result);
+
+                              if (selectedFeature) {
+                                dispatch(
+                                  setSecondaryInfoBoxElements([feature]),
+                                );
+                              } else {
+                                dispatch(setSelectedFeature(feature));
+                              }
+                            }
+                          }
+                        }}
+                      />
+                    );
                 }
-              })}
+              }})}
               {pos && mode === "featureInfo" && (
                 <ExtraMarker
                   markerOptions={{ markerColor: "cyan", spin: false }}

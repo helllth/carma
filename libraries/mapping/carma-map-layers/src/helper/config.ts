@@ -1005,6 +1005,9 @@ export const baseConfig = {
         keywords: [
           ":vec:",
           "carmaConf://vectorStyle:https://tiles.cismet.de/poi/bahnhofe.style.json",
+          "carmaconf://infoBoxMapping:title:p.strasse + ', ' + p.ort",
+          "carmaconf://infoBoxMapping:subtitle:p.info",
+          "carmaconf://infoBoxMapping:header:p.geographicidentifier",
         ],
       },
       {
