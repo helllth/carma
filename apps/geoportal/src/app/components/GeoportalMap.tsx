@@ -317,7 +317,7 @@ export const GeoportalMap = () => {
         >
           <FontAwesomeIcon
             icon={faInfo}
-            className={mode === "featureInfo" ? "text-orange-500" : ""}
+            className={mode === "featureInfo" ? "text-[#1677ff]" : ""}
           />
         </ControlButtonStyler>
       </Control>
@@ -522,7 +522,7 @@ export const GeoportalMap = () => {
                         type="vector"
                         maxSelectionCount={0}
                         onSelectionChanged={(e: { hits: any[]; hit: any }) => {
-                          if (mode === "featureInfo" && e.hits) {
+                          if (e.hits) {
                             const selectedFeature = e.hits[0];
 
                             const properties = selectedFeature.properties;
@@ -540,6 +540,8 @@ export const GeoportalMap = () => {
                               const feature = result.includes("function")
                                 ? functionToFeature(properties, result)
                                 : objectToFeature(properties, result);
+
+                              console.log("xxx feature", feature);
 
                               if (selectedFeature) {
                                 dispatch(
