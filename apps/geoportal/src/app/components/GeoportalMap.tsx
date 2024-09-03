@@ -307,7 +307,7 @@ export const GeoportalMap = () => {
         >
           <FontAwesomeIcon
             icon={faInfo}
-            className={mode === "featureInfo" ? "text-orange-700" : ""}
+            className={mode === "featureInfo" ? "text-orange-500" : ""}
           />
         </ControlButtonStyler>
       </Control>
