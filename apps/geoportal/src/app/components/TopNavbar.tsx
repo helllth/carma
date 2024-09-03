@@ -281,7 +281,7 @@ const TopNavbar = () => {
         </Tooltip>
         <Tooltip
           title={`Kartensteuerelemente ${
-            showLayerButtons ? "ausblenden" : "anzeigen"
+            showLayerButtons ? "ausblenden" : "einblenden"
           }`}
         >
           <button
