@@ -98,7 +98,7 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
   children,
   onResponsiveCollapse = () => console.log(),
   debugMode = false,
-  onHeightResize = (set: number|null) => set,
+  onHeightResize = (set: number | null) => set,
   ifStorybook = true,
 }) => {
   const [windowWidth, setWindowWidth] = useState(0);
@@ -172,19 +172,17 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
 
   return (
     <div
-      className={`${styles['container']} ${
-        debugMode ? styles['debug-mode'] : ''
-      }`}
+      className={`${styles['container']} ${debugMode ? styles['debug-mode'] : ''
+        }`}
       style={{
-        height: layoutHeight ? `${layoutHeight}px` : 'calc(100vh - 30px)',
+        height: layoutHeight ? `${layoutHeight}px` : 'calc(100vh - 54px)',
       }}
     >
       <div
-        className={`${styles['controls-container']} ${
-          layoutWidth && layoutWidth <= bottomCollapsBrake
+        className={`${styles['controls-container']} ${layoutWidth && layoutWidth <= bottomCollapsBrake
             ? styles['controls-container__mobile']
             : ''
-        }`}
+          }`}
         ref={containerRef}
       >
         {mainComponent ? mainComponent : null}
@@ -195,25 +193,21 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
                 {allPositions[position].map((component, idx) => {
                   return (
                     <div
-                      className={`${styles[position]} ${
-                        debugMode ? styles['debug-mode'] : ''
-                      } ${
-                        component.fullCollapseWidth &&
-                        layoutWidth &&
-                        layoutWidth <= bottomCollapsBrake
+                      className={`${styles[position]} ${debugMode ? styles['debug-mode'] : ''
+                        } ${component.fullCollapseWidth &&
+                          layoutWidth &&
+                          layoutWidth <= bottomCollapsBrake
                           ? styles['full-collapse-width']
                           : ''
-                      } ${
-                        layoutWidth && layoutWidth <= bottomCollapsBrake
+                        } ${layoutWidth && layoutWidth <= bottomCollapsBrake
                           ? styles[position + '__mobile']
                           : ''
-                      } ${
-                        idx === 0 &&
-                        layoutWidth &&
-                        layoutWidth <= bottomCollapsBrake
+                        } ${idx === 0 &&
+                          layoutWidth &&
+                          layoutWidth <= bottomCollapsBrake
                           ? styles[position + '__first']
                           : ''
-                      }`}
+                        }`}
                     >
                       <Control {...component} key={idx} />
                     </div>
@@ -224,9 +218,8 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
           } else {
             return (
               <div
-                className={`${styles[position]} ${
-                  debugMode ? styles['debug-mode'] : ''
-                }`}
+                className={`${styles[position]} ${debugMode ? styles['debug-mode'] : ''
+                  }`}
               >
                 {allPositions[position].map((component, idx) => {
                   return <Control {...component} key={idx} />;

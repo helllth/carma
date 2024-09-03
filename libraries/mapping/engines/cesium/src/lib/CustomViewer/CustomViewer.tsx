@@ -265,6 +265,8 @@ function CustomViewer(props: CustomViewerProps) {
         console.log("HOOK: resize cesium container");
         viewer.canvas.width = containerRef?.current?.clientWidth ?? 512;
         viewer.canvas.height = containerRef?.current?.clientHeight ?? 512;
+        viewer.canvas.style.width = "100%";
+        viewer.canvas.style.height = "100%";
       });
       if (containerRef?.current) {
         resizeObserver.observe(containerRef.current);
