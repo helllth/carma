@@ -544,7 +544,7 @@ export const GeoportalMap = () => {
                             hits: any[];
                             hit: any;
                           }) => {
-                            if (e.hits) {
+                            if (e.hits && i === layers.length - 1) {
                               const selectedVectorFeature = e.hits[0];
 
                               const properties =
