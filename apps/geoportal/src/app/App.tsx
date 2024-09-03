@@ -23,8 +23,10 @@ import {
 } from "./store/slices/mapping";
 import {
   getAllowUiChanges,
+  getMode,
   setAllow3d,
   setAllowUiChanges,
+  setMode,
   setShowLayerButtons,
   setShowLayerHideButtons,
 } from "./store/slices/ui";
@@ -32,6 +34,7 @@ import { Layer } from "@carma-mapping/layers";
 import { CrossTabCommunicationContextProvider } from "react-cismap/contexts/CrossTabCommunicationContextProvider";
 import HomeButton from "./components/HomeButton";
 import type { BackgroundLayer, Settings } from "@carma-apps/portals";
+import { OverlayTourProvider } from "@carma/libraries/commons/ui/lib-helper-overlay";
 
 if (typeof global === "undefined") {
   window.global = window;
@@ -48,17 +51,17 @@ function App({ published }: { published?: boolean }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const allowUiChanges = useSelector(getAllowUiChanges);
   const dispatch = useDispatch();
+  const mode = useSelector(getMode);
 
   useEffect(() => {
-
     // sticky feature flag
     // remove with allow3d=false once set
     // TODO: remove if feature flag is removed
 
-    const allow3dValue = searchParams.get('allow3d');
+    const allow3dValue = searchParams.get("allow3d");
 
     if (allow3dValue !== null) {
-      if (allow3dValue === '0' || allow3dValue.toLowerCase() === 'false') {
+      if (allow3dValue === "0" || allow3dValue.toLowerCase() === "false") {
         dispatch(setAllow3d(false));
       } else {
         dispatch(setAllow3d(true));
@@ -125,16 +128,21 @@ function App({ published }: { published?: boolean }) {
   }, [allowUiChanges]);
 
   const content = (
-
-    <TopicMapContextProvider>
-      <div className="flex flex-col h-screen w-full">
-        {!published && <TopNavbar />}
-        <MapMeasurement />
-        <GeoportalMap />
-      </div>
-    </TopicMapContextProvider>
+    <OverlayTourProvider
+      showOverlay={mode === "tour" ? true : false}
+      closeOverlay={() => dispatch(setMode("default"))}
+      transparency={0.8}
+      color="black"
+    >
+      <TopicMapContextProvider>
+        <div className="flex flex-col h-screen w-full">
+          {!published && <TopNavbar />}
+          <MapMeasurement />
+          <GeoportalMap />
+        </div>
+      </TopicMapContextProvider>
+    </OverlayTourProvider>
   );
-
 
   return syncToken ? (
     <CrossTabCommunicationContextProvider role="sync" token={syncToken}>
