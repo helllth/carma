@@ -134,3 +134,9 @@ export interface MappingState extends LayerState {
   focusMode: boolean;
   startDrawing: boolean;
 }
+
+export interface FeatureInfoState {
+  features: any[];
+  selectedFeature: any;
+  secondaryInfoBoxElements: any[];
+}
