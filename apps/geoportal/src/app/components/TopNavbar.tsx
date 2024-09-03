@@ -47,6 +47,7 @@ import {
 import { cn } from "../helper/helper";
 import { layerMap } from "../config";
 import { Save, Share, extractVectorStyles } from "@carma-apps/portals";
+import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,6 +65,11 @@ const TopNavbar = () => {
   const mode = useSelector(getMode);
   const [messageApi, contextHolder] = message.useMessage();
   const baseUrl = window.location.origin + window.location.pathname;
+
+  const menuTourRef = useOverlayHelper("Menüleiste");
+
+  const hintergrundTourRef = useOverlayHelper("Hintergrund");
+  const modalMenuTourRef = useOverlayHelper("Menü");
 
   const updateLayers = async (
     layer: Item,
@@ -224,7 +230,10 @@ const TopNavbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-6 absolute left-1/2 -ml-[140px]">
+      <div
+        ref={menuTourRef}
+        className="flex items-center gap-6 absolute left-1/2 -ml-[140px]"
+      >
         <Tooltip title="Aktualisieren">
           <button
             onClick={() => {
@@ -338,7 +347,7 @@ const TopNavbar = () => {
       </div>
 
       <div className="flex items-center gap-6">
-        <div className="lg:flex hidden">
+        <div className="lg:flex hidden" ref={hintergrundTourRef}>
           <Radio.Group
             value={backgroundLayer.id}
             onChange={(e) => {
@@ -376,6 +385,7 @@ const TopNavbar = () => {
           onClick={() => {
             setAppMenuVisible(true);
           }}
+          ref={modalMenuTourRef}
         >
           <FontAwesomeIcon icon={faBars} />
         </Button>

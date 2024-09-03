@@ -23,7 +23,12 @@ import InfoBoxMeasurement from "./map-measure/InfoBoxMeasurement.jsx";
 import PaleOverlay from "react-cismap/PaleOverlay";
 import { useSearchParams } from "react-router-dom";
 import { getBackgroundLayers } from "../helper/layer.tsx";
-import { getAllow3d, getMode, getShowLayerButtons, setMode } from "../store/slices/ui.ts";
+import {
+  getAllow3d,
+  getMode,
+  getShowLayerButtons,
+  setMode,
+} from "../store/slices/ui.ts";
 import CismapLayer from "react-cismap/CismapLayer";
 import {
   Control,
@@ -43,16 +48,23 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import type LocateControl from "leaflet.locatecontrol";
 import "./leaflet.css";
-import { CustomViewer, CustomViewerContextProvider } from "@carma-mapping/cesium-engine";
+import {
+  CustomViewer,
+  CustomViewerContextProvider,
+} from "@carma-mapping/cesium-engine";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
 import { ProjSingleGeoJson } from "react-cismap/ProjSingleGeoJson";
 import { defaultViewerState } from "../config/store.config.ts";
-import { BASEMAP_METROPOLRUHR_WMS_GRAUBLAU, WUPP_TERRAIN_PROVIDER } from "../config/dataSources.config.ts";
+import {
+  BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
+  WUPP_TERRAIN_PROVIDER,
+} from "../config/dataSources.config.ts";
 import { MODEL_ASSETS } from "../config/assets.config.ts";
 import { TweakpaneProvider } from "@carma-commons/debug";
 import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import { Tooltip } from "antd";
+import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
 
 enum MapMode {
   _2D = "2D",
@@ -100,8 +112,28 @@ export const GeoportalMap = () => {
   const [mapMode, setMapMode] = useState<MapMode>(MapMode._2D);
   const urlPrefix = window.location.origin + window.location.pathname;
 
+  const zoomControlTourRef = useOverlayHelper("Zoom", {
+    contentPos: "left",
+  });
+  const fullScreenControlTourRef = useOverlayHelper("Vollbild", {
+    contentPos: "left",
+  });
+  const navigatorControlTourRef = useOverlayHelper("Meine Position", {
+    contentPos: "left",
+  });
+  const homeControlTourRef = useOverlayHelper("Rathaus", {
+    contentPos: "left",
+  });
+  const measurementControlTourRef = useOverlayHelper("Messungen", {
+    contentPos: "left",
+  });
+
+  const gazetteerControlTourRef = useOverlayHelper("Gazetteer Suche");
+
   const toggleMapMode = useCallback(() => {
-    setMapMode(prevMode => prevMode === MapMode._2D ? MapMode._3D : MapMode._2D);
+    setMapMode((prevMode) =>
+      prevMode === MapMode._2D ? MapMode._3D : MapMode._2D,
+    );
   }, []);
   const version = getApplicationVersion(versionData);
   useEffect(() => {
@@ -133,7 +165,7 @@ export const GeoportalMap = () => {
   return (
     <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
       <Control position="topleft" order={10}>
-        <div className="flex flex-col">
+        <div ref={zoomControlTourRef} className="flex flex-col">
           <ControlButtonStyler
             onClick={() => {
               routedMapRef.leafletMap.leafletElement.zoomIn();
@@ -162,6 +194,7 @@ export const GeoportalMap = () => {
                 document.documentElement.requestFullscreen();
               }
             }}
+            ref={fullScreenControlTourRef}
           >
             <FontAwesomeIcon
               icon={document.fullscreenElement ? faCompress : faExpand}
@@ -172,6 +205,7 @@ export const GeoportalMap = () => {
       <Control position="topleft" order={30}>
         {showLocatorButton && (
           <ControlButtonStyler
+            ref={navigatorControlTourRef}
             onClick={() => setLocationProps((prev) => prev + 1)}
           >
             <FontAwesomeIcon icon={faLocationArrow} className="text-2xl" />
@@ -181,6 +215,7 @@ export const GeoportalMap = () => {
       </Control>
       <Control position="topleft" order={40}>
         <ControlButtonStyler
+          ref={homeControlTourRef}
           onClick={() =>
             routedMapRef.leafletMap.leafletElement.flyTo(
               [51.272570027476256, 7.199918031692506],
@@ -201,13 +236,14 @@ export const GeoportalMap = () => {
                     setMode(mode === "measurement" ? "default" : "measurement"),
                   );
                 }}
+                ref={measurementControlTourRef}
               >
                 <img
-                  src={`${urlPrefix}${mode === "measurement"
+                  src={`${urlPrefix}${
+                    mode === "measurement"
                       ? "measure-active.png"
                       : "measure.png"
-                    }`
-                  }
+                  }`}
                   alt="Measure"
                   className="w-6"
                 />
@@ -227,28 +263,32 @@ export const GeoportalMap = () => {
           </div>
         )}
       </Control>
-      {allow3d && <Control position="topleft" order={60}>
-        <ControlButtonStyler
-          onClick={toggleMapMode}
-          className="font-semibold"
-        >
-          {getMapModeButtonLabel(mapMode)}
-        </ControlButtonStyler>
-      </Control>}
+      {allow3d && (
+        <Control position="topleft" order={60}>
+          <ControlButtonStyler
+            onClick={toggleMapMode}
+            className="font-semibold"
+          >
+            {getMapModeButtonLabel(mapMode)}
+          </ControlButtonStyler>
+        </Control>
+      )}
       <Control position="topcenter" order={10}>
         {showLayerButtons && <LayerWrapper />}
       </Control>
       <Control position="bottomleft" order={10}>
-        <LibFuzzySearch
-          gazData={gazData}
-          mapRef={routedMapRef}
-          referenceSystem={referenceSystem}
-          referenceSystemDefinition={referenceSystemDefinition}
-          gazetteerHit={gazetteerHit}
-          setGazetteerHit={setGazetteerHit}
-          setOverlayFeature={setOverlayFeature}
-          placeholder="Wohin?"
-        />
+        <div ref={gazetteerControlTourRef} className="h-full w-full">
+          <LibFuzzySearch
+            gazData={gazData}
+            mapRef={routedMapRef}
+            referenceSystem={referenceSystem}
+            referenceSystemDefinition={referenceSystemDefinition}
+            gazetteerHit={gazetteerHit}
+            setGazetteerHit={setGazetteerHit}
+            setOverlayFeature={setOverlayFeature}
+            placeholder="Wohin?"
+          />
+        </div>
       </Control>
       <Main ref={wrapperRef}>
         <>
@@ -348,37 +388,40 @@ export const GeoportalMap = () => {
             </TopicMapComponent>
           </div>
 
-          {allow3d && <TweakpaneProvider>
-            <CustomViewerContextProvider
-              viewerState={defaultViewerState}
-              providerConfig={{
-                terrainProvider: WUPP_TERRAIN_PROVIDER,
-                imageryProvider: BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
-                models: MODEL_ASSETS,
-              }}
-            >
-              <div
-                ref={container3dMapRef}
-                className={"map-container-3d"} style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  visibility: mapMode === MapMode._3D ? "visible" : "hidden",
-                  pointerEvents: mapMode === MapMode._3D ? "auto" : "none",
-                }}>
-                <CustomViewer
-                  containerRef={container3dMapRef}
-                  enableLocationHashUpdate={false}
+          {allow3d && (
+            <TweakpaneProvider>
+              <CustomViewerContextProvider
+                viewerState={defaultViewerState}
+                providerConfig={{
+                  terrainProvider: WUPP_TERRAIN_PROVIDER,
+                  imageryProvider: BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
+                  models: MODEL_ASSETS,
+                }}
+              >
+                <div
+                  ref={container3dMapRef}
+                  className={"map-container-3d"}
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    visibility: mapMode === MapMode._3D ? "visible" : "hidden",
+                    pointerEvents: mapMode === MapMode._3D ? "auto" : "none",
+                  }}
                 >
-                </CustomViewer>
-              </div>
-            </CustomViewerContextProvider>
-          </TweakpaneProvider>}
+                  <CustomViewer
+                    containerRef={container3dMapRef}
+                    enableLocationHashUpdate={false}
+                  ></CustomViewer>
+                </div>
+              </CustomViewerContextProvider>
+            </TweakpaneProvider>
+          )}
         </>
       </Main>
-    </ControlLayout >
+    </ControlLayout>
   );
 };
 

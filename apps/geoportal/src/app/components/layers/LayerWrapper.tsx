@@ -32,6 +32,7 @@ import {
 import { cn } from "../../helper/helper";
 import "./button.css";
 import SecondaryView from "./SecondaryView";
+import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
 
 const LayerWrapper = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,8 @@ const LayerWrapper = () => {
   const style = {
     color: isOver ? "green" : undefined,
   };
+
+  const layerWrapperTourRef = useOverlayHelper("Layer Buttons");
 
   const getLayerPos = (id) => layers.findIndex((layer) => layer.id === id);
 
@@ -121,7 +124,10 @@ const LayerWrapper = () => {
                 <FontAwesomeIcon icon={faChevronRight} />
               </div>
             )}
-            <div className="w-full flex justify-center items-center h-full gap-2">
+            <div
+              ref={layerWrapperTourRef}
+              className="w-full flex justify-center items-center h-full gap-2"
+            >
               <LayerButton
                 icon="background"
                 layer={backgroundLayer}
