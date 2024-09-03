@@ -57,7 +57,6 @@ const MapMeasurement = (props) => {
   const moveToShape = useSelector(getMoveToShape);
   const mode = useSelector(getMode);
   const startDrawing = useSelector(getStartDrawing);
-
   const [measureControl, setMeasureControl] = useState(null);
   const [visiblePolylines, setVisiblePolylines] = useState();
   const [drawingShape, setDrawingLine] = useState(null);
@@ -135,6 +134,9 @@ const MapMeasurement = (props) => {
         );
         dispatch(setShapes(cleanAllArr));
         dispatch(setDeleteMeasurements(false));
+        if (measureControl.options.shapes.length === 1) {
+          measureControl.options.shapes = [];
+        }
       }
       if (moveToShape && !deleteShape) {
         measureControl.showActiveShape(map, shapeCoordinates[0]?.coordinates);

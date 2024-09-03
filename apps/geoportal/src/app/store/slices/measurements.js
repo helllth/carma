@@ -232,7 +232,6 @@ export const setActiveShapeIfDrawCanseld = () => {
     const lastActiveShape = state.measurements.lastActiveShapeBeforeDrawing;
     const visibleShapesLength = state.measurements.visibleShapes.length;
     const visible = state.measurements.visibleShapes;
-    console.log(visibleShapesLength);
     if (
       lastActiveShape &&
       visibleShapesLength > 1 &&
