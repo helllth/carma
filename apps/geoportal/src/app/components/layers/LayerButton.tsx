@@ -95,8 +95,10 @@ const LayerButton = ({
   useEffect(() => {
     map?.eachLayer((leafletLayer) => {
       if (
+        // @ts-ignore
         leafletLayer.options?.layers &&
         layer.other?.name &&
+        // @ts-ignore
         leafletLayer.options?.layers === layer.other?.name
       ) {
         leafletLayer.on("tileerror", () => {
