@@ -234,7 +234,7 @@ export const setActiveShapeIfDrawCanseld = () => {
     const visible = state.measurements.visibleShapes;
     if (
       lastActiveShape &&
-      visibleShapesLength > 1 &&
+      // visibleShapesLength > 1 &&
       visible[0]?.shapeId !== 55555
     ) {
       dispatch(setActiveShape(lastActiveShape));

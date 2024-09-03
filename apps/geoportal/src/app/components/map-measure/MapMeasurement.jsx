@@ -137,6 +137,11 @@ const MapMeasurement = (props) => {
         if (measureControl.options.shapes.length === 1) {
           measureControl.options.shapes = [];
         }
+        const cleanLocalLefletShapes = measureControl.options.shapes.filter(
+          (m) => m.shapeId !== activeShape,
+        );
+
+        measureControl.options.shapes = cleanLocalLefletShapes;
       }
       if (moveToShape && !deleteShape) {
         measureControl.showActiveShape(map, shapeCoordinates[0]?.coordinates);
@@ -194,6 +199,7 @@ const MapMeasurement = (props) => {
   }, [drawingShape]);
 
   useEffect(() => {
+    // debugger;
     if (startDrawing && measureControl) {
       measureControl.drawingLines(routedMapRef.leafletMap.leafletElement);
     }
