@@ -457,6 +457,10 @@ export const GeoportalMap = () => {
                             );
                             tmpSecondaryInfoBoxElements.push(feature);
                           }
+                        } else {
+                          dispatch(setSelectedFeature(null));
+                          dispatch(setSecondaryInfoBoxElements([]));
+                          dispatch(setFeatures([]));
                         }
                       } else if (isSameLayerTypes && layers.length > 1) {
                         const feature = await getFeatureForLayer(
