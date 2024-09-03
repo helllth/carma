@@ -74,7 +74,12 @@ export const createUrl = (baseUrl, pos, minimalBoxSize, layerName) => {
 export const getFeatureForLayer = async (layer, pos) => {
   const props = layer.props as LayerProps;
   const minimalBoxSize = 1;
-  const url = createUrl(props.url, pos, minimalBoxSize, props.name);
+  const url = createUrl(
+    props.url.replace("http", "https"),
+    pos,
+    minimalBoxSize,
+    props.name,
+  );
 
   let output = "";
 
