@@ -280,3 +280,22 @@ export const findLayerAndAddTags = (
   }
   return null;
 };
+
+export const customCategoryToLayers = (config) => {
+  const layers: any[] = [];
+  config.layers.forEach((layer) => {
+    let keywords: string[] = [];
+    if (layer.keywords) {
+      keywords = layer.keywords;
+    }
+    if (config.keywords) {
+      keywords = [...keywords, ...config.keywords];
+    }
+    layers.push({
+      ...layer,
+      keywords,
+    });
+  });
+
+  return layers;
+};
