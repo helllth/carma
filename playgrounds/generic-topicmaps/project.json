@@ -1,5 +1,5 @@
 {
-  "name": "generic-topicmaps",
+  "name": "generic-topicmaps-playground",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "playgrounds/generic-topicmaps/src",
   "projectType": "application",
@@ -25,15 +25,15 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "generic-topicmaps:build"
+        "buildTarget": "generic-topicmaps-playground:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "generic-topicmaps:build:development",
+          "buildTarget": "generic-topicmaps-playground:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "generic-topicmaps:build:production",
+          "buildTarget": "generic-topicmaps-playground:build:production",
           "hmr": false
         }
       }
@@ -42,14 +42,14 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "generic-topicmaps:build"
+        "buildTarget": "generic-topicmaps-playground:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "generic-topicmaps:build:development"
+          "buildTarget": "generic-topicmaps-playground:build:development"
         },
         "production": {
-          "buildTarget": "generic-topicmaps:build:production"
+          "buildTarget": "generic-topicmaps-playground:build:production"
         }
       }
     },
