@@ -596,13 +596,8 @@ export const GeoportalMap = () => {
                                   ? functionToFeature(properties, result)
                                   : objectToFeature(properties, result);
 
-                                if (selectedFeature) {
-                                  dispatch(
-                                    setSecondaryInfoBoxElements([feature]),
-                                  );
-                                } else {
-                                  dispatch(setSelectedFeature(feature));
-                                }
+                                dispatch(setSelectedFeature(feature));
+                                setPos(null);
                               }
                             }
                           }}
