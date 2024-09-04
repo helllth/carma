@@ -54,20 +54,10 @@ function App({ published }: { published?: boolean }) {
   const mode = useSelector(getMode);
 
   useEffect(() => {
-    // sticky feature flag
-    // remove with allow3d=false once set
     // TODO: remove if feature flag is removed
 
-    const allow3dValue = searchParams.get("allow3d");
-
-    if (allow3dValue !== null) {
-      if (allow3dValue === "0" || allow3dValue.toLowerCase() === "false") {
-        dispatch(setAllow3d(false));
-      } else {
-        dispatch(setAllow3d(true));
-      }
-    }
-
+    dispatch(setAllow3d(searchParams.has("allow3d")));
+    
     // END FEATURE FLAG
 
     if (searchParams.get("sync")) {

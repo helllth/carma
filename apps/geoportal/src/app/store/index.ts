@@ -56,7 +56,6 @@ const uiConfig = {
   storage: localForage,
   whitelist: [
     "allowUiChanges",
-    "allow3d",
     "showLayerHideButtons",
     "showLayerButtons",
     "showInfo",
