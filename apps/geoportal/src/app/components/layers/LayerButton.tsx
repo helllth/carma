@@ -102,7 +102,6 @@ const LayerButton = ({
         leafletLayer.options?.layers === layer.other?.name
       ) {
         leafletLayer.on("tileerror", () => {
-          console.log("xxx tileerror", leafletLayer);
           setError(true);
         });
 
@@ -137,7 +136,7 @@ const LayerButton = ({
         {...listeners}
         {...attributes}
         className={cn(
-          "w-fit min-w-max relative flex items-center gap-2 px-3 rounded-[10px] h-8 z-[99999999] button-shadow",
+          "w-fit min-w-max relative flex items-center gap-2 px-3 rounded-[10px] h-8 z-[9999999] button-shadow",
           selectedLayerIndex === -2
             ? layer.visible
               ? "bg-white"
