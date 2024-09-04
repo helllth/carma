@@ -8,12 +8,39 @@ import {
 } from "../../store/slices/features";
 import { useDispatch, useSelector } from "react-redux";
 import { getLayers } from "../../store/slices/mapping";
+import { getActionLinksForFeature } from "react-cismap/tools/uiHelper";
+import { useContext } from "react";
+import { TopicMapDispatchContext } from "react-cismap/contexts/TopicMapContextProvider";
 
 const FeatureInfoBox = () => {
   const dispatch = useDispatch();
   const selectedFeature = useSelector(getSelectedFeature);
   const secondaryInfoBoxElements = useSelector(getSecondaryInfoBoxElements);
   const numOfLayers = useSelector(getLayers).length;
+  const { zoomToFeature } = useContext<typeof TopicMapDispatchContext>(
+    TopicMapDispatchContext,
+  );
+
+  let links = [];
+  if (selectedFeature) {
+    links = getActionLinksForFeature(selectedFeature, {
+      displayZoomToFeature: true,
+      zoomToFeature: () => {
+        if (selectedFeature) {
+          const f = JSON.stringify(selectedFeature, null, 2);
+          const pf = JSON.parse(f);
+          pf.crs = {
+            type: "name",
+            properties: {
+              name: "urn:ogc:def:crs:EPSG::4326",
+            },
+          };
+
+          zoomToFeature(pf);
+        }
+      },
+    });
+  }
 
   const featureHeaders = secondaryInfoBoxElements.map((feature) => {
     return (
@@ -52,7 +79,7 @@ const FeatureInfoBox = () => {
       }
       noCurrentFeatureContent=""
       secondaryInfoBoxElements={featureHeaders}
-      //   links={links}
+      links={links}
     />
   );
 };
