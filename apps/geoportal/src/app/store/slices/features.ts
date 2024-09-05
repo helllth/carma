@@ -8,6 +8,7 @@ const initialState: FeatureInfoState = {
   features: [],
   selectedFeature: null,
   secondaryInfoBoxElements: [],
+  infoText: "",
 };
 
 const slice = createSlice({
@@ -37,6 +38,9 @@ const slice = createSlice({
       });
       state.secondaryInfoBoxElements = tmp.filter((f) => f !== null);
     },
+    setInfoText(state, action) {
+      state.infoText = action.payload;
+    },
   },
 });
 
@@ -48,14 +52,21 @@ export const {
   setSelectedFeature,
   setSecondaryInfoBoxElements,
   updateSecondaryInfoBoxElements,
+  setInfoText,
 } = slice.actions;
 
 export const getFeatures = (state: RootState) => {
   return state.features.features;
 };
+
 export const getSelectedFeature = (state: RootState) => {
   return state.features.selectedFeature;
 };
+
 export const getSecondaryInfoBoxElements = (state: RootState) => {
   return state.features.secondaryInfoBoxElements;
+};
+
+export const getInfoText = (state: RootState) => {
+  return state.features.infoText;
 };

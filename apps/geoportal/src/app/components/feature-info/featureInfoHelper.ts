@@ -71,7 +71,7 @@ export const createUrl = (baseUrl, pos, minimalBoxSize, layerName) => {
   return url;
 };
 
-export const getFeatureForLayer = async (layer, pos) => {
+export const getFeatureForLayer = async (layer, pos, setErrorMsg) => {
   const props = layer.props as LayerProps;
   const minimalBoxSize = 1;
   const url = createUrl(
@@ -106,6 +106,10 @@ export const getFeatureForLayer = async (layer, pos) => {
         : objectToFeature(output, result);
 
       return feature;
+    } else {
+      setErrorMsg("not in this position");
     }
+  } else {
+    setErrorMsg("not possible");
   }
 };

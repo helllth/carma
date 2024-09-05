@@ -85,6 +85,7 @@ import {
   getSecondaryInfoBoxElements,
   getSelectedFeature,
   setFeatures,
+  setInfoText,
   setSecondaryInfoBoxElements,
   setSelectedFeature,
 } from "../store/slices/features.ts";
@@ -414,6 +415,7 @@ export const GeoportalMap = () => {
                 if (mode === "featureInfo") {
                   dispatch(setSecondaryInfoBoxElements([]));
                   dispatch(setFeatures([]));
+                  dispatch(setInfoText(""));
                   const tmpSecondaryInfoBoxElements = [];
                   let tempSelectedFeature = null;
                   const pos = proj4(
@@ -427,7 +429,9 @@ export const GeoportalMap = () => {
                   }
 
                   if (layers && pos[0] && pos[1]) {
-                    const overlappingHeaders = [];
+                    let isFeatureInfoPossible = false;
+                    let isFeatureInfoPossibleInThisPosition = true;
+                    let errorMsg = "";
 
                     layers.forEach(async (testLayer, i) => {
                       if (
@@ -438,9 +442,13 @@ export const GeoportalMap = () => {
                         const feature = await getFeatureForLayer(
                           testLayer,
                           pos,
+                          (msg) => {
+                            errorMsg = msg;
+                          },
                         );
 
                         if (feature) {
+                          isFeatureInfoPossible = true;
                           dispatch(addFeature(feature));
 
                           if (!tempSelectedFeature) {
@@ -466,8 +474,12 @@ export const GeoportalMap = () => {
                         const feature = await getFeatureForLayer(
                           testLayer,
                           pos,
+                          (msg) => {
+                            errorMsg = msg;
+                          },
                         );
                         if (feature) {
+                          isFeatureInfoPossible = true;
                           dispatch(addFeature(feature));
 
                           if (!tempSelectedFeature) {
@@ -489,8 +501,12 @@ export const GeoportalMap = () => {
                         const feature = await getFeatureForLayer(
                           testLayer,
                           pos,
+                          (msg) => {
+                            errorMsg = msg;
+                          },
                         );
                         if (feature) {
+                          isFeatureInfoPossible = true;
                           dispatch(addFeature(feature));
 
                           if (!tempSelectedFeature) {
@@ -513,7 +529,24 @@ export const GeoportalMap = () => {
                           dispatch(setFeatures([]));
                         }
                       }
+
+                      if (errorMsg === "not in this position") {
+                        isFeatureInfoPossibleInThisPosition = false;
+                      }
                     });
+
+                    if (!isFeatureInfoPossible) {
+                      dispatch(
+                        setInfoText(
+                          !isFeatureInfoPossibleInThisPosition
+                            ? "Sachdatenabfrage an dieser Position nicht möglich"
+                            : "Hinzugefügte Layer sind nicht für die Sachdatenabfrage geeignet",
+                        ),
+                      );
+                      dispatch(setSelectedFeature(null));
+                      dispatch(setSecondaryInfoBoxElements([]));
+                      dispatch(setFeatures([]));
+                    }
                   }
                 }
               }}

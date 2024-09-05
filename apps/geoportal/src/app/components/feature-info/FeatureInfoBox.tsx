@@ -1,6 +1,7 @@
 import InfoBox from "react-cismap/topicmaps/InfoBox";
 import InfoBoxHeader from "react-cismap/topicmaps/InfoBoxHeader";
 import {
+  getInfoText,
   getSecondaryInfoBoxElements,
   getSelectedFeature,
   setSelectedFeature,
@@ -17,6 +18,7 @@ const FeatureInfoBox = () => {
   const selectedFeature = useSelector(getSelectedFeature);
   const secondaryInfoBoxElements = useSelector(getSecondaryInfoBoxElements);
   const numOfLayers = useSelector(getLayers).length;
+  const infoText = useSelector(getInfoText);
   const { zoomToFeature } = useContext<typeof TopicMapDispatchContext>(
     TopicMapDispatchContext,
   );
@@ -73,7 +75,9 @@ const FeatureInfoBox = () => {
       headerColor="#0078a8"
       {...selectedFeature?.properties}
       noCurrentFeatureTitle={
-        numOfLayers > 0
+        infoText
+          ? infoText
+          : numOfLayers > 0
           ? "Auf die Karte klicken um Informationen abzurufen"
           : "Layer hinzufügen um Informationen abrufen zu können"
       }
