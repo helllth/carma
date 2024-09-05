@@ -52,6 +52,7 @@ export function LibFuzzySearch({
     width: "calc(100% - 32px)",
     borderTopLeftRadius: 0,
   };
+  const prepoHandling = true;
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
@@ -99,7 +100,7 @@ export function LibFuzzySearch({
     let defaultLimit = 3;
     let defaultCut = 0.4;
     if (allGazeteerData.length > 0 && fuseInstance) {
-      const removeStopWords = removeStopwords(value, stopwords);
+      const removeStopWords = removeStopwords(value, stopwords, prepoHandling);
       const result = fuseInstance.search(removeStopWords);
 
       let resultWithRoundScore = result.map((r) => {
@@ -153,18 +154,18 @@ export function LibFuzzySearch({
 
   useEffect(() => {
     if (gazData.leafletElement > 0) {
-      const allModifiedData = prepareGazData(gazData);
+      const allModifiedData = prepareGazData(gazData, prepoHandling);
       setAllGazeteerData(allModifiedData);
     } else {
       console.info("no gazeteerdata defined, fetching gazData", sourcesConfig);
       const setDataCallback = (data) => {
         // setData(data);
-        setAllGazeteerData(prepareGazData(data));
+        setAllGazeteerData(prepareGazData(data, prepoHandling));
       };
       Array.isArray(sourcesConfig) &&
         getGazData(sourcesConfig, gazDataPrefix, setDataCallback);
     }
-  }, [gazData]);
+  }, [gazData, prepoHandling]);
 
   useEffect(() => {
     if (!fuseInstance && allGazeteerData.length > 0) {

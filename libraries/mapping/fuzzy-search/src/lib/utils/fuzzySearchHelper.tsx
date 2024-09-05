@@ -185,21 +185,29 @@ const preps = [
 ];
 const articles = ["der", "die", "das", "den", "dem", "des"];
 export const stopwords = [...preps, ...articles];
-export function removeStopwords(text, stopwords) {
-  const words = text.split(" ");
-  const placeholderWords = words.map((word) => {
-    if (stopwords.includes(word.toLowerCase())) {
-      // Replace each character in the word with an underscore
-      return "_".repeat(word.length);
-    }
-    return word;
-  });
-  return placeholderWords.join(" ");
+export function removeStopwords(text, stopwords, prepoHandling) {
+  if (prepoHandling) {
+    const words = text.split(" ");
+    const placeholderWords = words.map((word) => {
+      if (stopwords.includes(word.toLowerCase())) {
+        // Replace each character in the word with an underscore
+        return "_".repeat(word.length);
+      }
+      return word;
+    });
+    return placeholderWords.join(" ");
+  } else {
+    return text;
+  }
 }
-export function prepareGazData(data) {
+export function prepareGazData(data, prepoHandling) {
   const modifiedData = data.map((item) => {
     const searchData = item?.string;
-    const stringWithoutStopWords = removeStopwords(searchData, stopwords);
+    const stringWithoutStopWords = removeStopwords(
+      searchData,
+      stopwords,
+      prepoHandling,
+    );
     const address = {
       ...item,
       xSearchData: joinNumberLetter(stringWithoutStopWords),
