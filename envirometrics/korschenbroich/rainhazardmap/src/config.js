@@ -104,7 +104,7 @@ const config = {
 
       animation: 'SRI7/',
       name: 'Stärke 7',
-      title: 'Starkregen SRI 7 (38,7 - 39,5 l/m² in 1 h)',
+      title: 'Starkregen SRI 7 (37,2 - 38,2 l/m² in 1 h)',
       icon: 'bitbucket',
       subtitle:
         'Simulation eines einstündigen Starkregens einer Belastung zwischen 37,2 und 38,2 Liter/m² Niederschlag (Starkregenindex SRI 7) für das hydrologische Einzugsgebiet der Stadt Korschenbroich',
@@ -126,16 +126,12 @@ const config = {
     },
   ],
   backgrounds: [
+
     {
-      layerkey: 'cismetLight@100',
-      src: citymapGrey,
-      title: 'Stadtplan (grau)',
+      layerkey: 'nrwDOP@60|rvr@30',
+      src: ortho,
+      title: 'Luftbildkarte',
     },
-    // {
-    //   layerkey: 'nrwDOP@60|rvr@30',
-    //   src: ortho,
-    //   title: 'Luftbildkarte',
-    // },
     {
       layerkey: 'dtk@100',
       src: dtk,
