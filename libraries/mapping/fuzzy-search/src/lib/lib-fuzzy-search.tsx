@@ -99,27 +99,6 @@ export function LibFuzzySearch({
     let defaultLimit = 3;
     let defaultCut = 0.4;
     if (allGazeteerData.length > 0 && fuseInstance) {
-      const hash = window.location.hash;
-      const queryString = hash.includes("?") ? hash.split("?")[1] : "";
-      const searchParams = new URLSearchParams(queryString);
-
-      const sort = searchParams.get("sort");
-      const limit = searchParams.get("limit");
-      const cut = searchParams.get("cut");
-      if (sort && sort === "true") {
-        showSortedResults = true;
-      } else {
-        showSortedResults = false;
-      }
-
-      if (limit && parseFloat(limit) !== defaultLimit) {
-        defaultLimit = parseFloat(limit);
-      }
-
-      if (cut) {
-        defaultCut = parseFloat(cut);
-      }
-
       const removeStopWords = removeStopwords(value, stopwords);
       const result = fuseInstance.search(removeStopWords);
 
