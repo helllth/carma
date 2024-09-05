@@ -94,7 +94,7 @@ export function LibFuzzySearch({
   const [fireScrollEvent, setFireScrollEvent] = useState(null);
 
   const handleSearchAutoComplete = (value) => {
-    let ifShowScore = false;
+    let ifShowScore = true;
     let showSortedResults = false;
     let defaultLimit = 3;
     let defaultCut = 0.4;
@@ -103,7 +103,6 @@ export function LibFuzzySearch({
       const queryString = hash.includes("?") ? hash.split("?")[1] : "";
       const searchParams = new URLSearchParams(queryString);
 
-      const score = searchParams.get("score");
       const sort = searchParams.get("sort");
       const limit = searchParams.get("limit");
       const cut = searchParams.get("cut");
@@ -112,11 +111,7 @@ export function LibFuzzySearch({
       } else {
         showSortedResults = false;
       }
-      if (score && score === "true") {
-        ifShowScore = true;
-      } else {
-        ifShowScore = false;
-      }
+
       if (limit && parseFloat(limit) !== defaultLimit) {
         defaultLimit = parseFloat(limit);
       }
