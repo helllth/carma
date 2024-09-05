@@ -102,8 +102,7 @@ export function LibFuzzySearch({
       const hash = window.location.hash;
       const queryString = hash.includes("?") ? hash.split("?")[1] : "";
       const searchParams = new URLSearchParams(queryString);
-      const distance = searchParams.get("distance");
-      const threshold = searchParams.get("threshold");
+
       const score = searchParams.get("score");
       const sort = searchParams.get("sort");
       const limit = searchParams.get("limit");
@@ -122,21 +121,6 @@ export function LibFuzzySearch({
         defaultLimit = parseFloat(limit);
       }
 
-      if (
-        fuseInstance.options &&
-        Number(distance) !== fuseInstance.options.distance &&
-        distance
-      ) {
-        fuseInstance.options.distance = parseFloat(distance);
-      }
-
-      if (
-        fuseInstance.options &&
-        threshold &&
-        Number(threshold) !== fuseInstance.options.threshold
-      ) {
-        fuseInstance.options.threshold = parseFloat(threshold);
-      }
       if (cut) {
         defaultCut = parseFloat(cut);
       }
@@ -210,18 +194,9 @@ export function LibFuzzySearch({
 
   useEffect(() => {
     if (!fuseInstance && allGazeteerData.length > 0) {
-      const hash = window.location.hash;
-      const queryString = hash.includes("?") ? hash.split("?")[1] : "";
-      const searchParams = new URLSearchParams(queryString);
-      const distance = searchParams.get("distance");
-      const threshold = searchParams.get("threshold");
-
-      const distanceValue = distance !== null ? parseInt(distance) : 100;
-      const thresholdValue = threshold !== null ? parseFloat(threshold) : 0.5;
-
       const fuseAddressesOptions = {
-        distance: !isNaN(distanceValue) ? distanceValue : 100,
-        threshold: !isNaN(thresholdValue) ? thresholdValue : 0.5,
+        distance: 100,
+        threshold: 0.5,
         useExtendedSearch: true,
         keys: ["xSearchData"],
         includeScore: true,
