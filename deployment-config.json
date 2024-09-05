@@ -399,20 +399,14 @@
       },
       "projectPath": "./dist/playgrounds/vector"
     },
-    "--switched-off--rainhazardmap-korschenbroich": {
+    "rainhazardmap-korschenbroich": {
       "deployment": {
         "manual": {
           "container": {
             "image": "cismet/carma-ais-korschenbroich:"
           }
         },
-        "auto": {
-          "dev": {
-            "container": {
-              "image": "cismet/carma-ais-korschenbroich:dev"
-            }
-          }
-        },
+
         "projectPath": "./dist/envirometrics/korschenbroich/rainhazardmap"
       }
     },
