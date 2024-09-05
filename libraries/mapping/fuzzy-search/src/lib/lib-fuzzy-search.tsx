@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import type { BaseSelectRef } from "rc-select";
 import {
-  customSort,
   generateOptions,
   getGazData,
   limitSearchResult,
@@ -44,15 +43,24 @@ export function LibFuzzySearch({
   pixelwidth = 300,
   ifShowCategories: standardSearch = false,
   placeholder = "Wohin?",
+  config = {
+    prepoHandling: false,
+    ifShowScore: false,
+    limit: 3,
+    cut: 0.4,
+    distance: 100,
+    threshold: 0.5,
+  },
 }: SearchGazetteerProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
+  const { prepoHandling, ifShowScore, limit, cut, distance, threshold } =
+    config;
   const _gazetteerHitTrigger = undefined;
   const inputStyle = {
     width: "calc(100% - 32px)",
     borderTopLeftRadius: 0,
   };
-  const prepoHandling = true;
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
@@ -95,10 +103,6 @@ export function LibFuzzySearch({
   const [fireScrollEvent, setFireScrollEvent] = useState(null);
 
   const handleSearchAutoComplete = (value) => {
-    let ifShowScore = true;
-    let showSortedResults = false;
-    let defaultLimit = 3;
-    let defaultCut = 0.4;
     if (allGazeteerData.length > 0 && fuseInstance) {
       const removeStopWords = removeStopwords(value, stopwords, prepoHandling);
       const result = fuseInstance.search(removeStopWords);
@@ -114,15 +118,11 @@ export function LibFuzzySearch({
         }
       });
 
-      if (showSortedResults) {
-        resultWithRoundScore.sort(customSort);
-      }
-
-      if (defaultLimit !== 0) {
+      if (limit !== 0) {
         resultWithRoundScore = limitSearchResult(
           resultWithRoundScore,
-          defaultLimit,
-          defaultCut,
+          limit,
+          cut,
         );
       }
 
@@ -170,8 +170,8 @@ export function LibFuzzySearch({
   useEffect(() => {
     if (!fuseInstance && allGazeteerData.length > 0) {
       const fuseAddressesOptions = {
-        distance: 100,
-        threshold: 0.5,
+        distance,
+        threshold,
         useExtendedSearch: true,
         keys: ["xSearchData"],
         includeScore: true,
