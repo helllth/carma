@@ -157,9 +157,7 @@ export function LibFuzzySearch({
       const allModifiedData = prepareGazData(gazData, prepoHandling);
       setAllGazeteerData(allModifiedData);
     } else {
-      console.info("no gazeteerdata defined, fetching gazData", sourcesConfig);
       const setDataCallback = (data) => {
-        // setData(data);
         setAllGazeteerData(prepareGazData(data, prepoHandling));
       };
       Array.isArray(sourcesConfig) &&
