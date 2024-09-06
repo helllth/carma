@@ -1,7 +1,8 @@
 import { Cartesian3, Color } from 'cesium';
-import { ViewerState } from '@carma-mapping/cesium-engine';
+import { CesiumState } from '@carma-mapping/cesium-engine';
 
 import {
+  BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
   FOOTPRINT_GEOJSON_SOURCES,
   WUPP3D,
   WUPP_LOD2_TILESET,
@@ -25,7 +26,7 @@ const homeOffset = {
   z: 45000, // elevation
 };
 
-export const defaultViewerState: ViewerState = {
+export const defaultViewerState: CesiumState = {
   isAnimating: false,
   isMode2d: false,
   homeOffset: homeOffset,
@@ -52,6 +53,7 @@ export const defaultViewerState: ViewerState = {
     },
   },
   terrainProvider: WUPP_TERRAIN_PROVIDER,
+  imageryProvider: BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
 };
 
 export default defaultViewerState;

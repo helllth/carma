@@ -13,7 +13,6 @@ import LZString from "lz-string";
 import { useDispatch, useSelector } from "react-redux";
 import { backgroundSettings } from "@carma-collab/wuppertal/geoportal";
 import {
-  getShowMeasurementButton,
   setBackgroundLayer,
   setLayers,
   setShowFullscreenButton,
@@ -35,6 +34,9 @@ import { CrossTabCommunicationContextProvider } from "react-cismap/contexts/Cros
 import HomeButton from "./components/HomeButton";
 import type { BackgroundLayer, Settings } from "@carma-apps/portals";
 import { OverlayTourProvider } from "@carma/libraries/commons/ui/lib-helper-overlay";
+import { BASEMAP_METROPOLRUHR_WMS_GRAUBLAU, WUPP_TERRAIN_PROVIDER } from "./config/dataSources.config";
+import { MODEL_ASSETS } from "./config/assets.config";
+import { CustomViewerContextProvider } from "@carma-mapping/cesium-engine";
 
 if (typeof global === "undefined") {
   window.global = window;
@@ -125,11 +127,21 @@ function App({ published }: { published?: boolean }) {
       color={backgroundSettings.color}
     >
       <TopicMapContextProvider>
-        <div className="flex flex-col h-screen w-full">
-          {!published && <TopNavbar />}
-          <MapMeasurement />
-          <GeoportalMap />
-        </div>
+        <CustomViewerContextProvider
+          //initialViewerState={defaultCesiumState}
+          // TODO move these to store/slice setup ?
+          providerConfig={{
+            terrainProvider: WUPP_TERRAIN_PROVIDER,
+            imageryProvider: BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
+            models: MODEL_ASSETS,
+          }}
+        >
+          <div className="flex flex-col h-screen w-full">
+            {!published && <TopNavbar />}
+            <MapMeasurement />
+            <GeoportalMap />
+          </div>
+        </CustomViewerContextProvider>
       </TopicMapContextProvider>
     </OverlayTourProvider>
   );
