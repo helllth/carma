@@ -59,6 +59,8 @@ import {
   Compass,
   HomeControl,
   useCesiumCustomViewer,
+  useHomeControl,
+  useZoomControls,
 } from "@carma-mapping/cesium-engine";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
@@ -91,7 +93,6 @@ import {
 } from "../store/slices/features.ts";
 import { geoElements } from "@carma-collab/wuppertal/geoportal";
 import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
-import { useHomeControl } from "libraries/mapping/engines/cesium/src/lib/CustomViewer/hooks.ts";
 
 export const GeoportalMap = () => {
   const [gazData, setGazData] = useState([]);
@@ -120,6 +121,7 @@ export const GeoportalMap = () => {
   const focusMode = useSelector(getFocusMode);
   const { viewer } = useCesiumCustomViewer();
   const homeControl = useHomeControl();
+  const { handleZoomIn, handleZoomOut } = useZoomControls();
   const [urlParams, setUrlParams] = useSearchParams();
   const [layoutHeight, setLayoutHeight] = useState(null);
   const {
@@ -215,18 +217,20 @@ export const GeoportalMap = () => {
       <Control position="topleft" order={10}>
         <div ref={zoomControlTourRef} className="flex flex-col">
           <ControlButtonStyler
-            onClick={() => {
-              routedMapRef.leafletMap.leafletElement.zoomIn();
-              viewer?.scene.camera.zoomIn();
+            onClick={(e) => {
+              (!allow3d || isMode2d) && routedMapRef.leafletMap.leafletElement.zoomIn();
+              allow3d
+                && !isMode2d && handleZoomIn(e);
             }}
             className="!border-b-0 !rounded-b-none font-bold !z-[9999999]"
           >
             <FontAwesomeIcon icon={faPlus} className="text-base" />
           </ControlButtonStyler>
           <ControlButtonStyler
-            onClick={() => {
-              routedMapRef.leafletMap.leafletElement.zoomOut();
-              viewer?.scene.camera.zoomOut();
+            onClick={(e) => {
+              (!allow3d || isMode2d) && routedMapRef.leafletMap.leafletElement.zoomOut();
+              allow3d
+                && !isMode2d && handleZoomOut(e);
             }}
             className="!rounded-t-none !border-t-[1px]"
           >
@@ -281,7 +285,7 @@ export const GeoportalMap = () => {
       <Control position="topleft" order={50}>
         {showMeasurementButton && (
           <div className="flex items-center gap-4">
-            <Tooltip title={(allow3d && isMode2d) ? "Strecke / Fläche messen" : "zum messen zu 2D-Modus wechseln"} placement="right">
+            <Tooltip title={(allow3d && !isMode2d) ? "zum messen zu 2D-Modus wechseln" : "Strecke / Fläche messen"} placement="right">
               <ControlButtonStyler
                 disabled={allow3d && !isMode2d}
                 onClick={() => {

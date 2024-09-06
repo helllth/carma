@@ -29,12 +29,14 @@ const ControlButtonStyler = forwardRef<Ref, ControlButtonStylerProps>(
       alignItems: "center",
       justifyContent: "space-evenly",
       fontSize,
-      opacity: disabled ? 0.5 : 1,
+      filter: disabled ? "grayscale(100%) brightness(120%)" : "",
       // fontWeight: 700,
     } as CSSProperties;
     return (
       <button {...props} disabled={disabled} style={iconPadding} ref={ref}>
-        {children}
+        <div style={{ opacity: disabled ? 0.5 : 1 }}>
+          {children}
+        </div>
       </button>
     );
   },
