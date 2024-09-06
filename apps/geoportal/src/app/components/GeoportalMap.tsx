@@ -86,12 +86,15 @@ import {
   getPreferredLayerId,
   getSecondaryInfoBoxElements,
   getSelectedFeature,
+  getVectorInfo,
   setFeatures,
   setInfoText,
   setPreferredLayerId,
   setSecondaryInfoBoxElements,
   setSelectedFeature,
+  setVectorInfo,
 } from "../store/slices/features.ts";
+import store from "../store/index.ts";
 
 enum MapMode {
   _2D = "2D",
@@ -447,6 +450,15 @@ export const GeoportalMap = () => {
                   layers.length > 0 &&
                   atLeastOneLayerIsQueryable
                 ) {
+                  if (
+                    queryableLayers.find(
+                      (layer) => layer.layerType === "vector",
+                    )
+                  ) {
+                    setTimeout(() => {}, 100);
+                  }
+
+                  const vectorInfo = getVectorInfo(store.getState());
                   dispatch(setSecondaryInfoBoxElements([]));
                   dispatch(setFeatures([]));
                   const pos = proj4(
@@ -456,15 +468,22 @@ export const GeoportalMap = () => {
                   );
 
                   if (
-                    queryableLayers[queryableLayers.length - 1].layerType ===
-                    "wmts"
+                    queryableLayers[queryableLayers.length - 1].layerType !==
+                      "vector" ||
+                    !vectorInfo
                   ) {
                     setPos([e.latlng.lat, e.latlng.lng]);
+                  } else {
+                    setPos(null);
                   }
 
                   if (queryableLayers && pos[0] && pos[1]) {
                     const result = await Promise.all(
                       queryableLayers.map(async (testLayer) => {
+                        if (testLayer.layerType === "vector") {
+                          return vectorInfo;
+                        }
+
                         const feature = await getFeatureForLayer(
                           testLayer,
                           pos,
@@ -573,7 +592,7 @@ export const GeoportalMap = () => {
                             hits: any[];
                             hit: any;
                           }) => {
-                            if (e.hits && i === layers.length - 1) {
+                            if (e.hits) {
                               const selectedVectorFeature = e.hits[0];
 
                               const properties =
@@ -593,9 +612,20 @@ export const GeoportalMap = () => {
                                   ? functionToFeature(properties, result)
                                   : objectToFeature(properties, result);
 
-                                dispatch(setSelectedFeature(feature));
-                                setPos(null);
+                                // dispatch(setSelectedFeature(feature));
+                                dispatch(setVectorInfo(feature));
+
+                                if (
+                                  layer.id ===
+                                  queryableLayers[queryableLayers.length - 1].id
+                                ) {
+                                  setPos(null);
+                                }
+                              } else {
+                                dispatch(setVectorInfo(undefined));
                               }
+                            } else {
+                              dispatch(setVectorInfo(undefined));
                             }
                           }}
                         />
