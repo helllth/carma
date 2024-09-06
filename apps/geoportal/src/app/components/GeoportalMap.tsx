@@ -596,7 +596,6 @@ export const GeoportalMap = () => {
                             pane={`additionalLayers${i}`}
                             opacity={layer.opacity || 0.7}
                             type="vector"
-                            maxSelectionCount={0}
                             onSelectionChanged={(e: {
                               hits: any[];
                               hit: any;
@@ -617,11 +616,17 @@ export const GeoportalMap = () => {
                                 });
 
                                 if (result) {
-                                  const feature = result.includes("function")
+                                  const featureProperties = result.includes(
+                                    "function",
+                                  )
                                     ? functionToFeature(properties, result)
                                     : objectToFeature(properties, result);
 
-                                  // dispatch(setSelectedFeature(feature));
+                                  const feature = {
+                                    ...featureProperties,
+                                    id: layer.id,
+                                  };
+
                                   dispatch(setVectorInfo(feature));
 
                                   if (
