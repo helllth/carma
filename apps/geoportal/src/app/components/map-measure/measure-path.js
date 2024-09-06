@@ -416,6 +416,7 @@ L.Control.MeasurePolygon = L.Control.extend({
 
     map.on("draw:canceled", () => {
       this.options.checkonedrawpoligon = true;
+      this.options.cbSetDrawingStatus(false);
 
       this._toggleMeasure(
         "img_plg_lines",

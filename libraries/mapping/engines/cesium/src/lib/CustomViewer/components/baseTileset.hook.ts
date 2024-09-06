@@ -1,27 +1,34 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useCesium } from "resium";
-import { CesiumTerrainProvider, Color, Viewer } from "cesium";
+import { CesiumTerrainProvider, Color } from "cesium";
 import {
   setShowPrimaryTileset,
   setShowSecondaryTileset,
-} from "../../CustomViewerContextProvider/slices/viewer";
+} from "../../CustomViewerContextProvider/slices/cesium";
 import { SceneStyles } from "../../..";
-import { useCustomViewerContext } from "../../CustomViewerContextProvider/components/CustomViewerContextProvider";
+import {
+  CustomViewerContextType,
+  useCesiumCustomViewer,
+} from "../../CustomViewerContextProvider/components/CustomViewerContextProvider";
 
 // TODO move combined common setup out of here
 
-const setupPrimaryStyle = (
-  viewer: Viewer,
-  { terrainProvider, imageryLayer },
-) => {
+const setupPrimaryStyle = ({
+  viewer,
+  terrainProvider,
+  imageryLayer,
+}: CustomViewerContextType) => {
   (async () => {
+    if (!viewer) return;
     viewer.scene.globe.baseColor = Color.DARKGRAY;
 
     if (viewer.scene.terrainProvider instanceof CesiumTerrainProvider) {
       //viewer.scene.terrainProvider = ellipsoidTerrainProvider;
     } else {
-      viewer.scene.terrainProvider = await terrainProvider;
+      const provider = await terrainProvider;
+      if (provider) {
+        viewer.scene.terrainProvider = provider;
+      }
     }
     // viewer.scene.globe.depthTestAgainstTerrain = false;
 
@@ -34,10 +41,11 @@ const setupPrimaryStyle = (
   })();
 };
 
-export const setupSecondaryStyle = (
-  viewer: Viewer,
-  { terrainProvider, imageryLayer },
-) => {
+export const setupSecondaryStyle = ({
+  viewer,
+  terrainProvider,
+  imageryLayer,
+}) => {
   if (!viewer) return;
   (async () => {
     viewer.scene.globe.baseColor = Color.WHITE;
@@ -62,44 +70,36 @@ export const setupSecondaryStyle = (
   })();
 };
 
-export const useSceneStyleToggle = (style?: keyof SceneStyles) => {
+export const useSceneStyleToggle = (
+  initialStyle: keyof SceneStyles = "secondary",
+) => {
   const dispatch = useDispatch();
-  const { viewer } = useCesium();
-
-  // TODO initial style set by parameter
-  const [isPrimaryStyle, setIsPrimaryStyle] = useState(true);
-  console.log("HOOK: useSceneStyleToggle", style);
-  const customViewerContext = useCustomViewerContext();
+  const { viewer } = useCesiumCustomViewer();
+  const [currentStyle, setCurrentStyle] =
+    useState<keyof SceneStyles>(initialStyle);
+  const customViewerContext = useCesiumCustomViewer();
 
   useEffect(() => {
     if (!viewer) return;
 
-    if (isPrimaryStyle) {
-      setupPrimaryStyle(viewer, customViewerContext);
+    if (currentStyle === "primary") {
+      setupPrimaryStyle(customViewerContext);
       dispatch(setShowPrimaryTileset(true));
       dispatch(setShowSecondaryTileset(false));
     } else {
-      setupSecondaryStyle(viewer, customViewerContext);
+      setupSecondaryStyle(customViewerContext);
       dispatch(setShowPrimaryTileset(false));
       dispatch(setShowSecondaryTileset(true));
     }
+  }, [dispatch, viewer, currentStyle, customViewerContext]);
 
-    return () => {
-      if (isPrimaryStyle) {
-        setupSecondaryStyle(viewer, customViewerContext);
-        dispatch(setShowSecondaryTileset(true));
-        dispatch(setShowPrimaryTileset(false));
-      } else {
-        setupPrimaryStyle(viewer, customViewerContext);
-        dispatch(setShowPrimaryTileset(true));
-        dispatch(setShowSecondaryTileset(false));
-      }
-    };
-  }, [dispatch, viewer, isPrimaryStyle]);
-
-  const toggleSceneTyle = () => {
-    setIsPrimaryStyle(!isPrimaryStyle);
+  const toggleSceneStyle = (style?: "primary" | "secondary") => {
+    if (style) {
+      setCurrentStyle(style);
+    } else {
+      setCurrentStyle((prev) => (prev === "primary" ? "secondary" : "primary"));
+    }
   };
 
-  return toggleSceneTyle;
+  return toggleSceneStyle;
 };

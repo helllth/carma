@@ -27,6 +27,7 @@ export type SearchGazetteerProps = {
   ifShowCategories?: boolean;
   marker3dStyle?: ModelAsset;
   placeholder?: string;
+  config?: SearchConfig;
 };
 
 export type MapConsumer = L.Map | Viewer;
@@ -104,4 +105,13 @@ export type PayloadItemType = {
   n?: string;
   nr?: string | number;
   z?: string;
+};
+
+export type SearchConfig = {
+  prepoHandling?: boolean;
+  ifShowScore?: boolean;
+  limit?: number;
+  cut?: number;
+  distance?: number;
+  threshold?: number;
 };

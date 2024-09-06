@@ -1,8 +1,6 @@
 import { MouseEvent, ReactNode } from "react";
 import { faCompass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useCesium } from "resium";
-import OnMapButton from "./OnMapButton";
 import {
   Cartesian3,
   Cartographic,
@@ -11,15 +9,18 @@ import {
   Cartesian2,
 } from "cesium";
 import { pickViewerCanvasCenter } from "../../../utils";
+import { ControlButtonStyler } from "@carma-mapping/map-controls-layout";
+import { useCesiumCustomViewer } from "../../../CustomViewerContextProvider";
 
 type CompassProps = {
   children?: ReactNode;
+  disabled?: boolean;
 };
 
 const MIN_TOP_DOWN_DISTANCE = 50;
 
 export const Compass = (props: CompassProps) => {
-  const { viewer } = useCesium();
+  const { viewer } = useCesiumCustomViewer();
 
   const handleFlyToCenter = (e: MouseEvent) => {
     e.preventDefault();
@@ -78,9 +79,9 @@ export const Compass = (props: CompassProps) => {
   };
 
   return (
-    <OnMapButton title="Einnorden" onClick={handleFlyToCenter}>
+    <ControlButtonStyler title="Einnorden" onClick={handleFlyToCenter} disabled={props.disabled}>
       <FontAwesomeIcon icon={faCompass}></FontAwesomeIcon>
-    </OnMapButton>
+    </ControlButtonStyler>
   );
 };
 

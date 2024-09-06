@@ -7,6 +7,7 @@ import {
   GazDataItem,
   SourceWithPayload,
   PayloadItem,
+  SearchConfig,
 } from "../..";
 import { md5FetchText } from "./fetching";
 import L from "leaflet";
@@ -185,21 +186,29 @@ const preps = [
 ];
 const articles = ["der", "die", "das", "den", "dem", "des"];
 export const stopwords = [...preps, ...articles];
-export function removeStopwords(text, stopwords) {
-  const words = text.split(" ");
-  const placeholderWords = words.map((word) => {
-    if (stopwords.includes(word.toLowerCase())) {
-      // Replace each character in the word with an underscore
-      return "_".repeat(word.length);
-    }
-    return word;
-  });
-  return placeholderWords.join(" ");
+export function removeStopwords(text, stopwords, prepoHandling) {
+  if (prepoHandling) {
+    const words = text.split(" ");
+    const placeholderWords = words.map((word) => {
+      if (stopwords.includes(word.toLowerCase())) {
+        // Replace each character in the word with an underscore
+        return "_".repeat(word.length);
+      }
+      return word;
+    });
+    return placeholderWords.join(" ");
+  } else {
+    return text;
+  }
 }
-export function prepareGazData(data) {
+export function prepareGazData(data, prepoHandling) {
   const modifiedData = data.map((item) => {
     const searchData = item?.string;
-    const stringWithoutStopWords = removeStopwords(searchData, stopwords);
+    const stringWithoutStopWords = removeStopwords(
+      searchData,
+      stopwords,
+      prepoHandling,
+    );
     const address = {
       ...item,
       xSearchData: joinNumberLetter(stringWithoutStopWords),
@@ -667,4 +676,53 @@ export const builtInGazetteerHitTrigger = (
   } else {
     console.info("unhandled hit:", hit);
   }
+};
+
+export const getDefaultSearchConfig = (config: SearchConfig): SearchConfig => {
+  let prepoHandling;
+  let ifShowScore;
+  let limit;
+  let cut;
+  let distance;
+  let threshold;
+
+  if (!config.prepoHandling) {
+    prepoHandling = false;
+  } else {
+    prepoHandling = config.prepoHandling;
+  }
+  if (!config.ifShowScore) {
+    ifShowScore = false;
+  } else {
+    ifShowScore = config.ifShowScore;
+  }
+  if (!config.limit) {
+    limit = 3;
+  } else {
+    limit = config.limit;
+  }
+  if (!config.cut) {
+    cut = 0.4;
+  } else {
+    cut = config.cut;
+  }
+  if (!config.distance) {
+    distance = 100;
+  } else {
+    distance = config.distance;
+  }
+  if (!config.threshold) {
+    threshold = 0.5;
+  } else {
+    threshold = config.threshold;
+  }
+
+  return {
+    prepoHandling,
+    ifShowScore,
+    limit,
+    cut,
+    distance,
+    threshold,
+  };
 };

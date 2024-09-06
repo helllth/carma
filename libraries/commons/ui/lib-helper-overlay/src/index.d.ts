@@ -18,28 +18,46 @@ export type PositionOverlayHelper =
   | "top"
   | "left"
   | "right"
-  | "bottom";
+  | "bottom"
+  | "left-center"
+  | "left-top"
+  | "left-bottom"
+  | "right-center"
+  | "right-top"
+  | "right-bottom"
+  | "top-center"
+  | "top-right"
+  | "top-left"
+  | "bottom-center"
+  | "bottom-right"
+  | "bottom-left";
 
 export interface OverlayHelperConfig {
   el: HTMLElement;
-  message: string;
+  content: JSX.Element | string;
   containerPos?: PositionOverlayHelper;
   contentPos?: PositionOverlayHelper;
+  contentWidth?: string;
 }
 
 export type OptionsOverlayHelper = {
-  containerPos?: PositionOverlayHelper;
-  contentPos?: PositionOverlayHelper;
+  primary: {
+    containerPos?: PositionOverlayHelper;
+    contentPos?: PositionOverlayHelper;
+    contentWidth?: string;
+    content: JSX.Element | string;
+  };
 };
 
 type Position = { [key: string]: string | number };
 
 export interface HighlightRect {
   rect: DOMRect;
-  message: string;
+  content: JSX.Element | string;
   pos: Position;
   contentPos: any;
   contPos: Position;
+  contentWidth?: string;
 }
 
 export type OverlayTourProviderProps = {

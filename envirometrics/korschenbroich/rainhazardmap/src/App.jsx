@@ -30,20 +30,6 @@ function App() {
     getGazData(setGazData, "/data/adressen_korschenbroich.json");
   }, []);
 
-  const openNotification = (selectedFeature) => {
-    api.open({
-      message: (
-        <span>
-          <b>Schachtbezeichnung: {selectedFeature.properties.Bezeichnun}</b>
-        </span>
-      ),
-      description:
-        "Schachtdeckelhöhe [m ü. NHN]:" + selectedFeature.properties.OKSchachtd,
-      duration: 0,
-    });
-  };
-  console.log("notification", notification);
-
   return (
     <TopicMapContextProvider
       appKey={"cismetRainhazardMap.Korschenbroich"}
@@ -112,8 +98,13 @@ function App() {
                       </span>
                     ),
                     description:
-                      "Schachtdeckelhöhe [m ü. NHN]:" +
-                      selectedFeature.properties.OKSchachtd,
+                      "Schachtdeckelhöhe [m ü. NHN]: " +
+                      parseFloat(
+                        selectedFeature.properties.OKSchachtd,
+                      ).toLocaleString("de-DE", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }),
                     placement: "topRight",
                     onClose: () => {
                       setHinweisShown(false);

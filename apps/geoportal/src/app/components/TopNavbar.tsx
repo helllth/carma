@@ -1,15 +1,10 @@
 import { Button, Popover, Radio, Tooltip, message } from "antd";
 import {
-  faB,
   faBars,
-  faLandmark,
-  faLayerGroup,
   faPrint,
-  faRedo,
   faShareNodes,
   faEye,
   faEyeSlash,
-  faF,
   faFileExport,
   faBookOpenReader,
   faRotateRight,
@@ -44,11 +39,13 @@ import {
   setMode,
   setShowLayerButtons,
 } from "../store/slices/ui";
-import { cn } from "../helper/helper";
 import { layerMap } from "../config";
 import { Save, Share, extractVectorStyles } from "@carma-apps/portals";
 import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
 import { isNaN } from "lodash";
+import { useSceneStyleToggle } from "@carma-mapping/cesium-engine";
+import { geoElements } from "@carma-collab/wuppertal/geoportal";
+import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,11 +63,18 @@ const TopNavbar = () => {
   const mode = useSelector(getMode);
   const [messageApi, contextHolder] = message.useMessage();
   const baseUrl = window.location.origin + window.location.pathname;
+  const toggleSceneStyle = useSceneStyleToggle();
 
-  const menuTourRef = useOverlayHelper("Menüleiste");
+  const menuTourRef = useOverlayHelper(
+    getCollabedHelpElementsConfig("MENULEISTE", geoElements),
+  );
 
-  const hintergrundTourRef = useOverlayHelper("Hintergrund");
-  const modalMenuTourRef = useOverlayHelper("Menü");
+  const hintergrundTourRef = useOverlayHelper(
+    getCollabedHelpElementsConfig("HINTERGRUND", geoElements),
+  );
+  const modalMenuTourRef = useOverlayHelper(
+    getCollabedHelpElementsConfig("MENU", geoElements),
+  );
 
   const updateLayers = async (
     layer: Item,
@@ -355,37 +359,41 @@ const TopNavbar = () => {
 
       <div className="flex items-center gap-6">
         <div className="lg:flex hidden" ref={hintergrundTourRef}>
-          <Radio.Group
-            value={backgroundLayer.id}
-            onChange={(e) => {
-              if (e.target.value === "karte") {
-                dispatch(
-                  setBackgroundLayer({ ...selectedMapLayer, id: "karte" }),
-                );
-              } else {
-                dispatch(
-                  setBackgroundLayer({
-                    id: e.target.value,
-                    title: layerMap[e.target.value].title,
-                    opacity: 1.0,
-                    description: layerMap[e.target.value].description,
-                    inhalt: layerMap[e.target.value].inhalt,
-                    eignung: layerMap[e.target.value].eignung,
-                    layerType: "wmts",
-                    visible: true,
-                    props: {
-                      name: "",
-                      url: layerMap[e.target.value].url,
-                    },
-                    layers: layerMap[e.target.value].layers,
-                  }),
-                );
-              }
-            }}
-          >
-            <Radio.Button value="karte">Karte</Radio.Button>
-            <Radio.Button value="luftbild">Luftbild</Radio.Button>
-          </Radio.Group>
+          {backgroundLayer && (
+            <Radio.Group
+              value={backgroundLayer.id}
+              onChange={(e) => {
+                if (e.target.value === "karte") {
+                  dispatch(
+                    setBackgroundLayer({ ...selectedMapLayer, id: "karte" }),
+                  );
+                  toggleSceneStyle("secondary");
+                } else {
+                  dispatch(
+                    setBackgroundLayer({
+                      id: e.target.value,
+                      title: layerMap[e.target.value].title,
+                      opacity: 1.0,
+                      description: layerMap[e.target.value].description,
+                      inhalt: layerMap[e.target.value].inhalt,
+                      eignung: layerMap[e.target.value].eignung,
+                      layerType: "wmts",
+                      visible: true,
+                      props: {
+                        name: "",
+                        url: layerMap[e.target.value].url,
+                      },
+                      layers: layerMap[e.target.value].layers,
+                    }),
+                  );
+                  toggleSceneStyle("primary");
+                }
+              }}
+            >
+              <Radio.Button value="karte">Karte</Radio.Button>
+              <Radio.Button value="luftbild">Luftbild</Radio.Button>
+            </Radio.Group>
+          )}
         </div>
 
         <Button

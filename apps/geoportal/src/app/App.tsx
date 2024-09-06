@@ -11,9 +11,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import LZString from "lz-string";
 import { useDispatch, useSelector } from "react-redux";
-
+import { backgroundSettings } from "@carma-collab/wuppertal/geoportal";
 import {
-  getShowMeasurementButton,
   setBackgroundLayer,
   setLayers,
   setShowFullscreenButton,
@@ -35,6 +34,9 @@ import { CrossTabCommunicationContextProvider } from "react-cismap/contexts/Cros
 import HomeButton from "./components/HomeButton";
 import type { BackgroundLayer, Settings } from "@carma-apps/portals";
 import { OverlayTourProvider } from "@carma/libraries/commons/ui/lib-helper-overlay";
+import { BASEMAP_METROPOLRUHR_WMS_GRAUBLAU, WUPP_TERRAIN_PROVIDER } from "./config/dataSources.config";
+import { MODEL_ASSETS } from "./config/assets.config";
+import { CustomViewerContextProvider } from "@carma-mapping/cesium-engine";
 
 if (typeof global === "undefined") {
   window.global = window;
@@ -54,19 +56,9 @@ function App({ published }: { published?: boolean }) {
   const mode = useSelector(getMode);
 
   useEffect(() => {
-    // sticky feature flag
-    // remove with allow3d=false once set
     // TODO: remove if feature flag is removed
 
-    const allow3dValue = searchParams.get("allow3d");
-
-    if (allow3dValue !== null) {
-      if (allow3dValue === "0" || allow3dValue.toLowerCase() === "false") {
-        dispatch(setAllow3d(false));
-      } else {
-        dispatch(setAllow3d(true));
-      }
-    }
+    dispatch(setAllow3d(searchParams.has("allow3d")));
 
     // END FEATURE FLAG
 
@@ -131,15 +123,25 @@ function App({ published }: { published?: boolean }) {
     <OverlayTourProvider
       showOverlay={mode === "tour" ? true : false}
       closeOverlay={() => dispatch(setMode("default"))}
-      transparency={0.8}
-      color="black"
+      transparency={backgroundSettings.transparency}
+      color={backgroundSettings.color}
     >
       <TopicMapContextProvider>
-        <div className="flex flex-col h-screen w-full">
-          {!published && <TopNavbar />}
-          <MapMeasurement />
-          <GeoportalMap />
-        </div>
+        <CustomViewerContextProvider
+          //initialViewerState={defaultCesiumState}
+          // TODO move these to store/slice setup ?
+          providerConfig={{
+            terrainProvider: WUPP_TERRAIN_PROVIDER,
+            imageryProvider: BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
+            models: MODEL_ASSETS,
+          }}
+        >
+          <div className="flex flex-col h-screen w-full">
+            {!published && <TopNavbar />}
+            <MapMeasurement />
+            <GeoportalMap />
+          </div>
+        </CustomViewerContextProvider>
       </TopicMapContextProvider>
     </OverlayTourProvider>
   );

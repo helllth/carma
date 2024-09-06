@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { MouseEvent, ReactNode } from "react";
-import { useCesium } from "resium";
+import { ReactNode } from "react";
+import { useZoomControls } from "../../hooks";
 
 type ZoomControlsProps = {
   children?: ReactNode;
@@ -9,39 +9,8 @@ type ZoomControlsProps = {
   viewer?: any;
 };
 
-const MOVERATE_FACTOR = 0.1;
-
 const ZoomControls = (props: ZoomControlsProps) => {
-  const { viewer } = useCesium();
-
-  const handleZoomIn = (event: MouseEvent) => {
-    event.preventDefault();
-    // console.log('handleZoomIn', viewer);
-    if (!viewer) return;
-    const scene = viewer.scene;
-    const camera = viewer.camera;
-    const ellipsoid = scene.globe.ellipsoid;
-
-    const cameraHeight = ellipsoid.cartesianToCartographic(
-      camera.position,
-    ).height;
-    const moveRate = cameraHeight * MOVERATE_FACTOR;
-    camera.moveForward(moveRate);
-  };
-
-  const handleZoomOut = (event: MouseEvent) => {
-    event.preventDefault();
-    if (!viewer) return;
-    const scene = viewer.scene;
-    const camera = viewer.camera;
-    const ellipsoid = scene.globe.ellipsoid;
-
-    const cameraHeight = ellipsoid.cartesianToCartographic(
-      camera.position,
-    ).height;
-    const moveRate = cameraHeight * MOVERATE_FACTOR;
-    camera.moveBackward(moveRate);
-  };
+  const { handleZoomIn, handleZoomOut } = useZoomControls();
 
   return (
     <div className="leaflet-control-zoom leaflet-bar leaflet-control">
