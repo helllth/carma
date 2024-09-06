@@ -371,24 +371,27 @@ export const GeoportalMap = () => {
         </Control>
       )}
       <Control position="topleft" order={60}>
-        <ControlButtonStyler
-          onClick={() => {
-            dispatch(
-              setMode(mode === "featureInfo" ? "default" : "featureInfo"),
-            );
-            dispatch(setSelectedFeature(null));
-            dispatch(setSecondaryInfoBoxElements([]));
-            dispatch(setFeatures([]));
-            setPos(null);
-            dispatch(setPreferredLayerId(""));
-          }}
-          className="font-semibold"
-        >
-          <FontAwesomeIcon
-            icon={faInfo}
-            className={mode === "featureInfo" ? "text-[#1677ff]" : ""}
-          />
-        </ControlButtonStyler>
+        <Tooltip title="Sachdatenabfrage" placement="right">
+          <ControlButtonStyler
+            disabled={allow3d && !isMode2d}
+            onClick={() => {
+              dispatch(
+                setMode(mode === "featureInfo" ? "default" : "featureInfo"),
+              );
+              dispatch(setSelectedFeature(null));
+              dispatch(setSecondaryInfoBoxElements([]));
+              dispatch(setFeatures([]));
+              setPos(null);
+              dispatch(setPreferredLayerId(""));
+            }}
+            className="font-semibold"
+          >
+            <FontAwesomeIcon
+              icon={faInfo}
+              className={mode === "featureInfo" ? "text-[#1677ff]" : ""}
+            />
+          </ControlButtonStyler>
+        </Tooltip>
       </Control>
       <Control position="topcenter" order={10}>
         {showLayerButtons && <LayerWrapper />}
