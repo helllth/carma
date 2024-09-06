@@ -476,9 +476,9 @@ export const GeoportalMap = () => {
                       }),
                     );
 
-                    const filteredResult = result.filter(
-                      (feature) => feature !== undefined,
-                    );
+                    const filteredResult = result
+                      .filter((feature) => feature !== undefined)
+                      .reverse();
 
                     if (filteredResult.length === 0) {
                       dispatch(setSelectedFeature(null));
@@ -502,7 +502,6 @@ export const GeoportalMap = () => {
                             ...filteredResult.splice(preferredLayerIndex, 1),
                           );
                         }
-                      } else {
                       }
                       dispatch(setSelectedFeature(filteredResult[0]));
                       dispatch(
