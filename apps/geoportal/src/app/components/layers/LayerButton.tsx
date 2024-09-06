@@ -188,7 +188,7 @@ const LayerButton = ({
 
         {!background && (
           <>
-            <span className="text-base">{title}</span>
+            <span className="text-base pt-0.5">{title}</span>
             {queryable && mode === "featureInfo" && (
               <button
                 className={` flex items-center justify-center ${
@@ -227,7 +227,7 @@ const LayerButton = ({
                       : faEyeSlash
                     : faX
                 }
-                className="text-xs pt-0.5"
+                className="text-xs"
               />
             </button>
           </>
