@@ -82,10 +82,13 @@ import { LayerProps } from "@carma-mapping/layers";
 import {
   addFeature,
   getFeatures,
+  getInfoText,
+  getPreferredLayerId,
   getSecondaryInfoBoxElements,
   getSelectedFeature,
   setFeatures,
   setInfoText,
+  setPreferredLayerId,
   setSecondaryInfoBoxElements,
   setSelectedFeature,
 } from "../store/slices/features.ts";
@@ -112,6 +115,7 @@ export const GeoportalMap = () => {
   const [gazetteerHit, setGazetteerHit] = useState(null);
   const [overlayFeature, setOverlayFeature] = useState(null);
   const [pos, setPos] = useState<[number, number] | null>(null);
+  const infoText = useSelector(getInfoText);
   const [isSameLayerTypes, setIsSameLayerTypes] = useState(true);
   const selectedFeature = useSelector(getSelectedFeature);
   const features = useSelector(getFeatures);
@@ -128,6 +132,7 @@ export const GeoportalMap = () => {
   const showLocatorButton = useSelector(getShowLocatorButton);
   const showHamburgerMenu = useSelector(getShowHamburgerMenu);
   const showMeasurementButton = useSelector(getShowMeasurementButton);
+  const preferredLayerId = useSelector(getPreferredLayerId);
   const focusMode = useSelector(getFocusMode);
   const [urlParams, setUrlParams] = useSearchParams();
   const [layoutHeight, setLayoutHeight] = useState(null);
@@ -140,6 +145,35 @@ export const GeoportalMap = () => {
   const [locationProps, setLocationProps] = useState(0);
   const [mapMode, setMapMode] = useState<MapMode>(MapMode._2D);
   const urlPrefix = window.location.origin + window.location.pathname;
+  const queryableLayers = layers.filter(
+    (layer) => layer.queryable === true && layer.useInFeatureInfo === true,
+  );
+  const atLeastOneLayerIsQueryable = queryableLayers.length > 0;
+
+  if (!layers.some((layer) => layer.queryable === true) && layers.length > 0) {
+    dispatch(
+      setInfoText(
+        "Die Sachdatenabfrage ist für die ausgewählten Layer nicht verfügbar.",
+      ),
+    );
+  } else if (
+    !layers.some((layer) => layer.useInFeatureInfo === true) &&
+    layers.length > 0
+  ) {
+    dispatch(
+      setInfoText(
+        "Die Sachdatenabfrage wurde für alle ausgewählten Layer deaktiviert.",
+      ),
+    );
+  } else if (
+    queryableLayers.length > 0 &&
+    (infoText ===
+      "Die Sachdatenabfrage ist für die ausgewählten Layer nicht verfügbar." ||
+      infoText ===
+        "Die Sachdatenabfrage wurde für alle ausgewählten Layer deaktiviert.")
+  ) {
+    dispatch(setInfoText(""));
+  }
 
   const zoomControlTourRef = useOverlayHelper("Zoom", {
     contentPos: "left",
@@ -174,11 +208,6 @@ export const GeoportalMap = () => {
       if (wrapperRef.current) {
         setHeight(wrapperRef.current.clientHeight);
         setWidth(wrapperRef.current.clientWidth);
-        console.log(
-          "xxx resize",
-          wrapperRef.current.clientHeight,
-          wrapperRef.current.clientWidth,
-        );
       }
     };
 
@@ -342,6 +371,7 @@ export const GeoportalMap = () => {
             dispatch(setSecondaryInfoBoxElements([]));
             dispatch(setFeatures([]));
             setPos(null);
+            dispatch(setPreferredLayerId(""));
           }}
           className="font-semibold"
         >
@@ -412,141 +442,158 @@ export const GeoportalMap = () => {
                 target: HTMLElement;
                 type: string;
               }) => {
-                if (mode === "featureInfo") {
+                if (
+                  mode === "featureInfo" &&
+                  layers.length > 0 &&
+                  atLeastOneLayerIsQueryable
+                ) {
                   dispatch(setSecondaryInfoBoxElements([]));
                   dispatch(setFeatures([]));
-                  dispatch(setInfoText(""));
-                  const tmpSecondaryInfoBoxElements = [];
-                  let tempSelectedFeature = null;
                   const pos = proj4(
                     proj4.defs("EPSG:4326") as unknown as string,
                     proj4crs25832def,
                     [e.latlng.lng, e.latlng.lat],
                   );
 
-                  if (layers[layers.length - 1].layerType === "wmts") {
+                  if (
+                    queryableLayers[queryableLayers.length - 1].layerType ===
+                    "wmts"
+                  ) {
                     setPos([e.latlng.lat, e.latlng.lng]);
                   }
 
-                  if (layers && pos[0] && pos[1]) {
-                    let isFeatureInfoPossible = false;
-                    let isFeatureInfoPossibleInThisPosition = true;
-                    let errorMsg = "";
-
-                    layers.forEach(async (testLayer, i) => {
-                      if (
-                        !isSameLayerTypes &&
-                        i === layers.length - 1 &&
-                        testLayer.layerType === "wmts"
-                      ) {
+                  if (queryableLayers && pos[0] && pos[1]) {
+                    const result = await Promise.all(
+                      queryableLayers.map(async (testLayer) => {
                         const feature = await getFeatureForLayer(
                           testLayer,
                           pos,
-                          (msg) => {
-                            errorMsg = msg;
-                          },
                         );
 
                         if (feature) {
-                          isFeatureInfoPossible = true;
-                          dispatch(addFeature(feature));
-
-                          if (!tempSelectedFeature) {
-                            dispatch(setSelectedFeature(feature));
-                            tempSelectedFeature = feature;
-                            return;
-                          }
-                          if (tempSelectedFeature) {
-                            dispatch(
-                              setSecondaryInfoBoxElements([
-                                ...tmpSecondaryInfoBoxElements,
-                                feature,
-                              ]),
-                            );
-                            tmpSecondaryInfoBoxElements.push(feature);
-                          }
-                        } else {
-                          dispatch(setSelectedFeature(null));
-                          dispatch(setSecondaryInfoBoxElements([]));
-                          dispatch(setFeatures([]));
+                          return feature;
                         }
-                      } else if (isSameLayerTypes && layers.length > 1) {
-                        const feature = await getFeatureForLayer(
-                          testLayer,
-                          pos,
-                          (msg) => {
-                            errorMsg = msg;
-                          },
-                        );
-                        if (feature) {
-                          isFeatureInfoPossible = true;
-                          dispatch(addFeature(feature));
+                      }),
+                    );
 
-                          if (!tempSelectedFeature) {
-                            dispatch(setSelectedFeature(feature));
-                            tempSelectedFeature = feature;
-                            return;
-                          }
-                          if (tempSelectedFeature) {
-                            dispatch(
-                              setSecondaryInfoBoxElements([
-                                ...tmpSecondaryInfoBoxElements,
-                                feature,
-                              ]),
-                            );
-                            tmpSecondaryInfoBoxElements.push(feature);
-                          }
-                        }
-                      } else if (layers.length === 1) {
-                        const feature = await getFeatureForLayer(
-                          testLayer,
-                          pos,
-                          (msg) => {
-                            errorMsg = msg;
-                          },
-                        );
-                        if (feature) {
-                          isFeatureInfoPossible = true;
-                          dispatch(addFeature(feature));
+                    const filteredResult = result.filter(
+                      (feature) => feature !== undefined,
+                    );
 
-                          if (!tempSelectedFeature) {
-                            dispatch(setSelectedFeature(feature));
-                            tempSelectedFeature = feature;
-                            return;
-                          }
-                          if (tempSelectedFeature) {
-                            dispatch(
-                              setSecondaryInfoBoxElements([
-                                ...tmpSecondaryInfoBoxElements,
-                                feature,
-                              ]),
-                            );
-                            tmpSecondaryInfoBoxElements.push(feature);
-                          }
-                        } else {
-                          dispatch(setSelectedFeature(null));
-                          dispatch(setSecondaryInfoBoxElements([]));
-                          dispatch(setFeatures([]));
-                        }
-                      }
-
-                      if (errorMsg === "not in this position") {
-                        isFeatureInfoPossibleInThisPosition = false;
-                      }
-                    });
-
-                    if (!isFeatureInfoPossible) {
-                      dispatch(
-                        setInfoText(
-                          !isFeatureInfoPossibleInThisPosition
-                            ? "Sachdatenabfrage an dieser Position nicht möglich"
-                            : "Hinzugefügte Layer sind nicht für die Sachdatenabfrage geeignet",
-                        ),
-                      );
+                    if (filteredResult.length === 0) {
                       dispatch(setSelectedFeature(null));
                       dispatch(setSecondaryInfoBoxElements([]));
                       dispatch(setFeatures([]));
+                      dispatch(
+                        setInfoText(
+                          "Keine Informationen an dieser Stelle gefunden.",
+                        ),
+                      );
+                    } else {
+                      if (preferredLayerId) {
+                        const preferredLayerIndex = filteredResult.findIndex(
+                          (feature) => feature.id === preferredLayerId,
+                        );
+
+                        if (preferredLayerIndex !== -1) {
+                          filteredResult.splice(
+                            0,
+                            0,
+                            ...filteredResult.splice(preferredLayerIndex, 1),
+                          );
+                        }
+                      } else {
+                      }
+                      dispatch(setSelectedFeature(filteredResult[0]));
+                      dispatch(
+                        setSecondaryInfoBoxElements(
+                          filteredResult.slice(1, filteredResult.length),
+                        ),
+                      );
+                      dispatch(setFeatures(filteredResult));
                     }
+
+                    // layers.forEach(async (testLayer, i) => {
+                    //   if (
+                    //     !isSameLayerTypes &&
+                    //     i === layers.length - 1 &&
+                    //     testLayer.layerType === "wmts"
+                    //   ) {
+                    //     const feature = await getFeatureForLayer(
+                    //       testLayer,
+                    //       pos,
+                    //     );
+                    //     if (feature) {
+                    //       dispatch(addFeature(feature));
+                    //       if (!tempSelectedFeature) {
+                    //         dispatch(setSelectedFeature(feature));
+                    //         tempSelectedFeature = feature;
+                    //         return;
+                    //       }
+                    //       if (tempSelectedFeature) {
+                    //         dispatch(
+                    //           setSecondaryInfoBoxElements([
+                    //             ...tmpSecondaryInfoBoxElements,
+                    //             feature,
+                    //           ]),
+                    //         );
+                    //         tmpSecondaryInfoBoxElements.push(feature);
+                    //       }
+                    //     } else {
+                    //       dispatch(setSelectedFeature(null));
+                    //       dispatch(setSecondaryInfoBoxElements([]));
+                    //       dispatch(setFeatures([]));
+                    //     }
+                    //   } else if (isSameLayerTypes && layers.length > 1) {
+                    //     const feature = await getFeatureForLayer(
+                    //       testLayer,
+                    //       pos,
+                    //     );
+                    //     if (feature) {
+                    //       dispatch(addFeature(feature));
+                    //       if (!tempSelectedFeature) {
+                    //         dispatch(setSelectedFeature(feature));
+                    //         tempSelectedFeature = feature;
+                    //         return;
+                    //       }
+                    //       if (tempSelectedFeature) {
+                    //         dispatch(
+                    //           setSecondaryInfoBoxElements([
+                    //             ...tmpSecondaryInfoBoxElements,
+                    //             feature,
+                    //           ]),
+                    //         );
+                    //         tmpSecondaryInfoBoxElements.push(feature);
+                    //       }
+                    //     }
+                    //   } else if (layers.length === 1) {
+                    //     const feature = await getFeatureForLayer(
+                    //       testLayer,
+                    //       pos,
+                    //     );
+                    //     if (feature) {
+                    //       dispatch(addFeature(feature));
+                    //       if (!tempSelectedFeature) {
+                    //         dispatch(setSelectedFeature(feature));
+                    //         tempSelectedFeature = feature;
+                    //         return;
+                    //       }
+                    //       if (tempSelectedFeature) {
+                    //         dispatch(
+                    //           setSecondaryInfoBoxElements([
+                    //             ...tmpSecondaryInfoBoxElements,
+                    //             feature,
+                    //           ]),
+                    //         );
+                    //         tmpSecondaryInfoBoxElements.push(feature);
+                    //       }
+                    //     } else {
+                    //       dispatch(setSelectedFeature(null));
+                    //       dispatch(setSecondaryInfoBoxElements([]));
+                    //       dispatch(setFeatures([]));
+                    //     }
+                    //   }
+                    // });
                   }
                 }
               }}

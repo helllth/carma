@@ -3,6 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 import {
   faEye,
   faEyeSlash,
+  faInfo,
   faLayerGroup,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
@@ -21,8 +22,9 @@ import {
   setSelectedLayerIndex,
   setShowLeftScrollButton,
   setShowRightScrollButton,
+  toggleUseInFeatureInfo,
 } from "../../store/slices/mapping";
-import { getShowLayerHideButtons } from "../../store/slices/ui";
+import { getMode, getShowLayerHideButtons } from "../../store/slices/ui";
 import { iconColorMap, iconMap } from "./items";
 import "./tabs.css";
 import { useSearchParams } from "react-router-dom";
@@ -47,6 +49,7 @@ const LayerButton = ({
   layer,
   background,
 }: LayerButtonProps) => {
+  const queryable = layer?.queryable || layer.layerType === "vector";
   const { ref, inView } = useInView({
     threshold: 0.99,
   });
@@ -56,6 +59,7 @@ const LayerButton = ({
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showLayerHideButtons = useSelector(getShowLayerHideButtons);
   const showLeftScrollButton = useSelector(getShowLeftScrollButton);
+  const mode = useSelector(getMode);
   const showSettings = index === selectedLayerIndex;
   const layersLength = useSelector(getLayers).length;
   const urlPrefix = window.location.origin + window.location.pathname;
@@ -181,9 +185,25 @@ const LayerButton = ({
             <div className="w-full mx-3 h-[1px] rounded-lg bg-red-500" />
           </div>
         )}
+
         {!background && (
           <>
             <span className="text-base">{title}</span>
+            {queryable && mode === "featureInfo" && (
+              <button
+                className={` flex items-center justify-center ${
+                  layer.useInFeatureInfo
+                    ? "hover:text-blue-500 text-blue-600"
+                    : "hover:text-gray-500 text-gray-600"
+                }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(toggleUseInFeatureInfo({ id }));
+                }}
+              >
+                <FontAwesomeIcon icon={faInfo} className="" />
+              </button>
+            )}
             <button
               className="hover:text-gray-500 text-gray-600 flex items-center justify-center"
               onClick={(e) => {

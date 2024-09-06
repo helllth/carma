@@ -4,6 +4,7 @@ import {
   getInfoText,
   getSecondaryInfoBoxElements,
   getSelectedFeature,
+  setPreferredLayerId,
   setSelectedFeature,
   updateSecondaryInfoBoxElements,
 } from "../../store/slices/features";
@@ -53,10 +54,11 @@ const FeatureInfoBox = () => {
           paddingLeft: 10,
           cursor: "pointer",
         }}
-        key={"overlapping." + feature.id}
+        key={"overlapping."}
         onClick={() => {
           dispatch(setSelectedFeature(feature));
           dispatch(updateSecondaryInfoBoxElements(feature));
+          dispatch(setPreferredLayerId(feature.id));
         }}
       >
         <InfoBoxHeader
