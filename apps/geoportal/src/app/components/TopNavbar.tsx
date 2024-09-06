@@ -121,6 +121,8 @@ const TopNavbar = () => {
           layerType: "vector",
           opacity: 0.7,
           description: layer.description,
+          queryable: isNaN(layer.queryable) ? true : layer.queryable,
+          useInFeatureInfo: true,
           visible: true,
           props: {
             style: vectorObject.vectorStyle,
