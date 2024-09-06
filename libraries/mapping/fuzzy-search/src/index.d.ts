@@ -107,7 +107,7 @@ export type PayloadItemType = {
   z?: string;
 };
 
-type SearchConfig = {
+export type SearchConfig = {
   prepoHandling?: boolean;
   ifShowScore?: boolean;
   limit?: number;
