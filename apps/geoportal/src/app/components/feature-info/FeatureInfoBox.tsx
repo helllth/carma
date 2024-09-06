@@ -27,21 +27,20 @@ const FeatureInfoBox = () => {
   let links = [];
   if (selectedFeature) {
     links = getActionLinksForFeature(selectedFeature, {
-      displayZoomToFeature: true,
-      zoomToFeature: () => {
-        if (selectedFeature) {
-          const f = JSON.stringify(selectedFeature, null, 2);
-          const pf = JSON.parse(f);
-          pf.crs = {
-            type: "name",
-            properties: {
-              name: "urn:ogc:def:crs:EPSG::4326",
-            },
-          };
-
-          zoomToFeature(pf);
-        }
-      },
+      // displayZoomToFeature: true,
+      // zoomToFeature: () => {
+      //   if (selectedFeature) {
+      //     const f = JSON.stringify(selectedFeature, null, 2);
+      //     const pf = JSON.parse(f);
+      //     pf.crs = {
+      //       type: "name",
+      //       properties: {
+      //         name: "urn:ogc:def:crs:EPSG::4326",
+      //       },
+      //     };
+      //     zoomToFeature(pf);
+      //   }
+      // },
     });
   }
 
