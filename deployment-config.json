@@ -406,9 +406,15 @@
             "image": "cismet/carma-ais-korschenbroich:"
           }
         },
-
-        "projectPath": "./dist/envirometrics/korschenbroich/rainhazardmap"
-      }
+        "auto": {
+          "dev": {
+            "container": {
+              "image": "cismet/carma-ais-korschenbroich:dev"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/envirometrics/korschenbroich/rainhazardmap"
     },
     "map-control-playground": {
       "deployment": {
