@@ -114,6 +114,20 @@ const slice = createSlice({
       });
       state.layers = newLayers;
     },
+    toggleUseInFeatureInfo(state, action) {
+      const { id } = action.payload;
+      const newLayers = state.layers.map((obj) => {
+        if (obj.id === id) {
+          return {
+            ...obj,
+            useInFeatureInfo: !obj.useInFeatureInfo,
+          };
+        } else {
+          return obj;
+        }
+      });
+      state.layers = newLayers;
+    },
     setSelectedLayerIndex(state, action) {
       state.selectedLayerIndex = action.payload;
     },
@@ -189,6 +203,7 @@ export const {
   setShowHamburgerMenu,
   setFocusMode,
   setStartDrawing,
+  toggleUseInFeatureInfo,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {

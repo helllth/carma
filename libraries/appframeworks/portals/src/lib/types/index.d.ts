@@ -139,4 +139,6 @@ export interface FeatureInfoState {
   features: any[];
   selectedFeature: any;
   secondaryInfoBoxElements: any[];
+  infoText: string;
+  preferredLayerId: string;
 }
