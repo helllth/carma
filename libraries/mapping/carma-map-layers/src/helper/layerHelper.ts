@@ -125,6 +125,7 @@ const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
       name: layer.Name,
       type: "layer",
       layerType: "wmts",
+      queryable: layer.queryable,
       maxZoom: scaleHintToZoom(layer?.ScaleHint?.min),
       minZoom: scaleHintToZoom(layer?.ScaleHint?.max),
       props: { ...layer },
@@ -185,7 +186,23 @@ export const getLayerStructure = ({
           tags[0] = categoryObject.Title;
           foundLayer = { ...foundLayer, ...layer, tags, service };
 
+          let infoBoxMapping = "";
+
+          foundLayer?.keywords?.forEach((keyword) => {
+            const extracted = keyword.split("carmaconf://infoBoxMapping:")[1];
+
+            if (extracted) {
+              infoBoxMapping += extracted + "\n";
+            }
+          });
+
           if (foundLayer) {
+            if (!infoBoxMapping) {
+              foundLayer = {
+                ...foundLayer,
+                queryable: false,
+              };
+            }
             layers.push(foundLayer);
           }
         }
@@ -220,7 +237,23 @@ export const getLayerStructure = ({
             service: services[categoryConfig.serviceName as string],
           };
 
+          let infoBoxMapping = "";
+
+          foundLayer?.keywords?.forEach((keyword) => {
+            const extracted = keyword.split("carmaconf://infoBoxMapping:")[1];
+
+            if (extracted) {
+              infoBoxMapping += extracted + "\n";
+            }
+          });
+
           if (foundLayer) {
+            if (!infoBoxMapping) {
+              foundLayer = {
+                ...foundLayer,
+                queryable: false,
+              };
+            }
             layers.push(foundLayer);
           }
         }

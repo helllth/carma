@@ -48,6 +48,7 @@ import { cn } from "../helper/helper";
 import { layerMap } from "../config";
 import { Save, Share, extractVectorStyles } from "@carma-apps/portals";
 import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
+import { isNaN } from "lodash";
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -139,6 +140,8 @@ const TopNavbar = () => {
               opacity: 0.7,
               description: layer.description,
               visible: true,
+              queryable: layer.queryable,
+              useInFeatureInfo: true,
               props: {
                 url: layer.props.url,
                 legend: layer.props.Style[0].LegendURL,
@@ -159,6 +162,8 @@ const TopNavbar = () => {
               layerType: "vector",
               opacity: 0.7,
               description: layer.description,
+              queryable: isNaN(layer.queryable) ? true : layer.queryable,
+              useInFeatureInfo: true,
               visible: true,
               props: {
                 style: layer.props.style,

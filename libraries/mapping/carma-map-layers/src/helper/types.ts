@@ -23,6 +23,8 @@ export type Layer = {
   opacity: number;
   description: string;
   visible: boolean;
+  queryable?: boolean;
+  useInFeatureInfo?: boolean;
   icon?: string;
   other?: Item;
   // type?: 'wmts' | 'wmts-nt' | 'tiles' | 'vector';
@@ -83,6 +85,8 @@ export type Item = {
   alternativeIcon?: string;
   service?: { name: string; url: string };
   name: string;
+  queryable?: boolean;
+  useInFeatureInfo?: boolean;
   pictureBoundingBox?: [number, number, number, number];
   maxZoom?: number;
   minZoom?: number;
