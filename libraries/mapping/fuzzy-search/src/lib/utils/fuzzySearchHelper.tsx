@@ -688,21 +688,41 @@ export const getDefaultSearchConfig = (config: SearchConfig): SearchConfig => {
 
   if (!config.prepoHandling) {
     prepoHandling = false;
+  } else {
+    prepoHandling = config.prepoHandling;
   }
   if (!config.ifShowScore) {
     ifShowScore = false;
+  } else {
+    ifShowScore = config.ifShowScore;
   }
   if (!config.limit) {
     limit = 3;
+  } else {
+    limit = config.limit;
   }
   if (!config.cut) {
     cut = 0.4;
+  } else {
+    cut = config.cut;
   }
   if (!config.distance) {
     distance = 100;
+  } else {
+    distance = config.distance;
   }
   if (!config.threshold) {
     threshold = 0.5;
+  } else {
+    threshold = config.threshold;
   }
-  return config;
+
+  return {
+    prepoHandling,
+    ifShowScore,
+    limit,
+    cut,
+    distance,
+    threshold,
+  };
 };

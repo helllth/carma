@@ -57,6 +57,7 @@ export function LibFuzzySearch({
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
   const { prepoHandling, ifShowScore, limit, cut, distance, threshold } =
     getDefaultSearchConfig(config);
+  console.log("xxx", limit);
   const _gazetteerHitTrigger = undefined;
   const inputStyle = {
     width: "calc(100% - 32px)",
