@@ -141,4 +141,5 @@ export interface FeatureInfoState {
   secondaryInfoBoxElements: any[];
   infoText: string;
   preferredLayerId: string;
+  vectorInfo: any;
 }

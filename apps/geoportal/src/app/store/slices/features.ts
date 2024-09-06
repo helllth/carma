@@ -10,6 +10,7 @@ const initialState: FeatureInfoState = {
   secondaryInfoBoxElements: [],
   infoText: "",
   preferredLayerId: "",
+  vectorInfo: undefined,
 };
 
 const slice = createSlice({
@@ -45,6 +46,9 @@ const slice = createSlice({
     setPreferredLayerId(state, action) {
       state.preferredLayerId = action.payload;
     },
+    setVectorInfo(state, action) {
+      state.vectorInfo = action.payload;
+    },
   },
 });
 
@@ -58,6 +62,7 @@ export const {
   updateSecondaryInfoBoxElements,
   setInfoText,
   setPreferredLayerId,
+  setVectorInfo,
 } = slice.actions;
 
 export const getFeatures = (state: RootState) => {
@@ -78,4 +83,8 @@ export const getInfoText = (state: RootState) => {
 
 export const getPreferredLayerId = (state: RootState) => {
   return state.features.preferredLayerId;
+};
+
+export const getVectorInfo = (state: RootState) => {
+  return state.features.vectorInfo;
 };
