@@ -189,21 +189,6 @@ const LayerButton = ({
         {!background && (
           <>
             <span className="text-base pt-0.5">{title}</span>
-            {queryable && mode === "featureInfo" && (
-              <button
-                className={` flex items-center justify-center ${
-                  layer.useInFeatureInfo
-                    ? "hover:text-blue-500 text-blue-600"
-                    : "hover:text-gray-500 text-gray-600"
-                }`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  dispatch(toggleUseInFeatureInfo({ id }));
-                }}
-              >
-                <FontAwesomeIcon icon={faInfo} className="" />
-              </button>
-            )}
             <button
               className="hover:text-gray-500 text-gray-600 flex items-center justify-center"
               onClick={(e) => {
@@ -233,6 +218,24 @@ const LayerButton = ({
           </>
         )}
       </div>
+      {queryable && mode === "featureInfo" && !background && (
+        <div
+          className="absolute flex items-center -bottom-2"
+          style={{ width: buttonRef.current?.clientWidth + "px" }}
+        >
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              dispatch(toggleUseInFeatureInfo({ id }));
+            }}
+            className={cn(
+              "h-[5px] z-[999999999] cursor-pointer w-full mx-3 rounded-full",
+              layer.useInFeatureInfo && "bg-[#1677ff]",
+              !layer.useInFeatureInfo && "bg-gray-500",
+            )}
+          />
+        </div>
+      )}
     </div>
   );
 };
