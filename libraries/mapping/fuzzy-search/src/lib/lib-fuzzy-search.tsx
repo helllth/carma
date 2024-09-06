@@ -17,6 +17,7 @@ import {
   removeStopwords,
   stopwords,
   builtInGazetteerHitTrigger as carmaGazetteerHitTrigger,
+  getDefaultSearchConfig,
 } from "./utils/fuzzySearchHelper";
 import {
   SearchResultItem,
@@ -55,7 +56,7 @@ export function LibFuzzySearch({
   const [options, setOptions] = useState<Option[]>([]);
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
   const { prepoHandling, ifShowScore, limit, cut, distance, threshold } =
-    config;
+    getDefaultSearchConfig(config);
   const _gazetteerHitTrigger = undefined;
   const inputStyle = {
     width: "calc(100% - 32px)",

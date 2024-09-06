@@ -7,6 +7,7 @@ import {
   GazDataItem,
   SourceWithPayload,
   PayloadItem,
+  SearchConfig,
 } from "../..";
 import { md5FetchText } from "./fetching";
 import L from "leaflet";
@@ -675,4 +676,33 @@ export const builtInGazetteerHitTrigger = (
   } else {
     console.info("unhandled hit:", hit);
   }
+};
+
+export const getDefaultSearchConfig = (config: SearchConfig): SearchConfig => {
+  let prepoHandling;
+  let ifShowScore;
+  let limit;
+  let cut;
+  let distance;
+  let threshold;
+
+  if (!config.prepoHandling) {
+    prepoHandling = false;
+  }
+  if (!config.ifShowScore) {
+    ifShowScore = false;
+  }
+  if (!config.limit) {
+    limit = 3;
+  }
+  if (!config.cut) {
+    cut = 0.4;
+  }
+  if (!config.distance) {
+    distance = 100;
+  }
+  if (!config.threshold) {
+    threshold = 0.5;
+  }
+  return config;
 };

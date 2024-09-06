@@ -108,10 +108,10 @@ export type PayloadItemType = {
 };
 
 type SearchConfig = {
-  prepoHandling: boolean;
-  ifShowScore: boolean;
-  limit: number;
-  cut: number;
-  distance: number;
-  threshold: number;
+  prepoHandling?: boolean;
+  ifShowScore?: boolean;
+  limit?: number;
+  cut?: number;
+  distance?: number;
+  threshold?: number;
 };
