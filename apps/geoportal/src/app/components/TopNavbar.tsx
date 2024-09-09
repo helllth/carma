@@ -333,7 +333,7 @@ const TopNavbar = () => {
             <button
               className="hover:text-gray-600 text-xl"
               onClick={() => {
-                if (mode === "default") {
+                if (mode !== "tour") {
                   dispatch(setMode("tour"));
                 } else {
                   dispatch(setMode("default"));
