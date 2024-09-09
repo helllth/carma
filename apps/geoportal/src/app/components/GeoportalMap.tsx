@@ -490,8 +490,16 @@ export const GeoportalMap = () => {
                   if (queryableLayers && pos[0] && pos[1]) {
                     const result = await Promise.all(
                       queryableLayers.map(async (testLayer) => {
-                        if (testLayer.layerType === "vector") {
+                        if (
+                          testLayer.layerType === "vector" &&
+                          testLayer.id === vectorInfo.id
+                        ) {
                           return vectorInfo;
+                        } else if (
+                          testLayer.layerType === "vector" &&
+                          testLayer.id !== vectorInfo.id
+                        ) {
+                          return undefined;
                         }
 
                         const feature = await getFeatureForLayer(
