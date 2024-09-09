@@ -481,10 +481,19 @@ export const GeoportalMap = () => {
                     [e.latlng.lng, e.latlng.lat],
                   );
 
+                  const vectorLayers = queryableLayers.filter(
+                    (layer) => layer.layerType === "vector",
+                  );
+
+                  if (vectorLayers.length === nothingFoundIDs.length) {
+                    dispatch(setVectorInfo(undefined));
+                  }
+
                   if (
                     queryableLayers[queryableLayers.length - 1].layerType !==
                       "vector" ||
-                    !vectorInfo
+                    !vectorInfo ||
+                    vectorLayers.length === nothingFoundIDs.length
                   ) {
                     setPos([e.latlng.lat, e.latlng.lng]);
                   } else {
