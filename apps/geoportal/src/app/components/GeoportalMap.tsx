@@ -599,6 +599,7 @@ export const GeoportalMap = () => {
                             pane={`additionalLayers${i}`}
                             opacity={layer.opacity || 0.7}
                             type="vector"
+                            selectionEnabled={mode === "featureInfo"}
                             onSelectionChanged={(e: {
                               hits: any[];
                               hit: any;
