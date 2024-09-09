@@ -132,4 +132,5 @@ export interface FeatureInfoState {
   infoText: string;
   preferredLayerId: string;
   vectorInfo: any;
+  nothingFoundIDs: string[];
 }

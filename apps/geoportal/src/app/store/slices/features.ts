@@ -11,6 +11,7 @@ const initialState: FeatureInfoState = {
   infoText: "",
   preferredLayerId: "",
   vectorInfo: undefined,
+  nothingFoundIDs: [],
 };
 
 const slice = createSlice({
@@ -49,6 +50,12 @@ const slice = createSlice({
     setVectorInfo(state, action) {
       state.vectorInfo = action.payload;
     },
+    addNothingFoundID(state, action) {
+      state.nothingFoundIDs.push(action.payload);
+    },
+    clearNothingFoundIDs(state) {
+      state.nothingFoundIDs = [];
+    },
   },
 });
 
@@ -63,6 +70,8 @@ export const {
   setInfoText,
   setPreferredLayerId,
   setVectorInfo,
+  addNothingFoundID,
+  clearNothingFoundIDs,
 } = slice.actions;
 
 export const getFeatures = (state: RootState) => {
@@ -87,4 +96,8 @@ export const getPreferredLayerId = (state: RootState) => {
 
 export const getVectorInfo = (state: RootState) => {
   return state.features.vectorInfo;
+};
+
+export const getNothingFoundIDs = (state: RootState) => {
+  return state.features.nothingFoundIDs;
 };

@@ -84,8 +84,11 @@ import {
 import { LayerProps } from "@carma-mapping/layers";
 import {
   addFeature,
+  addNothingFoundID,
+  clearNothingFoundIDs,
   getFeatures,
   getInfoText,
+  getNothingFoundIDs,
   getPreferredLayerId,
   getSecondaryInfoBoxElements,
   getSelectedFeature,
@@ -469,6 +472,7 @@ export const GeoportalMap = () => {
                   }
 
                   const vectorInfo = getVectorInfo(store.getState());
+                  const nothingFoundIDs = getNothingFoundIDs(store.getState());
                   dispatch(setSecondaryInfoBoxElements([]));
                   dispatch(setFeatures([]));
                   const pos = proj4(
@@ -492,14 +496,15 @@ export const GeoportalMap = () => {
                       queryableLayers.map(async (testLayer) => {
                         if (
                           testLayer.layerType === "vector" &&
+                          (testLayer.id !== vectorInfo.id ||
+                            nothingFoundIDs.includes(testLayer.id))
+                        ) {
+                          return undefined;
+                        } else if (
+                          testLayer.layerType === "vector" &&
                           testLayer.id === vectorInfo.id
                         ) {
                           return vectorInfo;
-                        } else if (
-                          testLayer.layerType === "vector" &&
-                          testLayer.id !== vectorInfo.id
-                        ) {
-                          return undefined;
                         }
 
                         const feature = await getFeatureForLayer(
@@ -516,6 +521,8 @@ export const GeoportalMap = () => {
                     const filteredResult = result
                       .filter((feature) => feature !== undefined)
                       .reverse();
+
+                    dispatch(clearNothingFoundIDs());
 
                     if (filteredResult.length === 0) {
                       dispatch(setSelectedFeature(null));
@@ -654,7 +661,7 @@ export const GeoportalMap = () => {
                                   dispatch(setVectorInfo(undefined));
                                 }
                               } else {
-                                dispatch(setVectorInfo(undefined));
+                                dispatch(addNothingFoundID(layer.id));
                               }
                             }}
                           />
