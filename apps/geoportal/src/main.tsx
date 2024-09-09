@@ -7,6 +7,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import { suppressReactCismapErrors } from "@carma-commons/utils";
 import { CESIUM_BASE_URL } from "./app/config/app.config";
+import { ErrorBoundary } from "react-error-boundary";
+import AppErrorFallback from "./app/components/AppErrorFallback";
 
 declare global {
   interface Window {
@@ -16,21 +18,21 @@ declare global {
 
 const persistor = persistStore(store);
 
-const createRouter = () => createHashRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/publish",
-    element: <App published={true} />,
-  },
-]);
+const createRouter = () =>
+  createHashRouter([
+    {
+      path: "/",
+      element: <App />,
+    },
+    {
+      path: "/publish",
+      element: <App published={true} />,
+    },
+  ]);
 
 suppressReactCismapErrors();
 
 window.CESIUM_BASE_URL = CESIUM_BASE_URL;
-
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -38,7 +40,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <PersistGate loading={null} persistor={persistor}>
     <Provider store={store}>
-      <RouterProvider router={createRouter()} />
+      <ErrorBoundary FallbackComponent={AppErrorFallback}>
+        <RouterProvider router={createRouter()} />
+      </ErrorBoundary>
     </Provider>
-  </PersistGate>
+  </PersistGate>,
 );
