@@ -61,8 +61,8 @@
       "deployment": {
         "manual": {
           "pages": {
-            "org": "carma-dev-deployments",
-            "prj": "topicmaps-bplan-auskunft-wuppertal"
+            "org": "digital-twin-wuppertal-live",
+            "prj": "bplan-auskunft"
           }
         },
         "auto": {
