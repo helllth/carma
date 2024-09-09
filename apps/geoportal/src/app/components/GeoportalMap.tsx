@@ -496,7 +496,7 @@ export const GeoportalMap = () => {
                       queryableLayers.map(async (testLayer) => {
                         if (
                           testLayer.layerType === "vector" &&
-                          (testLayer.id !== vectorInfo.id ||
+                          (testLayer.id !== vectorInfo?.id ||
                             nothingFoundIDs.includes(testLayer.id))
                         ) {
                           return undefined;
