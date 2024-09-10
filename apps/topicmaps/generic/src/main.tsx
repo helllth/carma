@@ -39,7 +39,7 @@ function AppWrapper() {
   let { name } = useParams();
   // Now you can use 'name' inside your App component or pass it as a prop
   if (name === undefined) {
-    name = "wasserstoff-tankstellenkarte_wuppertal";
+    name = "Wasserstoff-Tankstellenkarte_Wuppertal";
   }
   return <App name={name} />;
 }
