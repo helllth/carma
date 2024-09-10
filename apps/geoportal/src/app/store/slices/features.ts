@@ -53,6 +53,11 @@ const slice = createSlice({
     addNothingFoundID(state, action) {
       state.nothingFoundIDs.push(action.payload);
     },
+    removeNothingFoundID(state, action) {
+      state.nothingFoundIDs = state.nothingFoundIDs.filter(
+        (id) => id !== action.payload,
+      );
+    },
     clearNothingFoundIDs(state) {
       state.nothingFoundIDs = [];
     },
@@ -71,6 +76,7 @@ export const {
   setPreferredLayerId,
   setVectorInfo,
   addNothingFoundID,
+  removeNothingFoundID,
   clearNothingFoundIDs,
 } = slice.actions;
 

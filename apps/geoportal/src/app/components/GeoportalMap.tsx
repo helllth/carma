@@ -93,6 +93,7 @@ import {
   getSecondaryInfoBoxElements,
   getSelectedFeature,
   getVectorInfo,
+  removeNothingFoundID,
   setFeatures,
   setInfoText,
   setPreferredLayerId,
@@ -658,6 +659,7 @@ export const GeoportalMap = () => {
                                   };
 
                                   dispatch(setVectorInfo(feature));
+                                  dispatch(removeNothingFoundID(layer.id));
 
                                   if (
                                     layer.id ===
