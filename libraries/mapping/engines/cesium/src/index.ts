@@ -1,3 +1,5 @@
+import { CustomViewer } from "./lib/CustomViewer";
+
 export { CustomCesiumWidget } from "./lib/CustomCesiumWidget";
 export * from "./lib/CustomViewer";
 export * from "./lib/CustomViewerContextProvider";
@@ -15,3 +17,5 @@ export { SearchGazetteer } from "./lib/components/SearchGazetteer";
 
 // Re-export all the types as workaround
 export * from "./index.d";
+
+export default CustomViewer;

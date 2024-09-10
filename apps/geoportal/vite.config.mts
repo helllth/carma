@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import { nxViteTsPaths } from "@nx/vite/plugins/nx-tsconfig-paths.plugin";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
-const CESIUM_PATHNAME = "__cesium__"; // also set in config of cesium eventually share via env var?
+const CESIUM_PATHNAME = "__cesium__";
 
 export default defineConfig({
   root: __dirname,
@@ -14,7 +14,7 @@ export default defineConfig({
     port: 4200,
     host: "localhost",
     fs: {
-      allow: ["../../.."],
+      allow: ["../.."],
     },
   },
 
@@ -30,7 +30,7 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: "../../node_modules/cesium/Build/Cesium/*", // dont use @cesium module folder
+          src: "../../node_modules/cesium/Build/Cesium/*",
           dest: CESIUM_PATHNAME,
         },
       ],
