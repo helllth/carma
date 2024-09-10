@@ -213,7 +213,7 @@ const InfoBoxMeasurement = () => {
                   collapsedContent={
                     visibleShapesData[currentMeasure].shapeType === "polygon"
                       ? `Fläche: ${visibleShapesData[currentMeasure].area}`
-                      : `Entfernung: ${visibleShapesData[currentMeasure].distance}`
+                      : `Strecke: ${visibleShapesData[currentMeasure].distance}`
                   }
                 />
               </span>
