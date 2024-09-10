@@ -8,13 +8,12 @@ const TILESET_BASE_PATH = `${APP_BASE_PATH}data/tiles/`;
 
 // TILESETS
 
-export const WUPP3D = {
+export const WUPP_MESH_2020 = {
   url: "https://wupp-3d-data.cismet.de/mesh2024/tileset.json",
-  translation: {
-    x: 7.20009,
-    y: 51.272034,
-    z: 0,
-  },
+};
+
+export const WUPP_MESH_2024 = {
+  url: "https://wupp-3d-data.cismet.de/mesh2024/tileset.json",
 };
 
 export const WUPP_LOD2_TILESET = {

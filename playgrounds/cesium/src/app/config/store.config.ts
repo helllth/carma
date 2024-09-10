@@ -4,7 +4,7 @@ import { CesiumState } from '@carma-mapping/cesium-engine';
 import {
   BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
   FOOTPRINT_GEOJSON_SOURCES,
-  WUPP3D,
+  WUPP_MESH_2024,
   WUPP_LOD2_TILESET,
   WUPP_TERRAIN_PROVIDER,
 } from './dataSources.config';
@@ -48,7 +48,7 @@ export const defaultViewerState: CesiumState = {
   dataSources: {
     footprintGeoJson: FOOTPRINT_GEOJSON_SOURCES.VORONOI,
     tilesets: {
-      primary: WUPP3D,
+      primary: WUPP_MESH_2024,
       secondary: WUPP_LOD2_TILESET,
     },
   },

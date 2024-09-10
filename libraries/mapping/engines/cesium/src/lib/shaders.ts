@@ -2,8 +2,9 @@ import { LightingModel } from "cesium";
 
 export enum CustomShaderKeys {
   CLAY = "CLAY",
+  UNLIT_ENHANCED_2020 = "UNLIT_ENHANCED_2020",
+  UNLIT_ENHANCED_2024 = "UNLIT_ENHANCED_2024",
   UNLIT = "UNLIT",
-  UNLIT_BASE = "UNLIT_BASE",
   UNLIT_FOG = "UNLIT_FOG",
   UNDEFINED = "UNDEFINED",
   MONOCHROME = "MONOCHROME",
@@ -11,6 +12,7 @@ export enum CustomShaderKeys {
 
 export const CUSTOM_SHADERS_DEFINITIONS = {
   [CustomShaderKeys.CLAY]: {
+    lightingModel: LightingModel.PBR,
     fragmentShaderText: `
     void fragmentMain(FragmentInput fsInput, inout czm_modelMaterial material)
     {
@@ -19,7 +21,7 @@ export const CUSTOM_SHADERS_DEFINITIONS = {
     }
   `,
   },
-  [CustomShaderKeys.UNLIT]: {
+  [CustomShaderKeys.UNLIT_ENHANCED_2020]: {
     lightingModel: LightingModel.UNLIT,
     fragmentShaderText: `
     void fragmentMain(FragmentInput fsInput, inout czm_modelMaterial material)
@@ -33,6 +35,27 @@ export const CUSTOM_SHADERS_DEFINITIONS = {
         float whitePoint = 0.75; // stretch to white
          
         vec3 color = (material.diffuse - vec3(blackPoint)) / (vec3(whitePoint) - vec3(blackPoint));
+        color = clamp(color, 0.0, 1.0); // Ensure values are in [0,1] range
+    
+        // Apply gamma correction after point adjustments
+        material.diffuse = pow(color, gammaCorrection);
+    }
+    `,
+  },
+  [CustomShaderKeys.UNLIT_ENHANCED_2024]: {
+    lightingModel: LightingModel.UNLIT,
+    fragmentShaderText: `
+    void fragmentMain(FragmentInput fsInput, inout czm_modelMaterial material)
+    {
+        // This is tuned for a specific tileset texture, not generic
+        // Apply gamma correction
+        vec3 gammaCorrection = vec3(1.25,1.25,1.23); // adjust color gamma per channel
+        
+        // Apply channel-specific clamping
+        vec3 blackPoint = vec3(0.0,0.0,0.0); 
+        vec3 whitePoint = vec3(0.90,0.90,0.92); 
+         
+        vec3 color = (material.diffuse - blackPoint) / (whitePoint - blackPoint);
         color = clamp(color, 0.0, 1.0); // Ensure values are in [0,1] range
     
         // Apply gamma correction after point adjustments
@@ -73,7 +96,7 @@ export const CUSTOM_SHADERS_DEFINITIONS = {
     }
     `,
   },
-  [CustomShaderKeys.UNLIT_BASE]: {
+  [CustomShaderKeys.UNLIT]: {
     lightingModel: LightingModel.UNLIT,
   },
   [CustomShaderKeys.MONOCHROME]: {

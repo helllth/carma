@@ -30,14 +30,15 @@ let maximumScreenSpaceError = 8; // 16 is default but quite Low Quality
 
 const customShaderKeys = {
   clay: k.CLAY,
-  "unlit enhanced": k.UNLIT,
-  unlit: k.UNLIT_BASE,
+  "unlit 2020": k.UNLIT_ENHANCED_2020,
+  "unlit 2024": k.UNLIT_ENHANCED_2024,
+  unlit: k.UNLIT,
   "unlit fog": k.UNLIT_FOG,
   monochrome: k.MONOCHROME,
   undefined: k.UNDEFINED,
 };
 
-const DEFAULT_MESH_SHADER_KEY = k.UNLIT;
+const DEFAULT_MESH_SHADER_KEY = k.UNLIT_ENHANCED_2024;
 const DEFAULT_MESH_SHADER = new CustomShader(
   CUSTOM_SHADERS_DEFINITIONS[DEFAULT_MESH_SHADER_KEY],
 );

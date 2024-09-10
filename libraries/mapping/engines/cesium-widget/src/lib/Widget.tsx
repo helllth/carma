@@ -17,12 +17,12 @@ import {
   ClippingPlaneCollection,
 } from "cesium";
 import { generateRingFromDegrees } from "./utils";
-import { CUSTOM_SHADERS_DEFINITIONS } from "./shaders";
 
 import type { FC, ReactNode } from "react";
 import type { LatLngRadians, LatLngRecord } from "types/common-geo";
+import { CUSTOM_SHADERS_DEFINITIONS } from "@carma-mapping/cesium-engine/shaders";
 
-const unlit = new CustomShader(CUSTOM_SHADERS_DEFINITIONS.UNLIT);
+const unlit = new CustomShader(CUSTOM_SHADERS_DEFINITIONS.UNLIT_ENHANCED_2024);
 
 const addDebugPrimitives = (widget: CesiumWidget, cartesian: Cartesian3) => {
   const pointCollection = new PointPrimitiveCollection();

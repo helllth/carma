@@ -9,7 +9,7 @@ import { Checkbox, Radio, Select } from 'antd';
 import type { LatLngRecord } from 'types/common-geo';
 import {
   FOOTPRINT_GEOJSON_SOURCES,
-  WUPP3D,
+  WUPP_MESH_2024,
 } from '../../../config/dataSources.config';
 
 const { Option } = Select;
@@ -303,7 +303,7 @@ function View() {
           }}
         >
           <Widget
-            tilesetUrl={WUPP3D.url}
+            tilesetUrl={WUPP_MESH_2024.url}
             position={poi.position}
             range={poi.range}
             clip={clip}
