@@ -24,7 +24,7 @@ export const tabItems = (legend) => {
       ),
     },
     {
-      label: "Hintergrund",
+      label: "Datenquelle",
       key: "2",
       children: (
         <p>
