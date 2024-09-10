@@ -6,6 +6,7 @@ import L from "leaflet";
 import "leaflet-draw";
 import "leaflet-editable";
 import "leaflet-measure-path";
+import "./measure";
 import "./measure-path";
 import "leaflet-measure-path/leaflet-measure-path.css";
 import makeMeasureIcon from "./measure.png";
