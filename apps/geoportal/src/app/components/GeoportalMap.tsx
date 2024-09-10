@@ -321,14 +321,38 @@ export const GeoportalMap = () => {
       <Control position="topleft" order={50}>
         {showMeasurementButton && (
           <div className="flex items-center gap-4">
-            <Tooltip
-              title={
-                allow3d && !isMode2d
-                  ? "zum messen zu 2D-Modus wechseln"
-                  : "Strecke / Fläche messen"
-              }
-              placement="right"
-            >
+            {mode !== "measurement" ? (
+              <Tooltip
+                title={
+                  allow3d && !isMode2d
+                    ? "zum messen zu 2D-Modus wechseln"
+                    : "Strecke / Fläche messen"
+                }
+                placement="right"
+              >
+                <ControlButtonStyler
+                  disabled={allow3d && !isMode2d}
+                  onClick={() => {
+                    dispatch(
+                      setMode(
+                        mode === "measurement" ? "default" : "measurement",
+                      ),
+                    );
+                  }}
+                  ref={measurementControlTourRef}
+                >
+                  <img
+                    src={`${urlPrefix}${
+                      mode === "measurement"
+                        ? "measure-active.png"
+                        : "measure.png"
+                    }`}
+                    alt="Measure"
+                    className="w-6"
+                  />
+                </ControlButtonStyler>
+              </Tooltip>
+            ) : (
               <ControlButtonStyler
                 disabled={allow3d && !isMode2d}
                 onClick={() => {
@@ -348,7 +372,7 @@ export const GeoportalMap = () => {
                   className="w-6"
                 />
               </ControlButtonStyler>
-            </Tooltip>
+            )}
             {mode === "measurement" && (
               <Tooltip title="Neue Messung" placement="right">
                 <ControlButtonStyler
