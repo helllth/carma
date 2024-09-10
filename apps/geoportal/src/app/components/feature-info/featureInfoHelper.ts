@@ -81,6 +81,16 @@ export const getFeatureForLayer = async (layer, pos) => {
     props.name,
   );
 
+  const imgUrl =
+    props.url +
+    `&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
+    `${pos[0] - minimalBoxSize},` +
+    `${pos[1] - minimalBoxSize},` +
+    `${pos[0] + minimalBoxSize},` +
+    `${pos[1] + minimalBoxSize}` +
+    `&WIDTH=10&HEIGHT=10&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${props.name}&STYLES=default&QUERY_LAYERS=${props.name}&INFO_FORMAT=text/html&X=5&Y=5
+            `;
+
   let output = "";
 
   let result = "";
@@ -105,7 +115,19 @@ export const getFeatureForLayer = async (layer, pos) => {
         ? functionToFeature(output, result)
         : objectToFeature(output, result);
 
-      return { ...feature, id: layer.id };
+      return {
+        properties: {
+          ...feature.properties,
+          genericLinks: [
+            {
+              url: imgUrl,
+              tooltip: "Alte Sachdatenabfrage",
+              iconname: "lupe",
+            },
+          ],
+        },
+        id: layer.id,
+      };
     }
   }
 };
