@@ -511,7 +511,7 @@
           }
         }
       },
-      "projectPath": "./dist/apps/topicmaps/generic-topicmap"
+      "projectPath": "./dist/apps/topicmaps/generic"
     }
   }
 }
