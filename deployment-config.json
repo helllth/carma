@@ -493,6 +493,25 @@
         }
       },
       "projectPath": "./dist/apps/lagis/desktop"
+    },
+    "generic-topicmap": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "generic-topicmap"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "generic-topicmap"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/apps/topicmaps/generic-topicmap"
     }
   }
 }
