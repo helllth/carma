@@ -16,21 +16,21 @@ declare global {
 
 const persistor = persistStore(store);
 
-const createRouter = () => createHashRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/publish",
-    element: <App published={true} />,
-  },
-]);
+const createRouter = () =>
+  createHashRouter([
+    {
+      path: "/",
+      element: <App />,
+    },
+    {
+      path: "/publish",
+      element: <App published={true} />,
+    },
+  ]);
 
 suppressReactCismapErrors();
 
 window.CESIUM_BASE_URL = CESIUM_BASE_URL;
-
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -40,5 +40,5 @@ root.render(
     <Provider store={store}>
       <RouterProvider router={createRouter()} />
     </Provider>
-  </PersistGate>
+  </PersistGate>,
 );

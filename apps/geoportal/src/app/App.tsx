@@ -34,9 +34,14 @@ import { CrossTabCommunicationContextProvider } from "react-cismap/contexts/Cros
 import HomeButton from "./components/HomeButton";
 import type { BackgroundLayer, Settings } from "@carma-apps/portals";
 import { OverlayTourProvider } from "@carma/libraries/commons/ui/lib-helper-overlay";
-import { BASEMAP_METROPOLRUHR_WMS_GRAUBLAU, WUPP_TERRAIN_PROVIDER } from "./config/dataSources.config";
+import {
+  BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
+  WUPP_TERRAIN_PROVIDER,
+} from "./config/dataSources.config";
 import { MODEL_ASSETS } from "./config/assets.config";
 import { CustomViewerContextProvider } from "@carma-mapping/cesium-engine";
+import { ErrorBoundary } from "react-error-boundary";
+import AppErrorFallback from "./components/AppErrorFallback";
 
 if (typeof global === "undefined") {
   window.global = window;
@@ -136,11 +141,13 @@ function App({ published }: { published?: boolean }) {
             models: MODEL_ASSETS,
           }}
         >
-          <div className="flex flex-col h-screen w-full">
-            {!published && <TopNavbar />}
-            <MapMeasurement />
-            <GeoportalMap />
-          </div>
+          <ErrorBoundary FallbackComponent={AppErrorFallback}>
+            <div className="flex flex-col h-screen w-full">
+              {!published && <TopNavbar />}
+              <MapMeasurement />
+              <GeoportalMap />
+            </div>
+          </ErrorBoundary>
         </CustomViewerContextProvider>
       </TopicMapContextProvider>
     </OverlayTourProvider>
