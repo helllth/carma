@@ -19,134 +19,39 @@ import getGTMFeatureStyler, {
   getColorFromProperties,
 } from "react-cismap/topicmaps/generic/GTMStyler";
 import DefaultAppMenu from "react-cismap/topicmaps/menu/DefaultAppMenu";
+import slugify from "slugify";
 
 const host = "https://wupp-topicmaps-data.cismet.de";
-
-// const {
-//   configFromFile,
-//   featureDefaultProperties,
-//   featureDefaults,
-//   features,
-//   infoBoxConfig,
-//   simpleHelp,
-// } = wasserstoffConfig;
-
-// const {
-//   configFromFile,
-//   featureDefaultProperties,
-//   featureDefaults,
-//   features,
-//   infoBoxConfig,
-//   simpleHelp,
-// } = parkscheinautomatenConfig;
 
 async function getConfig(slugName, configType, server, path) {
   try {
     const u = server + path + slugName + "/" + configType + ".json";
-    console.log("try to read rconfig at ", u);
+    console.debug("try to read rconfig at ", u);
     const result = await fetch(u);
     const resultObject = await result.json();
-    console.log("config: loaded " + slugName + "/" + configType);
+    console.debug("config: loaded " + slugName + "/" + configType);
     return resultObject;
   } catch (ex) {
-    console.log("error for rconfig", ex);
+    console.debug(
+      "no config found at ",
+      server + path + slugName + "/" + configType + ".json",
+    );
   }
 }
 async function getMarkdown(slugName, configType, server, path) {
   try {
     const u = server + path + slugName + "/" + configType + ".md";
-    console.log("try to read markdown at ", u);
+    console.debug("try to read markdown at ", u);
     const result = await fetch(u);
     const resultObject = await result.text();
-    console.log("config: loaded " + slugName + "/" + configType);
+    console.debug("config: loaded " + slugName + "/" + configType);
     return resultObject;
   } catch (ex) {
-    console.log("error for rconfig", ex);
-  }
-}
-async function initialize({
-  slugName,
-  setConfig,
-  setFeatureCollection,
-  setInitialized,
-  path = "/dev/",
-  server = "https://raw.githubusercontent.com/cismet/wupp-generic-topic-map-config",
-}) {
-  const config = await getConfig(slugName, "config", server, path);
-
-  const featureDefaultProperties = await getConfig(
-    slugName,
-    "featureDefaultProperties",
-    server,
-    path,
-  );
-  const featureDefaults = await getConfig(
-    slugName,
-    "featureDefaults",
-    server,
-    path,
-  );
-  const helpTextBlocks = await getConfig(
-    slugName,
-    "helpTextBlocks",
-    server,
-    path,
-  );
-  const simpleHelpMd = await await getMarkdown(
-    slugName,
-    "simpleHelp",
-    server,
-    path,
-  );
-  const simpleHelp = await await getConfig(
-    slugName,
-    "simpleHelp",
-    server,
-    path,
-  );
-  const infoBoxConfig = await getConfig(slugName, "infoBoxConfig", path);
-  const features = await getConfig(slugName, "features", server, path);
-
-  if (helpTextBlocks !== undefined) {
-    config.helpTextblocks = helpTextBlocks;
-  } else if (simpleHelpMd !== undefined) {
-    const simpleHelpObject = { type: "MARKDOWN", content: simpleHelpMd };
-    config.helpTextblocks = getSimpleHelpForGenericTM(
-      document.title,
-      simpleHelpObject,
-    );
-  } else {
-    config.helpTextblocks = getSimpleHelpForGenericTM(
-      document.title,
-      simpleHelp,
+    console.debug(
+      "no markdown found at ",
+      server + path + slugName + "/" + configType + ".md",
     );
   }
-  if (features !== undefined) {
-    config.features = features;
-  }
-
-  if (infoBoxConfig !== undefined) {
-    config.info = infoBoxConfig;
-  }
-
-  const fc = [];
-  let i = 0;
-  for (const f of config.features) {
-    const ef = { ...featureDefaults, ...f };
-    ef.id = i;
-    ef.index = i;
-    i++;
-    ef.properties = { ...featureDefaultProperties, ...ef.properties };
-    fc.push(ef);
-  }
-  config.features = fc;
-  console.log("config", setConfig, config);
-
-  setConfig(config);
-  if (setFeatureCollection !== undefined) {
-    setFeatureCollection(fc);
-  }
-  setInitialized(true);
 }
 
 export const getGazData = async (
@@ -163,14 +68,23 @@ export const getGazData = async (
   const prefix = "GazDataForStories";
   const sources = {};
 
-  sources.adressen = await md5FetchText(prefix, host + "/data/adressen.json");
-  sources.bezirke = await md5FetchText(prefix, host + "/data/bezirke.json");
-  sources.quartiere = await md5FetchText(prefix, host + "/data/quartiere.json");
-  sources.pois = await md5FetchText(prefix, host + "/data/pois.json");
-  sources.kitas = await md5FetchText(prefix, host + "/data/kitas.json");
+  sources.adressen = await md5FetchText(
+    prefix,
+    host + "/data/3857/adressen.json",
+  );
+  sources.bezirke = await md5FetchText(
+    prefix,
+    host + "/data/3857/bezirke.json",
+  );
+  sources.quartiere = await md5FetchText(
+    prefix,
+    host + "/data/3857/quartiere.json",
+  );
+  sources.pois = await md5FetchText(prefix, host + "/data/3857/pois.json");
+  sources.kitas = await md5FetchText(prefix, host + "/data/3857/kitas.json");
   sources.bpklimastandorte = await md5FetchText(
     prefix,
-    host + "/data/bpklimastandorte.json",
+    host + "/data/3857/bpklimastandorte.json",
   );
 
   const gazData = getGazDataForTopicIds(sources, topics);
@@ -194,29 +108,103 @@ const downloadText = (text, filename) => {
   document.body.removeChild(element);
 };
 
-function App({ name }) {
+function App({
+  name,
+  configPath = "/dev/",
+  configServer = "https://raw.githubusercontent.com/cismet/wupp-generic-topic-map-config", //"https://raw.githubusercontent.com/cismet/wupp-generic-topic-map-config",
+}) {
   const [initialized, setInitialized] = useState(false);
   const [config, setConfig] = useState({});
-  //   JSON.parse(JSON.stringify(configFromFile)),
-  // );
-  const {
-    configFromFile,
-    featureDefaultProperties,
-    featureDefaults,
-    features,
-    infoBoxConfig,
-    simpleHelp,
-  } = config;
+
   const [gazData, setGazData] = useState([]);
   useEffect(() => {
     (async () => {
-      await initialize({ slugName: name, setConfig, setInitialized });
-      //getGazData(setGazData, config.tm.gazetteerTopicsList);
-      console.log("xxx config ", config);
+      const path = configPath;
+      const server = configServer;
+      const slugName = slugify(name, { lower: true });
+      const config = await getConfig(slugName, "config", server, path);
 
-      //setConfig(config);
+      const featureDefaultProperties = await getConfig(
+        slugName,
+        "featureDefaultProperties",
+        server,
+        path,
+      );
+      const featureDefaults = await getConfig(
+        slugName,
+        "featureDefaults",
+        server,
+        path,
+      );
+      const helpTextBlocks = await getConfig(
+        slugName,
+        "helpTextBlocks",
+        server,
+        path,
+      );
+      const simpleHelpMd = await await getMarkdown(
+        slugName,
+        "simpleHelp",
+        server,
+        path,
+      );
+      const simpleHelp = await await getConfig(
+        slugName,
+        "simpleHelp",
+        server,
+        path,
+      );
+      const infoBoxConfig = await getConfig(
+        slugName,
+        "infoBoxConfig",
+        server,
+        path,
+      );
+      const features = await getConfig(slugName, "features", server, path);
+
+      if (helpTextBlocks !== undefined) {
+        config.helpTextblocks = helpTextBlocks;
+      } else if (simpleHelpMd !== undefined) {
+        const simpleHelpObject = { type: "MARKDOWN", content: simpleHelpMd };
+        config.helpTextblocks = getSimpleHelpForGenericTM(
+          document.title,
+          simpleHelpObject,
+        );
+      } else {
+        config.helpTextblocks = getSimpleHelpForGenericTM(
+          document.title,
+          simpleHelp,
+        );
+      }
+      if (features !== undefined) {
+        config.features = features;
+      }
+
+      if (infoBoxConfig !== undefined) {
+        config.info = infoBoxConfig;
+      }
+
+      const fc = [];
+      let i = 0;
+      for (const f of config.features) {
+        const ef = { ...featureDefaults, ...f };
+        ef.id = i;
+        i++;
+        ef.properties = { ...featureDefaultProperties, ...ef.properties };
+        fc.push(ef);
+      }
+      config.features = fc;
+
+      //Backwards conmpatibility
+      config.tm.gazetteerSearchPlaceholder =
+        config.tm.gazetteerSearchBoxPlaceholdertext;
+      config.info.city = config.city;
+      getGazData(setGazData, config.tm.gazetteerTopicsList);
+      setConfig(config);
+
+      setInitialized(true);
     })();
-  }, []);
+  }, [name]);
 
   if (initialized === true) {
     return (
@@ -237,10 +225,10 @@ function App({ name }) {
         <TopicMapComponent
           {...config.tm}
           gazData={gazData}
-          infoBox={<GenericInfoBoxFromFeature config={infoBoxConfig} />}
+          infoBox={<GenericInfoBoxFromFeature config={config.info} />}
           modalMenu={
             <DefaultAppMenu
-              simpleHelp={simpleHelp}
+              simpleHelp={config.helpTextblocks}
               previewMapPosition={config?.tm?.previewMapPosition}
               previewFeatureCollectionCount={
                 config?.tm?.previewFeatureCollectionCount
