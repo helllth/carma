@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode, useContext, useState } from "react";
+import { MouseEvent, ReactNode, useContext, useEffect, useState } from "react";
 import {
   Cartesian3,
   Cartographic,
@@ -202,7 +202,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
         if (
           prevCamera2dPosition &&
           Cartesian3.equals(viewer.camera.position, prevCamera2dPosition) !==
-            true
+          true
         ) {
           console.log(
             "camera position unchanged, skipping 2d to 3d transition animation",
@@ -228,6 +228,23 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
       }
     }
   };
+
+  useEffect(() => {
+    // reset isTransitioning after 2 seconds
+    let timeoutId: NodeJS.Timeout | null = null;
+
+    if (isTransitioning) {
+      timeoutId = setTimeout(() => {
+        setIsTransitioning(false);
+      }, 4000);
+    }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [isTransitioning]);
 
   return (
     <ControlButtonStyler
