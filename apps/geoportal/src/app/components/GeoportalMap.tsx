@@ -664,7 +664,7 @@ export const GeoportalMap = () => {
                               hits: any[];
                               hit: any;
                             }) => {
-                              if (e.hits) {
+                              if (e.hits && layer.queryable) {
                                 const selectedVectorFeature = e.hits[0];
                                 const vectorPos = proj4(
                                   proj4.defs("EPSG:4326") as unknown as string,
