@@ -43,9 +43,13 @@ import { layerMap } from "../config";
 import { Save, Share, extractVectorStyles } from "@carma-apps/portals";
 import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
 import { isNaN } from "lodash";
-import { useSceneStyleToggle } from "@carma-mapping/cesium-engine";
+import { useSceneStyleToggle, useViewerIsMode2d } from "@carma-mapping/cesium-engine";
 import { geoElements } from "@carma-collab/wuppertal/geoportal";
 import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
+
+
+const disabledClass = "text-gray-300";
+const disabledImageOpacity = "opacity-20";
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,6 +68,8 @@ const TopNavbar = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const baseUrl = window.location.origin + window.location.pathname;
   const toggleSceneStyle = useSceneStyleToggle();
+  const isMode2d = useViewerIsMode2d();
+
 
   const menuTourRef = useOverlayHelper(
     getCollabedHelpElementsConfig("MENULEISTE", geoElements),
@@ -257,6 +263,7 @@ const TopNavbar = () => {
         </Tooltip>
         <Tooltip title="Kartenebenen hinzufügen">
           <button
+            disabled={!isMode2d}
             onClick={() => {
               setIsModalOpen(true);
             }}
@@ -265,17 +272,17 @@ const TopNavbar = () => {
             <img
               src={baseUrl + "icons/add-layers.png"}
               alt="Kartenebenen hinzufügen"
-              className="h-5 mb-0.5 cursor-pointer"
+              className={`h-5 mb-0.5 cursor-pointer ${isMode2d ? "" : disabledImageOpacity}`}
             />
           </button>
         </Tooltip>
         <Tooltip
-          title={`Hintergrundkarte ${
-            focusMode ? "zurücksetzen" : "abschwächen"
-          }`}
+          title={`Hintergrundkarte ${focusMode ? "zurücksetzen" : "abschwächen"
+            }`}
         >
           <button
             className="h-[24.5px]"
+            disabled={!isMode2d}
             onClick={() => {
               dispatch(setFocusMode(!focusMode));
             }}
@@ -286,17 +293,17 @@ const TopNavbar = () => {
                 `${focusMode ? "icons/focus-on.png" : "icons/focus-off.png"}`
               }
               alt="Kartenebenen hinzufügen"
-              className="h-5 mb-0.5 cursor-pointer"
+              className={`h-5 mb-0.5 cursor-pointer ${isMode2d ? "" : disabledImageOpacity}`}
             />
           </button>
         </Tooltip>
         <Tooltip
-          title={`Kartensteuerelemente ${
-            showLayerButtons ? "ausblenden" : "einblenden"
-          }`}
+          title={`Kartensteuerelemente ${showLayerButtons ? "ausblenden" : "einblenden"
+            }`}
         >
           <button
-            className="text-xl hover:text-gray-600"
+            className={`text-xl hover:text-gray-600 ${isMode2d ? "" : disabledClass}`}
+            disabled={!isMode2d}
             onClick={() => {
               dispatch(setShowLayerButtons(!showLayerButtons));
             }}
@@ -320,7 +327,7 @@ const TopNavbar = () => {
               />
             }
           >
-            <button className="hover:text-gray-600 text-xl">
+            <button className={`hover:text-gray-600 text-xl ${isMode2d ? "" : disabledClass}`}>
               <FontAwesomeIcon icon={faFileExport} />
             </button>
           </Popover>
