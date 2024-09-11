@@ -174,7 +174,7 @@ export const GeoportalMap = () => {
     (infoText ===
       "Die Sachdatenabfrage ist für die ausgewählten Layer nicht verfügbar." ||
       infoText ===
-      "Die Sachdatenabfrage wurde für alle ausgewählten Layer deaktiviert.")
+        "Die Sachdatenabfrage wurde für alle ausgewählten Layer deaktiviert.")
   ) {
     dispatch(setInfoText(""));
   }
@@ -251,7 +251,6 @@ export const GeoportalMap = () => {
     setIsSameLayerTypes(isSame);
   }, [layers]);
 
-
   useEffect(() => {
     // INTIALIZE Cesium Tileset style from Geoportal/TopicMap background later style
     if (viewer && backgroundLayer) {
@@ -261,7 +260,7 @@ export const GeoportalMap = () => {
         toggleSceneStyle("secondary");
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewer, backgroundLayer]);
 
   // TODO Move out Controls to own component
@@ -365,10 +364,11 @@ export const GeoportalMap = () => {
                 ref={measurementControlTourRef}
               >
                 <img
-                  src={`${urlPrefix}${mode === "measurement"
+                  src={`${urlPrefix}${
+                    mode === "measurement"
                       ? "measure-active.png"
                       : "measure.png"
-                    }`}
+                  }`}
                   alt="Measure"
                   className="w-6"
                 />
@@ -494,7 +494,7 @@ export const GeoportalMap = () => {
                       (layer) => layer.layerType === "vector",
                     )
                   ) {
-                    setTimeout(() => { }, 100);
+                    setTimeout(() => {}, 100);
                   }
 
                   const vectorInfo = getVectorInfo(store.getState());
@@ -517,7 +517,7 @@ export const GeoportalMap = () => {
 
                   if (
                     queryableLayers[queryableLayers.length - 1].layerType !==
-                    "vector" ||
+                      "vector" ||
                     !vectorInfo ||
                     vectorLayers.length === nothingFoundIDs.length
                   ) {
@@ -658,6 +658,25 @@ export const GeoportalMap = () => {
                             }) => {
                               if (e.hits) {
                                 const selectedVectorFeature = e.hits[0];
+                                const vectorPos = proj4(
+                                  proj4.defs("EPSG:4326") as unknown as string,
+                                  proj4crs25832def,
+                                  selectedVectorFeature.geometry.coordinates,
+                                );
+                                const minimalBoxSize = 1;
+                                const featureInfoBaseUrl =
+                                  layer.other.service.url;
+                                const layerName = layer.other.name;
+
+                                const imgUrl =
+                                  featureInfoBaseUrl +
+                                  `?&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
+                                  `${vectorPos[0] - minimalBoxSize},` +
+                                  `${vectorPos[1] - minimalBoxSize},` +
+                                  `${vectorPos[0] + minimalBoxSize},` +
+                                  `${vectorPos[1] + minimalBoxSize}` +
+                                  `&WIDTH=10&HEIGHT=10&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layerName}&STYLES=default&QUERY_LAYERS=${layerName}&INFO_FORMAT=text/html&X=5&Y=5
+                                        `;
 
                                 const properties =
                                   selectedVectorFeature.properties;
@@ -679,7 +698,16 @@ export const GeoportalMap = () => {
                                     : objectToFeature(properties, result);
 
                                   const feature = {
-                                    ...featureProperties,
+                                    properties: {
+                                      ...featureProperties.properties,
+                                      genericLinks: [
+                                        {
+                                          url: imgUrl,
+                                          tooltip: "Alte Sachdatenabfrage",
+                                          iconname: "lupe",
+                                        },
+                                      ],
+                                    },
                                     id: layer.id,
                                   };
 
