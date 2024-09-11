@@ -319,6 +319,16 @@ L.Control.MeasurePolygon = L.Control.extend({
     });
 
     map.on("draw:drawstart", (event) => {
+      var mouseActive = L.Browser.touch && matchMedia("(hover:hover)").matches;
+      if (
+        mouseActive ||
+        event.layerType === "circle" ||
+        event.layerType === "rectangle"
+      ) {
+        event.target.touchExtend.enable();
+      } else {
+        event.target.touchExtend.disable();
+      }
       this.options.cbSaveLastActiveShapeIdBeforeDrawingHandler();
       this.options.measurementOrder = this.options.measurementOrder + 1;
       const shapesObj = {
