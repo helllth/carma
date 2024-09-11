@@ -1656,6 +1656,104 @@ export const baseConfig = {
       {
         name: "R102:fluruebersicht",
       },
+      {
+        name: "kst_landtagswahlkreise",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}landtagswahlkreise/style.json`,
+        ],
+      },
+      {
+        name: "kst_knoten",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}knoten/style.json`,
+        ],
+      },
+      {
+        name: "kst_segment",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}segmente/segmente.style.json`,
+        ],
+      },
+      {
+        name: "kst_segmenttypen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}segmente/segmenttypen.style.json`,
+        ],
+      },
+      {
+        name: "kst_segment_hnr",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}segmente/segmente_mit_hsnr.style.json`,
+        ],
+      },
+      {
+        name: "kst_segment_steigung",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}segmente/mit_steigung.style.json`,
+        ],
+      },
+      {
+        name: "kst_baubloecke",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}baubloecke/style.json`,
+        ],
+      },
+      {
+        name: "kst_quartiere",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}quartiere/style.json`,
+        ],
+      },
+      {
+        name: "kst_stadtbezirk",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}stadtbezirk/style.json`,
+        ],
+      },
+      {
+        name: "kst_stadtgebiet",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}stadtgebiet/style.json`,
+        ],
+      },
+      {
+        name: "kst_statistische_bezirke",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}statistische_bezirke/style.json`,
+        ],
+      },
+      {
+        name: "kst_stimmbezirke",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}stimmbezirke/style.json`,
+        ],
+      },
+      {
+        name: "kst_kommunalwahlbezirke",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}kommunalwahlbezirke/style.json`,
+        ],
+      },
+      {
+        name: "kst_bundestagswahlkreise",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bundestagswahlkreise/style.json`,
+        ],
+      },
     ],
   },
   Verkehr: {
