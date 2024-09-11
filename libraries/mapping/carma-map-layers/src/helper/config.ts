@@ -1763,6 +1763,90 @@ export const baseConfig = {
       {
         name: "einstr",
       },
+      {
+        name: "sch30",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}tempo_30_schilder/style.json`,
+        ],
+      },
+      {
+        name: "sch30",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}tempo_30_schilder/style.json`,
+        ],
+      },
+      {
+        name: "vbel2020",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}verkehrsbelastung_2020/style.json`,
+        ],
+      },
+      {
+        name: "vbel2013",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}verkehrsbelastung_2013/style.json`,
+        ],
+      },
+      {
+        name: "bewohnerbereiche",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bewohnerparkbereiche/style.json`,
+        ],
+      },
+      {
+        name: "bewohnerzonen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bewohnerparkzonen/style.json`,
+        ],
+      },
+      {
+        name: "cityparkflaechen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}city_parkflaechen/style.json`,
+        ],
+      },
+      {
+        name: "cityzonen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}city_parkzonen/style.json`,
+        ],
+      },
+      {
+        name: "pranlagen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}br_pr_anlagen/pr.style.json`,
+        ],
+      },
+      {
+        name: "carsharing",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}carsharing/style.json`,
+        ],
+      },
+      {
+        name: "reitwege",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}reitwege/style.json`,
+        ],
+      },
+      {
+        name: "branlagen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}br_pr_anlagen/br.style.json`,
+        ],
+      },
     ],
   },
   Immo: {
