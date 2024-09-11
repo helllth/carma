@@ -423,7 +423,7 @@ export const GeoportalMap = () => {
         </Tooltip>
       </Control>
       <Control position="topcenter" order={10}>
-        {showLayerButtons && <LayerWrapper />}
+        {showLayerButtons && isMode2d && <LayerWrapper />}
       </Control>
       <Control position="bottomleft" order={10}>
         <div ref={gazetteerControlTourRef} className="h-full w-full">
