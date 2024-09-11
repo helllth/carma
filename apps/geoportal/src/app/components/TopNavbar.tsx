@@ -43,10 +43,12 @@ import { layerMap } from "../config";
 import { Save, Share, extractVectorStyles } from "@carma-apps/portals";
 import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
 import { isNaN } from "lodash";
-import { useSceneStyleToggle, useViewerIsMode2d } from "@carma-mapping/cesium-engine";
+import {
+  useSceneStyleToggle,
+  useViewerIsMode2d,
+} from "@carma-mapping/cesium-engine";
 import { geoElements } from "@carma-collab/wuppertal/geoportal";
 import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
-
 
 const disabledClass = "text-gray-300";
 const disabledImageOpacity = "opacity-20";
@@ -69,7 +71,6 @@ const TopNavbar = () => {
   const baseUrl = window.location.origin + window.location.pathname;
   const toggleSceneStyle = useSceneStyleToggle();
   const isMode2d = useViewerIsMode2d();
-
 
   const menuTourRef = useOverlayHelper(
     getCollabedHelpElementsConfig("MENULEISTE", geoElements),
@@ -131,7 +132,11 @@ const TopNavbar = () => {
           layerType: "vector",
           opacity: 0.7,
           description: layer.description,
-          queryable: isNaN(layer.queryable) ? true : layer.queryable,
+          queryable: isNaN(layer.queryable)
+            ? layer.keywords.some((keyword) =>
+                keyword.includes("carmaconf://infoBoxMapping"),
+              )
+            : layer.queryable,
           useInFeatureInfo: true,
           visible: true,
           props: {
@@ -174,7 +179,11 @@ const TopNavbar = () => {
               layerType: "vector",
               opacity: 0.7,
               description: layer.description,
-              queryable: isNaN(layer.queryable) ? true : layer.queryable,
+              queryable: isNaN(layer.queryable)
+                ? layer.keywords.some((keyword) =>
+                    keyword.includes("carmaconf://infoBoxMapping"),
+                  )
+                : layer.queryable,
               useInFeatureInfo: true,
               visible: true,
               props: {
@@ -272,13 +281,16 @@ const TopNavbar = () => {
             <img
               src={baseUrl + "icons/add-layers.png"}
               alt="Kartenebenen hinzufügen"
-              className={`h-5 mb-0.5 cursor-pointer ${isMode2d ? "" : disabledImageOpacity}`}
+              className={`h-5 mb-0.5 cursor-pointer ${
+                isMode2d ? "" : disabledImageOpacity
+              }`}
             />
           </button>
         </Tooltip>
         <Tooltip
-          title={`Hintergrundkarte ${focusMode ? "zurücksetzen" : "abschwächen"
-            }`}
+          title={`Hintergrundkarte ${
+            focusMode ? "zurücksetzen" : "abschwächen"
+          }`}
         >
           <button
             className="h-[24.5px]"
@@ -293,16 +305,21 @@ const TopNavbar = () => {
                 `${focusMode ? "icons/focus-on.png" : "icons/focus-off.png"}`
               }
               alt="Kartenebenen hinzufügen"
-              className={`h-5 mb-0.5 cursor-pointer ${isMode2d ? "" : disabledImageOpacity}`}
+              className={`h-5 mb-0.5 cursor-pointer ${
+                isMode2d ? "" : disabledImageOpacity
+              }`}
             />
           </button>
         </Tooltip>
         <Tooltip
-          title={`Kartensteuerelemente ${showLayerButtons ? "ausblenden" : "einblenden"
-            }`}
+          title={`Kartensteuerelemente ${
+            showLayerButtons ? "ausblenden" : "einblenden"
+          }`}
         >
           <button
-            className={`text-xl hover:text-gray-600 ${isMode2d ? "" : disabledClass}`}
+            className={`text-xl hover:text-gray-600 ${
+              isMode2d ? "" : disabledClass
+            }`}
             disabled={!isMode2d}
             onClick={() => {
               dispatch(setShowLayerButtons(!showLayerButtons));
@@ -327,7 +344,11 @@ const TopNavbar = () => {
               />
             }
           >
-            <button className={`hover:text-gray-600 text-xl ${isMode2d ? "" : disabledClass}`}>
+            <button
+              className={`hover:text-gray-600 text-xl ${
+                isMode2d ? "" : disabledClass
+              }`}
+            >
               <FontAwesomeIcon icon={faFileExport} />
             </button>
           </Popover>

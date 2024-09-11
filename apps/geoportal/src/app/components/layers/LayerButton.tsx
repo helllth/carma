@@ -49,7 +49,7 @@ const LayerButton = ({
   layer,
   background,
 }: LayerButtonProps) => {
-  const queryable = layer?.queryable || layer.layerType === "vector";
+  const queryable = layer?.queryable;
   const { ref, inView } = useInView({
     threshold: 0.99,
   });

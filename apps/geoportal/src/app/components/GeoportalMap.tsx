@@ -269,7 +269,7 @@ export const GeoportalMap = () => {
     if (allow3d === false || allow3d === undefined) {
       dispatch(setIsMode2d(true));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allow3d]);
 
   // TODO Move out Controls to own component
@@ -733,7 +733,9 @@ export const GeoportalMap = () => {
                                   dispatch(setVectorInfo(undefined));
                                 }
                               } else {
-                                dispatch(addNothingFoundID(layer.id));
+                                if (layer.queryable) {
+                                  dispatch(addNothingFoundID(layer.id));
+                                }
                               }
                             }}
                           />
