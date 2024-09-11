@@ -476,6 +476,8 @@ export const topicMapsConfig: Config = {
   ],
 };
 
+const vectorBaseUrl = "https://tiles.cismet.de/";
+
 export const poiCategoryWithKeywords = {
   keywords: [
     'carmaconf://infoBoxMapping:title:p.strasse + ", " + p.ort',
@@ -523,10 +525,10 @@ export const poiCategoryWithKeywords = {
     },
     {
       name: "poi_bezirkssozialdienste",
-      keywords: [
-        ":vec:",
-        "carmaConf://vectorStyle:https://tiles.cismet.de/poi/behorden.style.json",
-      ],
+      // keywords: [
+      //   ":vec:",
+      //   "carmaConf://vectorStyle:https://tiles.cismet.de/poi/behorden.style.json",
+      // ],
     },
     {
       name: "poi_bibliotheken",
@@ -565,12 +567,20 @@ export const poiCategoryWithKeywords = {
         793881.5445769589, 6668348.432670274, 794954.6487943687,
         6669100.262503172,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/feuerwehrstandorte.style.json`,
+      ],
     },
     {
       name: "poi_filmtheater",
       pictureBoundingBox: [
         795040.6404511896, 6666030.24092181, 797186.8488860093,
         6667533.900587609,
+      ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/filmtheater.style.json`,
       ],
     },
     {
@@ -579,12 +589,20 @@ export const poiCategoryWithKeywords = {
         802349.9312809596, 6668144.202485324, 806642.348150599,
         6671151.521816919,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/freizeitsportangebote.style.json`,
+      ],
     },
     {
       name: "poi_friedhofsverband",
       pictureBoundingBox: [
         802432.937116363, 6668932.459339514, 803506.0413337728,
         6669684.289172413,
+      ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/friedhofsverband-wuppertal.style.json`,
       ],
     },
     {
@@ -593,22 +611,38 @@ export const poiCategoryWithKeywords = {
         792683.0358600187, 6666519.9156342605, 796975.4527296581,
         6669527.234965856,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/friedhofe.style.json`,
+      ],
       icon: "Kreis_dunkelgruen",
       alternativeIcon: "Icon_Friedhof",
     },
     {
       name: "poi_friedhoefe_ehem",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/ehemalige-friedhofe.style.json`,
+      ],
       icon: "Kreis_dunkelgruen",
       alternativeIcon: "Icon_Friedhof",
     },
     {
       name: "poi_gebaeude",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/gebaude-und-bauwerke.style.json`,
+      ],
     },
     {
       name: "poi_gruenanlagen",
       pictureBoundingBox: [
         792683.0358600187, 6666519.9156342605, 796975.4527296581,
         6669527.234965856,
+      ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/grunanlagen-und-walder.style.json`,
       ],
       icon: "Viereck_gruen",
       alternativeIcon: "Icon_Gruenanlagen_und_Waelder",
@@ -619,6 +653,10 @@ export const poiCategoryWithKeywords = {
         799177.1974428413, 6659678.204438456, 800137.4376106737,
         6660409.730685716,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/stauseen-und-talsperren.style.json`,
+      ],
       icon: "Kreis_gruen",
       alternativeIcon: "Icon_Stausee",
     },
@@ -628,11 +666,19 @@ export const poiCategoryWithKeywords = {
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/wupperufer-lebensader-wupper.style.json`,
+      ],
       icon: "Kreis_gruen",
       alternativeIcon: "Icon_Lebensader_Wupper",
     },
     {
       name: "poi_jugend",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/jugend-und-kindertreffs.style.json`,
+      ],
     },
     {
       name: "poi_ksp",
@@ -650,6 +696,8 @@ export const poiCategoryWithKeywords = {
     {
       name: "poi_kirchen",
       keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/kirchen.style.json`,
         "carmaconf://infoBoxMapping:title: p.strasse + ', ' + p.ort",
         "carmaconf://infoBoxMapping:subtitle: p.info",
         "carmaconf://infoBoxMapping:header:p.geographicidentifier",
@@ -661,12 +709,20 @@ export const poiCategoryWithKeywords = {
         792683.0358600187, 6666519.9156342605, 796975.4527296581,
         6669527.234965856,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/krankenhauser.style.json`,
+      ],
     },
     {
       name: "poi_medien",
       pictureBoundingBox: [
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
+      ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/medien.style.json`,
       ],
     },
     {
@@ -675,9 +731,17 @@ export const poiCategoryWithKeywords = {
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/moscheen.style.json`,
+      ],
     },
     {
       name: "poi_museen",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/museen-und-galerien.style.json`,
+      ],
     },
     {
       name: "poi_opunkte",
@@ -685,9 +749,17 @@ export const poiCategoryWithKeywords = {
         792683.0358600187, 6666519.9156342605, 796975.4527296581,
         6669527.234965856,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/orientierungspunkte-und-begriffe.style.json`,
+      ],
     },
     {
       name: "poi_polizeidienststellen",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/polizeidienststellen.style.json`,
+      ],
     },
     {
       name: "poi_schulen",
@@ -754,6 +826,10 @@ export const poiCategoryWithKeywords = {
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/schwebebahn-haltestellen.style.json`,
+      ],
     },
     {
       name: "poi_schwimmbaeder",
@@ -761,12 +837,24 @@ export const poiCategoryWithKeywords = {
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/schwimmbader.style.json`,
+      ],
     },
     {
       name: "poi_sehenswuerdigkeiten",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/sehenswurdigkeiten.style.json`,
+      ],
     },
     {
       name: "poi_soziale",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/soziale-einrichtungen.style.json`,
+      ],
     },
     {
       name: "poi_sporthallen",
@@ -774,12 +862,24 @@ export const poiCategoryWithKeywords = {
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/sporthallen-und-platze.style.json`,
+      ],
     },
     {
       name: "poi_stadtverwaltung",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/stadtverwaltung.style.json`,
+      ],
     },
     {
       name: "poi_synagogen",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/synagogen.style.json`,
+      ],
     },
     {
       name: "poi_theater",
@@ -787,15 +887,41 @@ export const poiCategoryWithKeywords = {
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/theater.style.json`,
+      ],
     },
     {
       name: "poi_veranstaltungsorte",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/veranstaltungsorte.style.json`,
+      ],
     },
     {
       name: "poi_wege",
       pictureBoundingBox: [
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
+      ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/wege-und-platze.style.json`,
+      ],
+    },
+    {
+      name: "poi_trinkwasser",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/trinkwasserbrunnen.style.json`,
+      ],
+    },
+    {
+      name: "poi_reisebus",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}poi/informationen-fur-reisebusse.style.json`,
       ],
     },
   ],
@@ -925,15 +1051,27 @@ export const baseConfig = {
       },
       {
         name: "R102:stadtgrundkarte_hausnr",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}sgk_hausnummern/style.json`,
+        ],
       },
       {
         name: "urban",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}urbanAtlas/style.json`,
+        ],
       },
       {
         name: "bplanreihe",
       },
       {
         name: "bplanhintergrund",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bplanhintergrund/style.json`,
+        ],
       },
       {
         name: "wuppertal:1827",
@@ -988,6 +1126,10 @@ export const baseConfig = {
         name: "baeume",
         icon: "Viereck_baumgruen",
         alternativeIcon: "Viereck_baumgruen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}baeume/style.json`,
+        ],
       },
       {
         name: "kga",
@@ -1001,6 +1143,10 @@ export const baseConfig = {
         pictureBoundingBox: [
           790989.4779520752, 6664143.201786021, 800673.0939729535,
           6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}radon/style.json`,
         ],
       },
       {
@@ -1130,12 +1276,24 @@ export const baseConfig = {
       },
       {
         name: "Hitze-Ist",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}hitzeinsel/style.json`,
+        ],
       },
       {
         name: "Hitze-Stark-Ist",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}starke_hitzeinsel/style.json`,
+        ],
       },
       {
         name: "Hitze-2050",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}ausweitung_hitzeinsel/style.json`,
+        ],
       },
       {
         name: "Frischluftschneisen",
@@ -1157,6 +1315,10 @@ export const baseConfig = {
       },
       {
         name: "no2",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}luftmessstation/style.json`,
+        ],
       },
       {
         name: "lugi2000",
@@ -1329,6 +1491,10 @@ export const baseConfig = {
           808586.7150576031, 6657920.749952179, 813165.7707833119,
           6660846.854941222,
         ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}innenbereichssatzungen/style.json`,
+        ],
       },
       {
         name: "r102:fnp",
@@ -1352,6 +1518,10 @@ export const baseConfig = {
           793980.0766837327, 6660217.443786437, 796269.6045465872,
           6661680.496280962,
         ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}fnp_aenderungsverfahren_alle/style.json`,
+        ],
       },
       {
         name: "Fnpaenderungsverfahren-r",
@@ -1359,12 +1529,20 @@ export const baseConfig = {
           793980.0766837327, 6660217.443786437, 796269.6045465872,
           6661680.496280962,
         ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}fnp_aenderungsverfahren_rv/style.json`,
+        ],
       },
       {
         name: "Fnpaenderungsverfahren-n",
         pictureBoundingBox: [
           793980.0766837327, 6660217.443786437, 796269.6045465872,
           6661680.496280962,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}fnp_aenderungsverfahren_iv/style.json`,
         ],
       },
       {
@@ -1450,6 +1628,10 @@ export const baseConfig = {
           801365.804541788, 6668672.095711919, 801671.5526549286,
           6668977.84382506,
         ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}baulastnachweis/style.json`,
+        ],
       },
     ],
   },
@@ -1465,7 +1647,102 @@ export const baseConfig = {
         ],
       },
       {
+        name: "breitband_hk",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}breitbandausbau_fttb/style.json`,
+        ],
+      },
+      {
+        name: "container",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}containerstandorte/style.json`,
+        ],
+      },
+      {
+        name: "zvb",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}versorgungsbereiche/versorgungsbereiche.style.json`,
+        ],
+      },
+      {
+        name: "zvb-erw",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}versorgungsbereiche/erweiterungsbereiche.style.json`,
+        ],
+      },
+      {
         name: "fernwaermewsw",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}fernwaermenetz/style.json`,
+        ],
+      },
+      {
+        name: "fernsued",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}geltungsbereich/style.json`,
+        ],
+      },
+      {
+        name: "belis_Masten",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}leuchten/style.json`,
+        ],
+      },
+      {
+        name: "eplusbest",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bestehende_telefonica_anlagen/style.json`,
+        ],
+      },
+      {
+        name: "o2best",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bestehende_o2_anlagen/style.json`,
+        ],
+      },
+      {
+        name: "tmobilebest",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bestehende_telekom_anlagen/style.json`,
+        ],
+      },
+      {
+        name: "vodafonebest",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bestehende_vodaphone_anlagen/style.json`,
+        ],
+      },
+      {
+        name: "belis_Leitungen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}leitungen/style.json`,
+        ],
+      },
+      {
+        name: "fernsuedl",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}betriebsfertige_leitungen/style.json`,
+        ],
+      },
+      {
+        name: "belis_Masten_mit_e",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}masten_mit_anschluss/style.json`,
+        ],
       },
       {
         name: "schaechte",
@@ -1518,6 +1795,104 @@ export const baseConfig = {
       {
         name: "R102:fluruebersicht",
       },
+      {
+        name: "kst_landtagswahlkreise",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}landtagswahlkreise/style.json`,
+        ],
+      },
+      {
+        name: "kst_knoten",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}knoten/style.json`,
+        ],
+      },
+      {
+        name: "kst_segment",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}segmente/segmente.style.json`,
+        ],
+      },
+      {
+        name: "kst_segmenttypen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}segmente/segmenttypen.style.json`,
+        ],
+      },
+      {
+        name: "kst_segment_hnr",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}segmente/segmente_mit_hsnr.style.json`,
+        ],
+      },
+      {
+        name: "kst_segment_steigung",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}segmente/mit_steigung.style.json`,
+        ],
+      },
+      {
+        name: "kst_baubloecke",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}baubloecke/style.json`,
+        ],
+      },
+      {
+        name: "kst_quartiere",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}quartiere/style.json`,
+        ],
+      },
+      {
+        name: "kst_stadtbezirk",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}stadtbezirk/style.json`,
+        ],
+      },
+      {
+        name: "kst_stadtgebiet",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}stadtgebiet/style.json`,
+        ],
+      },
+      {
+        name: "kst_statistische_bezirke",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}statistische_bezirke/style.json`,
+        ],
+      },
+      {
+        name: "kst_stimmbezirke",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}stimmbezirke/style.json`,
+        ],
+      },
+      {
+        name: "kst_kommunalwahlbezirke",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}kommunalwahlbezirke/style.json`,
+        ],
+      },
+      {
+        name: "kst_bundestagswahlkreise",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bundestagswahlkreise/style.json`,
+        ],
+      },
     ],
   },
   Verkehr: {
@@ -1526,6 +1901,90 @@ export const baseConfig = {
     layers: [
       {
         name: "einstr",
+      },
+      {
+        name: "sch30",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}tempo_30_schilder/style.json`,
+        ],
+      },
+      {
+        name: "sch30",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}tempo_30_schilder/style.json`,
+        ],
+      },
+      {
+        name: "vbel2020",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}verkehrsbelastung_2020/style.json`,
+        ],
+      },
+      {
+        name: "vbel2013",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}verkehrsbelastung_2013/style.json`,
+        ],
+      },
+      {
+        name: "bewohnerbereiche",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bewohnerparkbereiche/style.json`,
+        ],
+      },
+      {
+        name: "bewohnerzonen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bewohnerparkzonen/style.json`,
+        ],
+      },
+      {
+        name: "cityparkflaechen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}city_parkflaechen/style.json`,
+        ],
+      },
+      {
+        name: "cityzonen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}city_parkzonen/style.json`,
+        ],
+      },
+      {
+        name: "pranlagen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}br_pr_anlagen/pr.style.json`,
+        ],
+      },
+      {
+        name: "carsharing",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}carsharing/style.json`,
+        ],
+      },
+      {
+        name: "reitwege",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}reitwege/style.json`,
+        ],
+      },
+      {
+        name: "branlagen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}br_pr_anlagen/br.style.json`,
+        ],
       },
     ],
   },
@@ -1544,66 +2003,146 @@ export const baseConfig = {
       },
       {
         name: "wg_2020",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/2020.style.json`,
+        ],
       },
       {
         name: "wg_2010",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/2019.style.json`,
+        ],
       },
       {
         name: "wg_2000",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/2009.style.json`,
+        ],
       },
       {
         name: "wg_1990",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1999.style.json`,
+        ],
       },
       {
         name: "wg_1980",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1989.style.json`,
+        ],
       },
       {
         name: "wg_1970",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1979.style.json`,
+        ],
       },
       {
         name: "wg_1960",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1969.style.json`,
+        ],
       },
       {
         name: "wg_1949",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1959.style.json`,
+        ],
       },
       {
         name: "wg_1919",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1948.style.json`,
+        ],
       },
       {
         name: "wg",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1918.style.json`,
+        ],
       },
       {
         name: "wg_unbek",
       },
       {
         name: "nwg_2020",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/2020.style.json`,
+        ],
       },
       {
         name: "nwg_2010",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/2019.style.json`,
+        ],
       },
       {
         name: "nwg_2000",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/2009.style.json`,
+        ],
       },
       {
         name: "nwg_1990",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1999.style.json`,
+        ],
       },
       {
         name: "nwg_1980",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1989.style.json`,
+        ],
       },
       {
         name: "nwg_1970",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1979.style.json`,
+        ],
       },
       {
         name: "nwg_1960",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1969.style.json`,
+        ],
       },
       {
         name: "nwg_1949",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1959.style.json`,
+        ],
       },
       {
         name: "nwg_1919",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1948.style.json`,
+        ],
       },
       {
         name: "nwg",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1918.style.json`,
+        ],
       },
       {
         name: "nwg_unbek",
