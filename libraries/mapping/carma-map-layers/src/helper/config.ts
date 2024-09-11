@@ -1603,7 +1603,95 @@ export const baseConfig = {
         ],
       },
       {
+        name: "breitband_hk",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}breitbandausbau_fttb/style.json`,
+        ],
+      },
+      {
+        name: "container",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}containerstandorte/style.json`,
+        ],
+      },
+      {
+        name: "zvb",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}versorgungsbereiche/versorgungsbereiche.style.json`,
+        ],
+      },
+      {
+        name: "zvb-erw",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}versorgungsbereiche/erweiterungsbereiche.style.json`,
+        ],
+      },
+      {
         name: "fernwaermewsw",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}fernwaermenetz/style.json`,
+        ],
+      },
+      {
+        name: "fernsued",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}geltungsbereich/style.json`,
+        ],
+      },
+      {
+        name: "belis_Masten",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}leuchten/style.json`,
+        ],
+      },
+      {
+        name: "eplusbest",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bestehende_telefonica_anlagen/style.json`,
+        ],
+      },
+      {
+        name: "o2best",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bestehende_o2_anlagen/style.json`,
+        ],
+      },
+      {
+        name: "tmobilebest",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bestehende_telekom_anlagen/style.json`,
+        ],
+      },
+      {
+        name: "vodafonebest",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bestehende_vodaphone_anlagen/style.json`,
+        ],
+      },
+      {
+        name: "belis_Leitungen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}leitungen/style.json`,
+        ],
+      },
+      {
+        name: "belis_Masten_mit_e",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}masten_mit_anschluss/style.json`,
+        ],
       },
       {
         name: "schaechte",
