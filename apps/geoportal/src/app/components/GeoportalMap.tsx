@@ -61,6 +61,7 @@ import {
   useCesiumCustomViewer,
   useHomeControl,
   useZoomControls,
+  useSceneStyleToggle,
 } from "@carma-mapping/cesium-engine";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
@@ -135,6 +136,8 @@ export const GeoportalMap = () => {
   const { viewer } = useCesiumCustomViewer();
   const homeControl = useHomeControl();
   const { handleZoomIn, handleZoomOut } = useZoomControls();
+  const toggleSceneStyle = useSceneStyleToggle();
+
   const [urlParams, setUrlParams] = useSearchParams();
   const [layoutHeight, setLayoutHeight] = useState(null);
   const [isMeasurementTooltip, setIsMeasurementTooltip] = useState(false);
@@ -171,7 +174,7 @@ export const GeoportalMap = () => {
     (infoText ===
       "Die Sachdatenabfrage ist für die ausgewählten Layer nicht verfügbar." ||
       infoText ===
-        "Die Sachdatenabfrage wurde für alle ausgewählten Layer deaktiviert.")
+      "Die Sachdatenabfrage wurde für alle ausgewählten Layer deaktiviert.")
   ) {
     dispatch(setInfoText(""));
   }
@@ -247,6 +250,19 @@ export const GeoportalMap = () => {
 
     setIsSameLayerTypes(isSame);
   }, [layers]);
+
+
+  useEffect(() => {
+    // INTIALIZE Cesium Tileset style from Geoportal/TopicMap background later style
+    if (viewer && backgroundLayer) {
+      if (backgroundLayer.id === "luftbild") {
+        toggleSceneStyle("primary");
+      } else {
+        toggleSceneStyle("secondary");
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewer, backgroundLayer]);
 
   // TODO Move out Controls to own component
 
@@ -349,11 +365,10 @@ export const GeoportalMap = () => {
                 ref={measurementControlTourRef}
               >
                 <img
-                  src={`${urlPrefix}${
-                    mode === "measurement"
+                  src={`${urlPrefix}${mode === "measurement"
                       ? "measure-active.png"
                       : "measure.png"
-                  }`}
+                    }`}
                   alt="Measure"
                   className="w-6"
                 />
@@ -479,7 +494,7 @@ export const GeoportalMap = () => {
                       (layer) => layer.layerType === "vector",
                     )
                   ) {
-                    setTimeout(() => {}, 100);
+                    setTimeout(() => { }, 100);
                   }
 
                   const vectorInfo = getVectorInfo(store.getState());
@@ -502,7 +517,7 @@ export const GeoportalMap = () => {
 
                   if (
                     queryableLayers[queryableLayers.length - 1].layerType !==
-                      "vector" ||
+                    "vector" ||
                     !vectorInfo ||
                     vectorLayers.length === nothingFoundIDs.length
                   ) {
