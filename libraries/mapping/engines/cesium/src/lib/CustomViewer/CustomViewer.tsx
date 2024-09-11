@@ -427,9 +427,9 @@ function CustomViewer(props: CustomViewerProps) {
       // see https://cesium.com/learn/cesiumjs/ref-doc/Viewer.html#.ConstructorOptions for defaults
 
       // quality and performance
-      msaaSamples={2}
-      useBrowserRecommendedResolution={false} // crisper image, does not ignore devicepixel ratio
-      // resolutionScale={window.devicePixelRatio} // would override dpr
+      msaaSamples={4}
+      useBrowserRecommendedResolution={true} // false allows crisper image, does not ignore devicepixel ratio
+      //resolutionScale={window.devicePixelRatio} // would override dpr
       scene3DOnly={true} // No 2D map resources loaded
       //sceneMode={SceneMode.SCENE3D} // Default but explicit
 
@@ -438,6 +438,7 @@ function CustomViewer(props: CustomViewerProps) {
       baseLayerPicker={false}
       fullscreenButton={false}
       geocoder={false}
+      targetFrameRate={60}
       homeButton={false}
       infoBox={false}
       sceneModePicker={false}
@@ -445,7 +446,7 @@ function CustomViewer(props: CustomViewerProps) {
       timeline={false}
       navigationHelpButton={false}
       navigationInstructionsInitiallyVisible={false}
-      //skyBox={true}
+      skyBox={false}
     >
       <BaseTilesets />
       {children}

@@ -26,7 +26,7 @@ import { useCesiumCustomViewer } from "../../CustomViewerContextProvider";
 
 const preloadWhenHidden = true;
 let enableDebugWireframe = false;
-let maximumScreenSpaceError = 8; // 16 is default but quite Low Quality
+const defaultMaximumScreenSpaceError = 8; // 16 is default but quite Low Quality
 
 const customShaderKeys = {
   clay: k.CLAY,
@@ -36,6 +36,11 @@ const customShaderKeys = {
   "unlit fog": k.UNLIT_FOG,
   monochrome: k.MONOCHROME,
   undefined: k.UNDEFINED,
+};
+
+const debugTilesetUrls = {
+  wupp2020: "https://wupp-3d-data.cismet.de/mesh/tileset.json",
+  wupp2024: "https://wupp-3d-data.cismet.de/mesh2024/tileset.json",
 };
 
 const DEFAULT_MESH_SHADER_KEY = k.UNLIT_ENHANCED_2024;
@@ -58,6 +63,16 @@ export const BaseTilesets = () => {
   const [customMeshShader, setCustomMeshShader] = useState<
     undefined | CustomShader
   >(DEFAULT_MESH_SHADER);
+  const [maximumScreenSpaceErrorPrimary, setMaximumScreenSpaceErrorPrimary] = useState(
+    tilesets.primary?.maximumScreenSpaceError ?? defaultMaximumScreenSpaceError
+  );
+  const [maximumScreenSpaceErrorSecondary, setMaximumScreenSpaceErrorSecondary] = useState(
+    tilesets.secondary?.maximumScreenSpaceError ?? defaultMaximumScreenSpaceError
+  );
+
+  const [primaryTilesetUrl, setPrimaryTilesetUrl] = useState(
+    tilesets.primary?.url ?? ""
+  );
 
   const tilesetOpacity = useTilesetOpacity();
 
@@ -99,7 +114,12 @@ export const BaseTilesets = () => {
           }
         }
       },
-
+      get primaryTilesetUrl() {
+        return primaryTilesetUrl;
+      },
+      set primaryTilesetUrl(v: string) {
+        setPrimaryTilesetUrl(v);
+      },
       get enableDebugWireframe() {
         return enableDebugWireframe;
       },
@@ -130,15 +150,20 @@ export const BaseTilesets = () => {
           tsB.show = v;
         }
       },
-      get maximumScreenSpaceError() {
-        return maximumScreenSpaceError;
+      get maximumScreenSpaceErrorPrimary() {
+        return maximumScreenSpaceErrorPrimary;
       },
-      set maximumScreenSpaceError(v: number) {
-        maximumScreenSpaceError = v;
-
+      set maximumScreenSpaceErrorPrimary(v: number) {
+        setMaximumScreenSpaceErrorPrimary(v);
         if (tsA) {
           tsA.maximumScreenSpaceError = v;
         }
+      },
+      get maximumScreenSpaceErrorSecondary() {
+        return maximumScreenSpaceErrorSecondary;
+      },
+      set maximumScreenSpaceErrorSecondary(v: number) {
+        setMaximumScreenSpaceErrorSecondary(v);
         if (tsB) {
           tsB.maximumScreenSpaceError = v;
         }
@@ -147,10 +172,12 @@ export const BaseTilesets = () => {
 
     [
       { name: "customShaderKey", options: customShaderKeys },
+      { name: "primaryTilesetUrl", options: { default: tilesets.primary?.url ?? "", ...debugTilesetUrls } },
       { name: "enableDebugWireframe" },
       { name: "showPrimary" },
       { name: "showSecondary" },
-      { name: "maximumScreenSpaceError", min: 1, max: 16, step: 1 },
+      { name: "maximumScreenSpaceErrorPrimary", min: 1, max: 16, step: 1 },
+      { name: "maximumScreenSpaceErrorSecondary", min: 1, max: 16, step: 1 },
     ],
   );
 
@@ -199,6 +226,7 @@ export const BaseTilesets = () => {
   return (
     <>
       <Resium3DTileset
+        key={primaryTilesetUrl}
         show={showPrimary}
         customShader={customMeshShader}
         enableDebugWireframe={enableDebugWireframe}
@@ -206,14 +234,13 @@ export const BaseTilesets = () => {
         //cacheBytes={536870912 * 2}
         shadows={ShadowMode.DISABLED}
         dynamicScreenSpaceError={false}
-        baseScreenSpaceError={256}
-        maximumScreenSpaceError={maximumScreenSpaceError}
+        //baseScreenSpaceError={256}
+        maximumScreenSpaceError={maximumScreenSpaceErrorPrimary}
         foveatedScreenSpaceError={false}
         //skipScreenSpaceErrorFactor={8}
-        skipLevelOfDetail={true}
+        //skipLevelOfDetail={true}
         //immediatelyLoadDesiredLevelOfDetail={true}
-
-        url={tilesets.primary?.url ?? ""}
+        url={primaryTilesetUrl}
         style={style}
         enableCollision={false}
         preloadWhenHidden={preloadWhenHidden}
@@ -224,7 +251,7 @@ export const BaseTilesets = () => {
         enableDebugWireframe={enableDebugWireframe}
         // quality
         dynamicScreenSpaceError={false}
-        maximumScreenSpaceError={maximumScreenSpaceError}
+        maximumScreenSpaceError={maximumScreenSpaceErrorSecondary}
         foveatedScreenSpaceError={false}
         //skipScreenSpaceErrorFactor={4}
         skipLevelOfDetail={true}
