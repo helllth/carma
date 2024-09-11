@@ -137,6 +137,7 @@ export const GeoportalMap = () => {
   const { handleZoomIn, handleZoomOut } = useZoomControls();
   const [urlParams, setUrlParams] = useSearchParams();
   const [layoutHeight, setLayoutHeight] = useState(null);
+  const [isMeasurementTooltip, setIsMeasurementTooltip] = useState(false);
   const {
     routedMapRef,
     referenceSystem,
@@ -327,7 +328,15 @@ export const GeoportalMap = () => {
                   ? "zum messen zu 2D-Modus wechseln"
                   : "Strecke / Fläche messen"
               }
-              open={mode !== "measurement" ? true : false}
+              open={isMeasurementTooltip}
+              defaultOpen={false}
+              onOpenChange={(open) => {
+                if (mode === "measurement") {
+                  setIsMeasurementTooltip(false);
+                } else {
+                  setIsMeasurementTooltip(!isMeasurementTooltip);
+                }
+              }}
               placement="right"
             >
               <ControlButtonStyler
