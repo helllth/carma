@@ -1051,6 +1051,10 @@ export const baseConfig = {
       },
       {
         name: "R102:stadtgrundkarte_hausnr",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}sgk_hausnummern/style.json`,
+        ],
       },
       {
         name: "urban",
@@ -1114,6 +1118,10 @@ export const baseConfig = {
         name: "baeume",
         icon: "Viereck_baumgruen",
         alternativeIcon: "Viereck_baumgruen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}baeume/style.json`,
+        ],
       },
       {
         name: "kga",
@@ -1127,6 +1135,10 @@ export const baseConfig = {
         pictureBoundingBox: [
           790989.4779520752, 6664143.201786021, 800673.0939729535,
           6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}radon/style.json`,
         ],
       },
       {
@@ -1670,66 +1682,146 @@ export const baseConfig = {
       },
       {
         name: "wg_2020",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/2020.style.json`,
+        ],
       },
       {
         name: "wg_2010",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/2019.style.json`,
+        ],
       },
       {
         name: "wg_2000",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/2009.style.json`,
+        ],
       },
       {
         name: "wg_1990",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1999.style.json`,
+        ],
       },
       {
         name: "wg_1980",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1989.style.json`,
+        ],
       },
       {
         name: "wg_1970",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1979.style.json`,
+        ],
       },
       {
         name: "wg_1960",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1969.style.json`,
+        ],
       },
       {
         name: "wg_1949",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1959.style.json`,
+        ],
       },
       {
         name: "wg_1919",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1948.style.json`,
+        ],
       },
       {
         name: "wg",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}wohngebaeude/1918.style.json`,
+        ],
       },
       {
         name: "wg_unbek",
       },
       {
         name: "nwg_2020",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/2020.style.json`,
+        ],
       },
       {
         name: "nwg_2010",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/2019.style.json`,
+        ],
       },
       {
         name: "nwg_2000",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/2009.style.json`,
+        ],
       },
       {
         name: "nwg_1990",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1999.style.json`,
+        ],
       },
       {
         name: "nwg_1980",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1989.style.json`,
+        ],
       },
       {
         name: "nwg_1970",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1979.style.json`,
+        ],
       },
       {
         name: "nwg_1960",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1969.style.json`,
+        ],
       },
       {
         name: "nwg_1949",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1959.style.json`,
+        ],
       },
       {
         name: "nwg_1919",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1948.style.json`,
+        ],
       },
       {
         name: "nwg",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}nicht_wohngebaeude/1918.style.json`,
+        ],
       },
       {
         name: "nwg_unbek",
