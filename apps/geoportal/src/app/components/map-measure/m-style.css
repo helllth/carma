@@ -60,3 +60,8 @@
 .leaflet-bar.leaflet-control.m-container.draw-custom-button {
   margin-left: 4px;
 }
+
+.leaflet-zoom-animated.leaflet-measure-path-measurement
+  > div:not([title="Total area"]) {
+  margin-top: -52% !important;
+}
