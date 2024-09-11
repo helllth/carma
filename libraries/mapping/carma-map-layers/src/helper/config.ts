@@ -1058,12 +1058,20 @@ export const baseConfig = {
       },
       {
         name: "urban",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}urbanAtlas/style.json`,
+        ],
       },
       {
         name: "bplanreihe",
       },
       {
         name: "bplanhintergrund",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bplanhintergrund/style.json`,
+        ],
       },
       {
         name: "wuppertal:1827",
@@ -1268,12 +1276,24 @@ export const baseConfig = {
       },
       {
         name: "Hitze-Ist",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}hitzeinsel/style.json`,
+        ],
       },
       {
         name: "Hitze-Stark-Ist",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}starke_hitzeinsel/style.json`,
+        ],
       },
       {
         name: "Hitze-2050",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}ausweitung_hitzeinsel/style.json`,
+        ],
       },
       {
         name: "Frischluftschneisen",
@@ -1295,6 +1315,10 @@ export const baseConfig = {
       },
       {
         name: "no2",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}luftmessstation/style.json`,
+        ],
       },
       {
         name: "lugi2000",
@@ -1467,6 +1491,10 @@ export const baseConfig = {
           808586.7150576031, 6657920.749952179, 813165.7707833119,
           6660846.854941222,
         ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}innenbereichssatzungen/style.json`,
+        ],
       },
       {
         name: "r102:fnp",
@@ -1490,6 +1518,10 @@ export const baseConfig = {
           793980.0766837327, 6660217.443786437, 796269.6045465872,
           6661680.496280962,
         ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}fnp_aenderungsverfahren_alle/style.json`,
+        ],
       },
       {
         name: "Fnpaenderungsverfahren-r",
@@ -1497,12 +1529,20 @@ export const baseConfig = {
           793980.0766837327, 6660217.443786437, 796269.6045465872,
           6661680.496280962,
         ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}fnp_aenderungsverfahren_rv/style.json`,
+        ],
       },
       {
         name: "Fnpaenderungsverfahren-n",
         pictureBoundingBox: [
           793980.0766837327, 6660217.443786437, 796269.6045465872,
           6661680.496280962,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}fnp_aenderungsverfahren_iv/style.json`,
         ],
       },
       {
@@ -1587,6 +1627,10 @@ export const baseConfig = {
         pictureBoundingBox: [
           801365.804541788, 6668672.095711919, 801671.5526549286,
           6668977.84382506,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}baulastnachweis/style.json`,
         ],
       },
     ],
@@ -1684,6 +1728,13 @@ export const baseConfig = {
         keywords: [
           ":vec:",
           `carmaConf://vectorStyle:${vectorBaseUrl}leitungen/style.json`,
+        ],
+      },
+      {
+        name: "fernsuedl",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}betriebsfertige_leitungen/style.json`,
         ],
       },
       {
