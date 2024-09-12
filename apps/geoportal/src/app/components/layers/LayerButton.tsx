@@ -219,7 +219,7 @@ const LayerButton = ({
         )}
         {queryable && mode === "featureInfo" && !background && (
           <div
-            className="absolute flex items-center top-10 left-0 z-[999999999]"
+            className="absolute flex items-center top-[32px] left-0 z-[999999999]"
             style={{ width: buttonRef.current?.clientWidth + "px" }}
           >
             <div
