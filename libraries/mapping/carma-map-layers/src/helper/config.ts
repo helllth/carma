@@ -763,12 +763,20 @@ export const poiCategoryWithKeywords = {
     },
     {
       name: "poi_schulen",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}schulen/schule.style.json`,
+      ],
     },
     {
       name: "poi_schulen_grund",
       pictureBoundingBox: [
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
+      ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}schulen/grundschule.style.json`,
       ],
     },
     {
@@ -777,12 +785,20 @@ export const poiCategoryWithKeywords = {
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}schulen/gymnasium.style.json`,
+      ],
     },
     {
       name: "poi_schulen_real",
       pictureBoundingBox: [
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
+      ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}schulen/realschule.style.json`,
       ],
     },
     {
@@ -791,12 +807,20 @@ export const poiCategoryWithKeywords = {
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}schulen/hauptschule.style.json`,
+      ],
     },
     {
       name: "poi_schulen_gesamt",
       pictureBoundingBox: [
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
+      ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}schulen/gesamtschule.style.json`,
       ],
     },
     {
@@ -805,6 +829,10 @@ export const poiCategoryWithKeywords = {
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}schulen/foerderschule.style.json`,
+      ],
     },
     {
       name: "poi_schulen_andere",
@@ -812,12 +840,20 @@ export const poiCategoryWithKeywords = {
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
       ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}schulen/andere.style.json`,
+      ],
     },
     {
       name: "poi_schulen_beruf",
       pictureBoundingBox: [
         790989.4779520752, 6664143.201786021, 800673.0939729535,
         6670157.840449209,
+      ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}schulen/berufsbildende.style.json`,
       ],
     },
     {
