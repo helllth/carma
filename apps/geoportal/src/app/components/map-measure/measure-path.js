@@ -291,6 +291,8 @@ L.Control.MeasurePolygon = L.Control.extend({
       if (!this.options.checkonedrawpoligon) {
         this.drawingLines(map);
         this.options.checkonedrawpoligon = true;
+      } else {
+        // this.options.checkonedrawpoligon = false;
       }
     });
 
@@ -787,8 +789,14 @@ L.Control.MeasurePolygon = L.Control.extend({
         savedShape.addTo(this._measureLayers).showMeasurements().enableEdit();
         // savedShape.on("dblclick", this._onPolygonClick.bind(this, map));
         savedShape.on("click", () => {
+          console.log("xxx saved shaped click");
+          this.options.checkonedrawpoligon = true;
           this.options.cbSetActiveShape(savedShape.customID);
           this.options.cbSetUpdateStatusHandler(false);
+        });
+        savedShape.on("mouseout", (e) => {
+          console.log("xxx mouse leave");
+          this.options.checkonedrawpoligon = false;
         });
         savedShape.on(
           "editable:drag editable:dragstart editable:dragend editable:vertex:drag editable:vertex:deleted",
