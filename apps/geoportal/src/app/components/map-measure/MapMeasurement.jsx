@@ -154,8 +154,8 @@ const MapMeasurement = (props) => {
     }
 
     if (measureControl) {
-      measureControl.changeMeasurementMode(mode);
       const map = routedMapRef.leafletMap.leafletElement;
+      measureControl.changeMeasurementMode(mode, map);
       const shapeCoordinates = measurementShapes.filter(
         (s) => s.shapeId === activeShape,
       );

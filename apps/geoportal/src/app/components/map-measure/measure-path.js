@@ -79,6 +79,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     polygonMode: false,
     measurementMode: false,
     startDrawing: false,
+    isFirstLoading: true,
   },
 
   drawingPolygons: function (map) {
@@ -823,7 +824,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     }
   },
 
-  toggleMeasurementMode: function (ifChangeMode = true) {
+  toggleMeasurementMode: function (ifChangeMode = true, map) {
     const mode = this.options.measurementMode;
     if (mode === "measurement") {
       this._clearMeasurements();
@@ -833,11 +834,17 @@ L.Control.MeasurePolygon = L.Control.extend({
 
       document.getElementById("img_plg_lines").src =
         this.options.icon_lineActive;
+
+      if (this.options.isFirstLoading) {
+        this.drawingLines(map);
+        this.options.checkonedrawpoligon = true;
+        this.options.isFirstLoading = false;
+      }
     } else {
       this._clearMeasurements();
       // const drawBtn = document.getElementById("draw_shape");
       // drawBtn.classList.add("hide-draw-btn");
-
+      this.options.isFirstLoading = true;
       document.getElementById("img_plg_lines").src =
         this.options.icon_lineInactive;
     }
@@ -847,9 +854,9 @@ L.Control.MeasurePolygon = L.Control.extend({
     }
   },
 
-  changeMeasurementMode: function (mode) {
+  changeMeasurementMode: function (mode, map) {
     this.options.measurementMode = mode;
-    this.toggleMeasurementMode(false);
+    this.toggleMeasurementMode(false, map);
   },
   changeMeasurementsArr: function (arr) {
     this.options.shapes = arr;
