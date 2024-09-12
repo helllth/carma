@@ -287,8 +287,9 @@ L.Control.MeasurePolygon = L.Control.extend({
     this._measureLayers = L.layerGroup().addTo(map);
 
     map.on("click", (event) => {
-      console.log("xxx map cllick", this.options.checkonedrawpoligon);
-      if (!this.options.checkonedrawpoligon) {
+      // console.log("xxx map cllick", this.options.checkonedrawpoligon);
+      const mode = this.options.measurementMode;
+      if (!this.options.checkonedrawpoligon && mode === "measurement") {
         this.drawingLines(map);
         this.options.checkonedrawpoligon = true;
       } else {
@@ -789,13 +790,13 @@ L.Control.MeasurePolygon = L.Control.extend({
         savedShape.addTo(this._measureLayers).showMeasurements().enableEdit();
         // savedShape.on("dblclick", this._onPolygonClick.bind(this, map));
         savedShape.on("click", () => {
-          console.log("xxx saved shaped click");
+          // console.log("xxx saved shaped click");
           this.options.checkonedrawpoligon = true;
           this.options.cbSetActiveShape(savedShape.customID);
           this.options.cbSetUpdateStatusHandler(false);
         });
         savedShape.on("mouseout", (e) => {
-          console.log("xxx mouse leave");
+          // console.log("xxx mouse leave");
           this.options.checkonedrawpoligon = false;
         });
         savedShape.on(

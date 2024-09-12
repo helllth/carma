@@ -157,7 +157,9 @@ const InfoBoxMeasurement = () => {
     return position;
   };
 
-  const deleteShapeHandler = () => {
+  const deleteShapeHandler = (e) => {
+    e.stopPropagation();
+
     dispatch(setDeleteMeasurements(true));
     cleanUpdateMeasurementStatus();
   };
