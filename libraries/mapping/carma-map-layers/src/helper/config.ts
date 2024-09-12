@@ -685,12 +685,20 @@ export const poiCategoryWithKeywords = {
     },
     {
       name: "poi_kita",
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}kita/style.json`,
+      ],
     },
     {
       name: "poi_kita_beh",
       pictureBoundingBox: [
         792683.0358600187, 6666519.9156342605, 796975.4527296581,
         6669527.234965856,
+      ],
+      keywords: [
+        ":vec:",
+        `carmaConf://vectorStyle:${vectorBaseUrl}inklusion/style.json`,
       ],
     },
     {
