@@ -512,6 +512,44 @@
         }
       },
       "projectPath": "./dist/apps/topicmaps/generic"
+    },
+    "potenzialflaechen-online": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "potenzialflaechen-online"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "potenzialflaechen-online"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/apps/wunda/potenzialflaechen"
+    },
+    "umweltalarm": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "umweltalarm"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "umweltalarm"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/apps/wunda/umweltalarm"
     }
   }
 }
