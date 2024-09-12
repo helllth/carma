@@ -29,7 +29,6 @@ import {
   getShowLayerButtons,
   setMode,
 } from "../../store/slices/ui.ts";
-import CismapLayer from "react-cismap/CismapLayer";
 import {
   Control,
   ControlButtonStyler,
@@ -68,28 +67,19 @@ import { TweakpaneProvider } from "@carma-commons/debug";
 import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import { Tooltip } from "antd";
 import FeatureInfoBox from "../feature-info/FeatureInfoBox.tsx";
-import proj4 from "proj4";
-import { proj4crs25832def } from "react-cismap/constants/gis";
 import { ExtraMarker } from "react-cismap/ExtraMarker";
+
 import {
-  functionToFeature,
-  objectToFeature,
-} from "../feature-info/featureInfoHelper.tsx";
-import {
-  addNothingFoundID,
-  removeNothingFoundID,
   setFeatures,
   setPreferredLayerId,
   setSecondaryInfoBoxElements,
   setSelectedFeature,
-  setVectorInfo,
 } from "../../store/slices/features.ts";
 import store from "../../store/index.ts";
-import FeatureInfoIcon from "../feature-info/FeatureInfoIcon.tsx";
 import LocateControlComponent from "./controls/LocateControlComponent.tsx";
-import { getQueryableLayers, getUrlPrefix } from './utils';
+import { getUrlPrefix } from './utils';
 import { useDispatchSachdatenInfoText, useTourRefCollabLabels } from "./hooks.ts";
-import { onClickTopicMap } from "./topicmap.utils.ts";
+import { createCismapLayers, onClickTopicMap } from "./topicmap.utils.ts";
 
 // TODO: Make transition style configurable with config and cesium library
 const MAPMODE_TRANSITION_DURATION = 1000;
@@ -448,121 +438,9 @@ export const GeoportalMap = () => {
                 gazetteerHit={gazetteerHit}
               />
               {focusMode && <PaleOverlay />}
-              {layers &&
-                layers.map((layer, i) => {
-                  if (layer.visible) {
-                    switch (layer.layerType) {
-                      case "wmts":
-                        return (
-                          <CismapLayer
-                            key={`${focusMode}_${i}_${layer.id}`}
-                            url={layer.props.url}
-                            maxZoom={26}
-                            layers={layer.props.name}
-                            format="image/png"
-                            tiled={true}
-                            transparent="true"
-                            pane="additionalLayers1"
-                            opacity={layer.opacity.toFixed(1) || 0.7}
-                            type={"wmts"}
-                          />
-                        );
-                      case "vector":
-                        return (
-                          <CismapLayer
-                            key={`${focusMode}_${i}_${layer.id}_${layer.opacity}`}
-                            style={layer.props.style}
-                            maxZoom={26}
-                            pane={`additionalLayers${i}`}
-                            opacity={layer.opacity || 0.7}
-                            type="vector"
-                            selectionEnabled={
-                              mode === "featureInfo" && layer.useInFeatureInfo
-                            }
-                            onSelectionChanged={(e: {
-                              hits: any[];
-                              hit: any;
-                            }) => {
-                              const queryableLayers = getQueryableLayers(layers);
-                              if (e.hits && layer.queryable) {
-                                const selectedVectorFeature = e.hits[0];
-                                const vectorPos = proj4(
-                                  proj4.defs("EPSG:4326") as unknown as string,
-                                  proj4crs25832def,
-                                  selectedVectorFeature.geometry.coordinates,
-                                );
-                                const minimalBoxSize = 1;
-                                const featureInfoBaseUrl =
-                                  layer.other.service.url;
-                                const layerName = layer.other.name;
-
-                                const imgUrl =
-                                  featureInfoBaseUrl +
-                                  `?&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
-                                  `${vectorPos[0] - minimalBoxSize},` +
-                                  `${vectorPos[1] - minimalBoxSize},` +
-                                  `${vectorPos[0] + minimalBoxSize},` +
-                                  `${vectorPos[1] + minimalBoxSize}` +
-                                  `&WIDTH=10&HEIGHT=10&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layerName}&STYLES=default&QUERY_LAYERS=${layerName}&INFO_FORMAT=text/html&X=5&Y=5
-                                        `;
-
-                                const properties =
-                                  selectedVectorFeature.properties;
-                                let result = "";
-                                layer.other.keywords.forEach((keyword) => {
-                                  const extracted = keyword.split(
-                                    "carmaconf://infoBoxMapping:",
-                                  )[1];
-                                  if (extracted) {
-                                    result += extracted + "\n";
-                                  }
-                                });
-
-                                if (result) {
-                                  const featureProperties = result.includes(
-                                    "function",
-                                  )
-                                    ? functionToFeature(properties, result)
-                                    : objectToFeature(properties, result);
-
-                                  const feature = {
-                                    properties: {
-                                      ...featureProperties.properties,
-                                      genericLinks: [
-                                        {
-                                          url: imgUrl,
-                                          tooltip: "Alte Sachdatenabfrage",
-                                          icon: <FeatureInfoIcon />,
-                                        },
-                                      ],
-                                    },
-                                    id: layer.id,
-                                  };
-
-                                  dispatch(setVectorInfo(feature));
-                                  dispatch(removeNothingFoundID(layer.id));
-
-                                  if (
-                                    layer.id ===
-                                    queryableLayers[queryableLayers.length - 1]
-                                      .id
-                                  ) {
-                                    setPos(null);
-                                  }
-                                } else {
-                                  dispatch(setVectorInfo(undefined));
-                                }
-                              } else {
-                                if (layer.queryable) {
-                                  dispatch(addNothingFoundID(layer.id));
-                                }
-                              }
-                            }}
-                          />
-                        );
-                    }
-                  }
-                })}
+              {createCismapLayers(layers, {
+                focusMode, mode, dispatch, setPos
+              })}
               {pos && mode === "featureInfo" && layers.length > 0 && (
                 <ExtraMarker
                   markerOptions={{ markerColor: "cyan", spin: false }}
