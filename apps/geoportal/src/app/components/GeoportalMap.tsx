@@ -82,7 +82,7 @@ import {
   getFeatureForLayer,
   getLeafNodes,
   objectToFeature,
-} from "./feature-info/featureInfoHelper.ts";
+} from "./feature-info/featureInfoHelper";
 import { LayerProps } from "@carma-mapping/layers";
 import {
   addFeature,
@@ -106,6 +106,8 @@ import {
 import store from "../store/index.ts";
 import { geoElements } from "@carma-collab/wuppertal/geoportal";
 import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
+import { faSquare } from "@fortawesome/free-regular-svg-icons";
+import FeatureInfoIcon from "./feature-info/FeatureInfoIcon.tsx";
 
 export const GeoportalMap = () => {
   const [gazData, setGazData] = useState([]);
@@ -712,7 +714,7 @@ export const GeoportalMap = () => {
                                         {
                                           url: imgUrl,
                                           tooltip: "Alte Sachdatenabfrage",
-                                          iconname: "lupe",
+                                          icon: <FeatureInfoIcon />,
                                         },
                                       ],
                                     },
