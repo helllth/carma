@@ -68,27 +68,17 @@ import { TweakpaneProvider } from "@carma-commons/debug";
 import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import { Tooltip } from "antd";
 import FeatureInfoBox from "../feature-info/FeatureInfoBox.tsx";
-import type { LatLng, Point } from "leaflet";
 import proj4 from "proj4";
 import { proj4crs25832def } from "react-cismap/constants/gis";
 import { ExtraMarker } from "react-cismap/ExtraMarker";
 import {
   functionToFeature,
-  getFeatureForLayer,
   objectToFeature,
 } from "../feature-info/featureInfoHelper.tsx";
 import {
   addNothingFoundID,
-  clearNothingFoundIDs,
-  getFeatures,
-  getNothingFoundIDs,
-  getPreferredLayerId,
-  getSecondaryInfoBoxElements,
-  getSelectedFeature,
-  getVectorInfo,
   removeNothingFoundID,
   setFeatures,
-  setInfoText,
   setPreferredLayerId,
   setSecondaryInfoBoxElements,
   setSelectedFeature,
@@ -97,8 +87,9 @@ import {
 import store from "../../store/index.ts";
 import FeatureInfoIcon from "../feature-info/FeatureInfoIcon.tsx";
 import LocateControlComponent from "./controls/LocateControlComponent.tsx";
-import { getAtLeastOneLayerIsQueryable, getQueryableLayers, getUrlPrefix } from './utils';
+import { getQueryableLayers, getUrlPrefix } from './utils';
 import { useDispatchSachdatenInfoText, useTourRefCollabLabels } from "./hooks.ts";
+import { onClickTopicMap } from "./topicmap.utils.ts";
 
 // TODO: Make transition style configurable with config and cesium library
 const MAPMODE_TRANSITION_DURATION = 1000;
@@ -111,12 +102,8 @@ export const GeoportalMap = () => {
   const [overlayFeature, setOverlayFeature] = useState(null);
   const [pos, setPos] = useState<[number, number] | null>(null);
   const [isSameLayerTypes, setIsSameLayerTypes] = useState(true);
-  const selectedFeature = useSelector(getSelectedFeature);
-  const features = useSelector(getFeatures);
-  const secondaryInfoBoxElements = useSelector(getSecondaryInfoBoxElements);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const container3dMapRef = useRef<HTMLDivElement>(null);
-  const container2dMapRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const layers = useSelector(getLayers);
   const allow3d = useSelector(getAllow3d);
@@ -128,7 +115,6 @@ export const GeoportalMap = () => {
   const showLocatorButton = useSelector(getShowLocatorButton);
   const showHamburgerMenu = useSelector(getShowHamburgerMenu);
   const showMeasurementButton = useSelector(getShowMeasurementButton);
-  const preferredLayerId = useSelector(getPreferredLayerId);
   const focusMode = useSelector(getFocusMode);
   const { viewer } = useCesiumCustomViewer();
   const homeControl = useHomeControl();
@@ -433,126 +419,7 @@ export const GeoportalMap = () => {
                 const newParams = { ...paramsToObject(urlParams), ...location };
                 setUrlParams(newParams);
               }}
-              onclick={async (e: {
-                containerPoint: Point;
-                latlng: LatLng;
-                layerPoint: Point;
-                originalEvent: PointerEvent;
-                sourceTarget: HTMLElement;
-                target: HTMLElement;
-                type: string;
-              }) => {
-                const queryableLayers = getQueryableLayers(layers);
-                if (
-                  mode === "featureInfo" &&
-                  getAtLeastOneLayerIsQueryable(layers)
-
-                ) {
-                  if (
-                    queryableLayers.find(
-                      (layer) => layer.layerType === "vector",
-                    )
-                  ) {
-                    setTimeout(() => { }, 100);
-                  }
-
-                  const vectorInfo = getVectorInfo(store.getState());
-                  const nothingFoundIDs = getNothingFoundIDs(store.getState());
-                  dispatch(setSecondaryInfoBoxElements([]));
-                  dispatch(setFeatures([]));
-                  const pos = proj4(
-                    proj4.defs("EPSG:4326") as unknown as string,
-                    proj4crs25832def,
-                    [e.latlng.lng, e.latlng.lat],
-                  );
-
-
-                  const vectorLayers = queryableLayers.filter(
-                    (layer) => layer.layerType === "vector",
-                  );
-
-                  if (vectorLayers.length === nothingFoundIDs.length) {
-                    dispatch(setVectorInfo(undefined));
-                  }
-
-                  if (
-                    queryableLayers[queryableLayers.length - 1].layerType !==
-                    "vector" ||
-                    !vectorInfo ||
-                    vectorLayers.length === nothingFoundIDs.length
-                  ) {
-                    setPos([e.latlng.lat, e.latlng.lng]);
-                  } else {
-                    setPos(null);
-                  }
-
-                  if (queryableLayers && pos[0] && pos[1]) {
-                    const result = await Promise.all(
-                      queryableLayers.map(async (testLayer) => {
-                        if (
-                          testLayer.layerType === "vector" &&
-                          (testLayer.id !== vectorInfo?.id ||
-                            nothingFoundIDs.includes(testLayer.id))
-                        ) {
-                          return undefined;
-                        } else if (
-                          testLayer.layerType === "vector" &&
-                          testLayer.id === vectorInfo.id
-                        ) {
-                          return vectorInfo;
-                        }
-
-                        const feature = await getFeatureForLayer(
-                          testLayer,
-                          pos,
-                        );
-
-                        if (feature) {
-                          return feature;
-                        }
-                      }),
-                    );
-
-                    const filteredResult = result
-                      .filter((feature) => feature !== undefined)
-                      .reverse();
-
-                    dispatch(clearNothingFoundIDs());
-
-                    if (filteredResult.length === 0) {
-                      dispatch(setSelectedFeature(null));
-                      dispatch(setSecondaryInfoBoxElements([]));
-                      dispatch(setFeatures([]));
-                      dispatch(
-                        setInfoText(
-                          "Keine Informationen an dieser Stelle gefunden.",
-                        ),
-                      );
-                    } else {
-                      if (preferredLayerId) {
-                        const preferredLayerIndex = filteredResult.findIndex(
-                          (feature) => feature.id === preferredLayerId,
-                        );
-
-                        if (preferredLayerIndex !== -1) {
-                          filteredResult.splice(
-                            0,
-                            0,
-                            ...filteredResult.splice(preferredLayerIndex, 1),
-                          );
-                        }
-                      }
-                      dispatch(setSelectedFeature(filteredResult[0]));
-                      dispatch(
-                        setSecondaryInfoBoxElements(
-                          filteredResult.slice(1, filteredResult.length),
-                        ),
-                      );
-                      dispatch(setFeatures(filteredResult));
-                    }
-                  }
-                }
-              }}
+              onclick={(e) => onClickTopicMap(e, { dispatch, mode, store, setPos })}
               gazetteerSearchComponent={<></>}
               infoBox={
                 mode === "measurement" ? (
