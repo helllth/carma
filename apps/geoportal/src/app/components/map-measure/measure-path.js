@@ -237,16 +237,16 @@ L.Control.MeasurePolygon = L.Control.extend({
       "leaflet-bar leaflet-control dont-show m-container",
     );
 
-    const modeBtn = L.DomUtil.create(
-      "div",
-      "leaflet-bar leaflet-control dont-show m-container hide-draw-btn draw-custom-button",
-      linesContainer,
-    );
+    // const modeBtn = L.DomUtil.create(
+    //   "div",
+    //   "leaflet-bar leaflet-control dont-show m-container hide-draw-btn draw-custom-button",
+    //   linesContainer,
+    // );
 
-    modeBtn.id = "draw_shape";
-    modeBtn.title = "Flächen- und Umfangsmessungen";
+    // modeBtn.id = "draw_shape";
+    // modeBtn.title = "Flächen- und Umfangsmessungen";
 
-    modeBtn.innerHTML = this.options.mode_btn;
+    // modeBtn.innerHTML = this.options.mode_btn;
 
     const lineIcon = L.DomUtil.create("a", "", linesContainer);
     lineIcon.innerHTML = `
@@ -260,17 +260,17 @@ L.Control.MeasurePolygon = L.Control.extend({
     const iconsWrapper = L.DomUtil.create("div", "m-icons-wrapper");
     iconsWrapper.appendChild(linesContainer);
 
-    iconsWrapper.appendChild(modeBtn);
+    // iconsWrapper.appendChild(modeBtn);
 
-    L.DomEvent.on(
-      modeBtn,
-      "click",
-      (event) => {
-        event.preventDefault(); // Prevent default action (e.g., redirection)
-        this.drawingLines(map);
-      },
-      this,
-    );
+    // L.DomEvent.on(
+    //   modeBtn,
+    //   "click",
+    //   (event) => {
+    //     event.preventDefault(); // Prevent default action (e.g., redirection)
+    //     this.drawingLines(map);
+    //   },
+    //   this,
+    // );
 
     L.DomEvent.on(
       lineIcon,
@@ -285,6 +285,11 @@ L.Control.MeasurePolygon = L.Control.extend({
     this._map = map;
 
     this._measureLayers = L.layerGroup().addTo(map);
+
+    map.on("click", (event) => {
+      console.log("xxx map cllick");
+      this.drawingLines(map);
+    });
 
     map.on("draw:created", (event) => {
       this.options.checkonedrawpoligon = false;
@@ -806,48 +811,24 @@ L.Control.MeasurePolygon = L.Control.extend({
     }
   },
 
-  // toggleMeasurementMode: function (map) {
-  //   this.cancelDrawing();
-  //   const mode = this.options.measurementMode;
-  //   if (mode === 'measurement') {
-  //     this._clearMeasurements();
-  //     const drawBtn = document.getElementById('draw_shape');
-  //     drawBtn.classList.add('hide-draw-btn');
-  //   } else {
-  //     this._clearMeasurements();
-  //     const drawBtn = document.getElementById('draw_shape');
-  //     drawBtn.classList.remove('hide-draw-btn');
-  //     this.loadMeasurements();
-  //   }
-  //   this._toggleMeasurementBtn();
-
-  //   this.options.cbToggleMeasurementMode();
-  // },
-
   toggleMeasurementMode: function (ifChangeMode = true) {
-    // this.cancelDrawing();
     const mode = this.options.measurementMode;
     if (mode === "measurement") {
       this._clearMeasurements();
-      // const drawBtn = document.getElementById('draw_shape');
-      // drawBtn.classList.add('hide-draw-btn');
       this.loadMeasurements();
-      const drawBtn = document.getElementById("draw_shape");
-      drawBtn.classList.remove("hide-draw-btn");
+      // const drawBtn = document.getElementById("draw_shape");
+      // drawBtn.classList.remove("hide-draw-btn");
 
       document.getElementById("img_plg_lines").src =
         this.options.icon_lineActive;
     } else {
       this._clearMeasurements();
-      // const drawBtn = document.getElementById('draw_shape');
-      // drawBtn.classList.add('hide-draw-btn');
-      const drawBtn = document.getElementById("draw_shape");
-      drawBtn.classList.add("hide-draw-btn");
+      // const drawBtn = document.getElementById("draw_shape");
+      // drawBtn.classList.add("hide-draw-btn");
 
       document.getElementById("img_plg_lines").src =
         this.options.icon_lineInactive;
     }
-    // this._toggleMeasurementBtn();
 
     if (ifChangeMode) {
       this.options.cbToggleMeasurementMode();

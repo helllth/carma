@@ -203,12 +203,12 @@ const MapMeasurement = (props) => {
     }
   }, [drawingShape]);
 
-  useEffect(() => {
-    // debugger;
-    if (startDrawing && measureControl) {
-      measureControl.drawingLines(routedMapRef.leafletMap.leafletElement);
-    }
-  }, [startDrawing]);
+  // useEffect(() => {
+  //   // debugger;
+  //   if (startDrawing && measureControl) {
+  //     measureControl.drawingLines(routedMapRef.leafletMap.leafletElement);
+  //   }
+  // }, [startDrawing]);
 
   const saveShapeHandler = (layer) => {
     dispatch(addShape(layer));
