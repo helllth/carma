@@ -217,25 +217,25 @@ const LayerButton = ({
             </button>
           </>
         )}
-      </div>
-      {queryable && mode === "featureInfo" && !background && (
-        <div
-          className="absolute flex items-center -bottom-2"
-          style={{ width: buttonRef.current?.clientWidth + "px" }}
-        >
+        {queryable && mode === "featureInfo" && !background && (
           <div
-            onClick={(e) => {
-              e.stopPropagation();
-              dispatch(toggleUseInFeatureInfo({ id }));
-            }}
-            className={cn(
-              "h-[5px] z-[999999999] cursor-pointer w-full mx-3 rounded-full",
-              layer.useInFeatureInfo && "bg-[#1677ff]",
-              !layer.useInFeatureInfo && "bg-gray-500",
-            )}
-          />
-        </div>
-      )}
+            className="absolute flex items-center top-10 left-0 z-[999999999]"
+            style={{ width: buttonRef.current?.clientWidth + "px" }}
+          >
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                dispatch(toggleUseInFeatureInfo({ id }));
+              }}
+              className={cn(
+                "h-[5px] z-[999999999] cursor-pointer w-full mx-3 rounded-full",
+                layer.useInFeatureInfo && "bg-[#1677ff]",
+                !layer.useInFeatureInfo && "bg-gray-500",
+              )}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
