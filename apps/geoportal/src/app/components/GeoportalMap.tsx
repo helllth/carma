@@ -109,6 +109,9 @@ import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from 
 import { faSquare } from "@fortawesome/free-regular-svg-icons";
 import FeatureInfoIcon from "./feature-info/FeatureInfoIcon.tsx";
 
+// TODO: Make transition style configurable with config and cesium library
+const MAPMODE_TRANSITION_DURATION = 1000;
+
 export const GeoportalMap = () => {
   const [gazData, setGazData] = useState([]);
   const [height, setHeight] = useState(0);
@@ -123,6 +126,7 @@ export const GeoportalMap = () => {
   const secondaryInfoBoxElements = useSelector(getSecondaryInfoBoxElements);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const container3dMapRef = useRef<HTMLDivElement>(null);
+  const container2dMapRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const layers = useSelector(getLayers);
   const allow3d = useSelector(getAllow3d);
@@ -177,7 +181,7 @@ export const GeoportalMap = () => {
     (infoText ===
       "Die Sachdatenabfrage ist für die ausgewählten Layer nicht verfügbar." ||
       infoText ===
-        "Die Sachdatenabfrage wurde für alle ausgewählten Layer deaktiviert.")
+      "Die Sachdatenabfrage wurde für alle ausgewählten Layer deaktiviert.")
   ) {
     dispatch(setInfoText(""));
   }
@@ -375,11 +379,10 @@ export const GeoportalMap = () => {
                 ref={measurementControlTourRef}
               >
                 <img
-                  src={`${urlPrefix}${
-                    mode === "measurement"
-                      ? "measure-active.png"
-                      : "measure.png"
-                  }`}
+                  src={`${urlPrefix}${mode === "measurement"
+                    ? "measure-active.png"
+                    : "measure.png"
+                    }`}
                   alt="Measure"
                   className="w-6"
                 />
@@ -505,7 +508,7 @@ export const GeoportalMap = () => {
                       (layer) => layer.layerType === "vector",
                     )
                   ) {
-                    setTimeout(() => {}, 100);
+                    setTimeout(() => { }, 100);
                   }
 
                   const vectorInfo = getVectorInfo(store.getState());
@@ -528,7 +531,7 @@ export const GeoportalMap = () => {
 
                   if (
                     queryableLayers[queryableLayers.length - 1].layerType !==
-                      "vector" ||
+                    "vector" ||
                     !vectorInfo ||
                     vectorLayers.length === nothingFoundIDs.length
                   ) {
@@ -766,8 +769,9 @@ export const GeoportalMap = () => {
                   right: 0,
                   bottom: 0,
                   zIndex: 401,
-                  visibility: !isMode2d ? "visible" : "hidden",
-                  pointerEvents: !isMode2d ? "auto" : "none",
+                  opacity: isMode2d ? 0 : 1,
+                  transition: `opacity ${MAPMODE_TRANSITION_DURATION}ms ease-in-out`,
+                  pointerEvents: isMode2d ? "none" : "auto",
                 }}
               >
                 <CustomViewer

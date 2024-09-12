@@ -4,7 +4,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import {
@@ -15,10 +14,8 @@ import {
   PerspectiveFrustum,
   Rectangle,
   OrthographicFrustum,
-  Cartesian2,
-  Cartesian3,
 } from "cesium";
-import { Entity, Viewer as ResiumViewer, useCesium } from "resium";
+import { Viewer as ResiumViewer } from "resium";
 
 import {
   useShowSecondaryTileset,
@@ -32,10 +29,11 @@ import { useLocation } from "react-router-dom";
 import useInitializeViewer from "./hooks";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 import { useTweakpaneCtx } from "@carma-commons/debug";
-import { getDegreesFromCartographic, resolutionFractions } from "../utils";
+import { leafletToCesiumCamera, resolutionFractions } from "../utils";
 
 import { formatFractions } from "../utils/formatters";
 import { useCesiumCustomViewer } from "../CustomViewerContextProvider";
+import type { LeafletEvent } from "leaflet";
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -110,31 +108,28 @@ function CustomViewer(props: CustomViewerProps) {
 
   // Create a callback function to set the FOV
 
-
-  const onMoveEnd = () => {
-    console.log("HOOK: leaflet moveend listener", topicMapContext);
-    const leafletPosition = leaflet.getCenter();
-    console.log("HOOK: leaflet moveend listener", leafletPosition);
-
-    if (viewer && isMode2d) {
-      // TODO replace zoom aware version, this is debug only
-      viewer.scene.camera.flyTo({
-        destination: Cartesian3.fromDegrees(leafletPosition.lng, leafletPosition.lat, 500),
-        orientation: {
-          heading: viewer.camera.heading,
-          pitch: viewer.camera.pitch,
-          roll: 0,
-        },
-        duration: 0,
-        complete: () => {
-          console.log("HOOK: flyTo complete", getDegreesFromCartographic(viewer.scene.camera.positionCartographic), viewer);
-        }
-      });
-    }
-  }
+  // TODO implement focus check to prevent update loops
 
   useEffect(() => {
-    if (topicMapContext) {
+    if (topicMapContext && isMode2d) {
+
+      const handleLeafletMoveEnd = (event: LeafletEvent) => {
+        const center = event.target?.getCenter();
+        const zoom = event.target?.getZoom();
+
+        const mapLocation = {
+          lat: center.lat,
+          lng: center.lng,
+          zoom,
+        };
+
+        //console.log("handleLeafletMoveEnd xxx", mapLocation);
+
+        if (viewer && mapLocation.lat && mapLocation.lng && mapLocation.zoom) {
+          leafletToCesiumCamera(viewer, mapLocation);
+        }
+      };
+
       console.log("HOOK: topicMapContext changed", topicMapContext);
       const leaflet =
         topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
@@ -143,14 +138,14 @@ function CustomViewer(props: CustomViewerProps) {
       }
       if (leaflet) {
         // add moveend listener to leaflet
-        leaflet.on("moveend", onMoveEnd);
+        leaflet.on("moveend", handleLeafletMoveEnd);
         return () => {
-          leaflet.off("moveend", onMoveEnd);
+          leaflet.off("moveend", handleLeafletMoveEnd);
         };
       }
 
     }
-  }, [topicMapContext]);
+  }, [topicMapContext, viewer, isMode2d]);
 
   useTweakpaneCtx(
     {
@@ -407,6 +402,7 @@ function CustomViewer(props: CustomViewerProps) {
     };
   }, [
     viewer,
+    leaflet,
     location.pathname,
     isSecondaryStyle,
     topicMapContext?.routedMapRef,
