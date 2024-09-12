@@ -365,6 +365,7 @@ export const GeoportalMap = () => {
               <ControlButtonStyler
                 disabled={!isMode2d}
                 onClick={() => {
+                  setIsMeasurementTooltip(false);
                   dispatch(
                     setMode(mode === "measurement" ? "default" : "measurement"),
                   );
