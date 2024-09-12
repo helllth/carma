@@ -287,8 +287,11 @@ L.Control.MeasurePolygon = L.Control.extend({
     this._measureLayers = L.layerGroup().addTo(map);
 
     map.on("click", (event) => {
-      console.log("xxx map cllick");
-      this.drawingLines(map);
+      console.log("xxx map cllick", this.options.checkonedrawpoligon);
+      if (!this.options.checkonedrawpoligon) {
+        this.drawingLines(map);
+        this.options.checkonedrawpoligon = true;
+      }
     });
 
     map.on("draw:created", (event) => {
@@ -299,7 +302,7 @@ L.Control.MeasurePolygon = L.Control.extend({
       this.options.cbSetDrawingShape(null);
 
       const layer = event.layer;
-      layer.on("dblclick", this._onPolygonClick.bind(this, map));
+      // layer.on("dblclick", this._onPolygonClick.bind(this, map));
 
       layer.on("editable:vertex:dragend", () => {
         this.options.cbSetUpdateStatusHandler(false);
@@ -716,7 +719,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     polygon.customShape = "polygon";
 
     polygon.addTo(this._measureLayers).showMeasurements().enableEdit();
-    polygon.on("dblclick", this._onPolygonClick.bind(this, map));
+    // polygon.on("dblclick", this._onPolygonClick.bind(this, map));
     polygon.on("click", () => {
       this.options.cbSetActiveShape(polygon.customID);
       this.options.cbSetUpdateStatusHandler(false);
@@ -782,7 +785,7 @@ L.Control.MeasurePolygon = L.Control.extend({
         });
         savedShape.customID = shapeId;
         savedShape.addTo(this._measureLayers).showMeasurements().enableEdit();
-        savedShape.on("dblclick", this._onPolygonClick.bind(this, map));
+        // savedShape.on("dblclick", this._onPolygonClick.bind(this, map));
         savedShape.on("click", () => {
           this.options.cbSetActiveShape(savedShape.customID);
           this.options.cbSetUpdateStatusHandler(false);
