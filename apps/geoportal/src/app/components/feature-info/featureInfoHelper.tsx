@@ -1,4 +1,8 @@
 import { LayerProps } from "@carma-mapping/layers";
+import { faSquare } from "@fortawesome/free-regular-svg-icons";
+import { faInfo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FeatureInfoIcon from "./FeatureInfoIcon";
 
 export const getLeafNodes = (node, result: any = {}): any => {
   if (node.nodeType === Node.ELEMENT_NODE) {
@@ -122,7 +126,7 @@ export const getFeatureForLayer = async (layer, pos) => {
             {
               url: imgUrl,
               tooltip: "Alte Sachdatenabfrage",
-              iconname: "lupe",
+              icon: <FeatureInfoIcon />,
             },
           ],
         },
