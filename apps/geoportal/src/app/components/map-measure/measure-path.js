@@ -79,7 +79,6 @@ L.Control.MeasurePolygon = L.Control.extend({
     polygonMode: false,
     measurementMode: false,
     startDrawing: false,
-    isFirstLoading: true,
   },
 
   drawingPolygons: function (map) {
@@ -139,17 +138,7 @@ L.Control.MeasurePolygon = L.Control.extend({
 
     const latlng = event.latlng;
 
-    console.log("xxx", this._measureHandler);
-
-    if (this._measureHandler._markers) {
-      this._measureHandler._markers.push(new L.Marker(latlng));
-      this._measureHandler._poly = new L.Polyline(
-        [latlng],
-        this._measureHandler.options.shapeOptions,
-      );
-      this._measureHandler._poly.addTo(map);
-      this._measureHandler._startLatLng = latlng;
-    }
+    this.options.currenLine.addVertex(latlng);
 
     this._toggleMeasure(
       "img_plg_lines",
@@ -304,7 +293,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     this._measureLayers = L.layerGroup().addTo(map);
 
     map.on("click", (event) => {
-      // console.log("xxx map cllick", this.options.checkonedrawpoligon);
+      this.options.currenLine;
       const mode = this.options.measurementMode;
       if (!this.options.checkonedrawpoligon && mode === "measurement") {
         this.drawingLines(map, event);
@@ -378,8 +367,6 @@ L.Control.MeasurePolygon = L.Control.extend({
 
       layers.eachLayer((layer) => {
         layer.customHandle = index++;
-        console.log("xxx layer", layer);
-
         layer.on("click", (e) => {
           if (e.target.customHandle === 0) {
             this.options.shapeMode = "polygon";
@@ -807,15 +794,12 @@ L.Control.MeasurePolygon = L.Control.extend({
         });
         savedShape.customID = shapeId;
         savedShape.addTo(this._measureLayers).showMeasurements().enableEdit();
-        // savedShape.on("dblclick", this._onPolygonClick.bind(this, map));
         savedShape.on("click", () => {
-          // console.log("xxx saved shaped click");
           this.options.checkonedrawpoligon = true;
           this.options.cbSetActiveShape(savedShape.customID);
           this.options.cbSetUpdateStatusHandler(false);
         });
         savedShape.on("mouseout", (e) => {
-          // console.log("xxx mouse leave");
           this.options.checkonedrawpoligon = false;
         });
         savedShape.on(
@@ -853,16 +837,17 @@ L.Control.MeasurePolygon = L.Control.extend({
       document.getElementById("img_plg_lines").src =
         this.options.icon_lineActive;
 
-      if (this.options.isFirstLoading) {
-        // this.drawingLines(map);
-        // this.options.checkonedrawpoligon = true;
-        this.options.isFirstLoading = false;
-      }
+      // if (this.options.isFirstLoading) {
+      //   this.options.isFirstLoading = false;
+      // }
     } else {
       this._clearMeasurements();
+      if (this.options.currenLine) {
+        this.options.currenLine.disable();
+      }
       // const drawBtn = document.getElementById("draw_shape");
       // drawBtn.classList.add("hide-draw-btn");
-      this.options.isFirstLoading = true;
+      this.options.checkonedrawpoligon = false;
       document.getElementById("img_plg_lines").src =
         this.options.icon_lineInactive;
     }
