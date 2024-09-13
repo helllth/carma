@@ -79,7 +79,9 @@ export const getFeatureForLayer = async (layer, pos) => {
   const props = layer.props as LayerProps;
   const minimalBoxSize = 1;
   const url = createUrl(
-    props.url.replace("http", "https"),
+    props.url.includes("https")
+      ? props.url
+      : props.url.replace("http", "https"),
     pos,
     minimalBoxSize,
     props.name,
@@ -104,6 +106,7 @@ export const getFeatureForLayer = async (layer, pos) => {
   });
 
   if (result) {
+    console.log("xxx", url);
     await fetch(url)
       .then((response) => response.text())
       .then((data) => {
