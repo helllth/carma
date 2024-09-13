@@ -66,10 +66,10 @@
   margin-top: -52% !important;
 }
 
-.leaflet-draw-tooltip {
+/* .leaflet-draw-tooltip {
   display: hidden !important;
 }
 
 #routedMap:hover .leaflet-draw-tooltip {
   visibility: visible !important;
-}
+} */
