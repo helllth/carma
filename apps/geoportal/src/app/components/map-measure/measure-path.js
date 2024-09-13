@@ -109,7 +109,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     );
   },
 
-  drawingLines: function (map) {
+  drawingLines: function (map, event) {
     this.options.shapeMode = "line";
     this._measureHandler = new L.Draw.Polyline(map, {
       showLength: true,
@@ -135,11 +135,20 @@ L.Control.MeasurePolygon = L.Control.extend({
       "Klicken (ggf. mehrmals), um die nächsten Punkte des Linienzuges zu setzen.";
     L.drawLocal.draw.handlers.polyline.tooltip.end = tooltipContent;
 
-    const tooltip = document.querySelector(".leaflet-draw-tooltip");
-    console.log("xxx", tooltip);
-    if (tooltip) {
-      // tooltip.style.left = e.originalEvent.clientX + 'px';
-      // tooltip.style.top = e.originalEvent.clientY + 'px';
+    this._measureHandler.enable();
+
+    const latlng = event.latlng;
+
+    console.log("xxx", this._measureHandler);
+
+    if (this._measureHandler._markers) {
+      this._measureHandler._markers.push(new L.Marker(latlng));
+      this._measureHandler._poly = new L.Polyline(
+        [latlng],
+        this._measureHandler.options.shapeOptions,
+      );
+      this._measureHandler._poly.addTo(map);
+      this._measureHandler._startLatLng = latlng;
     }
 
     this._toggleMeasure(
@@ -298,7 +307,7 @@ L.Control.MeasurePolygon = L.Control.extend({
       // console.log("xxx map cllick", this.options.checkonedrawpoligon);
       const mode = this.options.measurementMode;
       if (!this.options.checkonedrawpoligon && mode === "measurement") {
-        this.drawingLines(map);
+        this.drawingLines(map, event);
         this.options.checkonedrawpoligon = true;
       } else {
         // this.options.checkonedrawpoligon = false;
@@ -369,6 +378,7 @@ L.Control.MeasurePolygon = L.Control.extend({
 
       layers.eachLayer((layer) => {
         layer.customHandle = index++;
+        console.log("xxx layer", layer);
 
         layer.on("click", (e) => {
           if (e.target.customHandle === 0) {
@@ -844,8 +854,8 @@ L.Control.MeasurePolygon = L.Control.extend({
         this.options.icon_lineActive;
 
       if (this.options.isFirstLoading) {
-        this.drawingLines(map);
-        this.options.checkonedrawpoligon = true;
+        // this.drawingLines(map);
+        // this.options.checkonedrawpoligon = true;
         this.options.isFirstLoading = false;
       }
     } else {
