@@ -135,6 +135,13 @@ L.Control.MeasurePolygon = L.Control.extend({
       "Klicken (ggf. mehrmals), um die nächsten Punkte des Linienzuges zu setzen.";
     L.drawLocal.draw.handlers.polyline.tooltip.end = tooltipContent;
 
+    const tooltip = document.querySelector(".leaflet-draw-tooltip");
+    console.log("xxx", tooltip);
+    if (tooltip) {
+      // tooltip.style.left = e.originalEvent.clientX + 'px';
+      // tooltip.style.top = e.originalEvent.clientY + 'px';
+    }
+
     this._toggleMeasure(
       "img_plg_lines",
       "icon_lineActive",
@@ -331,7 +338,8 @@ L.Control.MeasurePolygon = L.Control.extend({
     });
 
     map.on("draw:drawstart", (event) => {
-      var mouseActive = L.Browser.touch && matchMedia("(hover:hover)").matches;
+      const mouseActive =
+        L.Browser.touch && matchMedia("(hover:hover)").matches;
       if (
         mouseActive ||
         event.layerType === "circle" ||
