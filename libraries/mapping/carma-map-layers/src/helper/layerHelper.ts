@@ -116,9 +116,6 @@ const scaleHintToZoom = (scaleHint: number) => {
 
 const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
   if (layer) {
-    if (layer.KeywordList) {
-      console.log("xxx layer", layer);
-    }
     let item: Item = {
       title: layer.Title,
       description: layer.Abstract,
