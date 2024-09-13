@@ -30,6 +30,7 @@ import {
 } from "../feature-info/featureInfoHelper";
 import { getAtLeastOneLayerIsQueryable, getQueryableLayers } from "./utils";
 import { UIMode } from "../../store/slices/ui";
+import FeatureInfoIcon from "../feature-info/FeatureInfoIcon";
 
 interface WMTSLayerProps {
   type: "wmts";
@@ -223,7 +224,7 @@ const onSelectionChangedVector = (
             {
               url: imgUrl,
               tooltip: "Alte Sachdatenabfrage",
-              iconname: "lupe",
+              icon: createElement(FeatureInfoIcon),
             },
           ],
         },

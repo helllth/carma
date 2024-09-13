@@ -2,7 +2,7 @@ import { faSquare } from "@fortawesome/free-regular-svg-icons"
 import { faInfo } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-const FeatureInfoIcon = () => {
+export const FeatureInfoIcon = () => {
   return (
     <div
                   className="relative inline-block"
