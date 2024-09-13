@@ -1,17 +1,28 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "leaflet/dist/leaflet.css";
-import "react-bootstrap-typeahead/css/Typeahead.css";
-import "react-cismap/topicMaps.css";
-import "./index.css";
-import { TopicMapContextProvider } from "react-cismap/contexts/TopicMapContextProvider";
-import { GeoportalMap } from "./components/GeoportalMap/GeoportalMap";
-import TopNavbar from "./components/TopNavbar";
-import MapMeasurement from "./components/map-measure/MapMeasurement";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import LZString from "lz-string";
-import { useDispatch, useSelector } from "react-redux";
-import { backgroundSettings } from "@carma-collab/wuppertal/geoportal";
+// Built-in Modules
+import { useEffect, useState } from 'react';
+
+// 3rd party Modules
+import LZString from 'lz-string';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+
+// 1st party Modules
+import { TopicMapContextProvider } from 'react-cismap/contexts/TopicMapContextProvider';
+
+// Monorepo Packages
+import { backgroundSettings } from '@carma-collab/wuppertal/geoportal';
+import { OverlayTourProvider } from '@carma/libraries/commons/ui/lib-helper-overlay';
+import { CustomViewerContextProvider } from '@carma-mapping/cesium-engine';
+import type { Layer } from '@carma-mapping/layers';
+import type { BackgroundLayer, Settings } from '@carma-apps/portals';
+import { CrossTabCommunicationContextProvider } from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
+
+// Local Modules
+import AppErrorFallback from './components/AppErrorFallback';
+import { GeoportalMap } from './components/GeoportalMap/GeoportalMap';
+import MapMeasurement from './components/map-measure/MapMeasurement';
+import TopNavbar from './components/TopNavbar';
 import {
   setBackgroundLayer,
   setLayers,
@@ -19,29 +30,31 @@ import {
   setShowHamburgerMenu,
   setShowLocatorButton,
   setShowMeasurementButton,
-} from "./store/slices/mapping";
+} from './store/slices/mapping';
 import {
-  getAllowUiChanges,
-  getMode,
-  setAllow3d,
-  setAllowUiChanges,
-  setMode,
-  setShowLayerButtons,
-  setShowLayerHideButtons,
-} from "./store/slices/ui";
-import { Layer } from "@carma-mapping/layers";
-import { CrossTabCommunicationContextProvider } from "react-cismap/contexts/CrossTabCommunicationContextProvider";
-import HomeButton from "./components/HomeButton";
-import type { BackgroundLayer, Settings } from "@carma-apps/portals";
-import { OverlayTourProvider } from "@carma/libraries/commons/ui/lib-helper-overlay";
+  getUIAllowChanges,
+  getUIMode,
+  setUIAllow3d,
+  setUIAllowChanges,
+  setUIMode,
+  setUIShowLayerButtons,
+  setUIShowLayerHideButtons,
+  UIMode,
+} from './store/slices/ui';
+
+// Config
+import { MODEL_ASSETS } from './config/assets.config';
 import {
   BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
   WUPP_TERRAIN_PROVIDER,
-} from "./config/dataSources.config";
-import { MODEL_ASSETS } from "./config/assets.config";
-import { CustomViewerContextProvider } from "@carma-mapping/cesium-engine";
-import { ErrorBoundary } from "react-error-boundary";
-import AppErrorFallback from "./components/AppErrorFallback";
+} from './config/dataSources.config';
+
+// Side-Effect Imports
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'leaflet/dist/leaflet.css';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-cismap/topicMaps.css';
+import './index.css';
 
 if (typeof global === "undefined") {
   window.global = window;
@@ -56,14 +69,14 @@ type Config = {
 function App({ published }: { published?: boolean }) {
   const [syncToken, setSyncToken] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const allowUiChanges = useSelector(getAllowUiChanges);
+  const allowUiChanges = useSelector(getUIAllowChanges);
   const dispatch = useDispatch();
-  const mode = useSelector(getMode);
+  const mode = useSelector(getUIMode);
 
   useEffect(() => {
     // TODO: remove if feature flag is removed
 
-    dispatch(setAllow3d(searchParams.has("allow3d")));
+    dispatch(setUIAllow3d(searchParams.has("allow3d")));
 
     // END FEATURE FLAG
 
@@ -79,18 +92,18 @@ function App({ published }: { published?: boolean }) {
       dispatch(setLayers(newConfig.layers));
       dispatch(setBackgroundLayer(newConfig.backgroundLayer));
       if (newConfig.settings) {
-        dispatch(setShowLayerButtons(newConfig.settings.showLayerButtons));
+        dispatch(setUIShowLayerButtons(newConfig.settings.showLayerButtons));
         dispatch(setShowFullscreenButton(newConfig.settings.showFullscreen));
         dispatch(setShowLocatorButton(newConfig.settings.showLocator));
         dispatch(setShowMeasurementButton(newConfig.settings.showMeasurement));
         dispatch(setShowHamburgerMenu(newConfig.settings.showHamburgerMenu));
 
         if (newConfig.settings.showLayerHideButtons || published) {
-          dispatch(setAllowUiChanges(false));
-          dispatch(setShowLayerHideButtons(true));
+          dispatch(setUIAllowChanges(false));
+          dispatch(setUIShowLayerHideButtons(true));
         } else {
-          dispatch(setAllowUiChanges(true));
-          dispatch(setShowLayerHideButtons(false));
+          dispatch(setUIAllowChanges(true));
+          dispatch(setUIShowLayerHideButtons(false));
         }
       }
       searchParams.delete("data");
@@ -101,13 +114,13 @@ function App({ published }: { published?: boolean }) {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.shiftKey) {
-        dispatch(setShowLayerHideButtons(true));
+        dispatch(setUIShowLayerHideButtons(true));
       }
     };
 
     const onKeyUp = (e: KeyboardEvent) => {
       if (allowUiChanges) {
-        dispatch(setShowLayerHideButtons(false));
+        dispatch(setUIShowLayerHideButtons(false));
       }
     };
 
@@ -126,8 +139,8 @@ function App({ published }: { published?: boolean }) {
 
   const content = (
     <OverlayTourProvider
-      showOverlay={mode === "tour" ? true : false}
-      closeOverlay={() => dispatch(setMode("default"))}
+      showOverlay={mode === UIMode.TOUR ? true : false}
+      closeOverlay={() => dispatch(setUIMode(UIMode.DEFAULT))}
       transparency={backgroundSettings.transparency}
       color={backgroundSettings.color}
     >
