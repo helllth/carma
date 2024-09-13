@@ -30,7 +30,7 @@ import {
 } from "../feature-info/featureInfoHelper";
 import { getAtLeastOneLayerIsQueryable, getQueryableLayers } from "./utils";
 import { UIMode } from "../../store/slices/ui";
-import FeatureInfoIcon from "../feature-info/FeatureInfoIcon";
+import { FeatureInfoIcon }from "../feature-info/FeatureInfoIcon";
 
 interface WMTSLayerProps {
   type: "wmts";

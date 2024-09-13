@@ -19,11 +19,13 @@ import { useLocation } from "react-router-dom";
 import { useCesiumCustomViewer } from "../CustomViewerContextProvider";
 import { leafletToCesiumCamera } from "../utils";
 
+import type { Map as LeafletMap } from "leaflet";
+
 const useInitializeViewer = (
   viewer: Viewer | null,
   home: Cartesian3 | null,
   homeOffset: Cartesian3 | null,
-  leaflet?: L.Map | null,
+  leaflet?: LeafletMap | null,
 ) => {
   const [hash, setHash] = useState<string | null>(null); // effectively hook should run only once
   const dispatch = useDispatch();
