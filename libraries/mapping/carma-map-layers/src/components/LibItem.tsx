@@ -416,12 +416,14 @@ const LibItem = ({
               title
             )}
           </h3>
-          {keywords && extractVectorStyles(keywords) && !forceWMS && (
-            <FontAwesomeIcon
-              icon={faRocket}
-              className="text-xl cursor-pointer text-gray-700 z-50"
-            />
-          )}
+          {keywords &&
+            extractVectorStyles(keywords)?.vectorStyle &&
+            !forceWMS && (
+              <FontAwesomeIcon
+                icon={faRocket}
+                className="text-xl cursor-pointer text-gray-700 z-50"
+              />
+            )}
         </div>
         <p
           className="text-base line-clamp-3 h-[66px]"
