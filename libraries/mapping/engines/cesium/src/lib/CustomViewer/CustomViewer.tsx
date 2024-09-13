@@ -112,7 +112,6 @@ function CustomViewer(props: CustomViewerProps) {
 
   useEffect(() => {
     if (topicMapContext && isMode2d) {
-
       const handleLeafletMoveEnd = (event: LeafletEvent) => {
         const center = event.target?.getCenter();
         const zoom = event.target?.getZoom();
@@ -137,7 +136,6 @@ function CustomViewer(props: CustomViewerProps) {
         console.log("HOOK: leaflet changed", leaflet);
       }
       if (leaflet) {
-        // add moveend listener to leaflet
         leaflet.on("moveend", handleLeafletMoveEnd);
         return () => {
           leaflet.off("moveend", handleLeafletMoveEnd);
@@ -300,7 +298,7 @@ function CustomViewer(props: CustomViewerProps) {
 
   const location = useLocation();
 
-  useInitializeViewer(viewer, home, homeOffset);
+  useInitializeViewer(viewer, home, homeOffset, leaflet);
 
   useEffect(() => {
     if (viewer && enableLocationHashUpdate) {

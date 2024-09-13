@@ -17,11 +17,13 @@ import { decodeSceneFromLocation } from "./utils";
 import { setupSecondaryStyle } from "./components/baseTileset.hook";
 import { useLocation } from "react-router-dom";
 import { useCesiumCustomViewer } from "../CustomViewerContextProvider";
+import { leafletToCesiumCamera } from "../utils";
 
 const useInitializeViewer = (
   viewer: Viewer | null,
   home: Cartesian3 | null,
   homeOffset: Cartesian3 | null,
+  leaflet?: L.Map | null,
 ) => {
   const [hash, setHash] = useState<string | null>(null); // effectively hook should run only once
   const dispatch = useDispatch();
@@ -74,6 +76,13 @@ const useInitializeViewer = (
           );
         })();
         */
+      } else if (leaflet) {
+        console.log("HOOK: initViewer from leaflet");
+        const { lat, lng } = leaflet.getCenter();
+        const zoom = leaflet.getZoom();
+        leafletToCesiumCamera(viewer, { lat, lng, zoom });
+
+        // triggers url hash update on moveend
       } else if (home && homeOffset) {
         console.log("HOOK: initViewer no hash, using home");
         viewer.camera.lookAt(home, homeOffset);
@@ -120,36 +129,41 @@ const MOVERATE_FACTOR = 0.33;
 export function useZoomControls(moveRateFactor: number = MOVERATE_FACTOR) {
   const { viewer } = useCesiumCustomViewer();
 
-  const handleZoomIn = useCallback((event: React.MouseEvent) => {
-    event.preventDefault();
-    if (!viewer) return;
-    const scene = viewer.scene;
-    const camera = viewer.camera;
-    const ellipsoid = scene.globe.ellipsoid;
+  const handleZoomIn = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault();
+      if (!viewer) return;
+      const scene = viewer.scene;
+      const camera = viewer.camera;
+      const ellipsoid = scene.globe.ellipsoid;
 
-    const cameraHeight = ellipsoid.cartesianToCartographic(
-      camera.position,
-    ).height;
-    const moveRate = cameraHeight * moveRateFactor;
-    camera.moveForward(moveRate);
-  }, [viewer, moveRateFactor]);
+      const cameraHeight = ellipsoid.cartesianToCartographic(
+        camera.position,
+      ).height;
+      const moveRate = cameraHeight * moveRateFactor;
+      camera.moveForward(moveRate);
+    },
+    [viewer, moveRateFactor],
+  );
 
-  const handleZoomOut = useCallback((event: React.MouseEvent) => {
-    event.preventDefault();
-    if (!viewer) return;
-    const scene = viewer.scene;
-    const camera = viewer.camera;
-    const ellipsoid = scene.globe.ellipsoid;
+  const handleZoomOut = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault();
+      if (!viewer) return;
+      const scene = viewer.scene;
+      const camera = viewer.camera;
+      const ellipsoid = scene.globe.ellipsoid;
 
-    const cameraHeight = ellipsoid.cartesianToCartographic(
-      camera.position,
-    ).height;
-    const moveRate = cameraHeight * moveRateFactor
-    camera.moveBackward(moveRate);
-  }, [viewer, moveRateFactor]);
+      const cameraHeight = ellipsoid.cartesianToCartographic(
+        camera.position,
+      ).height;
+      const moveRate = cameraHeight * moveRateFactor;
+      camera.moveBackward(moveRate);
+    },
+    [viewer, moveRateFactor],
+  );
 
   return { handleZoomIn, handleZoomOut };
 }
-
 
 export default useInitializeViewer;
