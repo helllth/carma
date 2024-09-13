@@ -116,6 +116,9 @@ const scaleHintToZoom = (scaleHint: number) => {
 
 const wmsLayerToGenericItem = (layer: XMLLayer, serviceName: string) => {
   if (layer) {
+    if (layer.KeywordList) {
+      console.log("xxx layer", layer);
+    }
     let item: Item = {
       title: layer.Title,
       description: layer.Abstract,
@@ -187,9 +190,15 @@ export const getLayerStructure = ({
           foundLayer = { ...foundLayer, ...layer, tags, service };
 
           let infoBoxMapping = "";
+          let thumbnail = "";
 
           foundLayer?.keywords?.forEach((keyword) => {
             const extracted = keyword.split("carmaconf://infoBoxMapping:")[1];
+            const foundThumbnail = keyword.split("carmaConf://thumbnail:")[1];
+
+            if (foundThumbnail) {
+              thumbnail = foundThumbnail;
+            }
 
             if (extracted) {
               infoBoxMapping += extracted + "\n";
@@ -202,6 +211,10 @@ export const getLayerStructure = ({
                 ...foundLayer,
                 queryable: false,
               };
+            }
+
+            if (thumbnail) {
+              foundLayer.thumbnail = thumbnail;
             }
             layers.push(foundLayer);
           }
@@ -238,9 +251,15 @@ export const getLayerStructure = ({
           };
 
           let infoBoxMapping = "";
+          let thumbnail = "";
 
           foundLayer?.keywords?.forEach((keyword) => {
             const extracted = keyword.split("carmaconf://infoBoxMapping:")[1];
+            const foundThumbnail = keyword.split("carmaConf://thumbnail:")[1];
+
+            if (foundThumbnail) {
+              thumbnail = foundThumbnail;
+            }
 
             if (extracted) {
               infoBoxMapping += extracted + "\n";
@@ -253,6 +272,10 @@ export const getLayerStructure = ({
                 ...foundLayer,
                 queryable: false,
               };
+            }
+
+            if (thumbnail) {
+              foundLayer.thumbnail = thumbnail;
             }
             layers.push(foundLayer);
           }
