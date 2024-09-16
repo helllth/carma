@@ -183,8 +183,12 @@ export const getLayerStructure = ({
               wms.Capability.Request.GetMap.DCPType[0].HTTP.Get.OnlineResource;
           }
           let tags = foundLayer.tags;
+          let keywords = foundLayer.keywords;
           tags[0] = categoryObject.Title;
           foundLayer = { ...foundLayer, ...layer, tags, service };
+          if (keywords && foundLayer?.keywords) {
+            foundLayer.keywords = [...keywords, ...foundLayer.keywords];
+          }
 
           let infoBoxMapping = "";
           let thumbnail = "";
