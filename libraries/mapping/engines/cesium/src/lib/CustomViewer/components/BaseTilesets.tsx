@@ -238,8 +238,8 @@ export const BaseTilesets = () => {
         maximumScreenSpaceError={maximumScreenSpaceErrorPrimary}
         foveatedScreenSpaceError={true}
         foveatedConeSize={0.2}
-        //skipScreenSpaceErrorFactor={8}
-        //skipLevelOfDetail={true}
+        skipScreenSpaceErrorFactor={4}
+        skipLevelOfDetail={true}
         //immediatelyLoadDesiredLevelOfDetail={true}
         url={primaryTilesetUrl}
         style={style}

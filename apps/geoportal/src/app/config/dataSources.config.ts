@@ -15,7 +15,7 @@ export const WUPP_MESH_2020 = {
 
 export const WUPP_MESH_2024 = {
   url: "https://wupp-3d-data.cismet.de/mesh2024/tileset.json",
-  maximumScreenSpaceError: 4,
+  maximumScreenSpaceError: 6,
 };
 
 export const WUPP_LOD2_TILESET = {
