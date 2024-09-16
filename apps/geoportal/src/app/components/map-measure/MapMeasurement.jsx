@@ -8,7 +8,6 @@ import "leaflet-editable";
 import "leaflet-measure-path";
 import "./measure";
 import "./measure-path";
-import "./customDrawTooltip";
 import "leaflet-measure-path/leaflet-measure-path.css";
 import makeMeasureIcon from "./measure.png";
 import makeMeasureActiveIcon from "./measure-active.png";
@@ -254,9 +253,6 @@ const MapMeasurement = (props) => {
   const mapMovingEndHandler = (status) => {
     dispatch(setMapMovingEnd(status));
   };
-
-
-
 
   const updateAreaOfDrawingMeasurementHandler = (newArea) => {
     dispatch(updateAreaOfDrawingMeasurement(newArea));

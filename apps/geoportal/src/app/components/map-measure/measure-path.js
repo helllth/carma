@@ -140,6 +140,11 @@ L.Control.MeasurePolygon = L.Control.extend({
 
     this.options.currenLine.addVertex(latlng);
 
+    const tooltip = document.querySelector(".leaflet-draw-tooltip");
+
+    const pos = map.latLngToLayerPoint(latlng);
+    L.DomUtil.setPosition(tooltip, pos);
+
     this._toggleMeasure(
       "img_plg_lines",
       "icon_lineActive",
