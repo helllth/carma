@@ -15,7 +15,7 @@ L.Draw.Tooltip = L.Draw.Tooltip.extend({
 
     this._map.on("mouseout", this._onMouseOut, this);
     this._map.once("mousemove", this._onFirstMouseMove, this);
-    this._map.on("click", this._onMapClick, this);
+    // this._map.on("click", this._onMapClick, this);
   },
 
   updateContent: function (labelText) {
