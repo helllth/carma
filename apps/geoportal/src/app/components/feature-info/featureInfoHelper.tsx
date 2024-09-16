@@ -1,7 +1,4 @@
 import { LayerProps } from "@carma-mapping/layers";
-import { faSquare } from "@fortawesome/free-regular-svg-icons";
-import { faInfo } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FeatureInfoIcon from "./FeatureInfoIcon";
 
 export const getLeafNodes = (node, result: any = {}): any => {
@@ -106,7 +103,6 @@ export const getFeatureForLayer = async (layer, pos) => {
   });
 
   if (result) {
-    console.log("xxx", url);
     await fetch(url)
       .then((response) => response.text())
       .then((data) => {
