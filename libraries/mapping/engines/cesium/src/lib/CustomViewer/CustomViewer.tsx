@@ -387,9 +387,9 @@ function CustomViewer(props: CustomViewerProps) {
               duration,
             });
           }
-          // preload 2D view
-          console.log("leaflet", leaflet, topicMapContext?.routedMapRef);
-          leaflet && setLeafletView(viewer, leaflet, { animate: false });
+          // preload 2D view (TODO: disable to reduce request count)
+          // console.log("leaflet", leaflet, topicMapContext?.routedMapRef);
+          // leaflet && setLeafletView(viewer, leaflet, { animate: false });
         }
       }
     };

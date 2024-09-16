@@ -236,7 +236,8 @@ export const BaseTilesets = () => {
         dynamicScreenSpaceError={false}
         //baseScreenSpaceError={256}
         maximumScreenSpaceError={maximumScreenSpaceErrorPrimary}
-        foveatedScreenSpaceError={false}
+        foveatedScreenSpaceError={true}
+        foveatedConeSize={0.2}
         //skipScreenSpaceErrorFactor={8}
         //skipLevelOfDetail={true}
         //immediatelyLoadDesiredLevelOfDetail={true}
@@ -252,9 +253,9 @@ export const BaseTilesets = () => {
         // quality
         dynamicScreenSpaceError={false}
         maximumScreenSpaceError={maximumScreenSpaceErrorSecondary}
-        foveatedScreenSpaceError={false}
+        foveatedScreenSpaceError={true}
         //skipScreenSpaceErrorFactor={4}
-        skipLevelOfDetail={true}
+        //skipLevelOfDetail={true}
         //immediatelyLoadDesiredLevelOfDetail={true}
 
         url={tilesets.secondary?.url ?? ""}
