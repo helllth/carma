@@ -1,6 +1,5 @@
 L.Draw.Tooltip = L.Draw.Tooltip.extend({
   initialize: function (map) {
-    console.log("xxx override tooltip");
     this._map = map;
     this._popupPane = map._panes.popupPane;
 
@@ -47,11 +46,9 @@ L.Draw.Tooltip = L.Draw.Tooltip.extend({
   },
 
   _onFirstMouseMove: function () {
-    console.log("xxx mouse moved for the first time");
     this._hasPosition = true;
     if (!this._isTooltipEmpty) {
       this._visible = true;
-      console.log("xxx tooltip should be visible");
     }
   },
 
