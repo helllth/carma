@@ -75,6 +75,11 @@ const FeatureInfoBox = () => {
       header="Informationen"
       headerColor="#0078a8"
       {...selectedFeature?.properties}
+      title={
+        selectedFeature?.properties?.title.includes("undefined")
+          ? undefined
+          : selectedFeature?.properties?.title
+      }
       noCurrentFeatureTitle={
         infoText
           ? infoText
