@@ -489,17 +489,6 @@ export const poiCategoryWithKeywords = {
   ],
   layers: [
     {
-      name: "poi_awg",
-      pictureBoundingBox: [
-        789024.8074594327, 6664703.341883925, 791171.0158942525,
-        6666207.001549717,
-      ],
-      keywords: [
-        ":vec:",
-        "carmaConf://vectorStyle:https://tiles.cismet.de/poi/awg.style.json",
-      ],
-    },
-    {
       name: "poi_bahnhoefe",
       pictureBoundingBox: [
         794448.2534819795, 6665461.740523942, 796594.4619167992,
@@ -1513,6 +1502,17 @@ export const baseConfig = {
     layers: [
       {
         name: "poi",
+      },
+      {
+        name: "poi_awg",
+        pictureBoundingBox: [
+          789024.8074594327, 6664703.341883925, 791171.0158942525,
+          6666207.001549717,
+        ],
+        keywords: [
+          ":vec:",
+          "carmaConf://vectorStyle:https://tiles.cismet.de/poi/awg.style.json",
+        ],
       },
       ...customCategoryToLayers(poiCategoryWithKeywords),
     ],
