@@ -405,8 +405,6 @@
       if (isPolygon && options.showArea && latLngs.length > 2) {
         formatter = options.formatArea || L.bind(this.formatArea, this);
         var area = ringArea(latLngs);
-        console.log(this.getBounds());
-
         L.marker
           .measurement(
             this.getCentroid(latLngs),
