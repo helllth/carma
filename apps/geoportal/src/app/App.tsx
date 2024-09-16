@@ -34,7 +34,6 @@ import {
 import {
   getUIAllowChanges,
   getUIMode,
-  setUIAllow3d,
   setUIAllowChanges,
   setUIMode,
   setUIShowLayerButtons,
@@ -74,11 +73,6 @@ function App({ published }: { published?: boolean }) {
   const mode = useSelector(getUIMode);
 
   useEffect(() => {
-    // TODO: remove if feature flag is removed
-
-    dispatch(setUIAllow3d(searchParams.has("allow3d")));
-
-    // END FEATURE FLAG
 
     if (searchParams.get("sync")) {
       setSyncToken(searchParams.get("sync"));

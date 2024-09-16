@@ -84,6 +84,7 @@ import { createCismapLayers, onClickTopicMap } from "./topicmap.utils.ts";
 import { useGazData } from "../../hooks/useGazData.ts";
 import { useWindowSize } from "../../hooks/useWindowSize.ts";
 import { useTourRefCollabLabels } from "../../hooks/useTourRefCollabLabels.ts";
+import { useFeatureInfoModeCursorStyle } from "../../hooks/useFeatureInfoModeCursorStyle.ts";
 
 // TODO: Make transition style configurable with config and cesium library
 const MAPMODE_TRANSITION_DURATION = 1000;
@@ -147,15 +148,7 @@ export const GeoportalMap = () => {
     dispatch(toggleUIMode(UIMode.FEATURE_INFO));
   };
 
-  useEffect(() => {
-    if (document.getElementById("routedMap")) {
-      if (isModeFeatureInfo) {
-        document.getElementById("routedMap").style.cursor = "crosshair";
-      } else {
-        document.getElementById("routedMap").style.cursor = "pointer";
-      }
-    }
-  }, [isModeFeatureInfo]);
+  useFeatureInfoModeCursorStyle();
 
   useEffect(() => {
     let isSame = true;
@@ -180,6 +173,7 @@ export const GeoportalMap = () => {
   }, [layers]);
 
   useEffect(() => {
+    // TODO wrap this with 3d component in own component? 
     // INTIALIZE Cesium Tileset style from Geoportal/TopicMap background later style
     if (viewer && backgroundLayer) {
       if (backgroundLayer.id === "luftbild") {
