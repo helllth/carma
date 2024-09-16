@@ -35,7 +35,7 @@ const MeasurementTitle = ({
         className="text-[14px] min-h-[20px] min-w-[10px] mr-1"
         dangerouslySetInnerHTML={{ __html: capitalizeFirstLetter(content) }}
       ></span>
-      <span className="text-[14px] text-[#979797] mr-2">#{order}</span>
+      <span className="text-[14px] mr-2">#{order}</span>
       {isCollapsed && (
         <span className="text-[12px] text-[#808080]">{collapsedContent}</span>
       )}

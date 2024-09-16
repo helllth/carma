@@ -108,7 +108,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     );
   },
 
-  drawingLines: function (map) {
+  drawingLines: function (map, event) {
     this.options.shapeMode = "line";
     this._measureHandler = new L.Draw.Polyline(map, {
       showLength: true,
@@ -133,6 +133,12 @@ L.Control.MeasurePolygon = L.Control.extend({
     L.drawLocal.draw.handlers.polyline.tooltip.cont =
       "Klicken (ggf. mehrmals), um die nächsten Punkte des Linienzuges zu setzen.";
     L.drawLocal.draw.handlers.polyline.tooltip.end = tooltipContent;
+
+    this._measureHandler.enable();
+
+    const latlng = event.latlng;
+
+    this.options.currenLine.addVertex(latlng);
 
     this._toggleMeasure(
       "img_plg_lines",
@@ -237,16 +243,16 @@ L.Control.MeasurePolygon = L.Control.extend({
       "leaflet-bar leaflet-control dont-show m-container",
     );
 
-    const modeBtn = L.DomUtil.create(
-      "div",
-      "leaflet-bar leaflet-control dont-show m-container hide-draw-btn draw-custom-button",
-      linesContainer,
-    );
+    // const modeBtn = L.DomUtil.create(
+    //   "div",
+    //   "leaflet-bar leaflet-control dont-show m-container hide-draw-btn draw-custom-button",
+    //   linesContainer,
+    // );
 
-    modeBtn.id = "draw_shape";
-    modeBtn.title = "Flächen- und Umfangsmessungen";
+    // modeBtn.id = "draw_shape";
+    // modeBtn.title = "Flächen- und Umfangsmessungen";
 
-    modeBtn.innerHTML = this.options.mode_btn;
+    // modeBtn.innerHTML = this.options.mode_btn;
 
     const lineIcon = L.DomUtil.create("a", "", linesContainer);
     lineIcon.innerHTML = `
@@ -260,17 +266,17 @@ L.Control.MeasurePolygon = L.Control.extend({
     const iconsWrapper = L.DomUtil.create("div", "m-icons-wrapper");
     iconsWrapper.appendChild(linesContainer);
 
-    iconsWrapper.appendChild(modeBtn);
+    // iconsWrapper.appendChild(modeBtn);
 
-    L.DomEvent.on(
-      modeBtn,
-      "click",
-      (event) => {
-        event.preventDefault(); // Prevent default action (e.g., redirection)
-        this.drawingLines(map);
-      },
-      this,
-    );
+    // L.DomEvent.on(
+    //   modeBtn,
+    //   "click",
+    //   (event) => {
+    //     event.preventDefault(); // Prevent default action (e.g., redirection)
+    //     this.drawingLines(map);
+    //   },
+    //   this,
+    // );
 
     L.DomEvent.on(
       lineIcon,
@@ -286,6 +292,17 @@ L.Control.MeasurePolygon = L.Control.extend({
 
     this._measureLayers = L.layerGroup().addTo(map);
 
+    map.on("click", (event) => {
+      this.options.currenLine;
+      const mode = this.options.measurementMode;
+      if (!this.options.checkonedrawpoligon && mode === "measurement") {
+        this.drawingLines(map, event);
+        this.options.checkonedrawpoligon = true;
+      } else {
+        // this.options.checkonedrawpoligon = false;
+      }
+    });
+
     map.on("draw:created", (event) => {
       this.options.checkonedrawpoligon = false;
       this.options.ifDrawing = false;
@@ -294,7 +311,7 @@ L.Control.MeasurePolygon = L.Control.extend({
       this.options.cbSetDrawingShape(null);
 
       const layer = event.layer;
-      layer.on("dblclick", this._onPolygonClick.bind(this, map));
+      // layer.on("dblclick", this._onPolygonClick.bind(this, map));
 
       layer.on("editable:vertex:dragend", () => {
         this.options.cbSetUpdateStatusHandler(false);
@@ -319,7 +336,8 @@ L.Control.MeasurePolygon = L.Control.extend({
     });
 
     map.on("draw:drawstart", (event) => {
-      var mouseActive = L.Browser.touch && matchMedia("(hover:hover)").matches;
+      const mouseActive =
+        L.Browser.touch && matchMedia("(hover:hover)").matches;
       if (
         mouseActive ||
         event.layerType === "circle" ||
@@ -349,7 +367,6 @@ L.Control.MeasurePolygon = L.Control.extend({
 
       layers.eachLayer((layer) => {
         layer.customHandle = index++;
-
         layer.on("click", (e) => {
           if (e.target.customHandle === 0) {
             this.options.shapeMode = "polygon";
@@ -711,7 +728,7 @@ L.Control.MeasurePolygon = L.Control.extend({
     polygon.customShape = "polygon";
 
     polygon.addTo(this._measureLayers).showMeasurements().enableEdit();
-    polygon.on("dblclick", this._onPolygonClick.bind(this, map));
+    // polygon.on("dblclick", this._onPolygonClick.bind(this, map));
     polygon.on("click", () => {
       this.options.cbSetActiveShape(polygon.customID);
       this.options.cbSetUpdateStatusHandler(false);
@@ -777,10 +794,13 @@ L.Control.MeasurePolygon = L.Control.extend({
         });
         savedShape.customID = shapeId;
         savedShape.addTo(this._measureLayers).showMeasurements().enableEdit();
-        savedShape.on("dblclick", this._onPolygonClick.bind(this, map));
         savedShape.on("click", () => {
+          this.options.checkonedrawpoligon = true;
           this.options.cbSetActiveShape(savedShape.customID);
           this.options.cbSetUpdateStatusHandler(false);
+        });
+        savedShape.on("mouseout", (e) => {
+          this.options.checkonedrawpoligon = false;
         });
         savedShape.on(
           "editable:drag editable:dragstart editable:dragend editable:vertex:drag editable:vertex:deleted",
@@ -806,57 +826,40 @@ L.Control.MeasurePolygon = L.Control.extend({
     }
   },
 
-  // toggleMeasurementMode: function (map) {
-  //   this.cancelDrawing();
-  //   const mode = this.options.measurementMode;
-  //   if (mode === 'measurement') {
-  //     this._clearMeasurements();
-  //     const drawBtn = document.getElementById('draw_shape');
-  //     drawBtn.classList.add('hide-draw-btn');
-  //   } else {
-  //     this._clearMeasurements();
-  //     const drawBtn = document.getElementById('draw_shape');
-  //     drawBtn.classList.remove('hide-draw-btn');
-  //     this.loadMeasurements();
-  //   }
-  //   this._toggleMeasurementBtn();
-
-  //   this.options.cbToggleMeasurementMode();
-  // },
-
-  toggleMeasurementMode: function (ifChangeMode = true) {
-    // this.cancelDrawing();
+  toggleMeasurementMode: function (ifChangeMode = true, map) {
     const mode = this.options.measurementMode;
     if (mode === "measurement") {
       this._clearMeasurements();
-      // const drawBtn = document.getElementById('draw_shape');
-      // drawBtn.classList.add('hide-draw-btn');
       this.loadMeasurements();
-      const drawBtn = document.getElementById("draw_shape");
-      drawBtn.classList.remove("hide-draw-btn");
+      // const drawBtn = document.getElementById("draw_shape");
+      // drawBtn.classList.remove("hide-draw-btn");
 
       document.getElementById("img_plg_lines").src =
         this.options.icon_lineActive;
+
+      // if (this.options.isFirstLoading) {
+      //   this.options.isFirstLoading = false;
+      // }
     } else {
       this._clearMeasurements();
-      // const drawBtn = document.getElementById('draw_shape');
-      // drawBtn.classList.add('hide-draw-btn');
-      const drawBtn = document.getElementById("draw_shape");
-      drawBtn.classList.add("hide-draw-btn");
-
+      if (this.options.currenLine) {
+        this.options.currenLine.disable();
+      }
+      // const drawBtn = document.getElementById("draw_shape");
+      // drawBtn.classList.add("hide-draw-btn");
+      this.options.checkonedrawpoligon = false;
       document.getElementById("img_plg_lines").src =
         this.options.icon_lineInactive;
     }
-    // this._toggleMeasurementBtn();
 
     if (ifChangeMode) {
       this.options.cbToggleMeasurementMode();
     }
   },
 
-  changeMeasurementMode: function (mode) {
+  changeMeasurementMode: function (mode, map) {
     this.options.measurementMode = mode;
-    this.toggleMeasurementMode(false);
+    this.toggleMeasurementMode(false, map);
   },
   changeMeasurementsArr: function (arr) {
     this.options.shapes = arr;

@@ -8,6 +8,7 @@ import "leaflet-editable";
 import "leaflet-measure-path";
 import "./measure";
 import "./measure-path";
+import "./customDrawTooltip";
 import "leaflet-measure-path/leaflet-measure-path.css";
 import makeMeasureIcon from "./measure.png";
 import makeMeasureActiveIcon from "./measure-active.png";
@@ -100,6 +101,7 @@ const MapMeasurement = (props) => {
 
       const measurePolygonControl = L.control.measurePolygon(customOptions);
       measurePolygonControl.addTo(mapExample);
+
       setMeasureControl(measurePolygonControl);
     }
   }, [routedMapRef]);
@@ -154,8 +156,8 @@ const MapMeasurement = (props) => {
     }
 
     if (measureControl) {
-      measureControl.changeMeasurementMode(mode);
       const map = routedMapRef.leafletMap.leafletElement;
+      measureControl.changeMeasurementMode(mode, map);
       const shapeCoordinates = measurementShapes.filter(
         (s) => s.shapeId === activeShape,
       );
@@ -203,12 +205,12 @@ const MapMeasurement = (props) => {
     }
   }, [drawingShape]);
 
-  useEffect(() => {
-    // debugger;
-    if (startDrawing && measureControl) {
-      measureControl.drawingLines(routedMapRef.leafletMap.leafletElement);
-    }
-  }, [startDrawing]);
+  // useEffect(() => {
+  //   // debugger;
+  //   if (startDrawing && measureControl) {
+  //     measureControl.drawingLines(routedMapRef.leafletMap.leafletElement);
+  //   }
+  // }, [startDrawing]);
 
   const saveShapeHandler = (layer) => {
     dispatch(addShape(layer));
