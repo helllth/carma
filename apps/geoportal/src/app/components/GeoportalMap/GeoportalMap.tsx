@@ -78,7 +78,7 @@ import {
 } from "../../store/slices/features.ts";
 import store from "../../store/index.ts";
 import LocateControlComponent from "./controls/LocateControlComponent.tsx";
-import { getUrlPrefix } from './utils';
+import { getUrlPrefix } from "./utils";
 import { useDispatchSachdatenInfoText } from "../../hooks/useDispatchSachdatenInfoText.ts";
 import { createCismapLayers, onClickTopicMap } from "./topicmap.utils.ts";
 import { useGazData } from "../../hooks/useGazData.ts";
@@ -129,7 +129,6 @@ export const GeoportalMap = () => {
   const [isMeasurementTooltip, setIsMeasurementTooltip] = useState(false);
   const [locationProps, setLocationProps] = useState(0);
 
-
   const version = getApplicationVersion(versionData);
 
   // custom hooks
@@ -173,7 +172,7 @@ export const GeoportalMap = () => {
   }, [layers]);
 
   useEffect(() => {
-    // TODO wrap this with 3d component in own component? 
+    // TODO wrap this with 3d component in own component?
     // INTIALIZE Cesium Tileset style from Geoportal/TopicMap background later style
     if (viewer && backgroundLayer) {
       if (backgroundLayer.id === "luftbild") {
@@ -292,26 +291,14 @@ export const GeoportalMap = () => {
                 ref={tourRefLabels.measurement}
               >
                 <img
-                  src={`${getUrlPrefix()}${isModeMeasurement
-                    ? "measure-active.png"
-                    : "measure.png"
-                    }`}
+                  src={`${getUrlPrefix()}${
+                    isModeMeasurement ? "measure-active.png" : "measure.png"
+                  }`}
                   alt="Measure"
                   className="w-6"
                 />
               </ControlButtonStyler>
             </Tooltip>
-            {isModeMeasurement && (
-              <Tooltip title="Neue Messung" placement="right">
-                <ControlButtonStyler
-                  onClick={() => {
-                    dispatch(setStartDrawing(true));
-                  }}
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                </ControlButtonStyler>
-              </Tooltip>
-            )}
           </div>
         )}
       </Control>
@@ -366,10 +353,7 @@ export const GeoportalMap = () => {
       </Control>
       <Main ref={wrapperRef}>
         <>
-          <div
-            className={"map-container-2d"}
-            style={{ zIndex: 100 }}
-          >
+          <div className={"map-container-2d"} style={{ zIndex: 100 }}>
             <TopicMapComponent
               gazData={gazData}
               modalMenu={
@@ -395,7 +379,9 @@ export const GeoportalMap = () => {
                 const newParams = { ...paramsToObject(urlParams), ...location };
                 setUrlParams(newParams);
               }}
-              onclick={(e) => onClickTopicMap(e, { dispatch, mode: uiMode, store, setPos })}
+              onclick={(e) =>
+                onClickTopicMap(e, { dispatch, mode: uiMode, store, setPos })
+              }
               gazetteerSearchComponent={<></>}
               infoBox={
                 isModeMeasurement ? (
@@ -425,7 +411,10 @@ export const GeoportalMap = () => {
               />
               {focusMode && <PaleOverlay />}
               {createCismapLayers(layers, {
-                focusMode, mode: uiMode, dispatch, setPos
+                focusMode,
+                mode: uiMode,
+                dispatch,
+                setPos,
               })}
               {pos && isModeFeatureInfo && layers.length > 0 && (
                 <ExtraMarker
