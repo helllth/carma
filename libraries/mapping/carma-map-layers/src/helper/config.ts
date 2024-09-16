@@ -489,9 +489,6 @@ export const poiCategoryWithKeywords = {
   ],
   layers: [
     {
-      name: "poi",
-    },
-    {
       name: "poi_awg",
       pictureBoundingBox: [
         789024.8074594327, 6664703.341883925, 791171.0158942525,
@@ -1513,7 +1510,12 @@ export const baseConfig = {
   POI: {
     Title: "POI",
     serviceName: "wuppPOI",
-    layers: [...customCategoryToLayers(poiCategoryWithKeywords)],
+    layers: [
+      {
+        name: "poi",
+      },
+      ...customCategoryToLayers(poiCategoryWithKeywords),
+    ],
   },
   Planung: {
     Title: "Planung",
