@@ -1498,6 +1498,10 @@ export const baseConfig = {
     layers: [
       {
         name: "poi",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/style.json`,
+        ],
       },
       {
         name: "poi_awg",
