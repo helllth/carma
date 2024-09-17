@@ -5,12 +5,16 @@ import {
   Cartesian3,
   PerspectiveFrustum,
   Math as CeMath,
+  ScreenSpaceCameraController,
+  Scene,
+  Color,
 } from "cesium";
 import { useDispatch } from "react-redux";
 import {
   setIsAnimating,
   setShowPrimaryTileset,
   setShowSecondaryTileset,
+  useShowSecondaryTileset,
   useViewerHome,
 } from "../CustomViewerContextProvider/slices/cesium";
 import { decodeSceneFromLocation } from "./utils";
@@ -31,6 +35,27 @@ const useInitializeViewer = (
   const dispatch = useDispatch();
   const location = useLocation();
   const viewerContext = useCesiumCustomViewer();
+  const isSecondaryStyle = useShowSecondaryTileset();
+
+  useEffect(() => {
+    if (viewer) {
+      console.log("HOOK: enable terrain collision detection");
+      const scene: Scene = viewer.scene;
+      const sscc: ScreenSpaceCameraController =
+        scene.screenSpaceCameraController;
+
+      scene.globe.depthTestAgainstTerrain = true;
+      // Terrain would show up as opaques surface over mesh if not set transparent
+      scene.globe.translucency.enabled = true;
+      scene.globe.translucency.frontFaceAlpha = isSecondaryStyle ? 1.0 : 0.0;
+      scene.globe.translucency.backFaceAlpha = isSecondaryStyle ? 1.0 : 0.0;
+
+      sscc.enableCollisionDetection = true;
+
+      sscc.minimumZoomDistance = 50; // about the resolution of the mesh textures
+      sscc.maximumZoomDistance = 50000; // limit to 50km city overview
+    }
+  }, [viewer, isSecondaryStyle]);
 
   useEffect(() => {
     if (viewer && hash === null) {
