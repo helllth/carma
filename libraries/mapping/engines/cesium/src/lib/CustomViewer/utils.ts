@@ -10,6 +10,7 @@ import {
   FlatDecodedSceneHash,
   SceneStateDescription,
 } from "../..";
+import { Navigate } from "react-router-dom";
 
 // 5 DEGREES OF FREEDOM CAMERA encoding/decoding
 // lon, lat, height, heading, pitch
@@ -179,9 +180,17 @@ export const replaceHashRoutedHistory = (
     const fullHashState = `#${routedPath}?${formattedHash}`;
     // this is a workaround to avoid triggering rerenders from the HashRouter
     // navigate would cause rerenders
-    // navigate(`${hashRouterPart}?${sceneHash}`, { replace: true });
+    // navigate(`${routedPath}?${formattedHash}`, { replace: true });
     // see https://github.com/remix-run/react-router/discussions/9851#discussioncomment-9459061
-    window.history.replaceState(null, "", fullHashState);
+    
+    const currentUrl = new URL(window.location.href);
+    const pathPart = currentUrl.pathname.length > 1 ? `/${currentUrl.pathname}` : "";
+    const newUrl = `${currentUrl.origin}${pathPart}${fullHashState}`;
+    
+    window.history.replaceState(null, "", newUrl);
+
+
+
   }
 };
 

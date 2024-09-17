@@ -24,7 +24,7 @@ import {
   useViewerIsMode2d,
 } from "../CustomViewerContextProvider/slices/cesium";
 import { BaseTilesets } from "./components/BaseTilesets";
-import { encodeScene, replaceHashRoutedHistory, setLeafletView } from "./utils";
+import { encodeScene, replaceHashRoutedHistory } from "./utils";
 import { useLocation } from "react-router-dom";
 import useInitializeViewer from "./hooks";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
@@ -73,7 +73,7 @@ type CustomViewerProps = {
 };
 
 const DEFAULT_RESOLUTION_SCALE = 1;
-const OFFSCREEN_RESOLUTION_SCALE = 1/64;
+const OFFSCREEN_RESOLUTION_SCALE = 1 / 64;
 export const TRANSITION_DELAY = 1000;
 
 function CustomViewer(props: CustomViewerProps) {
@@ -454,7 +454,7 @@ function CustomViewer(props: CustomViewerProps) {
 
       // quality and performance
       msaaSamples={4}
-     //useBrowserRecommendedResolution={true} // false allows crisper image, does not ignore devicepixel ratio
+      //useBrowserRecommendedResolution={true} // false allows crisper image, does not ignore devicepixel ratio
       //resolutionScale={window.devicePixelRatio} // would override dpr
       scene3DOnly={true} // No 2D map resources loaded
       //sceneMode={SceneMode.SCENE3D} // Default but explicit
