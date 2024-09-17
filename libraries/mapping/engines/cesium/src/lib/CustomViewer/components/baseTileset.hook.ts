@@ -34,9 +34,6 @@ const setupPrimaryStyle = ({
 
     if (imageryLayer) {
       imageryLayer.show = false;
-      if (!viewer.imageryLayers.contains(imageryLayer)) {
-        viewer.imageryLayers.add(imageryLayer);
-      }
     }
   })();
 };
@@ -61,8 +58,8 @@ export const setupSecondaryStyle = ({
     if (imageryLayer.ready) {
       imageryLayer.show = true;
       // console.log('Secondary Style Setup: add imagery layer');
-      if (!viewer.imageryLayers.contains(imageryLayer)) {
-        // console.log('Secondary Style Setup: add imagery layer');
+      if (viewer.imageryLayers.length === 0) {
+        console.log('Secondary Style Setup: add imagery layer');
         viewer.imageryLayers.add(imageryLayer);
       }
     }

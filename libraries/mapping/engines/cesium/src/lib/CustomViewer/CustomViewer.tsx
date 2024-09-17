@@ -77,7 +77,7 @@ const OFFSCREEN_RESOLUTION_SCALE = 1 / 64;
 export const TRANSITION_DELAY = 1000;
 
 function CustomViewer(props: CustomViewerProps) {
-  const { setViewer } = useCesiumCustomViewer();
+  const { setViewer, imageryLayer } = useCesiumCustomViewer();
   const home = useViewerHome();
   const homeOffset = useViewerHomeOffset();
   const isSecondaryStyle = useShowSecondaryTileset();
@@ -362,7 +362,8 @@ function CustomViewer(props: CustomViewerProps) {
 
   useEffect(() => {
     if (viewer) {
-      console.log("HOOK: viewer changed intit scene settings");
+      console.log("HOOK: viewer changed init scene settings");
+      // remove default layers
       viewer.imageryLayers.removeAll();
       viewer.scene.screenSpaceCameraController.enableCollisionDetection = true;
     }
@@ -377,16 +378,30 @@ function CustomViewer(props: CustomViewerProps) {
           console.log("HOOK: setAdaptiveResolutionScale", OFFSCREEN_RESOLUTION_SCALE);
           setAdaptiveResolutionScale(OFFSCREEN_RESOLUTION_SCALE);
           viewer.resolutionScale = OFFSCREEN_RESOLUTION_SCALE;
+            for (let i = 0; i < viewer.imageryLayers.length; i++) {
+              const layer = viewer.imageryLayers.get(i);
+              if (layer) {
+                layer.show = false; // Hide the layer
+                console.log("hiding cesium imagery layer", i)
+              }
+            }
         }, TRANSITION_DELAY);
       } else {
         console.log("HOOK: setAdaptiveResolutionScale", baseResolutionScale);
         setAdaptiveResolutionScale(baseResolutionScale);
         viewer.resolutionScale = baseResolutionScale;
+        for (let i = 0; i < viewer.imageryLayers.length; i++) {
+          const layer = viewer.imageryLayers.get(i);
+          if (layer) {
+            layer.show = true; // unHide the layer
+            console.log("showing cesium imagery layer", i)
+          }
+        }
       }
     } else {
-      setAdaptiveResolutionScale(OFFSCREEN_RESOLUTION_SCALE);
+      setAdaptiveResolutionScale(baseResolutionScale);
     }
-  }, [viewer, isMode2d, baseResolutionScale]);
+  }, [viewer, isMode2d, baseResolutionScale, imageryLayer]);
 
   useEffect(() => {
     console.log("HOOK: viewer changed", isSecondaryStyle);
