@@ -511,10 +511,6 @@ export const poiCategoryWithKeywords = {
     },
     {
       name: "poi_bezirkssozialdienste",
-      // keywords: [
-      //   ":vec:",
-      //   "carmaConf://vectorStyle:https://tiles.cismet.de/poi/behorden.style.json",
-      // ],
     },
     {
       name: "poi_bibliotheken",
@@ -1514,7 +1510,468 @@ export const baseConfig = {
           "carmaConf://vectorStyle:https://tiles.cismet.de/poi/awg.style.json",
         ],
       },
-      ...customCategoryToLayers(poiCategoryWithKeywords),
+      {
+        name: "poi_bahnhoefe",
+        pictureBoundingBox: [
+          794448.2534819795, 6665461.740523942, 796594.4619167992,
+          6666965.400189739,
+        ],
+        keywords: [
+          ":vec:",
+          "carmaConf://vectorStyle:https://tiles.cismet.de/poi/bahnhofe.style.json",
+          "carmaconf://infoBoxMapping:title:p.strasse + ', ' + p.ort",
+          "carmaconf://infoBoxMapping:subtitle:p.info",
+          "carmaconf://infoBoxMapping:header:p.geographicidentifier",
+        ],
+      },
+      {
+        name: "poi_behoerden",
+        keywords: [
+          ":vec:",
+          "carmaConf://vectorStyle:https://tiles.cismet.de/poi/behorden.style.json",
+        ],
+      },
+      {
+        name: "poi_bezirkssozialdienste",
+      },
+      {
+        name: "poi_bibliotheken",
+        keywords: [
+          ":vec:",
+          "carmaConf://vectorStyle:https://tiles.cismet.de/poi/bibliotheken.style.json",
+        ],
+      },
+      {
+        name: "poi_bildungseinrichtungen",
+        keywords: [
+          ":vec:",
+          "carmaConf://vectorStyle:https://tiles.cismet.de/poi/bildungseinrichtungen.style.json",
+        ],
+      },
+      {
+        name: "poi_haltestellen",
+      },
+      {
+        name: "poi_clubs",
+        keywords: [
+          ":vec:",
+          "carmaConf://vectorStyle:https://tiles.cismet.de/poi/clubs.style.json",
+        ],
+      },
+      {
+        name: "poi_dienstleistungsangebote",
+        keywords: [
+          ":vec:",
+          "carmaConf://vectorStyle:https://tiles.cismet.de/poi/dienstleistungsangebote.style.json",
+        ],
+      },
+      {
+        name: "poi_feuerwehr",
+        pictureBoundingBox: [
+          793881.5445769589, 6668348.432670274, 794954.6487943687,
+          6669100.262503172,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/feuerwehrstandorte.style.json`,
+        ],
+      },
+      {
+        name: "poi_filmtheater",
+        pictureBoundingBox: [
+          795040.6404511896, 6666030.24092181, 797186.8488860093,
+          6667533.900587609,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/filmtheater.style.json`,
+        ],
+      },
+      {
+        name: "poi_freizeitsportangebote",
+        pictureBoundingBox: [
+          802349.9312809596, 6668144.202485324, 806642.348150599,
+          6671151.521816919,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/freizeitsportangebote.style.json`,
+        ],
+      },
+      {
+        name: "poi_friedhofsverband",
+        pictureBoundingBox: [
+          802432.937116363, 6668932.459339514, 803506.0413337728,
+          6669684.289172413,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/friedhofsverband-wuppertal.style.json`,
+        ],
+      },
+      {
+        name: "poi_friedhoefe",
+        pictureBoundingBox: [
+          792683.0358600187, 6666519.9156342605, 796975.4527296581,
+          6669527.234965856,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/friedhofe.style.json`,
+        ],
+        icon: "Kreis_dunkelgruen",
+        alternativeIcon: "Icon_Friedhof",
+      },
+      {
+        name: "poi_friedhoefe_ehem",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/ehemalige-friedhofe.style.json`,
+        ],
+        icon: "Kreis_dunkelgruen",
+        alternativeIcon: "Icon_Friedhof",
+      },
+      {
+        name: "poi_gebaeude",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/gebaude-und-bauwerke.style.json`,
+        ],
+      },
+      {
+        name: "poi_gruenanlagen",
+        pictureBoundingBox: [
+          792683.0358600187, 6666519.9156342605, 796975.4527296581,
+          6669527.234965856,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/grunanlagen-und-walder.style.json`,
+        ],
+        icon: "Viereck_gruen",
+        alternativeIcon: "Icon_Gruenanlagen_und_Waelder",
+      },
+      {
+        name: "poi_stauseen",
+        pictureBoundingBox: [
+          799177.1974428413, 6659678.204438456, 800137.4376106737,
+          6660409.730685716,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/stauseen-und-talsperren.style.json`,
+        ],
+        icon: "Kreis_gruen",
+        alternativeIcon: "Icon_Stausee",
+      },
+      {
+        name: "poi_wupperufer",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/wupperufer-lebensader-wupper.style.json`,
+        ],
+        icon: "Kreis_gruen",
+        alternativeIcon: "Icon_Lebensader_Wupper",
+      },
+      {
+        name: "poi_jugend",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/jugend-und-kindertreffs.style.json`,
+        ],
+      },
+      {
+        name: "poi_ksp",
+      },
+      {
+        name: "poi_kita",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}kita/style.json`,
+        ],
+      },
+      {
+        name: "poi_kita_beh",
+        pictureBoundingBox: [
+          792683.0358600187, 6666519.9156342605, 796975.4527296581,
+          6669527.234965856,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}inklusion/style.json`,
+        ],
+      },
+      {
+        name: "poi_kirchen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/kirchen.style.json`,
+          "carmaconf://infoBoxMapping:title: p.strasse + ', ' + p.ort",
+          "carmaconf://infoBoxMapping:subtitle: p.info",
+          "carmaconf://infoBoxMapping:header:p.geographicidentifier",
+        ],
+      },
+      {
+        name: "poi_krankenhaeuser",
+        pictureBoundingBox: [
+          792683.0358600187, 6666519.9156342605, 796975.4527296581,
+          6669527.234965856,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/krankenhauser.style.json`,
+        ],
+      },
+      {
+        name: "poi_medien",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/medien.style.json`,
+        ],
+      },
+      {
+        name: "poi_moscheen",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/moscheen.style.json`,
+        ],
+      },
+      {
+        name: "poi_museen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/museen-und-galerien.style.json`,
+        ],
+      },
+      {
+        name: "poi_opunkte",
+        pictureBoundingBox: [
+          792683.0358600187, 6666519.9156342605, 796975.4527296581,
+          6669527.234965856,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/orientierungspunkte-und-begriffe.style.json`,
+        ],
+      },
+      {
+        name: "poi_polizeidienststellen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/polizeidienststellen.style.json`,
+        ],
+      },
+      {
+        name: "poi_schulen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}schulen/schule.style.json`,
+        ],
+      },
+      {
+        name: "poi_schulen_grund",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}schulen/grundschule.style.json`,
+        ],
+      },
+      {
+        name: "poi_schulen_gym",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}schulen/gymnasium.style.json`,
+        ],
+      },
+      {
+        name: "poi_schulen_real",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}schulen/realschule.style.json`,
+        ],
+      },
+      {
+        name: "poi_schulen_haupt",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}schulen/hauptschule.style.json`,
+        ],
+      },
+      {
+        name: "poi_schulen_gesamt",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}schulen/gesamtschule.style.json`,
+        ],
+      },
+      {
+        name: "poi_schulen_forder",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}schulen/foerderschule.style.json`,
+        ],
+      },
+      {
+        name: "poi_schulen_andere",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}schulen/andere.style.json`,
+        ],
+      },
+      {
+        name: "poi_schulen_beruf",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}schulen/berufsbildende.style.json`,
+        ],
+      },
+      {
+        name: "poi_schwebebahnhaltestellen",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/schwebebahn-haltestellen.style.json`,
+        ],
+      },
+      {
+        name: "poi_schwimmbaeder",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/schwimmbader.style.json`,
+        ],
+      },
+      {
+        name: "poi_sehenswuerdigkeiten",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/sehenswurdigkeiten.style.json`,
+        ],
+      },
+      {
+        name: "poi_soziale",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/soziale-einrichtungen.style.json`,
+        ],
+      },
+      {
+        name: "poi_sporthallen",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/sporthallen-und-platze.style.json`,
+        ],
+      },
+      {
+        name: "poi_stadtverwaltung",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/stadtverwaltung.style.json`,
+        ],
+      },
+      {
+        name: "poi_synagogen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/synagogen.style.json`,
+        ],
+      },
+      {
+        name: "poi_theater",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/theater.style.json`,
+        ],
+      },
+      {
+        name: "poi_veranstaltungsorte",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/veranstaltungsorte.style.json`,
+        ],
+      },
+      {
+        name: "poi_wege",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/wege-und-platze.style.json`,
+        ],
+      },
+      {
+        name: "poi_trinkwasser",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/trinkwasserbrunnen.style.json`,
+        ],
+      },
+      {
+        name: "poi_reisebus",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/informationen-fur-reisebusse.style.json`,
+        ],
+      },
     ],
   },
   Planung: {
