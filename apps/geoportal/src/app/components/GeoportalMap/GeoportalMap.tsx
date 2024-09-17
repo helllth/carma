@@ -443,6 +443,7 @@ export const GeoportalMap = () => {
               >
                 <CustomViewer
                   containerRef={container3dMapRef}
+                  enableLocationHashUpdate={false}
                 ></CustomViewer>
               </div>
             </TweakpaneProvider>
