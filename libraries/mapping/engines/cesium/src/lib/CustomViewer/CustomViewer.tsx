@@ -65,9 +65,16 @@ type CustomViewerProps = {
     showGroundAtmosphere?: boolean;
     showSkirts?: boolean;
   };
+  viewerOptions?: {
+    resolutionScale?: number;
+  };
 
   minimapLayerUrl?: string;
 };
+
+const DEFAULT_RESOLUTION_SCALE = 1;
+const OFFSCREEN_RESOLUTION_SCALE = 1/64;
+export const TRANSITION_DELAY = 1000;
 
 function CustomViewer(props: CustomViewerProps) {
   const { setViewer } = useCesiumCustomViewer();
@@ -87,6 +94,9 @@ function CustomViewer(props: CustomViewerProps) {
       showGroundAtmosphere: false,
       showSkirts: false,
     },
+    viewerOptions = {
+      resolutionScale: DEFAULT_RESOLUTION_SCALE,
+    },
     containerRef,
     enableLocationHashUpdate = true,
   } = props;
@@ -95,6 +105,8 @@ function CustomViewer(props: CustomViewerProps) {
   const [viewportLimitDebug, setViewportLimitDebug] = useState<boolean>(false);
 
   const [viewer, setComponentStateViewer] = useState<Viewer | null>(null);
+  const baseResolutionScale = viewerOptions.resolutionScale || DEFAULT_RESOLUTION_SCALE;
+  const [adaptiveResolutionScale, setAdaptiveResolutionScale] = useState<number>(baseResolutionScale);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const topicMapContext: any =
@@ -144,6 +156,7 @@ function CustomViewer(props: CustomViewerProps) {
 
     }
   }, [topicMapContext, viewer, isMode2d]);
+
 
   useTweakpaneCtx(
     {
@@ -357,6 +370,25 @@ function CustomViewer(props: CustomViewerProps) {
   }, [viewer]);
 
   useEffect(() => {
+    // render offscreen with ultra low res to reduce memory usage
+    if (viewer) {
+      if (isMode2d) {
+        setTimeout(() => {
+          console.log("HOOK: setAdaptiveResolutionScale", OFFSCREEN_RESOLUTION_SCALE);
+          setAdaptiveResolutionScale(OFFSCREEN_RESOLUTION_SCALE);
+          viewer.resolutionScale = OFFSCREEN_RESOLUTION_SCALE;
+        }, TRANSITION_DELAY);
+      } else {
+        console.log("HOOK: setAdaptiveResolutionScale", baseResolutionScale);
+        setAdaptiveResolutionScale(baseResolutionScale);
+        viewer.resolutionScale = baseResolutionScale;
+      }
+    } else {
+      setAdaptiveResolutionScale(OFFSCREEN_RESOLUTION_SCALE);
+    }
+  }, [viewer, isMode2d, baseResolutionScale]);
+
+  useEffect(() => {
     console.log("HOOK: viewer changed", isSecondaryStyle);
     if (!viewer) return;
 
@@ -422,13 +454,14 @@ function CustomViewer(props: CustomViewerProps) {
 
       // quality and performance
       msaaSamples={4}
-      useBrowserRecommendedResolution={true} // false allows crisper image, does not ignore devicepixel ratio
+     //useBrowserRecommendedResolution={true} // false allows crisper image, does not ignore devicepixel ratio
       //resolutionScale={window.devicePixelRatio} // would override dpr
       scene3DOnly={true} // No 2D map resources loaded
       //sceneMode={SceneMode.SCENE3D} // Default but explicit
 
       // hide UI
       animation={false}
+      //resolutionScale={adaptiveResolutionScale}
       baseLayerPicker={false}
       fullscreenButton={false}
       geocoder={false}

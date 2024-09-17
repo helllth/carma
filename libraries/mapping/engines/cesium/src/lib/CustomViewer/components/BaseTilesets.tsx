@@ -7,6 +7,7 @@ import {
   useShowSecondaryTileset,
   useTilesetOpacity,
   useViewerDataSources,
+  useViewerIsMode2d,
 } from "../../CustomViewerContextProvider/slices/cesium";
 import {
   Cesium3DTileset,
@@ -23,6 +24,7 @@ import {
 
 import { create3DTileStyle } from "../../utils";
 import { useCesiumCustomViewer } from "../../CustomViewerContextProvider";
+import { TRANSITION_DELAY } from "../CustomViewer";
 
 const preloadWhenHidden = true;
 let enableDebugWireframe = false;
@@ -91,6 +93,7 @@ export const BaseTilesets = () => {
     show: true,
   });
   */
+  const isMode2d = useViewerIsMode2d();
 
   const { folderCallback } = useTweakpaneCtx(
     {
@@ -222,6 +225,26 @@ export const BaseTilesets = () => {
       viewer.scene.fog.enabled = false;
     }
   }, [viewer]);
+
+  useEffect(() => {
+    const hideTilesets = () => {
+      // render offscreen with ultra low res to reduce memory usage
+      console.log("HOOK: hide tilesets in 2d");
+      if (tsA) { tsA.show = false; tsA.preloadWhenHidden = false; }
+      if (tsB) { tsB.show = false; tsB.preloadWhenHidden = false; }
+    }
+    if (viewer) {
+      if (isMode2d) {
+        setTimeout(() => { hideTilesets(); }, TRANSITION_DELAY);
+      } else {
+        if (tsA) { tsA.show = showPrimary; tsA.preloadWhenHidden = preloadWhenHidden; }
+        if (tsB) { tsB.show = showSecondary; tsB.preloadWhenHidden = preloadWhenHidden; }
+      }
+    } else {
+      console.log("HOOK: no viewer");
+      hideTilesets();
+    }
+  }, [isMode2d, viewer, showPrimary, showSecondary, tsA, tsB]);
 
   return (
     <>
