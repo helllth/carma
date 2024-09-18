@@ -16,9 +16,14 @@ const LocateControlComponent = ({ startLocate = 0 }) => {
       const lc = (L.control as LocateControl)
         .locate({
           position: "topright",
-          flyTo: true,
-          drawMarker: false,
-          icon: "custom_icon",
+          locateOptions: {
+            enableHighAccuracy: true,
+          },
+          showCompass: true,
+          setView: "untilPan",
+          keepCurrentZoomLevel: "true",
+          flyTo: false,
+          drawCircle: false,
         })
         .addTo(mapExample);
       setLocationInstance(lc);
