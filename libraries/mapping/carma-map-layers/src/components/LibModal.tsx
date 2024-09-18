@@ -268,7 +268,12 @@ export const LibModal = ({
       width={"100%"}
       closeIcon={false}
       wrapClassName="h-full"
-      className="h-[90%]"
+      className="h-[88%]"
+      styles={{
+        content: {
+          backgroundColor: "#f2f2f2",
+        },
+      }}
     >
       <div
         className="w-full h-full flex flex-col bg-[#f2f2f2]"
