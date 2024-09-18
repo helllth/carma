@@ -115,7 +115,11 @@ function CustomViewer(props: CustomViewerProps) {
   const [viewportLimit, setViewportLimit] = useState<number>(4);
   const [viewportLimitDebug, setViewportLimitDebug] = useState<boolean>(false);
   const minZoomDistance = useScreenSpaceCameraControllerMinimumZoomDistance();
+  const [minZoomTweak, setMinZoomTweak] = useState(minZoomDistance)
+
   const maxZoomDistance = useScreenSpaceCameraControllerMaximumZoomDistance();
+  const [maxZoomTweak, setMaxZoomTweak] = useState(maxZoomDistance)
+
   const collisions = useScreenSpaceCameraControllerEnableCollisionDetection();
   const setMaxZoomDistance = (v: number) => dispatch(setScreenSpaceCameraControllerMaximumZoomDistance(v));
   const setMinZoomDistance = (v: number) => dispatch(setScreenSpaceCameraControllerMinimumZoomDistance(v));
@@ -286,17 +290,23 @@ function CustomViewer(props: CustomViewerProps) {
     },
     {
       get maxZoomDistance() {
-        return maxZoomDistance
+        return maxZoomTweak
       },
       set maxZoomDistance(value: number) {
-        setMaxZoomDistance(value)
+        if (!isNaN(value)) {
+          // TODO add debounce for all Setters
+          setMaxZoomDistance(value)
+        }
       },
       get minZoomDistance() {
         return minZoomDistance
       },
       set minZoomDistance(value: number) {
-        setMinZoomDistance(value)
+        if (!isNaN(value)) {
+          setMinZoomDistance(value)
+        }
       },
+
       get collisions() {
         return collisions
       },
