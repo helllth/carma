@@ -44,6 +44,7 @@ export const objectToFeature = (jsonOutput: any, code: string) => {
 
   const properties = {
     ...tmpInfo,
+    wmsProps: jsonOutput,
   };
 
   return { properties };
@@ -55,6 +56,7 @@ export const functionToFeature = (output: any, code: string) => {
 
   const properties = {
     ...tmpInfo,
+    wmsProps: output,
   };
 
   return { properties };
