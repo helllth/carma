@@ -105,7 +105,9 @@ export const getFeatureForLayer = async (layer, pos) => {
   let result = "";
   layer.other.keywords.forEach((keyword) => {
     const extracted = keyword.split("carmaconf://infoBoxMapping:")[1];
-    result += extracted + "\n";
+    if (extracted) {
+      result += extracted + "\n";
+    }
   });
 
   if (result) {
