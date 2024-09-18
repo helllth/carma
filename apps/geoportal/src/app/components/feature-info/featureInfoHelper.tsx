@@ -23,7 +23,11 @@ export const objectToFeature = (jsonOutput: any, code: string) => {
       },
     };
   }
-  const conf = code.split("\n").filter((line) => line.trim() !== "");
+
+  const conf = code
+    .split("\n")
+    .filter((line) => line.trim() !== "" && line.trim() !== "undefined");
+
   let functionString = `(function(p) {
                     const info = {`;
 

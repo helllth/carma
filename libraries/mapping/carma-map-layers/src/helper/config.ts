@@ -2493,6 +2493,15 @@ export const baseConfig = {
           `carmaConf://vectorStyle:${vectorBaseUrl}br_pr_anlagen/br.style.json`,
         ],
       },
+      {
+        name: "emobil_auto",
+        keywords: [
+          "carmaconf://infoBoxMapping:title:p.betreiber",
+          "carmaconf://infoBoxMapping:subtitle: p.zusatzinfo",
+          "carmaconf://infoBoxMapping:header:p.standort",
+          "carmaconf://infoBoxMapping:modal:'emob'",
+        ],
+      },
     ],
   },
   Immo: {
