@@ -30,7 +30,7 @@ const parser = new WMSCapabilities();
 type LayerCategories = {
   Title: string;
   layers: SavedLayerConfig[];
-}
+};
 
 export interface LibModalProps {
   open: boolean;
@@ -179,7 +179,7 @@ export const LibModal = ({
                 const mergedLayer = mergeStructures(tmpLayer, newLayers);
 
                 newLayers = mergedLayer;
-                let tmp = [];
+                let tmp: Layer[] = [];
                 if (customCategories) {
                   tmp = [...customCategories, ...newLayers];
                 } else {
@@ -200,7 +200,7 @@ export const LibModal = ({
           });
           const mergedLayer = mergeStructures(tmpLayer, newLayers);
           newLayers = mergedLayer;
-          let tmp = [];
+          let tmp: Layer[] = [];
           if (customCategories) {
             tmp = [...customCategories, ...newLayers];
           } else {
@@ -215,7 +215,7 @@ export const LibModal = ({
           });
           const mergedLayer = mergeStructures(tmpLayer, newLayers);
           newLayers = mergedLayer;
-          let tmp = [];
+          let tmp: Layer[] = [];
           if (customCategories) {
             tmp = [...customCategories, ...newLayers];
           } else {
@@ -388,7 +388,7 @@ export const LibModal = ({
                             thumbnails={thumbnails}
                             setThumbnail={setThumbnail}
                             activeLayers={activeLayers}
-                            key={`${category.Title}_layer_${i}`}
+                            key={`${category.Title}_layer_${i}_${layer.id}`}
                           />
                         ))}
                       </div>
