@@ -73,7 +73,12 @@ export const useTweakpaneCtx = (
 const TweakpaneProvider: React.FC<{
   children: ReactNode;
   hashparam?: string;
-}> = ({ children, hashparam = 'dev' }) => {
+  position?: {
+    top?: number,
+    left?: number,
+    right?: number,
+  }
+}> = ({ children, hashparam = 'dev', position = {top:64, right: 10} } ) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const paneRef = useRef<Pane | null>(null);
@@ -143,6 +148,8 @@ const TweakpaneProvider: React.FC<{
     };
   }, [containerRef]);
 
+  const {top, left, right} = position ?? {};
+
   return (
     <TweakpaneContext.Provider value={{ paneRef }}>
       <div
@@ -151,8 +158,9 @@ const TweakpaneProvider: React.FC<{
         style={{
           position: 'absolute',
           display: isEnabled ? 'block' : 'none',
-          top: 10,
-          left: 45,
+          top,
+          left,
+          right,
           zIndex: 10000,
         }}
       ></div>
