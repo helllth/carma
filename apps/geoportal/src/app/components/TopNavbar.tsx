@@ -50,6 +50,7 @@ import {
 } from "@carma-mapping/cesium-engine";
 import { geoElements } from "@carma-collab/wuppertal/geoportal";
 import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
+import { updateInfoElementsAfterRemovingFeature } from "../store/slices/features";
 
 const disabledClass = "text-gray-300";
 const disabledImageOpacity = "opacity-20";
@@ -207,6 +208,7 @@ const TopNavbar = () => {
     if (activeLayers.find((activeLayer) => activeLayer.id === layer.id)) {
       try {
         dispatch(removeLayer(layer.id));
+        dispatch(updateInfoElementsAfterRemovingFeature(layer.id));
         messageApi.open({
           type: "success",
           content: `${layer.title} wurde erfolgreich entfernt.`,
