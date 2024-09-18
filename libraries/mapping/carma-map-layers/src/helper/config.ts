@@ -959,81 +959,6 @@ export const baseConfig = {
     serviceName: "wuppKarten",
     layers: [
       {
-        name: "R102:luftbild2022",
-      },
-      {
-        name: "R102:luftbild2020",
-      },
-      {
-        name: "R102:luftbild2018",
-      },
-      {
-        name: "R102:luftbild2016",
-      },
-      {
-        name: "R102:luftbild2014",
-      },
-      {
-        name: "R102:luftbild2012",
-      },
-      {
-        name: "R102:luftbild2010",
-      },
-      {
-        name: "R102:luftbild2007",
-      },
-      {
-        name: "R102:luftbild2005",
-      },
-      {
-        name: "R102:luftbild2002",
-      },
-      {
-        name: "R102:luftbild1997",
-      },
-      {
-        name: "R102:luftbild1991",
-      },
-      {
-        name: "R102:luftbild1985",
-      },
-      {
-        name: "R102:luftbild1979",
-      },
-      {
-        name: "R102:luftbild1928",
-      },
-      {
-        name: "R102:trueortho2022",
-      },
-      {
-        name: "R102:trueortho2020",
-      },
-      {
-        name: "R102:trueortho2018",
-      },
-      {
-        name: "spw2_orange",
-      },
-      {
-        name: "spw2_light",
-      },
-      {
-        name: "spw2_graublau",
-      },
-      {
-        name: "oepnv_rvr",
-      },
-      {
-        name: "abkf",
-      },
-      {
-        name: "abkg",
-      },
-      {
-        name: "abkt",
-      },
-      {
         name: "alf",
       },
       {
@@ -1066,6 +991,30 @@ export const baseConfig = {
         ],
       },
       {
+        name: "abkf",
+      },
+      {
+        name: "abkg",
+      },
+      {
+        name: "abkt",
+      },
+      {
+        name: "spw2_orange",
+      },
+      {
+        name: "spw2_light",
+      },
+      {
+        name: "spw2_graublau",
+      },
+      {
+        name: "oepnv_rvr",
+      },
+      {
+        name: "hillshade",
+      },
+      {
         name: "R102:UEK125",
         pictureBoundingBox: [
           784874.5156892611, 6655868.893474152, 821182.1041247197,
@@ -1087,16 +1036,6 @@ export const baseConfig = {
         keywords: [
           ":vec:",
           `carmaConf://vectorStyle:${vectorBaseUrl}urbanAtlas/style.json`,
-        ],
-      },
-      {
-        name: "bplanreihe",
-      },
-      {
-        name: "bplanhintergrund",
-        keywords: [
-          ":vec:",
-          `carmaConf://vectorStyle:${vectorBaseUrl}bplanhintergrund/style.json`,
         ],
       },
       {
@@ -1140,7 +1079,69 @@ export const baseConfig = {
         name: "R102:DGK:grau_nt",
       },
       {
-        name: "hillshade",
+        name: "bplanreihe",
+      },
+      {
+        name: "bplanhintergrund",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}bplanhintergrund/style.json`,
+        ],
+      },
+      {
+        name: "R102:trueortho2022",
+      },
+      {
+        name: "R102:trueortho2020",
+      },
+      {
+        name: "R102:trueortho2018",
+      },
+
+      {
+        name: "R102:luftbild2022",
+      },
+      {
+        name: "R102:luftbild2020",
+      },
+      {
+        name: "R102:luftbild2018",
+      },
+      {
+        name: "R102:luftbild2016",
+      },
+      {
+        name: "R102:luftbild2014",
+      },
+      {
+        name: "R102:luftbild2012",
+      },
+      {
+        name: "R102:luftbild2010",
+      },
+      {
+        name: "R102:luftbild2007",
+      },
+      {
+        name: "R102:luftbild2005",
+      },
+      {
+        name: "R102:luftbild2002",
+      },
+      {
+        name: "R102:luftbild1997",
+      },
+      {
+        name: "R102:luftbild1991",
+      },
+      {
+        name: "R102:luftbild1985",
+      },
+      {
+        name: "R102:luftbild1979",
+      },
+      {
+        name: "R102:luftbild1928",
       },
     ],
   },
