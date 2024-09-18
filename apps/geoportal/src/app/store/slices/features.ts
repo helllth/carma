@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 
 import type { FeatureInfoState } from "@carma-apps/portals";
@@ -41,6 +41,28 @@ const slice = createSlice({
       });
       state.secondaryInfoBoxElements = tmp.filter((f) => f !== null);
     },
+    updateInfoElementsAfterRemovingFeature(
+      state,
+      action: PayloadAction<string>,
+    ) {
+      const id = action.payload;
+      if (state.selectedFeature.id === id) {
+        state.selectedFeature = null;
+
+        if (state.secondaryInfoBoxElements.length > 0) {
+          const selectedFeature = state.secondaryInfoBoxElements[0];
+          state.selectedFeature = selectedFeature;
+          state.secondaryInfoBoxElements =
+            state.secondaryInfoBoxElements.filter(
+              (f) => f.id !== selectedFeature.id,
+            );
+        }
+      } else {
+        state.secondaryInfoBoxElements = state.secondaryInfoBoxElements.filter(
+          (f) => f.id !== id,
+        );
+      }
+    },
     setInfoText(state, action) {
       state.infoText = action.payload;
     },
@@ -72,6 +94,7 @@ export const {
   setSelectedFeature,
   setSecondaryInfoBoxElements,
   updateSecondaryInfoBoxElements,
+  updateInfoElementsAfterRemovingFeature,
   setInfoText,
   setPreferredLayerId,
   setVectorInfo,

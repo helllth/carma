@@ -24,12 +24,17 @@ import {
   setShowRightScrollButton,
   toggleUseInFeatureInfo,
 } from "../../store/slices/mapping";
-import { getUIMode, getUIShowLayerHideButtons, UIMode } from "../../store/slices/ui";
+import {
+  getUIMode,
+  getUIShowLayerHideButtons,
+  UIMode,
+} from "../../store/slices/ui";
 import { iconColorMap, iconMap } from "./items";
 import "./tabs.css";
 import { useSearchParams } from "react-router-dom";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 import type L from "leaflet";
+import { updateInfoElementsAfterRemovingFeature } from "../../store/slices/features";
 // import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface LayerButtonProps {
@@ -146,8 +151,8 @@ const LayerButton = ({
               ? "bg-white"
               : "bg-neutral-200/70"
             : showSettings
-              ? "bg-white"
-              : "bg-neutral-200",
+            ? "bg-white"
+            : "bg-neutral-200",
           zoom >= layer.props.maxZoom && "opacity-50",
           zoom <= layer.props.minZoom && "opacity-50",
         )}
@@ -201,6 +206,7 @@ const LayerButton = ({
                   }
                 } else {
                   dispatch(removeLayer(id));
+                  dispatch(updateInfoElementsAfterRemovingFeature(id));
                 }
               }}
             >
