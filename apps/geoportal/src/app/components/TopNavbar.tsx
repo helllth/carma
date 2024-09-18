@@ -117,7 +117,7 @@ const TopNavbar = () => {
 
     if (layer.type === "layer") {
       const vectorObject = extractVectorStyles(layer.keywords);
-      if (vectorObject && !forceWMS) {
+      if (vectorObject.vectorStyle && !forceWMS) {
         const zoom = await fetch(vectorObject.vectorStyle)
           .then((response) => {
             return response.json();
@@ -139,8 +139,8 @@ const TopNavbar = () => {
           description: layer.description,
           queryable: isNaN(layer.queryable)
             ? layer.keywords.some((keyword) =>
-              keyword.includes("carmaconf://infoBoxMapping"),
-            )
+                keyword.includes("carmaconf://infoBoxMapping"),
+              )
             : layer.queryable,
           useInFeatureInfo: true,
           visible: true,
@@ -186,8 +186,8 @@ const TopNavbar = () => {
               description: layer.description,
               queryable: isNaN(layer.queryable)
                 ? layer.keywords.some((keyword) =>
-                  keyword.includes("carmaconf://infoBoxMapping"),
-                )
+                    keyword.includes("carmaconf://infoBoxMapping"),
+                  )
                 : layer.queryable,
               useInFeatureInfo: true,
               visible: true,
@@ -286,14 +286,16 @@ const TopNavbar = () => {
             <img
               src={baseUrl + "icons/add-layers.png"}
               alt="Kartenebenen hinzufügen"
-              className={`h-5 mb-0.5 cursor-pointer ${isMode2d ? "" : disabledImageOpacity
-                }`}
+              className={`h-5 mb-0.5 cursor-pointer ${
+                isMode2d ? "" : disabledImageOpacity
+              }`}
             />
           </button>
         </Tooltip>
         <Tooltip
-          title={`Hintergrundkarte ${focusMode ? "zurücksetzen" : "abschwächen"
-            }`}
+          title={`Hintergrundkarte ${
+            focusMode ? "zurücksetzen" : "abschwächen"
+          }`}
         >
           <button
             className="h-[24.5px]"
@@ -308,18 +310,21 @@ const TopNavbar = () => {
                 `${focusMode ? "icons/focus-on.png" : "icons/focus-off.png"}`
               }
               alt="Kartenebenen hinzufügen"
-              className={`h-5 mb-0.5 cursor-pointer ${isMode2d ? "" : disabledImageOpacity
-                }`}
+              className={`h-5 mb-0.5 cursor-pointer ${
+                isMode2d ? "" : disabledImageOpacity
+              }`}
             />
           </button>
         </Tooltip>
         <Tooltip
-          title={`Kartensteuerelemente ${showLayerButtons ? "ausblenden" : "einblenden"
-            }`}
+          title={`Kartensteuerelemente ${
+            showLayerButtons ? "ausblenden" : "einblenden"
+          }`}
         >
           <button
-            className={`text-xl hover:text-gray-600 ${isMode2d ? "" : disabledClass
-              }`}
+            className={`text-xl hover:text-gray-600 ${
+              isMode2d ? "" : disabledClass
+            }`}
             disabled={!isMode2d}
             onClick={() => {
               dispatch(setUIShowLayerButtons(!showLayerButtons));
@@ -345,8 +350,9 @@ const TopNavbar = () => {
             }
           >
             <button
-              className={`hover:text-gray-600 text-xl ${isMode2d ? "" : disabledClass
-                }`}
+              className={`hover:text-gray-600 text-xl ${
+                isMode2d ? "" : disabledClass
+              }`}
             >
               <FontAwesomeIcon icon={faFileExport} />
             </button>
@@ -355,7 +361,9 @@ const TopNavbar = () => {
         <Tooltip title="Drucken">
           <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
         </Tooltip>
-        <Tooltip title={`Hilfe ${mode === UIMode.TOUR ? "ausblenden" : "anzeigen"}`}>
+        <Tooltip
+          title={`Hilfe ${mode === UIMode.TOUR ? "ausblenden" : "anzeigen"}`}
+        >
           <Popover trigger="click" placement="bottom">
             <button
               className="hover:text-gray-600 text-xl"
