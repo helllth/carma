@@ -3,6 +3,9 @@
 import { Cartesian3, Color } from 'cesium';
 import { CesiumState } from '@carma-mapping/cesium-engine';
 
+import { colorToArray } from '@carma-mapping/cesium-engine/utils';
+
+import { MODEL_ASSETS } from './assets.config';
 import {
   BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
   FOOTPRINT_GEOJSON_SOURCES,
@@ -11,8 +14,6 @@ import {
   WUPP_TERRAIN_PROVIDER,
 } from './dataSources.config';
 import { WUPPERTAL } from './locations.config';
-import { colorToArray } from '@carma-mapping/cesium-engine/utils';
-import { MODEL_ASSETS } from './assets.config';
 
 // SETUP Store State
 
@@ -40,6 +41,11 @@ export const defaultCesiumState: CesiumState = {
     tileset: {
       opacity: 1.0,
     },
+  },
+  sceneSpaceCameraController: {
+    enableCollisionDetection: true,
+    maximumZoomDistance: 50000,
+    minimumZoomDistance: 100
   },
   sceneStyles: {
     default: {

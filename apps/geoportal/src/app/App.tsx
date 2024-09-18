@@ -8,15 +8,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
 // 1st party Modules
+import { CrossTabCommunicationContextProvider } from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
 import { TopicMapContextProvider } from 'react-cismap/contexts/TopicMapContextProvider';
 
 // Monorepo Packages
 import { backgroundSettings } from '@carma-collab/wuppertal/geoportal';
+import { TweakpaneProvider } from '@carma-commons/debug';
 import { OverlayTourProvider } from '@carma/libraries/commons/ui/lib-helper-overlay';
 import { CustomViewerContextProvider } from '@carma-mapping/cesium-engine';
 import type { Layer } from '@carma-mapping/layers';
 import type { BackgroundLayer, Settings } from '@carma-apps/portals';
-import { CrossTabCommunicationContextProvider } from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
 
 // Local Modules
 import AppErrorFallback from './components/AppErrorFallback';
@@ -148,13 +149,15 @@ function App({ published }: { published?: boolean }) {
             models: MODEL_ASSETS,
           }}
         >
-          <ErrorBoundary FallbackComponent={AppErrorFallback}>
-            <div className="flex flex-col h-screen w-full">
-              {!published && <TopNavbar />}
-              <MapMeasurement />
-              <GeoportalMap />
-            </div>
-          </ErrorBoundary>
+          <TweakpaneProvider>
+            <ErrorBoundary FallbackComponent={AppErrorFallback}>
+              <div className="flex flex-col h-screen w-full">
+                {!published && <TopNavbar />}
+                <MapMeasurement />
+                <GeoportalMap />
+              </div>
+            </ErrorBoundary>
+          </TweakpaneProvider>
         </CustomViewerContextProvider>
       </TopicMapContextProvider>
     </OverlayTourProvider>

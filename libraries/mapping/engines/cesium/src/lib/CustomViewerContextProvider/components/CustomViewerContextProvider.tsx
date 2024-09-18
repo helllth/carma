@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useState } from "react";
-
-import { ReactNode, useRef } from "react";
+import type { ReactNode } from "react";
 
 import {
   CesiumTerrainProvider,
@@ -39,8 +38,6 @@ export const useCesiumCustomViewer = () => {
   }  
   return context;
 };
-
-
 
 export const CustomViewerContextProvider = ({
   children,

@@ -8,19 +8,20 @@ import {
   defined,
   Cartesian2,
 } from "cesium";
-import { pickViewerCanvasCenter } from "../../../utils";
 import { ControlButtonStyler } from "@carma-mapping/map-controls-layout";
+
+import { pickViewerCanvasCenter } from "../../../utils";
 import { useCesiumCustomViewer } from "../../../CustomViewerContextProvider";
+import { useScreenSpaceCameraControllerMinimumZoomDistance } from '../../../CustomViewerContextProvider/slices/cesium';
 
 type CompassProps = {
   children?: ReactNode;
   disabled?: boolean;
 };
 
-const MIN_TOP_DOWN_DISTANCE = 50;
-
 export const Compass = (props: CompassProps) => {
   const { viewer } = useCesiumCustomViewer();
+  const minZoomDistance = useScreenSpaceCameraControllerMinimumZoomDistance();
 
   const handleFlyToCenter = (e: MouseEvent) => {
     e.preventDefault();
@@ -50,7 +51,7 @@ export const Compass = (props: CompassProps) => {
           destination = Cartesian3.fromDegrees(
             longitude,
             latitude,
-            cartographic.height + Math.max(distance, MIN_TOP_DOWN_DISTANCE),
+            cartographic.height + Math.max(distance, minZoomDistance),
           );
         }
       } else {
@@ -63,7 +64,7 @@ export const Compass = (props: CompassProps) => {
         destination = Cartesian3.fromDegrees(
           longitude,
           latitude,
-          cartographic.height + MIN_TOP_DOWN_DISTANCE,
+          cartographic.height + minZoomDistance,
         );
       }
 

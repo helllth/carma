@@ -114,13 +114,18 @@ export interface CesiumState {
   
     }
     */
+  sceneSpaceCameraController: {
+    enableCollisionDetection: boolean;
+    minimumZoomDistance: number; // default is 1.0
+    maximumZoomDistance: number; // default is Infinity
+  };
+  sceneStyles: SceneStyles;
   // TODO move to per tileset styling
   styling: {
     tileset: {
       opacity: number;
     };
   };
-  sceneStyles: SceneStyles;
   dataSources: {
     footprintGeoJson: null | GeoJsonConfig;
     tilesets: {

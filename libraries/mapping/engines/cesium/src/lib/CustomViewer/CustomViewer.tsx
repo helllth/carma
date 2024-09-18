@@ -1,11 +1,15 @@
 import {
-  ReactNode,
-  RefObject,
+  type ReactNode,
+  type RefObject,
   useCallback,
   useContext,
   useEffect,
   useState,
 } from "react";
+import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import type { LeafletEvent } from "leaflet";
+
 import {
   Color,
   HeadingPitchRange,
@@ -17,23 +21,29 @@ import {
 } from "cesium";
 import { Viewer as ResiumViewer } from "resium";
 
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
+
+import { useTweakpaneCtx } from "@carma-commons/debug";
+
 import {
+  setScreenSpaceCameraControllerEnableCollisionDetection,
+  setScreenSpaceCameraControllerMaximumZoomDistance,
+  setScreenSpaceCameraControllerMinimumZoomDistance,
+  useScreenSpaceCameraControllerEnableCollisionDetection,
+  useScreenSpaceCameraControllerMaximumZoomDistance,
+  useScreenSpaceCameraControllerMinimumZoomDistance,
   useShowSecondaryTileset,
   useViewerHome,
   useViewerHomeOffset,
   useViewerIsMode2d,
 } from "../CustomViewerContextProvider/slices/cesium";
-import { BaseTilesets } from "./components/BaseTilesets";
-import { encodeScene, replaceHashRoutedHistory } from "./utils";
-import { useLocation } from "react-router-dom";
-import useInitializeViewer from "./hooks";
-import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
-import { useTweakpaneCtx } from "@carma-commons/debug";
 import { leafletToCesiumCamera, resolutionFractions } from "../utils";
-
 import { formatFractions } from "../utils/formatters";
 import { useCesiumCustomViewer } from "../CustomViewerContextProvider";
-import type { LeafletEvent } from "leaflet";
+import { BaseTilesets } from "./components/BaseTilesets";
+import { encodeScene, replaceHashRoutedHistory } from "./utils";
+import useInitializeViewer from "./hooks";
+
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -78,6 +88,7 @@ export const TRANSITION_DELAY = 1000;
 
 function CustomViewer(props: CustomViewerProps) {
   const { setViewer, imageryLayer } = useCesiumCustomViewer();
+  const dispatch = useDispatch();
   const home = useViewerHome();
   const homeOffset = useViewerHomeOffset();
   const isSecondaryStyle = useShowSecondaryTileset();
@@ -103,6 +114,14 @@ function CustomViewer(props: CustomViewerProps) {
 
   const [viewportLimit, setViewportLimit] = useState<number>(4);
   const [viewportLimitDebug, setViewportLimitDebug] = useState<boolean>(false);
+  const minZoomDistance = useScreenSpaceCameraControllerMinimumZoomDistance();
+  const maxZoomDistance = useScreenSpaceCameraControllerMaximumZoomDistance();
+  const collisions = useScreenSpaceCameraControllerEnableCollisionDetection();
+  const setMaxZoomDistance = (v: number) => dispatch(setScreenSpaceCameraControllerMaximumZoomDistance(v));
+  const setMinZoomDistance = (v: number) => dispatch(setScreenSpaceCameraControllerMinimumZoomDistance(v));
+  const setCollisions = (v: boolean) => dispatch(setScreenSpaceCameraControllerEnableCollisionDetection(v));
+
+
 
   const [viewer, setComponentStateViewer] = useState<Viewer | null>(null);
   const baseResolutionScale = viewerOptions.resolutionScale || DEFAULT_RESOLUTION_SCALE;
@@ -260,6 +279,38 @@ function CustomViewer(props: CustomViewerProps) {
       },
     ],
   );
+
+  useTweakpaneCtx(
+    {
+      title: "Scene Camera Controller",
+    },
+    {
+      get maxZoomDistance() {
+        return maxZoomDistance
+      },
+      set maxZoomDistance(value: number) {
+        setMaxZoomDistance(value)
+      },
+      get minZoomDistance() {
+        return minZoomDistance
+      },
+      set minZoomDistance(value: number) {
+        setMinZoomDistance(value)
+      },
+      get collisions() {
+        return collisions
+      },
+      set collisions(v: boolean) {
+        setCollisions(v)
+      }
+    },
+    [
+      { name: "collisions" },
+      { name: "maxZoomDistance", min: 1, max: 1000000, step: 1 },
+      { name: "minZoomDistance", min: 1, max: 500, step: 1 },
+    ],
+  );
+
   useEffect(() => {
     if (!viewer) return;
 
@@ -378,13 +429,13 @@ function CustomViewer(props: CustomViewerProps) {
           console.log("HOOK: setAdaptiveResolutionScale", OFFSCREEN_RESOLUTION_SCALE);
           setAdaptiveResolutionScale(OFFSCREEN_RESOLUTION_SCALE);
           viewer.resolutionScale = OFFSCREEN_RESOLUTION_SCALE;
-            for (let i = 0; i < viewer.imageryLayers.length; i++) {
-              const layer = viewer.imageryLayers.get(i);
-              if (layer) {
-                layer.show = false; // Hide the layer
-                console.log("hiding cesium imagery layer", i)
-              }
+          for (let i = 0; i < viewer.imageryLayers.length; i++) {
+            const layer = viewer.imageryLayers.get(i);
+            if (layer) {
+              layer.show = false; // Hide the layer
+              console.log("hiding cesium imagery layer", i)
             }
+          }
         }, TRANSITION_DELAY);
       } else {
         console.log("HOOK: setAdaptiveResolutionScale", baseResolutionScale);

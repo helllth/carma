@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   Viewer,
   BoundingSphere,
@@ -7,23 +9,23 @@ import {
   Math as CeMath,
   ScreenSpaceCameraController,
   Scene,
-  Color,
 } from "cesium";
-import { useDispatch } from "react-redux";
+import type { Map as LeafletMap } from "leaflet";
+
+import { useCesiumCustomViewer } from "../CustomViewerContextProvider";
 import {
   setIsAnimating,
   setShowPrimaryTileset,
   setShowSecondaryTileset,
+  useScreenSpaceCameraControllerMinimumZoomDistance,
+  useScreenSpaceCameraControllerMaximumZoomDistance,
   useShowSecondaryTileset,
   useViewerHome,
+  useScreenSpaceCameraControllerEnableCollisionDetection,
 } from "../CustomViewerContextProvider/slices/cesium";
 import { decodeSceneFromLocation } from "./utils";
 import { setupSecondaryStyle } from "./components/baseTileset.hook";
-import { useLocation } from "react-router-dom";
-import { useCesiumCustomViewer } from "../CustomViewerContextProvider";
 import { leafletToCesiumCamera } from "../utils";
-
-import type { Map as LeafletMap } from "leaflet";
 
 const useInitializeViewer = (
   viewer: Viewer | null,
@@ -36,6 +38,9 @@ const useInitializeViewer = (
   const location = useLocation();
   const viewerContext = useCesiumCustomViewer();
   const isSecondaryStyle = useShowSecondaryTileset();
+  const minZoom = useScreenSpaceCameraControllerMinimumZoomDistance();
+  const maxZoom = useScreenSpaceCameraControllerMaximumZoomDistance();
+  const enableCollisionDetection = useScreenSpaceCameraControllerEnableCollisionDetection();
 
   useEffect(() => {
     if (viewer) {
@@ -50,12 +55,11 @@ const useInitializeViewer = (
       scene.globe.translucency.frontFaceAlpha = isSecondaryStyle ? 1.0 : 0.0;
       scene.globe.translucency.backFaceAlpha = isSecondaryStyle ? 1.0 : 0.0;
 
-      sscc.enableCollisionDetection = true;
-
-      sscc.minimumZoomDistance = 50; // about the resolution of the mesh textures
-      sscc.maximumZoomDistance = 50000; // limit to 50km city overview
+      sscc.enableCollisionDetection = enableCollisionDetection;
+      sscc.minimumZoomDistance = minZoom ?? 1;
+      sscc.maximumZoomDistance = maxZoom ?? Infinity;
     }
-  }, [viewer, isSecondaryStyle]);
+  }, [viewer, isSecondaryStyle, maxZoom, minZoom, enableCollisionDetection]);
 
   useEffect(() => {
     if (viewer && hash === null) {

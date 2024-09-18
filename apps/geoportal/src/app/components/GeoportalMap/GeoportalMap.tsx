@@ -64,7 +64,6 @@ import {
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
 import { ProjSingleGeoJson } from "react-cismap/ProjSingleGeoJson";
-import { TweakpaneProvider } from "@carma-commons/debug";
 import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import { Tooltip } from "antd";
 import FeatureInfoBox from "../feature-info/FeatureInfoBox.tsx";
@@ -425,7 +424,6 @@ export const GeoportalMap = () => {
             </TopicMapComponent>
           </div>
           {allow3d && (
-            <TweakpaneProvider>
               <div
                 ref={container3dMapRef}
                 className={"map-container-3d"}
@@ -445,7 +443,6 @@ export const GeoportalMap = () => {
                   containerRef={container3dMapRef}
                 ></CustomViewer>
               </div>
-            </TweakpaneProvider>
           )}
         </>
       </Main>

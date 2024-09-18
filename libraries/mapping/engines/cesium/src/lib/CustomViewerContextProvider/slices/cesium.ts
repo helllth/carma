@@ -1,10 +1,11 @@
+import { Cartesian3, Color } from "cesium";
+import localForage from "localforage";
+import { useSelector } from "react-redux";
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Cartesian3, Color } from "cesium";
-import { useSelector } from "react-redux";
-import { ColorInput, RootState, CesiumState } from "../../..";
+
+import type { ColorInput, RootState, CesiumState } from "../../..";
 import { colorToArray, isColorRgbaArray } from "../../utils";
-import localForage from "localforage";
 
 const initialState: CesiumState = {
   isAnimating: false,
@@ -17,6 +18,11 @@ const initialState: CesiumState = {
     tileset: {
       opacity: 1.0,
     },
+  },
+  sceneSpaceCameraController: {
+    enableCollisionDetection: false,
+    minimumZoomDistance: 1,
+    maximumZoomDistance: Infinity,
   },
   sceneStyles: {
     default: {
@@ -76,6 +82,24 @@ export const sliceCesium = createSlice({
     ) => {
       state.showSecondaryTileset = action.payload;
     },
+    setScreenSpaceCameraControllerMaximumZoomDistance: (
+      state: CesiumState,
+      action: PayloadAction<number>,
+    ) => {
+      state.sceneSpaceCameraController.maximumZoomDistance = action.payload;
+    },
+    setScreenSpaceCameraControllerMinimumZoomDistance: (
+      state: CesiumState,
+      action: PayloadAction<number>,
+    ) => {
+      state.sceneSpaceCameraController.minimumZoomDistance = action.payload;
+    },
+    setScreenSpaceCameraControllerEnableCollisionDetection: (
+      state: CesiumState,
+      action: PayloadAction<boolean>,
+    ) => {
+      state.sceneSpaceCameraController.enableCollisionDetection = action.payload;
+    },
     setTilesetOpacity: (state: CesiumState, action: PayloadAction<number>) => {
       // console.log(action.payload);
       state.styling.tileset.opacity = action.payload;
@@ -113,6 +137,9 @@ export const {
   setShowPrimaryTileset,
   setShowSecondaryTileset,
   setTilesetOpacity,
+  setScreenSpaceCameraControllerMaximumZoomDistance,
+  setScreenSpaceCameraControllerMinimumZoomDistance,
+  setScreenSpaceCameraControllerEnableCollisionDetection
 } = sliceCesium.actions;
 
 // selectors
@@ -136,6 +163,19 @@ const selectViewerSceneGlobalBaseColor = createSelector(
   (baseColor) => new Color(...baseColor),
 );
 
+const selectScreenSpaceCameraControllerMinimumZoomDistance = ({
+  cesium,
+}: RootState) => cesium.sceneSpaceCameraController.minimumZoomDistance;
+
+const selectScreenSpaceCameraControllerMaximumZoomDistance = ({
+  cesium,
+}: RootState) => cesium.sceneSpaceCameraController.maximumZoomDistance;
+
+const selectScreenSpaceCameraControllerEnableCollisionDetection = ({
+  cesium,
+}: RootState) => cesium.sceneSpaceCameraController.enableCollisionDetection;
+
+
 export const useViewerIsAnimating = () => useSelector(selectViewerIsAnimating);
 export const useViewerIsMode2d = () => useSelector(selectViewerIsMode2d);
 export const useViewerDataSources = () => useSelector(selectViewerDataSources);
@@ -150,5 +190,11 @@ export const useShowSecondaryTileset = () =>
   useSelector(({ cesium }: RootState) => cesium.showSecondaryTileset);
 export const useTilesetOpacity = () =>
   useSelector(({ cesium }: RootState) => cesium.styling.tileset.opacity);
+export const useScreenSpaceCameraControllerMaximumZoomDistance = () =>
+  useSelector(selectScreenSpaceCameraControllerMaximumZoomDistance);
+export const useScreenSpaceCameraControllerMinimumZoomDistance = () =>
+  useSelector(selectScreenSpaceCameraControllerMinimumZoomDistance);
+export const useScreenSpaceCameraControllerEnableCollisionDetection = () =>
+  useSelector(selectScreenSpaceCameraControllerEnableCollisionDetection);
 
 export default sliceCesium;
