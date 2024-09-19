@@ -613,7 +613,8 @@ export const carmaGazetteerHitTrigger = (
             geometryInstances: invertedGeometryInstance,
             allowPicking: false,
             releaseGeometryInstances: false, // needed to get ID
-            //classificationType: ClassificationType.BOTH,
+            // TODO: add forwarding of TYPE by Map Style / Or have a Groundprimitives per style
+            classificationType: ClassificationType.CESIUM_3D_TILE
           });
 
           viewer.scene.groundPrimitives.add(invertedGroundPrimitive);
