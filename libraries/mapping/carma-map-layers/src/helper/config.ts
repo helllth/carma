@@ -1987,6 +1987,17 @@ export const baseConfig = {
     serviceName: "wuppPlanung",
     layers: [
       {
+        name: "baul",
+        pictureBoundingBox: [
+          801365.804541788, 6668672.095711919, 801671.5526549286,
+          6668977.84382506,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}baulastnachweis/style.json`,
+        ],
+      },
+      {
         name: "bverfahren-r",
       },
       {
@@ -2134,15 +2145,73 @@ export const baseConfig = {
         ],
       },
       {
-        name: "baul",
-        pictureBoundingBox: [
-          801365.804541788, 6668672.095711919, 801671.5526549286,
-          6668977.84382506,
-        ],
-        keywords: [
-          ":vec:",
-          `carmaConf://vectorStyle:${vectorBaseUrl}baulastnachweis/style.json`,
-        ],
+        name: "baudenkmale",
+      },
+      {
+        name: "bodendenkmale",
+      },
+      {
+        name: "denkmalbr",
+      },
+      {
+        name: "denkmalbn",
+      },
+      {
+        name: "stadtbhstr",
+      },
+      {
+        name: "talachse",
+      },
+      {
+        name: "teilraeume",
+      },
+      {
+        name: "gruen",
+      },
+      {
+        name: "gestalt",
+      },
+      {
+        name: "gestaltn",
+      },
+      {
+        name: "innenbandstadt",
+      },
+      {
+        name: "srt1",
+      },
+      {
+        name: "srt21",
+      },
+      {
+        name: "srt22",
+      },
+      {
+        name: "srt31",
+      },
+      {
+        name: "srt32",
+      },
+      {
+        name: "srt4",
+      },
+      {
+        name: "srt5",
+      },
+      {
+        name: "srt6",
+      },
+      {
+        name: "srt7",
+      },
+      {
+        name: "srt81",
+      },
+      {
+        name: "srt82",
+      },
+      {
+        name: "srt83",
       },
     ],
   },
