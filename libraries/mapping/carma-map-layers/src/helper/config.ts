@@ -1276,20 +1276,6 @@ export const baseConfig = {
         name: "R102:SRv",
       },
       {
-        name: "stadt:kompensationoe",
-        pictureBoundingBox: [
-          790989.4779520752, 6664143.201786021, 800673.0939729535,
-          6670157.840449209,
-        ],
-      },
-      {
-        name: "naturdenkmale",
-        pictureBoundingBox: [
-          790989.4779520752, 6664143.201786021, 800673.0939729535,
-          6670157.840449209,
-        ],
-      },
-      {
         name: "Klimafunktion",
       },
       {
@@ -1352,6 +1338,29 @@ export const baseConfig = {
       },
       {
         name: "lugi1987",
+      },
+      {
+        name: "solar_year",
+      },
+      {
+        name: "solar_zy_photo",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+      },
+      {
+        name: "solar_zy_therm",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
+      },
+      {
+        name: "solar_umring",
+      },
+      {
+        name: "solar_karte",
       },
       {
         name: "laerm2016:STR_RAST_DEN",
@@ -1469,27 +1478,18 @@ export const baseConfig = {
         ],
       },
       {
-        name: "solar_year",
-      },
-      {
-        name: "solar_zy_photo",
+        name: "stadt:kompensationoe",
         pictureBoundingBox: [
           790989.4779520752, 6664143.201786021, 800673.0939729535,
           6670157.840449209,
         ],
       },
       {
-        name: "solar_zy_therm",
+        name: "naturdenkmale",
         pictureBoundingBox: [
           790989.4779520752, 6664143.201786021, 800673.0939729535,
           6670157.840449209,
         ],
-      },
-      {
-        name: "solar_umring",
-      },
-      {
-        name: "solar_karte",
       },
     ],
   },
