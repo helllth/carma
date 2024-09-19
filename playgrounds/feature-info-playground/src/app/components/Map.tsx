@@ -204,12 +204,13 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
             opacity={1}
             maxSelectionCount={1}
             selectionEnabled
-            // key={vectorStyle}
             onSelectionChanged={(e: { hits: any[]; hit: any }) => {
-              const selectedFeature = e.hits[0];
+              if (e.hits?.length > 0) {
+                const selectedFeature = e.hits[0];
 
-              const p = selectedFeature.properties;
-              dispatch(setVectorOutput(p));
+                const p = selectedFeature.properties;
+                dispatch(setVectorOutput(p));
+              }
             }}
           />
         )}
