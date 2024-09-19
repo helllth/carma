@@ -1657,32 +1657,6 @@ export const baseConfig = {
         alternativeIcon: "Icon_Gruenanlagen_und_Waelder",
       },
       {
-        name: "poi_stauseen",
-        pictureBoundingBox: [
-          799177.1974428413, 6659678.204438456, 800137.4376106737,
-          6660409.730685716,
-        ],
-        keywords: [
-          ":vec:",
-          `carmaConf://vectorStyle:${vectorBaseUrl}poi/stauseen-und-talsperren.style.json`,
-        ],
-        icon: "Kreis_gruen",
-        alternativeIcon: "Icon_Stausee",
-      },
-      {
-        name: "poi_wupperufer",
-        pictureBoundingBox: [
-          790989.4779520752, 6664143.201786021, 800673.0939729535,
-          6670157.840449209,
-        ],
-        keywords: [
-          ":vec:",
-          `carmaConf://vectorStyle:${vectorBaseUrl}poi/wupperufer-lebensader-wupper.style.json`,
-        ],
-        icon: "Kreis_gruen",
-        alternativeIcon: "Icon_Lebensader_Wupper",
-      },
-      {
         name: "poi_jugend",
         keywords: [
           ":vec:",
@@ -1776,6 +1750,13 @@ export const baseConfig = {
         keywords: [
           ":vec:",
           `carmaConf://vectorStyle:${vectorBaseUrl}poi/polizeidienststellen.style.json`,
+        ],
+      },
+      {
+        name: "poi_reisebus",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/informationen-fur-reisebusse.style.json`,
         ],
       },
       {
@@ -1928,6 +1909,19 @@ export const baseConfig = {
         ],
       },
       {
+        name: "poi_stauseen",
+        pictureBoundingBox: [
+          799177.1974428413, 6659678.204438456, 800137.4376106737,
+          6660409.730685716,
+        ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/stauseen-und-talsperren.style.json`,
+        ],
+        icon: "Kreis_gruen",
+        alternativeIcon: "Icon_Stausee",
+      },
+      {
         name: "poi_synagogen",
         keywords: [
           ":vec:",
@@ -1943,6 +1937,13 @@ export const baseConfig = {
         keywords: [
           ":vec:",
           `carmaConf://vectorStyle:${vectorBaseUrl}poi/theater.style.json`,
+        ],
+      },
+      {
+        name: "poi_trinkwasser",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/trinkwasserbrunnen.style.json`,
         ],
       },
       {
@@ -1964,18 +1965,20 @@ export const baseConfig = {
         ],
       },
       {
-        name: "poi_trinkwasser",
-        keywords: [
-          ":vec:",
-          `carmaConf://vectorStyle:${vectorBaseUrl}poi/trinkwasserbrunnen.style.json`,
-        ],
+        name: "poi_weihnacht",
       },
       {
-        name: "poi_reisebus",
+        name: "poi_wupperufer",
+        pictureBoundingBox: [
+          790989.4779520752, 6664143.201786021, 800673.0939729535,
+          6670157.840449209,
+        ],
         keywords: [
           ":vec:",
-          `carmaConf://vectorStyle:${vectorBaseUrl}poi/informationen-fur-reisebusse.style.json`,
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/wupperufer-lebensader-wupper.style.json`,
         ],
+        icon: "Kreis_gruen",
+        alternativeIcon: "Icon_Lebensader_Wupper",
       },
     ],
   },
