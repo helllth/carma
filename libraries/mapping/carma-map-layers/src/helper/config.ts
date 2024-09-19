@@ -2483,11 +2483,7 @@ export const baseConfig = {
         name: "einstr",
       },
       {
-        name: "sch30",
-        keywords: [
-          ":vec:",
-          `carmaConf://vectorStyle:${vectorBaseUrl}tempo_30_schilder/style.json`,
-        ],
+        name: "zone30",
       },
       {
         name: "sch30",
@@ -2508,6 +2504,22 @@ export const baseConfig = {
         keywords: [
           ":vec:",
           `carmaConf://vectorStyle:${vectorBaseUrl}verkehrsbelastung_2013/style.json`,
+        ],
+      },
+      {
+        name: "emobil_auto",
+        keywords: [
+          "carmaconf://infoBoxMapping:title:p.betreiber",
+          "carmaconf://infoBoxMapping:subtitle: p.zusatzinfo",
+          "carmaconf://infoBoxMapping:header:p.standort",
+          "carmaconf://infoBoxMapping:modal:'emob'",
+        ],
+      },
+      {
+        name: "carsharing",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}carsharing/style.json`,
         ],
       },
       {
@@ -2546,18 +2558,10 @@ export const baseConfig = {
         ],
       },
       {
-        name: "carsharing",
-        keywords: [
-          ":vec:",
-          `carmaConf://vectorStyle:${vectorBaseUrl}carsharing/style.json`,
-        ],
+        name: "psa",
       },
       {
-        name: "reitwege",
-        keywords: [
-          ":vec:",
-          `carmaConf://vectorStyle:${vectorBaseUrl}reitwege/style.json`,
-        ],
+        name: "treppen",
       },
       {
         name: "branlagen",
@@ -2567,12 +2571,46 @@ export const baseConfig = {
         ],
       },
       {
-        name: "emobil_auto",
+        name: "rad-ein",
+      },
+      {
+        name: "emobil_bike",
+      },
+      {
+        name: "emobil_verleih",
+      },
+      {
+        name: "rad-bel",
+      },
+      {
+        name: "rad-stg",
+      },
+      {
+        name: "rad-ast",
+      },
+      {
+        name: "rad-sper",
+      },
+      {
+        name: "rad-zun",
+      },
+      {
+        name: "rad-bau",
+      },
+      {
+        name: "rad-wst",
+      },
+      {
+        name: "rad-w",
+      },
+      {
+        name: "rad-nrw",
+      },
+      {
+        name: "reitwege",
         keywords: [
-          "carmaconf://infoBoxMapping:title:p.betreiber",
-          "carmaconf://infoBoxMapping:subtitle: p.zusatzinfo",
-          "carmaconf://infoBoxMapping:header:p.standort",
-          "carmaconf://infoBoxMapping:modal:'emob'",
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}reitwege/style.json`,
         ],
       },
     ],
