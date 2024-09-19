@@ -15,6 +15,13 @@ export const getLeafNodes = (node, result: any = {}): any => {
   return result;
 };
 
+export const truncateString = (text: string, num: number) => {
+  if (text.length > num) {
+    return text.slice(0, num) + "...";
+  }
+  return text;
+};
+
 export const objectToFeature = (jsonOutput: any, code: string) => {
   if (!jsonOutput) {
     return {

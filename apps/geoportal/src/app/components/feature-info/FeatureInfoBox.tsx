@@ -13,6 +13,7 @@ import { getLayers } from "../../store/slices/mapping";
 import { getActionLinksForFeature } from "react-cismap/tools/uiHelper";
 import { useState } from "react";
 import { additionalInfoFactory } from "@carma-collab/wuppertal/geoportal";
+import { truncateString } from "./featureInfoHelper";
 
 const FeatureInfoBox = () => {
   const [open, setOpen] = useState(false);
@@ -64,9 +65,12 @@ const FeatureInfoBox = () => {
         pixelwidth={350}
         currentFeature={selectedFeature}
         hideNavigator={true}
-        header="Informationen"
-        headerColor="#0078a8"
         {...selectedFeature?.properties}
+        headerColor={
+          selectedFeature?.properties.headerColor
+            ? selectedFeature.properties.headerColor
+            : "#0078a8"
+        }
         title={
           selectedFeature?.properties?.title.includes("undefined")
             ? undefined
@@ -78,6 +82,20 @@ const FeatureInfoBox = () => {
             : numOfLayers > 0
             ? "Auf die Karte klicken um Informationen abzurufen"
             : "Layer hinzufügen um Informationen abrufen zu können"
+        }
+        header={
+          <div
+            className="w-full py-0.5 pl-1"
+            style={{
+              backgroundColor: selectedFeature?.properties.headerColor
+                ? selectedFeature.properties.headerColor
+                : "#0078a8",
+            }}
+          >
+            {selectedFeature?.properties.header
+              ? truncateString(selectedFeature.properties.header, 66)
+              : "Informationen"}
+          </div>
         }
         noCurrentFeatureContent=""
         secondaryInfoBoxElements={featureHeaders}
