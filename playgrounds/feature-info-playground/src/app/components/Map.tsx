@@ -37,7 +37,9 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
   const vectorStyle = useSelector(getVectorStyle);
   const layerMode = useSelector(getLayerMode);
   const dispatch = useDispatch();
-  const { zoomToFeature } = useContext<typeof TopicMapDispatchContext>(TopicMapDispatchContext);
+  const { zoomToFeature } = useContext<typeof TopicMapDispatchContext>(
+    TopicMapDispatchContext,
+  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -115,10 +117,11 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
         }) => {
           if (layerMode === "default") {
             // TODO fix type mapping
-            const pos = proj4(proj4.defs("EPSG:4326") as unknown as string, proj4crs25832def, [
-              e.latlng.lng,
-              e.latlng.lat,
-            ]);
+            const pos = proj4(
+              proj4.defs("EPSG:4326") as unknown as string,
+              proj4crs25832def,
+              [e.latlng.lng, e.latlng.lat],
+            );
 
             setPos([e.latlng.lat, e.latlng.lng]);
 
@@ -199,10 +202,10 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
             pane="additionalLayers2"
             opacity={1}
             maxSelectionCount={1}
+            selectionEnabled
             // key={vectorStyle}
             onSelectionChanged={(e: { hits: any[]; hit: any }) => {
               const selectedFeature = e.hits[0];
-              console.log("xxxy selectedFeature", selectedFeature);
 
               const p = selectedFeature.properties;
               dispatch(setVectorOutput(p));
