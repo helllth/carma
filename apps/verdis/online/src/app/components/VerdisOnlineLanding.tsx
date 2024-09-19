@@ -8,9 +8,13 @@ import { getKassenzeichenbySTAC } from "../../store/slices/kassenzeichen";
 import { getLoginInProgress, getLoginInfoText } from "../../store/slices/auth";
 import { useNavigate } from "react-router-dom";
 import { getConfData, getUiState } from "../../store/slices/ui";
-import { Kontaktinformationen } from "@carma-collab/wuppertal/verdis-online";
+import {
+  Kontaktinformationen,
+  VersionNumberLoginPage,
+} from "@carma-collab/wuppertal/verdis-online";
 import type { UnknownAction } from "redux";
-
+import { getApplicationVersion } from "@carma-commons/utils";
+import versionData from "../../version.json";
 const VerdisOnlineLanding = () => {
   const [stac, setStac] = useState("");
   const [loginAlertVisible, setLoginAlertVisible] = useState(false);
@@ -172,7 +176,7 @@ const VerdisOnlineLanding = () => {
       <div style={landingStyle}>
         <Container>
           <Row className="show-grid">
-            <Col xs={12} md={12}>
+            <Col xs={7} md={7}>
               <h1 style={{ color: "white" }}>
                 <img alt="" width={180} src="/images/wuppertal-white.svg" />
               </h1>
@@ -209,6 +213,11 @@ const VerdisOnlineLanding = () => {
               <h3 style={{ color: "white" }}>
                 Versiegelungsdaten | Flächenentwässerung
               </h3>
+            </Col>
+            <Col xs={5} md={5}>
+              <VersionNumberLoginPage
+                version={getApplicationVersion(versionData)}
+              />
             </Col>
           </Row>
 

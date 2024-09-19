@@ -1,16 +1,13 @@
-import { Button } from 'react-bootstrap';
-import CismetFooterAcks from 'react-cismap/topicmaps/wuppertal/CismetFooterAcknowledgements';
+import { Button } from "react-bootstrap";
+import { KompaktanleitungFooter } from "@carma-collab/wuppertal/verdis-online";
+import { getApplicationVersion } from "@carma-commons/utils";
+import versionData from "../../../version.json";
 
 const Menu99Footer = () => {
+  const version = getApplicationVersion(versionData);
   return (
-    <div style={{ display: 'flex' }}>
-      <span style={{ fontSize: '11px' }}>
-        <b>Hintergrundkarten</b>: True Orthophoto 2022, Amtliche Basiskarte
-        (ABK) © Stadt Wuppertal | Stadtplanwerk 2.0 (Beta) © RVR | WebAtlasDE ©
-        BKG <a>(Details und Nutzungsbedingungen)</a>
-        <br />
-        <CismetFooterAcks />
-      </span>
+    <div style={{ display: "flex" }}>
+      <KompaktanleitungFooter version={version} />
       <Button size="sm" variant="info">
         In eigenem Fenster öffnen
       </Button>
