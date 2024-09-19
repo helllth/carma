@@ -136,7 +136,7 @@ const TopNavbar = () => {
           title: layer.title,
           id: layer.id,
           layerType: "vector",
-          opacity: 0.7,
+          opacity: 1.0,
           description: layer.description,
           queryable: isNaN(layer.queryable)
             ? layer.keywords.some((keyword) =>
@@ -160,7 +160,7 @@ const TopNavbar = () => {
               title: layer.title,
               id: layer.id,
               layerType: "wmts",
-              opacity: 0.7,
+              opacity: 1.0,
               description: layer.description,
               visible: true,
               queryable: layer.queryable,
@@ -183,7 +183,7 @@ const TopNavbar = () => {
               title: layer.title,
               id: layer.id,
               layerType: "vector",
-              opacity: 0.7,
+              opacity: 1.0,
               description: layer.description,
               queryable: isNaN(layer.queryable)
                 ? layer.keywords.some((keyword) =>
