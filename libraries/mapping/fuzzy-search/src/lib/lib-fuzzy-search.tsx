@@ -2,11 +2,13 @@ import { useEffect, useState, useRef } from "react";
 import type { IFuseOptions } from "fuse.js";
 import Fuse from "fuse.js";
 import { AutoComplete, Button } from "antd";
-import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
-import "./fuzzy-search.css";
-import IconComp from "react-cismap/commons/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+
+import { RoutedMap } from "react-cismap";
+import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
+import IconComp from "react-cismap/commons/Icon";
+
 import type { BaseSelectRef } from "rc-select";
 import {
   generateOptions,
@@ -16,9 +18,12 @@ import {
   prepareGazData,
   removeStopwords,
   stopwords,
-  builtInGazetteerHitTrigger as carmaGazetteerHitTrigger,
+  carmaGazetteerHitTrigger,
   getDefaultSearchConfig,
+  SELECTED_POLYGON_ID,
+  INVERTED_SELECTED_POLYGON_ID,
 } from "./utils/fuzzySearchHelper";
+import { removeCesiumMarker, removeGroundPrimitiveById } from "./utils/cesium";
 import {
   SearchResultItem,
   SearchGazetteerProps,
@@ -27,6 +32,7 @@ import {
   MapConsumer,
 } from "..";
 import { gazDataPrefix, sourcesConfig } from "./config";
+import "./fuzzy-search.css";
 
 interface FuseWithOption<T> extends Fuse<T> {
   options?: IFuseOptions<T>;
@@ -38,6 +44,7 @@ export function LibFuzzySearch({
   // gazetteerHit,
   // overlayFeature,
   mapRef,
+  cesiumRef,
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
@@ -65,24 +72,12 @@ export function LibFuzzySearch({
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
-  const mapConsumers: MapConsumer[] = [];
-  mapRef && mapConsumers.push(mapRef);
+  let mapConsumers: MapConsumer[] = [];
+  //mapRef && mapConsumers.push(mapRef);
+  cesiumRef && mapConsumers.push(cesiumRef);
 
-  // const internalGazetteerHitTrigger = (hit) => {
-  //   carmaGazetteerHitTrigger(
-  //     hit,
-  //     mapConsumers,
-  //     {
-  //       setGazetteerHit,
-  //     },
-  //     // referenceSystem,
-  //     // referenceSystemDefinition,
-  //     // setGazetteerHit,
-  //     // setOverlayFeature,
-  //     // _gazetteerHitTrigger,
-  //   );
-  // };
-  const internalGazetteerHitTrigger = (hit) => {
+
+  const topicMapGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
       hit,
       mapRef.current
@@ -145,7 +140,9 @@ export function LibFuzzySearch({
 
   const handleOnSelect = (option) => {
     setCleanBtnDisable(false);
-    internalGazetteerHitTrigger([option.sData]);
+    console.log("xxx option", option, mapRef, cesiumRef, mapConsumers);
+    topicMapGazetteerHitTrigger([option.sData]); // TODO remove this after carma gazetteer hit trigger also handles LeafletMaps
+    carmaGazetteerHitTrigger([option.sData], mapConsumers);
     if (option.sData.type === "bezirke" || option.sData.type === "quartiere") {
       setGazetteerHit(null);
     } else {
@@ -236,6 +233,24 @@ export function LibFuzzySearch({
     }
   }, [dropdownContainerRef, options, fireScrollEvent, value]);
 
+
+  const handleOnClickClean = () => {
+    {
+      setGazetteerHit(null);
+      setValue("");
+      setOptions([]);
+      setSearchResult([]);
+      setOverlayFeature(null);
+      setCleanBtnDisable(true);
+      if (cesiumRef) {
+        removeCesiumMarker(cesiumRef);
+        cesiumRef.entities.removeById(SELECTED_POLYGON_ID);
+        //cesiumRef.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
+        removeGroundPrimitiveById(cesiumRef, INVERTED_SELECTED_POLYGON_ID);
+      }
+    }
+  }
+
   return (
     <div
       style={{
@@ -263,14 +278,7 @@ export function LibFuzzySearch({
             ? "clear-fuzzy-button clear-fuzzy-button__active"
             : "clear-fuzzy-button clear-fuzzy-button__active"
         }
-        onClick={() => {
-          setGazetteerHit(null);
-          setValue("");
-          setOptions([]);
-          setSearchResult([]);
-          setOverlayFeature(null);
-          setCleanBtnDisable(true);
-        }}
+        onClick={handleOnClickClean}
         disabled={cleanBtnDisable}
       />
       {!showCategories ? (
