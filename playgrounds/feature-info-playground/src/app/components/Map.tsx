@@ -197,6 +197,7 @@ const Map = ({ layer, selectedFeature }: MapProps) => {
         )}
         {vectorStyle && layerMode === "vector" && (
           <CismapLayer
+            key={vectorStyle}
             type={"vector"}
             style={vectorStyle}
             pane="additionalLayers2"
