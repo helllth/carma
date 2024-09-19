@@ -176,7 +176,7 @@ const VerdisOnlineLanding = () => {
       <div style={{ ...landingStyle, paddingTop: "1.5rem" }}>
         <Container>
           <Row className="show-grid">
-            <Col xs={7} md={7}>
+            <Col xs={12} md={12}>
               <h1 style={{ color: "white" }}>
                 <img alt="" width={180} src="/images/wuppertal-white.svg" />
               </h1>
@@ -213,11 +213,6 @@ const VerdisOnlineLanding = () => {
               <h3 style={{ color: "white" }}>
                 Versiegelungsdaten | Flächenentwässerung
               </h3>
-            </Col>
-            <Col xs={5} md={5}>
-              <VersionNumberLoginPage
-                version={getApplicationVersion(versionData)}
-              />
             </Col>
           </Row>
 
@@ -287,6 +282,23 @@ const VerdisOnlineLanding = () => {
             </Col>
           </Row>
         </Container>
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+            color: "white",
+            fontSize: "9px",
+            marginLeft: "auto",
+            paddingRight: "4px",
+            paddingBottom: "4px",
+          }}
+        >
+          <VersionNumberLoginPage
+            version={getApplicationVersion(versionData)}
+            fonntSize="9px"
+          />
+        </div>
       </div>
     </div>
   );
