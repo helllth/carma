@@ -487,8 +487,6 @@ L.Control.MeasurePolygon = L.Control.extend({
       const target = event.originalEvent.target;
       const isDesctop = this.options.device === "Desktop" ? true : false;
       const mode = this.options.measurementMode;
-      console.log("xxx ifDrawing", this.options.ifDrawing);
-      console.log("xxx target class list", target.classList);
 
       if (isDesctop) {
         if (!this.options.customTooltip && mode === "measurement") {
