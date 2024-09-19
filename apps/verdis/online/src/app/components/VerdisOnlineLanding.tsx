@@ -173,7 +173,7 @@ const VerdisOnlineLanding = () => {
         </AlertContainer>
       </div>
 
-      <div style={landingStyle}>
+      <div style={{ ...landingStyle, paddingTop: "1.5rem" }}>
         <Container>
           <Row className="show-grid">
             <Col xs={7} md={7}>
