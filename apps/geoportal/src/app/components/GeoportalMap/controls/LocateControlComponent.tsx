@@ -23,7 +23,7 @@ const LocateControlComponent = ({ startLocate = 0 }) => {
           setView: "untilPan",
           keepCurrentZoomLevel: "true",
           flyTo: false,
-          drawCircle: false,
+          drawCircle: true,
         })
         .addTo(mapExample);
       setLocationInstance(lc);
