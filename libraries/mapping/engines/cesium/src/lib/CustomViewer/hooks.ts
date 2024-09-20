@@ -21,11 +21,36 @@ import {
   useScreenSpaceCameraControllerMaximumZoomDistance,
   useShowSecondaryTileset,
   useViewerHome,
+  useViewerIsMode2d,
   useScreenSpaceCameraControllerEnableCollisionDetection,
+  useViewerIsAnimating,
 } from "../CustomViewerContextProvider/slices/cesium";
 import { decodeSceneFromLocation } from "./utils";
 import { setupSecondaryStyle } from "./components/baseTileset.hook";
-import { leafletToCesiumCamera } from "../utils";
+
+export const useLogCesiumRenderIn2D = () => {
+  const { viewer } = useCesiumCustomViewer();
+  const isMode2d = useViewerIsMode2d();
+  const isAnimating = useViewerIsAnimating();
+
+  useEffect(() => {
+    if (!viewer) return;
+
+    const logRender = () => {
+      if (isMode2d && !isAnimating) {
+        console.info("[CESIUM|2D3D] Cesium got rendered while in 2D mode");
+      }
+    };
+
+    // Subscribe to the postRender event
+    viewer.scene.postRender.addEventListener(logRender);
+
+    // Cleanup the event listener on unmount
+    return () => {
+      viewer.scene.postRender.removeEventListener(logRender);
+    };
+  }, [viewer, isMode2d, isAnimating]);
+};
 
 const useInitializeViewer = (
   viewer: Viewer | null,
@@ -40,12 +65,15 @@ const useInitializeViewer = (
   const isSecondaryStyle = useShowSecondaryTileset();
   const minZoom = useScreenSpaceCameraControllerMinimumZoomDistance();
   const maxZoom = useScreenSpaceCameraControllerMaximumZoomDistance();
-  const enableCollisionDetection = useScreenSpaceCameraControllerEnableCollisionDetection();
+  const enableCollisionDetection =
+    useScreenSpaceCameraControllerEnableCollisionDetection();
+  const isMode2d = useViewerIsMode2d();
 
   useEffect(() => {
     if (viewer) {
       console.log("HOOK: enable terrain collision detection");
       const scene: Scene = viewer.scene;
+      scene.requestRenderMode = true;
       const sscc: ScreenSpaceCameraController =
         scene.screenSpaceCameraController;
 
@@ -78,28 +106,36 @@ const useInitializeViewer = (
 
       // TODO enable 2D Mode if zoom value is present in hash on startup
 
-      if (isSecondaryStyle) {
-        console.log("HOOK: set secondary style from hash");
-        setupSecondaryStyle(viewerContext);
-        dispatch(setShowPrimaryTileset(false));
-        dispatch(setShowSecondaryTileset(true));
-      }
+      if (isMode2d) {
+        console.info(
+          "HOOK: skipping cesium location setup with 2d mode active zoom",
+        );
+      } else {
+        if (isSecondaryStyle) {
+          console.log("HOOK: set secondary style from hash");
+          setupSecondaryStyle(viewerContext);
+          dispatch(setShowPrimaryTileset(false));
+          dispatch(setShowSecondaryTileset(true));
+        }
 
-      if (sceneFromHashParams && longitude && latitude) {
-        console.log("HOOK: init Viewer set camera from hash");
-        viewer.camera.setView({
-          destination: Cartesian3.fromRadians(
-            longitude,
-            latitude,
-            height ?? 1000, // restore height if missing
-          ),
-          orientation: {
-            heading: heading ?? 0,
-            pitch: pitch ?? -CeMath.PI_OVER_TWO,
-          },
-        });
+        if (sceneFromHashParams && longitude && latitude) {
+          console.log(
+            "HOOK [2D3D|CESIUM|CAMERA] init Viewer set camera from hash zoom",
+            height,
+          );
+          viewer.camera.setView({
+            destination: Cartesian3.fromRadians(
+              longitude,
+              latitude,
+              height ?? 1000, // restore height if missing
+            ),
+            orientation: {
+              heading: heading ?? 0,
+              pitch: pitch ?? -CeMath.PI_OVER_TWO,
+            },
+          });
 
-        /*
+          /*
         (async () => {
           replaceHashRoutedHistory(
             await encodeScene({ viewer, isSecondaryStyle }),
@@ -107,26 +143,23 @@ const useInitializeViewer = (
           );
         })();
         */
-      } else if (leaflet) {
-        console.log("HOOK: initViewer from leaflet");
-        const { lat, lng } = leaflet.getCenter();
-        const zoom = leaflet.getZoom();
-        leafletToCesiumCamera(viewer, { lat, lng, zoom });
-
-        // triggers url hash update on moveend
-      } else if (home && homeOffset) {
-        console.log("HOOK: initViewer no hash, using home");
-        viewer.camera.lookAt(home, homeOffset);
-        viewer.camera.flyToBoundingSphere(new BoundingSphere(home, 500), {
-          duration: 2,
-        });
-        // triggers url hash update on moveend
-      } else {
-        console.info("HOOK: initViewer no hash, no home");
+        } else if (home && homeOffset) {
+          console.log(
+            "HOOK: [2D3D|CESIUM|CAMERA] initViewer no hash, using home zoom",
+            home,
+          );
+          viewer.camera.lookAt(home, homeOffset);
+          viewer.camera.flyToBoundingSphere(new BoundingSphere(home, 500), {
+            duration: 2,
+          });
+          // triggers url hash update on moveend
+        } else {
+          console.info("HOOK: initViewer no hash, no home, no zoom");
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewer, home, homeOffset, location.pathname, hash]);
+  }, [viewer, home, homeOffset, location.pathname, hash, isMode2d]);
 };
 
 export const useHomeControl = () => {
@@ -148,6 +181,7 @@ export const useHomeControl = () => {
     if (viewer && homePos) {
       dispatch(setIsAnimating(false));
       const boundingSphere = new BoundingSphere(homePos, 400);
+      console.log("HOOK: [2D3D|CESIUM|CAMERA] homeClick");
       viewer.camera.flyToBoundingSphere(boundingSphere);
     }
   }, [viewer, homePos, dispatch]);
