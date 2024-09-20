@@ -22,6 +22,10 @@ import MyMenu from "./components/Menu";
 import InfoPanel from "./components/SecondaryInfo";
 import Crosshair from "./Crosshair";
 import { searchForFeatures } from "./search";
+import {
+  tooltipText,
+  searchTextPlaceholder,
+} from "@carma-collab/wuppertal/umweltalarm";
 
 const host = "https://wupp-topicmaps-data.cismet.de";
 
@@ -191,9 +195,10 @@ function UmweltalarmMap({ loggedOut, initialised }) {
       <TopicMapComponent
         gazData={gazData}
         modalMenu={<MyMenu />}
+        gazetteerSearchPlaceholder={searchTextPlaceholder}
         homeZoom={13}
         maxZoom={22}
-        applicationMenuTooltipString="Einstellungen | Legende | Kompaktanleitung"
+        applicationMenuTooltipString={tooltipText}
         secondaryInfo={windowSize && <InfoPanel hits={hits} />}
         locatorControl={true}
         mappingBoundsChanged={(boundingBox) => {
