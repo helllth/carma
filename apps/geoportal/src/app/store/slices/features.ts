@@ -46,7 +46,7 @@ const slice = createSlice({
       action: PayloadAction<string>,
     ) {
       const id = action.payload;
-      if (state.selectedFeature.id === id) {
+      if (state.selectedFeature?.id === id) {
         state.selectedFeature = null;
 
         if (state.secondaryInfoBoxElements.length > 0) {
