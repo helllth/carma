@@ -109,7 +109,7 @@ const TopNavbar = () => {
         } catch {
           messageApi.open({
             type: "error",
-            content: `Es gab einen Fehler beim anwenden von ${layer.title}`,
+            content: `Es gab einen Fehler beim Anwenden von ${layer.title}`,
           });
         }
       }
@@ -216,7 +216,7 @@ const TopNavbar = () => {
       } catch {
         messageApi.open({
           type: "error",
-          content: `Es gab einen Fehler beim entfernen von ${layer.title}`,
+          content: `Es gab einen Fehler beim Entfernen von ${layer.title}`,
         });
       }
     } else {
