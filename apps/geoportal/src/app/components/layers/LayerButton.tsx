@@ -54,7 +54,6 @@ const LayerButton = ({
   layer,
   background,
 }: LayerButtonProps) => {
-  const queryable = layer?.queryable;
   const { ref, inView } = useInView({
     threshold: 0.99,
   });
@@ -81,6 +80,10 @@ const LayerButton = ({
 
   const style = { transform: CSS.Translate.toString(transform) };
   const zoom = routedMapRef?.leafletMap?.leafletElement.getZoom();
+  const queryable =
+    layer?.queryable &&
+    zoom < (layer.props.maxZoom ? layer.props.maxZoom : Infinity) &&
+    zoom > layer.props.minZoom;
   const map = routedMapRef?.leafletMap?.leafletElement as L.Map;
 
   useEffect(() => {

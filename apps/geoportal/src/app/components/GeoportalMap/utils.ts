@@ -1,13 +1,21 @@
 import type { Layer } from "@carma-mapping/layers";
 
-export const getUrlPrefix = () => window.location.origin + window.location.pathname;
+export const getUrlPrefix = () =>
+  window.location.origin + window.location.pathname;
 
-export const getQueryableLayers = (layers: Layer[]) => {
+export const getQueryableLayers = (layers: Layer[], zoom: number) => {
   return layers.filter(
-    (layer) => layer.queryable === true && layer.useInFeatureInfo === true,
+    (layer) =>
+      layer.queryable === true &&
+      layer.useInFeatureInfo === true &&
+      zoom < (layer.props.maxZoom ? layer.props.maxZoom : Infinity) &&
+      zoom > layer.props.minZoom,
   );
 };
 
-export const getAtLeastOneLayerIsQueryable = (layers: Layer[]): boolean => {
-  return getQueryableLayers(layers).length > 0;
+export const getAtLeastOneLayerIsQueryable = (
+  layers: Layer[],
+  zoom: number,
+): boolean => {
+  return getQueryableLayers(layers, zoom).length > 0;
 };

@@ -30,7 +30,7 @@ import {
 } from "../feature-info/featureInfoHelper";
 import { getAtLeastOneLayerIsQueryable, getQueryableLayers } from "./utils";
 import { UIMode } from "../../store/slices/ui";
-import { FeatureInfoIcon }from "../feature-info/FeatureInfoIcon";
+import { FeatureInfoIcon } from "../feature-info/FeatureInfoIcon";
 
 interface WMTSLayerProps {
   type: "wmts";
@@ -61,6 +61,7 @@ type Options = {
   mode: UIMode;
   setPos: (pos: [number, number] | null) => void;
   store: Store;
+  zoom: number;
 };
 
 // TODO: move to portal lib?
@@ -77,11 +78,14 @@ export const onClickTopicMap = async (
     target: HTMLElement;
     type: string;
   },
-  { dispatch, mode, setPos, store }: Options,
+  { dispatch, mode, setPos, store, zoom }: Options,
 ) => {
   const layers = getLayers(store.getState());
-  const queryableLayers = getQueryableLayers(layers);
-  if (mode === UIMode.FEATURE_INFO && getAtLeastOneLayerIsQueryable(layers)) {
+  const queryableLayers = getQueryableLayers(layers, zoom);
+  if (
+    mode === UIMode.FEATURE_INFO &&
+    getAtLeastOneLayerIsQueryable(layers, zoom)
+  ) {
     if (queryableLayers.find((layer) => layer.layerType === "vector")) {
       setTimeout(() => {}, 100);
     }
@@ -181,7 +185,7 @@ const onSelectionChangedVector = (
     hits: any[];
     hit: any;
   },
-  { layer, layers, dispatch, setPos },
+  { layer, layers, dispatch, setPos, zoom },
 ) => {
   if (e.hits && layer.queryable) {
     const selectedVectorFeature = e.hits[0];
@@ -234,9 +238,9 @@ const onSelectionChangedVector = (
       dispatch(setVectorInfo(feature));
       dispatch(removeNothingFoundID(layer.id));
 
-      const queryableLayers = getQueryableLayers(layers);
+      const queryableLayers = getQueryableLayers(layers, zoom);
 
-      if (layer.id === queryableLayers[queryableLayers.length - 1].id) {
+      if (layer.id === queryableLayers[queryableLayers.length - 1]?.id) {
         setPos(null);
       }
     } else {
@@ -260,11 +264,13 @@ export const createCismapLayers = (
     mode,
     dispatch,
     setPos,
+    zoom,
   }: {
     focusMode: boolean;
     mode: UIMode;
     dispatch: Dispatch;
     setPos: (pos: [number, number] | null) => void;
+    zoom: number;
   },
 ) =>
   layers.map((layer, i) => {
@@ -299,6 +305,7 @@ export const createCismapLayers = (
                 layers,
                 dispatch,
                 setPos,
+                zoom,
               }),
           });
       }

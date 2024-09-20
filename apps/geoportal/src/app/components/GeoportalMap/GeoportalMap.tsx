@@ -122,6 +122,7 @@ export const GeoportalMap = () => {
   } = useContext<typeof TopicMapContext>(TopicMapContext);
 
   const leaflelEl = routedMapRef?.leafletMap?.leafletElement;
+  const zoom = leaflelEl?.getZoom();
 
   const [gazetteerHit, setGazetteerHit] = useState(null);
   const [overlayFeature, setOverlayFeature] = useState(null);
@@ -203,7 +204,10 @@ export const GeoportalMap = () => {
           <ControlButtonStyler
             onClick={(e) => {
               // TODO Check for side effects of this while animating
-              isMode2d && leaflelEl.setZoom(Math.round(leaflelEl.getZoom()) + ZOOM_SNAP_DELTA);
+              isMode2d &&
+                leaflelEl.setZoom(
+                  Math.round(leaflelEl.getZoom()) + ZOOM_SNAP_DELTA,
+                );
               !isMode2d && handleZoomIn(e);
             }}
             className="!border-b-0 !rounded-b-none font-bold !z-[9999999]"
@@ -212,7 +216,10 @@ export const GeoportalMap = () => {
           </ControlButtonStyler>
           <ControlButtonStyler
             onClick={(e) => {
-              isMode2d && leaflelEl.setZoom(Math.round(leaflelEl.getZoom()) - ZOOM_SNAP_DELTA);
+              isMode2d &&
+                leaflelEl.setZoom(
+                  Math.round(leaflelEl.getZoom()) - ZOOM_SNAP_DELTA,
+                );
               !isMode2d && handleZoomOut(e);
             }}
             className="!rounded-t-none !border-t-[1px]"
@@ -383,7 +390,13 @@ export const GeoportalMap = () => {
                 setUrlParams(newParams);
               }}
               onclick={(e) =>
-                onClickTopicMap(e, { dispatch, mode: uiMode, store, setPos })
+                onClickTopicMap(e, {
+                  dispatch,
+                  mode: uiMode,
+                  store,
+                  setPos,
+                  zoom,
+                })
               }
               gazetteerSearchComponent={<></>}
               infoBox={
@@ -418,6 +431,7 @@ export const GeoportalMap = () => {
                 mode: uiMode,
                 dispatch,
                 setPos,
+                zoom,
               })}
               {pos && isModeFeatureInfo && layers.length > 0 && (
                 <ExtraMarker
@@ -428,25 +442,23 @@ export const GeoportalMap = () => {
             </TopicMapComponent>
           </div>
           {allow3d && (
-              <div
-                ref={container3dMapRef}
-                className={"map-container-3d"}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  zIndex: 401,
-                  opacity: isMode2d ? 0 : 1,
-                  transition: `opacity ${MAPMODE_TRANSITION_DURATION}ms ease-in-out`,
-                  pointerEvents: isMode2d ? "none" : "auto",
-                }}
-              >
-                <CustomViewer
-                  containerRef={container3dMapRef}
-                ></CustomViewer>
-              </div>
+            <div
+              ref={container3dMapRef}
+              className={"map-container-3d"}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 401,
+                opacity: isMode2d ? 0 : 1,
+                transition: `opacity ${MAPMODE_TRANSITION_DURATION}ms ease-in-out`,
+                pointerEvents: isMode2d ? "none" : "auto",
+              }}
+            >
+              <CustomViewer containerRef={container3dMapRef}></CustomViewer>
+            </div>
           )}
         </>
       </Main>
