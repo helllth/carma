@@ -22,6 +22,7 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import MeasurementTitle from "./MeasurementTitle";
 import Icon from "react-cismap/commons/Icon";
 import { UIContext } from "react-cismap/contexts/UIContextProvider";
+import "../infoBox.css";
 
 const InfoBoxMeasurement = () => {
   const measurementsData = useSelector(getShapes);
@@ -187,9 +188,7 @@ const InfoBoxMeasurement = () => {
       {visibleShapesData[currentMeasure] && (
         <ResponsiveInfoBox
           pixelwidth={350}
-          header={
-            <div className="w-full bg-blue-500 py-0.5 pl-1">Messungen</div>
-          }
+          header={<div className="w-full bg-blue-500">Messungen</div>}
           alwaysVisibleDiv={
             <div className="mt-2 mb-2 w-[96%] flex justify-between items-start gap-4">
               <span style={{ cursor: "pointer", width: "100%" }}>

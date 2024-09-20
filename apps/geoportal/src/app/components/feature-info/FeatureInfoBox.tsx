@@ -14,6 +14,7 @@ import { getActionLinksForFeature } from "react-cismap/tools/uiHelper";
 import { useState } from "react";
 import { additionalInfoFactory } from "@carma-collab/wuppertal/geoportal";
 import { truncateString } from "./featureInfoHelper";
+import "../infoBox.css";
 
 const FeatureInfoBox = () => {
   const [open, setOpen] = useState(false);
@@ -85,7 +86,7 @@ const FeatureInfoBox = () => {
         }
         header={
           <div
-            className="w-full py-0.5 pl-1"
+            className="w-full"
             style={{
               backgroundColor: selectedFeature?.properties.headerColor
                 ? selectedFeature.properties.headerColor
