@@ -27,6 +27,7 @@ const HomeButton = () => {
           );
           button.innerHTML = '<i class="fas fa-home fa-lg"></i>';
           L.DomEvent.disableClickPropagation(button);
+          // TODO move home to config and sync with 3d
           L.DomEvent.on(button, "click", () => {
             map.setView([51.27203462681256, 7.199971675872803], 18, {
               animate: true,

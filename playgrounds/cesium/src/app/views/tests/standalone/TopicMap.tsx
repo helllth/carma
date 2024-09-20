@@ -13,8 +13,8 @@ function View() {
         backgroundlayers="empty"
         hamburgerMenu={false}
         fullScreenControlEnabled={false}
-        zoomSnap={0.1}
-        zoomDelta={0.1}
+        zoomSnap={0.125}
+        zoomDelta={0.125}
       >
         {/* <StyledWMSTileLayer
           {...{

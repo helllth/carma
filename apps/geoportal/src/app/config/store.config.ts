@@ -1,8 +1,8 @@
 // TODO CONSOLIDATE_CESIUM 
 
 import { Cartesian3, Color } from 'cesium';
-import { CesiumState } from '@carma-mapping/cesium-engine';
 
+import { CesiumState, VIEWER_TRANSITION_STATE } from '@carma-mapping/cesium-engine';
 import { colorToArray } from '@carma-mapping/cesium-engine/utils';
 
 import { MODEL_ASSETS } from './assets.config';
@@ -32,6 +32,7 @@ const homeOffset = {
 
 export const defaultCesiumState: CesiumState = {
   isAnimating: false,
+  currentTransition: VIEWER_TRANSITION_STATE.NONE,
   isMode2d: true,
   homeOffset: homeOffset,
   homePosition: { x, y, z },

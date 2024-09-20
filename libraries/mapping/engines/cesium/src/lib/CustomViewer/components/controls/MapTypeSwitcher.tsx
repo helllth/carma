@@ -11,6 +11,12 @@ import { useDispatch } from "react-redux";
 import {
   useViewerIsMode2d,
   setIsMode2d,
+  setTransitionTo2d,
+  setTransitionTo3d,
+  useViewerCurrentTransition,
+  VIEWER_TRANSITION_STATE,
+  clearTransition,
+  useViewerIsTransitioning,
 } from "../../../CustomViewerContextProvider/slices/cesium";
 import { setLeafletView } from "../../utils";
 import {
@@ -35,7 +41,7 @@ type Props = {
   children?: ReactNode;
 };
 
-export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
+export const MapTypeSwitcher = ({ zoomSnap = 0 }: Props = {}) => {
   //const { viewer } = useCesium();
   const dispatch = useDispatch();
   const isMode2d = useViewerIsMode2d();
@@ -47,7 +53,9 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
     useState<Cartesian3 | null>(null);
   const [prevHPR, setPrevHPR] = useState<HeadingPitchRange | null>(null);
   const [prevDuration, setPrevDuration] = useState<number>(0);
-  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+
+  const isTransitioning = useViewerIsTransitioning();
+
   // TODO provide mapFramework context via props for UI?
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const topicMapContext: any =
@@ -139,11 +147,11 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
     setPrevDuration(duration);
 
     const onComplete = () => {
-      setLeafletView(viewer, leaflet, { animate: false, zoomSnap });
+      setLeafletView(viewer, leaflet, { animate: false, zoomSnap, duration: 0 });
       setPrevCamera2dPosition(viewer.camera.position.clone());
       // trigger the visual transition
       dispatch(setIsMode2d(true));
-      setIsTransitioning(false);
+      dispatch(clearTransition());
     };
 
     console.log("duration zoom", distance);
@@ -164,24 +172,24 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
       );
     } else {
       console.info("rotate around camera position not implemented yet zoom");
-      setIsTransitioning(false);
+      dispatch(clearTransition());
       /*
-           // TODO implement this
-           // rotate around the camera position
-           animateInterpolateHeadingPitchRange(
-             viewer,
-             viewer.camera.position,
-             new HeadingPitchRange(
-               0,
-               -Math.PI / 2,
-               height - viewer.camera.positionCartographic.height
-             ),
-             {
-               duration: duration * 1000,
-               onComplete,
-             }
-           );
-           */
+     // TODO implement this
+     // rotate around the camera position
+     animateInterpolateHeadingPitchRange(
+       viewer,
+       viewer.camera.position,
+       new HeadingPitchRange(
+         0,
+         -Math.PI / 2,
+         height - viewer.camera.positionCartographic.height
+       ),
+       {
+         duration: duration * 1000,
+         onComplete,
+       }
+     );
+     */
     }
   };
 
@@ -196,9 +204,9 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
     );
 
     if (viewer) {
-      setIsTransitioning(true);
 
       if (isMode2d) {
+        dispatch(setTransitionTo3d());
         dispatch(setIsMode2d(false));
 
         if (
@@ -209,7 +217,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
           console.log(
             "camera position unchanged, skipping 2d to 3d transition animation zoom",
           );
-          setIsTransitioning(false);
+          dispatch(clearTransition());
           return;
         }
 
@@ -221,13 +229,12 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
             animateInterpolateHeadingPitchRange(viewer, pos, prevHPR, {
               delay: DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION, // allow the css transition to finish
               duration: prevDuration * 1000,
-              onComplete: () => {
-                setIsTransitioning(false);
-              },
+              useCurrentDistance: true,
+              onComplete: clearTransition
             });
           } else {
             console.log('no change to 3d camera position applied zoom', pos, prevHPR);
-            setIsTransitioning(false);
+            dispatch(clearTransition());
             return;
           }
         }
@@ -235,28 +242,13 @@ export const MapTypeSwitcher = ({ zoomSnap = 1 }: Props = {}) => {
         leafletToCesium(viewer, leaflet, { cause: "SwitchMapMode to 3d", onComplete: () => setTimeout(onComplete, 100) })
 
       } else {
-        console.log("zoom to2D")
+        dispatch(setTransitionTo2d());
         transitionToMode2d(viewer);
       }
     }
   };
 
-  useEffect(() => {
-    // reset isTransitioning after 2 seconds
-    let timeoutId: NodeJS.Timeout | null = null;
 
-    if (isTransitioning) {
-      timeoutId = setTimeout(() => {
-        setIsTransitioning(false);
-      }, 4000);
-    }
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [isTransitioning]);
 
   return (
     <ControlButtonStyler

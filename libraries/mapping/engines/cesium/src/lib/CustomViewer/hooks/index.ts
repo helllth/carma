@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import {
@@ -12,7 +12,7 @@ import {
 } from "cesium";
 import type { Map as LeafletMap } from "leaflet";
 
-import { useCesiumCustomViewer } from "../CustomViewerContextProvider";
+import { useCesiumCustomViewer } from "../../CustomViewerContextProvider";
 import {
   setIsAnimating,
   setShowPrimaryTileset,
@@ -24,35 +24,48 @@ import {
   useViewerIsMode2d,
   useScreenSpaceCameraControllerEnableCollisionDetection,
   useViewerIsAnimating,
-} from "../CustomViewerContextProvider/slices/cesium";
-import { decodeSceneFromLocation } from "./utils";
-import { setupSecondaryStyle } from "./components/baseTileset.hook";
+  useViewerCurrentTransition,
+} from "../../CustomViewerContextProvider/slices/cesium";
+import { decodeSceneFromLocation } from "../utils";
+import { setupSecondaryStyle } from "../components/baseTileset.hook";
 
 export const useLogCesiumRenderIn2D = () => {
   const { viewer } = useCesiumCustomViewer();
   const isMode2d = useViewerIsMode2d();
   const isAnimating = useViewerIsAnimating();
+  const transition = useViewerCurrentTransition();
+
+  const isMode2dRef = useRef(isMode2d);
+  const transitionRef = useRef(transition);
+  const isAnimatingRef = useRef(isAnimating);
 
   useEffect(() => {
     if (!viewer) return;
 
     const logRender = () => {
-      if (isMode2d && !isAnimating) {
-        console.info("[CESIUM|2D3D] Cesium got rendered while in 2D mode");
+      if (isMode2dRef.current) {
+        console.info(
+          "[CESIUM|2D3D] Cesium got rendered while in 2D mode",
+          isAnimatingRef.current,
+          transitionRef.current,
+          isMode2d,
+          isMode2dRef.current,
+        );
       }
     };
 
     // Subscribe to the postRender event
+    console.log("HOOK [CESIUM|SCENE] add postrender listener");
     viewer.scene.postRender.addEventListener(logRender);
 
     // Cleanup the event listener on unmount
     return () => {
       viewer.scene.postRender.removeEventListener(logRender);
     };
-  }, [viewer, isMode2d, isAnimating]);
+  }, [viewer]);
 };
 
-const useInitializeViewer = (
+export const useInitializeViewer = (
   viewer: Viewer | null,
   home: Cartesian3 | null,
   homeOffset: Cartesian3 | null,
@@ -230,5 +243,3 @@ export function useZoomControls(moveRateFactor: number = MOVERATE_FACTOR) {
 
   return { handleZoomIn, handleZoomOut };
 }
-
-export default useInitializeViewer;

@@ -4,11 +4,18 @@ import { useSelector } from "react-redux";
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-import type { ColorInput, RootState, CesiumState } from "../../..";
+import { type ColorInput, type RootState, type CesiumState } from "../../..";
 import { colorToArray, isColorRgbaArray } from "../../utils";
+
+export enum VIEWER_TRANSITION_STATE {
+  NONE,
+  TO3D,
+  TO2D,
+}
 
 const initialState: CesiumState = {
   isAnimating: false,
+  currentTransition: VIEWER_TRANSITION_STATE.NONE,
   isMode2d: false,
   homeOffset: null,
   homePosition: null,
@@ -66,6 +73,16 @@ export const sliceCesium = createSlice({
 
     toggleIsAnimating: (state: CesiumState) => {
       state.isAnimating = !state.isAnimating;
+    },
+    clearTransition: (state: CesiumState) => {
+      console.log("xxx transition cleared");
+      state.currentTransition = VIEWER_TRANSITION_STATE.NONE
+    },
+    setTransitionTo2d: (state: CesiumState) => {
+      state.currentTransition = VIEWER_TRANSITION_STATE.TO2D
+    },
+    setTransitionTo3d: (state: CesiumState) => {
+      state.currentTransition = VIEWER_TRANSITION_STATE.TO3D
     },
     setIsMode2d: (state: CesiumState, action: PayloadAction<boolean>) => {
       state.isMode2d = action.payload;
@@ -133,6 +150,9 @@ export const sliceCesium = createSlice({
 export const {
   setIsAnimating,
   setIsMode2d,
+  clearTransition,
+  setTransitionTo2d,
+  setTransitionTo3d,
   toggleIsAnimating,
   setShowPrimaryTileset,
   setShowSecondaryTileset,
@@ -145,6 +165,9 @@ export const {
 // selectors
 
 const selectViewerIsAnimating = ({ cesium }: RootState) => cesium.isAnimating;
+const selectViewerCurrentTransition = ({ cesium }: RootState) => cesium.currentTransition;
+const selectViewerIsTransitioning = ({ cesium }: RootState) => cesium.currentTransition !== VIEWER_TRANSITION_STATE.NONE;
+
 const selectViewerIsMode2d = ({ cesium }: RootState) => cesium.isMode2d;
 const selectViewerDataSources = ({ cesium }: RootState) => cesium.dataSources;
 
@@ -177,6 +200,8 @@ const selectScreenSpaceCameraControllerEnableCollisionDetection = ({
 
 
 export const useViewerIsAnimating = () => useSelector(selectViewerIsAnimating);
+export const useViewerCurrentTransition = () => useSelector(selectViewerCurrentTransition);
+export const useViewerIsTransitioning = () => useSelector(selectViewerIsTransitioning);
 export const useViewerIsMode2d = () => useSelector(selectViewerIsMode2d);
 export const useViewerDataSources = () => useSelector(selectViewerDataSources);
 export const useViewerHome = () => useSelector(selectViewerHome);

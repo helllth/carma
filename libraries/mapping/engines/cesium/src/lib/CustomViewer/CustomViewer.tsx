@@ -43,7 +43,9 @@ import { formatFractions } from "../utils/formatters";
 import { useCesiumCustomViewer } from "../CustomViewerContextProvider";
 import { BaseTilesets } from "./components/BaseTilesets";
 import { encodeScene, replaceHashRoutedHistory } from "./utils";
-import useInitializeViewer, { useLogCesiumRenderIn2D } from "./hooks";
+import { useInitializeViewer, useLogCesiumRenderIn2D } from "./hooks";
+import useTransitionTimeout from "./hooks/useTransitionTimeout";
+import useDisableSSCC from "./hooks/useDisableSSCC";
 
 
 type CustomViewerProps = {
@@ -325,10 +327,14 @@ function CustomViewer(props: CustomViewerProps) {
   );
 
   useLogCesiumRenderIn2D();
+  useTransitionTimeout();
+  useDisableSSCC();
 
   useEffect(() => {
     if (!viewer) return;
+    console.log("[CESIUM] HOOK Track user focus")
 
+    /*
     const canvas = viewer.canvas;
 
     // Ensure the canvas can receive focus
@@ -355,6 +361,7 @@ function CustomViewer(props: CustomViewerProps) {
       canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mousemove", handleMouseDown);
     };
+    */
   }, [viewer]);
 
 

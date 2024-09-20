@@ -87,6 +87,7 @@ import { useFeatureInfoModeCursorStyle } from "../../hooks/useFeatureInfoModeCur
 
 // TODO: Make transition style configurable with config and cesium library
 const MAPMODE_TRANSITION_DURATION = 1000;
+const ZOOM_SNAP_DELTA = 1;
 
 export const GeoportalMap = () => {
   const dispatch = useDispatch();
@@ -119,6 +120,8 @@ export const GeoportalMap = () => {
     referenceSystemDefinition,
     maskingPolygon,
   } = useContext<typeof TopicMapContext>(TopicMapContext);
+
+  const leaflelEl = routedMapRef?.leafletMap?.leafletElement;
 
   const [gazetteerHit, setGazetteerHit] = useState(null);
   const [overlayFeature, setOverlayFeature] = useState(null);
@@ -200,7 +203,7 @@ export const GeoportalMap = () => {
           <ControlButtonStyler
             onClick={(e) => {
               // TODO Check for side effects of this while animating
-              isMode2d && routedMapRef.leafletMap.leafletElement.zoomIn();
+              isMode2d && leaflelEl.setZoom(Math.round(leaflelEl.getZoom()) + ZOOM_SNAP_DELTA);
               !isMode2d && handleZoomIn(e);
             }}
             className="!border-b-0 !rounded-b-none font-bold !z-[9999999]"
@@ -209,7 +212,7 @@ export const GeoportalMap = () => {
           </ControlButtonStyler>
           <ControlButtonStyler
             onClick={(e) => {
-              isMode2d && routedMapRef.leafletMap.leafletElement.zoomOut();
+              isMode2d && leaflelEl.setZoom(Math.round(leaflelEl.getZoom()) - ZOOM_SNAP_DELTA);
               !isMode2d && handleZoomOut(e);
             }}
             className="!rounded-t-none !border-t-[1px]"

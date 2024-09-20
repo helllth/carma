@@ -146,7 +146,7 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
         screenSizeWatcher !== 'mobile'
       ) {
         setScreenSizeWatcher('mobile');
-        console.log('xxx calback mobile');
+        console.info('HOOK [MAPCONTROL] callback mobile');
         onResponsiveCollapse('mobile');
       } else if (
         containerWidth &&
@@ -154,7 +154,7 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
         screenSizeWatcher !== 'screen'
       ) {
         setScreenSizeWatcher('screen');
-        console.log('xxx calback screen');
+        console.info('HOOK [MAPCONTROL] callback screen');
         onResponsiveCollapse('screen');
       }
 
