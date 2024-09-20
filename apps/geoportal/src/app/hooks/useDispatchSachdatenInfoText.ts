@@ -1,13 +1,18 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLayers } from "../store/slices/mapping";
 import { getInfoText, setInfoText } from "../store/slices/features";
 import { getAtLeastOneLayerIsQueryable } from "../components/GeoportalMap/utils";
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 
 export const useDispatchSachdatenInfoText = () => {
   const dispatch = useDispatch();
   const layers = useSelector(getLayers);
   const infoText = useSelector(getInfoText);
+  const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
+
+  const leaflelEl = routedMapRef?.leafletMap?.leafletElement;
+  const zoom = leaflelEl?.getZoom();
 
   useEffect(() => {
     if (
@@ -29,7 +34,7 @@ export const useDispatchSachdatenInfoText = () => {
         ),
       );
     } else if (
-      getAtLeastOneLayerIsQueryable(layers) &&
+      getAtLeastOneLayerIsQueryable(layers, zoom) &&
       (infoText ===
         "Die Sachdatenabfrage ist für die ausgewählten Layer nicht verfügbar." ||
         infoText ===
