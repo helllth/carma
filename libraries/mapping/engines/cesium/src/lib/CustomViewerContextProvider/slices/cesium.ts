@@ -14,9 +14,9 @@ export enum VIEWER_TRANSITION_STATE {
 }
 
 const initialState: CesiumState = {
+  isMode2d: false,
   isAnimating: false,
   currentTransition: VIEWER_TRANSITION_STATE.NONE,
-  isMode2d: false,
   homeOffset: null,
   homePosition: null,
   showPrimaryTileset: true,

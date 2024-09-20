@@ -100,8 +100,8 @@ export type SceneStyles = {
 };
 
 export interface CesiumState {
-  isAnimating: boolean;
-  currentTransition: VIEWER_TRANSITION_STATE;
+  isAnimating?: boolean;
+  currentTransition?: VIEWER_TRANSITION_STATE;
   isMode2d: boolean;
   homePosition: null | PlainCartesian3;
   homeOffset: null | PlainCartesian3;

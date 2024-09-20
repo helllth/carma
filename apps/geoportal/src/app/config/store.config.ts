@@ -31,8 +31,6 @@ const homeOffset = {
 };
 
 export const defaultCesiumState: CesiumState = {
-  isAnimating: false,
-  currentTransition: VIEWER_TRANSITION_STATE.NONE,
   isMode2d: true,
   homeOffset: homeOffset,
   homePosition: { x, y, z },
