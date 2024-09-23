@@ -1,6 +1,6 @@
 {
   "name": "@carma/source",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "license": "MIT",
   "scripts": {
     "update-all": "git fetch --all && git rebase origin/dev && git submodule update --init --recursive --remote --checkout --force && nx reset && npm install"
