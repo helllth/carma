@@ -8,7 +8,7 @@ import {
   PolygonHierarchy,
   Viewer,
   Model,
-} from 'cesium';
+} from "cesium";
 
 export const distanceFromZoomLevel = (zoom: number) => {
   return 40000000 / Math.pow(2, zoom);
@@ -17,7 +17,7 @@ export const distanceFromZoomLevel = (zoom: number) => {
 export const getHeadingPitchRangeFromZoom = (
   zoom: number,
   headingDeg = 0,
-  pitchDeg = 60
+  pitchDeg = 60,
 ) => {
   const range = distanceFromZoomLevel(zoom);
   const heading = CMath.toRadians(headingDeg);
@@ -27,7 +27,7 @@ export const getHeadingPitchRangeFromZoom = (
 
 export const getPositionWithHeightAsync = async (
   scene: Scene,
-  position: Cartographic
+  position: Cartographic,
 ) => {
   /*
   const terrainProvider = scene.globe.terrainProvider;
@@ -44,7 +44,7 @@ export const getPositionWithHeightAsync = async (
 };
 
 export const polygonHierarchyFromPolygonCoords = (
-  polygonCoords: number[][][]
+  polygonCoords: number[][][],
 ) => {
   // [positions, hole1, hole2, ...]
   const [positions, ...holes] = polygonCoords;
@@ -53,8 +53,8 @@ export const polygonHierarchyFromPolygonCoords = (
     Cartesian3.fromDegreesArray(positions.flat()),
     holes.map(
       (hole: number[][]) =>
-        new PolygonHierarchy(Cartesian3.fromDegreesArray(hole.flat()))
-    )
+        new PolygonHierarchy(Cartesian3.fromDegreesArray(hole.flat())),
+    ),
   );
   return hierarchy;
 };
@@ -75,47 +75,52 @@ export const invertedPolygonHierarchy = (
     [LON_MAX, LAT_MAX],
     [LON_MAX, LAT_MIN],
     [LON_MIN, LAT_MIN],
-  ]
+  ],
 ) => polygonHierarchyFromPolygonCoords([outerPolygon, polygon]);
 
-
-export const removeCesiumMarker = (viewer: Viewer, markerModel?: Model | null) => {
+export const removeCesiumMarker = (
+  viewer: Viewer,
+  markerModel?: Model | null,
+) => {
   if (markerModel) {
     viewer.scene.primitives.remove(markerModel);
     markerModel = null;
   } else {
-    console.info("no Marker found to remove")
+    console.info("no Marker found to remove");
   }
 
   //removePreRenderListener(viewer);
 };
 
-export function removeGroundPrimitiveById(viewer: Viewer, id: string): boolean {
+export function getGroundPrimitiveById(
+  viewer: Viewer,
+  id: string,
+): GroundPrimitive | null {
   const groundPrimitives = viewer.scene.groundPrimitives;
-  console.log(groundPrimitives)
 
   for (let i = 0; i < groundPrimitives.length; ++i) {
     const primitive = groundPrimitives.get(i);
     if (primitive instanceof GroundPrimitive) {
       // Check if the primitive's geometryInstances has the matching id
-      // needs that   
+      // needs that
       // releaseGeometryInstances: false
       // on the primitive constructor, not other obvious way to get the id of it otherwise.
-
-      console.log("remove",i,primitive);
       if (Array.isArray(primitive.geometryInstances)) {
         for (const instance of primitive.geometryInstances) {
           if (instance.id === id) {
-            groundPrimitives.remove(primitive);
-            return true;
+            return primitive;
           }
         }
       } else if (primitive.geometryInstances?.id === id) {
-        groundPrimitives.remove(primitive);
-        return true;
+        return primitive;
       }
     }
   }
+  return null;
+}
 
+export function removeGroundPrimitiveById(viewer: Viewer, id: string): boolean {
+  const primitive = getGroundPrimitiveById(viewer, id);
+  primitive && viewer.scene.groundPrimitives.remove(primitive);
   return false;
 }

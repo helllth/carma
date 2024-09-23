@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { CesiumTerrainProvider, Color } from "cesium";
+import { CesiumTerrainProvider, ClassificationType, Color } from "cesium";
 import {
   setShowPrimaryTileset,
   setShowSecondaryTileset,
@@ -10,6 +10,10 @@ import {
   CustomViewerContextType,
   useCesiumCustomViewer,
 } from "../../CustomViewerContextProvider/components/CustomViewerContextProvider";
+import {
+  cesiumUtils,
+  INVERTED_SELECTED_POLYGON_ID,
+} from "@carma-mapping/fuzzy-search";
 
 // TODO move combined common setup out of here
 
@@ -35,6 +39,15 @@ const setupPrimaryStyle = ({
     if (imageryLayer) {
       imageryLayer.show = false;
     }
+
+    const invertedSelection = cesiumUtils.getGroundPrimitiveById(
+      viewer,
+      INVERTED_SELECTED_POLYGON_ID,
+    );
+    if (invertedSelection) {
+      invertedSelection.classificationType = ClassificationType.CESIUM_3D_TILE;
+    }
+
     viewer.scene.requestRender();
   })();
 };
@@ -60,10 +73,19 @@ export const setupSecondaryStyle = ({
       imageryLayer.show = true;
       // console.log('Secondary Style Setup: add imagery layer');
       if (viewer.imageryLayers.length === 0) {
-        console.log('Secondary Style Setup: add imagery layer');
+        console.log("Secondary Style Setup: add imagery layer");
         viewer.imageryLayers.add(imageryLayer);
       }
     }
+
+    const invertedSelection = cesiumUtils.getGroundPrimitiveById(
+      viewer,
+      INVERTED_SELECTED_POLYGON_ID,
+    );
+    if (invertedSelection) {
+      invertedSelection.classificationType = ClassificationType.BOTH;
+    }
+
     viewer.scene.requestRender();
     // viewer.scene.globe.show = true;
   })();

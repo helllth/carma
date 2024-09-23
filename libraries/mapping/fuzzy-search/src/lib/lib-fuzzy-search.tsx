@@ -9,7 +9,7 @@ import type { BaseSelectRef } from "rc-select";
 import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
 import IconComp from "react-cismap/commons/Icon";
 
-import carmaHitTrigger, { INVERTED_SELECTED_POLYGON_ID, SELECTED_POLYGON_ID } from "./utils/carmaHitTrigger";
+import { carmaHitTrigger } from "./utils/carmaHitTrigger";
 import {
   generateOptions,
   getGazData,
@@ -27,6 +27,8 @@ import {
   Option,
   GruppedOptions,
   MapConsumer,
+  SELECTED_POLYGON_ID,
+  INVERTED_SELECTED_POLYGON_ID,
 } from "..";
 import { gazDataPrefix, sourcesConfig } from "./config";
 import { stopwords as stopwordsDe } from './config/stopwords.de-de';
