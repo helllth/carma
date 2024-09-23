@@ -5,6 +5,7 @@ import {
   ClassificationType,
   Color,
   ColorGeometryInstanceAttribute,
+  EasingFunction,
   Entity,
   GeometryInstance,
   GroundPrimitive,
@@ -19,6 +20,10 @@ import proj4 from "proj4";
 import { RoutedMap } from "react-cismap";
 
 import { ModelAsset } from "@carma-mapping/cesium-engine";
+import {
+  INVERTED_SELECTED_POLYGON_ID,
+  SELECTED_POLYGON_ID,
+} from "@carma-mapping/fuzzy-search";
 
 import {
   polygonHierarchyFromPolygonCoords,
@@ -32,11 +37,10 @@ import {
 import { PROJ4_CONVERTERS } from "./geo";
 
 import { DEFAULT_SRC_PROJ } from "../config";
+import { addCesiumMarker, removeCesiumMarker } from "./cesium3dMarker";
 
 const proj4ConverterLookup = {};
 const DEFAULT_ZOOM_LEVEL = 16;
-export const SELECTED_POLYGON_ID = "searchgaz-highlight-polygon";
-export const INVERTED_SELECTED_POLYGON_ID = "searchgaz-inverted-polygon";
 
 type Coord = { lat: number; lon: number };
 // type MapType = 'leaflet' | 'cesium';
@@ -77,7 +81,7 @@ const CesiumMapActions = {
         {
           offset: hpr,
           duration: 5,
-          //easingFunction: EasingFunction.SINUSOIDAL_IN,
+          easingFunction: EasingFunction.SINUSOIDAL_IN,
           complete: async () => {
             //console.log('done');
             const pos = await getPositionWithHeightAsync(
@@ -98,7 +102,7 @@ const CesiumMapActions = {
               {
                 offset: hprEnd,
                 duration: 3,
-                //easingFunction: EasingFunction.SINUSOIDAL_OUT
+                easingFunction: EasingFunction.SINUSOIDAL_OUT,
               },
             );
           },
@@ -152,14 +156,15 @@ export type GazetteerOptions = {
   referenceSystemDefinition?: any;
   suppressMarker?: boolean;
   mapActions?: MapActions;
-  marker3dStyle?: ModelAsset;
+  cesiumConfig?: {
+    markerAsset?: ModelAsset;
+  };
 };
 
 const defaultGazetteerOptions = {
   referenceSystem: undefined,
   referenceSystemDefinition: PROJ4_CONVERTERS.CRS25832,
   suppressMarker: false,
-  //marker3dStyle?: ModelAsset
 };
 
 export const carmaHitTrigger = (
@@ -173,8 +178,8 @@ export const carmaHitTrigger = (
     referenceSystemDefinition,
     suppressMarker,
     mapActions = { leaflet: {}, cesium: {} },
-  }: // marker3dStyle,
-  GazetteerOptions = defaultGazetteerOptions,
+    cesiumConfig = {},
+  }: GazetteerOptions = defaultGazetteerOptions,
 ) => {
   if (hit !== undefined && hit.length !== undefined && hit.length > 0) {
     const lAction = (mapActions.leaflet = {
@@ -187,7 +192,7 @@ export const carmaHitTrigger = (
       ...mapActions.cesium,
     } as CesiumMapActions);
 
-    // TODO location evaluation should be handled by app state and forwareded not in this component
+    // TODO location evaluation should be handled by app state and forwarded not in this component
     // const url = getUrlFromSearchParams();
 
     // TODO extend hitobject with parsed and derived data
@@ -230,7 +235,7 @@ export const carmaHitTrigger = (
       if (mapElement instanceof Viewer) {
         const viewer = mapElement;
         // add marker entity to map
-        // removeMarker(viewer);
+        removeCesiumMarker(viewer);
         viewer.entities.removeById(SELECTED_POLYGON_ID);
         //viewer.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
         removeGroundPrimitiveById(viewer, INVERTED_SELECTED_POLYGON_ID);
@@ -285,7 +290,9 @@ export const carmaHitTrigger = (
           //viewer.entities.add(invertedPolygonEntity);
           viewer.flyTo(polygonEntity);
         } else {
-          // marker3dStyle && addMarker(viewer, posHeight, marker3dStyle);
+          cesiumConfig?.markerAsset &&
+            addCesiumMarker(viewer, posHeight, cesiumConfig.markerAsset);
+          console.log("GAZETTEER: [2D3D|CESIUM|CAMERA] look at Marker");
           cAction.lookAt(mapElement.scene, pos, zoom);
         }
       } else if (mapElement instanceof RoutedMap) {

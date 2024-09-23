@@ -55,6 +55,7 @@ import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 
 import versionData from "../../../version.json";
 
+import { MODEL_ASSETS } from "../../config/assets.config.ts";
 import { paramsToObject } from "../../helper/helper.ts";
 import { getBackgroundLayers } from "../../helper/layer.tsx";
 
@@ -359,7 +360,10 @@ export const GeoportalMap = () => {
           <LibFuzzySearch
             gazData={gazData}
             mapRef={routedMapRef}
-            cesiumRef={viewer}
+            cesiumConfig={{
+              viewer,
+              markerAsset: MODEL_ASSETS.Marker
+            }}
             referenceSystem={referenceSystem}
             referenceSystemDefinition={referenceSystemDefinition}
             gazetteerHit={gazetteerHit}

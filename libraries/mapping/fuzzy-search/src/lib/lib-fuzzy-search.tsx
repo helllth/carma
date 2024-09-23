@@ -19,7 +19,8 @@ import {
   removeStopwords,
   getDefaultSearchConfig,
 } from "./utils/fuzzySearchHelper";
-import { removeCesiumMarker, removeGroundPrimitiveById } from "./utils/cesium";
+import { removeGroundPrimitiveById } from "./utils/cesium";
+import { removeCesiumMarker } from "./utils/cesium3dMarker";
 
 import {
   SearchResultItem,
@@ -45,7 +46,6 @@ export function LibFuzzySearch({
   // gazetteerHit,
   // overlayFeature,
   mapRef,
-  cesiumRef,
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
@@ -61,6 +61,7 @@ export function LibFuzzySearch({
     distance: 100,
     threshold: 0.5,
   },
+  cesiumConfig = {}
 }: SearchGazetteerProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
@@ -74,10 +75,11 @@ export function LibFuzzySearch({
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
+  const { viewer, markerAsset } = cesiumConfig
+
   let mapConsumers: MapConsumer[] = [];
   //mapRef && mapConsumers.push(mapRef);
-  cesiumRef && mapConsumers.push(cesiumRef);
-
+  viewer && mapConsumers.push(viewer);
 
   const topicMapGazetteerHitTrigger = (hit) => {
     builtInGazetteerHitTrigger(
@@ -142,9 +144,9 @@ export function LibFuzzySearch({
 
   const handleOnSelect = (option) => {
     setCleanBtnDisable(false);
-    console.log("xxx option", option, mapRef, cesiumRef, mapConsumers);
+    console.info("[SEARCH] selected option", option, mapRef, cesiumConfig, mapConsumers);
     topicMapGazetteerHitTrigger([option.sData]); // TODO remove this after carma gazetteer hit trigger also handles LeafletMaps
-    carmaHitTrigger([option.sData], mapConsumers);
+    carmaHitTrigger([option.sData], mapConsumers, { cesiumConfig });
     if (option.sData.type === "bezirke" || option.sData.type === "quartiere") {
       setGazetteerHit(null);
     } else {
@@ -244,11 +246,10 @@ export function LibFuzzySearch({
       setSearchResult([]);
       setOverlayFeature(null);
       setCleanBtnDisable(true);
-      if (cesiumRef) {
-        removeCesiumMarker(cesiumRef);
-        cesiumRef.entities.removeById(SELECTED_POLYGON_ID);
-        //cesiumRef.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
-        removeGroundPrimitiveById(cesiumRef, INVERTED_SELECTED_POLYGON_ID);
+      if (cesiumConfig.viewer) {
+        removeCesiumMarker(cesiumConfig.viewer);
+        cesiumConfig.viewer.entities.removeById(SELECTED_POLYGON_ID);
+        removeGroundPrimitiveById(cesiumConfig.viewer, INVERTED_SELECTED_POLYGON_ID);
       }
     }
   }
