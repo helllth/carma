@@ -38,13 +38,13 @@ const FeatureInfoBox = () => {
     });
   }
 
-  const featureHeaders = secondaryInfoBoxElements.map((feature) => {
+  const featureHeaders = secondaryInfoBoxElements.map((feature, i) => {
     return (
       <div
         style={{
           width: "340px",
           paddingBottom: 3,
-          paddingLeft: 10,
+          paddingLeft: 10 + i * 10,
           cursor: "pointer",
         }}
         key={"overlapping."}
@@ -85,8 +85,8 @@ const FeatureInfoBox = () => {
           infoText
             ? infoText
             : numOfLayers > 0
-              ? "Auf die Karte klicken um Informationen abzurufen"
-              : "Layer hinzufügen um Informationen abrufen zu können"
+            ? "Auf die Karte klicken um Informationen abzurufen"
+            : "Layer hinzufügen um Informationen abrufen zu können"
         }
         header={
           <div
