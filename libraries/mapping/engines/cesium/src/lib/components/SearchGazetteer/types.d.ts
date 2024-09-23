@@ -1,4 +1,4 @@
-export type StopWords = string[];
+import type {ENDPOINT} from '@carma-mapping/fuzzy-search/';
 
 export type Option = {
   key: string;
@@ -11,22 +11,6 @@ export type OptionItem = {
   label: JSX.Element;
   options: Option[];
 };
-
-export type ENDPOINT =
-  | "adressen"
-  | "aenderungsv"
-  | "bezirke"
-  | "bpklimastandorte"
-  | "bplaene"
-  | "ebikes"
-  | "emob"
-  | "geps"
-  | "geps_reverse"
-  | "kitas"
-  | "prbr"
-  | "no2"
-  | "quartiere"
-  | "pois";
 
 export type SourceConfig = {
   topic: ENDPOINT;

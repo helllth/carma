@@ -1,5 +1,5 @@
 import { stopwords } from "./stopwords.de-de";
-import { ENDPOINT } from "../types.d";
+import { ENDPOINT } from "@carma-mapping/fuzzy-search";
 
 export { stopwords };
 
@@ -19,31 +19,12 @@ const createConfig = (endpoint: ENDPOINT, crs = DEFAULT_PROJ) => ({
 
 // add default endpoints here
 const DEFAULT_GAZ_SOURCES: ENDPOINT[] = [
-  "adressen",
-  "bezirke",
-  "quartiere",
-  "pois",
-  "kitas",
+  ENDPOINT.ADRESSEN,
+  ENDPOINT.BEZIRKE,
+  ENDPOINT.QUARTIERE,
+  ENDPOINT.KITAS,
 ];
 
 export const sourcesConfig = DEFAULT_GAZ_SOURCES.map((endpoint) =>
   createConfig(endpoint),
 );
-
-export const titleMapConfig: Record<ENDPOINT, string> = {
-  pois: "POIS",
-  bpklimastandorte: "Klimastandorte",
-  kitas: "Kitas",
-  bezirke: "Bezirke",
-  quartiere: "Quartiere",
-  adressen: "Adressen",
-  // todo to be confirmed
-  aenderungsv: "Änderungsverfahren",
-  bplaene: "Bebauungs-Pläne",
-  emob: "Elektromobilität",
-  ebikes: "E-Bikes",
-  geps: "GEPS",
-  geps_reverse: "GEPS",
-  prbr: "PR BR",
-  no2: "NO2",
-};

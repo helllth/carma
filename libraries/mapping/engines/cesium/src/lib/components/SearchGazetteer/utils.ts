@@ -1,15 +1,9 @@
-import { titleMapConfig } from "./config";
-import {
-  GazDataItem,
-  SourceConfig,
-  SourceWithPayload,
-  StopWords,
-} from "./types.d";
+import type { GazDataItem, SourceConfig, SourceWithPayload } from "./types.d";
 import { md5FetchText } from "./tools/fetching";
 import { getGazDataFromSources } from "./tools/gazetteerHelper";
-export const titleMap = new Map(Object.entries(titleMapConfig));
 
-export function removeStopwords(text, stopwords: StopWords) {
+
+export function removeStopwords(text, stopwords: string[]) {
   const words = text.split(" ");
   const placeholderWords = words.map((word) => {
     // Check if the word is in the stopwords array (case insensitive)
@@ -22,7 +16,7 @@ export function removeStopwords(text, stopwords: StopWords) {
   return placeholderWords.join(" ");
 }
 
-export function prepareGazData(data, stopwords: StopWords) {
+export function prepareGazData(data, stopwords: string[]) {
   const modifiedData = data.map((item) => {
     const searchData = item?.string;
     const address = {

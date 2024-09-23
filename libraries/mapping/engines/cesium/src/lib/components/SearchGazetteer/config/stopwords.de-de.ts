@@ -1,6 +1,4 @@
-import { StopWords } from "../types.d";
-
-const preps: StopWords = [
+const preps = [
   "am",
   "an",
   "anstatt",
@@ -29,6 +27,6 @@ const preps: StopWords = [
   "zwischen",
 ];
 
-const articles: StopWords = ["der", "die", "das", "den", "dem", "des"];
+const articles = ["der", "die", "das", "den", "dem", "des"];
 
-export const stopwords: StopWords = [...preps, ...articles];
+export const stopwords: string[] = [...preps, ...articles];

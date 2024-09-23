@@ -1,6 +1,7 @@
 import L from "leaflet";
 import type { RefObject } from "react";
 import { Viewer } from "cesium";
+import { stopwords } from './lib/config/stopwords.de-de';
 
 type mapRefType = RefObject<{
   current: { leafletMap: { leafletElement: L.Map } };
@@ -23,6 +24,7 @@ export type SearchGazetteerProps = {
   //crs?: string;
   referenceSystem: any;
   referenceSystemDefinition: any;
+  stopwords?: string[];
   pixelwidth?: number;
   ifShowCategories?: boolean;
   marker3dStyle?: ModelAsset;

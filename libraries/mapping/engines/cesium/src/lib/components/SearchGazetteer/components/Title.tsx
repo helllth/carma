@@ -1,13 +1,13 @@
 import { FC } from "react";
-import { titleMap } from "../utils";
+import { NAMED_CATEGORIES } from '@carma-mapping/fuzzy-search';
 
 interface TitleProps {
   category: string;
 }
 
 const Title: FC<TitleProps> = ({ category }) => {
-  const title = titleMap.get(category) || category;
-  return <span>{title}</span>;
+  const title = NAMED_CATEGORIES[category] || category;
+  return <span>{title as string}</span>;
 };
 
 export default Title;

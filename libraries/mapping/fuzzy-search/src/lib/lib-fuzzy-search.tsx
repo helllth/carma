@@ -4,12 +4,12 @@ import Fuse from "fuse.js";
 import { AutoComplete, Button } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import type { BaseSelectRef } from "rc-select";
 
-import { RoutedMap } from "react-cismap";
 import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
 import IconComp from "react-cismap/commons/Icon";
 
-import type { BaseSelectRef } from "rc-select";
+import carmaHitTrigger, { INVERTED_SELECTED_POLYGON_ID, SELECTED_POLYGON_ID } from "./utils/carmaHitTrigger";
 import {
   generateOptions,
   getGazData,
@@ -17,13 +17,10 @@ import {
   mapDataToSearchResult,
   prepareGazData,
   removeStopwords,
-  stopwords,
-  carmaGazetteerHitTrigger,
   getDefaultSearchConfig,
-  SELECTED_POLYGON_ID,
-  INVERTED_SELECTED_POLYGON_ID,
 } from "./utils/fuzzySearchHelper";
 import { removeCesiumMarker, removeGroundPrimitiveById } from "./utils/cesium";
+
 import {
   SearchResultItem,
   SearchGazetteerProps,
@@ -32,6 +29,8 @@ import {
   MapConsumer,
 } from "..";
 import { gazDataPrefix, sourcesConfig } from "./config";
+import { stopwords as stopwordsDe } from './config/stopwords.de-de';
+
 import "./fuzzy-search.css";
 
 interface FuseWithOption<T> extends Fuse<T> {
@@ -48,6 +47,7 @@ export function LibFuzzySearch({
   setOverlayFeature,
   referenceSystem,
   referenceSystemDefinition,
+  stopwords = stopwordsDe,
   pixelwidth = 300,
   ifShowCategories: standardSearch = false,
   placeholder = "Wohin?",
@@ -142,7 +142,7 @@ export function LibFuzzySearch({
     setCleanBtnDisable(false);
     console.log("xxx option", option, mapRef, cesiumRef, mapConsumers);
     topicMapGazetteerHitTrigger([option.sData]); // TODO remove this after carma gazetteer hit trigger also handles LeafletMaps
-    carmaGazetteerHitTrigger([option.sData], mapConsumers);
+    carmaHitTrigger([option.sData], mapConsumers);
     if (option.sData.type === "bezirke" || option.sData.type === "quartiere") {
       setGazetteerHit(null);
     } else {
