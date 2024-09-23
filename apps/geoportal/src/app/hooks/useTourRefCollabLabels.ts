@@ -1,7 +1,8 @@
+import { useMemo } from "react";
+
 import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
 import { getCollabedHelpComponentConfig } from "@carma-collab/wuppertal/helper-overlay";
 import { geoElements } from "@carma-collab/wuppertal/geoportal";
-import { useMemo } from "react";
 
 export const useTourRefCollabLabels = () => {
   const zoom = useOverlayHelper(

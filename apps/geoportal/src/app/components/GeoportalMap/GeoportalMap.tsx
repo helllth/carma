@@ -1,28 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { paramsToObject } from "../../helper/helper.ts";
-import {
-  getBackgroundLayer,
-  getFocusMode,
-  getLayers,
-  getShowFullscreenButton,
-  getShowHamburgerMenu,
-  getShowLocatorButton,
-  getShowMeasurementButton,
-  setStartDrawing,
-} from "../../store/slices/mapping.ts";
-import {
-  getCollabedHelpComponentConfig,
-  tooltipText,
-} from "@carma-collab/wuppertal/geoportal";
-import versionData from "../../../version.json";
-import { getApplicationVersion } from "@carma-commons/utils";
-import LayerWrapper from "../layers/LayerWrapper.tsx";
-import InfoBoxMeasurement from "../map-measure/InfoBoxMeasurement.jsx";
-import PaleOverlay from "react-cismap/PaleOverlay";
 import { useSearchParams } from "react-router-dom";
-import { getBackgroundLayers } from "../../helper/layer.tsx";
+
+import { Tooltip } from "antd";
 import {
   getUIAllow3d,
   getUIMode,
@@ -36,7 +16,6 @@ import {
   ControlLayout,
   Main,
 } from "@carma-mapping/map-controls-layout";
-import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCompress,
@@ -47,9 +26,20 @@ import {
   faMinus,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import "../leaflet.css";
-import "cesium/Build/Cesium/Widgets/widgets.css";
 
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
+import { ExtraMarker } from "react-cismap/ExtraMarker";
+import PaleOverlay from "react-cismap/PaleOverlay";
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
+import { ProjSingleGeoJson } from "react-cismap/ProjSingleGeoJson";
+import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
+
+import {
+  getCollabedHelpComponentConfig,
+  tooltipText,
+} from "@carma-collab/wuppertal/geoportal";
+import { getApplicationVersion } from "@carma-commons/utils";
 import {
   CustomViewer,
   MapTypeSwitcher,
@@ -62,28 +52,47 @@ import {
   useZoomControls,
 } from "@carma-mapping/cesium-engine";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
-import GazetteerHitDisplay from "react-cismap/GazetteerHitDisplay";
-import { ProjSingleGeoJson } from "react-cismap/ProjSingleGeoJson";
-import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
-import { Tooltip } from "antd";
-import FeatureInfoBox from "../feature-info/FeatureInfoBox.tsx";
-import { ExtraMarker } from "react-cismap/ExtraMarker";
 
+import versionData from "../../../version.json";
+
+import { paramsToObject } from "../../helper/helper.ts";
+import { getBackgroundLayers } from "../../helper/layer.tsx";
+
+import { useDispatchSachdatenInfoText } from "../../hooks/useDispatchSachdatenInfoText.ts";
+import { useGazData } from "../../hooks/useGazData.ts";
+import { useWindowSize } from "../../hooks/useWindowSize.ts";
+import { useTourRefCollabLabels } from "../../hooks/useTourRefCollabLabels.ts";
+import { useFeatureInfoModeCursorStyle } from "../../hooks/useFeatureInfoModeCursorStyle.ts";
+
+import store from "../../store/index.ts";
 import {
   setFeatures,
   setPreferredLayerId,
   setSecondaryInfoBoxElements,
   setSelectedFeature,
 } from "../../store/slices/features.ts";
-import store from "../../store/index.ts";
+import {
+  getBackgroundLayer,
+  getFocusMode,
+  getLayers,
+  getShowFullscreenButton,
+  getShowHamburgerMenu,
+  getShowLocatorButton,
+  getShowMeasurementButton,
+  setStartDrawing,
+} from "../../store/slices/mapping.ts";
+
+import FeatureInfoBox from "../feature-info/FeatureInfoBox.tsx";
+import LayerWrapper from "../layers/LayerWrapper.tsx";
+import InfoBoxMeasurement from "../map-measure/InfoBoxMeasurement.jsx";
+
 import LocateControlComponent from "./controls/LocateControlComponent.tsx";
-import { getUrlPrefix } from "./utils";
-import { useDispatchSachdatenInfoText } from "../../hooks/useDispatchSachdatenInfoText.ts";
+
 import { createCismapLayers, onClickTopicMap } from "./topicmap.utils.ts";
-import { useGazData } from "../../hooks/useGazData.ts";
-import { useWindowSize } from "../../hooks/useWindowSize.ts";
-import { useTourRefCollabLabels } from "../../hooks/useTourRefCollabLabels.ts";
-import { useFeatureInfoModeCursorStyle } from "../../hooks/useFeatureInfoModeCursorStyle.ts";
+import { getUrlPrefix } from "./utils";
+
+import "../leaflet.css";
+import "cesium/Build/Cesium/Widgets/widgets.css";
 
 // TODO: Make transition style configurable with config and cesium library
 const MAPMODE_TRANSITION_DURATION = 1000;
@@ -300,9 +309,8 @@ export const GeoportalMap = () => {
                 ref={tourRefLabels.measurement}
               >
                 <img
-                  src={`${getUrlPrefix()}${
-                    isModeMeasurement ? "measure-active.png" : "measure.png"
-                  }`}
+                  src={`${getUrlPrefix()}${isModeMeasurement ? "measure-active.png" : "measure.png"
+                    }`}
                   alt="Measure"
                   className="w-6"
                 />

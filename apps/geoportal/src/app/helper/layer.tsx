@@ -1,17 +1,6 @@
-import CismapLayer from 'react-cismap/CismapLayer';
 import objectAssign from 'object-assign';
-import type { DefaultLayerConfig, LayerConfig, NamedStyles } from '@carma-apps/portals'
+import CismapLayer from 'react-cismap/CismapLayer';
 import { namedStyles, defaultLayerConfig } from "../config"
-
-/*
-interface backgroundLayersProps {
-  layerString: string;
-  namedMapStyle?: string;
-  config?: any;
-  layerConfig?: LayerConfig;
-}
-*/
-
 interface backgroundLayersProps {
   layerString: string;
   namedMapStyle?: string;

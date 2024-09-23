@@ -1,7 +1,9 @@
 import { useEffect, useContext, useState } from "react";
+
 import type LocateControl from "leaflet.locatecontrol";
+import { control } from "leaflet";
+
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
-import L from "leaflet";
 
 const LocateControlComponent = ({ startLocate = 0 }) => {
   const { routedMapRef } = useContext<typeof TopicMapContext>(
@@ -13,7 +15,7 @@ const LocateControlComponent = ({ startLocate = 0 }) => {
   useEffect(() => {
     if (!locationInstance && routedMapRef) {
       const mapExample = routedMapRef.leafletMap.leafletElement;
-      const lc = (L.control as LocateControl)
+      const lc = (control as LocateControl)
         .locate({
           position: "topright",
           locateOptions: {

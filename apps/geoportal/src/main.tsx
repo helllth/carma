@@ -1,11 +1,13 @@
-import * as ReactDOM from "react-dom/client";
-import App from "./app/App";
+import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import store from "./app/store";
 import { RouterProvider, createHashRouter } from "react-router-dom";
-import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+
 import { suppressReactCismapErrors } from "@carma-commons/utils";
+
+import App from "./app/App";
+import store from "./app/store";
 import { CESIUM_BASE_URL } from "./app/config/app.config";
 
 declare global {
@@ -32,7 +34,7 @@ suppressReactCismapErrors();
 
 window.CESIUM_BASE_URL = CESIUM_BASE_URL;
 
-const root = ReactDOM.createRoot(
+const root = createRoot(
   document.getElementById("root") as HTMLElement,
 );
 root.render(

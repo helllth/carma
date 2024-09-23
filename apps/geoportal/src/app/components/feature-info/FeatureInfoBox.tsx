@@ -1,5 +1,12 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import InfoBox from "react-cismap/topicmaps/InfoBox";
+import { getActionLinksForFeature } from "react-cismap/tools/uiHelper";
 import InfoBoxHeader from "react-cismap/topicmaps/InfoBoxHeader";
+
+import { additionalInfoFactory } from "@carma-collab/wuppertal/geoportal";
+
 import {
   getInfoText,
   getSecondaryInfoBoxElements,
@@ -8,12 +15,9 @@ import {
   setSelectedFeature,
   updateSecondaryInfoBoxElements,
 } from "../../store/slices/features";
-import { useDispatch, useSelector } from "react-redux";
 import { getLayers } from "../../store/slices/mapping";
-import { getActionLinksForFeature } from "react-cismap/tools/uiHelper";
-import { useState } from "react";
-import { additionalInfoFactory } from "@carma-collab/wuppertal/geoportal";
 import { truncateString } from "./featureInfoHelper";
+
 import "../infoBox.css";
 
 const FeatureInfoBox = () => {
@@ -81,8 +85,8 @@ const FeatureInfoBox = () => {
           infoText
             ? infoText
             : numOfLayers > 0
-            ? "Auf die Karte klicken um Informationen abzurufen"
-            : "Layer hinzufügen um Informationen abrufen zu können"
+              ? "Auf die Karte klicken um Informationen abzurufen"
+              : "Layer hinzufügen um Informationen abrufen zu können"
         }
         header={
           <div
