@@ -38,7 +38,6 @@ import { PROJ4_CONVERTERS } from "./geo";
 
 import { DEFAULT_SRC_PROJ } from "../config";
 import { addCesiumMarker, removeCesiumMarker } from "./cesium3dMarker";
-import { Cartographic } from "cesium";
 
 const proj4ConverterLookup = {};
 const DEFAULT_ZOOM_LEVEL = 16;
