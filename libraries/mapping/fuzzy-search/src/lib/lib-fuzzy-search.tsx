@@ -250,6 +250,7 @@ export function LibFuzzySearch({
         removeCesiumMarker(cesiumConfig.viewer);
         cesiumConfig.viewer.entities.removeById(SELECTED_POLYGON_ID);
         removeGroundPrimitiveById(cesiumConfig.viewer, INVERTED_SELECTED_POLYGON_ID);
+        cesiumConfig.viewer.scene.render(); // explicit render for requestRenderMode;
       }
     }
   }

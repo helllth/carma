@@ -237,6 +237,7 @@ export const carmaHitTrigger = (
         viewer.entities.removeById(SELECTED_POLYGON_ID);
         //viewer.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
         removeGroundPrimitiveById(viewer, INVERTED_SELECTED_POLYGON_ID);
+        viewer.scene.render(); // explicit render for requestRenderMode;
         const posHeight = await getPositionWithHeightAsync(
           viewer.scene,
           Cartographic.fromDegrees(pos.lon, pos.lat),
