@@ -125,6 +125,27 @@ export interface MappingState extends LayerState {
   startDrawing: boolean;
 }
 
+export type FeatureInfo = {
+  id: string;
+  properties: {
+    header: string;
+    headerColor: string;
+    title: string;
+    subtitle: string;
+    email?: string;
+    tel?: string;
+    url?: string;
+    genericLinks?: {
+      url: string;
+      tooltip: string;
+      icon: JSX.Element;
+    }[];
+    wmsProps?: {
+      [key: string]: string;
+    };
+  };
+};
+
 export interface FeatureInfoState {
   features: any[];
   selectedFeature: any;
@@ -132,6 +153,6 @@ export interface FeatureInfoState {
   infoText: string;
   preferredLayerId: string;
   vectorInfo: any;
-  vectorInfos: any[];
+  vectorInfos: FeatureInfo[];
   nothingFoundIDs: string[];
 }
