@@ -64,14 +64,7 @@ export const MODEL_ASSETS: Record<string, ModelAsset> = {
     anchorOffset: { z: 0 },
     isCameraFacing: true,
     fixedScale: true,
-  },
-
-  Wind: {
-    uri: `${APP_BASE_PATH}data/glb/game_ready_wind_turbine_animated.glb`,
-    scale: 85,
-    anchorOffset: { z: 0 },
-    hasAnimation: true,
-  },
+  }
 };
 
 export default { MODEL_ASSETS, IMAGE_ASSETS };
