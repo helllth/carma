@@ -53,6 +53,7 @@ interface VectorLayerProps {
   pane: string;
   opacity: number | string;
   selectionEnabled?: boolean;
+  maxSelectionCount?: number;
   onSelectionChanged?: (e: { hits: any[]; hit: any }) => void;
 }
 
@@ -297,6 +298,7 @@ export const createCismapLayers = (
             pane: `additionalLayers${i}`,
             opacity: layer.opacity || 0.7,
             type: "vector",
+            maxSelectionCount: 10,
             selectionEnabled:
               mode === UIMode.FEATURE_INFO && layer.useInFeatureInfo,
             onSelectionChanged: (e) =>
