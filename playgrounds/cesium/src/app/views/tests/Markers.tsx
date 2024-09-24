@@ -31,9 +31,6 @@ function View() {
         { position: [7.202, 51.271, 200], model: GLB.MarkerRotatingCounter },
 
         { position: [7.203, 51.274, 200], model: GLB.MarkerFacing },
-
-        { position: [7.137755, 51.223535, 270], model: GLB.Wind },
-        { position: [7.20028, 51.27174, 155], model: GLB.Wind },
       ]}
     />
   );
