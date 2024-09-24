@@ -7,6 +7,8 @@ import {
   GroundPrimitive,
   PolygonHierarchy,
   Viewer,
+  Model,
+  sampleTerrainMostDetailed,
 } from "cesium";
 
 export const distanceFromZoomLevel = (zoom: number) => {
@@ -28,18 +30,24 @@ export const getPositionWithHeightAsync = async (
   scene: Scene,
   position: Cartographic,
 ) => {
-  /*
   const terrainProvider = scene.globe.terrainProvider;
-  console.log('terrainProvider', terrainProvider);
+  console.log("[CESIUM|TERRAIN] terrainProvider", terrainProvider, position);
   return sampleTerrainMostDetailed(terrainProvider, [position]).then(
-    (updatedPositions) => {
-      return updatedPositions[0];
-    }
+    (updatedPositions: Cartographic[]) => {
+      const cartoPos = updatedPositions[0];
+      if (cartoPos instanceof Cartographic) {
+        console.info("[CESIUM|TERRAIN] sampledTerrain for position", position, cartoPos);
+        return cartoPos;
+      } else {
+        console.warn(
+          "[CESIUM|TERRAIN] could not get elevation for position",
+          position,
+          cartoPos,
+        );
+        return position;
+      }
+    },
   );
-*/
-  const cartesianPosition = Cartographic.toCartesian(position);
-  const clampedPosition = scene.clampToHeight(cartesianPosition);
-  return Cartographic.fromCartesian(clampedPosition);
 };
 
 export const polygonHierarchyFromPolygonCoords = (
@@ -59,8 +67,6 @@ export const polygonHierarchyFromPolygonCoords = (
 };
 
 // WUPPERTAL EXTENT PLUS SOME PADDING
-
-// TODO for lib use make this configurable or find other way to thave inverted polgon spanning globe
 const LAT_PADDING = 8;
 const LON_PADDING = 5;
 const LAT_MIN = 51.16 - LAT_PADDING;
@@ -78,6 +84,20 @@ export const invertedPolygonHierarchy = (
     [LON_MIN, LAT_MIN],
   ],
 ) => polygonHierarchyFromPolygonCoords([outerPolygon, polygon]);
+
+export const removeCesiumMarker = (
+  viewer: Viewer,
+  markerModel?: Model | null,
+) => {
+  if (markerModel) {
+    viewer.scene.primitives.remove(markerModel);
+    markerModel = null;
+  } else {
+    console.info("no Marker found to remove");
+  }
+
+  //removePreRenderListener(viewer);
+};
 
 export function getGroundPrimitiveById(
   viewer: Viewer,

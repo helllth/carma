@@ -76,38 +76,36 @@ const CesiumMapActions = {
       const hpr = getHeadingPitchRangeFromZoom(zoom - 1, 0, -70);
       const range = distanceFromZoomLevel(zoom - 2);
 
-      await scene.camera.flyToBoundingSphere(
-        new BoundingSphere(target, range),
-        {
-          offset: hpr,
-          duration: 5,
-          easingFunction: EasingFunction.SINUSOIDAL_IN,
-          complete: async () => {
-            //console.log('done');
-            const pos = await getPositionWithHeightAsync(
-              scene,
-              Cartographic.fromDegrees(lon, lat),
-            );
+      const onComplete = async () => {
+        //console.log('done');
+        const pos = await getPositionWithHeightAsync(
+          scene,
+          Cartographic.fromDegrees(lon, lat),
+        );
 
-            const targetWithHeight = Cartesian3.fromRadians(
-              pos.longitude,
-              pos.latitude,
-              pos.height,
-            );
+        const targetWithHeight = Cartesian3.fromRadians(
+          pos.longitude,
+          pos.latitude,
+          pos.height,
+        );
 
-            const hprEnd = getHeadingPitchRangeFromZoom(zoom, 0, -45);
+        const hprEnd = getHeadingPitchRangeFromZoom(zoom, 0, -45);
 
-            scene.camera.flyToBoundingSphere(
-              new BoundingSphere(targetWithHeight),
-              {
-                offset: hprEnd,
-                duration: 3,
-                easingFunction: EasingFunction.SINUSOIDAL_OUT,
-              },
-            );
-          },
-        },
-      );
+        scene.camera.flyToBoundingSphere(new BoundingSphere(targetWithHeight), {
+          offset: hprEnd,
+          duration: 3,
+          easingFunction: EasingFunction.SINUSOIDAL_IN_OUT,
+        });
+      };
+
+      //TODO optianal add responsive duration based on distance of target
+
+      scene.camera.flyToBoundingSphere(new BoundingSphere(target, range), {
+        offset: hpr,
+        //duration: 5,
+        easingFunction: EasingFunction.SINUSOIDAL_IN_OUT,
+        //complete: onComplete
+      });
     }
   },
   setZoom: (scene: Scene, zoom: number) => scene && scene.camera.zoomIn(zoom),
