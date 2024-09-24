@@ -110,10 +110,6 @@ export const config = {
           784621.3180330665, 6660622.321170634, 794304.9340539448,
           6666636.959833823,
         ],
-        keywords: [
-          'carmaconf://infoBoxMapping:subtitle: "Berechneter Dauerschallpegel: " + p.value + " Dezibel (A)"',
-          'carmaconf://infoBoxMapping:header: "Straßenverkehrslärm "',
-        ],
       },
       {
         name: "laerm2016:STR_RAST_NGT",
@@ -121,10 +117,6 @@ export const config = {
         pictureBoundingBox: [
           784621.3180330665, 6660622.321170634, 794304.9340539448,
           6666636.959833823,
-        ],
-        keywords: [
-          'carmaconf://infoBoxMapping:subtitle: "Berechneter Dauerschallpegel: " + p.value + " Dezibel (A)"',
-          'carmaconf://infoBoxMapping:header: "Straßenverkehrslärm "',
         ],
       },
       {
@@ -479,14 +471,7 @@ export const topicMapsConfig: Config = {
 const vectorBaseUrl = "https://tiles.cismet.de/";
 
 export const poiCategoryWithKeywords = {
-  keywords: [
-    'carmaconf://infoBoxMapping:title:p.strasse + ", " + p.ort',
-    "carmaconf://infoBoxMapping:subtitle: p.info",
-    "carmaconf://infoBoxMapping:email: p.email",
-    "carmaconf://infoBoxMapping:header:p.geographicidentifier",
-    "carmaconf://infoBoxMapping:url:p.url",
-    "carmaconf://infoBoxMapping:tel:p.telefon",
-  ],
+  keywords: [],
   layers: [
     {
       name: "poi_bahnhoefe",
@@ -497,9 +482,6 @@ export const poiCategoryWithKeywords = {
       keywords: [
         ":vec:",
         "carmaConf://vectorStyle:https://tiles.cismet.de/poi/bahnhofe.style.json",
-        "carmaconf://infoBoxMapping:title:p.strasse + ', ' + p.ort",
-        "carmaconf://infoBoxMapping:subtitle:p.info",
-        "carmaconf://infoBoxMapping:header:p.geographicidentifier",
       ],
     },
     {
@@ -688,9 +670,6 @@ export const poiCategoryWithKeywords = {
       keywords: [
         ":vec:",
         `carmaConf://vectorStyle:${vectorBaseUrl}poi/kirchen.style.json`,
-        "carmaconf://infoBoxMapping:title: p.strasse + ', ' + p.ort",
-        "carmaconf://infoBoxMapping:subtitle: p.info",
-        "carmaconf://infoBoxMapping:header:p.geographicidentifier",
       ],
     },
     {
@@ -1686,9 +1665,6 @@ export const baseConfig = {
         keywords: [
           ":vec:",
           `carmaConf://vectorStyle:${vectorBaseUrl}poi/kirchen.style.json`,
-          "carmaconf://infoBoxMapping:title: p.strasse + ', ' + p.ort",
-          "carmaconf://infoBoxMapping:subtitle: p.info",
-          "carmaconf://infoBoxMapping:header:p.geographicidentifier",
         ],
       },
       {
@@ -2505,12 +2481,6 @@ export const baseConfig = {
       },
       {
         name: "emobil_auto",
-        keywords: [
-          "carmaconf://infoBoxMapping:title:p.betreiber",
-          "carmaconf://infoBoxMapping:subtitle: p.zusatzinfo",
-          "carmaconf://infoBoxMapping:header:p.standort",
-          "carmaconf://infoBoxMapping:modal:'emob'",
-        ],
       },
       {
         name: "carsharing",
