@@ -10,10 +10,13 @@ import type { Layer } from "@carma-mapping/layers";
 
 import {
   addNothingFoundID,
+  addVectorInfo,
   clearNothingFoundIDs,
+  clearVectorInfos,
   getNothingFoundIDs,
   getPreferredLayerId,
   getVectorInfo,
+  getVectorInfos,
   removeNothingFoundID,
   setFeatures,
   setInfoText,
@@ -91,7 +94,7 @@ export const onClickTopicMap = async (
       setTimeout(() => {}, 100);
     }
 
-    const vectorInfo = getVectorInfo(store.getState());
+    const vectorInfos = getVectorInfos(store.getState());
     const nothingFoundIDs = getNothingFoundIDs(store.getState());
     const preferredLayerId = getPreferredLayerId(store.getState());
     dispatch(setSecondaryInfoBoxElements([]));
@@ -112,7 +115,7 @@ export const onClickTopicMap = async (
 
     if (
       queryableLayers[queryableLayers.length - 1].layerType !== "vector" ||
-      !vectorInfo ||
+      vectorInfos.length === 0 ||
       vectorLayers.length === nothingFoundIDs.length
     ) {
       setPos([e.latlng.lat, e.latlng.lng]);
@@ -123,17 +126,16 @@ export const onClickTopicMap = async (
     if (queryableLayers && pos[0] && pos[1]) {
       const result = await Promise.all(
         queryableLayers.map(async (testLayer) => {
-          if (
-            testLayer.layerType === "vector" &&
-            (testLayer.id !== vectorInfo?.id ||
-              nothingFoundIDs.includes(testLayer.id))
-          ) {
+          const vectorInfoIndex = vectorInfos.findIndex(
+            (vi) => vi.id === testLayer.id,
+          );
+          if (testLayer.layerType === "vector" && vectorInfoIndex === -1) {
             return undefined;
           } else if (
             testLayer.layerType === "vector" &&
-            testLayer.id === vectorInfo.id
+            vectorInfoIndex !== -1
           ) {
-            return vectorInfo;
+            return vectorInfos[vectorInfoIndex];
           }
 
           const feature = await getFeatureForLayer(testLayer, pos);
@@ -181,6 +183,13 @@ export const onClickTopicMap = async (
   }
 };
 
+const checkIfLayerIsFirst = (layer: Layer, layers: Layer[]) => {
+  const firstVectorLayerIndex = layers.findIndex(
+    (l) => l.layerType === "vector",
+  );
+  return layers.findIndex((l) => l.id === layer.id) === firstVectorLayerIndex;
+};
+
 const onSelectionChangedVector = (
   e: {
     hits: any[];
@@ -188,6 +197,9 @@ const onSelectionChangedVector = (
   },
   { layer, layers, dispatch, setPos, zoom },
 ) => {
+  if (checkIfLayerIsFirst(layer, layers)) {
+    dispatch(clearVectorInfos());
+  }
   if (e.hits && layer.queryable) {
     const selectedVectorFeature = e.hits[0];
     const vectorPos = proj4(
@@ -236,6 +248,7 @@ const onSelectionChangedVector = (
         id: layer.id,
       };
 
+      dispatch(addVectorInfo(feature));
       dispatch(setVectorInfo(feature));
       dispatch(removeNothingFoundID(layer.id));
 
