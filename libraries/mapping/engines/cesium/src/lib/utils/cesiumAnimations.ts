@@ -75,6 +75,8 @@ export function animateInterpolateHeadingPitchRange(
 
     // Update the camera's orientation
     viewer.camera.lookAt(destination, orientation);
+    // explicit render call due to cesium request render mode.
+    viewer.scene.render();
 
     if (t < 1) {
       requestAnimationFrame(animate);
