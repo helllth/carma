@@ -31,6 +31,7 @@ export type SearchGazetteerProps = {
   cesiumConfig?: {
     viewer?: Viewer;
     markerAsset?: ModelAsset;
+    isPrimaryStyle: boolean;
   }
 };
 

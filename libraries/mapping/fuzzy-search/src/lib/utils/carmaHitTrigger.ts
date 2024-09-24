@@ -156,6 +156,7 @@ export type GazetteerOptions = {
   mapActions?: MapActions;
   cesiumConfig?: {
     markerAsset?: ModelAsset;
+    isPrimaryStyle : boolean;
   };
 };
 
@@ -176,7 +177,7 @@ export const carmaHitTrigger = (
     referenceSystemDefinition,
     suppressMarker,
     mapActions = { leaflet: {}, cesium: {} },
-    cesiumConfig = {},
+    cesiumConfig = {isPrimaryStyle: false},
   }: GazetteerOptions = defaultGazetteerOptions,
 ) => {
   if (hit !== undefined && hit.length !== undefined && hit.length > 0) {
@@ -279,8 +280,7 @@ export const carmaHitTrigger = (
             geometryInstances: invertedGeometryInstance,
             allowPicking: false,
             releaseGeometryInstances: false, // needed to get ID
-            // TODO: add forwarding of TYPE by Map Style / Or have a Groundprimitives per style
-            classificationType: ClassificationType.CESIUM_3D_TILE,
+            classificationType: cesiumConfig.isPrimaryStyle ? ClassificationType.CESIUM_3D_TILE : ClassificationType.BOTH,
           });
 
           viewer.scene.groundPrimitives.add(invertedGroundPrimitive);

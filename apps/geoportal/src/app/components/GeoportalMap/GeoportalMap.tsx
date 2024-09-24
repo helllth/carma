@@ -50,6 +50,7 @@ import {
   useViewerIsMode2d,
   useSceneStyleToggle,
   useZoomControls,
+  useShowPrimaryTileset,
 } from "@carma-mapping/cesium-engine";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 
@@ -123,6 +124,7 @@ export const GeoportalMap = () => {
   const homeControl = useHomeControl();
   const { handleZoomIn, handleZoomOut } = useZoomControls();
   const toggleSceneStyle = useSceneStyleToggle();
+  const showPrimaryTileset = useShowPrimaryTileset();
 
   const {
     routedMapRef,
@@ -362,7 +364,8 @@ export const GeoportalMap = () => {
             mapRef={routedMapRef}
             cesiumConfig={{
               viewer,
-              markerAsset: MODEL_ASSETS.Marker
+              markerAsset: MODEL_ASSETS.Marker,
+              isPrimaryStyle: showPrimaryTileset
             }}
             referenceSystem={referenceSystem}
             referenceSystemDefinition={referenceSystemDefinition}

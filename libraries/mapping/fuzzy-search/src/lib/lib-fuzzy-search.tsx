@@ -3,7 +3,7 @@ import type { IFuseOptions } from "fuse.js";
 import Fuse from "fuse.js";
 import { AutoComplete, Button } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faL, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import type { BaseSelectRef } from "rc-select";
 
 import { builtInGazetteerHitTrigger } from "react-cismap/tools/gazetteerHelper";
@@ -61,7 +61,7 @@ export function LibFuzzySearch({
     distance: 100,
     threshold: 0.5,
   },
-  cesiumConfig = {}
+  cesiumConfig = { isPrimaryStyle: false }
 }: SearchGazetteerProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
@@ -75,7 +75,7 @@ export function LibFuzzySearch({
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
-  const { viewer, markerAsset } = cesiumConfig
+  const { viewer, markerAsset, isPrimaryStyle } = cesiumConfig
 
   let mapConsumers: MapConsumer[] = [];
   //mapRef && mapConsumers.push(mapRef);
