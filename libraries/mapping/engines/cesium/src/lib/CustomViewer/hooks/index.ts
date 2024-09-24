@@ -35,21 +35,15 @@ export const useLogCesiumRenderIn2D = () => {
   const isAnimating = useViewerIsAnimating();
   const transition = useViewerCurrentTransition();
 
-  const isMode2dRef = useRef(isMode2d);
-  const transitionRef = useRef(transition);
-  const isAnimatingRef = useRef(isAnimating);
-
   useEffect(() => {
     if (!viewer) return;
-
     const logRender = () => {
-      if (isMode2dRef.current) {
+      if (isMode2d) {
         console.info(
           "[CESIUM|2D3D] Cesium got rendered while in 2D mode",
-          isAnimatingRef.current,
-          transitionRef.current,
+          isAnimating,
+          transition,
           isMode2d,
-          isMode2dRef.current,
         );
       }
     };
@@ -62,7 +56,7 @@ export const useLogCesiumRenderIn2D = () => {
     return () => {
       viewer.scene.postRender.removeEventListener(logRender);
     };
-  }, [viewer]);
+  }, [viewer, isMode2d, isAnimating, transition]);
 };
 
 export const useInitializeViewer = (

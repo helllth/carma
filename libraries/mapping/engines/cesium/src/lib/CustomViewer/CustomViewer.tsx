@@ -90,7 +90,7 @@ const OFFSCREEN_RESOLUTION_SCALE = 1 / 64;
 export const TRANSITION_DELAY = 1000;
 
 function CustomViewer(props: CustomViewerProps) {
-  const { setViewer, imageryLayer } = useCesiumCustomViewer();
+  const { viewer, setViewer, imageryLayer } = useCesiumCustomViewer();
   const dispatch = useDispatch();
   const home = useViewerHome();
   const homeOffset = useViewerHomeOffset();
@@ -125,8 +125,6 @@ function CustomViewer(props: CustomViewerProps) {
   const setCollisions = (v: boolean) => dispatch(setScreenSpaceCameraControllerEnableCollisionDetection(v));
 
 
-
-  const [viewer, setComponentStateViewer] = useState<Viewer | null>(null);
   const previousViewerRef = useRef<Viewer | null>(null); // track viewer changes
   const previousIsMode2d = useRef<boolean | null>(null);
   const previousIsSecondaryStyle = useRef<boolean | null>(null);
@@ -330,11 +328,11 @@ function CustomViewer(props: CustomViewerProps) {
   useTransitionTimeout();
   useDisableSSCC();
 
+  /*
   useEffect(() => {
     if (!viewer) return;
     console.log("[CESIUM] HOOK Track user focus")
 
-    /*
     const canvas = viewer.canvas;
 
     // Ensure the canvas can receive focus
@@ -361,23 +359,13 @@ function CustomViewer(props: CustomViewerProps) {
       canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mousemove", handleMouseDown);
     };
-    */
   }, [viewer]);
+  */
 
 
-  //const viewerRef = useCesiumCustomViewer();
-
-  /*
-  const viewerCallback = useCallback((node) => {
-    if (node !== null) {
-      setComponentStateViewer(node.cesiumElement);
-      //setViewer && setViewer(node.cesiumElement);
-    }
-  }, [viewerRef]);
-*/
   const viewerRef = useCallback((node) => {
     if (node !== null) {
-      setComponentStateViewer(node.cesiumElement);
+      //setComponentStateViewer(node.cesiumElement);
       setViewer && setViewer(node.cesiumElement);
     }
   }, []);

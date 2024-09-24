@@ -151,7 +151,6 @@ export const cameraToCartographicDegrees = (camera: Camera) => {
     latitude: CeMath.toDegrees(latitude),
     longitude: CeMath.toDegrees(longitude),
     height,
-    heightApprox: height - EARTH_RADIUS,
   };
 };
 
@@ -737,7 +736,7 @@ export const cesiumCenterPixelSizeToLeafletZoom = (
 export const leafletToCesium = (
   viewer: Viewer,
   leaflet: LeafletMap,
-  { cause, onComplete }: { cause?: string, onComplete?: Function } = {},
+  { cause, onComplete }: { cause?: string; onComplete?: Function } = {},
 ) => {
   const { lat, lng } = leaflet.getCenter();
   const zoom = leaflet.getZoom();
@@ -752,7 +751,12 @@ export const leafletToCesiumCamera = (
     limit = 5,
     cause = "not specified",
     onComplete,
-  }: { epsilon?: number; limit?: number; cause?: string; onComplete?: Function } = {},
+  }: {
+    epsilon?: number;
+    limit?: number;
+    cause?: string;
+    onComplete?: Function;
+  } = {},
 ) => {
   const lngRad = CeMath.toRadians(lng);
   const latRad = CeMath.toRadians(lat);
