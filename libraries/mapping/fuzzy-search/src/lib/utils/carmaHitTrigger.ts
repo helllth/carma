@@ -38,6 +38,7 @@ import { PROJ4_CONVERTERS } from "./geo";
 
 import { DEFAULT_SRC_PROJ } from "../config";
 import { addCesiumMarker, removeCesiumMarker } from "./cesium3dMarker";
+import { Cartographic } from "cesium";
 
 const proj4ConverterLookup = {};
 const DEFAULT_ZOOM_LEVEL = 16;
@@ -50,7 +51,7 @@ type LeafletMapActions = {
   fitBounds: (map: L.Map, bounds: L.LatLngBoundsExpression) => void;
 };
 type CesiumMapActions = {
-  lookAt: (scene: Scene, { lat, lon }: Coord, zoom: number) => void;
+  lookAt: (scene: Scene, pos: Cartographic, zoom: number) => void;
   setZoom: (scene: Scene, zoom: number) => void;
   fitBoundingSphere: (scene: Scene, bounds: BoundingSphere) => void;
 };
@@ -70,41 +71,28 @@ const LeafletMapActions = {
 };
 
 const CesiumMapActions = {
-  lookAt: async (scene: Scene, { lat, lon }: Coord, zoom: number) => {
+  lookAt: async (
+    scene: Scene,
+    { longitude, latitude, height }: Cartographic,
+    zoom: number,
+  ) => {
     if (scene) {
-      const target = Cartesian3.fromDegrees(lon, lat, 150);
+      const center = Cartesian3.fromRadians(longitude, latitude, height);
       const hpr = getHeadingPitchRangeFromZoom(zoom - 1, 0, -70);
       const range = distanceFromZoomLevel(zoom - 2);
 
-      const onComplete = async () => {
-        //console.log('done');
-        const pos = await getPositionWithHeightAsync(
-          scene,
-          Cartographic.fromDegrees(lon, lat),
-        );
+      //TODO optional add responsive duration based on distance of target
 
-        const targetWithHeight = Cartesian3.fromRadians(
-          pos.longitude,
-          pos.latitude,
-          pos.height,
-        );
-
-        const hprEnd = getHeadingPitchRangeFromZoom(zoom, 0, -45);
-
-        scene.camera.flyToBoundingSphere(new BoundingSphere(targetWithHeight), {
-          offset: hprEnd,
-          duration: 3,
-          easingFunction: EasingFunction.SINUSOIDAL_IN_OUT,
-        });
-      };
-
-      //TODO optianal add responsive duration based on distance of target
-
-      scene.camera.flyToBoundingSphere(new BoundingSphere(target, range), {
+      scene.camera.flyToBoundingSphere(new BoundingSphere(center, range), {
         offset: hpr,
         //duration: 5,
         easingFunction: EasingFunction.SINUSOIDAL_IN_OUT,
-        //complete: onComplete
+        complete: () => {
+          console.info(
+            "[CESIUM|ANIMATION] FlytoBoundingSphere Complete",
+            center,
+          );
+        },
       });
     }
   },
@@ -156,7 +144,7 @@ export type GazetteerOptions = {
   mapActions?: MapActions;
   cesiumConfig?: {
     markerAsset?: ModelAsset;
-    isPrimaryStyle : boolean;
+    isPrimaryStyle: boolean;
   };
 };
 
@@ -177,7 +165,7 @@ export const carmaHitTrigger = (
     referenceSystemDefinition,
     suppressMarker,
     mapActions = { leaflet: {}, cesium: {} },
-    cesiumConfig = {isPrimaryStyle: false},
+    cesiumConfig = { isPrimaryStyle: false },
   }: GazetteerOptions = defaultGazetteerOptions,
 ) => {
   if (hit !== undefined && hit.length !== undefined && hit.length > 0) {
@@ -280,7 +268,9 @@ export const carmaHitTrigger = (
             geometryInstances: invertedGeometryInstance,
             allowPicking: false,
             releaseGeometryInstances: false, // needed to get ID
-            classificationType: cesiumConfig.isPrimaryStyle ? ClassificationType.CESIUM_3D_TILE : ClassificationType.BOTH,
+            classificationType: cesiumConfig.isPrimaryStyle
+              ? ClassificationType.CESIUM_3D_TILE
+              : ClassificationType.BOTH,
           });
 
           viewer.scene.groundPrimitives.add(invertedGroundPrimitive);
@@ -292,7 +282,7 @@ export const carmaHitTrigger = (
           cesiumConfig?.markerAsset &&
             addCesiumMarker(viewer, posHeight, cesiumConfig.markerAsset);
           console.log("GAZETTEER: [2D3D|CESIUM|CAMERA] look at Marker");
-          cAction.lookAt(mapElement.scene, pos, zoom);
+          cAction.lookAt(mapElement.scene, posHeight, zoom);
         }
       } else if (mapElement instanceof RoutedMap) {
         console.log("xxx mapElement", mapElement, "not implemented");
