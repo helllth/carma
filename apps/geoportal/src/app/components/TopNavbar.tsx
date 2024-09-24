@@ -77,11 +77,9 @@ const TopNavbar = () => {
   const handleToggleTour = () => {
     dispatch(toggleUIMode(UIMode.TOUR));
   };
-
   const menuTourRef = useOverlayHelper(
     getCollabedHelpElementsConfig("MENULEISTE", geoElements),
   );
-
   const hintergrundTourRef = useOverlayHelper(
     getCollabedHelpElementsConfig("HINTERGRUND", geoElements),
   );
