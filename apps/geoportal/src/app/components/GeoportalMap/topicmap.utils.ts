@@ -200,62 +200,61 @@ const onSelectionChangedVector = (
     dispatch(clearVectorInfos());
   }
   if (e.hits && layer.queryable) {
-    const allSelections = e.hits.slice(0, e.hits.length / 2);
-    for (const selectedVectorFeature of allSelections) {
-      const vectorPos = proj4(
-        proj4.defs("EPSG:4326") as unknown as string,
-        proj4crs25832def,
-        selectedVectorFeature.geometry.coordinates,
-      );
-      const minimalBoxSize = 1;
-      const featureInfoBaseUrl = layer.other.service.url;
-      const layerName = layer.other.name;
+    const selectedVectorFeature = e.hits[0];
 
-      const imgUrl =
-        featureInfoBaseUrl +
-        `?&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
-        `${vectorPos[0] - minimalBoxSize},` +
-        `${vectorPos[1] - minimalBoxSize},` +
-        `${vectorPos[0] + minimalBoxSize},` +
-        `${vectorPos[1] + minimalBoxSize}` +
-        `&WIDTH=10&HEIGHT=10&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layerName}&STYLES=default&QUERY_LAYERS=${layerName}&INFO_FORMAT=text/html&X=5&Y=5`;
+    const vectorPos = proj4(
+      proj4.defs("EPSG:4326") as unknown as string,
+      proj4crs25832def,
+      selectedVectorFeature.geometry.coordinates,
+    );
+    const minimalBoxSize = 1;
+    const featureInfoBaseUrl = layer.other.service.url;
+    const layerName = layer.other.name;
 
-      const properties = selectedVectorFeature.properties;
-      let result = "";
-      layer.other.keywords.forEach((keyword) => {
-        const extracted = keyword.split("carmaconf://infoBoxMapping:")[1];
-        if (extracted) {
-          result += extracted + "\n";
-        }
-      });
+    const imgUrl =
+      featureInfoBaseUrl +
+      `?&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=` +
+      `${vectorPos[0] - minimalBoxSize},` +
+      `${vectorPos[1] - minimalBoxSize},` +
+      `${vectorPos[0] + minimalBoxSize},` +
+      `${vectorPos[1] + minimalBoxSize}` +
+      `&WIDTH=10&HEIGHT=10&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&FEATURE_COUNT=99&LAYERS=${layerName}&STYLES=default&QUERY_LAYERS=${layerName}&INFO_FORMAT=text/html&X=5&Y=5`;
 
-      if (result) {
-        const featureProperties = result.includes("function")
-          ? functionToFeature(properties, result)
-          : objectToFeature(properties, result);
+    const properties = selectedVectorFeature.properties;
+    let result = "";
+    layer.other.keywords.forEach((keyword) => {
+      const extracted = keyword.split("carmaconf://infoBoxMapping:")[1];
+      if (extracted) {
+        result += extracted + "\n";
+      }
+    });
 
-        const feature = {
-          properties: {
-            ...featureProperties.properties,
-            genericLinks: [
-              {
-                url: imgUrl,
-                tooltip: "Alte Sachdatenabfrage",
-                icon: createElement(FeatureInfoIcon),
-              },
-            ],
-          },
-          id: layer.id,
-        };
+    if (result) {
+      const featureProperties = result.includes("function")
+        ? functionToFeature(properties, result)
+        : objectToFeature(properties, result);
 
-        dispatch(addVectorInfo(feature));
-        dispatch(removeNothingFoundID(layer.id));
+      const feature = {
+        properties: {
+          ...featureProperties.properties,
+          genericLinks: [
+            {
+              url: imgUrl,
+              tooltip: "Alte Sachdatenabfrage",
+              icon: createElement(FeatureInfoIcon),
+            },
+          ],
+        },
+        id: layer.id,
+      };
 
-        const queryableLayers = getQueryableLayers(layers, zoom);
+      dispatch(addVectorInfo(feature));
+      dispatch(removeNothingFoundID(layer.id));
 
-        if (layer.id === queryableLayers[queryableLayers.length - 1]?.id) {
-          setPos(null);
-        }
+      const queryableLayers = getQueryableLayers(layers, zoom);
+
+      if (layer.id === queryableLayers[queryableLayers.length - 1]?.id) {
+        setPos(null);
       }
     }
   } else {
@@ -309,7 +308,6 @@ export const createCismapLayers = (
             pane: `additionalLayers${i}`,
             opacity: layer.opacity || 0.7,
             type: "vector",
-            maxSelectionCount: 10,
             selectionEnabled:
               mode === UIMode.FEATURE_INFO && layer.useInFeatureInfo,
             onSelectionChanged: (e) =>
