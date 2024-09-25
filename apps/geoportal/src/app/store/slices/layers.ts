@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "..";
-import { Layer } from "@carma-mapping/layers";
+import { Item } from "@carma-mapping/layers";
 
 export type LayersState = {
   thumbnails: any[];
-  favorites: { id: string }[];
+  favorites: Item[];
 };
 
 const initialState: LayersState = {
@@ -25,7 +25,7 @@ const slice = createSlice({
       }
       return state;
     },
-    addFavorite(state, action) {
+    addFavorite(state, action: PayloadAction<Item>) {
       const alreadyExists = state.favorites.some(
         (favorite) => favorite.id === action.payload.id,
       );
@@ -34,7 +34,7 @@ const slice = createSlice({
       }
       return state;
     },
-    removeFavorite(state, action) {
+    removeFavorite(state, action: PayloadAction<Item>) {
       const newFavorites = state.favorites.filter(
         (favorite) => favorite.id !== action.payload.id,
       );
