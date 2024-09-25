@@ -38,6 +38,9 @@ export interface LibModalProps {
   setAdditionalLayers: any;
   setThumbnail: any;
   thumbnails: any;
+  favorites: { id: string }[];
+  addFavorite: ({ id }: { id: string }) => void;
+  removeFavorite: ({ id }: { id: string }) => void;
   activeLayers: any[];
   customCategories?: LayerCategories[];
 }
@@ -50,6 +53,9 @@ export const LibModal = ({
   setThumbnail,
   activeLayers,
   customCategories,
+  addFavorite,
+  removeFavorite,
+  favorites,
 }: LibModalProps) => {
   const [layers, setLayers] = useState<any[]>([]);
   const [allLayers, setAllLayers] = useState<any[]>([]);
@@ -393,6 +399,9 @@ export const LibModal = ({
                             thumbnails={thumbnails}
                             setThumbnail={setThumbnail}
                             activeLayers={activeLayers}
+                            favorites={favorites}
+                            addFavorite={addFavorite}
+                            removeFavorite={removeFavorite}
                             key={`${category.Title}_layer_${i}_${layer.id}`}
                           />
                         ))}

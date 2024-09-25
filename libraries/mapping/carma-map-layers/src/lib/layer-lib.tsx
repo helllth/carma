@@ -1,5 +1,5 @@
-import {LibModal} from '../components/LibModal';
-import type { LibModalProps } from '../components/LibModal';
+import { LibModal } from "../components/LibModal";
+import type { LibModalProps } from "../components/LibModal";
 
 /* eslint-disable-next-line */
 
@@ -11,6 +11,9 @@ export function LayerLib({
   setThumbnail,
   activeLayers,
   customCategories,
+  addFavorite,
+  removeFavorite,
+  favorites,
 }: LibModalProps) {
   return (
     <LibModal
@@ -21,6 +24,9 @@ export function LayerLib({
       setThumbnail={setThumbnail}
       activeLayers={activeLayers}
       customCategories={customCategories}
+      addFavorite={addFavorite}
+      removeFavorite={removeFavorite}
+      favorites={favorites}
     />
   );
 }

@@ -16,7 +16,13 @@ import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import { LayerLib, Item, Layer } from "@carma-mapping/layers";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getThumbnails, setThumbnail } from "../store/slices/layers";
+import {
+  addFavorite,
+  getFavorites,
+  getThumbnails,
+  removeFavorite,
+  setThumbnail,
+} from "../store/slices/layers";
 import {
   appendLayer,
   appendSavedLayerConfig,
@@ -64,6 +70,7 @@ const TopNavbar = () => {
   const layerState = useSelector(getLayerState);
   const dispatch = useDispatch();
   const thumbnails = useSelector(getThumbnails);
+  const favorites = useSelector(getFavorites);
   const activeLayers = useSelector(getLayers);
   const showLayerButtons = useSelector(getUIShowLayerButtons);
   const focusMode = useSelector(getFocusMode);
@@ -244,6 +251,13 @@ const TopNavbar = () => {
           dispatch(setThumbnail(thumbnail));
         }}
         thumbnails={thumbnails}
+        favorites={favorites}
+        addFavorite={(layer) => {
+          dispatch(addFavorite(layer));
+        }}
+        removeFavorite={(layer) => {
+          dispatch(removeFavorite(layer));
+        }}
         activeLayers={activeLayers}
         customCategories={[
           {
