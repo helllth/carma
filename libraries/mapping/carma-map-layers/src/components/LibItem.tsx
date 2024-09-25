@@ -25,9 +25,9 @@ interface LayerItemProps {
   thumbnails: any;
   setThumbnail: any;
   activeLayers: Item[];
-  favorites: { id: string }[];
-  addFavorite: ({ id }: { id: string }) => void;
-  removeFavorite: ({ id }: { id: string }) => void;
+  favorites: Item[];
+  addFavorite: (layer: Item) => void;
+  removeFavorite: (layer: Item) => void;
 }
 
 const LibItem = ({
@@ -42,11 +42,11 @@ const LibItem = ({
 }: LayerItemProps) => {
   const [hovered, setHovered] = useState(false);
   const [isActiveLayer, setIsActiveLayer] = useState(false);
+  const isFavorite = favorites.some((favorite) => favorite.id === layer.id);
   const [thumbUrl, setThumbUrl] = useState("");
   const [collectionImages, setCollectionImages] = useState<string[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [forceWMS, setForceWMS] = useState(false);
-  const isFavorite = favorites.some((favorite) => favorite.id === layer.id);
   const title = layer.title;
   const description = layer.description;
   const keywords = layer.keywords;
@@ -289,13 +289,17 @@ const LibItem = ({
           <FontAwesomeIcon
             className="absolute right-1 top-1 text-3xl text-yellow-200 cursor-pointer z-50"
             icon={faStar}
-            onClick={() => removeFavorite({ id: layer.id })}
+            onClick={() => {
+              removeFavorite(layer);
+            }}
           />
         ) : (
           <FontAwesomeIcon
             className="absolute right-1 top-1 text-3xl cursor-pointer z-50 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
             icon={regularFaStar}
-            onClick={() => addFavorite({ id: layer.id })}
+            onClick={() => {
+              addFavorite(layer);
+            }}
           />
           // <StarOutlined className="absolute right-1 top-1 text-3xl text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.9)]" />
         )}
