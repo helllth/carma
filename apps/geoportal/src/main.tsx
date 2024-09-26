@@ -18,29 +18,31 @@ declare global {
 
 const persistor = persistStore(store);
 
-const createRouter = () =>
-  createHashRouter([
-    {
-      path: "/",
-      element: <App />,
-    },
-    {
-      path: "/publish",
-      element: <App published={true} />,
-    },
-  ]);
-
 suppressReactCismapErrors();
 
 window.CESIUM_BASE_URL = CESIUM_BASE_URL;
 
+console.info("RENDER: [GEOPORTAL] ROOT");
+
 const root = createRoot(
   document.getElementById("root") as HTMLElement,
 );
+
+
+
 root.render(
   <PersistGate loading={null} persistor={persistor}>
     <Provider store={store}>
-      <RouterProvider router={createRouter()} />
+      <RouterProvider router={createHashRouter([
+        {
+          path: "/",
+          element: <App />,
+        },
+        {
+          path: "/publish",
+          element: <App published={true} />,
+        },
+      ])} />
     </Provider>
   </PersistGate>,
 );

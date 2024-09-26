@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import LZString from "lz-string";
 import { ErrorBoundary } from "react-error-boundary";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 // 1st party Modules
 import { CrossTabCommunicationContextProvider } from "react-cismap/contexts/CrossTabCommunicationContextProvider";
@@ -74,6 +74,13 @@ function App({ published }: { published?: boolean }) {
   const allowUiChanges = useSelector(getUIAllowChanges);
   const dispatch = useDispatch();
   const mode = useSelector(getUIMode);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(" [GEOPORTAL|ROUTER] App Route changed to:", location.pathname);
+  }, [location]);
+
   const [windowWidth, windowHeight] = useWindowSize();
   const toolbarHeight = 50; //todo: better with useComponentSize(refToolbar)
   const mapWidth = windowWidth;
@@ -169,6 +176,8 @@ function App({ published }: { published?: boolean }) {
       </TopicMapContextProvider>
     </OverlayTourProvider>
   );
+
+  console.info("RENDER: [GEOPORTAL] APP");
 
   return syncToken ? (
     <CrossTabCommunicationContextProvider role="sync" token={syncToken}>

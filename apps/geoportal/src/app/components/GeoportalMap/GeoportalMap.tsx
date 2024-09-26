@@ -214,6 +214,8 @@ export const GeoportalMap = ({ width, height }) => {
 
   // TODO Move out Controls to own component
 
+  console.info("RENDER: [GEOPORTAL] MAP");
+
   return (
     <ControlLayout
       height={height}
