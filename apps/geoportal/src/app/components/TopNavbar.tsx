@@ -264,6 +264,10 @@ const TopNavbar = () => {
             Title: "Meine Zusammenstellungen",
             layers: savedLayerConfigs,
           },
+          {
+            Title: "Favoriten",
+            layers: favorites,
+          },
         ]}
       />
 
