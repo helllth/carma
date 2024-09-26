@@ -517,7 +517,7 @@ function CustomViewer(props: CustomViewerProps) {
     enableLocationHashUpdate,
   ]);
 
-  console.log("RENDER: CustomViewer");
+  console.info("RENDER: [CESIUM] CustomViewer");
 
   return (
     <ResiumViewer

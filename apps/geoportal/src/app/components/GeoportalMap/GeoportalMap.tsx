@@ -207,6 +207,8 @@ export const GeoportalMap = () => {
 
   // TODO Move out Controls to own component
 
+  console.info("RENDER: [GEOPORTAL] MAP");
+
   return (
     <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
       <Control position="topleft" order={10}>
