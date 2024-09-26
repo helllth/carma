@@ -1,29 +1,29 @@
 // Built-in Modules
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 // 3rd party Modules
-import LZString from 'lz-string';
-import { ErrorBoundary } from 'react-error-boundary';
-import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+import LZString from "lz-string";
+import { ErrorBoundary } from "react-error-boundary";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 // 1st party Modules
-import { CrossTabCommunicationContextProvider } from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
-import { TopicMapContextProvider } from 'react-cismap/contexts/TopicMapContextProvider';
+import { CrossTabCommunicationContextProvider } from "react-cismap/contexts/CrossTabCommunicationContextProvider";
+import { TopicMapContextProvider } from "react-cismap/contexts/TopicMapContextProvider";
 
 // Monorepo Packages
-import { backgroundSettings } from '@carma-collab/wuppertal/geoportal';
-import { TweakpaneProvider } from '@carma-commons/debug';
-import { OverlayTourProvider } from '@carma/libraries/commons/ui/lib-helper-overlay';
-import { CustomViewerContextProvider } from '@carma-mapping/cesium-engine';
-import type { Layer } from '@carma-mapping/layers';
-import type { BackgroundLayer, Settings } from '@carma-apps/portals';
+import { backgroundSettings } from "@carma-collab/wuppertal/geoportal";
+import { TweakpaneProvider } from "@carma-commons/debug";
+import { OverlayTourProvider } from "@carma/libraries/commons/ui/lib-helper-overlay";
+import { CustomViewerContextProvider } from "@carma-mapping/cesium-engine";
+import type { Layer } from "@carma-mapping/layers";
+import type { BackgroundLayer, Settings } from "@carma-apps/portals";
 
 // Local Modules
-import AppErrorFallback from './components/AppErrorFallback';
-import { GeoportalMap } from './components/GeoportalMap/GeoportalMap';
-import MapMeasurement from './components/map-measure/MapMeasurement';
-import TopNavbar from './components/TopNavbar';
+import AppErrorFallback from "./components/AppErrorFallback";
+import { GeoportalMap } from "./components/GeoportalMap/GeoportalMap";
+import MapMeasurement from "./components/map-measure/MapMeasurement";
+import TopNavbar from "./components/TopNavbar";
 import {
   setBackgroundLayer,
   setLayers,
@@ -31,7 +31,7 @@ import {
   setShowHamburgerMenu,
   setShowLocatorButton,
   setShowMeasurementButton,
-} from './store/slices/mapping';
+} from "./store/slices/mapping";
 import {
   getUIAllowChanges,
   getUIMode,
@@ -40,21 +40,21 @@ import {
   setUIShowLayerButtons,
   setUIShowLayerHideButtons,
   UIMode,
-} from './store/slices/ui';
+} from "./store/slices/ui";
 
 // Config
-import { MODEL_ASSETS } from './config/assets.config';
+import { MODEL_ASSETS } from "./config/assets.config";
 import {
   BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
   WUPP_TERRAIN_PROVIDER,
-} from './config/dataSources.config';
+} from "./config/dataSources.config";
 
 // Side-Effect Imports
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'leaflet/dist/leaflet.css';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import 'react-cismap/topicMaps.css';
-import './index.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "leaflet/dist/leaflet.css";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import "react-cismap/topicMaps.css";
+import "./index.css";
 
 if (typeof global === "undefined") {
   window.global = window;
@@ -74,7 +74,6 @@ function App({ published }: { published?: boolean }) {
   const mode = useSelector(getUIMode);
 
   useEffect(() => {
-
     if (searchParams.get("sync")) {
       setSyncToken(searchParams.get("sync"));
     }
@@ -151,7 +150,7 @@ function App({ published }: { published?: boolean }) {
         >
           <TweakpaneProvider>
             <ErrorBoundary FallbackComponent={AppErrorFallback}>
-              <div className="flex flex-col h-screen w-full">
+              <div className="flex flex-col h-full max-h-full w-full fixed">
                 {!published && <TopNavbar />}
                 <MapMeasurement />
                 <GeoportalMap />
