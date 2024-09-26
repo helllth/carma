@@ -122,18 +122,19 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
     let zoomDiff = 0;
 
     if (zoomSnap) {
-      // Move the cesium camera to the next integer zoom level of leaflet before transitioning
+      // Move the cesium camera to the next zoom snap level of leaflet before transitioning
       const currentZoom = cesiumCenterPixelSizeToLeafletZoom(viewer).value;
 
       if (currentZoom === null) {
         console.error("could not determine current zoom level");
       } else {
-        // go to the next integer zoom level
+        // go to the next integer zoom snap level
         // smaller values is further away
+        const intMultiple = currentZoom * (1 / zoomSnap)
         const targetZoom =
-          currentZoom % 1 < 0.75 // prefer zooming out
-            ? Math.floor(currentZoom)
-            : Math.ceil(currentZoom);
+          (intMultiple % 1) < (0.75) // prefer zooming out
+            ? Math.floor(intMultiple) * zoomSnap
+            : Math.ceil(intMultiple) * zoomSnap;
         zoomDiff = currentZoom - targetZoom;
         const heightFactor = Math.pow(2, zoomDiff);
         //const { groundHeight } = getCameraHeightAboveGround(viewer);
@@ -147,7 +148,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
     setPrevDuration(duration);
 
     const onComplete = () => {
-      setLeafletView(viewer, leaflet, { animate: false, zoomSnap, duration: 0 });
+      setLeafletView(viewer, leaflet, { animate: false, duration: 0 });
       setPrevCamera2dPosition(viewer.camera.position.clone());
       // trigger the visual transition
       dispatch(setIsMode2d(true));

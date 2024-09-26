@@ -1,5 +1,5 @@
 import { Cartesian3, Cartographic, Viewer, Math as CeMath } from "cesium";
-import L from "leaflet";
+import type L from "leaflet";
 import {
   cameraToCartographicDegrees,
   cesiumCenterPixelSizeToLeafletZoom,
@@ -181,25 +181,21 @@ export const replaceHashRoutedHistory = (
     // navigate would cause rerenders
     // navigate(`${routedPath}?${formattedHash}`, { replace: true });
     // see https://github.com/remix-run/react-router/discussions/9851#discussioncomment-9459061
-    
+
     const currentUrl = new URL(window.location.href);
     const newUrl = `${currentUrl.origin}${currentUrl.pathname}${fullHashState}`;
 
     window.history.replaceState(null, "", newUrl);
-
-
-
   }
 };
 
 export const setLeafletView = async (
   viewer: Viewer,
-  leafletElement,
+  leafletElement: L.Map,
   {
     duration = 0,
     animate = false,
-    zoomSnap = 1,
-  }: { duration?: number; animate?: boolean; zoomSnap?: number } = {},
+  }: { duration?: number; animate?: boolean } = {},
 ) => {
   if (!viewer || !leafletElement) return;
 
@@ -221,7 +217,6 @@ export const setLeafletView = async (
     console.warn("zoom is NaN", MIN_2D_ZOOM, zoom);
     zoom = DEFAULT_2D_ZOOM;
   }
-  L.setOptions(leafletElement, { zoomSnap }); // TODO fix zoom snapping in TopicMap Component
   const { longitude: lng, latitude: lat } = cameraToCartographicDegrees(
     viewer.camera,
   );
