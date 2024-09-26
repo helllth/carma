@@ -1,4 +1,4 @@
-import { starkregenConstants } from "@cismet-dev/react-cismap-rainhazardmaps/constants";
+import { starkregenConstants } from "@cismet-dev/react-cismap-envirometrics-maps/constants";
 
 const overridingBaseLayerConf = {
   namedStyles: {
