@@ -74,17 +74,16 @@ function App({ published }: { published?: boolean }) {
   const allowUiChanges = useSelector(getUIAllowChanges);
   const dispatch = useDispatch();
   const mode = useSelector(getUIMode);
-
+  const [windowWidth, windowHeight] = useWindowSize();
+  const toolbarHeight = 50; //todo: better with useComponentSize(refToolbar)
+  const mapWidth = windowWidth;
+  const mapHeight = windowHeight - toolbarHeight;
   const location = useLocation();
 
   useEffect(() => {
     console.log(" [GEOPORTAL|ROUTER] App Route changed to:", location.pathname);
   }, [location]);
 
-  const [windowWidth, windowHeight] = useWindowSize();
-  const toolbarHeight = 50; //todo: better with useComponentSize(refToolbar)
-  const mapWidth = windowWidth;
-  const mapHeight = windowHeight - toolbarHeight;
   useEffect(() => {
     if (searchParams.get("sync")) {
       setSyncToken(searchParams.get("sync"));
