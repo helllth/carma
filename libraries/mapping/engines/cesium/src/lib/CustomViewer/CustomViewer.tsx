@@ -375,7 +375,7 @@ function CustomViewer(props: CustomViewerProps) {
   useInitializeViewer(viewer, home, homeOffset, leaflet);
 
   useEffect(() => {
-    if (viewer && enableLocationHashUpdate) {
+    if (viewer && enableLocationHashUpdate && !isMode2d) {
       console.log(
         "HOOK: update Hash, route or style changed",
         isSecondaryStyle,
@@ -386,7 +386,7 @@ function CustomViewer(props: CustomViewerProps) {
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewer, enableLocationHashUpdate, location.pathname, isSecondaryStyle]);
+  }, [viewer, isMode2d, enableLocationHashUpdate, location.pathname, isSecondaryStyle]);
 
   useEffect(() => {
     if (viewer && containerRef?.current) {
