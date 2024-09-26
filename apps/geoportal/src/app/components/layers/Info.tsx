@@ -37,6 +37,7 @@ const Info = ({ description, legend }: InfoProps) => {
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const isBaseLayer = selectedLayerIndex === -1;
   const backgroundLayer = useSelector(getBackgroundLayer);
+  const currentLayer = layers[selectedLayerIndex];
 
   const getLayerPos = (id) => layers.findIndex((layer) => layer.id === id);
 
@@ -269,7 +270,7 @@ const Info = ({ description, legend }: InfoProps) => {
       ) : (
         <Tabs
           animated={false}
-          items={tabItems(legend)}
+          items={tabItems(legend, currentLayer)}
           activeKey={activeTabKey}
           onChange={(key) => dispatch(setUIActiveTabKey(key))}
         />

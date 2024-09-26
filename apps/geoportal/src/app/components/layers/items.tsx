@@ -1,3 +1,4 @@
+import { Layer } from "@carma-mapping/layers";
 import {
   faCircle,
   faGlobe,
@@ -5,7 +6,7 @@ import {
   faSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
-export const tabItems = (legend) => {
+export const tabItems = (legend, currentLayer: Layer) => {
   return [
     {
       label: "Legende",
@@ -61,7 +62,11 @@ export const tabItems = (legend) => {
             GetCapabilities
           </a>
           <a
-            href="https://offenedaten-wuppertal.de/dataset/interessante-orte-poi-wuppertal"
+            href={
+              currentLayer?.conf?.opendata
+                ? currentLayer.conf.opendata
+                : "https://offenedaten-wuppertal.de/dataset/interessante-orte-poi-wuppertal"
+            }
             target="_blank"
           >
             Open Data
