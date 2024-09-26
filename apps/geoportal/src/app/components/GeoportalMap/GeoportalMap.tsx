@@ -93,12 +93,10 @@ import LocateControlComponent from "./controls/LocateControlComponent.tsx";
 import { createCismapLayers, onClickTopicMap } from "./topicmap.utils.ts";
 import { getUrlPrefix } from "./utils";
 
+import { CESIUM_MAPMODE_TRANSITION_DURATION, LEAFLET_CONFIG } from '../../config/app.config';
+
 import "../leaflet.css";
 import "cesium/Build/Cesium/Widgets/widgets.css";
-
-// TODO: Make transition style configurable with config and cesium library
-const MAPMODE_TRANSITION_DURATION = 1000;
-const ZOOM_SNAP_DELTA = 1;
 
 export const GeoportalMap = () => {
   const dispatch = useDispatch();
@@ -218,7 +216,7 @@ export const GeoportalMap = () => {
               // TODO Check for side effects of this while animating
               isMode2d &&
                 leaflelEl.setZoom(
-                  Math.round(leaflelEl.getZoom()) + ZOOM_SNAP_DELTA,
+                  Math.round(leaflelEl.getZoom()) + 1, // get nearest zoom as integer base and then do integer increments.
                 );
               !isMode2d && handleZoomIn(e);
             }}
@@ -230,7 +228,7 @@ export const GeoportalMap = () => {
             onClick={(e) => {
               isMode2d &&
                 leaflelEl.setZoom(
-                  Math.round(leaflelEl.getZoom()) - ZOOM_SNAP_DELTA,
+                  Math.round(leaflelEl.getZoom()) - 1,
                 );
               !isMode2d && handleZoomOut(e);
             }}
@@ -324,7 +322,7 @@ export const GeoportalMap = () => {
       </Control>
       {allow3d && (
         <Control position="topleft" order={60}>
-          <MapTypeSwitcher />
+          <MapTypeSwitcher zoomSnap={LEAFLET_CONFIG.zoomSnap} />
           {
             //<SceneStyleToggle />
             <Compass disabled={isMode2d} />
@@ -423,6 +421,8 @@ export const GeoportalMap = () => {
                   <div></div>
                 )
               }
+              zoomSnap={LEAFLET_CONFIG.zoomSnap}
+              zoomDelta={LEAFLET_CONFIG.zoomDelta}
             >
               {backgroundLayer &&
                 backgroundLayer.visible &&
@@ -468,7 +468,7 @@ export const GeoportalMap = () => {
                 bottom: 0,
                 zIndex: 401,
                 opacity: isMode2d ? 0 : 1,
-                transition: `opacity ${MAPMODE_TRANSITION_DURATION}ms ease-in-out`,
+                transition: `opacity ${CESIUM_MAPMODE_TRANSITION_DURATION}ms ease-in-out`,
                 pointerEvents: isMode2d ? "none" : "auto",
               }}
             >
