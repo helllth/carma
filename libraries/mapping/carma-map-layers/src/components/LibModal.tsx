@@ -290,7 +290,7 @@ export const LibModal = ({
       >
         <div className="sticky top-0 px-6 pt-6">
           <div className="flex justify-between items-center">
-            <h1 className="mb-0 text-2xl font-semibold">Ressourcen</h1>
+            <h1 className="mb-0 text-2xl font-semibold">Kartenebenen</h1>
             {/* <Button
               onClick={() => {
                 createBaseConfig(layers);
