@@ -55,6 +55,7 @@ import "leaflet/dist/leaflet.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-cismap/topicMaps.css";
 import "./index.css";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 if (typeof global === "undefined") {
   window.global = window;
@@ -69,6 +70,7 @@ type Config = {
 function App({ published }: { published?: boolean }) {
   const [syncToken, setSyncToken] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const size = useWindowSize();
   const allowUiChanges = useSelector(getUIAllowChanges);
   const dispatch = useDispatch();
   const mode = useSelector(getUIMode);
@@ -150,7 +152,10 @@ function App({ published }: { published?: boolean }) {
         >
           <TweakpaneProvider>
             <ErrorBoundary FallbackComponent={AppErrorFallback}>
-              <div className="flex flex-col h-full max-h-full w-full fixed">
+              <div
+                className="flex flex-col w-full fixed "
+                style={{ height: size.height }}
+              >
                 {!published && <TopNavbar />}
                 <MapMeasurement />
                 <GeoportalMap />
