@@ -287,28 +287,30 @@ const LibItem = ({
           <div className="object-cover relative h-full overflow-clip w-[calc(130%+7.2px)]" />
         )}
 
-        {isFavorite ? (
-          <FontAwesomeIcon
-            className="absolute right-1 top-1 text-3xl text-yellow-200 cursor-pointer z-50"
-            icon={faStar}
-            onClick={() => {
-              if (removeFavorite) {
-                removeFavorite(layer);
-              }
-            }}
-          />
-        ) : (
-          <FontAwesomeIcon
-            className="absolute right-1 top-1 text-3xl cursor-pointer z-50 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
-            icon={regularFaStar}
-            onClick={() => {
-              if (addFavorite) {
-                addFavorite(layer);
-              }
-            }}
-          />
-          // <StarOutlined className="absolute right-1 top-1 text-3xl text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.9)]" />
-        )}
+        {layer.type !== "collection" ? (
+          isFavorite ? (
+            <FontAwesomeIcon
+              className="absolute right-1 top-1 text-3xl text-yellow-200 cursor-pointer z-50"
+              icon={faStar}
+              onClick={() => {
+                if (removeFavorite) {
+                  removeFavorite(layer);
+                }
+              }}
+            />
+          ) : (
+            <FontAwesomeIcon
+              className="absolute right-1 top-1 text-3xl cursor-pointer z-50 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
+              icon={regularFaStar}
+              onClick={() => {
+                if (addFavorite) {
+                  addFavorite(layer);
+                }
+              }}
+            />
+            // <StarOutlined className="absolute right-1 top-1 text-3xl text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.9)]" />
+          )
+        ) : null}
         {layer.type === "link" ? (
           <a
             className="absolute left-1 top-1 text-3xl cursor-pointer z-50 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
