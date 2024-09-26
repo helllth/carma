@@ -43,7 +43,7 @@ import { DEFAULT_SRC_PROJ } from "../config";
 const proj4ConverterLookup = {};
 const DEFAULT_ZOOM_LEVEL = 16;
 const DEFAULT_CESIUM_MARKER_ANCHOR_HEIGHT = 5; // in METERS
-const DEFAULT_CESIUM_PITCH_ADJUST_HEIGHT = 300; // meters
+const DEFAULT_CESIUM_PITCH_ADJUST_HEIGHT = 1000; // meters
 
 type Coord = { lat: number; lon: number };
 // type MapType = 'leaflet' | 'cesium';
@@ -94,8 +94,7 @@ const CesiumMapActions = {
       scene.camera.flyToBoundingSphere(new BoundingSphere(center, range), {
         offset: hpr,
         duration: 4,
-        pitchAdjustHeight:
-          cesiumConfig.pitchAdjustHeight ?? DEFAULT_CESIUM_PITCH_ADJUST_HEIGHT,
+        // pitchAdjustHeight: cesiumConfig.pitchAdjustHeight ?? DEFAULT_CESIUM_PITCH_ADJUST_HEIGHT,
         easingFunction: EasingFunction.QUADRATIC_IN_OUT,
         complete: () => {
           console.info(
