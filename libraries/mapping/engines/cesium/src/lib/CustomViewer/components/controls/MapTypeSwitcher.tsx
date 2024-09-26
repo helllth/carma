@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode, useContext, useEffect, useState } from "react";
+import { MouseEvent, ReactNode, useContext, useState } from "react";
 import {
   Cartesian3,
   Cartographic,
@@ -13,8 +13,6 @@ import {
   setIsMode2d,
   setTransitionTo2d,
   setTransitionTo3d,
-  useViewerCurrentTransition,
-  VIEWER_TRANSITION_STATE,
   clearTransition,
   useViewerIsTransitioning,
 } from "../../../CustomViewerContextProvider/slices/cesium";
@@ -33,15 +31,17 @@ import { CameraPositionAndOrientation } from "../../../..";
 import { ControlButtonStyler } from "@carma-mapping/map-controls-layout";
 import { useCesiumCustomViewer } from '../../../CustomViewerContextProvider/components/CustomViewerContextProvider';
 
+import type { ZoomIncrements } from "types/leaflet-config";
+
 // TODO sync
 const DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION = 1000;
 
 type Props = {
-  zoomSnap?: 0 | 1 | 0.5 | 0.25 | 0.125 | 0.0625 | 0.03125 | 0.015625;
+  zoomSnap?: ZoomIncrements;
   children?: ReactNode;
 };
 
-export const MapTypeSwitcher = ({ zoomSnap = 0 }: Props = {}) => {
+export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
   //const { viewer } = useCesium();
   const dispatch = useDispatch();
   const isMode2d = useViewerIsMode2d();
