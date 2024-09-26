@@ -4,5 +4,4 @@ export type * from "./types";
 export { utils };
 export { Save } from "./components/Save.tsx";
 export { Share } from "./components/Share.tsx";
-export { extractVectorStyles } from "./utils/carmaConfig";
-
+export { extractCarmaConf } from "./utils/carmaConfig";

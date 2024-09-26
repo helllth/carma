@@ -1,9 +1,9 @@
-import type { VectorObject } from "../types";
+import type { CarmaConfObject } from "../types";
 
-export const extractVectorStyles = (
+export const extractCarmaConf = (
   keywords: string[],
-): VectorObject | null => {
-  let vectorObject: VectorObject | null = null;
+): CarmaConfObject | null => {
+  let carmaConf: CarmaConfObject | null = null;
 
   if (keywords) {
     keywords.forEach((keyword) => {
@@ -15,11 +15,11 @@ export const extractVectorStyles = (
           colonIndex !== -1
             ? objectString.substring(colonIndex + 1).trim()
             : "";
-        const object = { [property]: value };
-        vectorObject = object;
+        const object = { ...carmaConf, [property]: value };
+        carmaConf = object;
       }
     });
   }
 
-  return vectorObject;
+  return carmaConf;
 };
