@@ -55,7 +55,8 @@ import "leaflet/dist/leaflet.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-cismap/topicMaps.css";
 import "./index.css";
-import { useWindowHeight } from "@react-hook/window-size";
+
+import { useWindowSize } from "@react-hook/window-size";
 
 if (typeof global === "undefined") {
   window.global = window;
@@ -70,11 +71,13 @@ type Config = {
 function App({ published }: { published?: boolean }) {
   const [syncToken, setSyncToken] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const height = useWindowHeight();
   const allowUiChanges = useSelector(getUIAllowChanges);
   const dispatch = useDispatch();
   const mode = useSelector(getUIMode);
-
+  const [windowWidth, windowHeight] = useWindowSize();
+  const toolbarHeight = 50; //todo: better with useComponentSize(refToolbar)
+  const mapWidth = windowWidth;
+  const mapHeight = windowHeight - toolbarHeight;
   useEffect(() => {
     if (searchParams.get("sync")) {
       setSyncToken(searchParams.get("sync"));
@@ -153,12 +156,12 @@ function App({ published }: { published?: boolean }) {
           <TweakpaneProvider>
             <ErrorBoundary FallbackComponent={AppErrorFallback}>
               <div
-                className="flex flex-col w-full"
-                style={{ height: "100dvh" }}
+                className="flex flex-col w-full "
+                style={{ height: windowHeight }}
               >
                 {!published && <TopNavbar />}
                 <MapMeasurement />
-                <GeoportalMap />
+                <GeoportalMap width={mapWidth} height={mapHeight} />
               </div>
             </ErrorBoundary>
           </TweakpaneProvider>
