@@ -9,7 +9,6 @@ import {
 } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import type { LeafletEvent, Map as LeafletMap } from "leaflet";
 
 import {
   Color,
@@ -86,7 +85,6 @@ type CustomViewerProps = {
 };
 
 const DEFAULT_RESOLUTION_SCALE = 1;
-const OFFSCREEN_RESOLUTION_SCALE = 1 / 64;
 export const TRANSITION_DELAY = 1000;
 
 function CustomViewer(props: CustomViewerProps) {
