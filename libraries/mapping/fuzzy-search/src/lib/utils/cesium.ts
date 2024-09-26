@@ -9,6 +9,7 @@ import {
   Viewer,
   Model,
   sampleTerrainMostDetailed,
+  Cesium3DTileset,
 } from "cesium";
 
 export const distanceFromZoomLevel = (zoom: number) => {
@@ -17,37 +18,107 @@ export const distanceFromZoomLevel = (zoom: number) => {
 
 export const getHeadingPitchRangeFromZoom = (
   zoom: number,
-  headingDeg = 0,
-  pitchDeg = 60,
+  {
+    heading = 0,
+    pitch = Math.PI / 2,
+  }: { heading?: number; pitch?: number } = {}, // prior
 ) => {
   const range = distanceFromZoomLevel(zoom);
-  const heading = CMath.toRadians(headingDeg);
-  const pitch = CMath.toRadians(pitchDeg);
   return new HeadingPitchRange(heading, pitch, range);
 };
 
 export const getPositionWithHeightAsync = async (
   scene: Scene,
   position: Cartographic,
+  tileset?: Cesium3DTileset,
 ) => {
-  const terrainProvider = scene.globe.terrainProvider;
-  console.log("[CESIUM|TERRAIN] terrainProvider", terrainProvider, position);
-  return sampleTerrainMostDetailed(terrainProvider, [position]).then(
-    (updatedPositions: Cartographic[]) => {
+  // Convert the Cartographic position to Cartesian3 coordinates
+  const cartesianPosition = Cartographic.toCartesian(position);
+
+  let updatedPosition: Cartographic | null = null;
+
+  if (tileset) {
+    // Attempt to clamp the position to the tileset's height
+    try {
+      const clampedPositions = await scene.clampToHeightMostDetailed(
+        [cartesianPosition],
+        [tileset],
+      );
+
+      if (
+        clampedPositions &&
+        clampedPositions.length > 0 &&
+        clampedPositions[0]
+      ) {
+        const clampedCartesian = clampedPositions[0];
+        const clampedCartographic =
+          Cartographic.fromCartesian(clampedCartesian);
+
+        updatedPosition = new Cartographic(
+          position.longitude,
+          position.latitude,
+          clampedCartographic.height,
+        );
+
+        console.info(
+          "[CESIUM|TILESET] Clamped position found for position",
+          position,
+          updatedPosition,
+        );
+      } else {
+        console.warn(
+          "[CESIUM|TILESET] No clamped position found for position",
+          position,
+        );
+      }
+    } catch (error) {
+      console.error(
+        "[CESIUM|TILESET] Error clamping to tileset height:",
+        error,
+      );
+    }
+  }
+
+  if (updatedPosition) {
+    // Elevation obtained from the tileset
+    return updatedPosition;
+  } else {
+    // Fall back to using terrain data
+    const terrainProvider = scene.globe.terrainProvider;
+    console.log(
+      "[CESIUM|TERRAIN] Using terrain provider",
+      terrainProvider,
+      "for position",
+      position,
+    );
+
+    try {
+      const updatedPositions = await sampleTerrainMostDetailed(
+        terrainProvider,
+        [position],
+      );
       const cartoPos = updatedPositions[0];
+
       if (cartoPos instanceof Cartographic) {
-        console.info("[CESIUM|TERRAIN] sampledTerrain for position", position, cartoPos);
+        console.info(
+          "[CESIUM|TERRAIN] Sampled terrain for position",
+          position,
+          cartoPos,
+        );
         return cartoPos;
       } else {
         console.warn(
-          "[CESIUM|TERRAIN] could not get elevation for position",
+          "[CESIUM|TERRAIN] Could not get elevation for position",
           position,
           cartoPos,
         );
         return position;
       }
-    },
-  );
+    } catch (error) {
+      console.error("[CESIUM|TERRAIN] Error sampling terrain:", error);
+      return position;
+    }
+  }
 };
 
 export const polygonHierarchyFromPolygonCoords = (

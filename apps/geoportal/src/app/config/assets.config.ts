@@ -21,7 +21,7 @@ export const MODEL_ASSETS: Record<string, ModelAsset> = {
     rotation: false,
     isCameraFacing: true,
     fixedScale: true,
-    anchorOffset: { z: 2 },
+    anchorOffset: { z: 0 },
   },
 
   /*

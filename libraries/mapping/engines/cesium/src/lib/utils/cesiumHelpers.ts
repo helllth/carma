@@ -455,17 +455,6 @@ export function pickFromClampedGeojson(
   return getLastGroundPrimitive(pickedObjects);
 }
 
-export const getHeightAtPosition = async (
-  scene: Scene,
-  camera: Camera,
-  fallBackHeightOffset,
-) => {
-  const [sample] = await scene.sampleHeightMostDetailed([
-    camera.positionCartographic,
-  ]);
-  return sample.height !== undefined ? sample.height : fallBackHeightOffset;
-};
-
 export function getPrimitiveById(viewer: Viewer, id: string) {
   const primitives = viewer.scene.primitives;
   const length = primitives.length;

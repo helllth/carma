@@ -1,6 +1,6 @@
 import L from "leaflet";
 import type { RefObject } from "react";
-import { Viewer } from "cesium";
+import { Cesium3DTileset, Viewer } from "cesium";
 import { stopwords } from './lib/config/stopwords.de-de';
 
 type mapRefType = RefObject<{
@@ -32,6 +32,7 @@ export type SearchGazetteerProps = {
     viewer?: Viewer;
     markerAsset?: ModelAsset;
     isPrimaryStyle: boolean;
+    elevationTileset?: Cesium3DTileset;
   }
 };
 

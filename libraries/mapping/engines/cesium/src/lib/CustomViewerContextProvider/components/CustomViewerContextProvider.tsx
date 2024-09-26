@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 
 import {
@@ -8,35 +8,35 @@ import {
   WebMapServiceImageryProvider,
   WebMapTileServiceImageryProvider,
   Viewer,
+  Cesium3DTileset,
 } from "cesium";
 import { ModelAsset } from "../../..";
 
 export interface CustomViewerContextType {
   viewer: Viewer | null;
-  setViewer: null | ((viewer: Viewer | null) => void);
+  setViewer: ((viewer: Viewer | null) => void);
   terrainProvider: Promise<CesiumTerrainProvider> | CesiumTerrainProvider | null;
   //imageryProvider:    | WebMapServiceImageryProvider    | WebMapTileServiceImageryProvider    | null;
   imageryLayer: ImageryLayer | null;
   ellipsoidTerrainProvider: EllipsoidTerrainProvider | null;
   models: Record<string, ModelAsset> | null;
+  tilesets: {
+    primary: Cesium3DTileset | null;
+    secondary: Cesium3DTileset | null;
+  }
+  // TODO add more setters
+  setPrimaryTileset: ((tileset: Cesium3DTileset | null) => void);
+  setSecondaryTileset: ((tileset: Cesium3DTileset | null) => void);
 };
 
-export const CustomViewerContext = createContext<CustomViewerContextType>({
-  viewer: null,
-  setViewer: null,
-  terrainProvider: null,
-  //imageryProvider: null,
-  imageryLayer: null,
-  ellipsoidTerrainProvider: null,
-  models: null,
-});
+export const CustomViewerContext = createContext<CustomViewerContextType | null>(null);
 
 // TODO: rename this
 export const useCesiumCustomViewer = () => {
   const context = useContext(CustomViewerContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useViewer must be used within a CustomViewerProvider');
-  }  
+  }
   return context;
 };
 
@@ -46,7 +46,7 @@ export const CustomViewerContextProvider = ({
 }: {
   children: ReactNode;
   providerConfig: {
-    terrainProvider: { 
+    terrainProvider: {
       url: string;
     };
     imageryProvider: {
@@ -58,12 +58,10 @@ export const CustomViewerContextProvider = ({
   }
 }) => {
 
-  const [viewer, setViewerState] = useState<Viewer | null>(null);
+  const [viewer, setViewer] = useState<Viewer | null>(null);
+  const [primaryTileset, setPrimaryTileset] = useState<Cesium3DTileset | null>(null);
+  const [secondaryTileset, setSecondaryTileset] = useState<Cesium3DTileset | null>(null);
 
-  const setViewer = useCallback((newViewer: Viewer | null) => {
-    setViewerState(newViewer);
-    // You can add any additional logic here when the viewer changes
-  }, []);
 
   const imageryProvider = new WebMapServiceImageryProvider(
     providerConfig.imageryProvider,
@@ -78,6 +76,12 @@ export const CustomViewerContextProvider = ({
     ),
     imageryLayer: new ImageryLayer(imageryProvider),
     models: providerConfig.models,
+    tilesets: {
+      primary: primaryTileset,
+      secondary: secondaryTileset,
+    },
+    setPrimaryTileset,
+    setSecondaryTileset,
   };
 
   console.log('Cesium CustomViewerContextProvider Initialized', values);

@@ -118,7 +118,7 @@ export const GeoportalMap = () => {
   const showHamburgerMenu = useSelector(getShowHamburgerMenu);
   const showMeasurementButton = useSelector(getShowMeasurementButton);
   const focusMode = useSelector(getFocusMode);
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer, tilesets } = useCesiumCustomViewer();
   const homeControl = useHomeControl();
   const { handleZoomIn, handleZoomOut } = useZoomControls();
   const toggleSceneStyle = useSceneStyleToggle();
@@ -363,7 +363,8 @@ export const GeoportalMap = () => {
             cesiumConfig={{
               viewer,
               markerAsset: MODEL_ASSETS.Marker,
-              isPrimaryStyle: showPrimaryTileset
+              isPrimaryStyle: showPrimaryTileset,
+              elevationTileset: tilesets.secondary
             }}
             referenceSystem={referenceSystem}
             referenceSystemDefinition={referenceSystemDefinition}
