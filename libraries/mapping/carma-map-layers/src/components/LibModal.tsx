@@ -38,9 +38,9 @@ export interface LibModalProps {
   setAdditionalLayers: any;
   setThumbnail: any;
   thumbnails: any;
-  favorites: Item[];
-  addFavorite: (layer: Item) => void;
-  removeFavorite: (layer: Item) => void;
+  favorites?: Item[];
+  addFavorite?: (layer: Item) => void;
+  removeFavorite?: (layer: Item) => void;
   activeLayers: any[];
   customCategories?: LayerCategories[];
 }
