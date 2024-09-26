@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import mappingSlice  from "./slices/mapping";
+import mappingSlice from "./slices/mapping";
 import layersSlice from "./slices/layers";
 import uiSlice from "./slices/ui";
 import measurementsSlice from "./slices/measurements";
@@ -9,7 +9,7 @@ import { persistReducer } from "redux-persist";
 import localForage from "localforage";
 import { APP_KEY, STORAGE_PREFIX } from "../config";
 import { getCesiumConfig, sliceCesium } from "@carma-mapping/cesium-engine";
-import { defaultCesiumState }from "../config/store.config";
+import { defaultCesiumState } from "../config/store.config";
 
 console.log("store initializing ....");
 
@@ -83,7 +83,7 @@ const mappingConfig = {
 const layersConfig = {
   key: "@" + APP_KEY + "." + STORAGE_PREFIX + ".app.layers",
   storage: localForage,
-  whitelist: ["thumbnails"],
+  whitelist: ["thumbnails", "favorites"],
 };
 const measurementsConfig = {
   key: "@" + APP_KEY + "." + STORAGE_PREFIX + ".app.measurements",
@@ -104,7 +104,10 @@ const store = configureStore({
     layers: persistReducer(layersConfig, layersSlice.reducer),
     measurements: persistReducer(measurementsConfig, measurementsSlice.reducer),
     features: persistReducer(featuresConfig, featuresSlice.reducer),
-    cesium: persistReducer(getCesiumConfig({appKey: APP_KEY, storagePrefix: STORAGE_PREFIX}), sliceCesium.reducer),
+    cesium: persistReducer(
+      getCesiumConfig({ appKey: APP_KEY, storagePrefix: STORAGE_PREFIX }),
+      sliceCesium.reducer,
+    ),
   },
   preloadedState: {
     cesium: defaultCesiumState,
@@ -113,7 +116,7 @@ const store = configureStore({
   middleware,
 });
 
-export default store
+export default store;
 
 export type AppStore = typeof store;
 
