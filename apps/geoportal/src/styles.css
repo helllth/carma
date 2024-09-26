@@ -3,12 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body,
-:root {
-  height: 100%;
-}
-
 .cesium-widget-credits {
   display: none !important;
 }

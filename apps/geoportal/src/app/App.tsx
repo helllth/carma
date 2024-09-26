@@ -55,7 +55,7 @@ import "leaflet/dist/leaflet.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-cismap/topicMaps.css";
 import "./index.css";
-import { useWindowSize } from "@uidotdev/usehooks";
+import { useWindowHeight } from "@react-hook/window-size";
 
 if (typeof global === "undefined") {
   window.global = window;
@@ -70,7 +70,7 @@ type Config = {
 function App({ published }: { published?: boolean }) {
   const [syncToken, setSyncToken] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const size = useWindowSize();
+  const height = useWindowHeight();
   const allowUiChanges = useSelector(getUIAllowChanges);
   const dispatch = useDispatch();
   const mode = useSelector(getUIMode);
@@ -154,7 +154,7 @@ function App({ published }: { published?: boolean }) {
             <ErrorBoundary FallbackComponent={AppErrorFallback}>
               <div
                 className="flex flex-col w-full fixed "
-                style={{ height: size.height }}
+                style={{ height: height }}
               >
                 {!published && <TopNavbar />}
                 <MapMeasurement />
