@@ -47,7 +47,7 @@ import {
   UIMode,
 } from "../store/slices/ui";
 import { layerMap } from "../config";
-import { Save, Share, extractVectorStyles } from "@carma-apps/portals";
+import { Save, Share, extractCarmaConf } from "@carma-apps/portals";
 import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
 import { isNaN } from "lodash";
 import {
@@ -122,9 +122,9 @@ const TopNavbar = () => {
     }
 
     if (layer.type === "layer") {
-      const vectorObject = extractVectorStyles(layer.keywords);
-      if (vectorObject.vectorStyle && !forceWMS) {
-        const zoom = await fetch(vectorObject.vectorStyle)
+      const carmaConf = extractCarmaConf(layer.keywords);
+      if (carmaConf.vectorStyle && !forceWMS) {
+        const zoom = await fetch(carmaConf.vectorStyle)
           .then((response) => {
             return response.json();
           })
@@ -143,6 +143,7 @@ const TopNavbar = () => {
           layerType: "vector",
           opacity: 1.0,
           description: layer.description,
+          conf: carmaConf,
           queryable: isNaN(layer.queryable)
             ? layer.keywords.some((keyword) =>
                 keyword.includes("carmaconf://infoBoxMapping"),
@@ -151,7 +152,7 @@ const TopNavbar = () => {
           useInFeatureInfo: true,
           visible: true,
           props: {
-            style: vectorObject.vectorStyle,
+            style: carmaConf.vectorStyle,
             minZoom: zoom?.minZoom,
           },
           other: {
@@ -167,6 +168,7 @@ const TopNavbar = () => {
               layerType: "wmts",
               opacity: 1.0,
               description: layer.description,
+              conf: carmaConf,
               visible: true,
               queryable: layer.queryable,
               useInFeatureInfo: true,
@@ -190,6 +192,7 @@ const TopNavbar = () => {
               layerType: "vector",
               opacity: 1.0,
               description: layer.description,
+              conf: carmaConf,
               queryable: isNaN(layer.queryable)
                 ? layer.keywords.some((keyword) =>
                     keyword.includes("carmaconf://infoBoxMapping"),

@@ -1,3 +1,5 @@
+import { CarmaConfObject } from "@carma-apps/portals";
+
 export type LayerConfig = {
   name: string;
   url?: string;
@@ -25,6 +27,7 @@ export type Layer = {
   visible: boolean;
   queryable?: boolean;
   useInFeatureInfo?: boolean;
+  conf?: CarmaConfObject;
   icon?: string;
   other?: Item;
   // type?: 'wmts' | 'wmts-nt' | 'tiles' | 'vector';
