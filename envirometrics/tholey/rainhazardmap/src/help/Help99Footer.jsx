@@ -54,8 +54,7 @@ const Comp = ({
         {taglineModelling}
         <div>
           <b>
-            {appName}{" "}
-            {versionString !== undefined ? versionString : "v" + version}
+            {appName} {versionString !== undefined ? versionString : version}
           </b>{" "}
           powered by{" "}
           <a href="https://cismet.de/" target="_cismet">
