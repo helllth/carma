@@ -196,17 +196,24 @@ const onSelectionChangedVector = (
   },
   { layer, layers, dispatch, setPos, zoom },
 ) => {
+  console.log("xxx", e);
   if (checkIfLayerIsFirst(layer, layers)) {
     dispatch(clearVectorInfos());
   }
   if (e.hits && layer.queryable) {
     const selectedVectorFeature = e.hits[0];
 
+    const coordinates =
+      selectedVectorFeature.geometry.type === "Polygon"
+        ? selectedVectorFeature.geometry.coordinates[0][0]
+        : selectedVectorFeature.geometry.coordinates;
+
     const vectorPos = proj4(
       proj4.defs("EPSG:4326") as unknown as string,
       proj4crs25832def,
-      selectedVectorFeature.geometry.coordinates,
+      coordinates,
     );
+
     const minimalBoxSize = 1;
     const featureInfoBaseUrl = layer.other.service.url;
     const layerName = layer.other.name;
