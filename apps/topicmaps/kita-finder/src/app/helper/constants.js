@@ -129,7 +129,7 @@ constants.STUNDEN = [
 ];
 
 constants.TRAEGERTEXT[0] = 'freier Trägerschaft';
-constants.TRAEGERTEXT[1] = 'Betriebskindertageseinrichtung';
+constants.TRAEGERTEXT[1] = 'Trägerschaft eines Betriebs';
 constants.TRAEGERTEXT[2] = 'städtischer Trägerschaft';
 constants.TRAEGERTEXT[3] = 'Trägerschaft einer Elterninitiative';
 constants.TRAEGERTEXT[4] = 'kirchlicher Trägerschaft (evangelisch)';
