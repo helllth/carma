@@ -144,35 +144,39 @@ export const ReplaceLocatorFromLeaflet = () => {
     }
   }, [containerRef]);
   return (
-    <TopicMapContextProvider
-      appKey="OnlineBaederkarteWuppertal2022"
-      featureItemsURL={
-        "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
-      }
-      referenceSystemDefinition={MappingConstants.proj4crs25832def}
-      mapEPSGCode="25832"
-      referenceSystem={MappingConstants.crs25832}
-      getFeatureStyler={getFeatureStyler}
-      featureTooltipFunction={(feature) => feature?.text}
-      convertItemToFeature={convertItemToFeature}
-      clusteringOptions={{
-        iconCreateFunction: getPoiClusterIconCreatorFunction({
-          svgSize: 24,
-        }),
-      }}
-    >
-      <ControlLayout>
-        <Control position="topleft" order={30}>
-          <ControlButtonStyler>
-            <AimOutlined onClick={() => setLocationProps((prev) => prev + 1)} />
-          </ControlButtonStyler>
-          <LocateControlComponent startLocate={locationProps} />
-        </Control>
-        <Main ref={containerRef}>
-          <Map mapStyle={containerHeight ?? undefined} />
-        </Main>
-      </ControlLayout>
-    </TopicMapContextProvider>
+    <div style={{ height: "calc(100dvh - 30px)" }}>
+      <TopicMapContextProvider
+        appKey="OnlineBaederkarteWuppertal2022"
+        featureItemsURL={
+          "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
+        }
+        referenceSystemDefinition={MappingConstants.proj4crs25832def}
+        mapEPSGCode="25832"
+        referenceSystem={MappingConstants.crs25832}
+        getFeatureStyler={getFeatureStyler}
+        featureTooltipFunction={(feature) => feature?.text}
+        convertItemToFeature={convertItemToFeature}
+        clusteringOptions={{
+          iconCreateFunction: getPoiClusterIconCreatorFunction({
+            svgSize: 24,
+          }),
+        }}
+      >
+        <ControlLayout>
+          <Control position="topleft" order={30}>
+            <ControlButtonStyler>
+              <AimOutlined
+                onClick={() => setLocationProps((prev) => prev + 1)}
+              />
+            </ControlButtonStyler>
+            <LocateControlComponent startLocate={locationProps} />
+          </Control>
+          <Main ref={containerRef}>
+            <Map mapStyle={containerHeight ?? undefined} />
+          </Main>
+        </ControlLayout>
+      </TopicMapContextProvider>
+    </div>
   );
 };
 
@@ -192,53 +196,55 @@ export const ExcalidrawExample = () => {
     }
   }, [containerRef]);
   return (
-    <ControlLayout>
-      <Control position="topleft" order={40}>
-        <AimOutlined />
-      </Control>
-      <Control position="topleft" order={30}>
-        <SettingFilled />
-      </Control>
-      <Control position="topleft" order={20}>
-        <ShrinkOutlined />
-      </Control>
-      <Control position="topleft" order={10}>
-        <PlusOutlined />
-      </Control>
-      <Control position="topright" order={1}>
-        <SyncOutlined />
-      </Control>
-      <Control position="topright" order={40}>
-        <AimOutlined />
-      </Control>
-      <Control position="topright" order={30}>
-        <SettingFilled />
-      </Control>
-      <Control position="bottomright" order={20}>
-        <ShrinkOutlined />
-      </Control>
-      <Control position="bottomright" order={10}>
-        <PlusOutlined />
-      </Control>
-      <Control position="bottomright" order={1}>
-        <HomeOutlined />
-      </Control>
-      <Control position="bottomleft" order={80}>
-        <HomeOutlined />
-      </Control>
-      <Control position="bottomleft" order={1}>
-        <LoadingOutlined />
-      </Control>
-      <Control position="bottomleft" order={2}>
-        <LoadingOutlined />
-      </Control>
-      <Control position="bottomleft" order={1}>
-        <SyncOutlined />
-      </Control>
-      <Main ref={containerRef}>
-        <DemoExcalidraw />
-      </Main>
-    </ControlLayout>
+    <div style={{ height: "calc(100dvh - 30px)" }}>
+      <ControlLayout>
+        <Control position="topleft" order={40}>
+          <AimOutlined />
+        </Control>
+        <Control position="topleft" order={30}>
+          <SettingFilled />
+        </Control>
+        <Control position="topleft" order={20}>
+          <ShrinkOutlined />
+        </Control>
+        <Control position="topleft" order={10}>
+          <PlusOutlined />
+        </Control>
+        <Control position="topright" order={1}>
+          <SyncOutlined />
+        </Control>
+        <Control position="topright" order={40}>
+          <AimOutlined />
+        </Control>
+        <Control position="topright" order={30}>
+          <SettingFilled />
+        </Control>
+        <Control position="bottomright" order={20}>
+          <ShrinkOutlined />
+        </Control>
+        <Control position="bottomright" order={10}>
+          <PlusOutlined />
+        </Control>
+        <Control position="bottomright" order={1}>
+          <HomeOutlined />
+        </Control>
+        <Control position="bottomleft" order={80}>
+          <HomeOutlined />
+        </Control>
+        <Control position="bottomleft" order={1}>
+          <LoadingOutlined />
+        </Control>
+        <Control position="bottomleft" order={2}>
+          <LoadingOutlined />
+        </Control>
+        <Control position="bottomleft" order={1}>
+          <SyncOutlined />
+        </Control>
+        <Main ref={containerRef}>
+          <DemoExcalidraw />
+        </Main>
+      </ControlLayout>
+    </div>
   );
 };
 
@@ -253,26 +259,28 @@ export const ResponsiveControlWithTwoColumns = () => {
   }, [containerRef]);
 
   return (
-    <ControlLayout>
-      <Control position="bottomleft" order={1}>
-        <div style={{ width: "600px", background: "red" }}>
-          A search component
-        </div>
-      </Control>
-      <Control position="bottomright" order={1}>
-        <div
-          style={{
-            width: "400px",
-            background: containerWidth ? "yellow" : "blue",
-          }}
-        >
-          Info banner
-        </div>
-      </Control>
-      <Main ref={containerRef}>
-        <GoogleMapIframe />
-      </Main>
-    </ControlLayout>
+    <div style={{ height: "calc(100dvh - 30px)" }}>
+      <ControlLayout>
+        <Control position="bottomleft" order={1}>
+          <div style={{ width: "600px", background: "red" }}>
+            A search component
+          </div>
+        </Control>
+        <Control position="bottomright" order={1}>
+          <div
+            style={{
+              width: "400px",
+              background: containerWidth ? "yellow" : "blue",
+            }}
+          >
+            Info banner
+          </div>
+        </Control>
+        <Main ref={containerRef}>
+          <GoogleMapIframe />
+        </Main>
+      </ControlLayout>
+    </div>
   );
 };
 
@@ -291,72 +299,74 @@ export const ResponsiveCollapsWithTwoColumnsOnBottom = () => {
     }
   }, [containerRef, layoutHeight]);
   return (
-    <TopicMapContextProvider
-      appKey="OnlineBaederkarteWuppertal2022"
-      featureItemsURL={
-        "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
-      }
-      referenceSystemDefinition={MappingConstants.proj4crs25832def}
-      mapEPSGCode="25832"
-      referenceSystem={MappingConstants.crs25832}
-      getFeatureStyler={getFeatureStyler}
-      featureTooltipFunction={(feature) => feature?.text}
-      convertItemToFeature={convertItemToFeature}
-      clusteringOptions={{
-        iconCreateFunction: getPoiClusterIconCreatorFunction({
-          svgSize: 24,
-        }),
-      }}
-    >
-      <ControlLayout
-        onResponsiveCollapse={(collapseEvent) => {
-          console.log("xxx", collapseEvent);
+    <div style={{ height: "calc(100dvh - 30px)" }}>
+      <TopicMapContextProvider
+        appKey="OnlineBaederkarteWuppertal2022"
+        featureItemsURL={
+          "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
+        }
+        referenceSystemDefinition={MappingConstants.proj4crs25832def}
+        mapEPSGCode="25832"
+        referenceSystem={MappingConstants.crs25832}
+        getFeatureStyler={getFeatureStyler}
+        featureTooltipFunction={(feature) => feature?.text}
+        convertItemToFeature={convertItemToFeature}
+        clusteringOptions={{
+          iconCreateFunction: getPoiClusterIconCreatorFunction({
+            svgSize: 24,
+          }),
         }}
-        onHeightResize={setLayoutHeight}
       >
-        <Control position="topleft" order={40}>
-          <ControlButtonStyler>
-            <AimOutlined />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topleft" order={30}>
-          <ControlButtonStyler>
-            <SettingFilled />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topleft" order={20}>
-          <ControlButtonStyler>
-            <ShrinkOutlined />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topright" order={30}>
-          <ControlButtonStyler>
-            <MenuOutlined />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="bottomleft" order={1} fullCollapseWidth={true}>
-          <GazetteerSearchComponent />
-        </Control>
-        <Control position="bottomright" order={1} fullCollapseWidth={true}>
-          <div
-            style={{
-              width: "300px",
-              background: "white",
-              height: "80px",
-              padding: "4px",
-              fontSize: "12px",
-              opacity: "0.9",
-            }}
-          >
-            Info Box
-          </div>
-        </Control>
+        <ControlLayout
+          onResponsiveCollapse={(collapseEvent) => {
+            console.log("xxx", collapseEvent);
+          }}
+          onHeightResize={setLayoutHeight}
+        >
+          <Control position="topleft" order={40}>
+            <ControlButtonStyler>
+              <AimOutlined />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topleft" order={30}>
+            <ControlButtonStyler>
+              <SettingFilled />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topleft" order={20}>
+            <ControlButtonStyler>
+              <ShrinkOutlined />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topright" order={30}>
+            <ControlButtonStyler>
+              <MenuOutlined />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="bottomleft" order={1} fullCollapseWidth={true}>
+            <GazetteerSearchComponent />
+          </Control>
+          <Control position="bottomright" order={1} fullCollapseWidth={true}>
+            <div
+              style={{
+                width: "300px",
+                background: "white",
+                height: "80px",
+                padding: "4px",
+                fontSize: "12px",
+                opacity: "0.9",
+              }}
+            >
+              Info Box
+            </div>
+          </Control>
 
-        <Main ref={containerRef}>
-          <Map mapStyle={containerWidth ?? undefined} />
-        </Main>
-      </ControlLayout>
-    </TopicMapContextProvider>
+          <Main ref={containerRef}>
+            <Map mapStyle={containerWidth ?? undefined} />
+          </Main>
+        </ControlLayout>
+      </TopicMapContextProvider>
+    </div>
   );
 };
 
@@ -379,58 +389,60 @@ export const ResponsiveThreeColumnsOnTop = () => {
   }, [containerRef]);
 
   return (
-    <TopicMapContextProvider
-      appKey="OnlineBaederkarteWuppertal2022"
-      featureItemsURL={
-        "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
-      }
-      referenceSystemDefinition={MappingConstants.proj4crs25832def}
-      mapEPSGCode="25832"
-      referenceSystem={MappingConstants.crs25832}
-      getFeatureStyler={getFeatureStyler}
-      featureTooltipFunction={(feature) => feature?.text}
-      convertItemToFeature={convertItemToFeature}
-      clusteringOptions={{
-        iconCreateFunction: getPoiClusterIconCreatorFunction({
-          svgSize: 24,
-        }),
-      }}
-    >
-      <ControlLayout
-        onResponsiveCollapse={(collapseEvent) => {
-          setResonsiveCollapse(collapseEvent);
+    <div style={{ height: "calc(100dvh - 30px)" }}>
+      <TopicMapContextProvider
+        appKey="OnlineBaederkarteWuppertal2022"
+        featureItemsURL={
+          "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
+        }
+        referenceSystemDefinition={MappingConstants.proj4crs25832def}
+        mapEPSGCode="25832"
+        referenceSystem={MappingConstants.crs25832}
+        getFeatureStyler={getFeatureStyler}
+        featureTooltipFunction={(feature) => feature?.text}
+        convertItemToFeature={convertItemToFeature}
+        clusteringOptions={{
+          iconCreateFunction: getPoiClusterIconCreatorFunction({
+            svgSize: 24,
+          }),
         }}
       >
-        <Control position="topleft" order={40}>
-          <ControlButtonStyler>
-            <AimOutlined />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topleft" order={30}>
-          <ControlButtonStyler>
-            <SettingFilled />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topleft" order={20}>
-          <ControlButtonStyler>
-            <ShrinkOutlined />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topright" order={30}>
-          <ControlButtonStyler>
-            <MenuOutlined />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topcenter" order={30}>
-          <ControlCenterStyler>
-            <div>Center controller</div>
-          </ControlCenterStyler>
-        </Control>
-        <Main ref={containerRef}>
-          <Map mapStyle={containerWidth ?? undefined} />
-        </Main>
-      </ControlLayout>
-    </TopicMapContextProvider>
+        <ControlLayout
+          onResponsiveCollapse={(collapseEvent) => {
+            setResonsiveCollapse(collapseEvent);
+          }}
+        >
+          <Control position="topleft" order={40}>
+            <ControlButtonStyler>
+              <AimOutlined />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topleft" order={30}>
+            <ControlButtonStyler>
+              <SettingFilled />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topleft" order={20}>
+            <ControlButtonStyler>
+              <ShrinkOutlined />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topright" order={30}>
+            <ControlButtonStyler>
+              <MenuOutlined />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topcenter" order={30}>
+            <ControlCenterStyler>
+              <div>Center controller</div>
+            </ControlCenterStyler>
+          </Control>
+          <Main ref={containerRef}>
+            <Map mapStyle={containerWidth ?? undefined} />
+          </Main>
+        </ControlLayout>
+      </TopicMapContextProvider>
+    </div>
   );
 };
 
@@ -567,104 +579,106 @@ export const ResponsiveDebugMode = () => {
   }, [containerRef, layoutHeight]);
 
   return (
-    <TopicMapContextProvider
-      appKey="OnlineBaederkarteWuppertal2022"
-      featureItemsURL={
-        "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
-      }
-      referenceSystemDefinition={MappingConstants.proj4crs25832def}
-      mapEPSGCode="25832"
-      referenceSystem={MappingConstants.crs25832}
-      getFeatureStyler={getFeatureStyler}
-      featureTooltipFunction={(feature) => feature?.text}
-      convertItemToFeature={convertItemToFeature}
-      clusteringOptions={{
-        iconCreateFunction: getPoiClusterIconCreatorFunction({
-          svgSize: 24,
-        }),
-      }}
-    >
-      <ControlLayout
-        onResponsiveCollapse={(collapseEvent) => {
-          setResonsiveCollapse(collapseEvent);
+    <div style={{ height: "calc(100dvh - 30px)" }}>
+      <TopicMapContextProvider
+        appKey="OnlineBaederkarteWuppertal2022"
+        featureItemsURL={
+          "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
+        }
+        referenceSystemDefinition={MappingConstants.proj4crs25832def}
+        mapEPSGCode="25832"
+        referenceSystem={MappingConstants.crs25832}
+        getFeatureStyler={getFeatureStyler}
+        featureTooltipFunction={(feature) => feature?.text}
+        convertItemToFeature={convertItemToFeature}
+        clusteringOptions={{
+          iconCreateFunction: getPoiClusterIconCreatorFunction({
+            svgSize: 24,
+          }),
         }}
-        debugMode={true}
-        onHeightResize={setLayoutHeight}
       >
-        <Control position="topleft" order={40}>
-          <ControlButtonStyler>
-            <AimOutlined />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topleft" order={30}>
-          <ControlButtonStyler>
-            <SettingFilled />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topleft" order={20}>
-          <ControlButtonStyler>
-            <ShrinkOutlined />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topright" order={30}>
-          <ControlButtonStyler>
-            <MenuOutlined />
-          </ControlButtonStyler>
-        </Control>
-        <Control position="topcenter" order={30}>
-          <div
-            style={
-              {
-                ...iconPadding,
-                fontSize: "14px",
-                opacity: 0.9,
-                width: "100%",
-                maxWidth: "100%",
-                height: "100%",
-                padding: "5px 4px",
-                border: "none",
-              } as CSSProperties
-            }
-          >
-            <div>Center controller</div>
-          </div>
-        </Control>
-        <Control position="bottomleft" order={1} fullCollapseWidth={true}>
-          <GazetteerSearchComponent />
-        </Control>
-        <Control position="bottomright" order={10} fullCollapseWidth={true}>
-          <div
-            style={{
-              width: "300px",
-              background: "white",
-              height: "80px",
-              padding: "4px",
-              fontSize: "12px",
-              opacity: "0.9",
-            }}
-          >
-            Info Box
-          </div>
-        </Control>
-        <Control position="bottomright" order={20}>
-          <div
-            style={{
-              width: "120px",
-              background: "green",
-              height: "80px",
-              padding: "4px",
-              fontSize: "12px",
-              opacity: "0.9",
-            }}
-          >
-            Pic Box
-          </div>
-        </Control>
-        <Main ref={containerRef}>
-          <Map mapStyle={containerWidth ?? undefined} />
-        </Main>
-      </ControlLayout>
-    </TopicMapContextProvider>
+        <ControlLayout
+          onResponsiveCollapse={(collapseEvent) => {
+            setResonsiveCollapse(collapseEvent);
+          }}
+          debugMode={true}
+          onHeightResize={setLayoutHeight}
+        >
+          <Control position="topleft" order={40}>
+            <ControlButtonStyler>
+              <AimOutlined />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topleft" order={30}>
+            <ControlButtonStyler>
+              <SettingFilled />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topleft" order={20}>
+            <ControlButtonStyler>
+              <ShrinkOutlined />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topright" order={30}>
+            <ControlButtonStyler>
+              <MenuOutlined />
+            </ControlButtonStyler>
+          </Control>
+          <Control position="topcenter" order={30}>
+            <div
+              style={
+                {
+                  ...iconPadding,
+                  fontSize: "14px",
+                  opacity: 0.9,
+                  width: "100%",
+                  maxWidth: "100%",
+                  height: "100%",
+                  padding: "5px 4px",
+                  border: "none",
+                } as CSSProperties
+              }
+            >
+              <div>Center controller</div>
+            </div>
+          </Control>
+          <Control position="bottomleft" order={1} fullCollapseWidth={true}>
+            <GazetteerSearchComponent />
+          </Control>
+          <Control position="bottomright" order={10} fullCollapseWidth={true}>
+            <div
+              style={{
+                width: "300px",
+                background: "white",
+                height: "80px",
+                padding: "4px",
+                fontSize: "12px",
+                opacity: "0.9",
+              }}
+            >
+              Info Box
+            </div>
+          </Control>
+          <Control position="bottomright" order={20}>
+            <div
+              style={{
+                width: "120px",
+                background: "green",
+                height: "80px",
+                padding: "4px",
+                fontSize: "12px",
+                opacity: "0.9",
+              }}
+            >
+              Pic Box
+            </div>
+          </Control>
+          <Main ref={containerRef}>
+            <Map mapStyle={containerWidth ?? undefined} />
+          </Main>
+        </ControlLayout>
+      </TopicMapContextProvider>
+    </div>
   );
 };
 
@@ -688,88 +702,90 @@ export const CalculateResponsiveBrake = () => {
   }, [containerRef, layoutHeight]);
 
   return (
-    <TopicMapContextProvider
-      appKey="OnlineBaederkarteWuppertal2022"
-      featureItemsURL={
-        "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
-      }
-      referenceSystemDefinition={MappingConstants.proj4crs25832def}
-      mapEPSGCode="25832"
-      referenceSystem={MappingConstants.crs25832}
-      getFeatureStyler={getFeatureStyler}
-      featureTooltipFunction={(feature) => feature?.text}
-      convertItemToFeature={convertItemToFeature}
-      clusteringOptions={{
-        iconCreateFunction: getPoiClusterIconCreatorFunction({
-          svgSize: 24,
-        }),
-      }}
-    >
-      <ControlLayout
-        onResponsiveCollapse={(collapseEvent) => {
-          setResonsiveCollapse(collapseEvent);
+    <div style={{ height: "calc(100dvh - 30px)" }}>
+      <TopicMapContextProvider
+        appKey="OnlineBaederkarteWuppertal2022"
+        featureItemsURL={
+          "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
+        }
+        referenceSystemDefinition={MappingConstants.proj4crs25832def}
+        mapEPSGCode="25832"
+        referenceSystem={MappingConstants.crs25832}
+        getFeatureStyler={getFeatureStyler}
+        featureTooltipFunction={(feature) => feature?.text}
+        convertItemToFeature={convertItemToFeature}
+        clusteringOptions={{
+          iconCreateFunction: getPoiClusterIconCreatorFunction({
+            svgSize: 24,
+          }),
         }}
-        onHeightResize={setLayoutHeight}
       >
-        <Control
-          position="bottomright"
-          order={10}
-          fullCollapseWidth={true}
-          bottomRightWidth={500}
+        <ControlLayout
+          onResponsiveCollapse={(collapseEvent) => {
+            setResonsiveCollapse(collapseEvent);
+          }}
+          onHeightResize={setLayoutHeight}
         >
-          <div
-            style={{
-              width: "500px",
-              background: "white",
-              height: "80px",
-              padding: "4px",
-              fontSize: "12px",
-              opacity: "0.9",
-            }}
+          <Control
+            position="bottomright"
+            order={10}
+            fullCollapseWidth={true}
+            bottomRightWidth={500}
           >
-            Info Box
-          </div>
-        </Control>
-        <Control position="bottomright" order={20}>
-          <div
-            style={{
-              width: "120px",
-              background: "green",
-              height: "80px",
-              padding: "4px",
-              fontSize: "12px",
-              opacity: "0.9",
-            }}
+            <div
+              style={{
+                width: "500px",
+                background: "white",
+                height: "80px",
+                padding: "4px",
+                fontSize: "12px",
+                opacity: "0.9",
+              }}
+            >
+              Info Box
+            </div>
+          </Control>
+          <Control position="bottomright" order={20}>
+            <div
+              style={{
+                width: "120px",
+                background: "green",
+                height: "80px",
+                padding: "4px",
+                fontSize: "12px",
+                opacity: "0.9",
+              }}
+            >
+              Pic Box
+            </div>
+          </Control>
+          <Control
+            position="bottomleft"
+            order={10}
+            bottomLeftWidth={500}
+            fullCollapseWidth={true}
           >
-            Pic Box
-          </div>
-        </Control>
-        <Control
-          position="bottomleft"
-          order={10}
-          bottomLeftWidth={500}
-          fullCollapseWidth={true}
-        >
-          <GazetteerSearchComponent pixelwidth={500} />
-        </Control>
-        <Control position="bottomleft" order={20} bottomLeftWidth={300}>
-          <div
-            style={{
-              width: "300px",
-              background: "white",
-              height: "80px",
-              padding: "4px",
-              fontSize: "12px",
-              opacity: "0.9",
-            }}
-          >
-            Second Gazetter
-          </div>
-        </Control>
-        <Main ref={containerRef}>
-          <Map mapStyle={containerWidth ?? undefined} />
-        </Main>
-      </ControlLayout>
-    </TopicMapContextProvider>
+            <GazetteerSearchComponent pixelwidth={500} />
+          </Control>
+          <Control position="bottomleft" order={20} bottomLeftWidth={300}>
+            <div
+              style={{
+                width: "300px",
+                background: "white",
+                height: "80px",
+                padding: "4px",
+                fontSize: "12px",
+                opacity: "0.9",
+              }}
+            >
+              Second Gazetter
+            </div>
+          </Control>
+          <Main ref={containerRef}>
+            <Map mapStyle={containerWidth ?? undefined} />
+          </Main>
+        </ControlLayout>
+      </TopicMapContextProvider>
+    </div>
   );
 };
