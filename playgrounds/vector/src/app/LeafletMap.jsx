@@ -1,55 +1,56 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect } from "react";
 
-import './App.css';
-import { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'leaflet/dist/leaflet.css';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import 'react-cismap/topicMaps.css';
-import { md5FetchText, fetchJSON } from 'react-cismap/tools/fetching';
-import { getGazDataForTopicIds } from 'react-cismap/tools/gazetteerHelper';
+import "./App.css";
+import { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "leaflet/dist/leaflet.css";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import "react-cismap/topicMaps.css";
+import { md5FetchText, fetchJSON } from "react-cismap/tools/fetching";
+import { getGazDataForTopicIds } from "react-cismap/tools/gazetteerHelper";
 
-import TopicMapContextProvider from 'react-cismap/contexts/TopicMapContextProvider';
-import { getClusterIconCreatorFunction } from 'react-cismap/tools/uiHelper';
-import TopicMapComponent from 'react-cismap/topicmaps/TopicMapComponent';
-import FeatureCollection from 'react-cismap/FeatureCollection';
-import GenericInfoBoxFromFeature from 'react-cismap/topicmaps/GenericInfoBoxFromFeature';
-import getGTMFeatureStyler from 'react-cismap/topicmaps/generic/GTMStyler';
-import { MappingConstants } from 'react-cismap';
-import queryString from 'query-string';
-import CrossTabCommunicationContextProvider from 'react-cismap/contexts/CrossTabCommunicationContextProvider';
-import CismapLayer from 'react-cismap/CismapLayer';
-import InfoBox from 'react-cismap/topicmaps/InfoBox';
-import { getActionLinksForFeature } from 'react-cismap/tools/uiHelper';
-import { TopicMapDispatchContext } from 'react-cismap/contexts/TopicMapContextProvider';
+import TopicMapContextProvider from "react-cismap/contexts/TopicMapContextProvider";
+import { getClusterIconCreatorFunction } from "react-cismap/tools/uiHelper";
+import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
+import FeatureCollection from "react-cismap/FeatureCollection";
+import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
+import getGTMFeatureStyler from "react-cismap/topicmaps/generic/GTMStyler";
+import { MappingConstants } from "react-cismap";
+import queryString from "query-string";
+import CrossTabCommunicationContextProvider from "react-cismap/contexts/CrossTabCommunicationContextProvider";
+import CismapLayer from "react-cismap/CismapLayer";
+import InfoBox from "react-cismap/topicmaps/InfoBox";
+import { getActionLinksForFeature } from "react-cismap/tools/uiHelper";
+import { TopicMapDispatchContext } from "react-cismap/contexts/TopicMapContextProvider";
+import { Button } from "antd";
 
-const host = 'https://wupp-topicmaps-data.cismet.de';
+const host = "https://wupp-topicmaps-data.cismet.de";
 
 const getGazData = async (setGazData) => {
-  const prefix = 'GazDataForStories';
+  const prefix = "GazDataForStories";
   const sources = {};
 
   sources.adressen = await md5FetchText(
     prefix,
-    host + '/data/3857/adressen.json',
+    host + "/data/3857/adressen.json",
   );
   sources.bezirke = await md5FetchText(
     prefix,
-    host + '/data/3857/bezirke.json',
+    host + "/data/3857/bezirke.json",
   );
   sources.quartiere = await md5FetchText(
     prefix,
-    host + '/data/3857/quartiere.json',
+    host + "/data/3857/quartiere.json",
   );
-  sources.pois = await md5FetchText(prefix, host + '/data/3857/pois.json');
-  sources.kitas = await md5FetchText(prefix, host + '/data/3857/kitas.json');
+  sources.pois = await md5FetchText(prefix, host + "/data/3857/pois.json");
+  sources.kitas = await md5FetchText(prefix, host + "/data/3857/kitas.json");
 
   const gazData = getGazDataForTopicIds(sources, [
-    'pois',
-    'kitas',
-    'bezirke',
-    'quartiere',
-    'adressen',
+    "pois",
+    "kitas",
+    "bezirke",
+    "quartiere",
+    "adressen",
   ]);
 
   setGazData(gazData);
@@ -57,7 +58,7 @@ const getGazData = async (setGazData) => {
 
 function App({ vectorStyles = [] }) {
   const [syncToken, setSyncToken] = useState(null);
-  const [layers, setLayers] = useState('');
+  const [layers, setLayers] = useState("");
   useEffect(() => {
     const params = queryString.parse(window.location.hash);
 
@@ -71,50 +72,51 @@ function App({ vectorStyles = [] }) {
 
   const backgroundConfigurations = {
     stadtplan: {
-      layerkey: 'wupp-plan-live',
-      src: '/images/rain-hazard-map-bg/citymap.png',
-      title: 'Stadtplan',
+      layerkey: "wupp-plan-live",
+      src: "/images/rain-hazard-map-bg/citymap.png",
+      title: "Stadtplan",
     },
     lbk: {
-      layerkey: 'trueOrtho2020@75|OMT_Klokantech_basic@50',
-      src: '/images/rain-hazard-map-bg/ortho.png',
-      title: 'Luftbildkarte',
+      layerkey: "trueOrtho2020@75|OMT_Klokantech_basic@50",
+      src: "/images/rain-hazard-map-bg/ortho.png",
+      title: "Luftbildkarte",
     },
     basemap: {
-      layerkey: 'basemap_relief@10',
-      src: '/images/rain-hazard-map-bg/citymap.png',
-      title: 'basemap',
+      layerkey: "basemap_relief@10",
+      src: "/images/rain-hazard-map-bg/citymap.png",
+      title: "basemap",
     },
 
     vector1: {
-      layerkey: 'OMT_Klokantech_basic@100',
-      src: '/images/rain-hazard-map-bg/citymap.png',
-      title: 'Stadtplan',
+      layerkey: "OMT_Klokantech_basic@100",
+      src: "/images/rain-hazard-map-bg/citymap.png",
+      title: "Stadtplan",
     },
     vector2: {
-      layerkey: 'OMT_OSM_bright@100',
-      src: '/images/rain-hazard-map-bg/citymap.png',
-      title: 'Stadtplan',
+      layerkey: "OMT_OSM_bright@100",
+      src: "/images/rain-hazard-map-bg/citymap.png",
+      title: "Stadtplan",
     },
   };
   const backgroundModes = [
     {
-      title: 'Vektorbasierter Layer (Basemap.de)',
-      mode: 'default',
-      layerKey: 'basemap',
+      title: "Vektorbasierter Layer (Basemap.de)",
+      mode: "default",
+      layerKey: "basemap",
     },
     {
-      title: 'Vektorbasierter Layer (OSM bright)',
-      mode: 'default',
-      layerKey: 'vector2',
+      title: "Vektorbasierter Layer (OSM bright)",
+      mode: "default",
+      layerKey: "vector2",
     },
     {
-      title: 'Stadtplan (RVR, zum Vergleich)',
-      mode: 'default',
-      layerKey: 'stadtplan',
+      title: "Stadtplan (RVR, zum Vergleich)",
+      mode: "default",
+      layerKey: "stadtplan",
     },
-    { title: 'Luftbildkarte', mode: 'default', layerKey: 'lbk' },
+    { title: "Luftbildkarte", mode: "default", layerKey: "lbk" },
   ];
+  console.log("vectorStyles", vectorStyles);
 
   const content = (
     <TopicMapContextProvider
@@ -123,11 +125,17 @@ function App({ vectorStyles = [] }) {
       backgroundModes={backgroundModes}
       referenceSystem={MappingConstants.crs3857}
       referenceSystemDefinition={MappingConstants.proj4crs3857def}
+      titleFactory={(feature) => (
+        <span style={{ margin: 2 }}>
+          <Button style={{ margin: 2 }}>Layer</Button>
+        </span>
+      )}
     >
       <Map layers={layers} vectorStyles={vectorStyles} />
     </TopicMapContextProvider>
   );
-  console.log('xxx sycn', syncToken);
+
+  console.log("xxx sycn", syncToken);
 
   return syncToken ? (
     <CrossTabCommunicationContextProvider role="sync" token={syncToken}>
@@ -153,12 +161,12 @@ const Map = ({ layers, vectorStyles }) => {
           const f = JSON.stringify(selectedFeature, null, 2);
           const pf = JSON.parse(f);
           pf.crs = {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn:ogc:def:crs:EPSG::4326',
+              name: "urn:ogc:def:crs:EPSG::4326",
             },
           };
-          console.log('xxx zoomToFeature', pf);
+          console.log("xxx zoomToFeature", pf);
 
           zoomToFeature(pf);
         }
@@ -169,7 +177,6 @@ const Map = ({ layers, vectorStyles }) => {
   useEffect(() => {
     getGazData(setGazData);
   }, []);
-  console.log('xxx selectedFeature ', selectedFeature);
 
   return (
     <TopicMapComponent
@@ -197,15 +204,15 @@ const Map = ({ layers, vectorStyles }) => {
         return (
           <CismapLayer
             {...{
-              type: 'vector',
+              type: "vector",
               style: style,
-              pane: 'additionalLayers' + index,
+              pane: "additionalLayers" + index,
               opacity: 1,
               maxSelectionCount: 1,
               onSelectionChanged: (e) => {
                 const selectedFeature = e.hits[0];
                 console.log(
-                  'xxxy selectedFeature',
+                  "xxxy selectedFeature",
                   JSON.stringify(selectedFeature, null, 2),
                 );
 
@@ -219,8 +226,8 @@ const Map = ({ layers, vectorStyles }) => {
                   setSelectedFeature(selectedFeature);
                 } else {
                   //if style has /poi/ in it, then it is a POI layer
-                  if (style.indexOf('/poi/') > -1) {
-                    console.log('xxxx style ', style);
+                  if (style.indexOf("/poi/") > -1) {
+                    console.log("xxxx style ", style);
 
                     const createInfoBoxInfo = (p) => {
                       const identifications = JSON.parse(p.identifications);
@@ -246,8 +253,8 @@ const Map = ({ layers, vectorStyles }) => {
                     setSelectedFeature(selectedFeature);
                   }
                   //if style has /sgk_hausnummer/ in it
-                  else if (style.indexOf('/sgk_hausnummern/') > -1) {
-                    console.log('xxx------');
+                  else if (style.indexOf("/sgk_hausnummern/") > -1) {
+                    console.log("xxx------");
 
                     const conf = [
                       "title:p.name+' '+p.hnummer",
@@ -266,11 +273,11 @@ const Map = ({ layers, vectorStyles }) => {
                                           };
                                           return info;
                     })`;
-                    console.log('xxx functionString', functionString);
+                    console.log("xxx functionString", functionString);
 
                     const tmpInfo = eval(functionString)(p);
 
-                    console.log('xxx tmpInfo', tmpInfo);
+                    console.log("xxx tmpInfo", tmpInfo);
 
                     selectedFeature.properties = {
                       ...selectedFeature.properties,
