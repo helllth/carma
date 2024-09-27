@@ -4,8 +4,8 @@
       "deployment": {
         "manual": {
           "pages": {
-            "org": "carma-dev-deployments",
-            "prj": "topicmaps-stadtplan-wuppertal"
+            "org": "digital-twin-wuppertal-live",
+            "prj": "stadtplan"
           }
         },
         "auto": {
