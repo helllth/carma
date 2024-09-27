@@ -20,11 +20,8 @@ import proj4 from "proj4";
 
 import { RoutedMap } from "react-cismap";
 
-import { ModelAsset } from "@carma-mapping/cesium-engine";
-import {
-  INVERTED_SELECTED_POLYGON_ID,
-  SELECTED_POLYGON_ID,
-} from "@carma-mapping/fuzzy-search";
+import type { ModelAsset } from "@carma-mapping/cesium-engine";
+
 
 import {
   polygonHierarchyFromPolygonCoords,
@@ -39,6 +36,7 @@ import { PROJ4_CONVERTERS } from "./geo";
 import { addCesiumMarker, removeCesiumMarker } from "./cesium3dMarker";
 
 import { DEFAULT_SRC_PROJ } from "../config";
+import { INVERTED_SELECTED_POLYGON_ID, SELECTED_POLYGON_ID } from '../../index';
 
 const proj4ConverterLookup = {};
 const DEFAULT_ZOOM_LEVEL = 16;
@@ -58,6 +56,7 @@ type CesiumMapActions = {
     pos: Cartographic,
     zoom: number,
     cesiumConfig: { pitchAdjustHeight?: number },
+    options?: { onComplete?: Function },
   ) => void;
   setZoom: (scene: Scene, zoom: number) => void;
   fitBoundingSphere: (scene: Scene, bounds: BoundingSphere) => void;
@@ -83,6 +82,7 @@ const CesiumMapActions = {
     { longitude, latitude, height }: Cartographic,
     zoom: number,
     cesiumConfig: { pitchAdjustHeight?: number } = {},
+    options: { onComplete?: Function } = {},
   ) => {
     if (scene) {
       const center = Cartesian3.fromRadians(longitude, latitude, height);
@@ -101,6 +101,7 @@ const CesiumMapActions = {
             "[CESIUM|ANIMATION] FlytoBoundingSphere Complete",
             center,
           );
+          options.onComplete && options.onComplete();
         },
       });
     }
@@ -233,17 +234,16 @@ export const carmaHitTrigger = (
       console.log("mapElement", mapElement);
       if (mapElement instanceof Viewer) {
         const viewer = mapElement;
+        const { scene } = viewer;
         // add marker entity to map
         removeCesiumMarker(viewer);
         viewer.entities.removeById(SELECTED_POLYGON_ID);
         //viewer.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
         removeGroundPrimitiveById(viewer, INVERTED_SELECTED_POLYGON_ID);
-        viewer.scene.render(); // explicit render for requestRenderMode;
-        const posTerrain = await getPositionWithHeightAsync(
-          viewer.scene,
-          Cartographic.fromDegrees(pos.lon, pos.lat),
-          //cesiumConfig.elevationTileset,
-        );
+        scene.requestRender(); // explicit render for requestRenderMode;
+        const posCarto = Cartographic.fromDegrees(pos.lon, pos.lat);
+
+        const posTerrain = await getPositionWithHeightAsync(scene, posCarto);
 
         if (polygon) {
           const polygonEntity = new Entity({
@@ -286,35 +286,57 @@ export const carmaHitTrigger = (
               : ClassificationType.BOTH,
           });
 
-          viewer.scene.groundPrimitives.add(invertedGroundPrimitive);
+          scene.groundPrimitives.add(invertedGroundPrimitive);
 
           viewer.entities.add(polygonEntity);
           //viewer.entities.add(invertedPolygonEntity);
           viewer.flyTo(polygonEntity);
         } else {
-          cAction.lookAt(mapElement.scene, posTerrain, zoom, cesiumConfig);
+          const delayedMarker = async () => {
+            const updateMarker = async () => {
+              const posTileset = await getPositionWithHeightAsync(
+                scene,
+                posCarto,
+                true,
+              );
+              const heightAboveTerrain = posTileset.height - posTerrain.height;
+              posTileset.height =
+                posTileset.height +
+                (cesiumConfig.markerAnchorHeight ??
+                  DEFAULT_CESIUM_MARKER_ANCHOR_HEIGHT);
+              console.log(
+                "GAZETTEER: [2D3D|CESIUM|CAMERA] adding marker at Marker (Tileset Elevation)",
+                posTileset.height,
+                heightAboveTerrain,
+                cesiumConfig.elevationTileset,
+              );
+              removeCesiumMarker(viewer);
+              cesiumConfig.markerAsset &&
+                addCesiumMarker(viewer, posTileset, cesiumConfig.markerAsset);
+            };
+            const getMarker = async () => {
+              await updateMarker();
+              cesiumConfig.elevationTileset?.initialTilesLoaded.removeEventListener(
+                getMarker,
+              );
+            };
+            if (cesiumConfig.markerAsset && cesiumConfig.elevationTileset) {
+              if (cesiumConfig.elevationTileset.tilesLoaded) getMarker();
+              else {
+                await updateMarker();
+                cesiumConfig.elevationTileset.initialTilesLoaded.addEventListener(
+                  getMarker,
+                );
+              }
+            }
+          };
+          cAction.lookAt(scene, posTerrain, zoom, cesiumConfig, {
+            onComplete: delayedMarker,
+          });
           console.log(
             "GAZETTEER: [2D3D|CESIUM|CAMERA] look at Marker (Terrain Elevation)",
             posTerrain.height,
           );
-          if (cesiumConfig.markerAsset) {
-            const posTileset = await getPositionWithHeightAsync(
-              viewer.scene,
-              Cartographic.fromDegrees(pos.lon, pos.lat),
-              cesiumConfig.elevationTileset,
-            );
-            const heightAboveTerrain = posTileset.height - posTerrain.height;
-            posTileset.height =
-              posTileset.height +
-              (cesiumConfig.markerAnchorHeight ??
-                DEFAULT_CESIUM_MARKER_ANCHOR_HEIGHT);
-            console.log(
-              "GAZETTEER: [2D3D|CESIUM|CAMERA] look at Marker (Tileset Elevation)",
-              posTileset.height,
-              heightAboveTerrain,
-            );
-            addCesiumMarker(viewer, posTileset, cesiumConfig.markerAsset);
-          }
         }
       } else if (mapElement instanceof RoutedMap) {
         console.log("xxx mapElement", mapElement, "not implemented");

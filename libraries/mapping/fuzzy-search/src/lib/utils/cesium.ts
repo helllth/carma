@@ -30,27 +30,23 @@ export const getHeadingPitchRangeFromZoom = (
 export const getPositionWithHeightAsync = async (
   scene: Scene,
   position: Cartographic,
-  tileset?: Cesium3DTileset,
+  useClampedHeight : boolean = false,
 ) => {
   // Convert the Cartographic position to Cartesian3 coordinates
   const cartesianPosition = Cartographic.toCartesian(position);
 
   let updatedPosition: Cartographic | null = null;
 
-  if (tileset) {
+  if (useClampedHeight) {
     // Attempt to clamp the position to the tileset's height
     try {
-      const clampedPositions = await scene.clampToHeightMostDetailed(
-        [cartesianPosition],
-        [tileset],
+      const clampedPosition = await scene.clampToHeight(
+        cartesianPosition,
+        //[tileset],
       );
 
-      if (
-        clampedPositions &&
-        clampedPositions.length > 0 &&
-        clampedPositions[0]
-      ) {
-        const clampedCartesian = clampedPositions[0];
+      if (clampedPosition) {
+        const clampedCartesian = clampedPosition;
         const clampedCartographic =
           Cartographic.fromCartesian(clampedCartesian);
 
@@ -77,6 +73,8 @@ export const getPositionWithHeightAsync = async (
         error,
       );
     }
+  } else {
+    console.info("[CESIUM|TILESET] No Tileset provided, using terrain");
   }
 
   if (updatedPosition) {

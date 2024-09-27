@@ -313,9 +313,8 @@ export const GeoportalMap = () => {
                 ref={tourRefLabels.measurement}
               >
                 <img
-                  src={`${getUrlPrefix()}${
-                    isModeMeasurement ? "measure-active.png" : "measure.png"
-                  }`}
+                  src={`${getUrlPrefix()}${isModeMeasurement ? "measure-active.png" : "measure.png"
+                    }`}
                   alt="Measure"
                   className="w-6"
                 />
@@ -368,7 +367,7 @@ export const GeoportalMap = () => {
               viewer,
               markerAsset: MODEL_ASSETS.Marker,
               isPrimaryStyle: showPrimaryTileset,
-              elevationTileset: tilesets.secondary,
+              elevationTileset: showPrimaryTileset ? tilesets.primary : tilesets.secondary,
             }}
             referenceSystem={referenceSystem}
             referenceSystemDefinition={referenceSystemDefinition}
