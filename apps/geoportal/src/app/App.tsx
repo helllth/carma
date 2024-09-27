@@ -56,8 +56,6 @@ import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-cismap/topicMaps.css";
 import "./index.css";
 
-import { useWindowSize } from "@react-hook/window-size";
-
 if (typeof global === "undefined") {
   window.global = window;
 }
@@ -74,10 +72,6 @@ function App({ published }: { published?: boolean }) {
   const allowUiChanges = useSelector(getUIAllowChanges);
   const dispatch = useDispatch();
   const mode = useSelector(getUIMode);
-  const [windowWidth, windowHeight] = useWindowSize();
-  const toolbarHeight = 50; //todo: better with useComponentSize(refToolbar)
-  const mapWidth = windowWidth;
-  const mapHeight = windowHeight - toolbarHeight;
   const location = useLocation();
 
   useEffect(() => {

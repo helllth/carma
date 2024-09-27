@@ -101,8 +101,6 @@ import {
 import "../leaflet.css";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 
-import { useWindowHeight, useWindowWidth } from "@react-hook/window-size";
-
 export const GeoportalMap = () => {
   const dispatch = useDispatch();
   const [urlParams, setUrlParams] = useSearchParams();
@@ -156,8 +154,6 @@ export const GeoportalMap = () => {
   const tourRefLabels = useTourRefCollabLabels();
   const gazData = useGazData();
   const { width, height } = useWindowSize(wrapperRef);
-  // const width = useWindowWidth();
-  // const height = useWindowHeight();
 
   const handleToggleMeasurement = () => {
     dispatch(toggleUIMode(UIMode.MEASUREMENT));
