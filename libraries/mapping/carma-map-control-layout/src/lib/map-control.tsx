@@ -1,7 +1,8 @@
-import React, { ReactNode, useRef, useState, useEffect } from 'react';
-import Control, { ControlProps } from './components/Control';
-import styles from './map-control.module.css';
-import Main from './components/Main';
+import React, { ReactNode, useRef, useState, useEffect } from "react";
+import Control, { ControlProps } from "./components/Control";
+import styles from "./map-control.module.css";
+import Main from "./components/Main";
+import { set } from "lodash";
 
 export interface ControlLayoutProps {
   children: ReactNode;
@@ -86,7 +87,7 @@ const buildChildHiegthWithBottomShift = (childNodes, className, gap) => {
   childNodes.forEach((currentItem) => {
     if (currentItem.className.startsWith(className)) {
       if (bottomShift > 0) {
-        currentItem.style.bottom = bottomShift + 'px';
+        currentItem.style.bottom = bottomShift + "px";
       }
 
       bottomShift += currentItem.clientHeight + gap;
@@ -103,7 +104,7 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
 }) => {
   const [windowWidth, setWindowWidth] = useState(0);
   const [layoutHeight, setLayoutHeight] = useState<number | null>(null);
-  const [screenSizeWatcher, setScreenSizeWatcher] = useState('');
+  const [screenSizeWatcher, setScreenSizeWatcher] = useState("");
   const {
     allPositions,
     mainComponent,
@@ -124,11 +125,11 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
     setLayoutHeight(ifStorybook ? window.innerHeight - 28 : window.innerHeight);
   };
   useEffect(() => {
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -143,26 +144,26 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
       if (
         containerWidth &&
         containerWidth < bottomCollapsBrake &&
-        screenSizeWatcher !== 'mobile'
+        screenSizeWatcher !== "mobile"
       ) {
-        setScreenSizeWatcher('mobile');
-        console.info('HOOK [MAPCONTROL] callback mobile');
-        onResponsiveCollapse('mobile');
+        setScreenSizeWatcher("mobile");
+        console.info("HOOK [MAPCONTROL] callback mobile");
+        onResponsiveCollapse("mobile");
       } else if (
         containerWidth &&
         containerWidth > bottomCollapsBrake &&
-        screenSizeWatcher !== 'screen'
+        screenSizeWatcher !== "screen"
       ) {
-        setScreenSizeWatcher('screen');
-        console.info('HOOK [MAPCONTROL] callback screen');
-        onResponsiveCollapse('screen');
+        setScreenSizeWatcher("screen");
+        console.info("HOOK [MAPCONTROL] callback screen");
+        onResponsiveCollapse("screen");
       }
 
       const childNodes = containerRef.current.childNodes;
 
-      buildChildHiegthWithBottomShift(childNodes, '_bottomright', 10);
+      buildChildHiegthWithBottomShift(childNodes, "_bottomright", 10);
 
-      buildChildHiegthWithBottomShift(childNodes, '_bottomleft', 10);
+      buildChildHiegthWithBottomShift(childNodes, "_bottomleft", 10);
     }
   }, [containerRef, windowWidth, screenSizeWatcher]);
 
@@ -172,40 +173,44 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
 
   return (
     <div
-      className={`${styles['container']} ${debugMode ? styles['debug-mode'] : ''
-        }`}
+      className={`${styles["container"]} ${
+        debugMode ? styles["debug-mode"] : ""
+      }`}
       style={{
-        height: layoutHeight ? `${layoutHeight}px` : 'calc(100vh - 54px)',
+        height: "100%", //layoutHeight ? `${layoutHeight}px` : "calc(100vh - 54px)",
       }}
     >
       <div
-        className={`${styles['controls-container']} ${layoutWidth && layoutWidth <= bottomCollapsBrake
-          ? styles['controls-container__mobile']
-          : ''
-          }`}
+        className={`${styles["controls-container"]} ${
+          layoutWidth && layoutWidth <= bottomCollapsBrake
+            ? styles["controls-container__mobile"]
+            : ""
+        }`}
         ref={containerRef}
       >
         {mainComponent ? mainComponent : null}
         {Object.entries(allPositions).map(([position, components]) => {
-          if (position.startsWith('bottom')) {
+          if (position.startsWith("bottom")) {
             return components.map((component, idx) => (
               <div
                 key={`${position}_${idx}`}
-                className={`${styles[position]} ${debugMode ? styles['debug-mode'] : ''
-                  } ${component.fullCollapseWidth &&
-                    layoutWidth &&
-                    layoutWidth <= bottomCollapsBrake
-                    ? styles['full-collapse-width']
-                    : ''
-                  } ${layoutWidth && layoutWidth <= bottomCollapsBrake
+                className={`${styles[position]} ${
+                  debugMode ? styles["debug-mode"] : ""
+                } ${
+                  component.fullCollapseWidth &&
+                  layoutWidth &&
+                  layoutWidth <= bottomCollapsBrake
+                    ? styles["full-collapse-width"]
+                    : ""
+                } ${
+                  layoutWidth && layoutWidth <= bottomCollapsBrake
                     ? styles[`${position}__mobile`]
-                    : ''
-                  } ${idx === 0 &&
-                    layoutWidth &&
-                    layoutWidth <= bottomCollapsBrake
+                    : ""
+                } ${
+                  idx === 0 && layoutWidth && layoutWidth <= bottomCollapsBrake
                     ? styles[`${position}__first`]
-                    : ''
-                  }`}
+                    : ""
+                }`}
               >
                 <Control {...component} key={`control_${position}_${idx}`} />
               </div>
@@ -214,8 +219,9 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
             return (
               <div
                 key={position}
-                className={`${styles[position]} ${debugMode ? styles['debug-mode'] : ''
-                  }`}
+                className={`${styles[position]} ${
+                  debugMode ? styles["debug-mode"] : ""
+                }`}
               >
                 {allPositions[position].map((component, idx) => {
                   return <Control {...component} key={idx} />;

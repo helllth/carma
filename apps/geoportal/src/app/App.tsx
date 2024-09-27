@@ -55,7 +55,6 @@ import "leaflet/dist/leaflet.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-cismap/topicMaps.css";
 import "./index.css";
-import { useWindowHeight } from "@react-hook/window-size";
 
 if (typeof global === "undefined") {
   window.global = window;
@@ -70,17 +69,14 @@ type Config = {
 function App({ published }: { published?: boolean }) {
   const [syncToken, setSyncToken] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const height = useWindowHeight();
   const allowUiChanges = useSelector(getUIAllowChanges);
   const dispatch = useDispatch();
   const mode = useSelector(getUIMode);
-
   const location = useLocation();
 
   useEffect(() => {
     console.log(" [GEOPORTAL|ROUTER] App Route changed to:", location.pathname);
   }, [location]);
-
 
   useEffect(() => {
     if (searchParams.get("sync")) {
@@ -160,7 +156,7 @@ function App({ published }: { published?: boolean }) {
           <TweakpaneProvider>
             <ErrorBoundary FallbackComponent={AppErrorFallback}>
               <div
-                className="flex flex-col w-full"
+                className="flex flex-col w-full "
                 style={{ height: "100dvh" }}
               >
                 {!published && <TopNavbar />}

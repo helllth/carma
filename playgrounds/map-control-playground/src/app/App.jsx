@@ -26,23 +26,25 @@ function App() {
   }, []);
 
   return (
-    <TopicMapContextProvider
-      appKey="OnlineBaederkarteWuppertal2022"
-      featureItemsURL={
-        "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
-      }
-      referenceSystemDefinition={MappingConstants.proj4crs25832def}
-      mapEPSGCode="25832"
-      referenceSystem={MappingConstants.crs25832}
-      getFeatureStyler={getFeatureStyler}
-      featureTooltipFunction={(feature) => feature?.text}
-      convertItemToFeature={convertItemToFeature}
-      clusteringOptions={{
-        iconCreateFunction: getPoiClusterIconCreatorFunction({ svgSize: 24 }),
-      }}
-    >
-      <Map />
-    </TopicMapContextProvider>
+    <div style={{ height: "100dvh" }}>
+      <TopicMapContextProvider
+        appKey="OnlineBaederkarteWuppertal2022"
+        featureItemsURL={
+          "https://wupp-topicmaps-data.cismet.de/data/baeder.data.json"
+        }
+        referenceSystemDefinition={MappingConstants.proj4crs25832def}
+        mapEPSGCode="25832"
+        referenceSystem={MappingConstants.crs25832}
+        getFeatureStyler={getFeatureStyler}
+        featureTooltipFunction={(feature) => feature?.text}
+        convertItemToFeature={convertItemToFeature}
+        clusteringOptions={{
+          iconCreateFunction: getPoiClusterIconCreatorFunction({ svgSize: 24 }),
+        }}
+      >
+        <Map />
+      </TopicMapContextProvider>
+    </div>
   );
 }
 

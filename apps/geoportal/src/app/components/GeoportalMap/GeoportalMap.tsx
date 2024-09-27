@@ -93,7 +93,10 @@ import LocateControlComponent from "./controls/LocateControlComponent.tsx";
 import { createCismapLayers, onClickTopicMap } from "./topicmap.utils.ts";
 import { getUrlPrefix } from "./utils";
 
-import { CESIUM_MAPMODE_TRANSITION_DURATION, LEAFLET_CONFIG } from '../../config/app.config';
+import {
+  CESIUM_MAPMODE_TRANSITION_DURATION,
+  LEAFLET_CONFIG,
+} from "../../config/app.config";
 
 import "../leaflet.css";
 import "cesium/Build/Cesium/Widgets/widgets.css";
@@ -229,9 +232,7 @@ export const GeoportalMap = () => {
           <ControlButtonStyler
             onClick={(e) => {
               isMode2d &&
-                leaflelEl.setZoom(
-                  Math.round(leaflelEl.getZoom()) - 1,
-                );
+                leaflelEl.setZoom(Math.round(leaflelEl.getZoom()) - 1);
               !isMode2d && handleZoomOut(e);
             }}
             className="!rounded-t-none !border-t-[1px]"
@@ -312,8 +313,9 @@ export const GeoportalMap = () => {
                 ref={tourRefLabels.measurement}
               >
                 <img
-                  src={`${getUrlPrefix()}${isModeMeasurement ? "measure-active.png" : "measure.png"
-                    }`}
+                  src={`${getUrlPrefix()}${
+                    isModeMeasurement ? "measure-active.png" : "measure.png"
+                  }`}
                   alt="Measure"
                   className="w-6"
                 />
@@ -366,7 +368,7 @@ export const GeoportalMap = () => {
               viewer,
               markerAsset: MODEL_ASSETS.Marker,
               isPrimaryStyle: showPrimaryTileset,
-              elevationTileset: tilesets.secondary
+              elevationTileset: tilesets.secondary,
             }}
             referenceSystem={referenceSystem}
             referenceSystemDefinition={referenceSystemDefinition}
@@ -379,7 +381,7 @@ export const GeoportalMap = () => {
       </Control>
       <Main ref={wrapperRef}>
         <>
-          <div className={"map-container-2d"} style={{ zIndex: 100 }}>
+          <div className={"map-container-2d"} style={{ zIndex: 400 }}>
             <TopicMapComponent
               gazData={gazData}
               modalMenu={
