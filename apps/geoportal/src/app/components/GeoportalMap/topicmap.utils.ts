@@ -196,7 +196,6 @@ const onSelectionChangedVector = (
   },
   { layer, layers, dispatch, setPos, zoom },
 ) => {
-  console.log("xxx", e);
   if (checkIfLayerIsFirst(layer, layers)) {
     dispatch(clearVectorInfos());
   }
