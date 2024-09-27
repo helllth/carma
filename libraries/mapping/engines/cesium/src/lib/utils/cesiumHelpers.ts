@@ -755,13 +755,13 @@ export const leafletToCesiumCamera = (
     latRad,
   );
 
-  let currentPixelResolution = getScenePixelSize(viewer).value;
-
   const viewerDim = Math.min(
     viewer.canvas.clientWidth,
     viewer.canvas.clientHeight,
   );
   const baseHeight = viewerDim * targetPixelResolution;
+
+  let currentPixelResolution = getScenePixelSize(viewer).value;
 
   if (currentPixelResolution === null) {
     console.warn("No pixel size found for camera position");
@@ -772,19 +772,21 @@ export const leafletToCesiumCamera = (
 
   let targetHeight = camera.positionCartographic.height;
 
-  console.info("zoom target height", baseHeight, targetHeight);
-
   if (targetHeight > 50000) {
     console.warn(
       "zoom request viewer height too high, applying base height",
       baseHeight,
       targetHeight,
     );
-    targetHeight = baseHeight;
+    targetHeight = 200 + baseHeight;
+  }
+  if (targetHeight < 200) {
+    console.warn("targetHeight too low setting to min height", 200);
+    targetHeight = 200;
   }
 
   console.info(
-    `L2C [2D3D|CESIUM|CAMERA] cause: ${cause} lat: ${lat} lng: ${lng} z: ${zoom} px: ${targetPixelResolution} dpr: ${window.devicePixelRatio} heights:`,
+    `L2C [2D3D|CESIUM|CAMERA] cause: ${cause} lat: ${lat} lng: ${lng} z: ${zoom} px: ${targetPixelResolution} dpr: ${window.devicePixelRatio}, resScale: ${viewer.resolutionScale} heights[base,target]:`,
     baseHeight,
     targetHeight,
   );
@@ -807,7 +809,12 @@ export const leafletToCesiumCamera = (
       console.warn(
         "Maximum height finding iterations reached with no result, restoring last Cesium camera position.",
       );
-      //console.log("L2C [2D3D] iterate", iterations, targetHeight, cameraPositionAtStart);
+      console.log(
+        "L2C [2D3D] iterate",
+        iterations,
+        targetHeight,
+        cameraPositionAtStart,
+      );
       camera.setView({ destination: cameraPositionAtStart });
       return false;
     }
@@ -815,7 +822,7 @@ export const leafletToCesiumCamera = (
     cameraHeightAboveGround *= adjustmentFactor;
     const newCameraHeight = cameraHeightAboveGround + groundHeight;
 
-    // console.log("L2C [2D3D|CESIUM|CAMERA] setview", iterations, targetHeight, newCameraHeight);
+    console.log("L2C [2D3D|CESIUM|CAMERA] setview", iterations, targetHeight, newCameraHeight);
     camera.setView({
       destination: Cartesian3.fromRadians(lngRad, latRad, newCameraHeight),
     });

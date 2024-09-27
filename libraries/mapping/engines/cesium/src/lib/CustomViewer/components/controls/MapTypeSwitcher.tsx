@@ -159,7 +159,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
 
     if (hasGroundPos) {
       // rotate around the groundposition at center
-      console.log("setting prev HPR zoom", groundPos, height)
+      console.info("[CESIUM|2D3D|TO2D] setting prev HPR zoom", groundPos, height)
       setPrevHPR(
         animateInterpolateHeadingPitchRange(
           viewer,
@@ -197,8 +197,8 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
   const handleSwitchMapMode = async (e: MouseEvent) => {
     e.preventDefault();
 
-    console.log(
-      "clicked handleSwitchMapMode zoom",
+    console.info(
+      "CLICKHANDLER: [CESIUM|LEAFLET|2D3D] clicked handleSwitchMapMode zoom",
       isMode2d,
       viewer,
       leaflet,
@@ -215,9 +215,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
           Cartesian3.equals(viewer.camera.position, prevCamera2dPosition) !==
           true
         ) {
-          console.log(
-            "camera position unchanged, skipping 2d to 3d transition animation zoom",
-          );
+          console.info("[CESIUM|LEAFLET|TO3D] camera position unchanged, skipping 2d to 3d transition animation zoom");
           dispatch(clearTransition());
           return;
         }
@@ -226,7 +224,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
           const pos = pickViewerCanvasCenter(viewer).scenePosition;
 
           if (pos && prevHPR) {
-            console.log('restore 3d camera position zoom', pos, prevHPR);
+            console.info('[CESIUM|2D3D|TO3D] restore 3d camera position zoom', pos, prevHPR);
             animateInterpolateHeadingPitchRange(viewer, pos, prevHPR, {
               delay: DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION, // allow the css transition to finish
               duration: prevDuration * 1000,
@@ -234,7 +232,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
               onComplete: clearTransition
             });
           } else {
-            console.log('no change to 3d camera position applied zoom', pos, prevHPR);
+            console.info('[CESIUM|2D3D|TO3D] to change to 3d camera position applied zoom', pos, prevHPR);
             dispatch(clearTransition());
             return;
           }
