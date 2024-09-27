@@ -20,6 +20,7 @@ export const WUPP_MESH_2024 = {
 
 export const WUPP_LOD2_TILESET = {
   url: "https://wupp-3d-data.cismet.de/lod2/tileset.json",
+  disableSelection: true,
 };
 
 export const WUPP_BAUMKATASTER_TILESET = {

@@ -69,6 +69,7 @@ export type TilesetConfig = {
   translation?: PlainCartesian3;
   idProperty?: string;
   maximumScreenSpaceError?: number;
+  disableSelection?: boolean;
 };
 
 export type GeoJsonConfig = {

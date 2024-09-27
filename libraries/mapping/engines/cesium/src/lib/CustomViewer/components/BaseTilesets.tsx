@@ -193,7 +193,7 @@ export const BaseTilesets = () => {
     }
   }, [showPrimary, tilesets.primary, showSecondary, tilesets.secondary]);
 
-  useSecondaryStyleTilesetClickHandler();
+  useSecondaryStyleTilesetClickHandler(tilesetConfigs.secondary);
 
   useEffect(() => {
     folderCallback &&

@@ -14,6 +14,7 @@ import {
 } from "cesium";
 import { useCesium } from "resium";
 import { useShowSecondaryTileset } from "./CustomViewerContextProvider/slices/cesium";
+import { TilesetConfig } from "../index";
 
 export type ClickData = {
   id: string | null;
@@ -96,12 +97,16 @@ export const usePropertyKeysFromGeoJsonDataSource = (
 };
 */
 
-export const useSecondaryStyleTilesetClickHandler = () => {
+export const useSecondaryStyleTilesetClickHandler = (
+  config: TilesetConfig | null | undefined,
+) => {
   const { viewer } = useCesium();
   const isSecondaryStyle = useShowSecondaryTileset();
 
+  const { disableSelection } = config ?? {};
+
   useEffect(() => {
-    if (!viewer || !isSecondaryStyle) return;
+    if (!viewer || !isSecondaryStyle || disableSelection) return;
     console.log("HOOK: useGLTFTilesetClickHandler");
 
     let selectedObject; // Store the currently selected feature
