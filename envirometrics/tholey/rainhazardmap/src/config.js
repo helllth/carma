@@ -39,6 +39,22 @@ const overridingBaseLayerConf = {
       version: "1.1.1",
       pane: "backgroundLayers",
     },
+    slOpenDOP: {
+      type: "wms",
+      url: "https://geoportal.saarland.de/freewms/dop",
+      layers: "sl_dop",
+      tiled: "false",
+      version: "1.1.1",
+      pane: "backgroundLayers",
+    },
+    slOpenTrueDOP: {
+      type: "wms",
+      url: "https://geoportal.saarland.de/freewms/truedop",
+      layers: "sl_dop20_rgb",
+      tiled: "false",
+      version: "1.1.1",
+      pane: "backgroundLayers",
+    },
     slDOPlic: {
       type: "wms",
       url: "https://dop-sl-tholey-usage-only-allowed-with-rainhazardmap-tholey.cismet.de?forceBasicAuth=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap",
@@ -222,6 +238,16 @@ const config = {
       src: "/images/rain-hazard-map-bg/ortho.png",
       title: "Luftbildkarte",
     },
+    // {
+    //   layerkey: "slOpenDOP@80|basemap_de_relief@20",
+    //   src: "/images/rain-hazard-map-bg/ortho.png",
+    //   title: "Luftbildkarte",
+    // },
+    // {
+    //   layerkey: "slOpenTrueDOP@80|basemap_de_relief@20",
+    //   src: "/images/rain-hazard-map-bg/ortho.png",
+    //   title: "Luftbildkarte",
+    // },
   ],
   backgroundsOff: [
     {
