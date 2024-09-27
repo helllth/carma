@@ -103,7 +103,7 @@ import "cesium/Build/Cesium/Widgets/widgets.css";
 
 import { useWindowHeight, useWindowWidth } from "@react-hook/window-size";
 
-export const GeoportalMap = ({ width, height }) => {
+export const GeoportalMap = () => {
   const dispatch = useDispatch();
   const [urlParams, setUrlParams] = useSearchParams();
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -155,7 +155,7 @@ export const GeoportalMap = ({ width, height }) => {
 
   const tourRefLabels = useTourRefCollabLabels();
   const gazData = useGazData();
-  // const { width, height } = useWindowSize(wrapperRef);
+  const { width, height } = useWindowSize(wrapperRef);
   // const width = useWindowWidth();
   // const height = useWindowHeight();
 
@@ -217,12 +217,7 @@ export const GeoportalMap = ({ width, height }) => {
   console.info("RENDER: [GEOPORTAL] MAP");
 
   return (
-    <ControlLayout
-      height={height}
-      width={width}
-      onHeightResize={setLayoutHeight}
-      ifStorybook={false}
-    >
+    <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
       <Control position="topleft" order={10}>
         <div ref={tourRefLabels.zoom} className="flex flex-col">
           <ControlButtonStyler

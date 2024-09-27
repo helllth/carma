@@ -163,11 +163,11 @@ function App({ published }: { published?: boolean }) {
             <ErrorBoundary FallbackComponent={AppErrorFallback}>
               <div
                 className="flex flex-col w-full "
-                style={{ height: windowHeight }}
+                style={{ height: "100dvh" }}
               >
                 {!published && <TopNavbar />}
                 <MapMeasurement />
-                <GeoportalMap width={mapWidth} height={mapHeight} />
+                <GeoportalMap />
               </div>
             </ErrorBoundary>
           </TweakpaneProvider>

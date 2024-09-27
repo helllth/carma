@@ -10,8 +10,6 @@ export interface ControlLayoutProps {
   onHeightResize?: (set: number | null) => void;
   debugMode?: boolean;
   ifStorybook?: boolean;
-  width: number;
-  height: number;
 }
 
 export interface AllPositions {
@@ -103,11 +101,9 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
   debugMode = false,
   onHeightResize = (set: number | null) => set,
   ifStorybook = true,
-  width,
-  height,
 }) => {
-  const [windowWidth, setWindowWidth] = useState(width);
-  const [layoutHeight, setLayoutHeight] = useState(height);
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [layoutHeight, setLayoutHeight] = useState<number | null>(null);
   const [screenSizeWatcher, setScreenSizeWatcher] = useState("");
   const {
     allPositions,
@@ -125,10 +121,8 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
   const layoutWidth = containerRef.current?.clientWidth;
 
   const handleResize = () => {
-    // setWindowWidth(window.innerWidth);
-    // setLayoutHeight(ifStorybook ? window.innerHeight - 28 : window.innerHeight);
-    setLayoutHeight(height);
-    setWindowWidth(width);
+    setWindowWidth(window.innerWidth);
+    setLayoutHeight(ifStorybook ? window.innerHeight - 28 : window.innerHeight);
   };
   useEffect(() => {
     window.addEventListener("resize", handleResize);
@@ -183,7 +177,7 @@ const ControlLayout: React.FC<ControlLayoutProps> = ({
         debugMode ? styles["debug-mode"] : ""
       }`}
       style={{
-        height: height, //layoutHeight ? `${layoutHeight}px` : "calc(100vh - 54px)",
+        height: "100%", //layoutHeight ? `${layoutHeight}px` : "calc(100vh - 54px)",
       }}
     >
       <div
