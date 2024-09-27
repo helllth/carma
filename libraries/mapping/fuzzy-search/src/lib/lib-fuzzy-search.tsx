@@ -32,7 +32,7 @@ import {
   INVERTED_SELECTED_POLYGON_ID,
 } from "..";
 import { gazDataPrefix, sourcesConfig } from "./config";
-import { stopwords as stopwordsDe } from './config/stopwords.de-de';
+import { stopwords as stopwordsDe } from "./config/stopwords.de-de";
 
 import "./fuzzy-search.css";
 
@@ -61,7 +61,7 @@ export function LibFuzzySearch({
     distance: 100,
     threshold: 0.5,
   },
-  cesiumConfig = { isPrimaryStyle: false }
+  cesiumConfig = { isPrimaryStyle: false },
 }: SearchGazetteerProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
@@ -75,7 +75,7 @@ export function LibFuzzySearch({
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
-  const { viewer, markerAsset, isPrimaryStyle } = cesiumConfig
+  const { viewer, markerAsset, isPrimaryStyle } = cesiumConfig;
 
   let mapConsumers: MapConsumer[] = [];
   //mapRef && mapConsumers.push(mapRef);
@@ -144,7 +144,13 @@ export function LibFuzzySearch({
 
   const handleOnSelect = (option) => {
     setCleanBtnDisable(false);
-    console.info("[SEARCH] selected option", option, mapRef, cesiumConfig, mapConsumers);
+    console.info(
+      "[SEARCH] selected option",
+      option,
+      mapRef,
+      cesiumConfig,
+      mapConsumers,
+    );
     topicMapGazetteerHitTrigger([option.sData]); // TODO remove this after carma gazetteer hit trigger also handles LeafletMaps
     carmaHitTrigger([option.sData], mapConsumers, { cesiumConfig });
     if (option.sData.type === "bezirke" || option.sData.type === "quartiere") {
@@ -237,7 +243,6 @@ export function LibFuzzySearch({
     }
   }, [dropdownContainerRef, options, fireScrollEvent, value]);
 
-
   const handleOnClickClean = () => {
     {
       setGazetteerHit(null);
@@ -249,11 +254,14 @@ export function LibFuzzySearch({
       if (cesiumConfig.viewer) {
         removeCesiumMarker(cesiumConfig.viewer);
         cesiumConfig.viewer.entities.removeById(SELECTED_POLYGON_ID);
-        removeGroundPrimitiveById(cesiumConfig.viewer, INVERTED_SELECTED_POLYGON_ID);
+        removeGroundPrimitiveById(
+          cesiumConfig.viewer,
+          INVERTED_SELECTED_POLYGON_ID,
+        );
         cesiumConfig.viewer.scene.render(); // explicit render for requestRenderMode;
       }
     }
-  }
+  };
 
   return (
     <div
@@ -294,6 +302,9 @@ export function LibFuzzySearch({
           onChange={(value) => setValue(value)}
           placeholder={placeholder}
           value={value}
+          dropdownAlign={{
+            offset: [0, 4],
+          }}
           onSelect={(value, option) => handleOnSelect(option)}
           defaultActiveFirstOption={true}
           dropdownRender={(item) => {
@@ -308,9 +319,13 @@ export function LibFuzzySearch({
         <AutoComplete
           popupClassName="certain-category-search-dropdown"
           popupMatchSelectWidth={500}
+          dropdownAlign={{
+            offset: [0, 4],
+          }}
           style={inputStyle}
           onSearch={(value) => handleSearchAutoComplete(value)}
           placeholder={placeholder}
+          placement="bottomLeft"
           options={searchResult}
           onSelect={(value, option) => handleOnSelect(option)}
           value={value}
