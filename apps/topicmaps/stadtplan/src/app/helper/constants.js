@@ -19,7 +19,7 @@ export let POI_COLORS = {
   "Dienstleistungen, Freizeit": "#26978F",
   Dienstleistungen: "#538DD5",
   "Bildung, Freizeit": "#BBAA1E",
-  Kinderbetreuung: "#00A0B0"
+  Kinderbetreuung: "#00A0B0",
 };
 
 export const crossLinkApps = [
@@ -29,31 +29,31 @@ export const crossLinkApps = [
     bsStyle: "success",
     backgroundColor: null,
     link: "https://wunda-geoportal.cismet.de/#/kitas",
-    target: "_kitas"
+    target: "_kitas",
   },
   {
     on: ["Sport", "Freizeit"],
     name: "Bäderkarte",
     bsStyle: "primary",
     backgroundColor: null,
-    link: "https://wunda-geoportal.cismet.de/#/baeder",
-    target: "_baeder"
+    link: "https://digital-twin-wuppertal-live.github.io/baederkarte/",
+    target: "_baeder",
   },
   {
     on: ["Kultur"],
     name: "Kulturstadtplan",
     bsStyle: "warning",
     backgroundColor: null,
-    link: "https://wunda-geoportal.cismet.de/#/kulturstadtplan",
-    target: "_kulturstadtplan"
+    link: "https://digital-twin-wuppertal-live.github.io/kulturstadtplan/",
+    target: "_kulturstadtplan",
   },
   {
     on: ["Mobilität"],
     name: "Park+Ride-Karte",
     bsStyle: "warning",
     backgroundColor: "#62B7D5",
-    link: "https://wunda-geoportal.cismet.de/#/xandride",
-    target: "_xandride"
+    link: "https://digital-twin-wuppertal-live.github.io/xandride/",
+    target: "_xandride",
   },
 
   {
@@ -61,17 +61,17 @@ export const crossLinkApps = [
     name: "E-Auto-Ladestationskarte",
     bsStyle: "warning",
     backgroundColor: "#003E7A",
-    link: "https://wunda-geoportal.cismet.de/#/elektromobilitaet",
-    target: "_elektromobilitaet"
+    link: "https://digital-twin-wuppertal-live.github.io/elektromobilitaet/",
+    target: "_elektromobilitaet",
   },
   {
     on: ["Mobilität"],
     name: "E-Fahrrad-Karte",
     bsStyle: "warning",
     backgroundColor: "#326C88", //'#15A44C', //'#EC7529',
-    link: "https://wunda-geoportal.cismet.de/#/ebikes",
-    target: "_ebikes"
-  }
+    link: "https://digital-twin-wuppertal-live.github.io/ebikes/",
+    target: "_ebikes",
+  },
   // {
   //   on: ['Gesundheit'],
   //   name: 'Corona-Präventionskarte',
