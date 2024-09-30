@@ -471,14 +471,14 @@ const LibItem = ({
         <div className="w-full h-80 p-6 shadow-sm hover:!shadow-lg rounded-lg bg-white col-span-full">
           <div className="flex h-full flex-col justify-between">
             <div>
-              <h5 className="font-semibold">Inhalt</h5>
-              <p className="text-sm">{parsedDescription.inhalt}</p>
-              <h5 className="font-semibold">Sichtbarkeit</h5>
-              <p className="text-sm">
+              <h5 className="font-semibold text-lg">Inhalt</h5>
+              <p className="text-base">{parsedDescription.inhalt}</p>
+              <h5 className="font-semibold text-lg">Sichtbarkeit</h5>
+              <p className="text-base">
                 {parsedDescription.sichtbarkeit.slice(0, -1)}
               </p>
-              <h5 className="font-semibold">Nutzung</h5>
-              <p className="text-sm">{parsedDescription.nutzung}</p>
+              <h5 className="font-semibold text-lg">Nutzung</h5>
+              <p className="text-base">{parsedDescription.nutzung}</p>
             </div>
             <p
               style={{ color: "rgba(0,0,0,0.5)", fontSize: "0.875rem" }}
