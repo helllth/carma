@@ -415,7 +415,7 @@ const TopNavbar = () => {
               onChange={(e) => {
                 if (e.target.value === "karte") {
                   dispatch(
-                    setBackgroundLayer({ ...selectedMapLayer, id: "karte" }),
+                    setBackgroundLayer({ ...selectedMapLayer, id: "karte", visible: isMode2d }),
                   );
                   toggleSceneStyle("secondary");
                 } else {
@@ -428,7 +428,7 @@ const TopNavbar = () => {
                       inhalt: layerMap[e.target.value].inhalt,
                       eignung: layerMap[e.target.value].eignung,
                       layerType: "wmts",
-                      visible: true,
+                      visible: isMode2d,
                       props: {
                         name: "",
                         url: layerMap[e.target.value].url,

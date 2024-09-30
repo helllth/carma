@@ -38,15 +38,15 @@ const DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION = 1000;
 
 type Props = {
   zoomSnap?: ZoomIncrements;
+  onComplete?: (isTo2D: boolean) => void;
   children?: ReactNode;
 };
 
-export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
+export const MapTypeSwitcher = ({ zoomSnap = 0.5, onComplete }: Props) => {
   //const { viewer } = useCesium();
   const dispatch = useDispatch();
   const isMode2d = useViewerIsMode2d();
   const { viewer } = useCesiumCustomViewer();
-
   const [prevCamera3d, setPrevCamera3d] =
     useState<CameraPositionAndOrientation | null>(null);
   const [prevCamera2dPosition, setPrevCamera2dPosition] =
@@ -62,40 +62,66 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
     useContext<typeof TopicMapContext>(TopicMapContext);
   const leaflet = topicMapContext?.routedMapRef?.leafletMap?.leafletElement;
 
-  const transitionToMode2d = (viewer: Viewer) => {
+  if (!viewer) {
+    console.warn("cesium not available")
+    return null;
+  }
+
+  const transitionToMode3d = () => {
+    dispatch(setTransitionTo3d());
+    dispatch(setIsMode2d(false));
+    const onComplete3d = () => {
+      dispatch(clearTransition());
+      onComplete && onComplete(false);
+    }
+    if (
+      prevCamera2dPosition &&
+      Cartesian3.equals(viewer.camera.position, prevCamera2dPosition) !==
+      true
+    ) {
+      console.info("[CESIUM|LEAFLET|TO3D] camera position unchanged, skipping 2d to 3d transition animation zoom");
+      onComplete3d();
+      return;
+    }
+
+    const onCompleteAnimatedTo3d = () => {
+      const pos = pickViewerCanvasCenter(viewer).scenePosition;
+
+      if (pos && prevHPR) {
+        console.info('[CESIUM|2D3D|TO3D] restore 3d camera position zoom', pos, prevHPR);
+        animateInterpolateHeadingPitchRange(viewer, pos, prevHPR, {
+          delay: DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION, // allow the css transition to finish
+          duration: prevDuration * 1000,
+          useCurrentDistance: true,
+          onComplete: onComplete3d
+        });
+      } else {
+        console.info('[CESIUM|2D3D|TO3D] to change to 3d camera position applied zoom', pos, prevHPR);
+        onComplete3d();
+        return;
+      }
+    }
+
+    leafletToCesium(viewer, leaflet, { cause: "SwitchMapMode to 3d", onComplete: () => setTimeout(onCompleteAnimatedTo3d, 100) })
+
+  }
+
+  const transitionToMode2d = () => {
     // TODO consolidate this logic into a shared helper function
+    dispatch(setTransitionTo2d());
     const groundPos = pickViewerCanvasCenter(viewer).scenePosition;
-    let latitude: number, longitude: number;
     let height = viewer.camera.positionCartographic.height;
     let distance = height;
     const hasGroundPos = defined(groundPos);
     if (hasGroundPos) {
-      /*
-           viewer.entities.removeById('groundPoint');
-           viewer.entities.add({
-             id: 'groundPoint',
-             position: groundPos,
-             point: {
-               pixelSize: 40,
-               color: Color.RED,
-             },
-           });
-           */
       const { scenePosition: pos, coordinates: cartographic } =
         pickViewerCanvasCenter(viewer, { getCoordinates: true });
       if (pos && cartographic) {
-        longitude = CeMath.toDegrees(cartographic.longitude);
-        latitude = CeMath.toDegrees(cartographic.latitude);
         distance = Cartesian3.distance(pos, viewer.camera.position);
         height = cartographic.height + distance;
       }
     } else {
       console.info("scene above horizon, using camera position as reference");
-      // use camera position if horizon is not visible
-      const cartographic = Cartographic.fromCartesian(viewer.camera.position);
-      longitude = CeMath.toDegrees(cartographic.longitude);
-      latitude = CeMath.toDegrees(cartographic.latitude);
-      // TODO resolve
     }
 
     // evaluate angles for animation duration
@@ -147,12 +173,13 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
     const duration = getTopDownCameraDeviationAngle(viewer) * 2 + zoomDiff * 1;
     setPrevDuration(duration);
 
-    const onComplete = () => {
+    const onComplete2d = () => {
       setLeafletView(viewer, leaflet, { animate: false, duration: 0 });
       setPrevCamera2dPosition(viewer.camera.position.clone());
       // trigger the visual transition
       dispatch(setIsMode2d(true));
       dispatch(clearTransition());
+      onComplete && onComplete(true);
     };
 
     console.log("duration zoom", distance);
@@ -167,7 +194,7 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
           new HeadingPitchRange(0, -Math.PI / 2, distance),
           {
             duration: duration * 1000,
-            onComplete,
+            onComplete: onComplete2d,
           },
         ),
       );
@@ -203,46 +230,11 @@ export const MapTypeSwitcher = ({ zoomSnap = 0.5 }: Props = {}) => {
       viewer,
       leaflet,
     );
-
     if (viewer) {
-
       if (isMode2d) {
-        dispatch(setTransitionTo3d());
-        dispatch(setIsMode2d(false));
-
-        if (
-          prevCamera2dPosition &&
-          Cartesian3.equals(viewer.camera.position, prevCamera2dPosition) !==
-          true
-        ) {
-          console.info("[CESIUM|LEAFLET|TO3D] camera position unchanged, skipping 2d to 3d transition animation zoom");
-          dispatch(clearTransition());
-          return;
-        }
-
-        const onComplete = () => {
-          const pos = pickViewerCanvasCenter(viewer).scenePosition;
-
-          if (pos && prevHPR) {
-            console.info('[CESIUM|2D3D|TO3D] restore 3d camera position zoom', pos, prevHPR);
-            animateInterpolateHeadingPitchRange(viewer, pos, prevHPR, {
-              delay: DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION, // allow the css transition to finish
-              duration: prevDuration * 1000,
-              useCurrentDistance: true,
-              onComplete: clearTransition
-            });
-          } else {
-            console.info('[CESIUM|2D3D|TO3D] to change to 3d camera position applied zoom', pos, prevHPR);
-            dispatch(clearTransition());
-            return;
-          }
-        }
-
-        leafletToCesium(viewer, leaflet, { cause: "SwitchMapMode to 3d", onComplete: () => setTimeout(onComplete, 100) })
-
+        transitionToMode3d();
       } else {
-        dispatch(setTransitionTo2d());
-        transitionToMode2d(viewer);
+        transitionToMode2d();
       }
     }
   };

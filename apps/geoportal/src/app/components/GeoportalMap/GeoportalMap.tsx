@@ -82,6 +82,7 @@ import {
   getShowLocatorButton,
   getShowMeasurementButton,
   setStartDrawing,
+  setBackgroundLayer,
 } from "../../store/slices/mapping.ts";
 
 import FeatureInfoBox from "../feature-info/FeatureInfoBox.tsx";
@@ -325,7 +326,12 @@ export const GeoportalMap = () => {
       </Control>
       {allow3d && (
         <Control position="topleft" order={60}>
-          <MapTypeSwitcher zoomSnap={LEAFLET_CONFIG.zoomSnap} />
+          <MapTypeSwitcher zoomSnap={LEAFLET_CONFIG.zoomSnap} onComplete=
+            {
+              (isTo2d: boolean) => {
+                dispatch(setBackgroundLayer({ ...backgroundLayer, visible: isTo2d }))
+              }
+            } />
           {
             //<SceneStyleToggle />
             <Compass disabled={isMode2d} />
