@@ -65,6 +65,7 @@ export const LibModal = ({
   const [searchValue, setSearchValue] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [showItems, setShowItems] = useState(false);
+  const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
   const [tmpCustomCategories, setTmpCustomCategories] = useState<
     any[] | undefined
   >([]);
@@ -402,6 +403,8 @@ export const LibModal = ({
                             favorites={favorites}
                             addFavorite={addFavorite}
                             removeFavorite={removeFavorite}
+                            selectedLayerId={selectedLayerId}
+                            setSelectedLayerId={setSelectedLayerId}
                             key={`${category.Title}_layer_${i}_${layer.id}`}
                           />
                         ))}

@@ -28,6 +28,8 @@ interface LayerItemProps {
   favorites?: Item[];
   addFavorite?: (layer: Item) => void;
   removeFavorite?: (layer: Item) => void;
+  selectedLayerId: string | null;
+  setSelectedLayerId: (id: string | null) => void;
 }
 
 const LibItem = ({
@@ -39,6 +41,8 @@ const LibItem = ({
   favorites,
   addFavorite,
   removeFavorite,
+  selectedLayerId,
+  setSelectedLayerId,
 }: LayerItemProps) => {
   const [hovered, setHovered] = useState(false);
   const [isActiveLayer, setIsActiveLayer] = useState(false);
@@ -49,7 +53,7 @@ const LibItem = ({
   const [collectionImages, setCollectionImages] = useState<string[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [forceWMS, setForceWMS] = useState(false);
-  const [openInfo, setOpenInfo] = useState(false);
+  const showInfo = selectedLayerId === layer.id;
   const title = layer.title;
   const description = layer.description;
   const keywords = layer.keywords;
@@ -243,7 +247,6 @@ const LibItem = ({
         className="flex flex-col rounded-lg w-full shadow-sm h-fit hover:!shadow-lg bg-white"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        onClick={() => setOpenInfo(!openInfo)}
       >
         <div className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]">
           {isLoading && (
@@ -342,7 +345,10 @@ const LibItem = ({
               className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
             />
           )}
-          <InfoOutlined className="absolute right-1 bottom-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50" />
+          <InfoOutlined
+            onClick={() => setSelectedLayerId(showInfo ? null : layer.id)}
+            className="absolute right-1 bottom-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
+          />
           {hovered && (
             <div className="flex flex-col items-center gap-2 absolute top-0 w-full h-full justify-center p-8 px-10">
               {layer.type === "link" ? (
@@ -404,7 +410,7 @@ const LibItem = ({
                 </button>
               )}
               <button
-                disabled
+                onClick={() => setSelectedLayerId(showInfo ? null : layer.id)}
                 className="w-36 flex text-center items-center px-2 bg-gray-100 hover:bg-gray-50 rounded-md py-2 cursor-not-allowed"
               >
                 <FontAwesomeIcon icon={faCircleInfo} className="mr-2 text-lg" />
@@ -493,7 +499,7 @@ const LibItem = ({
           </div>
         </Modal>
       </div>
-      {openInfo && (
+      {showInfo && (
         <div className="w-full h-80 shadow-md bg-white col-span-full">
           <p className="text-lg p-4">{layer.description}</p>
         </div>
