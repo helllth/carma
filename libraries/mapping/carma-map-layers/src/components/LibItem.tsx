@@ -17,7 +17,7 @@ import { Button, Modal, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { InfoOutlined } from "@ant-design/icons";
 import type { Item, Layer, LayerProps } from "../helper/types";
-import { extractVectorStyles } from "../helper/layerHelper";
+import { extractVectorStyles, parseDescription } from "../helper/layerHelper";
 
 interface LayerItemProps {
   setAdditionalLayers: any;
@@ -56,6 +56,7 @@ const LibItem = ({
   const showInfo = selectedLayerId === layer.id;
   const title = layer.title;
   const description = layer.description;
+  const parsedDescription = parseDescription(description);
   const keywords = layer.keywords;
   const tags =
     layer.type === "collection"
@@ -500,8 +501,30 @@ const LibItem = ({
         </Modal>
       </div>
       {showInfo && (
-        <div className="w-full h-80 shadow-md bg-white col-span-full">
-          <p className="text-lg p-4">{layer.description}</p>
+        <div className="w-full h-80 p-6 shadow-sm hover:!shadow-lg rounded-lg bg-white col-span-full">
+          <div className="flex h-full flex-col justify-between">
+            <div>
+              <h5 className="font-semibold">Inhalt</h5>
+              <p className="text-sm">{parsedDescription.inhalt}</p>
+              <h5 className="font-semibold">Sichtbarkeit</h5>
+              <p className="text-sm">
+                {parsedDescription.sichtbarkeit.slice(0, -1)}
+              </p>
+              <h5 className="font-semibold">Nutzung</h5>
+              <p className="text-sm">{parsedDescription.nutzung}</p>
+            </div>
+            <p
+              style={{ color: "rgba(0,0,0,0.5)", fontSize: "0.875rem" }}
+              className="mb-0 h-10 line-clamp-2"
+            >
+              {tags?.map((tag, i) => (
+                <span key={"tag_" + tag + "_" + i}>
+                  <span>{tag}</span>
+                  {i + 1 < tags.length && <span> · </span>}
+                </span>
+              ))}
+            </p>
+          </div>
         </div>
       )}
     </>

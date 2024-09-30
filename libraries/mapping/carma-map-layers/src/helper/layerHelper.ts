@@ -3,6 +3,37 @@ import type { WMSCapabilitiesJSON } from "wms-capabilities";
 import { serviceConfig } from "./config";
 import type { Item, XMLLayer, Layer, Config } from "./types";
 
+export const parseDescription = (description: string) => {
+  const result = { inhalt: "", sichtbarkeit: "", nutzung: "" };
+  const keywords = ["Inhalt:", "Sichtbarkeit:", "Nutzung:"];
+
+  if (!description) {
+    return result;
+  }
+
+  function extractTextAfterKeyword(input, keyword) {
+    const index = input.indexOf(keyword);
+    if (index !== -1) {
+      const startIndex = index + keyword.length;
+      let endIndex = input.length;
+      for (const nextKeyword of keywords) {
+        const nextIndex = input.indexOf(nextKeyword, startIndex);
+        if (nextIndex !== -1 && nextIndex < endIndex) {
+          endIndex = nextIndex;
+        }
+      }
+      return input.slice(startIndex, endIndex).trim();
+    }
+    return "";
+  }
+
+  result.inhalt = extractTextAfterKeyword(description, "Inhalt:");
+  result.sichtbarkeit = extractTextAfterKeyword(description, "Sichtbarkeit:");
+  result.nutzung = extractTextAfterKeyword(description, "Nutzung:");
+
+  return result;
+};
+
 export const flattenLayer = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   layer: any,
