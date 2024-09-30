@@ -12,3 +12,4 @@
 	path = libraries/collaboration/carma-pecher-collab/pecher-collab-submodule
 	url = https://github.com/cismet-collab/carma-pecher-collab.git
 	branch = main
+	ignore = all
