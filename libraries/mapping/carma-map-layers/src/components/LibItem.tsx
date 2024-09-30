@@ -132,7 +132,7 @@ const LibItem = ({
 
     const getCollectionImages = async (collection: { layers: Layer[] }) => {
       const layers = collection.layers;
-      let urls = [];
+      let urls: (string | null)[] = [];
       let imgUrls: string[] = [];
       if (layers.length > 3) {
         urls = layers.slice(0, 4).map((layer: Layer) => {
