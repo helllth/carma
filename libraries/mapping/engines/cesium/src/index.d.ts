@@ -55,6 +55,18 @@ export type ModelAsset = {
   hasAnimation?: boolean;
 };
 
+export type EntityData = {
+  id: string;
+  modelMatrix: Matrix4 | null;
+  animatedModelMatrix: Matrix4 | null;
+  modelConfig: ModelAsset | null;
+  lastRenderTime?: number;
+  animationSpeed?: number;
+  model: Model | null;
+  onPreUpdate?: Function;
+  cleanup?: Function;
+};
+
 //
 
 type PlainCartesian3 = {

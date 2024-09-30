@@ -6,16 +6,16 @@ import {
   setShowSecondaryTileset,
 } from "../../CustomViewerContextProvider/slices/cesium";
 import { SceneStyles } from "../../..";
+import { getGroundPrimitiveById } from "../../utils/cesiumGroundPrimitives";
 import {
   CustomViewerContextType,
   useCesiumCustomViewer,
 } from "../../CustomViewerContextProvider/components/CustomViewerContextProvider";
-import {
-  cesiumUtils,
-  INVERTED_SELECTED_POLYGON_ID,
-} from "@carma-mapping/fuzzy-search";
 
 // TODO move combined common setup out of here
+
+// TODO MOVE THE ID into viewer config/state
+const INVERTED_SELECTED_POLYGON_ID = "searchgaz-inverted-polygon";
 
 const setupPrimaryStyle = ({
   viewer,
@@ -40,7 +40,7 @@ const setupPrimaryStyle = ({
       imageryLayer.show = false;
     }
 
-    const invertedSelection = cesiumUtils.getGroundPrimitiveById(
+    const invertedSelection = getGroundPrimitiveById(
       viewer,
       INVERTED_SELECTED_POLYGON_ID,
     );
@@ -78,7 +78,7 @@ export const setupSecondaryStyle = ({
       }
     }
 
-    const invertedSelection = cesiumUtils.getGroundPrimitiveById(
+    const invertedSelection = getGroundPrimitiveById(
       viewer,
       INVERTED_SELECTED_POLYGON_ID,
     );

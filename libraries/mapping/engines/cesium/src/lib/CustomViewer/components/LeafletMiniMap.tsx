@@ -9,9 +9,9 @@ import { makeLeafletMarkerRotatable } from "./LeafletMiniMap.utils";
 import {
   cameraToCartographicDegrees,
   getViewerViewportPolygonRing,
+  polygonHierarchyFromPolygonCoords,
   rectangleToExtentDegrees,
 } from "../../utils";
-import { cesiumUtils } from "@carma-mapping/fuzzy-search";
 
 //TODO sync time externally if needed
 const DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION = 1000;
@@ -137,7 +137,7 @@ export const LeafletMiniMap = ({
 
           if (showCesiumPolygon) {
             const cesiumPolygon = new PolygonGraphics({
-              hierarchy: cesiumUtils.polygonHierarchyFromPolygonCoords([
+              hierarchy: polygonHierarchyFromPolygonCoords([
                 geom.map((coord) => coord.reverse()),
               ]),
               material: Color.YELLOW.withAlpha(0.45),

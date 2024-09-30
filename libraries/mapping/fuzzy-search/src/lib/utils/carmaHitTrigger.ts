@@ -20,27 +20,27 @@ import proj4 from "proj4";
 
 import { RoutedMap } from "react-cismap";
 
-import type { ModelAsset } from "@carma-mapping/cesium-engine";
-
-
+import type { EntityData, ModelAsset } from "@carma-mapping/cesium-engine";
 import {
-  polygonHierarchyFromPolygonCoords,
+  addCesiumMarker,
+  distanceFromZoomLevel,
   getHeadingPitchRangeFromZoom,
   getPositionWithHeightAsync,
-  distanceFromZoomLevel,
   invertedPolygonHierarchy,
+  polygonHierarchyFromPolygonCoords,
+  removeCesiumMarker,
   removeGroundPrimitiveById,
-} from "./cesium";
+} from "@carma-mapping/cesium-engine/utils";
 
 import { PROJ4_CONVERTERS } from "./geo";
-import { addCesiumMarker, removeCesiumMarker } from "./cesium3dMarker";
 
 import { DEFAULT_SRC_PROJ } from "../config";
-import { INVERTED_SELECTED_POLYGON_ID, SELECTED_POLYGON_ID } from '../../index';
+import { INVERTED_SELECTED_POLYGON_ID, SELECTED_POLYGON_ID } from "../../index";
 
 const proj4ConverterLookup = {};
 const DEFAULT_ZOOM_LEVEL = 16;
 const DEFAULT_CESIUM_MARKER_ANCHOR_HEIGHT = 5; // in METERS
+const MARKER_ELEVATION_OFFSET_TILESET_NOT_FINISHED_LOADING = 20;
 const DEFAULT_CESIUM_PITCH_ADJUST_HEIGHT = 1000; // meters
 
 type Coord = { lat: number; lon: number };
@@ -159,6 +159,8 @@ export type GazetteerOptions = {
     markerAnchorHeight?: number;
     pitchAdjustHeight?: number;
   };
+  selectedCesiumEntityData?: null | EntityData;
+  setSelectedCesiumEntityData?: Function;
 };
 
 const defaultGazetteerOptions = {
@@ -179,6 +181,8 @@ export const carmaHitTrigger = (
     suppressMarker,
     mapActions = { leaflet: {}, cesium: {} },
     cesiumConfig = { isPrimaryStyle: false },
+    selectedCesiumEntityData,
+    setSelectedCesiumEntityData,
   }: GazetteerOptions = defaultGazetteerOptions,
 ) => {
   if (hit !== undefined && hit.length !== undefined && hit.length > 0) {
@@ -236,7 +240,8 @@ export const carmaHitTrigger = (
         const viewer = mapElement;
         const { scene } = viewer;
         // add marker entity to map
-        removeCesiumMarker(viewer);
+        selectedCesiumEntityData &&
+          removeCesiumMarker(viewer, selectedCesiumEntityData);
         viewer.entities.removeById(SELECTED_POLYGON_ID);
         //viewer.entities.removeById(INVERTED_SELECTED_POLYGON_ID);
         removeGroundPrimitiveById(viewer, INVERTED_SELECTED_POLYGON_ID);
@@ -293,7 +298,7 @@ export const carmaHitTrigger = (
           viewer.flyTo(polygonEntity);
         } else {
           const delayedMarker = async () => {
-            const updateMarker = async () => {
+            const updateMarkerPosition = async (offset = 0) => {
               const posTileset = await getPositionWithHeightAsync(
                 scene,
                 posCarto,
@@ -303,29 +308,36 @@ export const carmaHitTrigger = (
               posTileset.height =
                 posTileset.height +
                 (cesiumConfig.markerAnchorHeight ??
-                  DEFAULT_CESIUM_MARKER_ANCHOR_HEIGHT);
+                  DEFAULT_CESIUM_MARKER_ANCHOR_HEIGHT) +
+                offset;
               console.log(
                 "GAZETTEER: [2D3D|CESIUM|CAMERA] adding marker at Marker (Tileset Elevation)",
                 posTileset.height,
                 heightAboveTerrain,
                 cesiumConfig.elevationTileset,
               );
-              removeCesiumMarker(viewer);
-              cesiumConfig.markerAsset &&
-                addCesiumMarker(viewer, posTileset, cesiumConfig.markerAsset);
+              const model = selectedCesiumEntityData?.model;
+              selectedCesiumEntityData &&
+                removeCesiumMarker(viewer, selectedCesiumEntityData);
+              if (cesiumConfig.markerAsset) {
+                const data = await addCesiumMarker(
+                  viewer,
+                  posTileset,
+                  cesiumConfig.markerAsset,
+                  model,
+                );
+                setSelectedCesiumEntityData &&
+                  setSelectedCesiumEntityData(data);
+              }
             };
-            const getMarker = async () => {
-              await updateMarker();
-              cesiumConfig.elevationTileset?.initialTilesLoaded.removeEventListener(
-                getMarker,
-              );
-            };
+
+            // TODO HANDLE TILSET LOAD events
             if (cesiumConfig.markerAsset && cesiumConfig.elevationTileset) {
-              if (cesiumConfig.elevationTileset.tilesLoaded) getMarker();
+              if (cesiumConfig.elevationTileset.tilesLoaded)
+                updateMarkerPosition();
               else {
-                await updateMarker();
-                cesiumConfig.elevationTileset.initialTilesLoaded.addEventListener(
-                  getMarker,
+                await updateMarkerPosition(
+                  MARKER_ELEVATION_OFFSET_TILESET_NOT_FINISHED_LOADING,
                 );
               }
             }
