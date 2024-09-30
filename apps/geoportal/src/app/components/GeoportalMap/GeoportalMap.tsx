@@ -51,12 +51,12 @@ import {
   useSceneStyleToggle,
   useZoomControls,
   useShowPrimaryTileset,
+  useViewerModels,
 } from "@carma-mapping/cesium-engine";
 import { LibFuzzySearch } from "@carma-mapping/fuzzy-search";
 
 import versionData from "../../../version.json";
 
-import { MODEL_ASSETS } from "../../config/assets.config.ts";
 import { paramsToObject } from "../../helper/helper.ts";
 import { getBackgroundLayers } from "../../helper/layer.tsx";
 
@@ -95,7 +95,7 @@ import { createCismapLayers, onClickTopicMap } from "./topicmap.utils.ts";
 import { getUrlPrefix } from "./utils";
 
 import {
-  CESIUM_MAPMODE_TRANSITION_DURATION,
+  CESIUM_CONFIG,
   LEAFLET_CONFIG,
 } from "../../config/app.config";
 
@@ -112,6 +112,8 @@ export const GeoportalMap = () => {
   const allow3d = useSelector(getUIAllow3d);
   const backgroundLayer = useSelector(getBackgroundLayer);
   const isMode2d = useViewerIsMode2d();
+  const models = useViewerModels();
+  const markerAsset = models.Marker;
   const layers = useSelector(getLayers);
   const uiMode = useSelector(getUIMode);
   const isModeMeasurement = uiMode === UIMode.MEASUREMENT;
@@ -371,7 +373,7 @@ export const GeoportalMap = () => {
             mapRef={routedMapRef}
             cesiumConfig={{
               viewer,
-              markerAsset: MODEL_ASSETS.Marker,
+              markerAsset,
               isPrimaryStyle: showPrimaryTileset,
               elevationTileset: showPrimaryTileset ? tilesets.primary : tilesets.secondary,
             }}
@@ -478,7 +480,7 @@ export const GeoportalMap = () => {
                 bottom: 0,
                 zIndex: 401,
                 opacity: isMode2d ? 0 : 1,
-                transition: `opacity ${CESIUM_MAPMODE_TRANSITION_DURATION}ms ease-in-out`,
+                transition: `opacity ${CESIUM_CONFIG.transitions.mapMode.duration}ms ease-in-out`,
                 pointerEvents: isMode2d ? "none" : "auto",
               }}
             >

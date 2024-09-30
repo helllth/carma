@@ -10,7 +10,6 @@ import {
   Viewer,
   Cesium3DTileset,
 } from "cesium";
-import { ModelAsset } from "../../..";
 
 export interface CustomViewerContextType {
   viewer: Viewer | null;
@@ -19,7 +18,6 @@ export interface CustomViewerContextType {
   //imageryProvider:    | WebMapServiceImageryProvider    | WebMapTileServiceImageryProvider    | null;
   imageryLayer: ImageryLayer | null;
   ellipsoidTerrainProvider: EllipsoidTerrainProvider | null;
-  models: Record<string, ModelAsset> | null;
   tilesets: {
     primary: Cesium3DTileset | null;
     secondary: Cesium3DTileset | null;
@@ -54,7 +52,6 @@ export const CustomViewerContextProvider = ({
       layers: string;
       parameters?: Record<string, string | number | boolean>;
     };
-    models: Record<string, ModelAsset> | null;
   }
 }) => {
 
@@ -75,7 +72,6 @@ export const CustomViewerContextProvider = ({
       providerConfig.terrainProvider.url,
     ),
     imageryLayer: new ImageryLayer(imageryProvider),
-    models: providerConfig.models,
     tilesets: {
       primary: primaryTileset,
       secondary: secondaryTileset,
