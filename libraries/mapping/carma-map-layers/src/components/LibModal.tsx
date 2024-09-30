@@ -392,7 +392,7 @@ export const LibModal = ({
                       <p className="mb-4 text-2xl font-semibold">
                         {category?.Title}
                       </p>
-                      <div className="grid xl:grid-cols-5 grid-flow-dense lg:grid-cols-4 sm:grid-cols-2 gap-8 mb-4">
+                      <div className="grid xl:grid-cols-7 grid-flow-dense lg:grid-cols-5 sm:grid-cols-4 gap-8 mb-4">
                         {category?.layers?.map((layer: any, i: number) => (
                           <LibItem
                             setAdditionalLayers={setAdditionalLayers}

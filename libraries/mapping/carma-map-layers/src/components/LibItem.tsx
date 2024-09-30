@@ -421,55 +421,22 @@ const LibItem = ({
           )}
         </div>
         <div className="flex flex-col gap-2 p-4">
-          <div className="w-full flex items-center gap-2">
-            <h3 className="text-lg truncate w-full mb-0">
-              {hightlightTextIndexes ? (
-                <>
-                  {title.substring(0, hightlightTextIndexes[0])}
-                  <span
-                    style={{
-                      backgroundColor: "rgba(240, 215, 139, 0.8)",
-                      padding: "0 0.08em",
-                    }}
-                  >
-                    {title.substring(
-                      hightlightTextIndexes[0],
-                      hightlightTextIndexes[1] + 1,
-                    )}
-                  </span>
-
-                  {title.substring(hightlightTextIndexes[1] + 1)}
-                </>
-              ) : (
-                title
-              )}
+          <div className="w-full flex gap-2">
+            <h3
+              className="text-lg w-full mb-0 line-clamp-2"
+              style={{ height: "3.5rem" }}
+            >
+              {title}
             </h3>
             {keywords &&
               extractVectorStyles(keywords)?.vectorStyle &&
               !forceWMS && (
                 <FontAwesomeIcon
                   icon={faRocket}
-                  className="text-xl cursor-pointer text-gray-700 z-50"
+                  className="text-xl pt-1 cursor-pointer text-gray-700 z-50"
                 />
               )}
           </div>
-          <p
-            className="text-base line-clamp-3 h-[66px]"
-            style={{ color: "rgba(0,0,0,0.7)" }}
-          >
-            {match && match.length > 1 ? match[1].trim() : description}
-          </p>
-          <p
-            style={{ color: "rgba(0,0,0,0.5)", fontSize: "0.875rem" }}
-            className="mb-0 h-10 line-clamp-2"
-          >
-            {tags?.map((tag, i) => (
-              <span key={"tag_" + tag + "_" + i}>
-                <span>{tag}</span>
-                {i + 1 < tags.length && <span> · </span>}
-              </span>
-            ))}
-          </p>
         </div>
         <Modal
           footer={null}
