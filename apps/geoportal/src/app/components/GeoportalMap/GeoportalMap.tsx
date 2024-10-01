@@ -328,7 +328,9 @@ export const GeoportalMap = () => {
       </Control>
       {allow3d && (
         <Control position="topleft" order={60}>
-          <MapTypeSwitcher zoomSnap={LEAFLET_CONFIG.zoomSnap} onComplete=
+          <MapTypeSwitcher zoomSnap={LEAFLET_CONFIG.zoomSnap} 
+          duration={CESIUM_CONFIG.transitions.mapMode.duration}
+          onComplete=
             {
               (isTo2d: boolean) => {
                 dispatch(setBackgroundLayer({ ...backgroundLayer, visible: isTo2d }))

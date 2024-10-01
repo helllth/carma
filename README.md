@@ -34,7 +34,7 @@ Welcome to CARMA, a monolithic repository (monorepo) powered by Nx, designed to 
 3. on dev branch you can also run the custom script
 
    `npm run update-all`
-   
+
 to refresh the repo and update all submodules
 
 ## Development Guidelines
@@ -69,9 +69,9 @@ Some possible additional Checks:
 
 If build errors occur due to submodules run:
 
- `npm run update-all` 
- 
- again, or just 
+`npm run update-all`
+
+again, or just
 
 `git submodule update --init --recursive --remote --checkout --force`
 

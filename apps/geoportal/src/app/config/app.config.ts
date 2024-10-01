@@ -8,7 +8,7 @@ const CESIUM_PATHNAME = "__cesium__";
 export const CESIUM_CONFIG: CesiumConfig = {
   transitions: {
     mapMode: {
-      duration: 100,
+      duration: 1000,
     },
   },
   camera: {
