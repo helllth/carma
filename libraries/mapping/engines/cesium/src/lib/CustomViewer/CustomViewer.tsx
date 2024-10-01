@@ -60,6 +60,7 @@ type CustomViewerProps = {
 
   //disableZoomRestrictions?: boolean; // todo
   //minZoom?: number; // todo
+  minPitch?: number;
   globe?: {
     // https://cesium.com/learn/cesiumjs/ref-doc/Globe.html
     baseColor?: Color;
@@ -99,6 +100,7 @@ function CustomViewer(props: CustomViewerProps) {
     },
     containerRef,
     enableLocationHashUpdate = true,
+    minPitch,
   } = props;
 
   const previousViewerRef = useRef<Viewer | null>(null); // track viewer changes
@@ -130,7 +132,7 @@ function CustomViewer(props: CustomViewerProps) {
   useTransitionTimeout();
   useDisableSSCC();
   useCameraRollSoftLimiter();
-  useCameraPitchHardLimiter();
+  useCameraPitchHardLimiter(minPitch);
 
   useEffect(() => {
     if (viewer && enableLocationHashUpdate && !isMode2d) {

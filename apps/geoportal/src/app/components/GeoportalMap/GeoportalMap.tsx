@@ -484,7 +484,7 @@ export const GeoportalMap = () => {
                 pointerEvents: isMode2d ? "none" : "auto",
               }}
             >
-              <CustomViewer containerRef={container3dMapRef}></CustomViewer>
+              <CustomViewer containerRef={container3dMapRef} minPitch={CESIUM_CONFIG.camera.minPitch} ></CustomViewer>
             </div>
           )}
         </>

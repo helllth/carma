@@ -8,13 +8,16 @@ import {
   useViewerIsMode2d,
 } from "../../CustomViewerContextProvider";
 
-const useCameraPitchHardLimiter = (minPitch = CeMath.toRadians(-(30))) => {
+const DEFAULT_MIN_PITCH = 12;
+
+const useCameraPitchHardLimiter = (minPitchDeg = DEFAULT_MIN_PITCH) => {
   const { viewer } = useCesiumCustomViewer();
   const dispatch = useDispatch();
   const isMode2d = useViewerIsMode2d();
   const collisions = useScreenSpaceCameraControllerEnableCollisionDetection();
   const lastPitch = useRef<number | null>(null);
   const lastPosition = useRef<Cartographic | null>(null);
+  const minPitchRad = CeMath.toRadians(-minPitchDeg);
   const clearLast = () => {
     lastPitch.current = null;
     lastPosition.current = null;
@@ -27,12 +30,12 @@ const useCameraPitchHardLimiter = (minPitch = CeMath.toRadians(-(30))) => {
       );
       clearLast();
       const onUpdate = async () => {
-        const isPitchTooLow = camera.pitch > minPitch;
+        const isPitchTooLow = camera.pitch > minPitchRad;
         if (isPitchTooLow) {
           console.log(
             "LISTENER HOOK [2D3D|CESIUM|CAMERA]: reset pitch",
             camera.pitch,
-            minPitch,
+            minPitchRad,
           );
           if (lastPitch.current !== null && lastPosition.current !== null) {
             const { latitude, longitude } = camera.positionCartographic;
@@ -43,7 +46,7 @@ const useCameraPitchHardLimiter = (minPitch = CeMath.toRadians(-(30))) => {
               ),
               orientation: {
                 heading: camera.heading,
-                pitch: minPitch,
+                pitch: minPitchRad,
                 roll: camera.roll,
               },
             });
@@ -57,7 +60,7 @@ const useCameraPitchHardLimiter = (minPitch = CeMath.toRadians(-(30))) => {
         scene.preUpdate.removeEventListener(onUpdate);
       };
     }
-  }, [viewer, minPitch, collisions, isMode2d, dispatch]);
+  }, [viewer, minPitchRad, collisions, isMode2d, dispatch]);
 };
 
 export default useCameraPitchHardLimiter;
