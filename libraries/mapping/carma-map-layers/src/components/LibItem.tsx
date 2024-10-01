@@ -245,11 +245,13 @@ const LibItem = ({
   return (
     <>
       <div
-        className="flex flex-col rounded-lg w-full shadow-sm h-fit hover:!shadow-lg bg-white"
+        className={`flex flex-col rounded-lg w-full shadow-sm h-fit hover:!shadow-lg ${
+          showInfo ? "bg-blue-50" : "bg-white"
+        }`}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <div className="relative overflow-hidden isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]">
+        <div className="relative overflow-hidden bg-white isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]">
           {isLoading && (
             <div style={{ position: "absolute", left: "50%" }}>
               <Spin />
