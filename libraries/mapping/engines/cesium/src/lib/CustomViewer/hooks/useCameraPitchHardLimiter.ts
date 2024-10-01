@@ -8,7 +8,7 @@ import {
   useViewerIsMode2d,
 } from "../../CustomViewerContextProvider";
 
-const useCameraPitchHardLimiter = (minPitch = CeMath.toRadians(-(90 / 8))) => {
+const useCameraPitchHardLimiter = (minPitch = CeMath.toRadians(-(30))) => {
   const { viewer } = useCesiumCustomViewer();
   const dispatch = useDispatch();
   const isMode2d = useViewerIsMode2d();
