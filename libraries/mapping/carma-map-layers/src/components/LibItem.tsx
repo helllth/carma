@@ -1,7 +1,5 @@
 import { faStar as regularFaStar } from "@fortawesome/free-regular-svg-icons";
 import {
-  faChevronDown,
-  faChevronUp,
   faCircleInfo,
   faCircleMinus,
   faCirclePlus,
@@ -439,14 +437,6 @@ const LibItem = ({
                 />
               )}
           </div>
-          <button
-            onClick={() => {
-              setSelectedLayerId(showInfo ? null : layer.id);
-            }}
-            className="w-full flex items-center justify-center"
-          >
-            <FontAwesomeIcon icon={showInfo ? faChevronUp : faChevronDown} />
-          </button>
         </div>
         <Modal
           footer={null}
