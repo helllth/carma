@@ -6,8 +6,9 @@ export const getUrlPrefix = () =>
 export const getQueryableLayers = (layers: Layer[], zoom: number) => {
   return layers.filter(
     (layer) =>
-      layer.queryable === true &&
-      layer.useInFeatureInfo === true &&
+      layer.queryable &&
+      layer.visible &&
+      layer.useInFeatureInfo &&
       zoom < (layer.props.maxZoom ? layer.props.maxZoom : Infinity) &&
       zoom > layer.props.minZoom,
   );
