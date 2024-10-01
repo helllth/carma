@@ -1,4 +1,3 @@
-import type { Viewer } from "cesium";
 import { useEffect } from "react";
 import {
   useCesiumCustomViewer,
