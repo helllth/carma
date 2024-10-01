@@ -1514,6 +1514,10 @@ export const baseConfig = {
       },
       {
         name: "poi_bezirkssozialdienste",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}poi/bezirkssozialdienste.style.json`,
+        ],
       },
       {
         name: "poi_bibliotheken",
