@@ -1,13 +1,10 @@
 import HeavyRainHazardMap from "@cismet-dev/react-cismap-envirometrics-maps/HeavyRainHazardMap";
-
 import React, { useEffect, useState } from "react";
 import { MappingConstants } from "react-cismap";
 import TopicMapContextProvider from "react-cismap/contexts/TopicMapContextProvider";
 import { md5FetchJSON } from "react-cismap/tools/fetching";
 import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
-
 import versionData from "./version.json";
-
 import config from "./config";
 import { getApplicationVersion } from "@carma-commons/utils";
 import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/xanten";
