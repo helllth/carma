@@ -23,29 +23,21 @@ Welcome to CARMA, a monolithic repository (monorepo) powered by Nx, designed to 
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/cismet/carma.git
    cd carma
    ```
 
-
 2. npm install
 
 3. on dev branch you can also run the custom script
-`npm run update-all`
-   to refresh the repo and update all submodules
 
-#### adding submodules:
-
-`git submodule update --init --recursive`
-
-#### Updating submodules:
-
-`git submodule update --remote --recursive --merge`
+   `npm run update-all`
+   
+to refresh the repo and update all submodules
 
 ## Development Guidelines
-
-... Setup guide to be determined
 
 ### Dev Environment:
 
@@ -55,34 +47,35 @@ Welcome to CARMA, a monolithic repository (monorepo) powered by Nx, designed to 
 
 Before committing, ensure that the following conditions are met:
 
-if only project is affect run nx build before pushing.
+if only project is affected, run nx build before pushing.
 
 `npx nx build my-project-name`
 
-for the whole project run
+for the whole monorepot run,
 
-`npx nx run-many -t test`
+`npx nx run-many -t build --nxBail`
 
-make sure the submodules stay in sync
+to check that all projects build before committing.
 
-`git submodule update --remote --recursive --merge`
+Some possible additional Checks:
 
-after updating the submodules one might need to skip the cache with
+`npx nx run-many -t lint  --nxBail`
 
-`npx nx reset`
+`npx nx run-many -t build-storybook --nxBail`
 
-or skip the cache directly with `--skipNxCache`
+`npx nx run-many -t test --nxBail`
 
-all projects should build before committing.
+### Submodules
 
-`npx nx run-many -t build --skipNxCache --nxBail`
-`npx nx run-many -t lint --skipNxCache --nxBail`
+If build errors occur due to submodules run:
 
-additional checks:
+ `npm run update-all` 
+ 
+ again, or just 
 
-`npx nx run-many -t build-storybook --skipNxCache --nxBail`
-`npx nx run-many -t test --skipNxCache --nxBail`
+`git submodule update --init --recursive --remote --checkout --force`
 
+to force update to current remote state of all submodules in the repository.
 
 ### Typescript configuration
 
@@ -140,7 +133,7 @@ import React, { useEffect, ReactNode } from "react";
 
 ### Linting
 
-uses eslint flat config in 
+uses eslint flat config in
 
 `/eslint.config.cjs`
 
@@ -171,7 +164,7 @@ Always do nx updates with the provided migrate utility.
 
 (prerequisites: have `npm-check-updates` installed globally with `npm install -g npm-check-updates`)
 
-until further notice keep: 
+until further notice keep:
 
 - eslint at 8.57
 - storybook at v7
