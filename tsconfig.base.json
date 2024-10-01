@@ -80,7 +80,6 @@
       "@carma-collab/wuppertal/verdis-online": [
         "libraries/collaboration/carma-wuppertal-collab/src/verdis-online/index.ts"
       ],
-      "@carma-pecher-collab/xanten": ["libraries/collaboration/carma-pecher-collab/src/xanten/index.jsx"],
       "@carma-collab/wuppertal/x-and-ride": ["libraries/collaboration/carma-wuppertal-collab/src/x-and-ride/index.ts"],
       "@carma-commons/debug": ["libraries/commons/debug/src/index.ts"],
       "@carma-commons/document-viewer": ["libraries/commons/document-viewer/src/index.ts"],
@@ -98,6 +97,8 @@
       "@carma-mapping/map-controls-layout": ["libraries/mapping/carma-map-control-layout/src/index.ts"],
       "@carma-mapping/maplibre-engine": ["libraries/mapping/engines/maplibre/src/index.ts"],
       "@carma-mapping/utils": ["libraries/mapping/carma-map-utils/src/index.ts"],
+      "@carma-pecher-collab/xanten": ["libraries/collaboration/carma-pecher-collab/src/xanten/index.jsx"],
+      "@carma-pecher-collab/euskirchen": ["libraries/collaboration/carma-pecher-collab/src/euskirchen/index.jsx"],
       "@carma/libraries/commons/ui/lib-helper-overlay": ["libraries/commons/ui/lib-helper-overlay/src/index.ts"]
     },
     "skipLibCheck": true
