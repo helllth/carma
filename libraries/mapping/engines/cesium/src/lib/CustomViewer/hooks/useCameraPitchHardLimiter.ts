@@ -57,7 +57,7 @@ const useCameraPitchHardLimiter = (minPitch = CeMath.toRadians(-(90 / 8))) => {
         scene.preUpdate.removeEventListener(onUpdate);
       };
     }
-  }, [viewer, collisions, isMode2d, dispatch]);
+  }, [viewer, minPitch, collisions, isMode2d, dispatch]);
 };
 
 export default useCameraPitchHardLimiter;
