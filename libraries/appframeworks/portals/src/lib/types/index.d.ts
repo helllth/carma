@@ -127,6 +127,7 @@ export interface MappingState extends LayerState {
 
 export type FeatureInfo = {
   id: string;
+  showMarker?: boolean;
   properties: {
     header: string;
     headerColor: string;

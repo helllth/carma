@@ -113,8 +113,11 @@ export const onClickTopicMap = async (
       dispatch(setVectorInfo(undefined));
     }
 
+    const topLayer = queryableLayers[queryableLayers.length - 1];
+
     if (
-      queryableLayers[queryableLayers.length - 1].layerType !== "vector" ||
+      topLayer.layerType !== "vector" ||
+      vectorInfos[vectorInfos.length - 1]?.showMarker ||
       vectorInfos.length === 0 ||
       vectorLayers.length === nothingFoundIDs.length
     ) {
@@ -252,6 +255,7 @@ const onSelectionChangedVector = (
           ],
         },
         id: layer.id,
+        showMarker: selectedVectorFeature.geometry.type === "Polygon",
       };
 
       dispatch(addVectorInfo(feature));

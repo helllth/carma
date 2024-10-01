@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 
-import type { FeatureInfoState } from "@carma-apps/portals";
+import type { FeatureInfo, FeatureInfoState } from "@carma-apps/portals";
 import { isEqual } from "lodash";
 
 const initialState: FeatureInfoState = {
@@ -84,7 +84,7 @@ const slice = createSlice({
     clearNothingFoundIDs(state) {
       state.nothingFoundIDs = [];
     },
-    addVectorInfo(state, action) {
+    addVectorInfo(state, action: PayloadAction<FeatureInfo>) {
       state.vectorInfos.push(action.payload);
     },
     removeVectorInfo(state, action) {
