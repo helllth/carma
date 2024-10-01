@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { InfoOutlined } from "@ant-design/icons";
 import type { Item, Layer, LayerProps } from "../helper/types";
 import { extractVectorStyles, parseDescription } from "../helper/layerHelper";
+import InfoCard from "./InfoCard";
 
 interface LayerItemProps {
   setAdditionalLayers: any;
@@ -56,7 +57,6 @@ const LibItem = ({
   const showInfo = selectedLayerId === layer.id;
   const title = layer.title;
   const description = layer.description;
-  const parsedDescription = parseDescription(description);
   const keywords = layer.keywords;
   const tags =
     layer.type === "collection"
@@ -467,37 +467,7 @@ const LibItem = ({
           </div>
         </Modal>
       </div>
-      {showInfo && (
-        <div className="w-full h-96 p-6 shadow-sm hover:!shadow-lg rounded-lg bg-white col-span-full">
-          <div className="flex h-full flex-col justify-between">
-            <h3>{title}</h3>
-            <div className="flex gap-2 w-full h-full">
-              <div className="w-2/3">
-                <h5 className="font-semibold text-lg">Inhalt</h5>
-                <p className="text-base">{parsedDescription.inhalt}</p>
-                <h5 className="font-semibold text-lg">Sichtbarkeit</h5>
-                <p className="text-base">
-                  {parsedDescription.sichtbarkeit.slice(0, -1)}
-                </p>
-                <h5 className="font-semibold text-lg">Nutzung</h5>
-                <p className="text-base">{parsedDescription.nutzung}</p>
-              </div>
-              <hr className="h-full w-1 bg-gray-300 rounded-md" />
-              <p
-                style={{ color: "rgba(0,0,0,0.5)", fontSize: "0.875rem" }}
-                className="mb-0 h-10 line-clamp-2"
-              >
-                {tags?.map((tag, i) => (
-                  <span key={"tag_" + tag + "_" + i}>
-                    <span>{tag}</span>
-                    {i + 1 < tags.length && <span> · </span>}
-                  </span>
-                ))}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      {showInfo && <InfoCard layer={layer} />}
     </>
   );
 };
