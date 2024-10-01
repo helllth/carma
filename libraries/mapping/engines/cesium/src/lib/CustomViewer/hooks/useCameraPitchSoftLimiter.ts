@@ -13,7 +13,7 @@ import { pickViewerCanvasCenter } from "../../utils/cesiumHelpers";
 const CESIUM_CAMERA_MIN_PITCH = CeMath.toRadians(-20);
 const CESIUM_CAMERA_MIN_PITCH_RESET_TO = CeMath.toRadians(-30);
 
-const useCameraLimiter = () => {
+const useCameraPitchSoftLimiter = () => {
   const { viewer } = useCesiumCustomViewer();
   const dispatch = useDispatch();
   const isMode2d = useViewerIsMode2d();
@@ -21,40 +21,22 @@ const useCameraLimiter = () => {
   useEffect(() => {
     if (viewer) {
       console.log(
-        "HOOK [2D3D|CESIUM] viewer changed add new Cesium MoveEnd Listener to reset rolled camera",
+        "HOOK [2D3D|CESIUM] viewer changed add new Cesium MoveEnd Listener to correct camera pitch",
       );
       const moveEndListener = async () => {
-        console.log("HOOK [2D3D|CESIUM] xxx", viewer.camera.pitch, isMode2d);
-        if (viewer.camera.position && !isMode2d) {
-          console.log("HOOK [2D3D|CESIUM] xxx", viewer.camera.pitch);
-          const rollDeviation =
-            Math.abs(CeMath.TWO_PI - viewer.camera.roll) % CeMath.TWO_PI;
-
-          if (rollDeviation > 0.02) {
-            console.log(
-              "LISTENER HOOK [2D3D|CESIUM|CAMERA]: flyTo reset roll 2D3D",
-              rollDeviation,
-            );
-            const duration = Math.min(rollDeviation, 1);
-            dispatch(setIsAnimating(true));
-            viewer.camera.flyTo({
-              destination: viewer.camera.position,
-              orientation: {
-                heading: viewer.camera.heading,
-                pitch: viewer.camera.pitch,
-                roll: 0,
-              },
-              duration,
-              complete: () => dispatch(setIsAnimating(false)),
-            });
-          }
-          const preventLookingUp =
+        if (viewer.camera.position && !isMode2d && collisions) {
+          console.log(
+            "HOOK [2D3D|CESIUM] Soft Pitch Limiter",
+            viewer.camera.pitch,
+          );
+          const isPitchTooLow =
             collisions && viewer.camera.pitch > CESIUM_CAMERA_MIN_PITCH;
-          if (preventLookingUp && collisions) {
+          if (isPitchTooLow) {
             console.log(
               "LISTENER HOOK [2D3D|CESIUM|CAMERA]: reset pitch",
               viewer.camera.pitch,
             );
+            // TODO Get CenterPos Lower from screen if distance is muliple of elevation. prevent pitch around distant point on horizon
             const centerPos = pickViewerCanvasCenter(viewer).scenePosition;
             if (centerPos) {
               dispatch(setIsAnimating(true));
@@ -86,4 +68,4 @@ const useCameraLimiter = () => {
   }, [viewer, collisions, isMode2d, dispatch]);
 };
 
-export default useCameraLimiter;
+export default useCameraPitchSoftLimiter;

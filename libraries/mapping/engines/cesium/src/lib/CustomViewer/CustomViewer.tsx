@@ -33,7 +33,8 @@ import { useInitializeViewer, useLogCesiumRenderIn2D } from "./hooks";
 import useTransitionTimeout from "./hooks/useTransitionTimeout";
 import useDisableSSCC from "./hooks/useDisableSSCC";
 import useTweakpane from "./hooks/useTweakpane";
-import useCameraLimiter from './hooks/useCameraLimiter';
+import useCameraRollSoftLimiter from './hooks/useCameraRollSoftLimiter';
+import useCameraPitchHardLimiter from "./hooks/useCameraPitchHardLimiter";
 
 
 type CustomViewerProps = {
@@ -128,7 +129,8 @@ function CustomViewer(props: CustomViewerProps) {
   useLogCesiumRenderIn2D();
   useTransitionTimeout();
   useDisableSSCC();
-  useCameraLimiter();
+  useCameraRollSoftLimiter();
+  useCameraPitchHardLimiter();
 
   useEffect(() => {
     if (viewer && enableLocationHashUpdate && !isMode2d) {
