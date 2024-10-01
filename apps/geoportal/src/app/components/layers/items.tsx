@@ -51,7 +51,7 @@ export const tabItems = (legend, currentLayer: Layer) => {
       ),
     },
     {
-      label: "Technische Informationen",
+      label: "Links",
       key: "3",
       children: (
         <div className="flex flex-col gap-2">
@@ -59,7 +59,7 @@ export const tabItems = (legend, currentLayer: Layer) => {
             href="https://maps.wuppertal.de/karten?service=WMS&request=GetCapabilities&version=1.1.1"
             target="_blank"
           >
-            GetCapabilities
+            Inhaltsverzeichnis des Kartendienstes (WMS Capabilities)
           </a>
           <a
             href={
@@ -69,7 +69,7 @@ export const tabItems = (legend, currentLayer: Layer) => {
             }
             target="_blank"
           >
-            Open Data
+            Datenquelle im Open-Data-Portal Wuppertal
           </a>
         </div>
       ),
