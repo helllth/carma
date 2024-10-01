@@ -242,17 +242,18 @@ const onSelectionChangedVector = (
       const featureProperties = result.includes("function")
         ? functionToFeature(properties, result)
         : objectToFeature(properties, result);
+      const genericLinks = featureProperties.properties.genericLinks || [];
 
       const feature = {
         properties: {
           ...featureProperties.properties,
-          genericLinks: [
+          genericLinks: genericLinks.concat([
             {
               url: imgUrl,
               tooltip: "Alte Sachdatenabfrage",
               icon: createElement(FeatureInfoIcon),
             },
-          ],
+          ]),
         },
         id: layer.id,
         showMarker: selectedVectorFeature.geometry.type === "Polygon",

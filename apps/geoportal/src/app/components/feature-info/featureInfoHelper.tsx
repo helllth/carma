@@ -132,17 +132,18 @@ export const getFeatureForLayer = async (layer, pos) => {
       const feature = result.includes("function")
         ? functionToFeature(output, result)
         : objectToFeature(output, result);
+      const genericLinks = feature.properties.genericLinks || [];
 
       return {
         properties: {
           ...feature.properties,
-          genericLinks: [
+          genericLinks: genericLinks.concat([
             {
               url: imgUrl,
               tooltip: "Alte Sachdatenabfrage",
               icon: <FeatureInfoIcon />,
             },
-          ],
+          ]),
         },
         id: layer.id,
       };
