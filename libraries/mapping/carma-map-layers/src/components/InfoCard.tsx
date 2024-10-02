@@ -2,7 +2,14 @@ import { Button } from "antd";
 import { parseDescription } from "../helper/layerHelper";
 import { Item } from "../helper/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleMinus,
+  faCirclePlus,
+  faImage,
+  faMap,
+  faStar,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface InfoCardProps {
   layer: Item;
@@ -30,31 +37,35 @@ const InfoCard = ({
   return (
     <div className="w-full h-[400px] p-6 shadow-sm hover:!shadow-lg rounded-lg bg-blue-50 col-span-full">
       <div className="flex h-full flex-col justify-between">
-        <div className="flex pb-4 gap-4 items-center">
-          <h3 className="mb-0 min-w-fit">{title}</h3>
-          <div className="w-full flex items-center justify-between">
+        <div className="flex pb-4 gap-4 items-center w-full justify-between">
+          <div className="flex w-max overflow-hidden gap-4 items-center">
+            <h3 className="mb-0 truncate leading-10">{title}</h3>
             <div className="flex items-center gap-4">
-              <Button onClick={handleAddClick}>
+              <Button
+                onClick={handleAddClick}
+                icon={
+                  <FontAwesomeIcon
+                    icon={isActiveLayer ? faCircleMinus : faCirclePlus}
+                  />
+                }
+              >
                 {isActiveLayer ? "Entfernen" : "Hinzufügen"}
               </Button>
-              <Button onClick={handleFavoriteClick}>
+              <Button
+                onClick={handleFavoriteClick}
+                icon={<FontAwesomeIcon icon={faStar} />}
+              >
                 {isFavorite ? "Favorit entfernen" : "Favorisieren"}
               </Button>
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                Vorschau
-              </Button>
+              <Button icon={<FontAwesomeIcon icon={faMap} />}>Vorschau</Button>
             </div>
-            <button
-              onClick={closeInfoCard}
-              className="rounded-full text-gray-600 hover:text-gray-500 flex items-center justify-center py-0.5 px-1"
-            >
-              <FontAwesomeIcon icon={faX} />
-            </button>
           </div>
+          <button
+            onClick={closeInfoCard}
+            className="text-gray-600 hover:text-gray-500 flex items-center justify-center py-0.5 px-1"
+          >
+            <FontAwesomeIcon icon={faX} />
+          </button>
         </div>
         <div className="flex gap-2 w-full h-full overflow-hidden">
           <div className="w-full flex flex-col justify-between overflow-auto">
