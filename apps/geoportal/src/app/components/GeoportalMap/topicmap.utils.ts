@@ -316,7 +316,7 @@ export const createCismapLayers = (
             key: `${focusMode}_${i}_${layer.id}_${layer.opacity}`,
             style: layer.props.style,
             maxZoom: MAX_ZOOM,
-            pane: `additionalLayers1`,
+            pane: `additionalLayers${i + 1}`,
             opacity: layer.opacity || 0.7,
             type: "vector",
             selectionEnabled:
