@@ -11,6 +11,9 @@ import {
   GeometryInstance,
   GroundPrimitive,
   HeightReference,
+  OrthographicFrustum,
+  PerspectiveFrustum,
+  PerspectiveOffCenterFrustum,
   PolygonGeometry,
   Scene,
   Viewer,
@@ -27,6 +30,7 @@ import {
   getHeadingPitchRangeFromZoom,
   getPositionWithHeightAsync,
   invertedPolygonHierarchy,
+  pickViewerCanvasCenter,
   polygonHierarchyFromPolygonCoords,
   removeCesiumMarker,
   removeGroundPrimitiveById,
@@ -41,7 +45,7 @@ const proj4ConverterLookup = {};
 const DEFAULT_ZOOM_LEVEL = 16;
 const DEFAULT_CESIUM_MARKER_ANCHOR_HEIGHT = 5; // in METERS
 const MARKER_ELEVATION_OFFSET_TILESET_NOT_FINISHED_LOADING = 20;
-const DEFAULT_CESIUM_PITCH_ADJUST_HEIGHT = 1000; // meters
+const DEFAULT_CESIUM_PITCH_ADJUST_HEIGHT = 1500; // meters
 
 type Coord = { lat: number; lon: number };
 // type MapType = 'leaflet' | 'cesium';
@@ -52,11 +56,11 @@ type LeafletMapActions = {
 };
 type CesiumMapActions = {
   lookAt: (
-    scene: Scene,
+    viewer: Viewer,
     pos: Cartographic,
     zoom: number,
     cesiumConfig: { pitchAdjustHeight?: number },
-    options?: { onComplete?: Function },
+    options?: { onComplete?: Function, durationFactor?: number },
   ) => void;
   setZoom: (scene: Scene, zoom: number) => void;
   fitBoundingSphere: (scene: Scene, bounds: BoundingSphere) => void;
@@ -78,23 +82,50 @@ const LeafletMapActions = {
 
 const CesiumMapActions = {
   lookAt: async (
-    scene: Scene,
+    viewer: Viewer,
     { longitude, latitude, height }: Cartographic,
     zoom: number,
     cesiumConfig: { pitchAdjustHeight?: number } = {},
-    options: { onComplete?: Function } = {},
+    options: { onComplete?: Function, durationFactor?: number } = {},
   ) => {
+    const { scene } = viewer;
     if (scene) {
+      const currentCenterPos = pickViewerCanvasCenter(viewer).scenePosition;
+
       const center = Cartesian3.fromRadians(longitude, latitude, height);
+
+      let duration = 4;
+
+      if (!currentCenterPos) {
+        return;
+      }
+
+      const distanceTargets = Cartesian3.distance(currentCenterPos, center);
+      const currentRange = Cartesian3.distance(
+        currentCenterPos,
+        scene.camera.position,
+      );
+
       const hpr = getHeadingPitchRangeFromZoom(zoom - 1, scene.camera);
       const range = distanceFromZoomLevel(zoom - 2);
+
+      duration = Math.pow(
+        distanceTargets + Math.abs(currentRange - range) / currentRange, 1/3
+      ) * (options.durationFactor ?? 1);
+
+      console.info(
+        "[CESIUM|SEARCH|CAMERA] move duration",
+        duration,
+        distanceTargets,
+      );
 
       //TODO optional add responsive duration based on distance of target
 
       scene.camera.flyToBoundingSphere(new BoundingSphere(center, range), {
         offset: hpr,
-        duration: 4,
-        // pitchAdjustHeight: cesiumConfig.pitchAdjustHeight ?? DEFAULT_CESIUM_PITCH_ADJUST_HEIGHT,
+        duration,
+        pitchAdjustHeight:
+          cesiumConfig.pitchAdjustHeight ?? DEFAULT_CESIUM_PITCH_ADJUST_HEIGHT,
         easingFunction: EasingFunction.QUADRATIC_IN_OUT,
         complete: () => {
           console.info(
@@ -342,8 +373,9 @@ export const carmaHitTrigger = (
               }
             }
           };
-          cAction.lookAt(scene, posTerrain, zoom, cesiumConfig, {
+          cAction.lookAt(viewer, posTerrain, zoom, cesiumConfig, {
             onComplete: delayedMarker,
+            durationFactor: 0.2
           });
           console.log(
             "GAZETTEER: [2D3D|CESIUM|CAMERA] look at Marker (Terrain Elevation)",
