@@ -27,16 +27,23 @@ const slice = createSlice({
     },
     addFavorite(state, action: PayloadAction<Item>) {
       const alreadyExists = state.favorites.some(
-        (favorite) => favorite.id === action.payload.id,
+        (favorite) =>
+          favorite.id === `fav_${action.payload.id}` ||
+          favorite.id === action.payload.id,
       );
       if (!alreadyExists) {
-        state.favorites = [...state.favorites, action.payload];
+        state.favorites = [
+          ...state.favorites,
+          { ...action.payload, id: `fav_${action.payload.id}` },
+        ];
       }
       return state;
     },
     removeFavorite(state, action: PayloadAction<Item>) {
       const newFavorites = state.favorites.filter(
-        (favorite) => favorite.id !== action.payload.id,
+        (favorite) =>
+          favorite.id !== `fav_${action.payload.id}` &&
+          favorite.id !== action.payload.id,
       );
       state.favorites = newFavorites;
       return state;

@@ -48,7 +48,10 @@ const LibItem = ({
   const [hovered, setHovered] = useState(false);
   const [isActiveLayer, setIsActiveLayer] = useState(false);
   const isFavorite = favorites
-    ? favorites.some((favorite) => favorite.id === layer.id)
+    ? favorites.some(
+        (favorite) =>
+          favorite.id === `fav_${layer.id}` || favorite.id === layer.id,
+      )
     : false;
   const [thumbUrl, setThumbUrl] = useState("");
   const [collectionImages, setCollectionImages] = useState<string[]>([]);
