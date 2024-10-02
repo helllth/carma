@@ -27,8 +27,8 @@ interface LayerItemProps {
   setThumbnail: any;
   activeLayers: Item[];
   favorites?: Item[];
-  addFavorite?: (layer: Item) => void;
-  removeFavorite?: (layer: Item) => void;
+  addFavorite: (layer: Item) => void;
+  removeFavorite: (layer: Item) => void;
   selectedLayerId: string | null;
   setSelectedLayerId: (id: string | null) => void;
 }
@@ -98,7 +98,9 @@ const LibItem = ({
 
   const hightlightTextIndexes = undefined;
 
-  const handleLayerClick = (e) => {
+  const handleLayerClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     e.stopPropagation();
     setAdditionalLayers(layer, false, forceWMS);
   };
@@ -246,7 +248,7 @@ const LibItem = ({
   return (
     <>
       <div
-        className={`flex flex-col rounded-lg w-full shadow-sm h-fit hover:!shadow-lg ${
+        className={`flex flex-col cursor-pointer rounded-lg w-full shadow-sm h-fit hover:!shadow-lg ${
           showInfo ? "bg-blue-50" : "bg-white"
         }`}
         onMouseEnter={() => setHovered(true)}
@@ -303,7 +305,8 @@ const LibItem = ({
               <FontAwesomeIcon
                 className="absolute right-1 top-1 text-3xl text-yellow-200 cursor-pointer z-50"
                 icon={faStar}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   if (removeFavorite) {
                     removeFavorite(layer);
                   }
@@ -313,7 +316,8 @@ const LibItem = ({
               <FontAwesomeIcon
                 className="absolute right-1 top-1 text-3xl cursor-pointer z-50 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
                 icon={regularFaStar}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   if (addFavorite) {
                     addFavorite(layer);
                   }
@@ -331,11 +335,15 @@ const LibItem = ({
             </a>
           ) : layer.type === "collection" ? (
             <>
-              <FontAwesomeIcon
+              <button
                 onClick={handleLayerClick}
-                icon={faSquareUpRight}
-                className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
-              />
+                className="absolute left-1 top-1 z-50"
+              >
+                <FontAwesomeIcon
+                  icon={faSquareUpRight}
+                  className="text-3xl text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
+                />
+              </button>
               <FontAwesomeIcon
                 onClick={() => setOpenDeleteModal(true)}
                 icon={faTrash}
@@ -343,11 +351,15 @@ const LibItem = ({
               />
             </>
           ) : (
-            <FontAwesomeIcon
+            <button
               onClick={handleLayerClick}
-              icon={isActiveLayer ? faMinus : faPlus}
-              className="absolute left-1 top-1 text-3xl cursor-pointer text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)] z-50"
-            />
+              className="absolute left-1 top-1 z-50"
+            >
+              <FontAwesomeIcon
+                icon={isActiveLayer ? faMinus : faPlus}
+                className="text-3xl text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]"
+              />
+            </button>
           )}
           {hovered && (
             <div className="flex flex-col items-center gap-2 absolute top-0 w-full h-full justify-center p-8 px-10">
@@ -459,7 +471,22 @@ const LibItem = ({
           </div>
         </Modal>
       </div>
-      {showInfo && <InfoCard layer={layer} />}
+      {showInfo && (
+        <InfoCard
+          isFavorite={isFavorite}
+          isActiveLayer={isActiveLayer}
+          layer={layer}
+          handleAddClick={handleLayerClick}
+          handleFavoriteClick={() => {
+            if (isFavorite) {
+              removeFavorite(layer);
+            } else {
+              addFavorite(layer);
+            }
+          }}
+          closeInfoCard={() => setSelectedLayerId(null)}
+        />
+      )}
     </>
   );
 };

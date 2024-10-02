@@ -1,19 +1,60 @@
+import { Button } from "antd";
 import { parseDescription } from "../helper/layerHelper";
 import { Item } from "../helper/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faX } from "@fortawesome/free-solid-svg-icons";
 
 interface InfoCardProps {
   layer: Item;
+  isFavorite: boolean;
+  isActiveLayer: boolean;
+  handleAddClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  handleFavoriteClick: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => void;
+  closeInfoCard: () => void;
 }
 
-const InfoCard = ({ layer }: InfoCardProps) => {
+const InfoCard = ({
+  layer,
+  isFavorite,
+  isActiveLayer,
+  handleAddClick,
+  handleFavoriteClick,
+  closeInfoCard,
+}: InfoCardProps) => {
   const { title, description, tags } = layer;
   const legends = layer.props.Style[0].LegendURL;
   const parsedDescription = parseDescription(description);
+
   return (
     <div className="w-full h-[400px] p-6 shadow-sm hover:!shadow-lg rounded-lg bg-blue-50 col-span-full">
       <div className="flex h-full flex-col justify-between">
         <div className="flex pb-4 gap-4 items-center">
-          <h3>{title}</h3>
+          <h3 className="mb-0 min-w-fit">{title}</h3>
+          <div className="w-full flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button onClick={handleAddClick}>
+                {isActiveLayer ? "Entfernen" : "Hinzufügen"}
+              </Button>
+              <Button onClick={handleFavoriteClick}>
+                {isFavorite ? "Favorit entfernen" : "Favorisieren"}
+              </Button>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                Vorschau
+              </Button>
+            </div>
+            <button
+              onClick={closeInfoCard}
+              className="rounded-full text-gray-600 hover:text-gray-500 flex items-center justify-center py-0.5 px-1"
+            >
+              <FontAwesomeIcon icon={faX} />
+            </button>
+          </div>
         </div>
         <div className="flex gap-2 w-full h-full overflow-hidden">
           <div className="w-full flex flex-col justify-between overflow-auto">
