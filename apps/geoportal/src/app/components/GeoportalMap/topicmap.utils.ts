@@ -300,20 +300,20 @@ export const createCismapLayers = (
       switch (layer.layerType) {
         case "wmts":
           return createCismapLayer({
-            key: `${focusMode}_${i}_${layer.id}`,
+            key: `${i}_${layer.id}`,
             url: layer.props.url,
             maxZoom: MAX_ZOOM,
             layers: layer.props.name,
             format: "image/png",
             tiled: true,
             transparent: "true",
-            pane: "additionalLayers1",
+            pane: `additionalLayers${i + 1}`,
             opacity: layer.opacity.toFixed(1) || 0.7,
             type: "wmts",
           });
         case "vector":
           return createCismapLayer({
-            key: `${focusMode}_${i}_${layer.id}_${layer.opacity}`,
+            key: `${i}_${layer.id}_${layer.opacity}`,
             style: layer.props.style,
             maxZoom: MAX_ZOOM,
             pane: `additionalLayers${i + 1}`,
