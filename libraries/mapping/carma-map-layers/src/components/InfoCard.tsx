@@ -31,6 +31,7 @@ const InfoCard = ({
   closeInfoCard,
 }: InfoCardProps) => {
   const { title, description, tags } = layer;
+  // @ts-expect-error fix typing
   const legends = layer.props.Style[0].LegendURL;
   const parsedDescription = parseDescription(description);
 

@@ -231,6 +231,8 @@ const TopNavbar = () => {
             layers: savedLayerConfigs,
           },
         ]}
+        addFavorite={() => {}}
+        removeFavorite={() => {}}
       />
 
       <div className="flex items-center gap-6">
