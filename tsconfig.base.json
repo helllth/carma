@@ -97,8 +97,9 @@
       "@carma-mapping/map-controls-layout": ["libraries/mapping/carma-map-control-layout/src/index.ts"],
       "@carma-mapping/maplibre-engine": ["libraries/mapping/engines/maplibre/src/index.ts"],
       "@carma-mapping/utils": ["libraries/mapping/carma-map-utils/src/index.ts"],
-      "@carma-pecher-collab/xanten": ["libraries/collaboration/carma-pecher-collab/src/xanten/index.jsx"],
       "@carma-pecher-collab/euskirchen": ["libraries/collaboration/carma-pecher-collab/src/euskirchen/index.jsx"],
+      "@carma-pecher-collab/xanten": ["libraries/collaboration/carma-pecher-collab/src/xanten/index.jsx"],
+      "@carma-pecher-collab/haltern": ["libraries/collaboration/carma-pecher-collab/src/haltern/index.jsx"],
       "@carma/libraries/commons/ui/lib-helper-overlay": ["libraries/commons/ui/lib-helper-overlay/src/index.ts"]
     },
     "skipLibCheck": true
