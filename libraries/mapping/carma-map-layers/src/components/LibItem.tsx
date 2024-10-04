@@ -256,7 +256,11 @@ const LibItem = ({
         }`}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        onClick={() => setSelectedLayerId(showInfo ? null : layer.id)}
+        onClick={() => {
+          if (layer.type !== "collection") {
+            setSelectedLayerId(showInfo ? null : layer.id);
+          }
+        }}
       >
         <div className="relative overflow-hidden bg-white isolate rounded-md flex justify-center items-center w-full aspect-[1.7777/1]">
           {isLoading && (
