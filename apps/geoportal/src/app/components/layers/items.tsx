@@ -61,16 +61,11 @@ export const tabItems = (legend, currentLayer: Layer) => {
           >
             Inhaltsverzeichnis des Kartendienstes (WMS Capabilities)
           </a>
-          <a
-            href={
-              currentLayer?.conf?.opendata
-                ? currentLayer.conf.opendata
-                : "https://offenedaten-wuppertal.de/dataset/interessante-orte-poi-wuppertal"
-            }
-            target="_blank"
-          >
-            Datenquelle im Open-Data-Portal Wuppertal
-          </a>
+          {currentLayer?.conf?.opendata && (
+            <a href={currentLayer.conf.opendata} target="_blank">
+              Datenquelle im Open-Data-Portal Wuppertal
+            </a>
+          )}
         </div>
       ),
     },
