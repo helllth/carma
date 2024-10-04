@@ -61,12 +61,6 @@ const LibItem = ({
   const title = layer.title;
   const description = layer.description;
   const keywords = layer.keywords;
-  const tags =
-    layer.type === "collection"
-      ? layer.layers.map((l) => l.title)
-      : layer.type === "link"
-      ? layer.tags
-      : layer?.tags?.slice(1);
 
   const name = layer.name;
   const service = layer.service;
@@ -110,7 +104,13 @@ const LibItem = ({
 
   useEffect(() => {
     let setActive = false;
-    if (activeLayers.find((activeLayer) => activeLayer.id === layer.id)) {
+    if (
+      activeLayers.find(
+        (activeLayer) =>
+          activeLayer.id ===
+          (layer.id.startsWith("fav_") ? layer.id.slice(4) : layer.id),
+      )
+    ) {
       setActive = true;
     }
     setIsActiveLayer(setActive);

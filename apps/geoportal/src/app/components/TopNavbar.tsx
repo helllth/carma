@@ -100,6 +100,7 @@ const TopNavbar = () => {
     forceWMS: boolean = false,
   ) => {
     let newLayer: Layer;
+    const id = layer.id.startsWith("fav_") ? layer.id.slice(4) : layer.id;
 
     if (layer.type === "collection") {
       if (deleteItem) {
@@ -139,7 +140,7 @@ const TopNavbar = () => {
           });
         newLayer = {
           title: layer.title,
-          id: layer.id,
+          id: id,
           layerType: "vector",
           opacity: 1.0,
           description: layer.description,
@@ -164,7 +165,7 @@ const TopNavbar = () => {
           case "wmts": {
             newLayer = {
               title: layer.title,
-              id: layer.id,
+              id: id,
               layerType: "wmts",
               opacity: 1.0,
               description: layer.description,
@@ -188,7 +189,7 @@ const TopNavbar = () => {
           case "vector": {
             newLayer = {
               title: layer.title,
-              id: layer.id,
+              id: id,
               layerType: "vector",
               opacity: 1.0,
               description: layer.description,
@@ -213,10 +214,10 @@ const TopNavbar = () => {
       }
     }
 
-    if (activeLayers.find((activeLayer) => activeLayer.id === layer.id)) {
+    if (activeLayers.find((activeLayer) => activeLayer.id === id)) {
       try {
-        dispatch(removeLayer(layer.id));
-        dispatch(updateInfoElementsAfterRemovingFeature(layer.id));
+        dispatch(removeLayer(id));
+        dispatch(updateInfoElementsAfterRemovingFeature(id));
         messageApi.open({
           type: "success",
           content: `${layer.title} wurde erfolgreich entfernt.`,
@@ -415,7 +416,11 @@ const TopNavbar = () => {
               onChange={(e) => {
                 if (e.target.value === "karte") {
                   dispatch(
-                    setBackgroundLayer({ ...selectedMapLayer, id: "karte", visible: isMode2d }),
+                    setBackgroundLayer({
+                      ...selectedMapLayer,
+                      id: "karte",
+                      visible: isMode2d,
+                    }),
                   );
                   toggleSceneStyle("secondary");
                 } else {
