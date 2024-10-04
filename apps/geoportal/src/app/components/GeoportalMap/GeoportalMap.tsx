@@ -211,6 +211,19 @@ export const GeoportalMap = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allow3d]);
 
+
+  const renderInfoBox = () => {
+    if (isMode2d) {
+      if (isModeMeasurement) {
+        return <InfoBoxMeasurement key={uiMode} />;
+      }
+      if (isModeFeatureInfo) {
+        return <FeatureInfoBox />;
+      }
+    }
+    return <div></div>;
+  };
+
   // TODO Move out Controls to own component
 
   console.info("RENDER: [GEOPORTAL] MAP");
@@ -328,9 +341,9 @@ export const GeoportalMap = () => {
       </Control>
       {allow3d && (
         <Control position="topleft" order={60}>
-          <MapTypeSwitcher zoomSnap={LEAFLET_CONFIG.zoomSnap} 
-          duration={CESIUM_CONFIG.transitions.mapMode.duration}
-          onComplete=
+          <MapTypeSwitcher zoomSnap={LEAFLET_CONFIG.zoomSnap}
+            duration={CESIUM_CONFIG.transitions.mapMode.duration}
+            onComplete=
             {
               (isTo2d: boolean) => {
                 dispatch(setBackgroundLayer({ ...backgroundLayer, visible: isTo2d }))
@@ -426,15 +439,7 @@ export const GeoportalMap = () => {
                 })
               }
               gazetteerSearchComponent={<></>}
-              infoBox={
-                isModeMeasurement ? (
-                  <InfoBoxMeasurement key={uiMode} />
-                ) : isModeFeatureInfo ? (
-                  <FeatureInfoBox />
-                ) : (
-                  <div></div>
-                )
-              }
+              infoBox={renderInfoBox()}
               zoomSnap={LEAFLET_CONFIG.zoomSnap}
               zoomDelta={LEAFLET_CONFIG.zoomDelta}
             >
