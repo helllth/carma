@@ -98,11 +98,25 @@ export const LibModal = ({
         };
       });
 
+      console.log("xxx results", results);
+
       resultsWithCategories.map((category) => {
         const newLayers: any[] = [];
 
         results.forEach((result) => {
-          if (category.Title === result.item?.tags?.[0]) {
+          if (
+            category.Title === "Favoriten" &&
+            result.item?.id.startsWith("fav_")
+          ) {
+            newLayers.push({
+              ...result.item,
+              highlight: result.matches,
+            });
+          }
+          if (
+            category.Title === result.item?.tags?.[0] &&
+            !result.item?.id.startsWith("fav_")
+          ) {
             newLayers.push({
               ...result.item,
               highlight: result.matches,
