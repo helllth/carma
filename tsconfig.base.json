@@ -100,9 +100,10 @@
       "@carma-pecher-collab/emsdetten": ["libraries/collaboration/carma-pecher-collab/src/emsdetten/index.jsx"],
       "@carma-pecher-collab/euskirchen": ["libraries/collaboration/carma-pecher-collab/src/euskirchen/index.jsx"],
       "@carma-pecher-collab/haltern": ["libraries/collaboration/carma-pecher-collab/src/haltern/index.jsx"],
+      "@carma-pecher-collab/meschede": ["libraries/collaboration/carma-pecher-collab/src/meschede/index.jsx"],
       "@carma-pecher-collab/olpe": ["libraries/collaboration/carma-pecher-collab/src/olpe/index.jsx"],
       "@carma-pecher-collab/xanten": ["libraries/collaboration/carma-pecher-collab/src/xanten/index.jsx"],
-      "@carma-pecher-collab/meschede": ["libraries/collaboration/carma-pecher-collab/src/meschede/index.jsx"],
+      "@carma-pecher-collab/paderborn": ["libraries/collaboration/carma-pecher-collab/src/paderborn/index.jsx"],
       "@carma/libraries/commons/ui/lib-helper-overlay": ["libraries/commons/ui/lib-helper-overlay/src/index.ts"]
     },
     "skipLibCheck": true
