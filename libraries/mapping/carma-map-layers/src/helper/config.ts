@@ -2542,10 +2542,6 @@ export const baseConfig = {
       },
       {
         name: "psa",
-        keywords: [
-          ":vec:",
-          `carmaConf://vectorStyle:${vectorBaseUrl}parkscheinautomat/style.json`,
-        ],
       },
       {
         name: "treppen",
