@@ -36,6 +36,7 @@ import useTweakpane from "./hooks/useTweakpane";
 import useCameraRollSoftLimiter from './hooks/useCameraRollSoftLimiter';
 import useCameraPitchEasingLimiter from "./hooks/useCameraPitchEasingLimiter";
 import useCameraPitchSoftLimiter from "./hooks/useCameraPitchSoftLimiter";
+import ElevationControl from "./components/controls/ElevationControl";
 
 
 type CustomViewerProps = {
@@ -267,40 +268,43 @@ function CustomViewer(props: CustomViewerProps) {
   console.info("RENDER: [CESIUM] CustomViewer");
 
   return (
-    <ResiumViewer
-      ref={viewerRef}
-      className={className}
-      // Resium ViewerOtherProps
-      full // equals style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}`
-      // Cesium Props
-      // see https://cesium.com/learn/cesiumjs/ref-doc/Viewer.html#.ConstructorOptions for defaults
+    <>
+      <ElevationControl show={false} />
+      <ResiumViewer
+        ref={viewerRef}
+        className={className}
+        // Resium ViewerOtherProps
+        full // equals style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}`
+        // Cesium Props
+        // see https://cesium.com/learn/cesiumjs/ref-doc/Viewer.html#.ConstructorOptions for defaults
 
-      // quality and performance
-      msaaSamples={4}
-      //useBrowserRecommendedResolution={true} // false allows crisper image, does not ignore devicepixel ratio
-      //resolutionScale={window.devicePixelRatio} // would override dpr
-      scene3DOnly={true} // No 2D map resources loaded
-      //sceneMode={SceneMode.SCENE3D} // Default but explicit
+        // quality and performance
+        msaaSamples={4}
+        //useBrowserRecommendedResolution={true} // false allows crisper image, does not ignore devicepixel ratio
+        //resolutionScale={window.devicePixelRatio} // would override dpr
+        scene3DOnly={true} // No 2D map resources loaded
+        //sceneMode={SceneMode.SCENE3D} // Default but explicit
 
-      // hide UI
-      animation={false}
-      //resolutionScale={adaptiveResolutionScale}
-      baseLayerPicker={false}
-      fullscreenButton={false}
-      geocoder={false}
-      targetFrameRate={60}
-      homeButton={false}
-      infoBox={false}
-      sceneModePicker={false}
-      selectionIndicator={selectionIndicator}
-      timeline={false}
-      navigationHelpButton={false}
-      navigationInstructionsInitiallyVisible={false}
-      skyBox={false}
-    >
-      <BaseTilesets />
-      {children}
-    </ResiumViewer>
+        // hide UI
+        animation={false}
+        //resolutionScale={adaptiveResolutionScale}
+        baseLayerPicker={false}
+        fullscreenButton={false}
+        geocoder={false}
+        targetFrameRate={60}
+        homeButton={false}
+        infoBox={false}
+        sceneModePicker={false}
+        selectionIndicator={selectionIndicator}
+        timeline={false}
+        navigationHelpButton={false}
+        navigationInstructionsInitiallyVisible={false}
+        skyBox={false}
+      >
+        <BaseTilesets />
+        {children}
+      </ResiumViewer>
+    </>
   );
 }
 

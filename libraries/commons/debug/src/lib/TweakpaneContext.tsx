@@ -78,7 +78,7 @@ const TweakpaneProvider: React.FC<{
     left?: number,
     right?: number,
   }
-}> = ({ children, hashparam = 'dev', position = {top:64, right: 10} } ) => {
+}> = ({ children, hashparam = 'dev', position = {top:64, left: 64} } ) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const paneRef = useRef<Pane | null>(null);
