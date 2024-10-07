@@ -30,8 +30,6 @@ export type Layer = {
   conf?: CarmaConfObject;
   icon?: string;
   other?: Item;
-  // type?: 'wmts' | 'wmts-nt' | 'tiles' | 'vector';
-  // legend?: { Format: string; OnlineResource: string; size: [number, number] }[];
 } & (
   | {
       layerType: "wmts" | "wmts-nt";
@@ -59,8 +57,8 @@ export type SavedLayerConfig = {
   layers: Layer[];
 };
 
-export type wmsProps = {
-  layerType: "wmts" | "wmts-nt";
+export type layerProps = {
+  layerType: "wmts" | "wmts-nt" | "vector";
   props: XMLLayer;
 };
 
@@ -70,12 +68,17 @@ export type vectorProps = {
     style: string;
     maxZoom?: number;
     minZoom?: number;
+    legend?: {
+      format: string;
+      OnlineResource: string;
+      size: [number, number];
+    }[];
   };
 };
 
 type tmpLayer = {
   type: "layer";
-} & (wmsProps | vectorProps);
+} & layerProps;
 
 type Feature = {
   type: "feature";
@@ -134,6 +137,7 @@ export type XMLLayer = {
       size: [number, number];
     }[];
   }[];
+  style?: string;
   Title: string;
   cascaded: number;
   fixedHeight: number;

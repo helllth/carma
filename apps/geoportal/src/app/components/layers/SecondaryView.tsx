@@ -36,13 +36,13 @@ import { iconColorMap, iconMap } from "./items";
 
 type Ref = HTMLDivElement;
 
-interface SecondaryViewProps { }
+interface SecondaryViewProps {}
 
 export const formatter: NonNullable<
   SliderSingleProps["tooltip"]
 >["formatter"] = (value) => `${value * 100}%`;
 
-const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({ }, ref) => {
+const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
   const infoRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -57,10 +57,10 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({ }, ref) => {
   const icon = layer.title.includes("Orthofoto")
     ? "ortho"
     : layer.title === "Bäume"
-      ? "bäume"
-      : layer.title.includes("gärten")
-        ? "gärten"
-        : undefined;
+    ? "bäume"
+    : layer.title.includes("gärten")
+    ? "gärten"
+    : undefined;
   const background = selectedLayerIndex === -1;
 
   useEffect(() => {
@@ -195,7 +195,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({ }, ref) => {
           {showInfoText && (
             <Info
               description={layer.description}
-              legend={layer.layerType === "wmts" ? layer.props.legend : []}
+              legend={layer.props.legend ? layer.props.legend : []}
             />
           )}
         </div>

@@ -155,6 +155,7 @@ const TopNavbar = () => {
           props: {
             style: carmaConf.vectorStyle,
             minZoom: zoom?.minZoom,
+            legend: layer.props.Style[0].LegendURL,
           },
           other: {
             ...layer,
@@ -203,6 +204,7 @@ const TopNavbar = () => {
               visible: true,
               props: {
                 style: layer.props.style,
+                legend: layer.props.Style[0].LegendURL,
               },
               other: {
                 ...layer,
