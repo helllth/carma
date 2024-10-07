@@ -1327,6 +1327,10 @@ export const baseConfig = {
           790989.4779520752, 6664143.201786021, 800673.0939729535,
           6670157.840449209,
         ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}dachflaechenumringe/solarpotenzial_strom.style.json`,
+        ],
       },
       {
         name: "solar_zy_therm",
@@ -1334,9 +1338,17 @@ export const baseConfig = {
           790989.4779520752, 6664143.201786021, 800673.0939729535,
           6670157.840449209,
         ],
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}dachflaechenumringe/solarpotenzial_waerme.style.json`,
+        ],
       },
       {
         name: "solar_umring",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}dachflaechenumringe/dachflaechenumringe.style.json`,
+        ],
       },
       {
         name: "solar_karte",
@@ -2530,9 +2542,17 @@ export const baseConfig = {
       },
       {
         name: "psa",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}parkscheinautomat/style.json`,
+        ],
       },
       {
         name: "treppen",
+        keywords: [
+          ":vec:",
+          `carmaConf://vectorStyle:${vectorBaseUrl}treppen/style.json`,
+        ],
       },
       {
         name: "branlagen",
