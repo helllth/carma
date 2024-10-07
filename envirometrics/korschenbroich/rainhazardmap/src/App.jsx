@@ -12,7 +12,7 @@ import "./notification.css";
 
 import { notification } from "antd";
 // import NotesDisplay from './NotesDisplay';
-import { getCollabedHelpComponentConfig } from "./collab-texts";
+import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/korschenbroich";
 
 function App() {
   const email = "yvonne.tuerks@korschenbroich.de";
