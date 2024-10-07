@@ -131,7 +131,7 @@ export const LibModal = ({
     includeMatches: true,
     useExtendedSearch: true,
     distance: 1000,
-    threshold: 0.3,
+    threshold: 0.1,
   });
 
   const getDataFromJson = (data: any) => {
