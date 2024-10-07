@@ -130,7 +130,7 @@ export const LibModal = ({
     shouldSort: false,
     includeMatches: true,
     useExtendedSearch: true,
-    distance: 1000,
+    ignoreLocation: true,
     threshold: 0.1,
   });
 
