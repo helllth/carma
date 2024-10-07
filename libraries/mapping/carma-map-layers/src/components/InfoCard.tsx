@@ -10,6 +10,7 @@ import {
   faStar,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
+import { extractCarmaConf } from "@carma-apps/portals";
 
 interface InfoCardProps {
   layer: Item;
@@ -34,6 +35,7 @@ const InfoCard = ({
   // @ts-expect-error fix typing
   const legends = layer.props.Style[0].LegendURL;
   const parsedDescription = parseDescription(description);
+  const carmaConf = extractCarmaConf(layer.keywords);
 
   return (
     <div className="w-full h-[400px] p-6 shadow-sm hover:!shadow-lg rounded-lg bg-blue-50 col-span-full">
@@ -99,21 +101,20 @@ const InfoCard = ({
           <div className="h-full w-0 border-r border-gray-300 my-0" />
           <div className="flex flex-col gap-0 w-1/4">
             <h5 className="font-semibold text-lg">Links:</h5>
-            <a
-              href="https://maps.wuppertal.de/karten?service=WMS&request=GetCapabilities&version=1.1.1"
-              target="_blank"
-              className="pb-2"
-            >
-              GetCapabilities
-            </a>
-            <a
-              href={
-                "https://offenedaten-wuppertal.de/dataset/interessante-orte-poi-wuppertal"
-              }
-              target="_blank"
-            >
-              Open Data
-            </a>
+            {layer?.service?.url && (
+              <a
+                href={`${layer.service.url}?service=WMS&request=GetCapabilities&version=1.1.1`}
+                target="_blank"
+                className="pb-2"
+              >
+                Inhaltsverzeichnis des Kartendienstes (WMS Capabilities)
+              </a>
+            )}
+            {carmaConf?.opendata && (
+              <a href={carmaConf.opendata} target="_blank" className="pb-2">
+                Datenquelle im Open-Data-Portal Wuppertal
+              </a>
+            )}
           </div>
           <div className="h-full w-0 border-r border-gray-300 my-0" />
           <div className="flex flex-col gap-0 w-1/4">
