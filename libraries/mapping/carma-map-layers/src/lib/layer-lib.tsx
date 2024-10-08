@@ -15,6 +15,7 @@ export function LayerLib({
   removeFavorite,
   favorites,
   updateActiveLayer,
+  removeLastLayer,
 }: LibModalProps) {
   return (
     <LibModal
@@ -29,6 +30,7 @@ export function LayerLib({
       removeFavorite={removeFavorite}
       favorites={favorites}
       updateActiveLayer={updateActiveLayer}
+      removeLastLayer={removeLastLayer}
     />
   );
 }

@@ -45,6 +45,7 @@ export interface LibModalProps {
   activeLayers: any[];
   customCategories?: LayerCategories[];
   updateActiveLayer: (layer: Layer) => void;
+  removeLastLayer?: () => void;
 }
 
 export const LibModal = ({
@@ -59,7 +60,9 @@ export const LibModal = ({
   removeFavorite,
   favorites,
   updateActiveLayer,
+  removeLastLayer,
 }: LibModalProps) => {
+  const [preview, setPreview] = useState(false);
   const [layers, setLayers] = useState<any[]>([]);
   const [allLayers, setAllLayers] = useState<any[]>([]);
   const services = serviceConfig;
@@ -306,12 +309,24 @@ export const LibModal = ({
     <Modal
       open={open}
       onCancel={() => {
-        setOpen(false);
+        if (preview) {
+          setPreview(false);
+          if (removeLastLayer) {
+            removeLastLayer();
+          }
+        } else {
+          setOpen(false);
+        }
       }}
+      style={{
+        top: preview ? "99%" : undefined,
+        transition: "top 400ms linear",
+      }}
+      mask={!preview}
       footer={<></>}
       width={"100%"}
       closeIcon={false}
-      wrapClassName="h-full"
+      wrapClassName="h-full !overflow-y-hidden"
       className="h-[88%]"
       styles={{
         content: {
@@ -442,6 +457,7 @@ export const LibModal = ({
                             removeFavorite={removeFavorite}
                             selectedLayerId={selectedLayerId}
                             setSelectedLayerId={setSelectedLayerId}
+                            setPreview={setPreview}
                             key={`${category.Title}_layer_${i}_${layer.id}`}
                           />
                         ))}

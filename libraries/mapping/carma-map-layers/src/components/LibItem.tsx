@@ -31,6 +31,7 @@ interface LayerItemProps {
   removeFavorite: (layer: Item) => void;
   selectedLayerId: string | null;
   setSelectedLayerId: (id: string | null) => void;
+  setPreview: (preview: boolean) => void;
 }
 
 const LibItem = ({
@@ -44,6 +45,7 @@ const LibItem = ({
   removeFavorite,
   selectedLayerId,
   setSelectedLayerId,
+  setPreview,
 }: LayerItemProps) => {
   const [hovered, setHovered] = useState(false);
   const [isActiveLayer, setIsActiveLayer] = useState(false);
@@ -96,10 +98,11 @@ const LibItem = ({
   const hightlightTextIndexes = undefined;
 
   const handleLayerClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    preview: boolean = false,
   ) => {
     e.stopPropagation();
-    setAdditionalLayers(layer, false, forceWMS);
+    setAdditionalLayers(layer, false, forceWMS, preview);
   };
 
   useEffect(() => {
@@ -492,6 +495,7 @@ const LibItem = ({
             }
           }}
           closeInfoCard={() => setSelectedLayerId(null)}
+          setPreview={setPreview}
         />
       )}
     </>

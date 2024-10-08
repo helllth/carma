@@ -69,6 +69,10 @@ const slice = createSlice({
       const newLayers = state.layers.filter((obj) => obj.id !== action.payload);
       state.layers = newLayers;
     },
+    removeLastLayer(state) {
+      const newLayers = state.layers.slice(0, -1);
+      state.layers = newLayers;
+    },
     updateLayer(state, action: PayloadAction<Layer>) {
       const newLayers = state.layers.map((obj) => {
         if (obj.id === action.payload.id) {
@@ -195,6 +199,7 @@ export const {
   setLayers,
   appendLayer,
   removeLayer,
+  removeLastLayer,
   updateLayer,
   appendSavedLayerConfig,
   deleteSavedLayerConfig,

@@ -16,11 +16,15 @@ interface InfoCardProps {
   layer: Item;
   isFavorite: boolean;
   isActiveLayer: boolean;
-  handleAddClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  handleAddClick: (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    preview?: boolean,
+  ) => void;
   handleFavoriteClick: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => void;
   closeInfoCard: () => void;
+  setPreview: (preview: boolean) => void;
 }
 
 const InfoCard = ({
@@ -30,6 +34,7 @@ const InfoCard = ({
   handleAddClick,
   handleFavoriteClick,
   closeInfoCard,
+  setPreview,
 }: InfoCardProps) => {
   const { title, description, tags } = layer;
   // @ts-expect-error fix typing
@@ -60,7 +65,15 @@ const InfoCard = ({
               >
                 {isFavorite ? "Favorit entfernen" : "Favorisieren"}
               </Button>
-              <Button icon={<FontAwesomeIcon icon={faMap} />}>Vorschau</Button>
+              <Button
+                onClick={(e) => {
+                  setPreview(true);
+                  handleAddClick(e, true);
+                }}
+                icon={<FontAwesomeIcon icon={faMap} />}
+              >
+                Vorschau
+              </Button>
             </div>
           </div>
           <button

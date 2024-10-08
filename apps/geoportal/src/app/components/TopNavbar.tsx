@@ -33,6 +33,7 @@ import {
   getLayerState,
   getSavedLayerConfigs,
   getSelectedMapLayer,
+  removeLastLayer,
   removeLayer,
   setBackgroundLayer,
   setFocusMode,
@@ -99,6 +100,7 @@ const TopNavbar = () => {
     layer: Item,
     deleteItem: boolean = false,
     forceWMS: boolean = false,
+    previewLayer: boolean = false,
   ) => {
     let newLayer: Layer;
     const id = layer.id.startsWith("fav_") ? layer.id.slice(4) : layer.id;
@@ -142,10 +144,12 @@ const TopNavbar = () => {
     } else {
       try {
         dispatch(appendLayer(newLayer));
-        messageApi.open({
-          type: "success",
-          content: `${layer.title} wurde erfolgreich hinzugefügt.`,
-        });
+        if (!previewLayer) {
+          messageApi.open({
+            type: "success",
+            content: `${layer.title} wurde erfolgreich hinzugefügt.`,
+          });
+        }
       } catch {
         messageApi.open({
           type: "error",
@@ -186,6 +190,9 @@ const TopNavbar = () => {
         ]}
         updateActiveLayer={(layer) => {
           dispatch(updateLayer(layer));
+        }}
+        removeLastLayer={() => {
+          dispatch(removeLastLayer());
         }}
       />
 
