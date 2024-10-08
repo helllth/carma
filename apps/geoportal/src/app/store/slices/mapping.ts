@@ -69,6 +69,16 @@ const slice = createSlice({
       const newLayers = state.layers.filter((obj) => obj.id !== action.payload);
       state.layers = newLayers;
     },
+    updateLayer(state, action: PayloadAction<Layer>) {
+      const newLayers = state.layers.map((obj) => {
+        if (obj.id === action.payload.id) {
+          return action.payload;
+        } else {
+          return obj;
+        }
+      });
+      state.layers = newLayers;
+    },
     appendSavedLayerConfig(state, action: PayloadAction<SavedLayerConfig>) {
       let newLayers = state.savedLayerConfigs;
       newLayers.push(action.payload);
@@ -185,6 +195,7 @@ export const {
   setLayers,
   appendLayer,
   removeLayer,
+  updateLayer,
   appendSavedLayerConfig,
   deleteSavedLayerConfig,
   changeOpacity,
