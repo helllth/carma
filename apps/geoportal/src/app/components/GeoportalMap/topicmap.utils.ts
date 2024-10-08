@@ -192,6 +192,17 @@ const checkIfLayerIsFirst = (layer: Layer, layers: Layer[]) => {
   return layers.findIndex((l) => l.id === layer.id) === firstVectorLayerIndex;
 };
 
+const getCoordinates = (geometry) => {
+  switch (geometry.type) {
+    case "Polygon":
+      return geometry.coordinates[0][0];
+    case "LineString":
+      return geometry.coordinates[1];
+    default:
+      return geometry.coordinates;
+  }
+};
+
 const onSelectionChangedVector = (
   e: {
     hits: any[];
@@ -205,10 +216,7 @@ const onSelectionChangedVector = (
   if (e.hits && layer.queryable) {
     const selectedVectorFeature = e.hits[0];
 
-    const coordinates =
-      selectedVectorFeature.geometry.type === "Polygon"
-        ? selectedVectorFeature.geometry.coordinates[0][0]
-        : selectedVectorFeature.geometry.coordinates;
+    const coordinates = getCoordinates(selectedVectorFeature.geometry);
 
     const vectorPos = proj4(
       proj4.defs("EPSG:4326") as unknown as string,
