@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, ChangeEvent } from "react";
+import { debounce } from "lodash";
 import {
     Cartesian3,
     Cartographic,
@@ -9,7 +10,6 @@ import { useTweakpaneCtx } from "@carma-commons/debug";
 import { useCesiumCustomViewer } from "../../../CustomViewerContextProvider";
 import { getPositionWithHeightAsync } from '../../../utils/positions';
 import "./elevation-control.css";
-import { wrap } from "module";
 
 const getNewPosition = (posCarto: Cartographic, newHeight: number): Cartesian3 => {
     return Cartesian3.fromRadians(
@@ -19,23 +19,51 @@ const getNewPosition = (posCarto: Cartographic, newHeight: number): Cartesian3 =
     );
 }
 
+
 interface ElevationControlProps {
     displayHeight: number;
     show: boolean;
     useClampedHeight: boolean;
+    updateEvent: "cameraChanged" | "scenePreRender" | "scenePreUpdate",
+    initialMaxElevation: number;
+    localMinEllipsoidalHeight: 100,
 }
+
+type DisplayY = {
+    factor: number;
+    camera: {
+        min: number;
+        height: number | null;
+        relativeToTerrain: number;
+        relativeToClamped: number;
+    }
+    terrain: number | null;
+    clamped: number | null;
+};
+
 
 const defaultOptions: ElevationControlProps = {
     displayHeight: 600,
     show: false,
     useClampedHeight: false,
+    initialMaxElevation: 500,
+    updateEvent: "cameraChanged",
+    localMinEllipsoidalHeight: 100,
 };
+
+// TOD0: highlight/signify non-reachable min height
+// TODO: evaluate change input to differential control like slider that controls speed of movement by distance from center/neutral position
 
 function ElevationControl(options: Partial<ElevationControlProps> = {}) {
 
-    const { displayHeight, show, useClampedHeight } = { ...defaultOptions, ...options };
-
-    const localMinEllipsoidalHeight = 100; // Sea level reference
+    const {
+        displayHeight,
+        initialMaxElevation,
+        localMinEllipsoidalHeight,
+        show,
+        updateEvent,
+        useClampedHeight,
+    } = { ...defaultOptions, ...options };
 
     const [ellipsoidHeight, setEllipsoidHeight] = useState<number>(localMinEllipsoidalHeight);
     const [terrainHeight, setTerrainHeight] = useState<number>(0);
@@ -52,8 +80,21 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
     const { viewer } = useCesiumCustomViewer();
     const [alwaysShow, setAlwaysShow] = useState(false);
     const [clamp, setClamp] = useState(useClampedHeight);
+    const [eventOption, setEventOption] = useState(updateEvent);
+    const isUpdating = useRef(false);
+    const updateHeight = useRef<() => void>();
+    const [displayY, setDisplayY] = useState<DisplayY>({
+        factor: 1,
+        camera: {
+            min: 0,
+            height: null,
+            relativeToTerrain: 0,
+            relativeToClamped: 0,
+        },
+        terrain: null,
+        clamped: null,
+    });
 
-    const lastCameraPosition = useRef<Cartesian3 | null>(null);
 
     useTweakpaneCtx({ title: "Elevation UI" }, {
         get alwaysShow() {
@@ -67,6 +108,12 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
         },
         set clamp(value: boolean) {
             setClamp(value);
+        },
+        get eventOption() {
+            return eventOption;
+        },
+        set eventOption(value: "cameraChanged" | "scenePreRender" | "scenePreUpdate") {
+            setEventOption(value);
         }
     }, [
         {
@@ -78,19 +125,25 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
             name: "clamp",
             label: "Clamp Tileset Height",
             type: "boolean",
-        }
+        },
+        {
+            name: "eventOption",
+            label: "Update Event",
+            type: "select",
+            options: {
+                cameraChanged: "cameraChanged",
+                scenePreRender: "scenePreRender",
+                scenePreUpdate: "scenePreUpdate",
+            },
+        },
     ]);
 
 
     useEffect(() => {
         if (viewer && (alwaysShow || show)) {
-            // todo provide these heights and position somewhere centralized state, 
-            // don't recompute for every new use in update loop
-            const updateHeights = () => {
-                if (lastCameraPosition.current !== null && viewer.camera.position.equals(lastCameraPosition.current)) {
-                    return;
-                }
-                const cameraPositionCartographic = viewer.camera.positionCartographic;
+            const update = () => {
+                if (isUpdating.current) return;
+                isUpdating.current = true; const cameraPositionCartographic = viewer.camera.positionCartographic;
                 const currentCameraHeight = cameraPositionCartographic.height;
                 setCameraHeightFmt(`${cameraPositionCartographic.height.toFixed(0)}m`);
                 getPositionWithHeightAsync(viewer.scene, cameraPositionCartographic, false).then((position) => {
@@ -104,44 +157,111 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
                     const maxHeight = Math.max(
                         currentCameraHeight,
                         position.height,
-                        localMinEllipsoidalHeight + 400, // Ensure some extra space
+                        initialMaxElevation,
                     );
                     setMaxDisplayHeight(Math.min(maxHeight * 1.1, 50000));
-                    lastCameraPosition.current = viewer.camera.position.clone();
 
                     if (clamp) {
                         getPositionWithHeightAsync(viewer.scene, cameraPositionCartographic, true).then((clampedPosition) => {
                             setClampedHeight(clampedPosition.height);
                             setCameraRelClampedHeightFmt(`${(currentCameraHeight - clampedPosition.height).toFixed(0)}m`);
                             setClampedRelHeightFmt(`${(clampedPosition.height - position.height).toFixed(1)}m`);
+                            isUpdating.current = false;
                         });
+                    } else {
+                        isUpdating.current = false;
                     }
                 });
             };
-            updateHeights();
-            viewer.scene.preRender.addEventListener(updateHeights);
+
+
+            // todo provide these heights and position somewhere centralized state, 
+            // don't recompute for every new use in update loop
+            const debouncedUpdate = debounce(update, 1000 / 60);
+            debouncedUpdate();
+            updateHeight.current = update;
+
+            viewer.camera.changed.removeEventListener(debouncedUpdate);
+            viewer.scene.preRender.removeEventListener(debouncedUpdate);
+            viewer.scene.preUpdate.removeEventListener(debouncedUpdate);
+
+            switch (eventOption) {
+                case "cameraChanged":
+                    viewer.camera.percentageChanged = 0.01;
+                    viewer.camera.changed.addEventListener(debouncedUpdate);
+                    break;
+                case "scenePreRender":
+                    viewer.scene.preRender.addEventListener(debouncedUpdate);
+                    break;
+                case "scenePreUpdate":
+                    viewer.scene.preUpdate.addEventListener(debouncedUpdate);
+                    break;
+                default:
+                    break;
+            }
             return () => {
-                viewer.scene.preRender.removeEventListener(updateHeights);
+                switch (eventOption) {
+                    case "cameraChanged":
+                        viewer.camera.changed.removeEventListener(debouncedUpdate);
+                        break;
+                    case "scenePreRender":
+                        viewer.scene.preRender.removeEventListener(debouncedUpdate);
+                        break;
+                    case "scenePreUpdate":
+                        viewer.scene.preUpdate.removeEventListener(debouncedUpdate);
+                        break;
+                    default:
+                        break;
+                }
             };
         }
-    }, [viewer, alwaysShow, show, clamp]);
+    }, [viewer, alwaysShow, show, clamp, eventOption, localMinEllipsoidalHeight]);
 
-    const clampedHeightDisplayPosition =
-        ((clampedHeight - ellipsoidHeight) / maxDisplayHeight) * displayHeight;
-    const terrainHeightDisplayPosition =
-        ((terrainHeight - ellipsoidHeight) / maxDisplayHeight) * displayHeight;
-    const cameraHeightDisplayPosition =
-        ((cameraHeight - ellipsoidHeight) / maxDisplayHeight) * displayHeight;
 
-    const cameraRelHeightDisplayPosition = (terrainHeightDisplayPosition + cameraHeightDisplayPosition) / 2;
-    const cameraRelClampedHeightDisplayPosition = clamp ? (clampedHeightDisplayPosition + cameraHeightDisplayPosition) / 2 : cameraRelHeightDisplayPosition;
+    useEffect(() => {
+        if (viewer) {
+            const factor = displayHeight / maxDisplayHeight;
+            const clampedHeightDisplayPosition =
+                (clampedHeight - ellipsoidHeight) * factor;
+            const terrainHeightDisplayPosition = (terrainHeight - ellipsoidHeight) * factor;
+            const cameraHeightDisplayPosition = (cameraHeight - ellipsoidHeight) * factor;
+            const cameraRelHeightDisplayPosition = (terrainHeightDisplayPosition + cameraHeightDisplayPosition) / 2;
+            const cameraRelClampedHeightDisplayPosition = clamp ? (clampedHeightDisplayPosition + cameraHeightDisplayPosition) / 2 : cameraRelHeightDisplayPosition;
+            const cameraMinElevationDisplayPosition =
+                (viewer?.scene.screenSpaceCameraController.minimumZoomDistance ?? 0) * factor + (clamp ? clampedHeightDisplayPosition : terrainHeightDisplayPosition);
+
+            setDisplayY({
+                factor,
+                camera: {
+                    min: Math.round(cameraMinElevationDisplayPosition),
+                    height: Math.round(cameraHeightDisplayPosition),
+                    relativeToTerrain: Math.round(cameraRelHeightDisplayPosition),
+                    relativeToClamped: Math.round(cameraRelClampedHeightDisplayPosition),
+                },
+                terrain: Math.round(terrainHeightDisplayPosition),
+                clamped: Math.round(clampedHeightDisplayPosition),
+            });
+        }
+    }, [
+        viewer,
+        terrainHeight,
+        clampedHeight,
+        cameraHeight,
+        ellipsoidHeight,
+        clamp,
+        displayHeight,
+        maxDisplayHeight,
+    ]);
+
 
     console.info("RENDER: [CESIUM] ElevationControl", alwaysShow, show);
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         const newValue = e.target.valueAsNumber;
-        if (Math.abs(cameraHeight - newValue) > 0.1 && viewer) {
+        if (
+            viewer && Math.abs(cameraHeight - newValue) > 0.05 &&
+            (!viewer.scene.screenSpaceCameraController.enableCollisionDetection || newValue >= (terrainHeight + viewer.scene.screenSpaceCameraController.minimumZoomDistance * 0.5))) {
 
             window.requestAnimationFrame(() => {
                 const newPosition = getNewPosition(viewer.camera.positionCartographic, newValue);
@@ -153,12 +273,13 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
                         roll: viewer.camera.roll,
                     },
                 });
-                viewer.scene.requestRender();
+                //viewer.scene.requestRender();
+                updateHeight.current && updateHeight.current();
             });
         }
     };
 
-    return ((alwaysShow || show) && cameraHeightDisplayPosition) &&
+    return ((alwaysShow || show)) && (
 
         <div // Backdrop
             ref={controlRef}
@@ -189,6 +310,21 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
             }}>
                 Höhe der Kamera
             </caption>
+            {viewer?.scene.screenSpaceCameraController.enableCollisionDetection && <div
+                style={{
+                    position: "absolute",
+                    bottom: `${displayY.camera.min}px`,
+                    left: "0px",
+                    right: "0px",
+                    height: "0px",
+                    borderBottomWidth: "1px",
+                    borderBottomStyle: "dotted",
+                    borderBottomColor: "orange",
+                    transition: "bottom 0.1s",
+
+                }}
+                title={`Minimale Kamera Höhe`}
+            />}
 
             {/* Axis */}
             <div
@@ -210,7 +346,7 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
                 max={Math.floor(maxDisplayHeight)}
                 value={cameraHeight}
                 onChange={onChangeHandler}
-                step={1}
+                step={0.2}
                 style={{
                     pointerEvents: "auto",
                     height: "100%",
@@ -223,24 +359,26 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
             ></input>
             <label style={{
                 position: "absolute",
-                bottom: `${cameraHeightDisplayPosition}px`,
+                bottom: `${displayY.camera.height}px`,
                 fontVariantNumeric: "tabular-nums",
                 left: "0.5rem",
                 height: "1.5rem",
                 overflow: "visible",
                 textWrap: "nowrap",
+                transition: "bottom 0.1s",
             }} >{cameraHeightFmt}</label>
             {/* Surface marker */}
-            {clamp && <div
+            {clamp && displayY.clamped && displayY.terrain && <div
                 style={{
                     position: "absolute",
-                    bottom: `${terrainHeightDisplayPosition}px`,
+                    bottom: `${displayY.terrain}px`,
                     left: "50%",
                     right: "0",
-                    height: `${clampedHeightDisplayPosition - terrainHeightDisplayPosition}px`,
+                    height: `${displayY.clamped - displayY.terrain}px`,
                     backgroundColor: "fuchsia",
                     opacity: 0.4,
                     transform: "translateX(0%)",
+                    transition: "bottom 0.1s, height 0.1s",
                 }}
                 title={`Normalisierte Gelände Höhe`}
             />}
@@ -251,16 +389,18 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
                     bottom: "0",
                     left: "0",
                     right: "0",
-                    height: `${terrainHeightDisplayPosition}px`,
+                    height: `${displayY.terrain}px`,
                     backgroundColor: "grey",
                     opacity: 0.8,
                     transform: "translateX(0%)",
+                    transition: "height 0.1s",
+
                 }}
                 title={`Terrain Höhe`}
             />
             <div style={{
                 position: "absolute",
-                bottom: `${cameraRelHeightDisplayPosition}px`,
+                bottom: `${displayY.camera.relativeToTerrain}px`,
                 fontVariantNumeric: "tabular-nums",
                 left: "0",
                 right: "0",
@@ -268,10 +408,11 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
                 overflow: "visible",
                 textWrap: "nowrap",
                 transform: "translate(-25%,50%) rotate(-90deg)",
+                transition: "bottom 0.1s",
             }} >←{cameraRelHeightFmt}→</div>
             {clamp && <div style={{
                 position: "absolute",
-                bottom: `${cameraRelClampedHeightDisplayPosition}px`,
+                bottom: `${displayY.camera.relativeToClamped}px`,
                 fontVariantNumeric: "tabular-nums",
                 left: "0",
                 right: "0",
@@ -279,23 +420,26 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
                 overflow: "visible",
                 textWrap: "nowrap",
                 transform: "translate(25%,50%) rotate(-90deg)",
+                transition: "bottom 0.1s",
             }} >←{cameraRelClampedHeightFmt}→</div>}
             {/* Terrain Label */}
-            <div style={{
+            {displayY.terrain && <div style={{
                 position: "absolute",
-                bottom: `${terrainHeightDisplayPosition - 20}px`,
+                bottom: `${displayY.terrain - 20}px`,
                 color: "black",
                 fontVariantNumeric: "tabular-nums",
                 left: "0.25rem",
                 height: "1.5rem",
-            }} >{terrainHeightFmt}</div>
+                transition: "bottom 0.1s",
+            }} >{terrainHeightFmt}</div>}
             {clamp && <div style={{
                 position: "absolute",
-                bottom: `${terrainHeightDisplayPosition}px`,
+                bottom: `${displayY.terrain}px`,
                 color: "black",
                 fontVariantNumeric: "tabular-nums",
                 right: "0.25rem",
                 height: "1.5rem",
+                transition: "bottom 0.1s",
             }} >{clampedRelHeightFmt}</div>}
             <div style={{
                 position: "absolute",
@@ -313,18 +457,18 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
             <div
                 style={{
                     position: "absolute",
-                    bottom: `${cameraHeightDisplayPosition}px`,
+                    bottom: `${displayY.camera.height}px`,
                     left: "0px",
                     right: "0px",
-                    height: "1px",
-                    backgroundColor: "black",
-                    transform: "translateX(0%)",
-
+                    borderBottomWidth: "2px",
+                    borderBottomStyle: "solid",
+                    borderBottomColor: "#666",
+                    transition: "bottom 0.1s",
                 }}
                 title={`Kamera Höhe`}
             />
         </div>
-        ;
+    );
 }
 
 export default ElevationControl;
