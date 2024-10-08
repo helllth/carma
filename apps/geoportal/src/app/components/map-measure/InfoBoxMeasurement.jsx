@@ -163,6 +163,7 @@ const InfoBoxMeasurement = () => {
 
     dispatch(setDeleteMeasurements(true));
     cleanUpdateMeasurementStatus();
+    setLastMeasureActive();
   };
 
   const setUpdateMeasurementStatus = (status) => {
