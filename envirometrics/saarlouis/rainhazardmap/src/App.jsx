@@ -14,7 +14,7 @@ function App() {
   const version = getApplicationVersion(versionData);
   const email = "starkregen@saarlouis.de";
   const [gazData, setGazData] = useState([]);
-
+  const urlPrefix = window.location.origin + window.location.pathname;
   const getGazData = async (setGazData, url) => {
     const prefix = "GazDataForStarkregengefahrenkarteByCismet";
     const data = await md5FetchJSON(prefix, url);
@@ -22,7 +22,7 @@ function App() {
   };
 
   useEffect(() => {
-    getGazData(setGazData, "/data/adressen_saarlouis.json");
+    getGazData(setGazData, urlPrefix + "/data/adressen_saarlouis.json");
   }, []);
 
   return (
