@@ -8,6 +8,7 @@ import config from "./config";
 import versionData from "./version.json";
 import { getApplicationVersion } from "@carma-commons/utils";
 import { getCollabedHelpComponentConfig } from "./getCollabedHelpComponentConfig";
+import "./notification.css";
 
 function App() {
   const email = "bauamt@tholey.de";

@@ -24,8 +24,3 @@ h4 {
 .leaflet-container .leaflet-control-attribution {
   margin-right: 11px !important;
 }
-
-.ant-notification .ant-notification-notice-wrapper {
-  background-color: transparent !important;
-  box-shadow: none;
-}

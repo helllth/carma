@@ -8,6 +8,7 @@ import paderbornConfig from "./config";
 import versionData from "./version.json";
 import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/paderborn";
 import { getApplicationVersion } from "@carma-commons/utils";
+import "./notification.css";
 
 function App() {
   const appKey = "cismetRainhazardMap.Paderborn";

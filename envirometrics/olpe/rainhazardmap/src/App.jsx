@@ -8,6 +8,7 @@ import { getApplicationVersion } from "@carma-commons/utils";
 import versionData from "./version.json";
 import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/olpe";
 import olpeConfig from "./config";
+import "./notification.css";
 
 function App() {
   const version = getApplicationVersion(versionData);

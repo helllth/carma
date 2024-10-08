@@ -10,6 +10,7 @@ import { getApplicationVersion } from "@carma-commons/utils";
 import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import { getCollabedHelpComponentConfig } from "./getCollabedHelpComponentConfig";
 import config from "./config";
+import "./notification.css";
 
 function App() {
   const footerLogoUrl = undefined;

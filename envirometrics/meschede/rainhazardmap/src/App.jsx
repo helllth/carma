@@ -10,6 +10,7 @@ import versionData from "./version.json";
 import { getApplicationVersion } from "@carma-commons/utils";
 import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/meschede";
 import meschedeConfig from "./meschede";
+import "./notification.css";
 
 function App() {
   const version = getApplicationVersion(versionData);

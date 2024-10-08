@@ -8,6 +8,7 @@ import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplic
 import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/haltern";
 import versionData from "./version.json";
 import config from "./config";
+import "./notification.css";
 
 function App() {
   const version = getApplicationVersion(versionData);
