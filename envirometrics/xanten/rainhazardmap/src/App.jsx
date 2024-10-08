@@ -15,6 +15,7 @@ function App() {
   const email = "starkregen@xanten.de";
   const footerLogoUrl = "/images/Signet_AIS_RZ.png";
   const [gazData, setGazData] = useState([]);
+  const urlPrefix = window.location.origin + window.location.pathname;
 
   const getGazData = async (setGazData, url) => {
     const prefix = "GazDataForStarkregengefahrenkarteByCismet";
@@ -25,7 +26,7 @@ function App() {
 
   const appKey = "cismetRainhazardMap";
   useEffect(() => {
-    getGazData(setGazData, "/data/adressen_xanten.json");
+    getGazData(setGazData, urlPrefix + "/data/adressen_xanten.json");
   }, []);
 
   return (
