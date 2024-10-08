@@ -15,6 +15,7 @@ export const CESIUM_CONFIG: CesiumConfig = {
     minPitch: 15,
     minPitchRange: 10
   },
+  markerKey: "MarkerGlowLine",
   baseUrl: `${APP_BASE_PATH}${CESIUM_PATHNAME}`,
   pathName: CESIUM_PATHNAME,
 };

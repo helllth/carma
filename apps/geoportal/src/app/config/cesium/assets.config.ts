@@ -15,13 +15,24 @@ export const IMAGE_ASSETS: Record<string, ModelAsset> = {
 };
 
 export const MODEL_ASSETS: Record<string, ModelAsset> = {
-  Marker: {
+  MarkerSolidLine: {
     uri: GLB_SAMPLE,
     scale: 8,
     rotation: false,
     isCameraFacing: true,
     fixedScale: true,
     anchorOffset: { z: 0 },
+    stemline: { color: [0.95, 0.8, 0.95, 0.75], width: 6, gap: 2, glow: false },
+  },
+
+  MarkerGlowLine: {
+    uri: GLB_SAMPLE,
+    scale: 8,
+    rotation: false,
+    isCameraFacing: true,
+    fixedScale: true,
+    anchorOffset: { z: 0 },
+    stemline: { color: [0.8, 0.8, 0.95, 0.2], width: 40, gap: 0, glow: true },
   },
 
   /*

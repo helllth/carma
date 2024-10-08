@@ -7,21 +7,86 @@ import {
   Model,
   Cartographic,
   Math as CeMath,
+  Material,
+  Color,
+  PolylineCollection,
 } from "cesium";
 
-import type { EntityData, ModelAsset } from "../..";
+import type { EntityData, ModelAsset, PolylineConfig } from "../..";
 
 const defaultOptions = {
   id: "selected3dmarker",
 };
 
+const createOrUpdateStemline = (
+  viewer: Viewer,
+  entityData: EntityData,
+  pos: Cartographic,
+  options: Partial<PolylineConfig> & { stemLength?: number } = {},
+) => {
+  const topHeight = pos.height - (options.gap ?? 0);
+  const baseHeight = topHeight - (options.stemLength ?? 30);
+
+  const posTop = Cartographic.clone(
+    Object.assign({}, pos, { height: topHeight }),
+  );
+  const posBase = Cartographic.clone(
+    Object.assign({}, pos, { height: baseHeight }),
+  );
+
+  const baseColor =
+    options.color?.length === 4 ? new Color(...options.color) : Color.WHITE;
+
+  const colorMaterial = Material.fromType("Color", { color: baseColor });
+
+  const material = options.glow
+    ? Material.fromType("PolylineGlow", {
+        color: baseColor,
+        glowPower: 0.1,
+        taperPower: 0.9,
+      })
+    : colorMaterial;
+
+  const positions = viewer.scene.ellipsoid.cartographicArrayToCartesianArray([
+    posTop,
+    posBase,
+  ]);
+  const width = options.width ?? 4;
+
+  if (entityData.stemline) {
+    entityData.stemline.positions = positions;
+    entityData.stemline.width = width;
+    entityData.stemline.material = material;
+  } else {
+    const polyline = {
+      positions,
+      width,
+      material,
+    };
+    console.info(
+      "[CESIUM|SCENE|POLYLINE] adding Stemline",
+      polyline,
+      posTop.height,
+      posBase.height,
+    );
+    const stemlineCollection = new PolylineCollection();
+    stemlineCollection.add(polyline);
+    viewer.scene.primitives.add(stemlineCollection);
+    entityData.stemline = stemlineCollection;
+  }
+};
+
 export const addCesiumMarker = async (
   viewer: Viewer,
   pos: Cartographic,
-  modelConfig: ModelAsset,
-  options: { model?: Model; id?: string } = {},
+  modelConfig: ModelAsset, // TODO integrate modelconfig to options
+  options: {
+    model?: Model;
+    id?: string;
+    stemline?: PolylineConfig; // override the modelConfig stemline
+  } = {},
 ) => {
-  console.log("addMarker", pos, modelConfig);
+  console.info("[CESIUM|SCENE] addMarker", pos, modelConfig);
 
   const { id, model } = Object.assign({ ...defaultOptions, ...options });
 
@@ -33,7 +98,7 @@ export const addCesiumMarker = async (
     model: null,
   };
 
-  const posCart = Cartesian3.fromRadians(
+  const posCartesian = Cartesian3.fromRadians(
     pos.longitude,
     pos.latitude,
     pos.height,
@@ -41,7 +106,7 @@ export const addCesiumMarker = async (
   const scale = modelConfig?.scale || 1;
   const offset = modelConfig?.anchorOffset || { x: 0, y: 0, z: 0 };
   const offsetZ = offset.z || 0;
-  const modelMatrix = Transforms.eastNorthUpToFixedFrame(posCart);
+  const modelMatrix = Transforms.eastNorthUpToFixedFrame(posCartesian);
   const translation = Matrix4.fromTranslation(
     new Cartesian3(0, 0, offsetZ * scale),
   );
@@ -69,6 +134,14 @@ export const addCesiumMarker = async (
       url: modelConfig.uri,
       modelMatrix: modelMatrix,
       scale: modelConfig.scale,
+    });
+  }
+
+  // Add the stemline if configured
+  if (options.stemline || modelConfig.stemline) {
+    createOrUpdateStemline(viewer, entityData, pos, {
+      ...modelConfig.stemline,
+      ...options.stemline,
     });
   }
 
@@ -173,6 +246,25 @@ const updateMarker = (viewer: Viewer, entityData: EntityData) => {
       }
     }
   }
+
+  if (entityData.stemline) {
+    const modelPosition = new Cartesian3(
+      entityData.animatedModelMatrix[12],
+      entityData.animatedModelMatrix[13],
+      entityData.animatedModelMatrix[14],
+    );
+    createOrUpdateStemline(
+      viewer,
+      entityData,
+      Cartographic.fromCartesian(modelPosition),
+      {
+        color: entityData.modelConfig?.stemline?.color,
+        width: entityData.modelConfig?.stemline?.width,
+        gap: entityData.modelConfig?.stemline?.gap,
+      },
+    );
+  }
+
   return entityData;
 };
 
@@ -185,8 +277,9 @@ export const removeCesiumMarker = (
     data?.model,
     data,
   );
-  if (data && data.model) {
-    viewer.scene.primitives.remove(data.model);
+  if (data) {
+    data.stemline && viewer.scene.primitives.remove(data.stemline);
+    data.model && viewer.scene.primitives.remove(data.model);
     data.cleanup && data.cleanup();
   }
 };

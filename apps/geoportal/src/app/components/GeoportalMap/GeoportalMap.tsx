@@ -113,7 +113,7 @@ export const GeoportalMap = () => {
   const backgroundLayer = useSelector(getBackgroundLayer);
   const isMode2d = useViewerIsMode2d();
   const models = useViewerModels();
-  const markerAsset = models.Marker;
+  const markerAsset = models[CESIUM_CONFIG.markerKey]; // 
   const layers = useSelector(getLayers);
   const uiMode = useSelector(getUIMode);
   const isModeMeasurement = uiMode === UIMode.MEASUREMENT;

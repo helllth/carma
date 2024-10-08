@@ -1,5 +1,6 @@
 // TODO consolidate with rest of libs
 
+import { Color } from "cesium";
 import { hashcodecs } from "./lib/CustomViewer/utils";
 
 type Translation = {
@@ -45,6 +46,14 @@ export interface Marker3dData extends Omit<MarkerData, "model"> {
   modelMatrix: Matrix4;
   animatedModelMatrix?: Matrix4;
 }
+
+export type PolylineConfig = {
+  color?: ColorRgbaArray;
+  width?: number;
+  gap?: number;
+  glow?: boolean;
+};
+
 export type ModelAsset = {
   uri: string;
   scale?: number;
@@ -53,10 +62,11 @@ export type ModelAsset = {
   fixedScale?: boolean;
   anchorOffset?: { x?: number; y?: number; z?: number };
   hasAnimation?: boolean;
+  stemline?: Partial<PolylineConfig>;
 };
 
 export type ParsedModelAsset = {
-  isParsed: true,
+  isParsed: true;
   uri: string;
   scale: number;
   isCameraFacing: boolean;
@@ -67,13 +77,12 @@ export type ParsedModelAsset = {
   model: Model;
 };
 
-
-
 export type EntityData = {
   id: string;
   modelMatrix: Matrix4 | null;
   animatedModelMatrix: Matrix4 | null;
   modelConfig: ModelAsset | null;
+  stemline?: Polyline | null;
   lastRenderTime?: number;
   animationSpeed?: number;
   model: Model | null;
