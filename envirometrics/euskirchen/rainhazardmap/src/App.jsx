@@ -18,6 +18,8 @@ import NotesDisplay from "./NotesDisplay";
 function App() {
   const version = getApplicationVersion(versionData);
   const email = "starkregen@kreis-euskirchen.de";
+  const urlPrefix = window.location.origin + window.location.pathname;
+
   const [gazData, setGazData] = useState([]);
   const [hinweisData, setHinweisData] = useState([]);
 
@@ -93,9 +95,9 @@ function App() {
   useEffect(() => {
     getGazData(
       setGazData,
-      "/data/adressen_euskirchen.json",
-      "/data/kommunen.json",
-      "/data/ortslagen.json",
+      urlPrefix + "/data/adressen_euskirchen.json",
+      urlPrefix + "/data/kommunen.json",
+      urlPrefix + "/data/ortslagen.json",
     );
     getHinweisData(setHinweisData, "/data/overlay.json");
   }, []);

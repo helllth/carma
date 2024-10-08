@@ -626,6 +626,25 @@
         }
       },
       "projectPath": "./dist/envirometrics/xanten/rainhazardmap"
+    },
+    "rainhazardmap-euskirchen": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "rainhazardmap-euskirchen"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "rainhazardmap-euskirchen"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/envirometrics/euskirchen/rainhazardmap"
     }
   }
 }
