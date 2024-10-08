@@ -13,14 +13,14 @@ import "./notification.css";
 function App() {
   const email = "bauamt@tholey.de";
   const [gazData, setGazData] = useState([]);
-
+  const urlPrefix = window.location.origin + window.location.pathname;
   const getGazData = async (setGazData, url) => {
     const prefix = "GazDataForStarkregengefahrenkarteByCismet";
     const data = await md5FetchJSON(prefix, url);
     setGazData(data);
   };
   useEffect(() => {
-    getGazData(setGazData, "data/adressen_tholey.json");
+    getGazData(setGazData, urlPrefix + "data/adressen_tholey.json");
   }, []);
   const version = getApplicationVersion(versionData);
 
