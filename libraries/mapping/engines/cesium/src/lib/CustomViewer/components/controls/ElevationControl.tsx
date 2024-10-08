@@ -215,7 +215,7 @@ function ElevationControl(options: Partial<ElevationControlProps> = {}) {
                 }
             };
         }
-    }, [viewer, alwaysShow, show, clamp, eventOption, localMinEllipsoidalHeight]);
+    }, [viewer, alwaysShow, show, clamp, eventOption, localMinEllipsoidalHeight, initialMaxElevation]);
 
 
     useEffect(() => {
