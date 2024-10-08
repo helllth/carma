@@ -569,25 +569,25 @@
         }
       },
       "projectPath": "./dist/envirometrics/tholey/rainhazardmap"
-    }
-  },
-  "rainhazardmap-saarlouis": {
-    "deployment": {
-      "manual": {
-        "pages": {
-          "org": "carma-dev-deployments",
-          "prj": "rainhazardmap-saarlouis"
-        }
-      },
-      "auto": {
-        "dev": {
+    },
+    "rainhazardmap-saarlouis": {
+      "deployment": {
+        "manual": {
           "pages": {
             "org": "carma-dev-deployments",
             "prj": "rainhazardmap-saarlouis"
           }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "rainhazardmap-saarlouis"
+            }
+          }
         }
-      }
-    },
-    "projectPath": "./dist/envirometrics/saarlouis/rainhazardmap"
+      },
+      "projectPath": "./dist/envirometrics/saarlouis/rainhazardmap"
+    }
   }
 }
