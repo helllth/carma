@@ -101,7 +101,7 @@ function App() {
     );
     getHinweisData(setHinweisData, "/data/overlay.json");
   }, []);
-  const footerLogoUrl = "/images/Signet_AIS_RZ.png";
+  const footerLogoUrl = urlPrefix + "/images/Signet_AIS_RZ.png";
   return (
     <TopicMapContextProvider
       appKey={"cismetRainhazardMap.Euskirchen"}
