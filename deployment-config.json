@@ -550,6 +550,25 @@
         }
       },
       "projectPath": "./dist/apps/wunda/umweltalarm"
+    },
+    "rainhazardmap-tholey": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "rainhazardmap-tholey"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "rainhazardmap-tholey"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/envirometrics/tholey/rainhazardmap"
     }
   }
 }
