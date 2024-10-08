@@ -676,8 +676,10 @@ L.Control.MeasurePolygon = L.Control.extend({
       if (layer instanceof L.Polyline) {
         if (layer.customID === customID) {
           polyline._path.classList.remove("custom-polyline");
+          polyline.enableEdit();
         } else {
           polyline._path.classList.add("custom-polyline");
+          polyline.disableEdit();
         }
       }
     });
