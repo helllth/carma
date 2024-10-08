@@ -588,6 +588,25 @@
         }
       },
       "projectPath": "./dist/envirometrics/saarlouis/rainhazardmap"
+    },
+    "rainhazardmap-huerth": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "rainhazardmap-huerth"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "rainhazardmap-huerth"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/envirometrics/huerth/rainhazardmap"
     }
   }
 }
