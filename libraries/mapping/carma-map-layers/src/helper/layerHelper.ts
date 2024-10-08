@@ -177,7 +177,10 @@ export const getLayerStructure = ({
   wms?: WMSCapabilitiesJSON;
   serviceName: string;
 }) => {
-  const structure: unknown[] = [];
+  const structure: {
+    Title: string;
+    layers: Item[];
+  }[] = [];
   const services = serviceConfig;
   for (let category in config) {
     const categoryConfig = config[category];
