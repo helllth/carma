@@ -100,7 +100,7 @@ const InfoCard = ({
           </div>
           <div className="h-full w-0 border-r border-gray-300 my-0" />
           <div className="flex flex-col gap-0 w-1/4">
-            <h5 className="font-semibold text-lg">Links:</h5>
+            <h5 className="font-semibold text-lg">Links</h5>
             {layer?.service?.url && (
               <a
                 href={`${layer.service.url}?service=WMS&request=GetCapabilities&version=1.1.1`}
@@ -118,7 +118,7 @@ const InfoCard = ({
           </div>
           <div className="h-full w-0 border-r border-gray-300 my-0" />
           <div className="flex flex-col gap-0 w-1/4">
-            <h5 className="font-semibold text-lg">Legende:</h5>
+            <h5 className="font-semibold text-lg">Legende</h5>
             <div className="h-full overflow-auto">
               {legends?.map((legend, i) => (
                 <img
