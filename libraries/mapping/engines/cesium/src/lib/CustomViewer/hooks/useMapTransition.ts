@@ -12,7 +12,7 @@ import {
   setTransitionTo3d,
   clearTransition,
   useViewerIsTransitioning,
-} from "../../CustomViewerContextProvider/slices/cesium";
+} from "../../CesiumContextProvider/slices/cesium";
 import {
   cesiumCenterPixelSizeToLeafletZoom,
   getTopDownCameraDeviationAngle,
@@ -20,7 +20,7 @@ import {
   pickViewerCanvasCenter,
 } from "../../utils";
 
-import { useCesiumCustomViewer } from "../../CustomViewerContextProvider";
+import { useCesiumContext } from "../../CesiumContextProvider";
 import { animateInterpolateHeadingPitchRange } from "../../utils/cesiumAnimations";
 import { setLeafletView } from "../utils";
 
@@ -38,7 +38,7 @@ export const useMapTransition = ({
   const dispatch = useDispatch();
   const topicMapContext = useContext<typeof TopicMapContext>(TopicMapContext);
 
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
   const leaflet = topicMapContext.routedMapRef?.leafletMap?.leafletElement;
 
   if (duration === undefined) {

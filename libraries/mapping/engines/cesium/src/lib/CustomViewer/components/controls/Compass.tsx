@@ -11,8 +11,8 @@ import {
 import { ControlButtonStyler } from "@carma-mapping/map-controls-layout";
 
 import { pickViewerCanvasCenter } from "../../../utils";
-import { useCesiumCustomViewer } from "../../../CustomViewerContextProvider";
-import { useScreenSpaceCameraControllerMinimumZoomDistance } from '../../../CustomViewerContextProvider/slices/cesium';
+import { useCesiumContext } from "../../../CesiumContextProvider";
+import { useScreenSpaceCameraControllerMinimumZoomDistance } from '../../../CesiumContextProvider/slices/cesium';
 
 type CompassProps = {
   children?: ReactNode;
@@ -20,7 +20,7 @@ type CompassProps = {
 };
 
 export const Compass = (props: CompassProps) => {
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
   const minZoomDistance = useScreenSpaceCameraControllerMinimumZoomDistance();
 
   const handleFlyToCenter = (e: MouseEvent) => {

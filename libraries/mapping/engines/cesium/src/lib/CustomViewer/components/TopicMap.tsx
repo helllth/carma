@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useCesium } from "resium";
 
 import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
 import StyledWMSTileLayer from "react-cismap/StyledWMSTileLayer";
@@ -7,15 +6,16 @@ import StyledWMSTileLayer from "react-cismap/StyledWMSTileLayer";
 import {
   useShowPrimaryTileset,
   useViewerIsMode2d,
-} from "../../CustomViewerContextProvider/slices/cesium";
+} from "../../CesiumContextProvider/slices/cesium";
 import { leafletToCesiumCamera } from "../../utils";
+import { useCesiumContext } from "../../CesiumContextProvider";
 
 // TODO sync this setting across app
 const DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION = 1000;
 
 // TODO remove this component replace with cesium overlayed on provied leaflet instance
 export const TopicMap = ({ forceShow = false } = {}) => {
-  const { viewer } = useCesium();
+  const { viewer } = useCesiumContext();
   const isPrimaryStyle = useShowPrimaryTileset();
   const isMode2d = useViewerIsMode2d();
 

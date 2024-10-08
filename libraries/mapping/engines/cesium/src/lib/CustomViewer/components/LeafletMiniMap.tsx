@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useCesium } from "resium";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -12,6 +11,7 @@ import {
   polygonHierarchyFromPolygonCoords,
   rectangleToExtentDegrees,
 } from "../../utils";
+import { useCesiumContext } from "../../CesiumContextProvider";
 
 //TODO sync time externally if needed
 const DEFAULT_MODE_2D_3D_CHANGE_FADE_DURATION = 1000;
@@ -37,7 +37,7 @@ export const LeafletMiniMap = ({
   showCesiumPolygon?: boolean;
   viewportLimitResolutionFactor?: number;
 }) => {
-  const { viewer } = useCesium();
+  const { viewer } = useCesiumContext();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
 

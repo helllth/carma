@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import {
   clearTransition,
   useViewerIsTransitioning,
-} from "../../CustomViewerContextProvider";
+} from "../../CesiumContextProvider";
 
 const DEFAULT_TIMEOUT = 4000;
 

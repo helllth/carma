@@ -4,7 +4,7 @@ import {
   useViewerIsMode2d,
   useViewerIsTransitioning,
 
-} from "../../../CustomViewerContextProvider/slices/cesium";
+} from "../../../CesiumContextProvider/slices/cesium";
 
 
 import { ControlButtonStyler } from "@carma-mapping/map-controls-layout";

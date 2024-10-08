@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import {
-  useCesiumCustomViewer,
+  useCesiumContext,
   useViewerIsAnimating,
   useViewerIsTransitioning,
-} from "../../CustomViewerContextProvider";
+} from "../../CesiumContextProvider";
 
 const useDisableSSCC = () => {
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
   const isAnimating = useViewerIsAnimating();
   const isTransitioning = useViewerIsTransitioning();
   useEffect(() => {

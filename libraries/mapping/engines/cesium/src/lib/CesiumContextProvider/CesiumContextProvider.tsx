@@ -11,7 +11,7 @@ import {
   Cesium3DTileset,
 } from "cesium";
 
-export interface CustomViewerContextType {
+export interface CesiumContextType {
   viewer: Viewer | null;
   setViewer: ((viewer: Viewer | null) => void);
   terrainProvider: Promise<CesiumTerrainProvider> | CesiumTerrainProvider | null;
@@ -27,18 +27,17 @@ export interface CustomViewerContextType {
   setSecondaryTileset: ((tileset: Cesium3DTileset | null) => void);
 };
 
-export const CustomViewerContext = createContext<CustomViewerContextType | null>(null);
+export const CesiumContext = createContext<CesiumContextType | null>(null);
 
-// TODO: rename this
-export const useCesiumCustomViewer = () => {
-  const context = useContext(CustomViewerContext);
+export const useCesiumContext = () => {
+  const context = useContext(CesiumContext);
   if (!context) {
-    throw new Error('useViewer must be used within a CustomViewerProvider');
+    throw new Error('useViewer must be used within a CesiumContextProvider');
   }
   return context;
 };
 
-export const CustomViewerContextProvider = ({
+export const CesiumContextProvider = ({
   children,
   providerConfig,
 }: {
@@ -83,10 +82,10 @@ export const CustomViewerContextProvider = ({
   console.log('Cesium CustomViewerContextProvider Initialized', values);
 
   return (
-    <CustomViewerContext.Provider value={values}>
+    <CesiumContext.Provider value={values}>
       {children}
-    </CustomViewerContext.Provider>
+    </CesiumContext.Provider>
   );
 };
 
-export default CustomViewerContextProvider;
+export default CesiumContextProvider;

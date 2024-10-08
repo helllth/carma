@@ -3,15 +3,15 @@ import { useDispatch } from "react-redux";
 import { Math as CeMath, Cartographic } from "cesium";
 
 import {
-  useCesiumCustomViewer,
+  useCesiumContext,
   useScreenSpaceCameraControllerEnableCollisionDetection,
   useViewerIsMode2d,
-} from "../../CustomViewerContextProvider";
+} from "../../CesiumContextProvider";
 
 const DEFAULT_MIN_PITCH = 12;
 
 const useCameraPitchHardLimiter = (minPitchDeg = DEFAULT_MIN_PITCH) => {
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
   const dispatch = useDispatch();
   const isMode2d = useViewerIsMode2d();
   const collisions = useScreenSpaceCameraControllerEnableCollisionDetection();

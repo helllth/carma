@@ -12,9 +12,8 @@ import {
   ColorBlendMode,
   Color,
 } from "cesium";
-import { useCesium } from "resium";
-import { useShowSecondaryTileset } from "./CustomViewerContextProvider/slices/cesium";
-import { TilesetConfig } from "../index";
+import { useShowSecondaryTileset } from "./CesiumContextProvider/slices/cesium";
+import { TilesetConfig, useCesiumContext } from "../index";
 
 export type ClickData = {
   id: string | null;
@@ -100,7 +99,7 @@ export const usePropertyKeysFromGeoJsonDataSource = (
 export const useSecondaryStyleTilesetClickHandler = (
   config: TilesetConfig | null | undefined,
 ) => {
-  const { viewer } = useCesium();
+  const { viewer } = useCesiumContext();
   const isSecondaryStyle = useShowSecondaryTileset();
 
   const { disableSelection } = config ?? {};

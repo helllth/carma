@@ -12,15 +12,15 @@ import {
   setScreenSpaceCameraControllerEnableCollisionDetection,
   setScreenSpaceCameraControllerMaximumZoomDistance,
   setScreenSpaceCameraControllerMinimumZoomDistance,
-  useCesiumCustomViewer,
+  useCesiumContext,
   useScreenSpaceCameraControllerEnableCollisionDetection,
   useScreenSpaceCameraControllerMaximumZoomDistance,
   useScreenSpaceCameraControllerMinimumZoomDistance,
-} from "../../CustomViewerContextProvider";
+} from "../../CesiumContextProvider";
 import { useDispatch } from "react-redux";
 
 const useTweakpane = () => {
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
 
   const dispatch = useDispatch();
 

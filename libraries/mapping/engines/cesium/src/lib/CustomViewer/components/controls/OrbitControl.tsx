@@ -2,15 +2,15 @@ import { ReactNode, MouseEvent, useEffect } from "react";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useRef } from "react";
-import { useCesium } from "resium";
 import OnMapButton from "./OnMapButton";
 import { Cartesian3, Color, Matrix4, Transforms, Viewer } from "cesium";
 import {
   toggleIsAnimating,
   useViewerIsAnimating,
-} from "../../../CustomViewerContextProvider/slices/cesium";
+} from "../../../CesiumContextProvider/slices/cesium";
 import { useDispatch } from "react-redux";
 import { pickViewerCanvasCenter } from "../../../utils";
+import { useCesiumContext } from "../../../CesiumContextProvider";
 
 // TODO use config/context
 const DEFAULT_ROTATION_SPEED = 0.0001;
@@ -23,7 +23,7 @@ type SpinningControlProps = {
 const orbitCenterPointId = "orbitCenterPoint";
 
 const OrbitControl = ({ showCenterPoint = true }: SpinningControlProps) => {
-  const { viewer } = useCesium();
+  const { viewer } = useCesiumContext();
   const orbitPointRef = useRef<Cartesian3 | null>(null);
   const lastRenderTimeRef = useRef<number | null>(null);
   const isAnimating = useViewerIsAnimating();

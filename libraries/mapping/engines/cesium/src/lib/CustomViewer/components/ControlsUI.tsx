@@ -11,7 +11,7 @@ import { MapTypeSwitcher } from "./controls/MapTypeSwitcher";
 import {
   useViewerHome,
   useViewerIsMode2d,
-} from "../../CustomViewerContextProvider/slices/cesium";
+} from "../../CesiumContextProvider/slices/cesium";
 const ControlsUI = ({ showHome = true, showOrbit = true }) => {
   const home = useViewerHome();
   const isMode2d = useViewerIsMode2d();

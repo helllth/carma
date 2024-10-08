@@ -2,7 +2,7 @@ import { CustomViewer } from "./lib/CustomViewer";
 
 export { CustomCesiumWidget } from "./lib/CustomCesiumWidget";
 export * from "./lib/CustomViewer";
-export * from "./lib/CustomViewerContextProvider";
+export * from "./lib/CesiumContextProvider";
 
 export { MapTypeSwitcher } from './lib/CustomViewer/components/controls/MapTypeSwitcher';
 export { SceneStyleToggle } from './lib/CustomViewer/components/controls/SceneStyleToggle';

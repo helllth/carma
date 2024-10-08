@@ -1,31 +1,28 @@
 import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 
-// Cesium Styles
-import 'cesium/Build/Cesium/Widgets/widgets.css';
-import { Navigation } from './components/Navigation';
-import { viewerRoutes, otherRoutes } from './routes';
+import { TopicMapContextProvider } from 'react-cismap/contexts/TopicMapContextProvider';
+
 import {
   CustomViewerPlayground,
-  CustomViewerContextProvider,
+  CesiumContextProvider,
 } from '@carma-mapping/cesium-engine';
+import { TweakpaneProvider } from '@carma-commons/debug';
+import { BASEMAP_METROPOLRUHR_WMS_GRAUBLAU, METROPOLERUHR_WMTS_SPW2_WEBMERCATOR, WUPP_TERRAIN_PROVIDER } from '@carma-commons/resources';
 
-
+import { Navigation } from './components/Navigation';
+import { viewerRoutes, otherRoutes } from './routes';
 import { routeGenerator } from './utils/routeGenerator';
 
 import 'leaflet/dist/leaflet.css';
-
-import { TopicMapContextProvider } from 'react-cismap/contexts/TopicMapContextProvider';
-
-import { TweakpaneProvider } from '@carma-commons/debug';
-import { BASEMAP_METROPOLRUHR_WMS_GRAUBLAU, METROPOLERUHR_WMTS_SPW2_WEBMERCATOR, WUPP_TERRAIN_PROVIDER } from '@carma-commons/resources';
+import 'cesium/Build/Cesium/Widgets/widgets.css';
 
 const ViewerRoutes = routeGenerator(viewerRoutes);
 const OtherRoutes = routeGenerator(otherRoutes);
 
 export function App() {
   return (
-    <CustomViewerContextProvider
+    <CesiumContextProvider
       //initialViewerState={defaultViewerState}
       providerConfig={{
         terrainProvider: WUPP_TERRAIN_PROVIDER,
@@ -68,7 +65,7 @@ export function App() {
           </Routes>
         </HashRouter>
       </TweakpaneProvider>
-    </CustomViewerContextProvider>
+    </CesiumContextProvider>
   );
 }
 export default App;

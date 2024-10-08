@@ -17,7 +17,7 @@ import { backgroundSettings } from "@carma-collab/wuppertal/geoportal";
 import { TweakpaneProvider } from "@carma-commons/debug";
 import { BASEMAP_METROPOLRUHR_WMS_GRAUBLAU, WUPP_TERRAIN_PROVIDER } from "@carma-commons/resources";
 import { OverlayTourProvider } from "@carma/libraries/commons/ui/lib-helper-overlay";
-import { CustomViewerContextProvider } from "@carma-mapping/cesium-engine";
+import { CesiumContextProvider } from "@carma-mapping/cesium-engine";
 import type { Layer } from "@carma-mapping/layers";
 import type { BackgroundLayer, Settings } from "@carma-apps/portals";
 
@@ -139,7 +139,7 @@ function App({ published }: { published?: boolean }) {
       color={backgroundSettings.color}
     >
       <TopicMapContextProvider>
-        <CustomViewerContextProvider
+        <CesiumContextProvider
           //initialViewerState={defaultCesiumState}
           // TODO move these to store/slice setup ?
           providerConfig={{
@@ -159,7 +159,7 @@ function App({ published }: { published?: boolean }) {
               </div>
             </ErrorBoundary>
           </TweakpaneProvider>
-        </CustomViewerContextProvider>
+        </CesiumContextProvider>
       </TopicMapContextProvider>
     </OverlayTourProvider>
   );

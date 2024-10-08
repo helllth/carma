@@ -12,7 +12,7 @@ import {
 } from "cesium";
 import type { Map as LeafletMap } from "leaflet";
 
-import { useCesiumCustomViewer } from "../../CustomViewerContextProvider";
+import { useCesiumContext } from "../../CesiumContextProvider";
 import {
   setIsAnimating,
   setShowPrimaryTileset,
@@ -25,12 +25,12 @@ import {
   useScreenSpaceCameraControllerEnableCollisionDetection,
   useViewerIsAnimating,
   useViewerCurrentTransition,
-} from "../../CustomViewerContextProvider/slices/cesium";
+} from "../../CesiumContextProvider/slices/cesium";
 import { decodeSceneFromLocation } from "../utils";
 import { setupSecondaryStyle } from "../components/baseTileset.hook";
 
 export const useLogCesiumRenderIn2D = () => {
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
   const isMode2d = useViewerIsMode2d();
   const isAnimating = useViewerIsAnimating();
   const transition = useViewerCurrentTransition();
@@ -68,7 +68,7 @@ export const useInitializeViewer = (
   const [hash, setHash] = useState<string | null>(null); // effectively hook should run only once
   const dispatch = useDispatch();
   const location = useLocation();
-  const viewerContext = useCesiumCustomViewer();
+  const viewerContext = useCesiumContext();
   const isSecondaryStyle = useShowSecondaryTileset();
   const minZoom = useScreenSpaceCameraControllerMinimumZoomDistance();
   const maxZoom = useScreenSpaceCameraControllerMaximumZoomDistance();
@@ -171,7 +171,7 @@ export const useInitializeViewer = (
 
 export const useHomeControl = () => {
   const dispatch = useDispatch();
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
   const homePosition = useViewerHome();
   const [homePos, setHomePos] = useState<Cartesian3 | null>(null);
 
@@ -199,7 +199,7 @@ export const useHomeControl = () => {
 const MOVERATE_FACTOR = 0.33;
 
 export function useZoomControls(moveRateFactor: number = MOVERATE_FACTOR) {
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
 
   const handleZoomIn = useCallback(
     (event: React.MouseEvent) => {

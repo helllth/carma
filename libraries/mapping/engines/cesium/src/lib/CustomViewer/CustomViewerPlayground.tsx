@@ -16,7 +16,7 @@ import {
   useViewerHome,
   useViewerHomeOffset,
   useViewerIsMode2d,
-} from "../CustomViewerContextProvider/slices/cesium";
+} from "../CesiumContextProvider/slices/cesium";
 import { BaseTilesets } from "./components/BaseTilesets";
 import ControlsUI from "./components/ControlsUI";
 import { encodeScene, replaceHashRoutedHistory, setLeafletView } from "./utils";
@@ -30,7 +30,7 @@ import { resolutionFractions } from "../utils";
 
 import { formatFractions } from "../utils/formatters";
 import MiniMap from "./components/LeafletMiniMap";
-import { useCesiumCustomViewer } from "../CustomViewerContextProvider";
+import { useCesiumContext } from "../CesiumContextProvider";
 
 type CustomViewerProps = {
   children?: ReactNode;
@@ -70,7 +70,7 @@ function CustomViewer(props: CustomViewerProps) {
   const isSecondaryStyle = useShowSecondaryTileset();
   const isMode2d = useViewerIsMode2d();
   //const isAnimating = useViewerIsAnimating();
-  const customViewerStore = useCesiumCustomViewer();
+  const customViewerStore = useCesiumContext();
 
 
   const {

@@ -2,12 +2,12 @@ import { useEffect, useRef } from "react";
 import { Math as CeMath, Cartographic, EasingFunction } from "cesium";
 
 import {
-  useCesiumCustomViewer,
+  useCesiumContext,
   useScreenSpaceCameraControllerEnableCollisionDetection,
   useViewerIsAnimating,
   useViewerIsMode2d,
   useViewerIsTransitioning,
-} from "../../CustomViewerContextProvider";
+} from "../../CesiumContextProvider";
 
 const DEFAULT_MIN_PITCH = 12;
 
@@ -23,7 +23,7 @@ const useCameraPitchEasingLimiter = (
     easing = EasingFunction.CIRCULAR_IN,
   }: LimiterOptions = {},
 ) => {
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
   const isMode2d = useViewerIsMode2d();
   const isAnimating = useViewerIsAnimating();
   const isTransitioning = useViewerIsTransitioning();

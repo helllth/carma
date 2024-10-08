@@ -4,12 +4,12 @@ import { Math as CeMath } from "cesium";
 
 import {
   setIsAnimating,
-  useCesiumCustomViewer,
+  useCesiumContext,
   useViewerIsMode2d,
-} from "../../CustomViewerContextProvider";
+} from "../../CesiumContextProvider";
 
 const useCameraRollSoftLimiter = () => {
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
   const dispatch = useDispatch();
   const isMode2d = useViewerIsMode2d();
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { MouseEvent, ReactNode } from "react";
 import { faCubes, faTreeCity } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useShowPrimaryTileset } from "../../../CustomViewerContextProvider/slices/cesium";
+import { useShowPrimaryTileset } from "../../../CesiumContextProvider/slices/cesium";
 import { SceneStyles } from "../../../..";
 import { useSceneStyleToggle } from "../baseTileset.hook";
 import { ControlButtonStyler } from "@carma-mapping/map-controls-layout";

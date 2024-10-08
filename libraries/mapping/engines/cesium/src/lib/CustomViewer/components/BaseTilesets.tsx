@@ -16,7 +16,7 @@ import {
   CustomShaderKeys as k,
 } from "../../shaders";
 import { create3DTileStyle } from "../../utils";
-import { useCesiumCustomViewer } from "../../CustomViewerContextProvider";
+import { useCesiumContext } from "../../CesiumContextProvider";
 import {
   setShowPrimaryTileset,
   setShowSecondaryTileset,
@@ -25,7 +25,7 @@ import {
   useTilesetOpacity,
   useViewerDataSources,
   useViewerIsMode2d,
-} from "../../CustomViewerContextProvider/slices/cesium";
+} from "../../CesiumContextProvider/slices/cesium";
 import { TRANSITION_DELAY } from "../CustomViewer";
 
 let enableDebugWireframe = false;
@@ -54,8 +54,7 @@ const DEFAULT_MESH_SHADER = new CustomShader(
 export const BaseTilesets = () => {
   const tilesetConfigs = useViewerDataSources().tilesets;
   const showPrimary = useShowPrimaryTileset();
-  //const { viewer } = useCesium();
-  const { viewer, tilesets, setPrimaryTileset, setSecondaryTileset } = useCesiumCustomViewer();
+  const { viewer, tilesets, setPrimaryTileset, setSecondaryTileset } = useCesiumContext();
   const showSecondary = useShowSecondaryTileset();
 
   const [showTileInspector, setShowTileInspector] = useState(false);

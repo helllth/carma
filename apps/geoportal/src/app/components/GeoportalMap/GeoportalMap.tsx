@@ -44,7 +44,7 @@ import {
   CustomViewer,
   MapTypeSwitcher,
   Compass,
-  useCesiumCustomViewer,
+  useCesiumContext,
   setIsMode2d,
   useHomeControl,
   useViewerIsMode2d,
@@ -124,7 +124,7 @@ export const GeoportalMap = () => {
   const showHamburgerMenu = useSelector(getShowHamburgerMenu);
   const showMeasurementButton = useSelector(getShowMeasurementButton);
   const focusMode = useSelector(getFocusMode);
-  const { viewer, tilesets } = useCesiumCustomViewer();
+  const { viewer, tilesets } = useCesiumContext();
   const homeControl = useHomeControl();
   const { handleZoomIn, handleZoomOut } = useZoomControls();
   const toggleSceneStyle = useSceneStyleToggle();

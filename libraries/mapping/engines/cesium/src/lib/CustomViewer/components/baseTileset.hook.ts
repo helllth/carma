@@ -4,13 +4,13 @@ import { CesiumTerrainProvider, ClassificationType, Color } from "cesium";
 import {
   setShowPrimaryTileset,
   setShowSecondaryTileset,
-} from "../../CustomViewerContextProvider/slices/cesium";
+} from "../../CesiumContextProvider/slices/cesium";
 import { SceneStyles } from "../../..";
 import { getGroundPrimitiveById } from "../../utils/cesiumGroundPrimitives";
 import {
-  CustomViewerContextType,
-  useCesiumCustomViewer,
-} from "../../CustomViewerContextProvider/components/CustomViewerContextProvider";
+  CesiumContextType,
+  useCesiumContext,
+} from "../../CesiumContextProvider/CesiumContextProvider";
 
 // TODO move combined common setup out of here
 
@@ -21,7 +21,7 @@ const setupPrimaryStyle = ({
   viewer,
   terrainProvider,
   imageryLayer,
-}: CustomViewerContextType) => {
+}: CesiumContextType) => {
   (async () => {
     if (!viewer) return;
     viewer.scene.globe.baseColor = Color.DARKGRAY;
@@ -95,10 +95,10 @@ export const useSceneStyleToggle = (
   initialStyle: keyof SceneStyles = "secondary",
 ) => {
   const dispatch = useDispatch();
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
   const [currentStyle, setCurrentStyle] =
     useState<keyof SceneStyles>(initialStyle);
-  const customViewerContext = useCesiumCustomViewer();
+  const customViewerContext = useCesiumContext();
 
   useEffect(() => {
     if (!viewer) return;

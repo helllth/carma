@@ -4,17 +4,17 @@ import { BoundingSphere, Cartesian3, Math as CeMath } from "cesium";
 
 import {
   setIsAnimating,
-  useCesiumCustomViewer,
+  useCesiumContext,
   useScreenSpaceCameraControllerEnableCollisionDetection,
   useViewerIsMode2d,
-} from "../../CustomViewerContextProvider";
+} from "../../CesiumContextProvider";
 import { pickViewerCanvasCenter } from "../../utils/cesiumHelpers";
 
 const useCameraPitchSoftLimiter = (
   minPitchDeg = 20,
   resetPitchOffsetDeg = 5,
 ) => {
-  const { viewer } = useCesiumCustomViewer();
+  const { viewer } = useCesiumContext();
   const dispatch = useDispatch();
   const isMode2d = useViewerIsMode2d();
   const collisions = useScreenSpaceCameraControllerEnableCollisionDetection();

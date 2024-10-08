@@ -24,9 +24,9 @@ import {
   useViewerHome,
   useViewerHomeOffset,
   useViewerIsMode2d,
-} from "../CustomViewerContextProvider/slices/cesium";
+} from "../CesiumContextProvider/slices/cesium";
 import { cameraToCartographicDegrees } from "../utils";
-import { useCesiumCustomViewer } from "../CustomViewerContextProvider";
+import { useCesiumContext } from "../CesiumContextProvider";
 import { BaseTilesets } from "./components/BaseTilesets";
 import { encodeScene, replaceHashRoutedHistory } from "./utils";
 import { useInitializeViewer, useLogCesiumRenderIn2D } from "./hooks";
@@ -81,7 +81,7 @@ const DEFAULT_RESOLUTION_SCALE = 1;
 export const TRANSITION_DELAY = 1000;
 
 function CustomViewer(props: CustomViewerProps) {
-  const { viewer, setViewer, imageryLayer } = useCesiumCustomViewer();
+  const { viewer, setViewer, imageryLayer } = useCesiumContext();
   const home = useViewerHome();
   const homeOffset = useViewerHomeOffset();
   const isSecondaryStyle = useShowSecondaryTileset();
