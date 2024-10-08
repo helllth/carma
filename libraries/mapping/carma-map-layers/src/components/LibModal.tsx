@@ -22,6 +22,7 @@ import "./input.css";
 import "./modal.css";
 import type { Item, Layer, SavedLayerConfig } from "../helper/types";
 import { isEqual } from "lodash";
+import { utils } from "@carma-apps/portals";
 const { Search } = Input;
 
 // @ts-expect-error tbd
@@ -43,6 +44,7 @@ export interface LibModalProps {
   removeFavorite: (layer: Item) => void;
   activeLayers: any[];
   customCategories?: LayerCategories[];
+  updateActiveLayer: (layer: Layer) => void;
 }
 
 export const LibModal = ({
@@ -56,6 +58,7 @@ export const LibModal = ({
   addFavorite,
   removeFavorite,
   favorites,
+  updateActiveLayer,
 }: LibModalProps) => {
   const [layers, setLayers] = useState<any[]>([]);
   const [allLayers, setAllLayers] = useState<any[]>([]);
@@ -110,7 +113,6 @@ export const LibModal = ({
           ) {
             newLayers.push({
               ...result.item,
-              highlight: result.matches,
             });
           }
           if (
@@ -119,7 +121,6 @@ export const LibModal = ({
           ) {
             newLayers.push({
               ...result.item,
-              highlight: result.matches,
             });
           }
         });
@@ -170,7 +171,6 @@ export const LibModal = ({
   };
 
   const getNumberOfLayers = (layerCategories: LayerCategories[]) => {
-    //console.log("xxx Layers",layerCategories)
     let numberOfLayers = 0;
     layerCategories?.forEach((category) => {
       numberOfLayers += category?.layers?.length;
@@ -196,6 +196,29 @@ export const LibModal = ({
                   config,
                   wms: result,
                   serviceName: services[key].name,
+                });
+
+                tmpLayer.forEach((category) => {
+                  if (category.layers.length > 0) {
+                    activeLayers.forEach(async (activeLayer) => {
+                      const foundLayer = category.layers.find(
+                        (layer) => layer.id === activeLayer.id,
+                      );
+                      if (foundLayer) {
+                        const updatedLayer = await utils.parseToMapLayer(
+                          foundLayer,
+                          false,
+                        );
+
+                        const shouldUpdate = !isEqual(
+                          activeLayer,
+                          updatedLayer,
+                        );
+
+                        updateActiveLayer(updatedLayer);
+                      }
+                    });
+                  }
                 });
                 const mergedLayer = mergeStructures(tmpLayer, newLayers);
 

@@ -37,6 +37,7 @@ import {
   setBackgroundLayer,
   setFocusMode,
   setLayers,
+  updateLayer,
 } from "../store/slices/mapping";
 import "./switch.css";
 import {
@@ -47,7 +48,7 @@ import {
   UIMode,
 } from "../store/slices/ui";
 import { layerMap } from "../config";
-import { Save, Share, extractCarmaConf } from "@carma-apps/portals";
+import { Save, Share, extractCarmaConf, utils } from "@carma-apps/portals";
 import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
 import { isNaN } from "lodash";
 import {
@@ -122,99 +123,7 @@ const TopNavbar = () => {
       return;
     }
 
-    if (layer.type === "layer") {
-      const carmaConf = extractCarmaConf(layer.keywords);
-      if (carmaConf.vectorStyle && !forceWMS) {
-        const zoom = await fetch(carmaConf.vectorStyle)
-          .then((response) => {
-            return response.json();
-          })
-          .then((result) => {
-            const minZoom =
-              result.sources["poi-source"]?.minzoom ||
-              result.sources["vector-tiles"]?.minzoom ||
-              9;
-            return {
-              minZoom,
-            };
-          });
-        newLayer = {
-          title: layer.title,
-          id: id,
-          layerType: "vector",
-          opacity: 1.0,
-          description: layer.description,
-          conf: carmaConf,
-          queryable: isNaN(layer.queryable)
-            ? layer.keywords.some((keyword) =>
-                keyword.includes("carmaconf://infoBoxMapping"),
-              )
-            : layer.queryable,
-          useInFeatureInfo: true,
-          visible: true,
-          props: {
-            style: carmaConf.vectorStyle,
-            minZoom: zoom?.minZoom,
-            legend: layer.props.Style[0].LegendURL,
-          },
-          other: {
-            ...layer,
-          },
-        };
-      } else {
-        switch (layer.layerType) {
-          case "wmts": {
-            newLayer = {
-              title: layer.title,
-              id: id,
-              layerType: "wmts",
-              opacity: 1.0,
-              description: layer.description,
-              conf: carmaConf,
-              visible: true,
-              queryable: layer.queryable,
-              useInFeatureInfo: true,
-              props: {
-                url: layer.props.url,
-                legend: layer.props.Style[0].LegendURL,
-                name: layer.props.Name,
-                maxZoom: layer.maxZoom,
-                minZoom: layer.minZoom,
-              },
-              other: {
-                ...layer,
-              },
-            };
-            break;
-          }
-          case "vector": {
-            newLayer = {
-              title: layer.title,
-              id: id,
-              layerType: "vector",
-              opacity: 1.0,
-              description: layer.description,
-              conf: carmaConf,
-              queryable: isNaN(layer.queryable)
-                ? layer.keywords.some((keyword) =>
-                    keyword.includes("carmaconf://infoBoxMapping"),
-                  )
-                : layer.queryable,
-              useInFeatureInfo: true,
-              visible: true,
-              props: {
-                style: layer.props.style,
-                legend: layer.props.Style[0].LegendURL,
-              },
-              other: {
-                ...layer,
-              },
-            };
-            break;
-          }
-        }
-      }
-    }
+    newLayer = await utils.parseToMapLayer(layer, forceWMS);
 
     if (activeLayers.find((activeLayer) => activeLayer.id === id)) {
       try {
@@ -275,6 +184,9 @@ const TopNavbar = () => {
             layers: favorites,
           },
         ]}
+        updateActiveLayer={(layer) => {
+          dispatch(updateLayer(layer));
+        }}
       />
 
       <div className="flex items-center gap-6">

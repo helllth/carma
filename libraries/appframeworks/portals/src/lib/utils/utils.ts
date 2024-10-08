@@ -5,6 +5,9 @@ import { md5FetchText } from "react-cismap/tools/fetching";
 import { getGazDataForTopicIds } from "react-cismap/tools/gazetteerHelper";
 
 import { ENDPOINT } from "@carma-mapping/fuzzy-search";
+import { Item, Layer } from "@carma-mapping/layers";
+import { extractCarmaConf } from "./carmaConfig";
+import { isNaN } from "lodash";
 
 const buildHostUri = (host: string, endpoint: ENDPOINT, crs: string) => {
   return `${host}/data/${crs}/${endpoint}.json`;
@@ -82,3 +85,105 @@ export function paramsToObject(entries: URLSearchParams) {
   }
   return result;
 }
+
+export const parseToMapLayer = async (layer: Item, forceWMS: boolean) => {
+  let newLayer: Layer;
+  const id = layer.id.startsWith("fav_") ? layer.id.slice(4) : layer.id;
+
+  const carmaConf = extractCarmaConf(layer.keywords);
+  if (layer.type === "layer") {
+    if (carmaConf?.vectorStyle && !forceWMS) {
+      const zoom = await fetch(carmaConf.vectorStyle)
+        .then((response) => {
+          return response.json();
+        })
+        .then((result) => {
+          const minZoom =
+            result.sources["poi-source"]?.minzoom ||
+            result.sources["vector-tiles"]?.minzoom ||
+            9;
+          return {
+            minZoom,
+          };
+        });
+      newLayer = {
+        title: layer.title,
+        id: id,
+        layerType: "vector",
+        opacity: 1.0,
+        description: layer.description,
+        conf: carmaConf,
+        queryable: isNaN(layer.queryable)
+          ? layer?.keywords?.some((keyword) =>
+              keyword.includes("carmaconf://infoBoxMapping"),
+            )
+          : layer.queryable,
+        useInFeatureInfo: true,
+        visible: true,
+        props: {
+          style: carmaConf.vectorStyle,
+          minZoom: zoom?.minZoom,
+          legend: layer.props.Style[0].LegendURL,
+        },
+        other: {
+          ...layer,
+        },
+      };
+    } else {
+      switch (layer.layerType) {
+        case "wmts": {
+          newLayer = {
+            title: layer.title,
+            id: id,
+            layerType: "wmts",
+            opacity: 1.0,
+            description: layer.description,
+            conf: carmaConf!,
+            visible: true,
+            queryable: layer.queryable,
+            useInFeatureInfo: true,
+            props: {
+              url: layer.props.url,
+              legend: layer.props.Style[0].LegendURL,
+              name: layer.props.Name,
+              maxZoom: layer.maxZoom,
+              minZoom: layer.minZoom,
+            },
+            other: {
+              ...layer,
+            },
+          };
+          break;
+        }
+        case "vector": {
+          newLayer = {
+            title: layer.title,
+            id: id,
+            layerType: "vector",
+            opacity: 1.0,
+            description: layer.description,
+            conf: carmaConf!,
+            queryable: isNaN(layer.queryable)
+              ? layer?.keywords?.some((keyword) =>
+                  keyword.includes("carmaconf://infoBoxMapping"),
+                )
+              : layer.queryable,
+            useInFeatureInfo: true,
+            visible: true,
+            props: {
+              style: layer.props.style ? layer.props.style : "",
+              legend: layer.props.Style[0].LegendURL,
+            },
+            other: {
+              ...layer,
+            },
+          };
+          break;
+        }
+      }
+    }
+  }
+
+  // @ts-ignore
+  return newLayer;
+};
