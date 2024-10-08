@@ -99,7 +99,7 @@ function App() {
       urlPrefix + "/data/kommunen.json",
       urlPrefix + "/data/ortslagen.json",
     );
-    getHinweisData(setHinweisData, "/data/overlay.json");
+    getHinweisData(setHinweisData, urlPrefix + "/data/overlay.json");
   }, []);
   const footerLogoUrl = urlPrefix + "/images/Signet_AIS_RZ.png";
   return (
