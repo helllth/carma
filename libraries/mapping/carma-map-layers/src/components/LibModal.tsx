@@ -319,7 +319,7 @@ export const LibModal = ({
         }
       }}
       style={{
-        top: preview ? "99%" : undefined,
+        top: preview ? "84%" : undefined,
         transition: "top 400ms linear",
       }}
       mask={!preview}
