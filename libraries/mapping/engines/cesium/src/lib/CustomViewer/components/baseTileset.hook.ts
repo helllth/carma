@@ -20,6 +20,7 @@ const INVERTED_SELECTED_POLYGON_ID = "searchgaz-inverted-polygon";
 const setupPrimaryStyle = ({
   viewer,
   terrainProvider,
+  surfaceProvider,
   imageryLayer,
 }: CesiumContextType) => {
   (async () => {
@@ -29,9 +30,8 @@ const setupPrimaryStyle = ({
     if (viewer.scene.terrainProvider instanceof CesiumTerrainProvider) {
       //viewer.scene.terrainProvider = ellipsoidTerrainProvider;
     } else {
-      const provider = await terrainProvider;
-      if (provider) {
-        viewer.scene.terrainProvider = provider;
+      if (surfaceProvider) {
+        viewer.scene.terrainProvider = surfaceProvider;
       }
     }
     // viewer.scene.globe.depthTestAgainstTerrain = false;
@@ -62,8 +62,11 @@ export const setupSecondaryStyle = ({
     viewer.scene.globe.baseColor = Color.WHITE;
 
     // console.log('setupSecondaryStyle', viewer.scene.terrainProvider);
-    if (!(viewer.scene.terrainProvider instanceof CesiumTerrainProvider)) {
-      viewer.scene.terrainProvider = await terrainProvider;
+    if (
+      !(viewer.scene.terrainProvider instanceof CesiumTerrainProvider) &&
+      terrainProvider
+    ) {
+      viewer.scene.terrainProvider = terrainProvider;
     }
     // DEPTH TEST is quite slow, only use if really necessary
     // viewer.scene.globe.depthTestAgainstTerrain = true;
@@ -95,24 +98,24 @@ export const useSceneStyleToggle = (
   initialStyle: keyof SceneStyles = "secondary",
 ) => {
   const dispatch = useDispatch();
-  const { viewer } = useCesiumContext();
   const [currentStyle, setCurrentStyle] =
     useState<keyof SceneStyles>(initialStyle);
-  const customViewerContext = useCesiumContext();
+  const context = useCesiumContext();
+  const { viewer } = context;
 
   useEffect(() => {
     if (!viewer) return;
 
     if (currentStyle === "primary") {
-      setupPrimaryStyle(customViewerContext);
+      setupPrimaryStyle(context);
       dispatch(setShowPrimaryTileset(true));
       dispatch(setShowSecondaryTileset(false));
     } else {
-      setupSecondaryStyle(customViewerContext);
+      setupSecondaryStyle(context);
       dispatch(setShowPrimaryTileset(false));
       dispatch(setShowSecondaryTileset(true));
     }
-  }, [dispatch, viewer, currentStyle, customViewerContext]);
+  }, [dispatch, viewer, currentStyle, context]);
 
   const toggleSceneStyle = (style?: "primary" | "secondary") => {
     if (style) {

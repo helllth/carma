@@ -114,6 +114,7 @@ export const GeoportalMap = () => {
   const isMode2d = useViewerIsMode2d();
   const models = useViewerModels();
   const markerAsset = models[CESIUM_CONFIG.markerKey]; // 
+  const markerAnchorHeight = CESIUM_CONFIG.markerAnchorHeight ?? 10;
   const layers = useSelector(getLayers);
   const uiMode = useSelector(getUIMode);
   const isModeMeasurement = uiMode === UIMode.MEASUREMENT;
@@ -124,7 +125,7 @@ export const GeoportalMap = () => {
   const showHamburgerMenu = useSelector(getShowHamburgerMenu);
   const showMeasurementButton = useSelector(getShowMeasurementButton);
   const focusMode = useSelector(getFocusMode);
-  const { viewer, tilesets } = useCesiumContext();
+  const { viewer, terrainProvider, surfaceProvider } = useCesiumContext();
   const homeControl = useHomeControl();
   const { handleZoomIn, handleZoomOut } = useZoomControls();
   const toggleSceneStyle = useSceneStyleToggle();
@@ -386,11 +387,13 @@ export const GeoportalMap = () => {
           <LibFuzzySearch
             gazData={gazData}
             mapRef={routedMapRef}
-            cesiumConfig={{
+            cesiumOptions={{
               viewer,
               markerAsset,
+              markerAnchorHeight,
               isPrimaryStyle: showPrimaryTileset,
-              elevationTileset: showPrimaryTileset ? tilesets.primary : tilesets.secondary,
+              surfaceProvider,
+              terrainProvider,
             }}
             referenceSystem={referenceSystem}
             referenceSystemDefinition={referenceSystemDefinition}

@@ -1,7 +1,7 @@
 import L from "leaflet";
 import type { RefObject } from "react";
-import { Cesium3DTileset, Viewer } from "cesium";
-import { stopwords } from './lib/config/stopwords.de-de';
+import { Viewer } from "cesium";
+import { CesiumOptions } from "@carma-mapping/cesium-engine";
 
 type mapRefType = RefObject<{
   current: { leafletMap: { leafletElement: L.Map } };
@@ -28,12 +28,7 @@ export type SearchGazetteerProps = {
   ifShowCategories?: boolean;
   placeholder?: string;
   config?: SearchConfig;
-  cesiumConfig?: {
-    viewer?: Viewer;
-    markerAsset?: ModelAsset;
-    isPrimaryStyle: boolean;
-    elevationTileset?: Cesium3DTileset;
-  }
+  cesiumOptions?: CesiumOptions;
 };
 
 export type MapConsumer = L.Map | Viewer;

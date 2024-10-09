@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 import {
@@ -14,7 +14,8 @@ import {
 export interface CesiumContextType {
   viewer: Viewer | null;
   setViewer: ((viewer: Viewer | null) => void);
-  terrainProvider: Promise<CesiumTerrainProvider> | CesiumTerrainProvider | null;
+  terrainProvider: CesiumTerrainProvider | null;
+  surfaceProvider: CesiumTerrainProvider | null;
   //imageryProvider:    | WebMapServiceImageryProvider    | WebMapTileServiceImageryProvider    | null;
   imageryLayer: ImageryLayer | null;
   ellipsoidTerrainProvider: EllipsoidTerrainProvider | null;
@@ -43,6 +44,9 @@ export const CesiumContextProvider = ({
 }: {
   children: ReactNode;
   providerConfig: {
+    surfaceProvider?: {
+      url: string;
+    };
     terrainProvider: {
       url: string;
     };
@@ -57,19 +61,42 @@ export const CesiumContextProvider = ({
   const [viewer, setViewer] = useState<Viewer | null>(null);
   const [primaryTileset, setPrimaryTileset] = useState<Cesium3DTileset | null>(null);
   const [secondaryTileset, setSecondaryTileset] = useState<Cesium3DTileset | null>(null);
+  const [terrainProvider, setTerrainProvider] = useState<CesiumTerrainProvider | null>(null);
+  const [surfaceProvider, setSurfaceProvider] = useState<CesiumTerrainProvider | null>(null);
+
 
 
   const imageryProvider = new WebMapServiceImageryProvider(
     providerConfig.imageryProvider,
   );
 
-  const values = {
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setTerrainProvider(await CesiumTerrainProvider.fromUrl(providerConfig.terrainProvider.url));
+      } catch (error) {
+        console.error("Failed to load terrain provider:", error);
+      }
+    })();
+  }, [providerConfig.terrainProvider.url]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        providerConfig.surfaceProvider && setSurfaceProvider(await CesiumTerrainProvider.fromUrl(providerConfig.surfaceProvider.url));
+      } catch (error) {
+        console.error("Failed to load terrain provider:", error);
+      }
+    })();
+  }, [providerConfig.surfaceProvider]);
+
+  const values: CesiumContextType = {
     viewer,
     setViewer,
     ellipsoidTerrainProvider: new EllipsoidTerrainProvider(),
-    terrainProvider: CesiumTerrainProvider.fromUrl(
-      providerConfig.terrainProvider.url,
-    ),
+    terrainProvider,
+    surfaceProvider,
     imageryLayer: new ImageryLayer(imageryProvider),
     tilesets: {
       primary: primaryTileset,

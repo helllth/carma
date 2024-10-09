@@ -15,7 +15,7 @@ import { TopicMapContextProvider } from "react-cismap/contexts/TopicMapContextPr
 import { backgroundSettings } from "@carma-collab/wuppertal/geoportal";
 
 import { TweakpaneProvider } from "@carma-commons/debug";
-import { BASEMAP_METROPOLRUHR_WMS_GRAUBLAU, WUPP_TERRAIN_PROVIDER } from "@carma-commons/resources";
+import { BASEMAP_METROPOLRUHR_WMS_GRAUBLAU, WUPP_TERRAIN_PROVIDER, WUPP_TERRAIN_PROVIDER_DSM_MESH_2024_1M } from "@carma-commons/resources";
 import { OverlayTourProvider } from "@carma/libraries/commons/ui/lib-helper-overlay";
 import { CesiumContextProvider } from "@carma-mapping/cesium-engine";
 import type { Layer } from "@carma-mapping/layers";
@@ -143,6 +143,7 @@ function App({ published }: { published?: boolean }) {
           //initialViewerState={defaultCesiumState}
           // TODO move these to store/slice setup ?
           providerConfig={{
+            surfaceProvider: WUPP_TERRAIN_PROVIDER_DSM_MESH_2024_1M,
             terrainProvider: WUPP_TERRAIN_PROVIDER,
             imageryProvider: BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
           }}

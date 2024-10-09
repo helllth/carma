@@ -63,7 +63,7 @@ export function LibFuzzySearch({
     distance: 100,
     threshold: 0.5,
   },
-  cesiumConfig = { isPrimaryStyle: false },
+  cesiumOptions,
 }: SearchGazetteerProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const [showCategories, setSfStandardSearch] = useState(standardSearch);
@@ -77,7 +77,7 @@ export function LibFuzzySearch({
   const autoCompleteRef = useRef<BaseSelectRef | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
-  const { viewer, markerAsset, isPrimaryStyle } = cesiumConfig;
+  const { viewer } = cesiumOptions ?? { viewer: null };
 
   let mapConsumers: MapConsumer[] = [];
   //mapRef && mapConsumers.push(mapRef);
@@ -152,12 +152,12 @@ export function LibFuzzySearch({
       "[SEARCH] selected option",
       option,
       mapRef,
-      cesiumConfig,
+      cesiumOptions,
       mapConsumers,
     );
     topicMapGazetteerHitTrigger([option.sData]); // TODO remove this after carma gazetteer hit trigger also handles LeafletMaps
     carmaHitTrigger([option.sData], mapConsumers, {
-      cesiumConfig,
+      cesiumOptions,
       selectedCesiumEntityData, setSelectedCesiumEntityData
     });
     if (option.sData.type === "bezirke" || option.sData.type === "quartiere") {
@@ -258,15 +258,15 @@ export function LibFuzzySearch({
       setSearchResult([]);
       setOverlayFeature(null);
       setCleanBtnDisable(true);
-      if (cesiumConfig.viewer) {
-        selectedCesiumEntityData && removeCesiumMarker(cesiumConfig.viewer, selectedCesiumEntityData)
+      if (cesiumOptions) {
+        selectedCesiumEntityData && removeCesiumMarker(cesiumOptions.viewer, selectedCesiumEntityData)
         setSelectedCesiumEntityData(null);
-        cesiumConfig.viewer.entities.removeById(SELECTED_POLYGON_ID);
+        cesiumOptions.viewer.entities.removeById(SELECTED_POLYGON_ID);
         removeGroundPrimitiveById(
-          cesiumConfig.viewer,
+          cesiumOptions.viewer,
           INVERTED_SELECTED_POLYGON_ID,
         );
-        cesiumConfig.viewer.scene.render(); // explicit render for requestRenderMode;
+        cesiumOptions.viewer.scene.requestRender(); // explicit render for requestRenderMode;
       }
     }
   };

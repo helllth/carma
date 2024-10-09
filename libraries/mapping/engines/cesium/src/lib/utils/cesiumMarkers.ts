@@ -21,18 +21,19 @@ const defaultOptions = {
 const createOrUpdateStemline = (
   viewer: Viewer,
   entityData: EntityData,
-  pos: Cartographic,
-  options: Partial<PolylineConfig> & { stemLength?: number } = {},
+  [pos, groundPos]: Cartographic[],
+  options: Partial<PolylineConfig> = {},
 ) => {
   const topHeight = pos.height - (options.gap ?? 0);
-  const baseHeight = topHeight - (options.stemLength ?? 30);
+  const baseHeight = groundPos.height + (options.gap ?? 10);
 
-  const posTop = Cartographic.clone(
-    Object.assign({}, pos, { height: topHeight }),
-  );
-  const posBase = Cartographic.clone(
-    Object.assign({}, pos, { height: baseHeight }),
-  );
+  const posTop = pos.clone();
+  posTop.height = topHeight;
+  const posBase = groundPos.clone();
+  posBase.height = baseHeight;
+
+  const posCenter = pos.clone();
+  posCenter.height = baseHeight + (topHeight - baseHeight) * 0.2;
 
   const baseColor =
     options.color?.length === 4 ? new Color(...options.color) : Color.WHITE;
@@ -42,13 +43,14 @@ const createOrUpdateStemline = (
   const material = options.glow
     ? Material.fromType("PolylineGlow", {
         color: baseColor,
-        glowPower: 0.1,
-        taperPower: 0.9,
+        glowPower: 1.0,
+        taperPower: 0.1,
       })
     : colorMaterial;
 
   const positions = viewer.scene.ellipsoid.cartographicArrayToCartesianArray([
     posTop,
+    posCenter,
     posBase,
   ]);
   const width = options.width ?? 4;
@@ -58,19 +60,25 @@ const createOrUpdateStemline = (
     entityData.stemline.width = width;
     entityData.stemline.material = material;
   } else {
-    const polyline = {
-      positions,
+    const [top, center, base] = positions;
+    const polylineTop = {
+      positions: [top, center],
+      width,
+      material,
+    };
+    const polylineBottom = {
+      positions: [base, center],
       width,
       material,
     };
     console.info(
       "[CESIUM|SCENE|POLYLINE] adding Stemline",
-      polyline,
       posTop.height,
       posBase.height,
     );
     const stemlineCollection = new PolylineCollection();
-    stemlineCollection.add(polyline);
+    stemlineCollection.add(polylineTop);
+    stemlineCollection.add(polylineBottom);
     viewer.scene.primitives.add(stemlineCollection);
     entityData.stemline = stemlineCollection;
   }
@@ -79,6 +87,7 @@ const createOrUpdateStemline = (
 export const addCesiumMarker = async (
   viewer: Viewer,
   pos: Cartographic,
+  groundPos: Cartographic,
   modelConfig: ModelAsset, // TODO integrate modelconfig to options
   options: {
     model?: Model;
@@ -139,7 +148,7 @@ export const addCesiumMarker = async (
 
   // Add the stemline if configured
   if (options.stemline || modelConfig.stemline) {
-    createOrUpdateStemline(viewer, entityData, pos, {
+    createOrUpdateStemline(viewer, entityData, [pos, groundPos], {
       ...modelConfig.stemline,
       ...options.stemline,
     });
@@ -246,25 +255,6 @@ const updateMarker = (viewer: Viewer, entityData: EntityData) => {
       }
     }
   }
-
-  if (entityData.stemline) {
-    const modelPosition = new Cartesian3(
-      entityData.animatedModelMatrix[12],
-      entityData.animatedModelMatrix[13],
-      entityData.animatedModelMatrix[14],
-    );
-    createOrUpdateStemline(
-      viewer,
-      entityData,
-      Cartographic.fromCartesian(modelPosition),
-      {
-        color: entityData.modelConfig?.stemline?.color,
-        width: entityData.modelConfig?.stemline?.width,
-        gap: entityData.modelConfig?.stemline?.gap,
-      },
-    );
-  }
-
   return entityData;
 };
 
@@ -278,8 +268,19 @@ export const removeCesiumMarker = (
     data,
   );
   if (data) {
-    data.stemline && viewer.scene.primitives.remove(data.stemline);
-    data.model && viewer.scene.primitives.remove(data.model);
+    // remove listeners before removing the primitives
+    // so no updates are triggered after the primitive is removed
     data.cleanup && data.cleanup();
+    viewer.scene.requestRender();
+    try {
+      data.model && viewer.scene.primitives.remove(data.model);
+    } catch (e) {
+      console.error("[CESIUM|MARKER] error removing model", e);
+    }
+    try {
+      data.stemline && viewer.scene.primitives.remove(data.stemline);
+    } catch (e) {
+      console.error("[CESIUM|MARKER] error removing stemline", e);
+    }
   }
 };

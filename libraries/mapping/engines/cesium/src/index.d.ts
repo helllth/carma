@@ -1,6 +1,6 @@
 // TODO consolidate with rest of libs
 
-import { Color } from "cesium";
+import { Color, TerrainProvider } from "cesium";
 import { hashcodecs } from "./lib/CustomViewer/utils";
 
 type Translation = {
@@ -90,7 +90,16 @@ export type EntityData = {
   cleanup?: Function;
 };
 
-//
+// as used for marker creation and fuzzy search
+export type CesiumOptions = {
+  viewer: Viewer;
+  markerAsset: ModelAsset;
+  isPrimaryStyle: boolean;
+  markerAnchorHeight?: number;
+  pitchAdjustHeight?: number;
+  terrainProvider: TerrainProvider;
+  surfaceProvider: TerrainProvider | null;
+};
 
 type PlainCartesian3 = {
   x: number;

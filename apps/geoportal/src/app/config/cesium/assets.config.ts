@@ -32,7 +32,7 @@ export const MODEL_ASSETS: Record<string, ModelAsset> = {
     isCameraFacing: true,
     fixedScale: true,
     anchorOffset: { z: 0 },
-    stemline: { color: [0.8, 0.8, 0.95, 0.2], width: 40, gap: 0, glow: true },
+    stemline: { color: [0.8, 0.8, 0.95, 0.2], width: 10, gap: 0.5, glow: true },
   },
 
   /*

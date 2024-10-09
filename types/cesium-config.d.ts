@@ -9,6 +9,7 @@ export type CesiumConfig = {
     minPitchRange: number;
   };
   markerKey?: string;
+  markerAnchorHeight?: number;
   baseUrl: string;
   pathName: string;
 };
