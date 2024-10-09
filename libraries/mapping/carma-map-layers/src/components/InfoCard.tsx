@@ -90,10 +90,14 @@ const InfoCard = ({
               <p className="text-base text-gray-600">
                 {parsedDescription.inhalt}
               </p>
-              <h5 className="font-semibold text-lg">Sichtbarkeit</h5>
-              <p className="text-base text-gray-600">
-                {parsedDescription.sichtbarkeit.slice(0, -1)}
-              </p>
+              {parsedDescription.sichtbarkeit.slice(0, -1) !== "öffentlich" && (
+                <>
+                  <h5 className="font-semibold">Sichtbarkeit</h5>
+                  <p className="text-sm">
+                    {parsedDescription.sichtbarkeit.slice(0, -1)}
+                  </p>
+                </>
+              )}
               <h5 className="font-semibold text-lg">Nutzung</h5>
               <p className="text-base text-gray-600">
                 {parsedDescription.nutzung}
