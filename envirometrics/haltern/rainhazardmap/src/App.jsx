@@ -9,13 +9,13 @@ import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/haltern";
 import versionData from "./version.json";
 import config from "./config";
 import "./notification.css";
+import footerLogoUrl from "./assets/images/Signet_AIS_RZ.png";
 
 function App() {
   const version = getApplicationVersion(versionData);
   const email = "starkregen@haltern.de";
   const [gazData, setGazData] = useState([]);
   const urlPrefix = window.location.origin + window.location.pathname;
-  const footerLogoUrl = urlPrefix + "/images/Signet_AIS_RZ.png";
 
   const getGazData = async (setGazData, url) => {
     const prefix = "GazDataForStarkregengefahrenkarteByCismet";
