@@ -260,7 +260,7 @@ const LibItem = ({
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onClick={() => {
-          if (layer.type !== "collection") {
+          if (layer.type === "layer") {
             setSelectedLayerId(showInfo ? null : layer.id);
           }
         }}
