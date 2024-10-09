@@ -664,6 +664,25 @@
         }
       },
       "projectPath": "./dist/envirometrics/haltern/rainhazardmap"
+    },
+    "rainhazardmap-olpe": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "rainhazardmap-olpe"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "rainhazardmap-olpe"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/envirometrics/olpe/rainhazardmap"
     }
   }
 }
