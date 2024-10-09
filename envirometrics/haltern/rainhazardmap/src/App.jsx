@@ -13,7 +13,7 @@ import "./notification.css";
 function App() {
   const version = getApplicationVersion(versionData);
   const email = "starkregen@haltern.de";
-  const footerLogoUrl = "/images/Signet_AIS_RZ.png";
+  const footerLogoUrl = urlPrefix + "/images/Signet_AIS_RZ.png";
   const [gazData, setGazData] = useState([]);
   const urlPrefix = window.location.origin + window.location.pathname;
 
