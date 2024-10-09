@@ -289,7 +289,7 @@ export const LibModal = ({
     if (!isEqual(customCategories, tmpCustomCategories)) {
       setTmpCustomCategories(customCategories);
 
-      let updatedLayers = layers.map((category) => {
+      let updatedLayers = allLayers.map((category) => {
         const title = category.Title;
         customCategories?.forEach((customCategory) => {
           if (customCategory.Title === title) {
@@ -298,7 +298,6 @@ export const LibModal = ({
         });
         return category;
       });
-      setLayers(updatedLayers);
       setAllLayers(updatedLayers);
     }
   }, [customCategories]);
