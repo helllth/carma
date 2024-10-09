@@ -1,5 +1,5 @@
 import { starkregenConstants } from "@cismet-dev/react-cismap-envirometrics-maps/constants";
-
+const urlPrefix = window.location.origin + window.location.pathname;
 const overridingBaseLayerConf = {
   namedStyles: {
     default: { opacity: 0.6 },
@@ -95,17 +95,17 @@ const config = {
   backgrounds: [
     {
       layerkey: "cismetLight@100",
-      src: "/images/rain-hazard-map-bg/citymapGrey.png",
+      src: urlPrefix + "/images/rain-hazard-map-bg/citymapGrey.png",
       title: "Stadtplan (grau)",
     },
     {
       layerkey: "nrwDOP@60|rvr@30",
-      src: "/images/rain-hazard-map-bg/ortho.png",
+      src: urlPrefix + "/images/rain-hazard-map-bg/ortho.png",
       title: "Luftbildkarte",
     },
     {
       layerkey: "dtk@40",
-      src: "/images/rain-hazard-map-bg/dtk.png",
+      src: urlPrefix + "/images/rain-hazard-map-bg/dtk.png",
       title: "DTK (bunt)",
     },
   ],
