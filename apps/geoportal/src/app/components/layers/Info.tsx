@@ -22,14 +22,18 @@ import LayerRow from "./LayerRow";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { layerMap } from "../../config";
 import "./text.css";
+import { useEffect, useState } from "react";
 
 interface InfoProps {
   description: string;
   legend: any;
 }
 
+const parser = new DOMParser();
+
 const Info = ({ description, legend }: InfoProps) => {
   const dispatch = useDispatch();
+  const [metadataText, setMetadataText] = useState("");
   const selectedMapLayer = useSelector(getSelectedMapLayer);
   const activeTabKey = useSelector(getUIActiveTabKey);
   const parsedDescription = parseDescription(description);
@@ -38,6 +42,9 @@ const Info = ({ description, legend }: InfoProps) => {
   const isBaseLayer = selectedLayerIndex === -1;
   const backgroundLayer = useSelector(getBackgroundLayer);
   const currentLayer = layers[selectedLayerIndex];
+  const metadataUrl =
+    // @ts-expect-error fix typing
+    currentLayer?.other?.props?.MetadataURL?.[0]?.OnlineResource;
 
   const getLayerPos = (id) => layers.findIndex((layer) => layer.id === id);
 
@@ -60,6 +67,22 @@ const Info = ({ description, legend }: InfoProps) => {
       dispatch(setBackgroundLayer({ ...selectedMapLayer, id: "karte" }));
     }
   };
+
+  useEffect(() => {
+    if (metadataUrl) {
+      fetch(metadataUrl)
+        .then((response) => {
+          return response.text();
+        })
+        .then((text) => {
+          const result = parser.parseFromString(text, "text/xml");
+          const abstract = result.getElementsByTagName("gmd:abstract")[0];
+          setMetadataText(abstract.textContent);
+        });
+    } else {
+      setMetadataText("");
+    }
+  }, [metadataUrl]);
 
   return (
     <>
@@ -274,7 +297,7 @@ const Info = ({ description, legend }: InfoProps) => {
       ) : (
         <Tabs
           animated={false}
-          items={tabItems(legend, currentLayer)}
+          items={tabItems(legend, currentLayer, metadataText)}
           activeKey={activeTabKey}
           onChange={(key) => dispatch(setUIActiveTabKey(key))}
         />
