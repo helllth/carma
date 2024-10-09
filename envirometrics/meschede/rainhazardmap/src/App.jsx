@@ -16,6 +16,8 @@ import footerLogoUrl from "./assets/images/Signet_AIS_RZ.png";
 function App() {
   const version = getApplicationVersion(versionData);
   const email = "starkregen@meschede.de";
+  const urlPrefix = window.location.origin + window.location.pathname;
+
   const [gazData, setGazData] = useState([]);
   const [gewaesserData, setGewaesserData] = useState([]);
   const [gewInfoShown, setGewInfoShown] = useState(false);
@@ -50,8 +52,8 @@ function App() {
     setGewaesserData(features || []);
   };
   useEffect(() => {
-    getGazData(setGazData, "/data/adressen_meschede.json");
-    getGewData(setGewaesserData, "/data/gewaesser_meschede.json");
+    getGazData(setGazData, urlPrefix + "/data/adressen_meschede.json");
+    getGewData(setGewaesserData, urlPrefix + "/data/gewaesser_meschede.json");
   }, []);
   return (
     <TopicMapContextProvider
