@@ -15,6 +15,7 @@ function App() {
   const email = "starkregen@haltern.de";
   const footerLogoUrl = "/images/Signet_AIS_RZ.png";
   const [gazData, setGazData] = useState([]);
+  const urlPrefix = window.location.origin + window.location.pathname;
 
   const getGazData = async (setGazData, url) => {
     const prefix = "GazDataForStarkregengefahrenkarteByCismet";
@@ -23,7 +24,7 @@ function App() {
     setGazData(data);
   };
   useEffect(() => {
-    getGazData(setGazData, "data/adressen_haltern.json");
+    getGazData(setGazData, urlPrefix + "data/adressen_haltern.json");
   }, []);
   return (
     <TopicMapContextProvider
