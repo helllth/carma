@@ -104,8 +104,6 @@ export const LibModal = ({
         };
       });
 
-      console.log("xxx results", results);
-
       resultsWithCategories.map((category) => {
         const newLayers: any[] = [];
 
@@ -232,7 +230,7 @@ export const LibModal = ({
                 } else {
                   tmp = newLayers;
                 }
-                setLayers(tmp);
+
                 setAllLayers(tmp);
               } else {
                 getDataFromJson(result);
@@ -278,6 +276,14 @@ export const LibModal = ({
   useEffect(() => {
     search(debouncedSearchTerm);
   }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    if (!searchValue) {
+      setLayers(allLayers);
+    } else {
+      search(debouncedSearchTerm);
+    }
+  }, [allLayers]);
 
   useEffect(() => {
     if (!isEqual(customCategories, tmpCustomCategories)) {
