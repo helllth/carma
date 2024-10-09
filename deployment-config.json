@@ -683,6 +683,25 @@
         }
       },
       "projectPath": "./dist/envirometrics/olpe/rainhazardmap"
+    },
+    "rainhazard-emsdetten": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "rainhazard-emsdetten"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "rainhazard-emsdetten"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/envirometrics/emsdetten/rainhazardmap"
     }
   }
 }
