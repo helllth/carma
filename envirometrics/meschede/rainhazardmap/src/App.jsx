@@ -11,10 +11,10 @@ import { getApplicationVersion } from "@carma-commons/utils";
 import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/meschede";
 import meschedeConfig from "./meschede";
 import "./notification.css";
+import footerLogoUrl from "./assets/images/Signet_AIS_RZ.png";
 
 function App() {
   const version = getApplicationVersion(versionData);
-  const footerLogoUrl = "/images/Signet_AIS_RZ.png";
   const email = "starkregen@meschede.de";
   const [gazData, setGazData] = useState([]);
   const [gewaesserData, setGewaesserData] = useState([]);
