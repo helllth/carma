@@ -1,4 +1,7 @@
 import { starkregenConstants } from "@cismet-dev/react-cismap-envirometrics-maps/constants";
+import citymapGrey from "./assets/images/rain-hazard-map-bg/citymapGrey.png";
+import citymapBg from "./assets/images/rain-hazard-map-bg/citymap.png";
+import orthoBg from "./assets/images/rain-hazard-map-bg/ortho.png";
 
 const animationSettingsLookup = {
   17: { pathCorrection: 0.6, velocityScale: 1 / 200, fade: 90 / 100, age: 50 },
@@ -360,17 +363,17 @@ const config = {
   backgrounds: [
     {
       layerkey: "basemap_grey@20",
-      src: "/images/rain-hazard-map-bg/citymapGrey.png",
+      src: citymapGrey,
       title: "Stadtplan (grau)",
     },
     {
       layerkey: "nrwDOP@60|basemap_grey@100",
-      src: "/images/rain-hazard-map-bg/ortho.png",
+      src: orthoBg,
       title: "Luftbildkarte",
     },
     {
       layerkey: "basemap_relief@30",
-      src: "/images/rain-hazard-map-bg/citymap.png",
+      src: citymapBg,
       title: "Stadtplan (bunt)",
     },
   ],
