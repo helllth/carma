@@ -645,6 +645,25 @@
         }
       },
       "projectPath": "./dist/envirometrics/euskirchen/rainhazardmap"
+    },
+    "rainhazardmap-haltern": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "rainhazardmap-haltern"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "rainhazardmap-haltern"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/envirometrics/haltern/rainhazardmap"
     }
   }
 }
