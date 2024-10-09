@@ -14,6 +14,7 @@ import {
   textElementsForOverlays,
 } from "@carma-pecher-collab/euskirchen";
 import NotesDisplay from "./NotesDisplay";
+import footerLogoUrl from "./assets/images/Signet_AIS_RZ.png";
 
 function App() {
   const version = getApplicationVersion(versionData);
@@ -101,7 +102,6 @@ function App() {
     );
     getHinweisData(setHinweisData, urlPrefix + "/data/overlay.json");
   }, []);
-  const footerLogoUrl = urlPrefix + "/images/Signet_AIS_RZ.png";
   return (
     <TopicMapContextProvider
       appKey={"cismetRainhazardMap.Euskirchen"}
