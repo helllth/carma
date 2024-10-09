@@ -9,12 +9,12 @@ import versionData from "./version.json";
 import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/olpe";
 import olpeConfig from "./config";
 import "./notification.css";
+import footerLogoUrl from "./assets/images/Signet_AIS_RZ.png";
 
 function App() {
   const version = getApplicationVersion(versionData);
   const email = "starkregen@olpe.de";
   const urlPrefix = window.location.origin + window.location.pathname;
-  const footerLogoUrl = urlPrefix + "/images/Signet_AIS_RZ.png";
   const [gazData, setGazData] = useState([]);
 
   const getGazData = async (setGazData, url) => {
