@@ -100,6 +100,12 @@ const LayerButton = ({
   }, [inView, selectedLayerIndex]);
 
   useEffect(() => {
+    if (index === layersLength - 1 && inView) {
+      dispatch(setShowRightScrollButton(false));
+    }
+  }, [layersLength]);
+
+  useEffect(() => {
     map?.eachLayer((leafletLayer) => {
       if (
         // @ts-ignore
