@@ -80,7 +80,7 @@ const Info = ({ description, legend }: InfoProps) => {
           setMetadataText(abstract.textContent);
         });
     } else {
-      setMetadataText("");
+      setMetadataText("keine Verknüpfung zum Metadatenkatalog vorhanden");
     }
   }, [metadataUrl]);
 
