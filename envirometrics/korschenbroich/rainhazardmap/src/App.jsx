@@ -16,8 +16,8 @@ import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/korschenbro
 
 function App() {
   const email = "yvonne.tuerks@korschenbroich.de";
+  const urlPrefix = window.location.origin + window.location.pathname;
   const [hinweisShown, setHinweisShown] = useState(false);
-
   const [gazData, setGazData] = useState([]);
   const version = getApplicationVersion(versionData);
   const getGazData = async (setGazData, url) => {
@@ -27,7 +27,7 @@ function App() {
   };
 
   useEffect(() => {
-    getGazData(setGazData, "/data/adressen_korschenbroich.json");
+    getGazData(setGazData, urlPrefix + "/data/adressen_korschenbroich.json");
   }, []);
 
   return (

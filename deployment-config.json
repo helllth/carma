@@ -408,8 +408,9 @@
         },
         "auto": {
           "dev": {
-            "container": {
-              "image": "cismet/carma-ais-korschenbroich:dev"
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "rainhazardmap-korschenbroich"
             }
           }
         }
