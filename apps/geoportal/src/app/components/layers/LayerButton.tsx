@@ -56,6 +56,13 @@ const LayerButton = ({
 }: LayerButtonProps) => {
   const { ref, inView } = useInView({
     threshold: 0.99,
+    onChange: (inView) => {
+      if (index === 0) {
+        dispatch(setShowLeftScrollButton(!inView));
+      } else if (index === layersLength - 1) {
+        dispatch(setShowRightScrollButton(!inView));
+      }
+    },
   });
   const dispatch = useDispatch();
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
@@ -87,18 +94,6 @@ const LayerButton = ({
   const map = routedMapRef?.leafletMap?.leafletElement as L.Map;
 
   useEffect(() => {
-    if (!inView && index === 0) {
-      dispatch(setShowLeftScrollButton(true));
-    }
-    if (!inView && index === layersLength - 1) {
-      dispatch(setShowRightScrollButton(true));
-    }
-    if (inView && index === 0) {
-      dispatch(setShowLeftScrollButton(false));
-    }
-    if (inView && index === layersLength - 1) {
-      dispatch(setShowRightScrollButton(false));
-    }
     if (!inView && selectedLayerIndex === index) {
       document.getElementById(`layer-${id}`).scrollIntoView();
     }
