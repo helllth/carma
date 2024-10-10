@@ -721,6 +721,25 @@
         }
       },
       "projectPath": "./dist/envirometrics/meschede/rainhazardmap"
+    },
+    "rainhazardmap-paderborn": {
+      "deployment": {
+        "manual": {
+          "pages": {
+            "org": "carma-dev-deployments",
+            "prj": "rainhazardmap-paderborn"
+          }
+        },
+        "auto": {
+          "dev": {
+            "pages": {
+              "org": "carma-dev-deployments",
+              "prj": "rainhazardmap-paderborn"
+            }
+          }
+        }
+      },
+      "projectPath": "./dist/envirometrics/paderborn/rainhazardmap"
     }
   }
 }

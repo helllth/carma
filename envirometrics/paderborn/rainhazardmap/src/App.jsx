@@ -9,12 +9,12 @@ import versionData from "./version.json";
 import { getCollabedHelpComponentConfig } from "@carma-pecher-collab/paderborn";
 import { getApplicationVersion } from "@carma-commons/utils";
 import "./notification.css";
+import footerLogoUrl from "./assets/images/Signet_AIS_RZ.png";
 
 function App() {
   const appKey = "cismetRainhazardMap.Paderborn";
   const email = "starkregen@paderborn.de";
   const version = getApplicationVersion(versionData);
-  const footerLogoUrl = "/images/Signet_AIS_RZ.png";
   const [gazData, setGazData] = useState([]);
 
   const getGazData = async (setGazData, url) => {

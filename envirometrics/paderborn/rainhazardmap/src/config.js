@@ -1,4 +1,7 @@
 import { starkregenConstants } from "@cismet-dev/react-cismap-envirometrics-maps/constants";
+import citymapGrey from "./assets/images/rain-hazard-map-bg/citymapGrey.18b.png";
+import orthoBg from "./assets/images/rain-hazard-map-bg/ortho.18.png";
+import citymapBg from "./assets/images/rain-hazard-map-bg/citymap.18.png";
 
 const overridingBaseLayerConf = {
   namedStyles: {
@@ -318,18 +321,18 @@ const config = {
   backgrounds: [
     {
       layerkey: "cismetLight@100",
-      src: "/images/rain-hazard-map-bg/citymapGrey.18b.png",
+      src: citymapGrey,
       title: "Stadtplan (grau)",
     },
     {
       layerkey: "nrwDOP@60|rvr@30",
       layerkey_: "rvr@60",
-      src: "/images/rain-hazard-map-bg/ortho.18.png",
+      src: orthoBg,
       title: "Luftbildkarte",
     },
     {
       layerkey: "dtk@40",
-      src: "/images/rain-hazard-map-bg/citymap.18.png",
+      src: citymapBg,
       title: "DTK (bunt)",
     },
   ],
