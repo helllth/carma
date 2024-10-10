@@ -85,7 +85,7 @@ export const createUrl = (baseUrl, pos, minimalBoxSize, layerName) => {
   return url;
 };
 
-export const getFeatureForLayer = async (layer, pos) => {
+export const getFeatureForLayer = async (layer, pos, coordinates) => {
   const props = layer.props as LayerProps;
   const minimalBoxSize = 1;
   const url = createUrl(
@@ -144,6 +144,10 @@ export const getFeatureForLayer = async (layer, pos) => {
               icon: <FeatureInfoIcon />,
             },
           ]),
+        },
+        geometry: {
+          type: "Point",
+          coordinates,
         },
         id: layer.id,
       };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import InfoBox from "react-cismap/topicmaps/InfoBox";
@@ -19,6 +19,10 @@ import { getLayers } from "../../store/slices/mapping";
 import { truncateString } from "./featureInfoHelper";
 
 import "../infoBox.css";
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
+
+import { getCoordinates } from "../GeoportalMap/topicmap.utils";
+import envelope from "@turf/envelope";
 
 const FeatureInfoBox = () => {
   const [open, setOpen] = useState(false);
@@ -28,12 +32,39 @@ const FeatureInfoBox = () => {
   const numOfLayers = useSelector(getLayers).length;
   const infoText = useSelector(getInfoText);
 
+  const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
+
   let links = [];
   if (selectedFeature) {
     links = getActionLinksForFeature(selectedFeature, {
       displaySecondaryInfoAction: !!selectedFeature?.properties?.modal,
       setVisibleStateOfSecondaryInfo: () => {
         setOpen(true);
+      },
+      displayZoomToFeature: true,
+      zoomToFeature: () => {
+        if (selectedFeature.geometry) {
+          const type = selectedFeature.geometry.type;
+          if (type === "Point") {
+            const coordinates = getCoordinates(selectedFeature.geometry);
+
+            if (routedMapRef) {
+              routedMapRef.leafletMap.leafletElement.setView(
+                [coordinates[1], coordinates[0]],
+                20,
+              );
+            }
+          } else {
+            const bbox = envelope(selectedFeature.geometry).bbox;
+
+            if (routedMapRef) {
+              routedMapRef.leafletMap.leafletElement.fitBounds([
+                [bbox[3], bbox[2]],
+                [bbox[1], bbox[0]],
+              ]);
+            }
+          }
+        }
       },
     });
   }

@@ -139,7 +139,10 @@ export const onClickTopicMap = async (
             return results;
           }
 
-          const feature = await getFeatureForLayer(testLayer, pos);
+          const feature = await getFeatureForLayer(testLayer, pos, [
+            e.latlng.lng,
+            e.latlng.lat,
+          ]);
 
           if (feature) {
             return feature;
@@ -192,7 +195,7 @@ const checkIfLayerIsFirst = (layer: Layer, layers: Layer[]) => {
   return layers.findIndex((l) => l.id === layer.id) === firstVectorLayerIndex;
 };
 
-const getCoordinates = (geometry) => {
+export const getCoordinates = (geometry) => {
   switch (geometry.type) {
     case "Polygon":
       return geometry.coordinates[0][0];
@@ -263,6 +266,7 @@ const onSelectionChangedVector = (
             },
           ]),
         },
+        geometry: selectedVectorFeature.geometry,
         id: layer.id,
         showMarker: selectedVectorFeature.geometry.type === "Polygon",
       };
