@@ -15,6 +15,8 @@ function App() {
   const appKey = "cismetRainhazardMap.Paderborn";
   const email = "starkregen@paderborn.de";
   const version = getApplicationVersion(versionData);
+  const urlPrefix = window.location.origin + window.location.pathname;
+
   const [gazData, setGazData] = useState([]);
 
   const getGazData = async (setGazData, url) => {
@@ -24,7 +26,7 @@ function App() {
     setGazData(data);
   };
   useEffect(() => {
-    getGazData(setGazData, "/data/adressen_paderborn.json");
+    getGazData(setGazData, urlPrefix + "/data/adressen_paderborn.json");
   }, []);
   return (
     <TopicMapContextProvider
