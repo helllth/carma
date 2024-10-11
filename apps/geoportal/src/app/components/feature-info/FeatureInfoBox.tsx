@@ -51,7 +51,9 @@ const FeatureInfoBox = () => {
             if (routedMapRef) {
               routedMapRef.leafletMap.leafletElement.setView(
                 [coordinates[1], coordinates[0]],
-                20,
+                selectedFeature.properties.zoom
+                  ? selectedFeature.properties.zoom
+                  : 20,
               );
             }
           } else {

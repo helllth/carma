@@ -110,10 +110,17 @@ export const getFeatureForLayer = async (layer, pos, coordinates) => {
   let output = "";
 
   let result = "";
+  let featureInfoZoom = 20;
   layer.other.keywords.forEach((keyword) => {
     const extracted = keyword.split("carmaconf://infoBoxMapping:")[1];
+    const zoom = keyword.split("carmaConf://featureInfoZoom:")[1];
+
     if (extracted) {
       result += extracted + "\n";
+    }
+
+    if (zoom) {
+      featureInfoZoom = parseInt(zoom);
     }
   });
 
@@ -144,6 +151,7 @@ export const getFeatureForLayer = async (layer, pos, coordinates) => {
               icon: <FeatureInfoIcon />,
             },
           ]),
+          zoom: featureInfoZoom,
         },
         geometry: {
           type: "Point",

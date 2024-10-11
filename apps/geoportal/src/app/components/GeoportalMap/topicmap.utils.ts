@@ -242,10 +242,17 @@ const onSelectionChangedVector = (
 
     const properties = selectedVectorFeature.properties;
     let result = "";
+    let featureInfoZoom = 20;
     layer.other.keywords.forEach((keyword) => {
       const extracted = keyword.split("carmaconf://infoBoxMapping:")[1];
+      const zoom = keyword.split("carmaConf://featureInfoZoom:")[1];
+
       if (extracted) {
         result += extracted + "\n";
+      }
+
+      if (zoom) {
+        featureInfoZoom = parseInt(zoom);
       }
     });
 
@@ -265,6 +272,7 @@ const onSelectionChangedVector = (
               icon: createElement(FeatureInfoIcon),
             },
           ]),
+          zoom: featureInfoZoom,
         },
         geometry: selectedVectorFeature.geometry,
         id: layer.id,
