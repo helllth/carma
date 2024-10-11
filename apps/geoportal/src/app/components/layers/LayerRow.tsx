@@ -5,6 +5,7 @@ import {
   faEyeSlash,
   faGripVertical,
   faLayerGroup,
+  faMap,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Slider } from "antd";
@@ -60,7 +61,7 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
           </div>
         ) : (
           <FontAwesomeIcon
-            icon={icon ? iconMap[icon] : faLayerGroup}
+            icon={icon ? iconMap[icon] : faMap}
             className="text-base"
             style={{ color: iconColorMap[icon] }}
             id="icon"
