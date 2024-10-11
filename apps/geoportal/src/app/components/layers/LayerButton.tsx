@@ -3,8 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 import {
   faEye,
   faEyeSlash,
-  faInfo,
-  faLayerGroup,
+  faMap,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -179,7 +178,7 @@ const LayerButton = ({
           </div>
         ) : (
           <FontAwesomeIcon
-            icon={icon ? iconMap[icon] : faLayerGroup}
+            icon={icon ? iconMap[icon] : faMap}
             className="text-base"
             style={{ color: iconColorMap[icon] }}
             id="icon"
@@ -197,7 +196,7 @@ const LayerButton = ({
 
         {!background && (
           <>
-            <span className="text-base pt-0.5">{title}</span>
+            <span className="text-base">{title}</span>
             <button
               className="hover:text-gray-500 text-gray-600 flex items-center justify-center"
               onClick={(e) => {

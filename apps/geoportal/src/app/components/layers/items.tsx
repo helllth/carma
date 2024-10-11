@@ -2,7 +2,7 @@ import { Layer } from "@carma-mapping/layers";
 import {
   faCircle,
   faGlobe,
-  faMap,
+  faLayerGroup,
   faSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -61,7 +61,7 @@ export const iconMap = {
   bäume: faCircle,
   gärten: faSquare,
   ortho: faGlobe,
-  background: faMap,
+  background: faLayerGroup,
 };
 
 export const iconColorMap = {

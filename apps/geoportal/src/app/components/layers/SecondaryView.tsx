@@ -5,8 +5,8 @@ import {
   faChevronRight,
   faEye,
   faEyeSlash,
-  faInfo,
   faLayerGroup,
+  faMap,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Slider } from "antd";
@@ -125,7 +125,9 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                 </div>
               ) : (
                 <FontAwesomeIcon
-                  icon={icon ? iconMap[icon] : faLayerGroup}
+                  icon={
+                    icon ? iconMap[icon] : isBaseLayer ? faLayerGroup : faMap
+                  }
                   className="text-base"
                   style={{ color: iconColorMap[icon] }}
                   id="icon"
