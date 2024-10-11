@@ -61,7 +61,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
     : layer.title.includes("gärten")
     ? "gärten"
     : undefined;
-  const background = selectedLayerIndex === -1;
+  const isBaseLayer = selectedLayerIndex === -1;
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -132,7 +132,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                 />
               )}
               <label className="mb-0 text-base w-full truncate" htmlFor="icon">
-                {layer.title}
+                {isBaseLayer ? "Hintergrund" : layer.title}
               </label>
             </div>
             <div className="w-full flex items-center gap-2">
@@ -140,7 +140,7 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
                 Transparenz:
               </label>
               <Slider
-                disabled={background}
+                disabled={isBaseLayer}
                 tooltip={{ formatter }}
                 onFocus={() => {
                   routedMapRef?.leafletMap?.leafletElement.dragging.disable();
