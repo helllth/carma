@@ -14,10 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { cn } from "../../helper/helper";
 import {
   changeVisibility,
+  getClickFromInfoView,
   getLayers,
   getSelectedLayerIndex,
   getShowLeftScrollButton,
   removeLayer,
+  setClickFromInfoView,
   setSelectedLayerIndex,
   setShowLeftScrollButton,
   setShowRightScrollButton,
@@ -69,6 +71,7 @@ const LayerButton = ({
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const showLayerHideButtons = useSelector(getUIShowLayerHideButtons);
   const showLeftScrollButton = useSelector(getShowLeftScrollButton);
+  const clickFromInfoView = useSelector(getClickFromInfoView);
   const mode = useSelector(getUIMode);
   const showSettings = index === selectedLayerIndex;
   const layersLength = useSelector(getLayers).length;
@@ -142,7 +145,11 @@ const LayerButton = ({
         ref={setNodeRef}
         onClick={(e) => {
           e.stopPropagation();
-          dispatch(setSelectedLayerIndex(showSettings ? -2 : index));
+          if (!clickFromInfoView) {
+            dispatch(setSelectedLayerIndex(showSettings ? -2 : index));
+          } else {
+            dispatch(setClickFromInfoView(false));
+          }
         }}
         style={style}
         {...listeners}

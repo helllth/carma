@@ -123,6 +123,7 @@ export interface MappingState extends LayerState {
   showHamburgerMenu: boolean;
   focusMode: boolean;
   startDrawing: boolean;
+  clickFromInfoView: boolean;
 }
 
 export type FeatureInfo = {

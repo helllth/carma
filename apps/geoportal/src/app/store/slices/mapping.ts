@@ -51,6 +51,7 @@ const initialState: MappingState = {
   showHamburgerMenu: false,
   focusMode: false,
   startDrawing: false,
+  clickFromInfoView: false,
 };
 
 const slice = createSlice({
@@ -190,6 +191,9 @@ const slice = createSlice({
     setStartDrawing(state, action: PayloadAction<boolean>) {
       state.startDrawing = action.payload;
     },
+    setClickFromInfoView(state, action: PayloadAction<boolean>) {
+      state.clickFromInfoView = action.payload;
+    },
   },
 });
 
@@ -219,6 +223,7 @@ export const {
   setFocusMode,
   setStartDrawing,
   toggleUseInFeatureInfo,
+  setClickFromInfoView,
 } = slice.actions;
 
 export const getLayers = (state: RootState) => {
@@ -280,4 +285,8 @@ export const getFocusMode = (state: RootState) => {
 
 export const getStartDrawing = (state: RootState) => {
   return state.mapping.startDrawing;
+};
+
+export const getClickFromInfoView = (state: RootState) => {
+  return state.mapping.clickFromInfoView;
 };

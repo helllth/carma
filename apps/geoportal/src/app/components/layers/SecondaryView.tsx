@@ -21,6 +21,7 @@ import {
   getBackgroundLayer,
   getLayers,
   getSelectedLayerIndex,
+  setClickFromInfoView,
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
   setSelectedLayerIndex,
@@ -33,6 +34,7 @@ import {
 } from "../../store/slices/ui";
 import Info from "./Info";
 import { iconColorMap, iconMap } from "./items";
+import store from "../../store";
 
 type Ref = HTMLDivElement;
 
@@ -65,8 +67,25 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
+      let newLayerIndex = -2;
+      const layerButtons = document.querySelectorAll('[id^="layer-"]');
+
+      layerButtons.forEach((layerButton, i) => {
+        if (layerButton.contains(event.target as Node)) {
+          newLayerIndex = i - 1;
+        }
+      });
       if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
-        dispatch(setSelectedLayerIndex(-2));
+        const currentLayerIndex = getSelectedLayerIndex(store.getState());
+
+        dispatch(
+          setSelectedLayerIndex(
+            newLayerIndex === currentLayerIndex ? -2 : newLayerIndex,
+          ),
+        );
+        if (newLayerIndex !== -2) {
+          dispatch(setClickFromInfoView(true));
+        }
       }
     };
     document.addEventListener("mousedown", handleOutsideClick);
