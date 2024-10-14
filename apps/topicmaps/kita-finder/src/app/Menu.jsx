@@ -26,6 +26,7 @@ import {
   getFeatureRenderingOption,
   setFeatureRenderingOption,
 } from "./store/slices/ui";
+import { constants as kitasConstants } from "./helper/constants";
 
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];
@@ -119,13 +120,13 @@ const Menu = () => {
                   onClick={(e) => {
                     dispatch(
                       setFeatureRenderingOption(
-                        "KITAS/CONSTS/FEATURE_RENDERING_BY_TRAEGERTYP",
+                        kitasConstants.FEATURE_RENDERING_BY_TRAEGERTYP,
                       ),
                     );
                   }}
                   checked={
                     featureRenderingOption ===
-                    "KITAS/CONSTS/FEATURE_RENDERING_BY_TRAEGERTYP"
+                    kitasConstants.FEATURE_RENDERING_BY_TRAEGERTYP
                   }
                   inline
                   label="nach Trägertyp"
@@ -138,13 +139,13 @@ const Menu = () => {
                   onClick={(e) => {
                     dispatch(
                       setFeatureRenderingOption(
-                        "KITAS/CONSTS/FEATURE_RENDERING_BY_PROFIL",
+                        kitasConstants.FEATURE_RENDERING_BY_PROFIL,
                       ),
                     );
                   }}
                   checked={
                     featureRenderingOption ===
-                    "KITAS/CONSTS/FEATURE_RENDERING_BY_PROFIL"
+                    kitasConstants.FEATURE_RENDERING_BY_PROFIL
                   }
                   inline
                   label="nach Profil (Inklusionsschwerpunkt j/n)"
