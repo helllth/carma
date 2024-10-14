@@ -1,11 +1,9 @@
 import Color from "color";
-import ColorHash from "color-hash";
 import createSVGPie from "create-svg-pie";
 import L from "leaflet";
-import queryString from "query-string";
 import createElement from "svg-create-element";
 
-import { POI_COLORS, constants } from "./constants";
+import { constants } from "./constants";
 
 const fallbackSVG = `
     <svg xmlns="http://www.w3.org/2000/svg" width="311.668" height="311.668">
@@ -160,36 +158,23 @@ export const getColorForProperties = (properties, featureRendering) => {
     } else {
       return "#<a>&lt;&lt;</a><a>&lt;&lt;</a>";
     }
-  } else if (featureRendering === constants.FEATURE_RENDERING_BY_TRAEGERTYP2) {
-    const lookup = opts[1];
-    const color = lookup[properties.traegertyp];
-    if (color) {
-      return color;
-    } else {
-      return "#<a>&lt;&lt;</a><a>&lt;&lt;</a>";
-    }
-  } else if (featureRendering === constants.FEATURE_RENDERING_BY_TRAEGERTYP3) {
-    const lookup = opts[2];
-    const color = lookup[properties.traegertyp];
-    if (color) {
-      return color;
-    } else {
-      return "#<a>&lt;&lt;</a><a>&lt;&lt;</a>";
-    }
   } else {
-    return "#333333";
+    return "#00B4CC";
   }
 };
 
 export const getFeatureStyler = (
   svgSize = 24,
   colorizer = getColorForProperties,
+  appMode,
+  secondarySelection,
   additionalStylingInfo,
 ) => {
-  const featureRenderingOptions = "KITAS/CONSTS/FEATURE_RENDERING_BY_PROFIL";
+  const featureRenderingOption = additionalStylingInfo.featureRenderingOption;
 
   return (feature) => {
-    var color = Color(colorizer(feature.properties, featureRenderingOptions));
+    var color = Color(colorizer(feature.properties, featureRenderingOption));
+
     let radius = svgSize / 2; //needed for the Tooltip Positioning
     let canvasSize = svgSize;
     if (feature.selected) {
@@ -205,16 +190,10 @@ export const getFeatureStyler = (
                     <style>
                     /* <![CDATA[ */
                         #badgefor_${feature.id} .bg-fill  {
-                            fill: ${colorizer(
-                              feature.properties,
-                              featureRenderingOptions,
-                            )};
+                            fill: ${color};
                         }
                         #badgefor_${feature.id} .bg-stroke  {
-                            stroke: ${colorizer(
-                              feature.properties,
-                              featureRenderingOptions,
-                            )};
+                            stroke: ${color};
                         }
                         #badgefor_${feature.id} .fg-fill  {
                             fill: white;
@@ -246,16 +225,10 @@ export const getFeatureStyler = (
                     <style>
                     /* <![CDATA[ */
                         #badgefor_${feature.id} .bg-fill  {
-                            fill: ${colorizer(
-                              feature.properties,
-                              featureRenderingOptions,
-                            )};
+                            fill: ${color};
                         }
                         #badgefor_${feature.id} .bg-stroke  {
-                            stroke: ${colorizer(
-                              feature.properties,
-                              featureRenderingOptions,
-                            )};
+                            stroke: ${color};
                         }
                         #badgefor_${feature.id} .fg-fill  {
                             fill: white;

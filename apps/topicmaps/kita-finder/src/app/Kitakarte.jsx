@@ -1,10 +1,5 @@
-import React from "react";
 import { useContext, useEffect, useState } from "react";
-import {
-  FeatureCollectionContext,
-  FeatureCollectionDispatchContext,
-} from "react-cismap/contexts/FeatureCollectionContextProvider";
-import { LightBoxContext } from "react-cismap/contexts/LightBoxContextProvider";
+import { FeatureCollectionDispatchContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
 import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
 import FeatureCollection from "react-cismap/FeatureCollection";
 import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
@@ -17,19 +12,14 @@ import {
   InfoBoxTextContent,
   InfoBoxTextTitle,
 } from "@carma-collab/wuppertal/kita-finder";
-import { useSelector } from "react-redux";
-import { getFeatureRenderingOption } from "./store/slices/ui";
 
-const Stadtplankarte = () => {
+const KitaKarte = () => {
   const [gazData, setGazData] = useState([]);
   const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
     FeatureCollectionDispatchContext,
   );
 
-  const { markerSymbolSize } = useContext(TopicMapStylingContext);
-  const { clusteringOptions } = useContext(FeatureCollectionContext);
-
-  const featureRenderingOption = useSelector(getFeatureRenderingOption);
+  const { additionalStylingInfo } = useContext(TopicMapStylingContext);
 
   useEffect(() => {
     getGazData(setGazData);
@@ -68,9 +58,11 @@ const Stadtplankarte = () => {
         />
       }
     >
-      <FeatureCollection></FeatureCollection>
+      <FeatureCollection
+        key={`feature_${additionalStylingInfo.featureRenderingOption}`}
+      ></FeatureCollection>
     </TopicMapComponent>
   );
 };
 
-export default Stadtplankarte;
+export default KitaKarte;
