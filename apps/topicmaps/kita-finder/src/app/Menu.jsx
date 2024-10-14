@@ -117,6 +117,7 @@ const Menu = () => {
                 <Form.Check
                   type="radio"
                   readOnly={true}
+                  id="radio_traegertyp"
                   onClick={(e) => {
                     dispatch(
                       setFeatureRenderingOption(
@@ -136,6 +137,7 @@ const Menu = () => {
                 <Form.Check
                   type="radio"
                   readOnly={true}
+                  id="radio_profil"
                   onClick={(e) => {
                     dispatch(
                       setFeatureRenderingOption(
