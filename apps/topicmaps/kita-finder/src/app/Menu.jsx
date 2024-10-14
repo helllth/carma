@@ -20,6 +20,12 @@ import {
 } from "@carma-collab/wuppertal/kita-finder";
 import versionData from "../version.json";
 import { getApplicationVersion } from "@carma-commons/utils";
+import { Form } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getFeatureRenderingOption,
+  setFeatureRenderingOption,
+} from "./store/slices/ui";
 
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];
@@ -41,6 +47,9 @@ const Menu = () => {
   );
 
   const { items } = useContext(FeatureCollectionContext);
+
+  const dispatch = useDispatch();
+  const featureRenderingOption = useSelector(getFeatureRenderingOption);
 
   if ((filterState === undefined) & (items !== undefined)) {
     setFilterState(getDefaultFilterConfiguration(itemsDictionary?.lebenslagen));
@@ -88,7 +97,61 @@ const Menu = () => {
             sectionBsStyle={FilterStyle}
             sectionContent={<FilterUI />}
           />,
-          <DefaultSettingsPanel key="settings" />,
+          <DefaultSettingsPanel
+            key="settings"
+            sparseSettingsSectionsExtensions={[
+              ,
+              <Form>
+                <label
+                  style={{
+                    display: "inline-block",
+                    maxWidth: "100%",
+                    marginBottom: "5px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Zeichenvorschrift
+                </label>
+                <br />
+                <Form.Check
+                  type="radio"
+                  readOnly={true}
+                  onClick={(e) => {
+                    dispatch(
+                      setFeatureRenderingOption(
+                        "KITAS/CONSTS/FEATURE_RENDERING_BY_TRAEGERTYP",
+                      ),
+                    );
+                  }}
+                  checked={
+                    featureRenderingOption ===
+                    "KITAS/CONSTS/FEATURE_RENDERING_BY_TRAEGERTYP"
+                  }
+                  inline
+                  label="nach Trägertyp"
+                />
+
+                <br />
+                <Form.Check
+                  type="radio"
+                  readOnly={true}
+                  onClick={(e) => {
+                    dispatch(
+                      setFeatureRenderingOption(
+                        "KITAS/CONSTS/FEATURE_RENDERING_BY_PROFIL",
+                      ),
+                    );
+                  }}
+                  checked={
+                    featureRenderingOption ===
+                    "KITAS/CONSTS/FEATURE_RENDERING_BY_PROFIL"
+                  }
+                  inline
+                  label="nach Profil (Inklusionsschwerpunkt j/n)"
+                />
+              </Form>,
+            ]}
+          />,
           <KompaktanleitungSection />,
           <GenericDigitalTwinReferenceSection />,
         ]}
