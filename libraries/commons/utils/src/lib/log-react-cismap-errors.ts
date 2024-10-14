@@ -18,6 +18,7 @@ export const suppressReactCismapErrors = () => {
   console.warn = (message, ...args) => {
     if (
       message &&
+      message.includes &&
       WARN_MESSAGE_PATTERNS.some((pattern) => message.includes(pattern))
     ) {
       if (suppressedCount % LOG_INTERVAL === 0) {
@@ -30,7 +31,7 @@ export const suppressReactCismapErrors = () => {
   };
 
   console.error = (message, ...args) => {
-    if (args.some((arg) => arg && arg.includes(REACT_CISMAP))) {
+    if (args.some((arg) => arg && arg.includes && arg.includes(REACT_CISMAP))) {
       if (suppressedCount % LOG_INTERVAL === 0) {
         originalError(LOG_MESSAGE);
       }
