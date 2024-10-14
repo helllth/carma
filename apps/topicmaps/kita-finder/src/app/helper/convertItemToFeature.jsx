@@ -42,7 +42,7 @@ const getHoursString = (properties) => {
   }
 };
 
-const convertItemToFeature = async (itemIn, poiColors) => {
+const convertItemToFeature = async (itemIn, featureRenderingOption) => {
   let clonedItem = JSON.parse(
     JSON.stringify({
       ...itemIn,
@@ -59,7 +59,9 @@ const convertItemToFeature = async (itemIn, poiColors) => {
   );
 
   let item = await addSVGToProps(clonedItem, (i) => getSignature(i));
-  const headerColor = Color(getColorForProperties(item, poiColors));
+  const headerColor = Color(
+    getColorForProperties(item, featureRenderingOption),
+  );
   const alter = getAgeString(item);
   const stunden = getHoursString(item);
   const info = {
@@ -119,9 +121,3 @@ const convertItemToFeature = async (itemIn, poiColors) => {
 };
 
 export default convertItemToFeature;
-
-export const getConvertItemToFeatureWithPOIColors = (poiColors) => {
-  return async (itemIn) => {
-    return await convertItemToFeature(itemIn, poiColors);
-  };
-};
