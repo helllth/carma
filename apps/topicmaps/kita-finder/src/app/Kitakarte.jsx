@@ -1,5 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { FeatureCollectionDispatchContext } from "react-cismap/contexts/FeatureCollectionContextProvider";
+import {
+  FeatureCollectionContext,
+  FeatureCollectionDispatchContext,
+} from "react-cismap/contexts/FeatureCollectionContextProvider";
 import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
 import FeatureCollection from "react-cismap/FeatureCollection";
 import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
@@ -12,18 +15,31 @@ import {
   InfoBoxTextContent,
   InfoBoxTextTitle,
 } from "@carma-collab/wuppertal/kita-finder";
+import { getClusterIconCreatorFunction } from "./helper/styler";
 
 const KitaKarte = () => {
   const [gazData, setGazData] = useState([]);
   const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
     FeatureCollectionDispatchContext,
   );
+  const { clusteringOptions } = useContext(FeatureCollectionContext);
 
   const { additionalStylingInfo } = useContext(TopicMapStylingContext);
 
   useEffect(() => {
     getGazData(setGazData);
   }, []);
+
+  useEffect(() => {
+    if (additionalStylingInfo) {
+      setClusteringOptions({
+        ...clusteringOptions,
+        iconCreateFunction: getClusterIconCreatorFunction({
+          featureRenderingOption: additionalStylingInfo.featureRenderingOption,
+        }),
+      });
+    }
+  }, [additionalStylingInfo]);
 
   return (
     <TopicMapComponent
