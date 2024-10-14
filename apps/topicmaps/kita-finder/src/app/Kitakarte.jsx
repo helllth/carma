@@ -10,7 +10,6 @@ import FeatureCollection from "react-cismap/FeatureCollection";
 import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
 import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
 import { getGazData } from "./helper/helper";
-import { getPoiClusterIconCreatorFunction } from "./helper/styler";
 import Menu from "./Menu";
 import {
   searchTextPlaceholder,
@@ -18,32 +17,23 @@ import {
   InfoBoxTextContent,
   InfoBoxTextTitle,
 } from "@carma-collab/wuppertal/kita-finder";
+import { useSelector } from "react-redux";
+import { getFeatureRenderingOption } from "./store/slices/ui";
 
-const Stadtplankarte = ({ poiColors }) => {
+const Stadtplankarte = () => {
   const [gazData, setGazData] = useState([]);
   const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
     FeatureCollectionDispatchContext,
   );
-  const lightBoxContext = useContext(LightBoxContext);
+
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
-  const { clusteringOptions, selectedFeature } = useContext(
-    FeatureCollectionContext,
-  );
+  const { clusteringOptions } = useContext(FeatureCollectionContext);
+
+  const featureRenderingOption = useSelector(getFeatureRenderingOption);
+
   useEffect(() => {
     getGazData(setGazData);
   }, []);
-
-  useEffect(() => {
-    if (markerSymbolSize) {
-      setClusteringOptions({
-        ...clusteringOptions,
-        iconCreateFunction: getPoiClusterIconCreatorFunction({
-          svgSize: markerSymbolSize,
-          poiColors,
-        }),
-      });
-    }
-  }, [markerSymbolSize]);
 
   return (
     <TopicMapComponent
