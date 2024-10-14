@@ -42,7 +42,7 @@ const getHoursString = (properties) => {
   }
 };
 
-const convertItemToFeature = async (itemIn, featureRenderingOption) => {
+const convertItemToFeature = async (itemIn) => {
   let clonedItem = JSON.parse(
     JSON.stringify({
       ...itemIn,
@@ -59,9 +59,7 @@ const convertItemToFeature = async (itemIn, featureRenderingOption) => {
   );
 
   let item = await addSVGToProps(clonedItem, (i) => getSignature(i));
-  const headerColor = Color(
-    getColorForProperties(item, featureRenderingOption),
-  );
+  const headerColor = Color(getColorForProperties(item));
   const alter = getAgeString(item);
   const stunden = getHoursString(item);
   const info = {
@@ -97,7 +95,7 @@ const convertItemToFeature = async (itemIn, featureRenderingOption) => {
     ),
   };
   item.info = info;
-  item.color = headerColor;
+  // item.color = headerColor;
   const id = item.id;
   const type = "Feature";
   const selected = false;
