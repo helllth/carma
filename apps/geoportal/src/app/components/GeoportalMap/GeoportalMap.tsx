@@ -94,10 +94,7 @@ import LocateControlComponent from "./controls/LocateControlComponent.tsx";
 import { createCismapLayers, onClickTopicMap } from "./topicmap.utils.ts";
 import { getUrlPrefix } from "./utils";
 
-import {
-  CESIUM_CONFIG,
-  LEAFLET_CONFIG,
-} from "../../config/app.config";
+import { CESIUM_CONFIG, LEAFLET_CONFIG } from "../../config/app.config";
 
 import "../leaflet.css";
 import "cesium/Build/Cesium/Widgets/widgets.css";
@@ -113,7 +110,7 @@ export const GeoportalMap = () => {
   const backgroundLayer = useSelector(getBackgroundLayer);
   const isMode2d = useViewerIsMode2d();
   const models = useViewerModels();
-  const markerAsset = models[CESIUM_CONFIG.markerKey]; // 
+  const markerAsset = models[CESIUM_CONFIG.markerKey]; //
   const markerAnchorHeight = CESIUM_CONFIG.markerAnchorHeight ?? 10;
   const layers = useSelector(getLayers);
   const uiMode = useSelector(getUIMode);
@@ -212,14 +209,13 @@ export const GeoportalMap = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allow3d]);
 
-
   const renderInfoBox = () => {
     if (isMode2d) {
       if (isModeMeasurement) {
         return <InfoBoxMeasurement key={uiMode} />;
       }
       if (isModeFeatureInfo) {
-        return <FeatureInfoBox />;
+        return <FeatureInfoBox pos={pos} />;
       }
     }
     return <div></div>;
@@ -330,8 +326,9 @@ export const GeoportalMap = () => {
                 ref={tourRefLabels.measurement}
               >
                 <img
-                  src={`${getUrlPrefix()}${isModeMeasurement ? "measure-active.png" : "measure.png"
-                    }`}
+                  src={`${getUrlPrefix()}${
+                    isModeMeasurement ? "measure-active.png" : "measure.png"
+                  }`}
                   alt="Measure"
                   className="w-6"
                 />
@@ -342,14 +339,15 @@ export const GeoportalMap = () => {
       </Control>
       {allow3d && (
         <Control position="topleft" order={60}>
-          <MapTypeSwitcher zoomSnap={LEAFLET_CONFIG.zoomSnap}
+          <MapTypeSwitcher
+            zoomSnap={LEAFLET_CONFIG.zoomSnap}
             duration={CESIUM_CONFIG.transitions.mapMode.duration}
-            onComplete=
-            {
-              (isTo2d: boolean) => {
-                dispatch(setBackgroundLayer({ ...backgroundLayer, visible: isTo2d }))
-              }
-            } />
+            onComplete={(isTo2d: boolean) => {
+              dispatch(
+                setBackgroundLayer({ ...backgroundLayer, visible: isTo2d }),
+              );
+            }}
+          />
           {
             //<SceneStyleToggle />
             <Compass disabled={isMode2d} />
@@ -494,7 +492,11 @@ export const GeoportalMap = () => {
                 pointerEvents: isMode2d ? "none" : "auto",
               }}
             >
-              <CustomViewer containerRef={container3dMapRef} minPitch={CESIUM_CONFIG.camera.minPitch} minPitchRange={CESIUM_CONFIG.camera.minPitchRange} ></CustomViewer>
+              <CustomViewer
+                containerRef={container3dMapRef}
+                minPitch={CESIUM_CONFIG.camera.minPitch}
+                minPitchRange={CESIUM_CONFIG.camera.minPitchRange}
+              ></CustomViewer>
             </div>
           )}
         </>

@@ -1,5 +1,7 @@
 import { LayerProps } from "@carma-mapping/layers";
 import FeatureInfoIcon from "./FeatureInfoIcon";
+import { proj4crs25832def } from "react-cismap/constants/gis";
+import proj4 from "proj4";
 
 export const getLeafNodes = (node, result: any = {}): any => {
   if (node.nodeType === Node.ELEMENT_NODE) {
@@ -161,4 +163,30 @@ export const getFeatureForLayer = async (layer, pos, coordinates) => {
       };
     }
   }
+};
+
+export const updateUrlWithCoordinates = (objectsArray, coordinates) => {
+  const updatedCoords = proj4(
+    proj4.defs("EPSG:4326") as unknown as string,
+    proj4crs25832def,
+    [coordinates[1], coordinates[0]],
+  );
+
+  const [x, y] = updatedCoords;
+
+  const minimalBoxSize = 1;
+
+  const newBBOX = `${x - minimalBoxSize},${y - minimalBoxSize},${
+    x + minimalBoxSize
+  },${y + minimalBoxSize}`;
+
+  return objectsArray.map((obj) => {
+    if (obj.tooltip === "Alte Sachdatenabfrage" && obj.url) {
+      return {
+        ...obj,
+        url: obj.url.replace(/(BBOX=)[^&]+/, `$1${newBBOX}`),
+      };
+    }
+    return obj;
+  });
 };

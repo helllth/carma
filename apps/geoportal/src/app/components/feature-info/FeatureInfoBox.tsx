@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import InfoBox from "react-cismap/topicmaps/InfoBox";
@@ -16,15 +16,20 @@ import {
   updateSecondaryInfoBoxElements,
 } from "../../store/slices/features";
 import { getLayers } from "../../store/slices/mapping";
-import { truncateString } from "./featureInfoHelper";
+import { truncateString, updateUrlWithCoordinates } from "./featureInfoHelper";
 
 import "../infoBox.css";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 
 import { getCoordinates } from "../GeoportalMap/topicmap.utils";
 import envelope from "@turf/envelope";
+import { isEqual } from "lodash";
 
-const FeatureInfoBox = () => {
+interface InfoBoxProps {
+  pos?: [number, number];
+}
+
+const FeatureInfoBox = ({ pos }: InfoBoxProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const selectedFeature = useSelector(getSelectedFeature);
@@ -33,6 +38,27 @@ const FeatureInfoBox = () => {
   const infoText = useSelector(getInfoText);
 
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
+
+  useEffect(() => {
+    if (pos && selectedFeature) {
+      const updatedLinks = updateUrlWithCoordinates(
+        selectedFeature.properties.genericLinks,
+        pos,
+      );
+
+      const updatedFeature = {
+        ...selectedFeature,
+        properties: {
+          ...selectedFeature.properties,
+          genericLinks: updatedLinks,
+        },
+      };
+
+      if (!isEqual(selectedFeature, updatedFeature)) {
+        dispatch(setSelectedFeature(updatedFeature));
+      }
+    }
+  }, [pos, selectedFeature]);
 
   let links = [];
   if (selectedFeature) {
