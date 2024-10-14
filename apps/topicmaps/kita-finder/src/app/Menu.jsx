@@ -27,6 +27,7 @@ import {
   setFeatureRenderingOption,
 } from "./store/slices/ui";
 import { constants as kitasConstants } from "./helper/constants";
+import { TopicMapStylingDispatchContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
 
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];
@@ -45,6 +46,10 @@ const Menu = () => {
   } = useContext(FeatureCollectionContext);
   const { setFilterState, setFilterMode } = useContext(
     FeatureCollectionDispatchContext,
+  );
+
+  const { setAdditionalStylingInfo } = useContext(
+    TopicMapStylingDispatchContext,
   );
 
   const { items } = useContext(FeatureCollectionContext);
@@ -119,6 +124,10 @@ const Menu = () => {
                   readOnly={true}
                   id="radio_traegertyp"
                   onClick={(e) => {
+                    setAdditionalStylingInfo({
+                      featureRenderingOption:
+                        kitasConstants.FEATURE_RENDERING_BY_TRAEGERTYP,
+                    });
                     dispatch(
                       setFeatureRenderingOption(
                         kitasConstants.FEATURE_RENDERING_BY_TRAEGERTYP,
@@ -139,6 +148,11 @@ const Menu = () => {
                   readOnly={true}
                   id="radio_profil"
                   onClick={(e) => {
+                    setAdditionalStylingInfo({
+                      featureRenderingOption:
+                        kitasConstants.FEATURE_RENDERING_BY_PROFIL,
+                    });
+
                     dispatch(
                       setFeatureRenderingOption(
                         kitasConstants.FEATURE_RENDERING_BY_PROFIL,

@@ -5,6 +5,7 @@ import createItemsDictionary from "./helper/createItemsDistionary";
 import itemFilterFunction, { traegertypMap } from "./helper/filter";
 import {
   getClusterIconCreatorFunction,
+  getColorForProperties,
   getFeatureStyler,
 } from "./helper/styler";
 import titleFactory from "./helper/titleFactory";
@@ -30,40 +31,42 @@ function App() {
     filters[traeger.text] = true;
   });
 
-  return (
-    <TopicMapContextProvider
-      appKey="OnlineStadtplanWuppertal2022"
-      featureItemsURL={
-        "https://wupp-topicmaps-data.cismet.de/data/kitas.data.json"
-      }
-      createFeatureItemsDictionary={createItemsDictionary}
-      getFeatureStyler={getFeatureStyler}
-      convertItemToFeature={(itemIn) =>
-        convertItemToFeature(itemIn, featureRenderingOption)
-      }
-      itemFilterFunction={itemFilterFunction}
-      titleFactory={titleFactory}
-      referenceSystemDefinition={MappingConstants.proj4crs25832def}
-      clusteringOptions={{
-        iconCreateFunction: getClusterIconCreatorFunction({
-          svgSize: 35,
-          featureRenderingOption,
-        }),
-      }}
-      mapEPSGCode="25832"
-      referenceSystem={MappingConstants.crs25832}
-      filterState={{
-        umfang_45: true,
-        umfang_35: true,
-        alter: "ab3",
-        normal: true,
-        inklusion: true,
-        ...filters,
-      }}
-    >
-      <KitaKarte />
-    </TopicMapContextProvider>
-  );
+  if (featureRenderingOption) {
+    return (
+      <TopicMapContextProvider
+        appKey="OnlineKitaFindernWuppertal2022"
+        featureItemsURL={
+          "https://wupp-topicmaps-data.cismet.de/data/kitas.data.json"
+        }
+        createFeatureItemsDictionary={createItemsDictionary}
+        getFeatureStyler={getFeatureStyler}
+        convertItemToFeature={convertItemToFeature}
+        itemFilterFunction={itemFilterFunction}
+        titleFactory={titleFactory}
+        referenceSystemDefinition={MappingConstants.proj4crs25832def}
+        clusteringOptions={{
+          iconCreateFunction: getClusterIconCreatorFunction({
+            svgSize: 35,
+            featureRenderingOption,
+          }),
+        }}
+        mapEPSGCode="25832"
+        referenceSystem={MappingConstants.crs25832}
+        filterState={{
+          umfang_45: true,
+          umfang_35: true,
+          alter: "ab3",
+          normal: true,
+          inklusion: true,
+          ...filters,
+        }}
+        additionalStylingInfo={{ featureRenderingOption }}
+        getColorFromProperties={getColorForProperties}
+      >
+        <KitaKarte />
+      </TopicMapContextProvider>
+    );
+  }
 }
 
 export default App;
