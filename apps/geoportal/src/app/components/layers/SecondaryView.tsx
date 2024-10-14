@@ -7,10 +7,12 @@ import {
   faEyeSlash,
   faLayerGroup,
   faMap,
+  faWindowMaximize,
+  faWindowMinimize,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Slider } from "antd";
-import { forwardRef, useContext, useEffect, useRef } from "react";
+import { forwardRef, useContext, useEffect, useRef, useState } from "react";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 import { useDispatch, useSelector } from "react-redux";
 import { cn } from "../../helper/helper";
@@ -45,6 +47,7 @@ export const formatter: NonNullable<
 >["formatter"] = (value) => `${value * 100}%`;
 
 const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
+  const [showAlternativeIcon, setShowAlternativeIcon] = useState(false);
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
   const infoRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -88,9 +91,26 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
         }
       }
     };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Control") {
+        setShowAlternativeIcon(true);
+      }
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.key === "Control") {
+        setShowAlternativeIcon(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
     };
   }, []);
 
@@ -202,13 +222,20 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
               }}
               className="relative fa-stack"
             >
-              <hr className="h-0.5 absolute -top-[9px] right-[3px] bg-black border-0 w-full" />
-              <FontAwesomeIcon
-                className="text-base pr-[5px]"
-                icon={showInfo ? faArrowUp : faArrowDown}
-              />
-              {!showInfo && (
-                <hr className="h-0.5 absolute top-[7px] right-[3px] bg-black border-0 w-full" />
+              {showInfo ? (
+                showAlternativeIcon ? (
+                  <div className="w-6 h-3 rounded-xl border-solid border-[2px] border-black" />
+                ) : (
+                  <FontAwesomeIcon
+                    className="text-base pr-[5px]"
+                    icon={faWindowMinimize}
+                  />
+                )
+              ) : (
+                <FontAwesomeIcon
+                  className="text-base pr-[5px]"
+                  icon={faWindowMaximize}
+                />
               )}
             </button>
           </div>
