@@ -102,6 +102,7 @@ import "cesium/Build/Cesium/Widgets/widgets.css";
 import { useOverlayHelper } from "@carma-commons/ui/lib-helper-overlay";
 import { geoElements } from "@carma-collab/wuppertal/geoportal";
 import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
+import { addCssToOverlayHelperItem } from "../../helper/overlayHelper.ts";
 
 export const GeoportalMap = () => {
   const dispatch = useDispatch();
@@ -137,7 +138,13 @@ export const GeoportalMap = () => {
   const toggleSceneStyle = useSceneStyleToggle();
   const showPrimaryTileset = useShowPrimaryTileset();
 
-  useOverlayHelper(getCollabedHelpElementsConfig("INFOBOX", geoElements));
+  const infoBoxOverlay = addCssToOverlayHelperItem(
+    getCollabedHelpElementsConfig("INFOBOX", geoElements),
+    "350px",
+    "137px",
+  );
+
+  useOverlayHelper(infoBoxOverlay);
 
   const {
     routedMapRef,

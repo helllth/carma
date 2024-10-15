@@ -93,3 +93,16 @@ export type OverlayTourProviderProps = {
   transparency?: number;
   color?: string;
 };
+
+export type GeoElementType = {
+  key: string;
+  containerPos?: PositionOverlayHelper;
+  contentPos?: PositionOverlayHelper;
+  content: JSX.Element | string;
+  contentWidth?: string;
+  position?: React.CSSProperties;
+  secondary?: {
+    content: JSX.Element | string;
+    secondaryPos?: SecondaryPlacement;
+  };
+};
