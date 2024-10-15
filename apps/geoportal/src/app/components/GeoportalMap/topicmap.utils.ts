@@ -272,6 +272,7 @@ const onSelectionChangedVector = (
               url: imgUrl,
               tooltip: "Alte Sachdatenabfrage",
               icon: createElement(FeatureInfoIcon),
+              target: "_legacyGetFeatureInfoHtml",
             },
           ]),
           zoom: featureInfoZoom,

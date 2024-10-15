@@ -151,6 +151,7 @@ export const getFeatureForLayer = async (layer, pos, coordinates) => {
               url: imgUrl,
               tooltip: "Alte Sachdatenabfrage",
               icon: <FeatureInfoIcon />,
+              target: "_legacyGetFeatureInfoHtml",
             },
           ]),
           zoom: featureInfoZoom,
