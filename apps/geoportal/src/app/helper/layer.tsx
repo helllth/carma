@@ -1,6 +1,6 @@
-import objectAssign from 'object-assign';
-import CismapLayer from 'react-cismap/CismapLayer';
-import { namedStyles, defaultLayerConfig } from "../config"
+import objectAssign from "object-assign";
+import CismapLayer from "react-cismap/CismapLayer";
+import { namedStyles, defaultLayerConfig } from "../config";
 interface backgroundLayersProps {
   layerString: string;
   namedMapStyle?: string;
@@ -8,24 +8,23 @@ interface backgroundLayersProps {
   layerConfig?: any;
 }
 
-
 export function getBackgroundLayers({
   layerString,
-  namedMapStyle = 'default',
+  namedMapStyle = "default",
   config = {
-    layerSeparator: '|',
+    layerSeparator: "|",
   },
   layerConfig,
 }: backgroundLayersProps) {
   let namedStylesConfig = namedStyles;
-  const layerArr = (layerString || '').split(config.layerSeparator || '|');
+  const layerArr = (layerString || "").split(config.layerSeparator || "|");
   let namedMapStyleExtension = namedMapStyle;
-  if (namedMapStyleExtension === null || namedMapStyleExtension === '') {
-    namedMapStyleExtension = 'default';
+  if (namedMapStyleExtension === null || namedMapStyleExtension === "") {
+    namedMapStyleExtension = "default";
   }
-  namedMapStyleExtension = '.' + namedMapStyleExtension;
+  namedMapStyleExtension = "." + namedMapStyleExtension;
   const getLayer = (layerWithNamedStyleExtension, options = {}) => {
-    const layerAndNamedStyleArray = layerWithNamedStyleExtension.split('.');
+    const layerAndNamedStyleArray = layerWithNamedStyleExtension.split(".");
     let namedStyleOptions = {};
 
     if (layerAndNamedStyleArray.length > 1) {
@@ -38,7 +37,7 @@ export function getBackgroundLayers({
           namedStyleOptions = objectAssign(
             {},
             namedStyleOptions,
-            namedStylesConfig[element]
+            namedStylesConfig[element],
           );
         }
       }
@@ -46,7 +45,7 @@ export function getBackgroundLayers({
     let mergedOptions = objectAssign({}, namedStyleOptions, options);
     const layerGetter = createLayerFactoryFunction(
       layerAndNamedStyleArray[0],
-      layerConfig
+      layerConfig,
     );
     if (layerGetter) {
       return layerGetter(mergedOptions);
@@ -56,15 +55,15 @@ export function getBackgroundLayers({
   };
 
   return (
-    <div key={'layer.' + layerString}>
+    <div key={"layer." + layerString}>
       {layerArr.map((layerWithOptions) => {
-        const layOp = layerWithOptions.split('@');
+        const layOp = layerWithOptions.split("@");
         if (!isNaN(parseInt(layOp[1], 10))) {
           const layerWithNamedStyleExtension =
             layOp[0] + namedMapStyleExtension;
 
           const layerOptions = {
-            opacity: parseInt(layOp[1] || '100', 10) / 100.0,
+            opacity: parseInt(layOp[1] || "100", 10) / 100.0,
           };
           return getLayer(layerWithNamedStyleExtension, layerOptions);
         }
@@ -77,8 +76,8 @@ export function getBackgroundLayers({
           } catch (error) {
             console.error(error);
             console.error(
-              'Problems during parsing of the layer options. Skip options. You will get the 100% Layer:' +
-              layOp[0]
+              "Problems during parsing of the layer options. Skip options. You will get the 100% Layer:" +
+                layOp[0],
             );
             const layerWithNamedStyleExtension =
               layOp[0] + namedMapStyleExtension;
@@ -102,8 +101,8 @@ const createLayerFactoryFunction = (key, _conf = defaultLayerConfig) => {
   };
 
   switch ((conf.namedLayers[key] || {}).type) {
-    case 'wms':
-    case 'wmts':
+    case "wms":
+    case "wmts":
       return (options) => {
         let params = { ...conf.defaults.wms, ...conf.namedLayers[key] };
         return (
@@ -111,13 +110,13 @@ const createLayerFactoryFunction = (key, _conf = defaultLayerConfig) => {
             key={key + JSON.stringify(options)}
             {...params}
             opacity={options.opacity}
-            cssFilter={options['css-filter']}
+            cssFilter={options["css-filter"]}
             type="wmts"
           />
         );
       };
-    case 'wms-nt':
-    case 'wmts-nt':
+    case "wms-nt":
+    case "wmts-nt":
       return (options) => {
         let params = { ...conf.defaults.wms, ...conf.namedLayers[key] };
         return (
@@ -129,7 +128,7 @@ const createLayerFactoryFunction = (key, _conf = defaultLayerConfig) => {
           />
         );
       };
-    case 'tiles':
+    case "tiles":
       return (options) => {
         let params = { ...conf.defaults.wms, ...conf.namedLayers[key] };
 
@@ -138,12 +137,12 @@ const createLayerFactoryFunction = (key, _conf = defaultLayerConfig) => {
             key={key + JSON.stringify(options)}
             {...params}
             opacity={options.opacity}
-            cssFilter={options['css-filter']}
+            cssFilter={options["css-filter"]}
             type="tiles"
           />
         );
       };
-    case 'vector':
+    case "vector":
       return (options) => {
         let params = { ...conf.defaults.vector, ...conf.namedLayers[key] };
 

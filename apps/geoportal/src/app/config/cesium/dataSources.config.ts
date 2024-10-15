@@ -22,4 +22,3 @@ export const FOOTPRINT_GEOJSON_SOURCES = {
     idProperty: "UUID",
   },
 };
-

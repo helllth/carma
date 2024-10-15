@@ -20,29 +20,27 @@ const persistor = persistStore(store);
 
 suppressReactCismapErrors();
 
-window.CESIUM_BASE_URL = CESIUM_CONFIG.baseUrl
+window.CESIUM_BASE_URL = CESIUM_CONFIG.baseUrl;
 
 console.info("RENDER: [GEOPORTAL] ROOT");
 
-const root = createRoot(
-  document.getElementById("root") as HTMLElement,
-);
-
-
+const root = createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
   <PersistGate loading={null} persistor={persistor}>
     <Provider store={store}>
-      <RouterProvider router={createHashRouter([
-        {
-          path: "/",
-          element: <App />,
-        },
-        {
-          path: "/publish",
-          element: <App published={true} />,
-        },
-      ])} />
+      <RouterProvider
+        router={createHashRouter([
+          {
+            path: "/",
+            element: <App />,
+          },
+          {
+            path: "/publish",
+            element: <App published={true} />,
+          },
+        ])}
+      />
     </Provider>
   </PersistGate>,
 );

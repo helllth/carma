@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { getGazData } from '../helper/helper';
+import { useState, useEffect } from "react";
+import { getGazData } from "../helper/helper";
 
 export const useGazData = () => {
   const [gazData, setGazData] = useState([]);

@@ -1,10 +1,15 @@
-import type { DefaultLayerConfig, LayerConfig, LayerMap, NamedStyles } from "@carma-apps/portals";
+import type {
+  DefaultLayerConfig,
+  LayerConfig,
+  LayerMap,
+  NamedStyles,
+} from "@carma-apps/portals";
 
 export const host = "https://wupp-topicmaps-data.cismet.de";
 export const APP_KEY = "geoportal";
 export const STORAGE_PREFIX = "1";
 
-export const namedStyles : NamedStyles = {
+export const namedStyles: NamedStyles = {
   default: { opacity: 0.6 },
   night: {
     opacity: 0.9,
@@ -106,7 +111,7 @@ export const defaultLayerConfig: DefaultLayerConfig = {
   },
 };
 
-export const layerMap : LayerMap = {
+export const layerMap: LayerMap = {
   luftbild: {
     title: "Luftbild",
     layers: "rvrGrundriss@100|trueOrtho2022@75|rvrSchriftNT@100",

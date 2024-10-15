@@ -130,21 +130,17 @@ export const {
   updateSecondaryInfoBoxElements,
 } = slice.actions;
 
-export const getFeatures = (state: RootState) =>
-  state.features.features;
+export const getFeatures = (state: RootState) => state.features.features;
 export const getSelectedFeature = (state: RootState) =>
   state.features.selectedFeature;
-export const getInfoText = (state: RootState) =>
-  state.features.infoText;
+export const getInfoText = (state: RootState) => state.features.infoText;
 export const getNothingFoundIDs = (state: RootState) =>
   state.features.nothingFoundIDs;
 export const getPreferredLayerId = (state: RootState) =>
   state.features.preferredLayerId;
 export const getSecondaryInfoBoxElements = (state: RootState) =>
   state.features.secondaryInfoBoxElements;
-export const getVectorInfo = (state: RootState) =>
-  state.features.vectorInfo;
-export const getVectorInfos = (state: RootState) =>
-  state.features.vectorInfos;
+export const getVectorInfo = (state: RootState) => state.features.vectorInfo;
+export const getVectorInfos = (state: RootState) => state.features.vectorInfos;
 
 export default slice.reducer;
