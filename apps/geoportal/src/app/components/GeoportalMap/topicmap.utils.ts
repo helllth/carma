@@ -74,6 +74,8 @@ type Options = {
 
 const MAX_ZOOM = 26;
 
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export const onClickTopicMap = async (
   e: {
     containerPoint: Point;
@@ -93,10 +95,10 @@ export const onClickTopicMap = async (
     getAtLeastOneLayerIsQueryable(layers, zoom)
   ) {
     if (queryableLayers.find((layer) => layer.layerType === "vector")) {
-      setTimeout(() => {}, 100);
+      await wait(10);
     }
 
-    const vectorInfos = getVectorInfos(store.getState());
+    const allVectorInfos = getVectorInfos(store.getState());
     const nothingFoundIDs = getNothingFoundIDs(store.getState());
     const preferredLayerId = getPreferredLayerId(store.getState());
     dispatch(clearSecondaryInfoBoxElements());
@@ -117,11 +119,29 @@ export const onClickTopicMap = async (
 
     const topLayer = queryableLayers[queryableLayers.length - 1];
 
+    const vectorInfos = queryableLayers
+      .map((layer) => {
+        const vectorInfo = allVectorInfos.find((vi) => vi.id === layer.id);
+        return vectorInfo;
+      })
+      .filter((vi) => vi !== undefined);
+
+    const nothingFoundIDsWithoutInvisibleLayers = [...new Set(nothingFoundIDs)]
+      .map((id) => {
+        const foundLayer = layers.find((layer) => layer.id === id);
+        if (foundLayer.visible) {
+          return id;
+        } else {
+          return undefined;
+        }
+      })
+      .filter((id) => id !== undefined);
+
     if (
       topLayer.layerType !== "vector" ||
       vectorInfos[vectorInfos.length - 1]?.showMarker ||
       vectorInfos.length === 0 ||
-      vectorLayers.length === nothingFoundIDs.length
+      vectorLayers.length === nothingFoundIDsWithoutInvisibleLayers.length
     ) {
       setPos([e.latlng.lat, e.latlng.lng]);
     } else {
@@ -164,6 +184,7 @@ export const onClickTopicMap = async (
         dispatch(clearSecondaryInfoBoxElements());
         dispatch(clearFeatures());
         dispatch(setInfoTextToNothingFound());
+        dispatch(clearVectorInfos());
       } else {
         if (preferredLayerId) {
           const preferredLayerIndex = filteredResult.findIndex(
@@ -185,6 +206,7 @@ export const onClickTopicMap = async (
           ),
         );
         dispatch(setFeatures(filteredResult));
+        dispatch(clearVectorInfos());
       }
     }
   }
@@ -215,9 +237,6 @@ const onSelectionChangedVector = (
   },
   { layer, layers, dispatch, setPos, zoom },
 ) => {
-  if (checkIfLayerIsFirst(layer, layers)) {
-    dispatch(clearVectorInfos());
-  }
   if (e.hits && layer.queryable) {
     const selectedVectorFeature = e.hits[0];
 
