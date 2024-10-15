@@ -10,6 +10,7 @@ export const tabItems = (
   legend,
   currentLayer: Layer,
   metadataText?: string,
+  pdfUrl?: string,
 ) => {
   return [
     {
@@ -31,7 +32,16 @@ export const tabItems = (
     {
       label: "Datenquelle",
       key: "2",
-      children: <p>{metadataText}</p>,
+      children: (
+        <>
+          <p>{metadataText}</p>
+          {pdfUrl && (
+            <a href={pdfUrl} target="_metadata">
+              Vollständiger Metadatensatz
+            </a>
+          )}
+        </>
+      ),
     },
     {
       label: "Links",

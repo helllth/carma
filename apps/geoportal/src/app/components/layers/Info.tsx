@@ -37,6 +37,7 @@ const parser = new DOMParser();
 const Info = ({ description, legend }: InfoProps) => {
   const dispatch = useDispatch();
   const [metadataText, setMetadataText] = useState("");
+  const [pdfUrl, setPdfUrl] = useState("");
   const selectedMapLayer = useSelector(getSelectedMapLayer);
   const activeTabKey = useSelector(getUIActiveTabKey);
   const parsedDescription = parseDescription(description);
@@ -71,8 +72,22 @@ const Info = ({ description, legend }: InfoProps) => {
     }
   };
 
+  const getIdFromUrl = (url: string) => {
+    const urlObj = new URL(url);
+
+    return urlObj.searchParams.get("id");
+  };
+
   useEffect(() => {
     if (metadataUrl) {
+      setPdfUrl(
+        `https://geoportal-nrw-content-type-pdf-proxy.cismet.de/geoportal-smartfinder-iso-1.2/resources/content/document/${getIdFromUrl(
+          metadataUrl,
+        )}?filename=Metadatensatz.${currentLayer.title.replaceAll(
+          " ",
+          "_",
+        )}.Wuppertal.pdf`,
+      );
       fetch(metadataUrl)
         .then((response) => {
           return response.text();
@@ -299,7 +314,7 @@ const Info = ({ description, legend }: InfoProps) => {
       ) : (
         <Tabs
           animated={false}
-          items={tabItems(legend, currentLayer, metadataText)}
+          items={tabItems(legend, currentLayer, metadataText, pdfUrl)}
           activeKey={activeTabKey}
           onChange={(key) => dispatch(setUIActiveTabKey(key))}
         />
