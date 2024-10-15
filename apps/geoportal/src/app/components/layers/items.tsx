@@ -37,7 +37,7 @@ export const tabItems = (
           <p>{metadataText}</p>
           {pdfUrl && (
             <a href={pdfUrl} target="_metadata">
-              Vollständiger Metadatensatz
+              Vollständiger Metadatensatz (PDF)
             </a>
           )}
         </>
