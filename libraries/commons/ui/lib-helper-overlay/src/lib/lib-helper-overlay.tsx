@@ -19,7 +19,7 @@ export function LibHelperOverlay({
         containerPos = "center",
         contentPos = "center",
         contentWidth,
-        customCss,
+        position,
         secondary,
       } = currentItem;
       const rect = el && el.getBoundingClientRect();
@@ -35,7 +35,7 @@ export function LibHelperOverlay({
           contentPos,
           contPos,
           contentWidth,
-          customCss,
+          position,
           secondary: secondary?.content,
           secondaryPos: secondary?.secondaryPos
             ? secondary?.secondaryPos
@@ -69,7 +69,7 @@ export function LibHelperOverlay({
           pos,
           contPos,
           contentWidth,
-          customCss,
+          position,
           secondary,
           secondaryPos,
         } = config;
@@ -89,7 +89,7 @@ export function LibHelperOverlay({
                     color: "white",
                     ...pos,
                   }
-                : customCss
+                : position
             }
           >
             <span

@@ -128,8 +128,12 @@ export const GeoportalMap = () => {
   const focusMode = useSelector(getFocusMode);
   const { viewer, terrainProvider, surfaceProvider } = useCesiumContext();
   const homeControl = useHomeControl();
-  const { handleZoomIn: handleZoomInCesium, handleZoomOut: handleZoomOutCesium } = useZoomControlsCesium();
-  const { getLeafletZoom, zoomInLeaflet, zoomOutLeaflet } = useLeafletZoomControls();
+  const {
+    handleZoomIn: handleZoomInCesium,
+    handleZoomOut: handleZoomOutCesium,
+  } = useZoomControlsCesium();
+  const { getLeafletZoom, zoomInLeaflet, zoomOutLeaflet } =
+    useLeafletZoomControls();
   const toggleSceneStyle = useSceneStyleToggle();
   const showPrimaryTileset = useShowPrimaryTileset();
 
@@ -319,8 +323,9 @@ export const GeoportalMap = () => {
                 ref={tourRefLabels.measurement}
               >
                 <img
-                  src={`${getUrlPrefix()}${isModeMeasurement ? "measure-active.png" : "measure.png"
-                    }`}
+                  src={`${getUrlPrefix()}${
+                    isModeMeasurement ? "measure-active.png" : "measure.png"
+                  }`}
                   alt="Measure"
                   className="w-6"
                 />

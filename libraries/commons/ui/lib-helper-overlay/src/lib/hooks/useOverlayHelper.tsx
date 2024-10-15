@@ -4,7 +4,7 @@ import { OverlayTourContext } from "../components/OverlayTourProvider";
 export const useOverlayHelper = (options: OptionsOverlayHelper) => {
   const [ref, setRef] = useState<HTMLElement | null>(null);
   const { addConfig, removeConfig } = useContext(OverlayTourContext);
-  const { containerPos, contentPos, contentWidth, content, customCss } =
+  const { containerPos, contentPos, contentWidth, content, position } =
     options.primary;
   let secondary: Secondary | undefined = undefined;
 
@@ -13,21 +13,16 @@ export const useOverlayHelper = (options: OptionsOverlayHelper) => {
   }
 
   useLayoutEffect(() => {
-    // if (!ref) return;
-
     let config: OverlayHelperConfig = {
       el: ref,
       content,
       containerPos,
       contentPos,
       contentWidth,
-      customCss,
+      position,
       ...(secondary && { secondary }),
     };
 
-    // if(secondary){
-    //   config
-    // }
     addConfig(config);
 
     return () => {

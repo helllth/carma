@@ -38,7 +38,7 @@ export interface OverlayHelperConfig {
   containerPos?: PositionOverlayHelper;
   contentPos?: PositionOverlayHelper;
   contentWidth?: string;
-  customCss?: React.CSSProperties;
+  position?: React.CSSProperties;
   secondary?: Secondary;
 }
 
@@ -66,7 +66,7 @@ export type OptionsOverlayHelper = {
     containerPos?: PositionOverlayHelper;
     contentPos?: PositionOverlayHelper;
     contentWidth?: string;
-    customCss?: React.CSSProperties;
+    position?: React.CSSProperties;
     content: JSX.Element | string;
   };
   secondary?: Secondary;
@@ -81,7 +81,7 @@ export interface HighlightRect {
   contentPos: any;
   contPos: Position;
   contentWidth?: string;
-  customCss?: React.CSSProperties;
+  position?: React.CSSProperties;
   secondary?: JSX.Element | string;
   secondaryPos?: SecondaryPlacement;
 }
