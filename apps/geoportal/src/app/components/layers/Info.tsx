@@ -42,6 +42,13 @@ const Info = ({ description, legend }: InfoProps) => {
   const activeTabKey = useSelector(getUIActiveTabKey);
   const parsedDescription = parseDescription(description);
   const layers = useSelector(getLayers);
+  const reversedLayers = layers
+    .slice()
+    .reverse()
+    .map((element, index) => {
+      return element;
+    });
+
   const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const isBaseLayer = selectedLayerIndex === -1;
   const backgroundLayer = useSelector(getBackgroundLayer);
@@ -304,10 +311,15 @@ const Info = ({ description, legend }: InfoProps) => {
                 items={layers}
                 strategy={verticalListSortingStrategy}
               >
-                {layers.map((layer, i) => (
+                {reversedLayers.map((layer, i) => (
                   <LayerRow key={`layer.${i}`} layer={layer} id={layer.id} />
                 ))}
               </SortableContext>
+              <LayerRow
+                isBackgroundLayer
+                layer={backgroundLayer}
+                id={backgroundLayer.id}
+              />
             </div>
           </DndContext>
         </div>
