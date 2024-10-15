@@ -1,3 +1,9 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { forwardRef, useContext, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Slider } from "antd";
+import type { SliderSingleProps } from "antd";
 import {
   faArrowDown,
   faArrowUp,
@@ -11,12 +17,11 @@ import {
   faWindowMinimize,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Slider } from "antd";
-import { forwardRef, useContext, useEffect, useRef, useState } from "react";
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
-import { useDispatch, useSelector } from "react-redux";
+
+import { SELECTED_LAYER_INDEX } from "@carma-apps/portals";
+
 import { cn } from "../../helper/helper";
-import type { SliderSingleProps } from "antd";
 import {
   changeOpacity,
   changeVisibility,
@@ -27,6 +32,7 @@ import {
   setNextSelectedLayerIndex,
   setPreviousSelectedLayerIndex,
   setSelectedLayerIndex,
+  setSelectedLayerIndexNoSelection,
 } from "../../store/slices/mapping";
 import {
   getUIShowInfo,
@@ -36,17 +42,16 @@ import {
 } from "../../store/slices/ui";
 import Info from "./Info";
 import { iconColorMap, iconMap } from "./items";
-import store from "../../store";
 
 type Ref = HTMLDivElement;
 
-interface SecondaryViewProps {}
+interface SecondaryViewProps { }
 
 export const formatter: NonNullable<
   SliderSingleProps["tooltip"]
 >["formatter"] = (value) => `${value * 100}%`;
 
-const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
+const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({ }, ref) => {
   const [showAlternativeIcon, setShowAlternativeIcon] = useState(false);
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
   const infoRef = useRef<HTMLDivElement>(null);
@@ -62,10 +67,10 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
   const icon = layer.title.includes("Orthofoto")
     ? "ortho"
     : layer.title === "Bäume"
-    ? "bäume"
-    : layer.title.includes("gärten")
-    ? "gärten"
-    : undefined;
+      ? "bäume"
+      : layer.title.includes("gärten")
+        ? "gärten"
+        : undefined;
   const isBaseLayer = selectedLayerIndex === -1;
 
   useEffect(() => {
@@ -79,14 +84,10 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
         }
       });
       if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
-        const currentLayerIndex = getSelectedLayerIndex(store.getState());
-
-        dispatch(
-          setSelectedLayerIndex(
-            newLayerIndex === currentLayerIndex ? -2 : newLayerIndex,
-          ),
-        );
-        if (newLayerIndex !== -2) {
+        const currentLayerIndex = selectedLayerIndex;
+        console.log("handleOutsideClick newLayerIndex", newLayerIndex, currentLayerIndex);
+        newLayerIndex === currentLayerIndex ? dispatch(setSelectedLayerIndexNoSelection()) : dispatch(setSelectedLayerIndex(newLayerIndex));
+        if (newLayerIndex !== SELECTED_LAYER_INDEX.NO_SELECTION) {
           dispatch(setClickFromInfoView(true));
         }
       }
@@ -112,12 +113,12 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  }, []);
+  }, [dispatch, selectedLayerIndex]);
 
   return (
     <div
       onClick={() => {
-        dispatch(setSelectedLayerIndex(-2));
+        dispatch(setSelectedLayerIndexNoSelection());
       }}
       className="absolute top-14 w-full z-[999]"
     >

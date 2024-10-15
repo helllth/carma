@@ -1,7 +1,15 @@
-import { Radio, Tabs } from "antd";
-import { cn, parseDescription } from "../../helper/helper";
-import { tabItems } from "./items";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Radio, Tabs } from "antd";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { DndContext } from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+
+import { cn, parseDescription } from "../../helper/helper";
 import { getUIActiveTabKey, setUIActiveTabKey } from "../../store/slices/ui";
 import {
   getBackgroundLayer,
@@ -12,17 +20,12 @@ import {
   setLayers,
   setSelectedMapLayer,
 } from "../../store/slices/mapping";
-import { DndContext } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+
+import { tabItems } from "./items";
 import LayerRow from "./LayerRow";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { layerMap } from "../../config";
+
 import "./text.css";
-import { useEffect, useState } from "react";
 
 interface InfoProps {
   description: string;

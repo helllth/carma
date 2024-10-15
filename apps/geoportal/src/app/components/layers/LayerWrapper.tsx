@@ -1,14 +1,9 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+
+import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getBackgroundLayer,
-  getLayers,
-  getSelectedLayerIndex,
-  getShowLeftScrollButton,
-  getShowRightScrollButton,
-  setLayers,
-  setSelectedLayerIndex,
-} from "../../store/slices/mapping";
-import LayerButton from "./LayerButton";
+
 import {
   DndContext,
   PointerSensor,
@@ -22,28 +17,48 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
-import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
-import { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { cn } from "../../helper/helper";
-import "./button.css";
-import SecondaryView from "./SecondaryView";
+
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
+
 import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
 import { geoElements } from "@carma-collab/wuppertal/geoportal";
 import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
 
+import { AppDispatch } from "../../store";
+import {
+  getBackgroundLayer,
+  getLayers,
+  getSelectedLayerIndex,
+  getSelectedLayerIndexIsNoSelection,
+  getShowLeftScrollButton,
+  getShowRightScrollButton,
+  setLayers,
+  setSelectedLayerIndex,
+  setSelectedLayerIndexNoSelection,
+} from "../../store/slices/mapping";
+import { cn } from "../../helper/helper";
+import LayerButton from "./LayerButton";
+import SecondaryView from "./SecondaryView";
+
+import "./button.css";
+
 const LayerWrapper = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
+
   const layers = useSelector(getLayers);
-  const selectedLayerIndex = useSelector(getSelectedLayerIndex);
   const backgroundLayer = useSelector(getBackgroundLayer);
+
+  const selectedLayerIndex = useSelector(getSelectedLayerIndex);
+  const isNoSelectionIndex = useSelector(getSelectedLayerIndexIsNoSelection);
   const showLeftScrollButton = useSelector(getShowLeftScrollButton);
   const showRightScrollButton = useSelector(getShowRightScrollButton);
+
   const { isOver, setNodeRef } = useDroppable({
     id: "droppable",
   });
@@ -64,9 +79,9 @@ const LayerWrapper = () => {
       const originalPos = getLayerPos(active.id);
       const newPos = getLayerPos(over.id);
       const newLayers = arrayMove(layers, originalPos, newPos);
-
       dispatch(setLayers(newLayers));
-      if (selectedLayerIndex !== -2) {
+      console.log("handleDragEnd newPos", newPos, selectedLayerIndex, isNoSelectionIndex);
+      if (!isNoSelectionIndex && selectedLayerIndex !== newPos) {
         dispatch(setSelectedLayerIndex(newPos));
       }
     }
@@ -75,6 +90,8 @@ const LayerWrapper = () => {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 2 } }),
   );
+
+  console.log("RENDER: LayerWrapper selectedLayerIndex", selectedLayerIndex);
 
   return (
     <>
@@ -92,7 +109,8 @@ const LayerWrapper = () => {
           id="buttonWrapper"
           className="w-full h-9 z-[999]"
           onClick={() => {
-            dispatch(setSelectedLayerIndex(-2));
+            console.log("onClick buttonWrapper");
+            dispatch(setSelectedLayerIndexNoSelection());
           }}
         >
           <div className="relative w-[calc(100%-40px)] mx-auto h-full">
@@ -158,10 +176,10 @@ const LayerWrapper = () => {
                         layer.title.includes("Orthofoto")
                           ? "ortho"
                           : layer.title === "Bäume"
-                          ? "bäume"
-                          : layer.title.includes("gärten")
-                          ? "gärten"
-                          : undefined
+                            ? "bäume"
+                            : layer.title.includes("gärten")
+                              ? "gärten"
+                              : undefined
                       }
                       layer={layer}
                     />
@@ -173,7 +191,7 @@ const LayerWrapper = () => {
         </div>
       </DndContext>
 
-      {selectedLayerIndex !== -2 && <SecondaryView />}
+      {!isNoSelectionIndex && <SecondaryView />}
     </>
   );
 };
