@@ -85,6 +85,7 @@
       "@carma-commons/document-viewer": ["libraries/commons/document-viewer/src/index.ts"],
       "@carma-commons/resources": ["libraries/commons/resources/src/index.ts"],
       "@carma-commons/utils": ["libraries/commons/utils/src/index.ts"],
+      "@carma-commons/ui/lib-helper-overlay": ["libraries/commons/ui/lib-helper-overlay/src/index.ts"],
       "@carma-mapping/cesium-engine": ["libraries/mapping/engines/cesium/src/index.ts"],
       "@carma-mapping/cesium-engine/shaders": ["libraries/mapping/engines/cesium/src/lib/shaders.ts"],
       "@carma-mapping/cesium-engine/types": ["libraries/mapping/engines/cesium/src/index.d.ts"],
@@ -106,8 +107,7 @@
       "@carma-pecher-collab/paderborn": ["libraries/collaboration/carma-pecher-collab/src/paderborn/index.jsx"],
       "@carma-pecher-collab/korschenbroich": [
         "libraries/collaboration/carma-pecher-collab/src/korschenbroich/index.jsx"
-      ],
-      "@carma/libraries/commons/ui/lib-helper-overlay": ["libraries/commons/ui/lib-helper-overlay/src/index.ts"]
+      ]
     },
     "skipLibCheck": true
   }

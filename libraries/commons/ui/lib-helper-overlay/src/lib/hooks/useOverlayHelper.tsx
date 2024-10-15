@@ -1,7 +1,7 @@
 import React, { useState, useContext, useLayoutEffect } from "react";
 import { OptionsOverlayHelper, OverlayHelperConfig, Secondary } from "../..";
 import { OverlayTourContext } from "../components/OverlayTourProvider";
-const useOverlayHelper = (options: OptionsOverlayHelper) => {
+export const useOverlayHelper = (options: OptionsOverlayHelper) => {
   const [ref, setRef] = useState<HTMLElement | null>(null);
   const { addConfig, removeConfig } = useContext(OverlayTourContext);
   const { containerPos, contentPos, contentWidth, content } = options.primary;

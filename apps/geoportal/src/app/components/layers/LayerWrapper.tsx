@@ -25,7 +25,7 @@ import {
 
 import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 
-import { useOverlayHelper } from "@carma/libraries/commons/ui/lib-helper-overlay";
+import { useOverlayHelper } from "@carma-commons/ui/lib-helper-overlay";
 import { geoElements } from "@carma-collab/wuppertal/geoportal";
 import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
 

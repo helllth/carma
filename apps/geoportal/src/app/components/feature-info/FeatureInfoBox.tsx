@@ -1,29 +1,29 @@
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { isEqual } from "lodash";
+import envelope from "@turf/envelope";
+
 import InfoBox from "react-cismap/topicmaps/InfoBox";
 import { getActionLinksForFeature } from "react-cismap/tools/uiHelper";
 import InfoBoxHeader from "react-cismap/topicmaps/InfoBoxHeader";
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 
 import { additionalInfoFactory } from "@carma-collab/wuppertal/geoportal";
 
 import {
-  getInfoText,
-  getSecondaryInfoBoxElements,
-  getSelectedFeature,
   setPreferredLayerId,
   setSelectedFeature,
   updateSecondaryInfoBoxElements,
+  getInfoText,
+  getSecondaryInfoBoxElements,
+  getSelectedFeature,
 } from "../../store/slices/features";
 import { getLayers } from "../../store/slices/mapping";
+import { getCoordinates } from "../GeoportalMap/topicmap.utils";
 import { truncateString, updateUrlWithCoordinates } from "./featureInfoHelper";
 
 import "../infoBox.css";
-import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
-
-import { getCoordinates } from "../GeoportalMap/topicmap.utils";
-import envelope from "@turf/envelope";
-import { isEqual } from "lodash";
 
 interface InfoBoxProps {
   pos?: [number, number];
@@ -33,8 +33,11 @@ const FeatureInfoBox = ({ pos }: InfoBoxProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const selectedFeature = useSelector(getSelectedFeature);
-  const secondaryInfoBoxElements = useSelector(getSecondaryInfoBoxElements);
-  const numOfLayers = useSelector(getLayers).length;
+  const secondaryInfoBoxElements = useSelector(
+    getSecondaryInfoBoxElements,
+  );
+  const layers = useSelector(getLayers);
+  const numOfLayers = layers.length;
   const infoText = useSelector(getInfoText);
 
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
@@ -144,8 +147,8 @@ const FeatureInfoBox = ({ pos }: InfoBoxProps) => {
           infoText
             ? infoText
             : numOfLayers > 0
-            ? "Auf die Karte klicken um Informationen abzurufen"
-            : "Layer hinzufügen um Informationen abrufen zu können"
+              ? "Auf die Karte klicken um Informationen abzurufen"
+              : "Layer hinzufügen um Informationen abrufen zu können"
         }
         header={
           <div

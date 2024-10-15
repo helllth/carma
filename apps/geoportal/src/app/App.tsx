@@ -20,7 +20,7 @@ import {
   WUPP_TERRAIN_PROVIDER,
   WUPP_TERRAIN_PROVIDER_DSM_MESH_2024_1M,
 } from "@carma-commons/resources";
-import { OverlayTourProvider } from "@carma/libraries/commons/ui/lib-helper-overlay";
+import { OverlayTourProvider } from "@carma-commons/ui/lib-helper-overlay";
 import { CesiumContextProvider } from "@carma-mapping/cesium-engine";
 import type { Layer } from "@carma-mapping/layers";
 import type { BackgroundLayer, Settings } from "@carma-apps/portals";
@@ -30,6 +30,8 @@ import AppErrorFallback from "./components/AppErrorFallback";
 import { GeoportalMap } from "./components/GeoportalMap/GeoportalMap";
 import MapMeasurement from "./components/map-measure/MapMeasurement";
 import TopNavbar from "./components/TopNavbar";
+
+import type { AppDispatch } from "./store";
 import {
   setBackgroundLayer,
   setLayers,
@@ -66,12 +68,14 @@ type Config = {
 };
 
 function App({ published }: { published?: boolean }) {
-  const [syncToken, setSyncToken] = useState(null);
+  const dispatch: AppDispatch = useDispatch();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const allowUiChanges = useSelector(getUIAllowChanges);
-  const dispatch = useDispatch();
-  const mode = useSelector(getUIMode);
+  const uiMode = useSelector(getUIMode);
   const location = useLocation();
+
+  const [syncToken, setSyncToken] = useState(null);
 
   useEffect(() => {
     console.log(" [GEOPORTAL|ROUTER] App Route changed to:", location.pathname);
@@ -137,7 +141,7 @@ function App({ published }: { published?: boolean }) {
 
   const content = (
     <OverlayTourProvider
-      showOverlay={mode === UIMode.TOUR ? true : false}
+      showOverlay={uiMode === UIMode.TOUR ? true : false}
       closeOverlay={() => dispatch(setUIMode(UIMode.DEFAULT))}
       transparency={backgroundSettings.transparency}
       color={backgroundSettings.color}
