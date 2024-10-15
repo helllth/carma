@@ -4,9 +4,13 @@ import { isEqual } from "lodash";
 import type { FeatureInfo, FeatureInfoState } from "@carma-apps/portals";
 import type { RootState } from "..";
 
+// TODO: move to constants/config;
+const EMPTY_INFO_TEXT = "";
+const NOTHING_FOUND_INFO_TEXT = "Keine Informationen an dieser Stelle gefunden."
+
 const initialState: FeatureInfoState = {
   features: [],
-  infoText: "",
+  infoText: EMPTY_INFO_TEXT,
   nothingFoundIDs: [],
   preferredLayerId: "",
   secondaryInfoBoxElements: [],
@@ -14,6 +18,8 @@ const initialState: FeatureInfoState = {
   vectorInfo: undefined,
   vectorInfos: [],
 };
+
+
 
 const slice = createSlice({
   name: "features",
@@ -24,6 +30,9 @@ const slice = createSlice({
     },
     setFeatures(state, action: PayloadAction<FeatureInfo[]>) {
       state.features = action.payload;
+    },
+    clearFeatures(state) {
+      state.features = [];
     },
 
     setSelectedFeature(state, action: PayloadAction<FeatureInfo | null>) {
@@ -50,6 +59,9 @@ const slice = createSlice({
           (f) => f.id !== id,
         );
       }
+    },
+    clearSelectedFeature(state) {
+      state.selectedFeature = null;
     },
 
     addNothingFoundID(state, action: PayloadAction<string>) {
@@ -85,6 +97,12 @@ const slice = createSlice({
     setInfoText(state, action: PayloadAction<string>) {
       state.infoText = action.payload;
     },
+    setInfoTextToNothingFound(state) {
+      state.infoText = NOTHING_FOUND_INFO_TEXT;
+    },
+    clearInfoText(state) {
+      state.infoText = EMPTY_INFO_TEXT;
+    },
 
     // PreferredLayerId
     setPreferredLayerId(state, action: PayloadAction<string>) {
@@ -101,16 +119,21 @@ const slice = createSlice({
         (f) => !isEqual(f, feature),
       );
     },
+    clearSecondaryInfoBoxElements(state) {
+      state.secondaryInfoBoxElements = [];
+    },
   },
 });
 
 // Export actions grouped by related state properties
 export const {
-  addFeature,
   setFeatures,
+  addFeature,
+  clearFeatures,
 
   setSelectedFeature,
   updateInfoElementsAfterRemovingFeature,
+  clearSelectedFeature,
 
   addNothingFoundID,
   removeNothingFoundID,
@@ -123,11 +146,14 @@ export const {
   clearVectorInfos,
 
   setInfoText,
+  setInfoTextToNothingFound,
+  clearInfoText,
 
   setPreferredLayerId,
 
   setSecondaryInfoBoxElements,
   updateSecondaryInfoBoxElements,
+  clearSecondaryInfoBoxElements,
 } = slice.actions;
 
 export const getFeatures = (state: RootState) => state.features.features;

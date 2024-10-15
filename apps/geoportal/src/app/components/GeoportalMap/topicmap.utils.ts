@@ -11,15 +11,17 @@ import type { Layer } from "@carma-mapping/layers";
 import {
   addNothingFoundID,
   addVectorInfo,
+  clearFeatures,
   clearNothingFoundIDs,
+  clearSecondaryInfoBoxElements,
+  clearSelectedFeature,
   clearVectorInfos,
   getNothingFoundIDs,
   getPreferredLayerId,
-  getVectorInfo,
   getVectorInfos,
   removeNothingFoundID,
   setFeatures,
-  setInfoText,
+  setInfoTextToNothingFound,
   setSecondaryInfoBoxElements,
   setSelectedFeature,
   setVectorInfo,
@@ -97,8 +99,8 @@ export const onClickTopicMap = async (
     const vectorInfos = getVectorInfos(store.getState());
     const nothingFoundIDs = getNothingFoundIDs(store.getState());
     const preferredLayerId = getPreferredLayerId(store.getState());
-    dispatch(setSecondaryInfoBoxElements([]));
-    dispatch(setFeatures([]));
+    dispatch(clearSecondaryInfoBoxElements());
+    dispatch(clearFeatures());
     const pos = proj4(
       proj4.defs("EPSG:4326") as unknown as string,
       proj4crs25832def,
@@ -158,10 +160,10 @@ export const onClickTopicMap = async (
       dispatch(clearNothingFoundIDs());
 
       if (filteredResult.length === 0) {
-        dispatch(setSelectedFeature(null));
-        dispatch(setSecondaryInfoBoxElements([]));
-        dispatch(setFeatures([]));
-        dispatch(setInfoText("Keine Informationen an dieser Stelle gefunden."));
+        dispatch(clearSelectedFeature());
+        dispatch(clearSecondaryInfoBoxElements());
+        dispatch(clearFeatures());
+        dispatch(setInfoTextToNothingFound());
       } else {
         if (preferredLayerId) {
           const preferredLayerIndex = filteredResult.findIndex(
