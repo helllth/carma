@@ -18,9 +18,10 @@ import { formatter } from "./SecondaryView";
 interface LayerRowProps {
   layer: Layer;
   id: string;
+  isBackgroundLayer?: boolean;
 }
 
-const LayerRow = ({ layer, id }: LayerRowProps) => {
+const LayerRow = ({ layer, id, isBackgroundLayer }: LayerRowProps) => {
   const dispatch = useDispatch();
   const urlPrefix = window.location.origin + window.location.pathname;
   const icon = layer.title.includes("Orthofoto")
@@ -47,7 +48,9 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
         <button
           {...listeners}
           {...attributes}
-          className="flex items-center justify-center !cursor-grab"
+          className={`flex items-center justify-center !cursor-grab ${
+            isBackgroundLayer ? "invisible" : ""
+          }`}
         >
           <FontAwesomeIcon icon={faGripVertical} />
         </button>
@@ -61,7 +64,9 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
           </div>
         ) : (
           <FontAwesomeIcon
-            icon={icon ? iconMap[icon] : faMap}
+            icon={
+              icon ? iconMap[icon] : isBackgroundLayer ? faLayerGroup : faMap
+            }
             className="text-base"
             style={{ color: iconColorMap[icon] }}
             id="icon"
@@ -72,6 +77,7 @@ const LayerRow = ({ layer, id }: LayerRowProps) => {
       <Slider
         min={0}
         max={1}
+        disabled={isBackgroundLayer}
         tooltip={{ formatter: formatter }}
         step={0.1}
         onChange={(value) => {
