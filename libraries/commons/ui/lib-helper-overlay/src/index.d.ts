@@ -33,11 +33,12 @@ export type PositionOverlayHelper =
   | "bottom-left";
 
 export interface OverlayHelperConfig {
-  el: HTMLElement;
+  el?: HTMLElement;
   content: JSX.Element | string;
   containerPos?: PositionOverlayHelper;
   contentPos?: PositionOverlayHelper;
   contentWidth?: string;
+  customCss?: React.CSSProperties;
   secondary?: Secondary;
 }
 
@@ -65,6 +66,7 @@ export type OptionsOverlayHelper = {
     containerPos?: PositionOverlayHelper;
     contentPos?: PositionOverlayHelper;
     contentWidth?: string;
+    customCss?: React.CSSProperties;
     content: JSX.Element | string;
   };
   secondary?: Secondary;
@@ -73,12 +75,13 @@ export type OptionsOverlayHelper = {
 type Position = { [key: string]: string | number };
 
 export interface HighlightRect {
-  rect: DOMRect;
+  rect: DOMRect | null;
   content: JSX.Element | string;
   pos: Position;
   contentPos: any;
   contPos: Position;
   contentWidth?: string;
+  customCss?: React.CSSProperties;
   secondary?: JSX.Element | string;
   secondaryPos?: SecondaryPlacement;
 }

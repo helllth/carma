@@ -70,6 +70,20 @@ const LayerWrapper = () => {
     getCollabedHelpElementsConfig("LAYERBUTTONS", geoElements),
   );
 
+  const infoBox = useOverlayHelper({
+    primary: {
+      content: <div>Info box</div>,
+      customCss: {
+        position: "absolute",
+        bottom: 0,
+        right: 0,
+        width: "350px",
+        height: "137px",
+        color: "white",
+      },
+    },
+  });
+
   const getLayerPos = (id) => layers.findIndex((layer) => layer.id === id);
 
   const handleDragEnd = (event) => {
@@ -80,7 +94,12 @@ const LayerWrapper = () => {
       const newPos = getLayerPos(over.id);
       const newLayers = arrayMove(layers, originalPos, newPos);
       dispatch(setLayers(newLayers));
-      console.log("handleDragEnd newPos", newPos, selectedLayerIndex, isNoSelectionIndex);
+      console.log(
+        "handleDragEnd newPos",
+        newPos,
+        selectedLayerIndex,
+        isNoSelectionIndex,
+      );
       if (!isNoSelectionIndex && selectedLayerIndex !== newPos) {
         dispatch(setSelectedLayerIndex(newPos));
       }
@@ -176,10 +195,10 @@ const LayerWrapper = () => {
                         layer.title.includes("Orthofoto")
                           ? "ortho"
                           : layer.title === "Bäume"
-                            ? "bäume"
-                            : layer.title.includes("gärten")
-                              ? "gärten"
-                              : undefined
+                          ? "bäume"
+                          : layer.title.includes("gärten")
+                          ? "gärten"
+                          : undefined
                       }
                       layer={layer}
                     />

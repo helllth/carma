@@ -12,27 +12,30 @@ export function LibHelperOverlay({
   const [hightlightRects, setHightlightRects] = useState<HighlightRect[]>([]);
   useEffect(() => {
     configs.forEach((currentItem) => {
+      console.log("xxx lib overlay", currentItem);
       const {
         el,
         content,
         containerPos = "center",
         contentPos = "center",
         contentWidth,
+        customCss,
         secondary,
       } = currentItem;
-      const rect = el.getBoundingClientRect();
+      const rect = el && el.getBoundingClientRect();
       const pos = getContainerPosition(containerPos);
       const contPos = getElementPosition(contentPos);
 
       setHightlightRects((prev) => [
         ...prev,
         {
-          rect,
+          rect: rect ? rect : null,
           content,
           pos,
           contentPos,
           contPos,
           contentWidth,
+          customCss,
           secondary: secondary?.content,
           secondaryPos: secondary?.secondaryPos
             ? secondary?.secondaryPos
@@ -66,6 +69,7 @@ export function LibHelperOverlay({
           pos,
           contPos,
           contentWidth,
+          customCss,
           secondary,
           secondaryPos,
         } = config;
@@ -74,15 +78,19 @@ export function LibHelperOverlay({
           <div
             key={idx}
             onClick={(e) => handleMessageClick(e)}
-            style={{
-              position: "absolute",
-              top: rect.top,
-              left: rect.left,
-              width: rect.width,
-              height: rect.height,
-              color: "white",
-              ...pos,
-            }}
+            style={
+              rect
+                ? {
+                    position: "absolute",
+                    top: rect.top,
+                    left: rect.left,
+                    width: rect.width,
+                    height: rect.height,
+                    color: "white",
+                    ...pos,
+                  }
+                : customCss
+            }
           >
             <span
               style={{
