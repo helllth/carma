@@ -23,6 +23,7 @@ import MeasurementTitle from "./MeasurementTitle";
 import Icon from "react-cismap/commons/Icon";
 import { UIContext } from "react-cismap/contexts/UIContextProvider";
 import "../infoBox.css";
+import { useOverlayHelper } from "@carma-commons/ui/lib-helper-overlay";
 
 const InfoBoxMeasurement = () => {
   const measurementsData = useSelector(getShapes);
@@ -39,6 +40,19 @@ const InfoBoxMeasurement = () => {
   const [stepAfterUpdating, setStepAfterUpdating] = useState(false);
   const [stepAfterCreating, setStepAfterCreating] = useState(false);
   const { collapsedInfoBox } = useContext(UIContext);
+  const infoBox = useOverlayHelper({
+    primary: {
+      content: <div>Infobox</div>,
+      customCss: {
+        position: "absolute",
+        bottom: 0,
+        right: 10,
+        width: "350px",
+        height: "137px",
+        color: "white",
+      },
+    },
+  });
 
   useEffect(() => {
     if (moveToShape) {

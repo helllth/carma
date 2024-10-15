@@ -70,20 +70,6 @@ const LayerWrapper = () => {
     getCollabedHelpElementsConfig("LAYERBUTTONS", geoElements),
   );
 
-  const infoBox = useOverlayHelper({
-    primary: {
-      content: <div>Info box</div>,
-      customCss: {
-        position: "absolute",
-        bottom: 0,
-        right: 0,
-        width: "350px",
-        height: "137px",
-        color: "white",
-      },
-    },
-  });
-
   const getLayerPos = (id) => layers.findIndex((layer) => layer.id === id);
 
   const handleDragEnd = (event) => {
