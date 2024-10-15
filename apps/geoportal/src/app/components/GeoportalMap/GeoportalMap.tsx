@@ -99,6 +99,9 @@ import { CESIUM_CONFIG, LEAFLET_CONFIG } from "../../config/app.config";
 
 import "../leaflet.css";
 import "cesium/Build/Cesium/Widgets/widgets.css";
+import { useOverlayHelper } from "@carma-commons/ui/lib-helper-overlay";
+import { geoElements } from "@carma-collab/wuppertal/geoportal";
+import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
 
 export const GeoportalMap = () => {
   const dispatch = useDispatch();
@@ -129,6 +132,8 @@ export const GeoportalMap = () => {
   const { getLeafletZoom, zoomInLeaflet, zoomOutLeaflet } = useLeafletZoomControls();
   const toggleSceneStyle = useSceneStyleToggle();
   const showPrimaryTileset = useShowPrimaryTileset();
+
+  useOverlayHelper(getCollabedHelpElementsConfig("INFOBOX", geoElements));
 
   const {
     routedMapRef,
