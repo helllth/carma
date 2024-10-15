@@ -1,5 +1,6 @@
 import type { Layer } from "@carma-mapping/layers";
 import type { CismapLayerProps } from "types/react-cismap.extended";
+import { SELECTED_LAYER_INDEX } from "..";
 
 export type CarmaConfObject = Record<string, string>;
 
@@ -108,7 +109,7 @@ export type BackgroundLayer = Layer & {
 };
 export interface LayerState {
   layers: Layer[];
-  selectedLayerIndex: number;
+  selectedLayerIndex: SELECTED_LAYER_INDEX | number;
   selectedMapLayer: BackgroundLayer;
   backgroundLayer: BackgroundLayer;
 }

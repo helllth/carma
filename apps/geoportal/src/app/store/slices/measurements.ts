@@ -1,41 +1,49 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "..";
+
+import type { RootState } from "..";
+
+export enum MEASUREMENT_MODE {
+  DEFAULT = "default",
+  MEASUREMENT = "measurement",
+}
 
 export type MeasurementsState = {
+  mode: MEASUREMENT_MODE;
   shapes: any[];
-  visibleShapes: any[];
   activeShape: null | any;
-  showAllMeasurements: boolean;
-  deleteMeasurements: boolean;
+  visibleShapes: any[];
+
+  showAll: boolean;
+  deleteAll: boolean;
   drawingShape: boolean;
   lastActiveShapeBeforeDrawing: null | any;
   moveToShape: null | any;
   updateShape: boolean;
   mapMovingEnd: boolean;
   updateTitleStatus: boolean;
-  measurementMode: string;
 };
 const initialState: MeasurementsState = {
+  mode: MEASUREMENT_MODE.DEFAULT,
   shapes: [],
-  visibleShapes: [],
   activeShape: null,
-  showAllMeasurements: false,
-  deleteMeasurements: false,
+  visibleShapes: [],
+
+  showAll: false,
+  deleteAll: false,
   drawingShape: false,
   lastActiveShapeBeforeDrawing: null,
   moveToShape: null,
   updateShape: false,
   mapMovingEnd: false,
   updateTitleStatus: false,
-  measurementMode: "default",
 };
 
 const slice = createSlice({
   name: "measurements",
   initialState,
   reducers: {
-    setVisibleShapes(state, action) {
-      state.visibleShapes = action.payload;
+    setMode(state, action) {
+      state.mode = action.payload;
     },
     setShapes(state, action) {
       state.shapes = action.payload;
@@ -43,14 +51,17 @@ const slice = createSlice({
     setActiveShape(state, action) {
       state.activeShape = action.payload;
     },
+    setVisibleShapes(state, action) {
+      state.visibleShapes = action.payload;
+    },
     setDrawingShape(state, action) {
       state.drawingShape = action.payload;
     },
-    setShowAllMeasurements(state, action) {
-      state.showAllMeasurements = action.payload;
+    setShowAll(state, action) {
+      state.showAll = action.payload;
     },
-    setDeleteMeasurements(state, action) {
-      state.deleteMeasurements = action.payload;
+    setDeleteAll(state, action) {
+      state.deleteAll = action.payload;
     },
     setMoveToShape(state, action) {
       state.moveToShape = action.payload;
@@ -67,65 +78,23 @@ const slice = createSlice({
     setLastActiveShapeBeforeDrawing(state, action) {
       state.lastActiveShapeBeforeDrawing = action.payload;
     },
-    setMeasurementMode(state, action) {
-      state.measurementMode = action.payload;
-    },
   },
 });
 
-export default slice;
-
 export const {
+  setMode,
   setShapes,
   setActiveShape,
   setVisibleShapes,
   setDrawingShape,
-  setShowAllMeasurements,
-  setDeleteMeasurements,
+  setShowAll,
+  setDeleteAll,
   setMoveToShape,
   setUpdateShape,
   setMapMovingEnd,
   setUpdateTitleStatus,
   setLastActiveShapeBeforeDrawing,
-  setMeasurementMode,
 } = slice.actions;
-
-export const getShapes = (state: RootState) => {
-  return state.measurements.shapes;
-};
-export const getActiveShapes = (state: RootState) => {
-  return state.measurements.activeShape;
-};
-export const getVisibleShapes = (state: RootState) => {
-  return state.measurements.visibleShapes;
-};
-export const getDrawingShape = (state: RootState) => {
-  return state.measurements.drawingShape;
-};
-export const getShowAllMeasurements = (state: RootState) => {
-  return state.measurements.showAllMeasurements;
-};
-export const getDeleteMeasurements = (state: RootState) => {
-  return state.measurements.deleteMeasurements;
-};
-export const getMoveToShape = (state: RootState) => {
-  return state.measurements.moveToShape;
-};
-export const getUpdateShapeToShape = (state: RootState) => {
-  return state.measurements.updateShape;
-};
-export const getMapMovingEnd = (state: RootState) => {
-  return state.measurements.mapMovingEnd;
-};
-export const getUpdateTitleStatus = (state: RootState) => {
-  return state.measurements.updateTitleStatus;
-};
-export const getLastActiveShapeBeforeDrawing = (state: RootState) => {
-  return state.measurements.lastActiveShapeBeforeDrawing;
-};
-export const getMeasurementMode = (state: RootState) => {
-  return state.measurements.measurementMode;
-};
 
 export const updateTitle = (shapeId, customTitle) => {
   return function (dispatch, getState) {
@@ -175,9 +144,9 @@ export const deleteShapeById = (shapeId) => {
   return function (dispatch, getState) {
     const state = getState();
     const allShapes = state.measurements.shapes;
-    const cleaerShapesArr = allShapes.filter((s) => s.shapeId !== shapeId);
+    const clearShapesArr = allShapes.filter((s) => s.shapeId !== shapeId);
 
-    dispatch(setShapes(cleaerShapesArr));
+    dispatch(setShapes(clearShapesArr));
   };
 };
 
@@ -241,7 +210,8 @@ export const setDrawingWithLastActiveShape = () => {
     }
   };
 };
-export const setActiveShapeIfDrawCanseld = () => {
+
+export const setActiveShapeIfDrawCancelled = () => {
   return function (dispatch, getState) {
     const state = getState();
     const lastActiveShape = state.measurements.lastActiveShapeBeforeDrawing;
@@ -263,16 +233,16 @@ export const setActiveShapeIfDrawCanseld = () => {
 export const toggleMeasurementMode = () => {
   return function (dispatch, getState) {
     const state = getState();
-    const mode = state.measurements.measurementMode;
-    if (mode === "default") {
-      dispatch(setMeasurementMode("measurement"));
+    const mode = state.measurements.mode;
+    if (mode === MEASUREMENT_MODE.DEFAULT) {
+      dispatch(setMode(MEASUREMENT_MODE.MEASUREMENT));
     } else {
-      dispatch(setMeasurementMode("default"));
+      dispatch(setMode(MEASUREMENT_MODE.DEFAULT));
     }
   };
 };
 
-export const updateAreaOfDrawingMeasurement = (newArea) => {
+export const updateAreaOfDrawing = (newArea) => {
   return function (dispatch, getState) {
     const state = getState();
     const shape = state.measurements.visibleShapes.map((s) => {
@@ -287,3 +257,26 @@ export const updateAreaOfDrawingMeasurement = (newArea) => {
     dispatch(setVisibleShapes(shape));
   };
 };
+
+export const getActiveShapes = (state: RootState) =>
+  state.measurements.activeShape;
+export const getDeleteAll = (state: RootState) => state.measurements.deleteAll;
+export const getDrawingShape = (state: RootState) =>
+  state.measurements.drawingShape;
+export const getLastActiveShapeBeforeDrawing = (state: RootState) =>
+  state.measurements.lastActiveShapeBeforeDrawing;
+export const getMapMovingEnd = (state: RootState) =>
+  state.measurements.mapMovingEnd;
+export const getMode = (state: RootState) => state.measurements.mode;
+export const getMoveToShape = (state: RootState) =>
+  state.measurements.moveToShape;
+export const getShowAll = (state: RootState) => state.measurements.showAll;
+export const getShapes = (state: RootState) => state.measurements.shapes;
+export const getUpdateShapeToShape = (state: RootState) =>
+  state.measurements.updateShape;
+export const getUpdateTitleStatus = (state: RootState) =>
+  state.measurements.updateTitleStatus;
+export const getVisibleShapes = (state: RootState) =>
+  state.measurements.visibleShapes;
+
+export default slice.reducer;

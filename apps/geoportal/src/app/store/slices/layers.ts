@@ -1,30 +1,22 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "..";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+
 import { Item } from "@carma-mapping/layers";
+import type { RootState } from "..";
 
 export type LayersState = {
-  thumbnails: any[];
   favorites: Item[];
+  thumbnails: any[];
 };
 
 const initialState: LayersState = {
-  thumbnails: [],
   favorites: [],
+  thumbnails: [],
 };
 
 const slice = createSlice({
   name: "layers",
   initialState,
   reducers: {
-    setThumbnail(state, action) {
-      let alreadyExists = state.thumbnails.some(
-        (thumbnail) => thumbnail.name === action.payload.name,
-      );
-      if (!alreadyExists) {
-        state.thumbnails = [...state.thumbnails, action.payload];
-      }
-      return state;
-    },
     addFavorite(state, action: PayloadAction<Item>) {
       const alreadyExists = state.favorites.some(
         (favorite) =>
@@ -48,17 +40,24 @@ const slice = createSlice({
       state.favorites = newFavorites;
       return state;
     },
+
+    setThumbnail(state, action) {
+      let alreadyExists = state.thumbnails.some(
+        (thumbnail) => thumbnail.name === action.payload.name,
+      );
+      if (!alreadyExists) {
+        state.thumbnails = [...state.thumbnails, action.payload];
+      }
+      return state;
+    },
   },
 });
 
-export default slice;
+export const { addFavorite, removeFavorite, setThumbnail } = slice.actions;
 
-export const { setThumbnail, addFavorite, removeFavorite } = slice.actions;
+export const getFavorites = (state: RootState): Item[] =>
+  state.layers.favorites;
+export const getThumbnails = (state: RootState): Item[] =>
+  state.layers.thumbnails;
 
-export const getThumbnails = (state: RootState) => {
-  return state.layers.thumbnails;
-};
-
-export const getFavorites = (state: RootState) => {
-  return state.layers.favorites;
-};
+export default slice.reducer;

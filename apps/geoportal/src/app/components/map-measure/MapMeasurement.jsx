@@ -23,10 +23,10 @@ import {
   getVisibleShapes,
   getDrawingShape,
   setDrawingShape,
-  setShowAllMeasurements,
-  getShowAllMeasurements,
-  getDeleteMeasurements,
-  setDeleteMeasurements,
+  setShowAll,
+  getShowAll,
+  getDeleteAll,
+  setDeleteAll,
   getMoveToShape,
   setMoveToShape,
   setUpdateShape,
@@ -36,8 +36,8 @@ import {
   updateShapeById,
   setLastVisibleShapeActive,
   setDrawingWithLastActiveShape,
-  setActiveShapeIfDrawCanseld,
-  updateAreaOfDrawingMeasurement,
+  setActiveShapeIfDrawCancelled,
+  updateAreaOfDrawing,
   deleteVisibleShapeById,
 } from "../../store/slices/measurements";
 
@@ -52,8 +52,8 @@ const MapMeasurement = (props) => {
   const measurementShapes = useSelector(getShapes);
   const activeShape = useSelector(getActiveShapes);
   const ifDrawing = useSelector(getDrawingShape);
-  const showAllMeasurements = useSelector(getShowAllMeasurements);
-  const deleteShape = useSelector(getDeleteMeasurements);
+  const showAllMeasurements = useSelector(getShowAll);
+  const deleteShape = useSelector(getDeleteAll);
   const visibleShapes = useSelector(getVisibleShapes);
   const moveToShape = useSelector(getMoveToShape);
   const mode = useSelector(getUIMode);
@@ -96,7 +96,7 @@ const MapMeasurement = (props) => {
         cbMapMovingEndHandler: mapMovingEndHandler,
         cbSaveLastActiveShapeIdBeforeDrawingHandler:
           saveLastActiveShapeIdBeforeDrawingHandler,
-        cbChangeActiveCanceldShapeId: changeActiveCanceldShapeId,
+        cbChangeActiveCanceldShapeId: changeActiveCancelledShapeId,
         cbToggleMeasurementMode: toggleMeasurementModeHandler,
         cbUpdateAreaOfDrawingMeasurement: updateAreaOfDrawingMeasurementHandler,
       };
@@ -128,7 +128,7 @@ const MapMeasurement = (props) => {
       if (showAllMeasurements) {
         const allPolylines = measureControl.getAllPolylines(map);
         measureControl.fitMapToPolylines(map, allPolylines);
-        dispatch(setShowAllMeasurements(false));
+        dispatch(setShowAll(false));
       }
 
       if (deleteShape) {
@@ -142,7 +142,7 @@ const MapMeasurement = (props) => {
           (m) => m.shapeId !== activeShape,
         );
         dispatch(setShapes(cleanAllArr));
-        dispatch(setDeleteMeasurements(false));
+        dispatch(setDeleteAll(false));
         if (measureControl.options.shapes.length === 1) {
           measureControl.options.shapes = [];
         }
@@ -229,8 +229,8 @@ const MapMeasurement = (props) => {
   const saveLastActiveShapeIdBeforeDrawingHandler = () => {
     dispatch(setDrawingWithLastActiveShape());
   };
-  const changeActiveCanceldShapeId = () => {
-    dispatch(setActiveShapeIfDrawCanseld());
+  const changeActiveCancelledShapeId = () => {
+    dispatch(setActiveShapeIfDrawCancelled());
   };
 
   const visiblePolylinesChange = (arr) => {
@@ -257,7 +257,7 @@ const MapMeasurement = (props) => {
   };
 
   const updateAreaOfDrawingMeasurementHandler = (newArea) => {
-    dispatch(updateAreaOfDrawingMeasurement(newArea));
+    dispatch(updateAreaOfDrawing(newArea));
   };
 
   return <div></div>;

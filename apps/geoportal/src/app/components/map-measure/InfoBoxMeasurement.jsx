@@ -4,10 +4,10 @@ import {
   setActiveShape,
   getActiveShapes,
   getVisibleShapes,
-  setShowAllMeasurements,
+  setShowAll,
   getUpdateShapeToShape,
   setUpdateShape,
-  setDeleteMeasurements,
+  setDeleteAll,
   getMoveToShape,
   setMoveToShape,
   getDrawingShape,
@@ -161,7 +161,7 @@ const InfoBoxMeasurement = () => {
   const deleteShapeHandler = (e) => {
     e.stopPropagation();
 
-    dispatch(setDeleteMeasurements(true));
+    dispatch(setDeleteAll(true));
     cleanUpdateMeasurementStatus();
     setLastMeasureActive();
   };
@@ -252,7 +252,7 @@ const InfoBoxMeasurement = () => {
               <div className="flex justify-center items-center w-[96%] mt-2 pt-3">
                 <span
                   className="mx-4 text-[#0078a8] cursor-pointer"
-                  onClick={() => dispatch(setShowAllMeasurements(true))}
+                  onClick={() => dispatch(setShowAll(true))}
                 >
                   {measurementsData.length} Messungen verfügbar
                 </span>
@@ -299,7 +299,7 @@ const InfoBoxMeasurement = () => {
               <div className="flex justify-center items-center w-[96%]">
                 <span
                   className="mx-4 text-[#0078a8] cursor-pointer"
-                  onClick={() => dispatch(setShowAllMeasurements(true))}
+                  onClick={() => dispatch(setShowAll(true))}
                 >
                   {measurementsData.length} Messungen verfügbar
                 </span>
