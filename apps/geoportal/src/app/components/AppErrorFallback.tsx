@@ -192,7 +192,7 @@ const AppErrorFallback = ({ error, resetErrorBoundary }) => {
               );
               // console.log("confirmation: " + confirmation);
               if (confirmation) {
-                console.log("resetting settings");
+                console.info("resetting settings");
                 localforage.clear();
               }
             }}

@@ -42,7 +42,7 @@ const useCameraPitchEasingLimiter = (
   useEffect(() => {
     if (viewer && !isMode2d && collisions && !isTransitioning && !isAnimating) {
       const { camera, scene } = viewer;
-      console.log("HOOK [CESIUM|CAMERA] EASING Pitch Limiter added");
+      console.info("HOOK [CESIUM|CAMERA] EASING Pitch Limiter added");
       clearLast();
       const onUpdate = async () => {
         const isPitchInRange = camera.pitch > minRangePitchRad;
@@ -58,7 +58,7 @@ const useCameraPitchEasingLimiter = (
             const newDelta = pitchDelta * unitEased;
             const newPitch = Math.min(lastPitch.current - newDelta, minPitchRad);
 
-            console.log(
+            console.info(
               "LISTENER HOOK [2D3D|CESIUM|CAMERA]: apply easing pitch limiter",
               Math.round(unitIn * 100),
               Math.round(unitEased * 100),
@@ -91,7 +91,7 @@ const useCameraPitchEasingLimiter = (
       };
       scene.preUpdate.addEventListener(onUpdate);
       return () => {
-        console.log("HOOK [CESIUM|CAMERA] Easing Pitch Limiter removed");
+        console.info("HOOK [CESIUM|CAMERA] Easing Pitch Limiter removed");
         scene.preUpdate.removeEventListener(onUpdate);
       };
     }

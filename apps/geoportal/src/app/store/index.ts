@@ -27,13 +27,13 @@ const stateLoggingEnabledFromSearch = new URLSearchParams(
 
 const inProduction = process.env.NODE_ENV === "production";
 
-console.log("in Production Mode:", inProduction);
+console.info("in Production Mode:", inProduction);
 const stateLoggingEnabled =
   (stateLoggingEnabledFromSearch !== null &&
     stateLoggingEnabledFromSearch !== "false") ||
   !inProduction;
 
-console.log(
+console.info(
   "stateLoggingEnabled:",
   stateLoggingEnabledFromSearch,
   "x",

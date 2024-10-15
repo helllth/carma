@@ -49,12 +49,14 @@ export const useLogCesiumRenderIn2D = () => {
     };
 
     // Subscribe to the postRender event
-    console.log("HOOK [CESIUM|SCENE] add postrender listener");
+    console.info("HOOK [CESIUM|SCENE] add postrender listener");
     viewer.scene.postRender.addEventListener(logRender);
 
     // Cleanup the event listener on unmount
     return () => {
       viewer.scene.postRender.removeEventListener(logRender);
+      console.info("HOOK [CESIUM|SCENE] add postrender removed");
+
     };
   }, [viewer, isMode2d, isAnimating, transition]);
 };

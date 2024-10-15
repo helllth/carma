@@ -78,7 +78,7 @@ function App({ published }: { published?: boolean }) {
   const [syncToken, setSyncToken] = useState(null);
 
   useEffect(() => {
-    console.log(" [GEOPORTAL|ROUTER] App Route changed to:", location.pathname);
+    console.info(" [GEOPORTAL|ROUTER] App Route changed to:", location.pathname);
   }, [location]);
 
   useEffect(() => {
