@@ -7,8 +7,12 @@ import type { SliderSingleProps } from "antd";
 import {
   faArrowDown,
   faArrowUp,
+  faChevronCircleDown,
+  faChevronCircleUp,
+  faChevronDown,
   faChevronLeft,
   faChevronRight,
+  faChevronUp,
   faEye,
   faEyeSlash,
   faLayerGroup,
@@ -45,13 +49,13 @@ import { iconColorMap, iconMap } from "./items";
 
 type Ref = HTMLDivElement;
 
-interface SecondaryViewProps { }
+interface SecondaryViewProps {}
 
 export const formatter: NonNullable<
   SliderSingleProps["tooltip"]
 >["formatter"] = (value) => `${value * 100}%`;
 
-const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({ }, ref) => {
+const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
   const [showAlternativeIcon, setShowAlternativeIcon] = useState(false);
   const { routedMapRef } = useContext<typeof TopicMapContext>(TopicMapContext);
   const infoRef = useRef<HTMLDivElement>(null);
@@ -67,10 +71,10 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({ }, ref) => {
   const icon = layer.title.includes("Orthofoto")
     ? "ortho"
     : layer.title === "Bäume"
-      ? "bäume"
-      : layer.title.includes("gärten")
-        ? "gärten"
-        : undefined;
+    ? "bäume"
+    : layer.title.includes("gärten")
+    ? "gärten"
+    : undefined;
   const isBaseLayer = selectedLayerIndex === -1;
 
   useEffect(() => {
@@ -85,8 +89,14 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({ }, ref) => {
       });
       if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
         const currentLayerIndex = selectedLayerIndex;
-        console.log("handleOutsideClick newLayerIndex", newLayerIndex, currentLayerIndex);
-        newLayerIndex === currentLayerIndex ? dispatch(setSelectedLayerIndexNoSelection()) : dispatch(setSelectedLayerIndex(newLayerIndex));
+        console.log(
+          "handleOutsideClick newLayerIndex",
+          newLayerIndex,
+          currentLayerIndex,
+        );
+        newLayerIndex === currentLayerIndex
+          ? dispatch(setSelectedLayerIndexNoSelection())
+          : dispatch(setSelectedLayerIndex(newLayerIndex));
         if (newLayerIndex !== SELECTED_LAYER_INDEX.NO_SELECTION) {
           dispatch(setClickFromInfoView(true));
         }
@@ -225,17 +235,25 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({ }, ref) => {
             >
               {showInfo ? (
                 showAlternativeIcon ? (
-                  <div className="w-6 h-3 rounded-xl border-solid border-[2px] border-black" />
+                  <FontAwesomeIcon
+                    className="text-base pr-[5px] text-gray-700"
+                    icon={faChevronCircleUp}
+                  />
                 ) : (
                   <FontAwesomeIcon
                     className="text-base pr-[5px]"
-                    icon={faWindowMinimize}
+                    icon={faChevronUp}
                   />
                 )
+              ) : showAlternativeIcon ? (
+                <FontAwesomeIcon
+                  className="text-base pr-[5px] text-gray-700"
+                  icon={faChevronCircleDown}
+                />
               ) : (
                 <FontAwesomeIcon
                   className="text-base pr-[5px]"
-                  icon={faWindowMaximize}
+                  icon={faChevronDown}
                 />
               )}
             </button>
