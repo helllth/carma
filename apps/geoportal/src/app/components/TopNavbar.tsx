@@ -51,9 +51,10 @@ import {
 } from "../store/slices/mapping";
 import {
   getUIMode,
+  getUIOverlayTourMode,
+  toggleShowOverlayTour,
   getUIShowLayerButtons,
   setUIShowLayerButtons,
-  toggleUIMode,
   UIMode,
 } from "../store/slices/ui";
 
@@ -84,6 +85,7 @@ const TopNavbar = () => {
   const savedLayerConfigs = useSelector(getSavedLayerConfigs);
 
   const uiMode = useSelector(getUIMode);
+  const tourMode = useSelector(getUIOverlayTourMode);
   const showLayerButtons = useSelector(getUIShowLayerButtons);
   const toggleSceneStyle = useSceneStyleToggle();
 
@@ -91,7 +93,7 @@ const TopNavbar = () => {
   const baseUrl = window.location.origin + window.location.pathname;
 
   const handleToggleTour = () => {
-    dispatch(toggleUIMode(UIMode.TOUR));
+    dispatch(toggleShowOverlayTour(!tourMode));
   };
   const menuTourRef = useOverlayHelper(
     getCollabedHelpElementsConfig("MENULEISTE", geoElements),
@@ -238,14 +240,16 @@ const TopNavbar = () => {
             <img
               src={baseUrl + "icons/add-layers.png"}
               alt="Kartenebenen hinzufügen"
-              className={`h-5 mb-0.5 cursor-pointer ${isMode2d ? "" : disabledImageOpacity
-                }`}
+              className={`h-5 mb-0.5 cursor-pointer ${
+                isMode2d ? "" : disabledImageOpacity
+              }`}
             />
           </button>
         </Tooltip>
         <Tooltip
-          title={`Hintergrundkarte ${focusMode ? "zurücksetzen" : "abschwächen"
-            }`}
+          title={`Hintergrundkarte ${
+            focusMode ? "zurücksetzen" : "abschwächen"
+          }`}
         >
           <button
             className="h-[24.5px]"
@@ -260,18 +264,21 @@ const TopNavbar = () => {
                 `${focusMode ? "icons/focus-on.png" : "icons/focus-off.png"}`
               }
               alt="Kartenebenen hinzufügen"
-              className={`h-5 mb-0.5 cursor-pointer ${isMode2d ? "" : disabledImageOpacity
-                }`}
+              className={`h-5 mb-0.5 cursor-pointer ${
+                isMode2d ? "" : disabledImageOpacity
+              }`}
             />
           </button>
         </Tooltip>
         <Tooltip
-          title={`Kartensteuerelemente ${showLayerButtons ? "ausblenden" : "einblenden"
-            }`}
+          title={`Kartensteuerelemente ${
+            showLayerButtons ? "ausblenden" : "einblenden"
+          }`}
         >
           <button
-            className={`text-xl hover:text-gray-600 ${isMode2d ? "" : disabledClass
-              }`}
+            className={`text-xl hover:text-gray-600 ${
+              isMode2d ? "" : disabledClass
+            }`}
             disabled={!isMode2d}
             onClick={() => {
               dispatch(setUIShowLayerButtons(!showLayerButtons));
@@ -297,8 +304,9 @@ const TopNavbar = () => {
             }
           >
             <button
-              className={`hover:text-gray-600 text-xl ${isMode2d ? "" : disabledClass
-                }`}
+              className={`hover:text-gray-600 text-xl ${
+                isMode2d ? "" : disabledClass
+              }`}
             >
               <FontAwesomeIcon icon={faFileExport} />
             </button>

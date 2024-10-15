@@ -21,11 +21,12 @@ export interface UIState {
   showInfoText: boolean;
   showLayerButtons: boolean;
   showLayerHideButtons: boolean;
+  showOverlayTour: boolean;
 }
 
 const initialState: UIState = {
   mode: UIMode.DEFAULT,
-
+  showOverlayTour: false,
   activeTabKey: "1",
   allow3d: true,
   allowChanges: true,
@@ -72,6 +73,9 @@ const slice = createSlice({
     setUIShowLayerHideButtons(state, action: PayloadAction<boolean>) {
       state.showLayerHideButtons = action.payload;
     },
+    toggleShowOverlayTour(state, action: PayloadAction<boolean>) {
+      state.showOverlayTour = action.payload;
+    },
   },
 });
 
@@ -86,6 +90,7 @@ export const {
   setUIShowInfoText,
   setUIShowLayerButtons,
   setUIShowLayerHideButtons,
+  toggleShowOverlayTour,
 } = slice.actions;
 
 export const getUIMode = (state: RootState) => state.ui.mode;
@@ -99,5 +104,7 @@ export const getUIShowLayerButtons = (state: RootState) =>
   state.ui.showLayerButtons;
 export const getUIShowLayerHideButtons = (state: RootState) =>
   state.ui.showLayerHideButtons;
+export const getUIOverlayTourMode = (state: RootState) =>
+  state.ui.showOverlayTour;
 
 export default slice.reducer;

@@ -43,6 +43,8 @@ import {
 import {
   getUIAllowChanges,
   getUIMode,
+  getUIOverlayTourMode,
+  toggleShowOverlayTour,
   setUIAllowChanges,
   setUIMode,
   setUIShowLayerButtons,
@@ -69,6 +71,7 @@ type Config = {
 
 function App({ published }: { published?: boolean }) {
   const dispatch: AppDispatch = useDispatch();
+  const tourMode = useSelector(getUIOverlayTourMode);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const allowUiChanges = useSelector(getUIAllowChanges);
@@ -141,8 +144,8 @@ function App({ published }: { published?: boolean }) {
 
   const content = (
     <OverlayTourProvider
-      showOverlay={uiMode === UIMode.TOUR ? true : false}
-      closeOverlay={() => dispatch(setUIMode(UIMode.DEFAULT))}
+      showOverlay={tourMode}
+      closeOverlay={() => dispatch(toggleShowOverlayTour(false))}
       transparency={backgroundSettings.transparency}
       color={backgroundSettings.color}
     >
