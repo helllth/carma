@@ -64,9 +64,7 @@ const LayerRow = ({ layer, id, isBackgroundLayer }: LayerRowProps) => {
           </div>
         ) : (
           <FontAwesomeIcon
-            icon={
-              icon ? iconMap[icon] : isBackgroundLayer ? faLayerGroup : faMap
-            }
+            icon={icon ? iconMap[icon] : faMap}
             className="text-base"
             style={{ color: iconColorMap[icon] }}
             id="icon"
