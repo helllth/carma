@@ -81,7 +81,7 @@ const AppErrorFallback = ({ error, resetErrorBoundary }) => {
         width: "100%",
         height: "100%",
         minHeight: "100vh",
-        background: "url('/images/error.jpg')",
+        background: "url('/geoportal/images/error.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
