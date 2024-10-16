@@ -27,7 +27,10 @@ import {
   setFeatureRenderingOption,
 } from "./store/slices/ui";
 import { constants as kitasConstants } from "./helper/constants";
-import { TopicMapStylingDispatchContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
+import {
+  TopicMapStylingDispatchContext,
+  TopicMapStylingContext,
+} from "react-cismap/contexts/TopicMapStylingContextProvider";
 
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];
@@ -37,6 +40,8 @@ const getDefaultFilterConfiguration = (lebenslagen) => {
 
 const Menu = () => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
+  const { setMarkerSymbolSize } = useContext(TopicMapStylingDispatchContext);
+  const { markerSymbolSize } = useContext(TopicMapStylingContext);
   const {
     filterState,
     filterMode,
@@ -133,6 +138,7 @@ const Menu = () => {
                         kitasConstants.FEATURE_RENDERING_BY_TRAEGERTYP,
                       ),
                     );
+                    setMarkerSymbolSize(markerSymbolSize + 0.0000001);
                   }}
                   checked={
                     featureRenderingOption ===
@@ -158,6 +164,7 @@ const Menu = () => {
                         kitasConstants.FEATURE_RENDERING_BY_PROFIL,
                       ),
                     );
+                    setMarkerSymbolSize(markerSymbolSize + 0.0000001);
                   }}
                   checked={
                     featureRenderingOption ===
