@@ -376,7 +376,14 @@ export const LibModal = ({
                 search(value);
               }}
             />
-            <Button type="text" onClick={() => setOpen(false)}>
+            <Button
+              type="text"
+              onClick={() => {
+                setOpen(false);
+                setPreview(false);
+                setSelectedLayerId(null);
+              }}
+            >
               <FontAwesomeIcon icon={faX} />
             </Button>
           </div>
