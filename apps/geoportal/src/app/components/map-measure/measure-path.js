@@ -281,18 +281,6 @@ L.Control.MeasurePolygon = L.Control.extend({
     const iconsWrapper = L.DomUtil.create("div", "m-icons-wrapper");
     iconsWrapper.appendChild(linesContainer);
 
-    // iconsWrapper.appendChild(modeBtn);
-
-    // L.DomEvent.on(
-    //   modeBtn,
-    //   "click",
-    //   (event) => {
-    //     event.preventDefault(); // Prevent default action (e.g., redirection)
-    //     this.drawingLines(map);
-    //   },
-    //   this,
-    // );
-
     L.DomEvent.on(
       lineIcon,
       "click",
