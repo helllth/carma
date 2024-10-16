@@ -132,7 +132,7 @@ const Map = () => {
       <StyledWMSTileLayer
         key={"Hauptnutzungen.flaeche:aevVisible:" + aevVisible}
         url="https://maps.wuppertal.de/planung"
-        layers={"r102:fnp_haupt_fl"}
+        layers={"r102_fnp_haupt_fl"}
         version="1.1.1"
         transparent="true"
         format="image/png"
