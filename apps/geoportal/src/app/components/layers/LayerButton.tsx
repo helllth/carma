@@ -154,16 +154,22 @@ const LayerButton = ({
         ref={setNodeRef}
         onClick={(e) => {
           e.stopPropagation();
-          console.log("onClick LayerButton settings clickFromInfoView", showSettings, clickFromInfoView);
+          console.log(
+            "onClick LayerButton settings clickFromInfoView",
+            showSettings,
+            clickFromInfoView,
+          );
           if (!clickFromInfoView) {
-            showSettings ? dispatch(setSelectedLayerIndexNoSelection()) : dispatch(setSelectedLayerIndex(index));
+            showSettings
+              ? dispatch(setSelectedLayerIndexNoSelection())
+              : dispatch(setSelectedLayerIndex(index));
           } else {
             dispatch(setClickFromInfoView(false));
           }
         }}
         style={{
           transform: CSS.Translate.toString(transform),
-          userSelect: "none"
+          userSelect: "none",
         }}
         {...listeners}
         {...attributes}
@@ -174,8 +180,8 @@ const LayerButton = ({
               ? "bg-white"
               : "bg-neutral-200/70"
             : showSettings
-              ? "bg-white"
-              : "bg-neutral-200",
+            ? "bg-white"
+            : "bg-neutral-200",
           zoom >= layer.props.maxZoom && "opacity-50",
           zoom <= layer.props.minZoom && "opacity-50",
         )}
@@ -218,6 +224,7 @@ const LayerButton = ({
           <>
             <span className="text-base">{title}</span>
             <button
+              id={`removeLayerButton-${id}`}
               className="hover:text-gray-500 text-gray-600 flex items-center justify-center"
               onClick={(e) => {
                 e.stopPropagation();
