@@ -116,7 +116,7 @@ const Map = () => {
         FNP-Auszug)
         <div style={{ float: "right", paddingRight: 10 }}>
           <a
-            href={urlPrefix + "/#/rechtsplan?" + searchParams}
+            href={urlPrefix + "#/rechtsplan?" + searchParams}
             onClick={() => {
               dispatch(setFeatureCollection([]));
             }}
@@ -150,7 +150,7 @@ const Map = () => {
         {aevVisible === true ? "mit Änderungsverfahren (ÄV)" : ""}
         <div style={{ float: "right", paddingRight: 10 }}>
           <a
-            href={urlPrefix + "/#/arbeitskarte?" + searchParams}
+            href={urlPrefix + "#/arbeitskarte?" + searchParams}
             onClick={() => {
               dispatch(setFeatureCollection([]));
             }}
