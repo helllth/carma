@@ -173,8 +173,8 @@ const slice = createSlice({
       }
     },
     setPreviousSelectedLayerIndex(state) {
-      const newIndex = SELECTED_LAYER_INDEX.BACKGROUND_LAYER;
-      if (newIndex < -1) {
+      const newIndex = state.selectedLayerIndex - 1;
+      if (newIndex < SELECTED_LAYER_INDEX.BACKGROUND_LAYER) {
         state.selectedLayerIndex = state.layers.length - 1;
       } else {
         state.selectedLayerIndex = newIndex;
