@@ -15,13 +15,13 @@ const factory = ({ featureCollectionContext }) => {
       } else {
         themenstadtplanDesc += filterState.positiv.length + " Themen";
       }
-      if (filterState.negativ.length > 0) {
+      if (filterState?.negativ?.length > 0) {
         if (filterState.negativ.length <= 3) {
           themenstadtplanDesc += " ohne ";
           themenstadtplanDesc += filterState.negativ.join(", ");
         } else {
           themenstadtplanDesc +=
-            " (" + filterState.negativ.length + " Themen ausgeschlossen)";
+            " (" + filterState?.negativ?.length + " Themen ausgeschlossen)";
         }
       }
     }
