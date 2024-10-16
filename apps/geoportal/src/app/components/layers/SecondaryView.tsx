@@ -80,7 +80,21 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       let newLayerIndex = -2;
+      let removedOtherLayer = false;
       const layerButtons = document.querySelectorAll('[id^="layer-"]');
+      const removeLayerButtons = document.querySelectorAll(
+        '[id^="removeLayerButton-"]',
+      );
+
+      removeLayerButtons.forEach((layerButton, i) => {
+        if (layerButton.contains(event.target as Node)) {
+          removedOtherLayer = true;
+        }
+      });
+
+      if (removedOtherLayer) {
+        return;
+      }
 
       layerButtons.forEach((layerButton, i) => {
         if (layerButton.contains(event.target as Node)) {
