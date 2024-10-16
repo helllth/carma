@@ -106,6 +106,7 @@ const Info = ({ description, legend }: InfoProps) => {
         });
     } else {
       setMetadataText("keine Verknüpfung zum Metadatenkatalog vorhanden");
+      setPdfUrl("");
     }
   }, [metadataUrl]);
 
