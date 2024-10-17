@@ -85,6 +85,7 @@ const FilterUI = () => {
                           setFilterState(newFilterState);
                         }}
                         checked={filterState[item.text]}
+                        id={"filter.kita.traeger.div." + item.c}
                         label={
                           <>
                             {item.text}{" "}
@@ -143,6 +144,7 @@ const FilterUI = () => {
                   checked={filterState.inklusion}
                   inline
                   label="Schwerpunkt Inklusion"
+                  id="filter.kita.inklusion.checkbox"
                 />
 
                 {"  "}
@@ -170,6 +172,7 @@ const FilterUI = () => {
                   checked={filterState.normal}
                   inline
                   label="ohne Schwerpunkt Inklusion"
+                  id="filter.kita.normal.checkbox"
                 />
                 {"  "}
                 <KitasProfileMapVisSymbol
@@ -217,6 +220,7 @@ const FilterUI = () => {
                   checked={filterState.alter === "unter2" || !filterState.alter}
                   inline
                   label="unter 2 Jahre"
+                  id="filter.kita.alter.unter2"
                 />
 
                 <br />
@@ -235,6 +239,7 @@ const FilterUI = () => {
                   checked={filterState.alter === "ab2"}
                   inline
                   label="2 bis 3 Jahre"
+                  id="filter.kita.alter.ab2"
                 />
                 <br />
                 <Form.Check
@@ -252,6 +257,7 @@ const FilterUI = () => {
                   checked={filterState.alter === "ab3"}
                   inline
                   label="ab 3 Jahre"
+                  id="filter.kita.alter.ab3"
                 />
               </Form>
 
@@ -294,6 +300,7 @@ const FilterUI = () => {
                   name="mapBackground"
                   inline
                   label="35 Stunden pro Woche"
+                  id="filter.kita.umfang.35h"
                 />
 
                 <br />
@@ -314,6 +321,7 @@ const FilterUI = () => {
                   checked={filterState.umfang_45}
                   inline
                   label="45 Stunden pro Woche"
+                  id="filter.kita.umfang.45h"
                 />
               </Form>
               <br />
