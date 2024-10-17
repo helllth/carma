@@ -7,6 +7,7 @@ import { constants } from "./constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faUser } from "@fortawesome/free-solid-svg-icons";
 import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
+import Icon from "react-cismap/commons/Icon";
 
 const getSignature = (properties) => {
   if (properties.signatur) {
@@ -70,24 +71,24 @@ const convertItemToFeature = async (itemIn) => {
       <>
         <p>{item?.adresse}</p>
         <p>
-          <FontAwesomeIcon
+          <Icon
             style={{
               color: "grey",
               width: "30px",
               textAlign: "center",
             }}
             size="2x"
-            icon={faUser}
+            name={"user"}
           />
           {alter}
-          <FontAwesomeIcon
+          <Icon
             style={{
               color: "grey",
               width: "40px",
               textAlign: "center",
             }}
             size="2x"
-            icon={faCalendar}
+            name={"calendar"}
           />
           {stunden}
         </p>
