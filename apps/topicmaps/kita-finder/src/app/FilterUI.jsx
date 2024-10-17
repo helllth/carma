@@ -1,42 +1,35 @@
-import { useContext } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { useContext } from "react";
+import { Button, Form } from "react-bootstrap";
 
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
-} from 'react-cismap/contexts/FeatureCollectionContextProvider';
-import { ResponsiveTopicMapContext } from 'react-cismap/contexts/ResponsiveTopicMapContextProvider';
-import { TopicMapStylingContext } from 'react-cismap/contexts/TopicMapStylingContextProvider';
-import { getColorFromLebenslagenCombination } from './helper/styler';
-import { constants as kitasConstants } from './helper/constants';
-import Icon from 'react-cismap/commons/Icon';
+} from "react-cismap/contexts/FeatureCollectionContextProvider";
+import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopicMapContextProvider";
+import { constants as kitasConstants } from "./helper/constants";
+import Icon from "react-cismap/commons/Icon";
 
-import 'url-search-params-polyfill';
-import KitasTraegertypMapVisSymbol from './helper/KitasTraegertypMapVisSymbol';
-import KitasProfileMapVisSymbol from './helper/KitasProfileMapVisSymbol';
-import KitasPieChart from './KitasPieChart';
-import { traegertypMap } from './helper/filter';
+import "url-search-params-polyfill";
+import KitasTraegertypMapVisSymbol from "./helper/KitasTraegertypMapVisSymbol";
+import KitasProfileMapVisSymbol from "./helper/KitasProfileMapVisSymbol";
+import KitasPieChart from "./KitasPieChart";
+import { traegertypMap } from "./helper/filter";
+import { useSelector } from "react-redux";
+import { getFeatureRenderingOption } from "./store/slices/ui";
 
 const FilterUI = () => {
-  const { itemsDictionary, filteredItems, filterState } = useContext(
-    FeatureCollectionContext
-  );
+  const { filterState } = useContext(FeatureCollectionContext);
   const { setFilterState } = useContext(FeatureCollectionDispatchContext);
   const { windowSize } = useContext(ResponsiveTopicMapContext);
 
-  const { additionalStylingInfo } = useContext(TopicMapStylingContext);
-  const poiColors = additionalStylingInfo?.poiColors;
+  const featureRenderingOption = useSelector(getFeatureRenderingOption);
 
   const width = windowSize?.width || 500;
 
   let widePieChartPlaceholder = null;
   let narrowPieChartPlaceholder = null;
 
-  let pieChart = (
-    <KitasPieChart
-      renderingOption={'KITAS/CONSTS/FEATURE_RENDERING_BY_TRAEGERTYP'}
-    />
-  );
+  let pieChart = <KitasPieChart />;
 
   if (width < 995) {
     narrowPieChartPlaceholder = (
@@ -53,34 +46,34 @@ const FilterUI = () => {
       <table border={0} width="100%">
         <tbody>
           <tr>
-            <td valign="center" style={{ width: '330px' }}>
+            <td valign="center" style={{ width: "330px" }}>
               <Form>
                 <label
                   style={{
-                    display: 'inline-block',
-                    maxWidth: '100%',
-                    marginBottom: '5px',
+                    display: "inline-block",
+                    maxWidth: "100%",
+                    marginBottom: "5px",
                     fontWeight: 700,
                   }}
                 >
                   Trägertyp
-                  {'  '}
+                  {"  "}
                   <Icon
                     style={{
-                      color: 'grey',
-                      width: '30px',
-                      textAlign: 'center',
+                      color: "grey",
+                      width: "30px",
+                      textAlign: "center",
                     }}
                     size="2x"
-                    name={'home'}
+                    name={"home"}
                   />
                 </label>
                 {traegertypMap.map((item) => {
                   return (
-                    <div key={'filter.kita.traeger.div.' + item.c}>
+                    <div key={"filter.kita.traeger.div." + item.c}>
                       <Form.Check
                         readOnly={true}
-                        key={'filter.kita.traeger.' + item.c}
+                        key={"filter.kita.traeger." + item.c}
                         onClick={(e) => {
                           const newFilterState = { ...filterState };
                           if (e.target.checked) {
@@ -92,13 +85,17 @@ const FilterUI = () => {
                           setFilterState(newFilterState);
                         }}
                         checked={filterState[item.text]}
+                        id={"filter.kita.traeger.div." + item.c}
                         label={
                           <>
-                            {item.text}{' '}
+                            {item.text}{" "}
                             <KitasTraegertypMapVisSymbol
-                              visible={true}
+                              visible={
+                                featureRenderingOption ===
+                                kitasConstants.FEATURE_RENDERING_BY_TRAEGERTYP
+                              }
                               traegertyp={kitasConstants.TRAEGERTYP.indexOf(
-                                item.c
+                                item.c,
                               )}
                             />
                           </>
@@ -112,28 +109,28 @@ const FilterUI = () => {
               <Form>
                 <label
                   style={{
-                    display: 'inline-block',
-                    maxWidth: '100%',
-                    marginBottom: '5px',
+                    display: "inline-block",
+                    maxWidth: "100%",
+                    marginBottom: "5px",
                     fontWeight: 700,
                   }}
                 >
                   Profil
-                  {'  '}
+                  {"  "}
                   <Icon
                     style={{
-                      color: 'grey',
-                      width: '30px',
-                      textAlign: 'center',
+                      color: "grey",
+                      width: "30px",
+                      textAlign: "center",
                     }}
                     size="2x"
-                    name={'child'}
+                    name={"child"}
                   />
                 </label>
                 <br />
                 <Form.Check
                   readOnly={true}
-                  key={'filter.kita.inklusion.checkbox'}
+                  key={"filter.kita.inklusion.checkbox"}
                   onClick={(e) => {
                     const newFilterState = { ...filterState };
                     if (e.target.checked) {
@@ -147,14 +144,21 @@ const FilterUI = () => {
                   checked={filterState.inklusion}
                   inline
                   label="Schwerpunkt Inklusion"
+                  id="filter.kita.inklusion.checkbox"
                 />
 
-                {'  '}
-                <KitasProfileMapVisSymbol inklusion={true} visible={true} />
+                {"  "}
+                <KitasProfileMapVisSymbol
+                  inklusion={true}
+                  visible={
+                    featureRenderingOption ===
+                    kitasConstants.FEATURE_RENDERING_BY_PROFIL
+                  }
+                />
                 <br />
                 <Form.Check
                   readOnly={true}
-                  key={'filter.kita.normal.checkbox'}
+                  key={"filter.kita.normal.checkbox"}
                   onClick={(e) => {
                     const newFilterState = { ...filterState };
                     if (e.target.checked) {
@@ -168,103 +172,114 @@ const FilterUI = () => {
                   checked={filterState.normal}
                   inline
                   label="ohne Schwerpunkt Inklusion"
+                  id="filter.kita.normal.checkbox"
                 />
-                {'  '}
-                <KitasProfileMapVisSymbol inklusion={false} visible={true} />
+                {"  "}
+                <KitasProfileMapVisSymbol
+                  inklusion={false}
+                  visible={
+                    featureRenderingOption ===
+                    kitasConstants.FEATURE_RENDERING_BY_PROFIL
+                  }
+                />
               </Form>
               <Form>
                 <br />
                 <label
                   style={{
-                    display: 'inline-block',
-                    maxWidth: '100%',
-                    marginBottom: '5px',
+                    display: "inline-block",
+                    maxWidth: "100%",
+                    marginBottom: "5px",
                     fontWeight: 700,
                   }}
                 >
-                  Kindesalter{' '}
+                  Kindesalter{" "}
                   <Icon
                     style={{
-                      color: 'grey',
-                      width: '30px',
-                      textAlign: 'center',
+                      color: "grey",
+                      width: "30px",
+                      textAlign: "center",
                     }}
                     size="2x"
-                    name={'user'}
+                    name={"user"}
                   />
                 </label>
                 <br />
                 <Form.Check
                   type="radio"
                   readOnly={true}
-                  key={'filter.kita.alter.unter2'}
+                  key={"filter.kita.alter.unter2"}
                   onClick={(e) => {
                     const newFilterState = { ...filterState };
                     if (e.target.checked) {
-                      newFilterState.alter = 'unter2';
+                      newFilterState.alter = "unter2";
                     }
 
                     setFilterState(newFilterState);
                   }}
-                  checked={filterState.alter === 'unter2' || !filterState.alter}
+                  checked={filterState.alter === "unter2" || !filterState.alter}
                   inline
                   label="unter 2 Jahre"
+                  id="filter.kita.alter.unter2"
                 />
 
                 <br />
                 <Form.Check
                   type="radio"
                   readOnly={true}
-                  key={'filter.kita.alter.ab2'}
+                  key={"filter.kita.alter.ab2"}
                   onClick={(e) => {
                     const newFilterState = { ...filterState };
                     if (e.target.checked) {
-                      newFilterState.alter = 'ab2';
+                      newFilterState.alter = "ab2";
                     }
 
                     setFilterState(newFilterState);
                   }}
-                  checked={filterState.alter === 'ab2'}
+                  checked={filterState.alter === "ab2"}
                   inline
                   label="2 bis 3 Jahre"
+                  id="filter.kita.alter.ab2"
                 />
                 <br />
                 <Form.Check
                   type="radio"
                   readOnly={true}
-                  key={'filter.kita.alter.ab3'}
+                  key={"filter.kita.alter.ab3"}
                   onClick={(e) => {
                     const newFilterState = { ...filterState };
                     if (e.target.checked) {
-                      newFilterState.alter = 'ab3';
+                      newFilterState.alter = "ab3";
                     }
 
                     setFilterState(newFilterState);
                   }}
-                  checked={filterState.alter === 'ab3'}
+                  checked={filterState.alter === "ab3"}
                   inline
                   label="ab 3 Jahre"
+                  id="filter.kita.alter.ab3"
                 />
               </Form>
+
               <Form>
                 <br />
                 <label
                   style={{
-                    display: 'inline-block',
-                    maxWidth: '100%',
-                    marginBottom: '5px',
+                    display: "inline-block",
+                    maxWidth: "100%",
+                    marginBottom: "5px",
                     fontWeight: 700,
                   }}
                 >
-                  Betreuungsumfang{' '}
+                  Betreuungsumfang{" "}
                   <Icon
                     style={{
-                      color: 'grey',
-                      width: '40px',
-                      textAlign: 'center',
+                      color: "grey",
+                      width: "40px",
+                      textAlign: "center",
                     }}
                     size="2x"
-                    name={'calendar'}
+                    name={"calendar"}
                   />
                 </label>
                 <br />
@@ -285,6 +300,7 @@ const FilterUI = () => {
                   name="mapBackground"
                   inline
                   label="35 Stunden pro Woche"
+                  id="filter.kita.umfang.35h"
                 />
 
                 <br />
@@ -305,6 +321,7 @@ const FilterUI = () => {
                   checked={filterState.umfang_45}
                   inline
                   label="45 Stunden pro Woche"
+                  id="filter.kita.umfang.45h"
                 />
               </Form>
               <br />
@@ -321,7 +338,7 @@ const FilterUI = () => {
                     setFilterState({
                       umfang_45: true,
                       umfang_35: true,
-                      alter: 'ab3',
+                      alter: "ab3",
                       normal: true,
                       inklusion: true,
                       ...newFilterState,

@@ -1,11 +1,9 @@
-import Color from 'color';
-import ColorHash from 'color-hash';
-import createSVGPie from 'create-svg-pie';
-import L from 'leaflet';
-import queryString from 'query-string';
-import createElement from 'svg-create-element';
+import Color from "color";
+import createSVGPie from "create-svg-pie";
+import L from "leaflet";
+import createElement from "svg-create-element";
 
-import { POI_COLORS, constants } from './constants';
+import { constants } from "./constants";
 
 const fallbackSVG = `
     <svg xmlns="http://www.w3.org/2000/svg" width="311.668" height="311.668">
@@ -14,13 +12,15 @@ const fallbackSVG = `
     </svg>
 `;
 
-export const getPoiClusterIconCreatorFunction = ({
+export const getClusterIconCreatorFunction = ({
   svgSize = 24,
   colorizer = getColorForProperties,
-  poiColors,
+  featureRenderingOption,
 }) => {
+
   //return a function because the functionCall of the iconCreateFunction cannot be manipulated
   return (cluster) => {
+    // const colorizer = getColorForProperties;
     var childCount = cluster.getChildCount();
     const values = [];
     const colors = [];
@@ -33,7 +33,9 @@ export const getPoiClusterIconCreatorFunction = ({
     let inCart = false;
     for (let marker of childMarkers) {
       values.push(1);
-      colors.push(Color(colorizer(marker.feature.properties, poiColors)));
+      colors.push(
+        Color(colorizer(marker.feature.properties, featureRenderingOption)),
+      );
       if (marker.feature.selected === true) {
         containsSelection = true;
       }
@@ -44,7 +46,7 @@ export const getPoiClusterIconCreatorFunction = ({
     const pie = createSVGPie(values, r, colors);
 
     let canvasSize = (svgSize / 3.0) * 5.0;
-    let background = createElement('svg', {
+    let background = createElement("svg", {
       width: canvasSize,
       height: canvasSize,
       viewBox: `0 0 ${canvasSize} ${canvasSize}`,
@@ -52,84 +54,71 @@ export const getPoiClusterIconCreatorFunction = ({
 
     //Kleiner Kreis in der Mitte
     // (blau wenn selektion)
-    let innerCircleColor = '#ffffff';
+    let innerCircleColor = "#ffffff";
     if (containsSelection) {
-      innerCircleColor = 'rgb(67, 149, 254)';
+      innerCircleColor = "rgb(67, 149, 254)";
     }
 
     //inner circle
     pie.appendChild(
-      createElement('circle', {
+      createElement("circle", {
         cx: r,
         cy: r,
         r: svgSize / 3.0,
-        'stroke-width': 0,
-        opacity: '0.5',
+        "stroke-width": 0,
+        opacity: "0.5",
         fill: innerCircleColor,
-      })
+      }),
     );
-
-    // //Debug Rectangle -should be commnented out
-    // background.appendChild(createElement('rect', {
-    //     x:0,
-    //     y:0,
-    //     width: canvasSize,
-    //     height: canvasSize,
-    //     "stroke-width":1,
-    //     stroke: "#000000",
-    //     opacity: "1",
-    //     fill: "#ff0000"
-
-    // }));
 
     background.appendChild(pie);
 
     // Umrandung
     background.appendChild(
-      createElement('circle', {
+      createElement("circle", {
         cx: canvasSize / 2.0,
         cy: canvasSize / 2.0,
         r: r,
-        'stroke-width': 2,
-        stroke: '#000000',
-        opacity: '0.5',
-        fill: 'none',
-      })
+        "stroke-width": 2,
+        stroke: "#000000",
+        opacity: "0.5",
+        fill: "none",
+      }),
     );
 
     if (inCart) {
       background
         .appendChild(
-          createElement('text', {
-            x: '50%',
-            y: '50%',
-            'text-anchor': 'middle',
-            'font-family': 'FontAwesome',
-            fill: '#fff',
-            'font-size': '26',
-            dy: '.4em',
-            opacity: '0.5',
-          })
+          createElement("text", {
+            x: "50%",
+            y: "50%",
+            "text-anchor": "middle",
+            "font-family": "FontAwesome",
+            fill: "#fff",
+            "font-size": "26",
+            dy: ".4em",
+            opacity: "0.5",
+          }),
         )
-        .appendChild(document.createTextNode('\uf005'));
+        .appendChild(document.createTextNode("\uf005"));
     }
 
     background
       .appendChild(
-        createElement('text', {
-          x: '50%',
-          y: '50%',
-          'text-anchor': 'middle',
-          dy: '.3em',
-        })
+        createElement("text", {
+          x: "50%",
+          y: "50%",
+          "text-anchor": "middle",
+          dy: ".3em",
+        }),
       )
       .appendChild(document.createTextNode(childCount));
 
-    pie.setAttribute('x', (canvasSize - r * 2) / 2.0);
-    pie.setAttribute('y', (canvasSize - r * 2) / 2.0);
+    pie.setAttribute("x", (canvasSize - r * 2) / 2.0);
+    pie.setAttribute("y", (canvasSize - r * 2) / 2.0);
 
     var divIcon = L.divIcon({
-      className: 'leaflet-data-marker',
+      className: "leaflet-data-marker",
       html:
         background.outerHTML ||
         new XMLSerializer().serializeToString(background), //IE11 Compatibility
@@ -140,84 +129,32 @@ export const getPoiClusterIconCreatorFunction = ({
   };
 };
 
-export const getColorFromLebenslagenCombination = (
-  combination,
-  poiColors = POI_COLORS
-) => {
-  let qColorRules;
-  let colorCandidate;
-  let lookup = null;
-  try {
-    qColorRules = undefined; //queryString.parse(store.getState().routing.location.search).colorRules;
-
-    if (qColorRules) {
-      try {
-        lookup = JSON.parse(qColorRules);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  } catch (error) {
-    //problem dduring colorRulesn override
-  }
-
-  colorCandidate = poiColors[combination];
-  if (colorCandidate) {
-    return colorCandidate;
-  } else {
-    let colorHash = new ColorHash({ saturation: 0.3 });
-    const c = colorHash.hex(combination);
-    // console.log(
-    //   "Keine vordefinierte Farbe für '" +
-    //     combination +
-    //     "' vorhanden. (Ersatz wird automatisch erstellt) --> " +
-    //     c
-    // );
-    return c;
-  }
-  return '#A83F6A';
-};
-
 const opts = [];
 const kC = constants;
 
 opts.push({});
 opts[opts.length - 1][kC.TRAEGERTYP.indexOf(kC.TRAEGERTYP_STAEDTISCH)] =
-  '#00A0B0';
-opts[opts.length - 1][kC.TRAEGERTYP.indexOf(kC.TRAEGERTYP_ANDERE)] = '#A1BBC1';
+  "#00A0B0";
+opts[opts.length - 1][kC.TRAEGERTYP.indexOf(kC.TRAEGERTYP_ANDERE)] = "#A1BBC1";
 opts[opts.length - 1][kC.TRAEGERTYP.indexOf(kC.TRAEGERTYP_BETRIEBSKITA)] =
-  '#594F4F';
+  "#594F4F";
 opts[opts.length - 1][kC.TRAEGERTYP.indexOf(kC.TRAEGERTYP_ELTERNINITIATIVE)] =
-  '#9DE0AD';
+  "#9DE0AD";
 opts[opts.length - 1][kC.TRAEGERTYP.indexOf(kC.TRAEGERTYP_KATHOLISCH)] =
-  '#7FBCB5';
+  "#7FBCB5";
 opts[opts.length - 1][kC.TRAEGERTYP.indexOf(kC.TRAEGERTYP_EVANGELISCH)] =
-  '#547980';
+  "#547980";
 
-export const getColorForProperties = (properties, poiColors) => {
-  let { mainlocationtype, color } = properties;
-  //console.log(colorHash.hex("" + JSON.stringify({ll})));
-  if (color !== undefined) {
-    return color;
-  } else if (mainlocationtype.color !== undefined) {
-    return mainlocationtype.color;
-  } else {
-    const lookup = opts[0];
-    const color = lookup[properties.traegertyp];
-    if (color) {
-      return color;
-    } else {
-      return '#<a>&lt;&lt;</a><a>&lt;&lt;</a>';
-    }
+export const getColorForProperties = (properties, featureRendering) => {
+  if (properties === undefined) {
+    return "#535353";
   }
-};
 
-export const getColor = (properties, featureRendering) => {
   if (featureRendering === constants.FEATURE_RENDERING_BY_PROFIL) {
-    if (properties.plaetze_fuer_behinderte === true) {
-      return '#00B4CC';
+    if (properties?.plaetze_fuer_behinderte === true) {
+      return "#00B4CC";
     } else {
-      return '#A83F6A';
+      return "#A83F6A";
     }
   } else if (featureRendering === constants.FEATURE_RENDERING_BY_TRAEGERTYP) {
     const lookup = opts[0];
@@ -225,26 +162,10 @@ export const getColor = (properties, featureRendering) => {
     if (color) {
       return color;
     } else {
-      return '#<a>&lt;&lt;</a><a>&lt;&lt;</a>';
-    }
-  } else if (featureRendering === constants.FEATURE_RENDERING_BY_TRAEGERTYP2) {
-    const lookup = opts[1];
-    const color = lookup[properties.traegertyp];
-    if (color) {
-      return color;
-    } else {
-      return '#<a>&lt;&lt;</a><a>&lt;&lt;</a>';
-    }
-  } else if (featureRendering === constants.FEATURE_RENDERING_BY_TRAEGERTYP3) {
-    const lookup = opts[2];
-    const color = lookup[properties.traegertyp];
-    if (color) {
-      return color;
-    } else {
-      return '#<a>&lt;&lt;</a><a>&lt;&lt;</a>';
+      return "#535353";
     }
   } else {
-    return '#333333';
+    return "#00B4CC";
   }
 };
 
@@ -253,12 +174,13 @@ export const getFeatureStyler = (
   colorizer = getColorForProperties,
   appMode,
   secondarySelection,
-  additionalStylingInfo
+  additionalStylingInfo,
 ) => {
-  const poiColors = additionalStylingInfo?.poiColors || POI_COLORS;
+  const featureRenderingOption = additionalStylingInfo.featureRenderingOption;
 
   return (feature) => {
-    var color = Color(colorizer(feature.properties, poiColors));
+    var color = Color(colorizer(feature.properties, featureRenderingOption));
+
     let radius = svgSize / 2; //needed for the Tooltip Positioning
     let canvasSize = svgSize;
     if (feature.selected) {
@@ -268,16 +190,15 @@ export const getFeatureStyler = (
     let selectionBox = canvasSize - 6;
     let badge = feature.properties.svgBadge || fallbackSVG; //|| `<image x="${(svgSize - 20) / 2}" y="${(svgSize - 20) / 2}" width="20" height="20" xlink:href="/pois/signaturen/`+getSignatur(feature.properties)+`" />`;
 
-    let svg = `<svg id="badgefor_${
-      feature.id
-    }" height="${canvasSize}" width="${canvasSize}"> 
+    let svg = `<svg id="badgefor_${feature.id
+      }" height="${canvasSize}" width="${canvasSize}"> 
                     <style>
                     /* <![CDATA[ */
                         #badgefor_${feature.id} .bg-fill  {
-                            fill: ${colorizer(feature.properties, poiColors)};
+                            fill: ${color};
                         }
                         #badgefor_${feature.id} .bg-stroke  {
-                            stroke: ${colorizer(feature.properties, poiColors)};
+                            stroke: ${color};
                         }
                         #badgefor_${feature.id} .fg-fill  {
                             fill: white;
@@ -287,11 +208,9 @@ export const getFeatureStyler = (
                         }
                     /* ]]> */
                     </style>
-                <svg x="${svgSize / 12}" y="${svgSize / 12}"  width="${
-      svgSize - (2 * svgSize) / 12
-    }" height="${svgSize - (2 * svgSize) / 12}" viewBox="0 0 ${
-      feature.properties.svgBadgeDimension.width
-    } ${feature.properties.svgBadgeDimension.height}">       
+                <svg x="${svgSize / 12}" y="${svgSize / 12}"  width="${svgSize - (2 * svgSize) / 12
+      }" height="${svgSize - (2 * svgSize) / 12}" viewBox="0 0 ${feature.properties.svgBadgeDimension.width
+      } ${feature.properties.svgBadgeDimension.height}">       
                     ${badge}
                 </svg>
                 </svg>  `;
@@ -303,16 +222,15 @@ export const getFeatureStyler = (
       let innerBadgeOffset = (selectionBox - badgeDimension) / 2;
 
       svg =
-        `<svg id="badgefor_${
-          feature.id
+        `<svg id="badgefor_${feature.id
         }" height="${canvasSize}" width="${canvasSize}">
                     <style>
                     /* <![CDATA[ */
                         #badgefor_${feature.id} .bg-fill  {
-                            fill: ${colorizer(feature.properties, poiColors)};
+                            fill: ${color};
                         }
                         #badgefor_${feature.id} .bg-stroke  {
-                            stroke: ${colorizer(feature.properties, poiColors)};
+                            stroke: ${color};
                         }
                         #badgefor_${feature.id} .fg-fill  {
                             fill: white;
@@ -323,8 +241,7 @@ export const getFeatureStyler = (
                     /* ]]> */
                     </style>
                 <rect x="${selectionOffset}" y="${selectionOffset}" rx="8" ry="8" width="${selectionBox}" height="${selectionBox}" fill="rgba(67, 149, 254, 0.8)" stroke-width="0"/>
-                <svg x="${selectionOffset + innerBadgeOffset}" y="${
-          selectionOffset + innerBadgeOffset
+                <svg x="${selectionOffset + innerBadgeOffset}" y="${selectionOffset + innerBadgeOffset
         }" width="${badgeDimension}" height="${badgeDimension}" viewBox="0 0 ` +
         feature.properties.svgBadgeDimension.width +
         ` ` +

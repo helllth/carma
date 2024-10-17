@@ -1,16 +1,13 @@
-import React from "react";
 import { useContext, useEffect, useState } from "react";
 import {
   FeatureCollectionContext,
   FeatureCollectionDispatchContext,
 } from "react-cismap/contexts/FeatureCollectionContextProvider";
-import { LightBoxContext } from "react-cismap/contexts/LightBoxContextProvider";
 import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
 import FeatureCollection from "react-cismap/FeatureCollection";
 import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
 import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
 import { getGazData } from "./helper/helper";
-import { getPoiClusterIconCreatorFunction } from "./helper/styler";
 import Menu from "./Menu";
 import {
   searchTextPlaceholder,
@@ -18,37 +15,72 @@ import {
   InfoBoxTextContent,
   InfoBoxTextTitle,
 } from "@carma-collab/wuppertal/kita-finder";
+import {
+  getClusterIconCreatorFunction,
+  getColorForProperties,
+  getFeatureStyler,
+} from "./helper/styler";
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 
-const Stadtplankarte = ({ poiColors }) => {
+const KitaKarte = () => {
   const [gazData, setGazData] = useState([]);
   const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
     FeatureCollectionDispatchContext,
   );
-  const lightBoxContext = useContext(LightBoxContext);
-  const { markerSymbolSize } = useContext(TopicMapStylingContext);
-  const { clusteringOptions, selectedFeature } = useContext(
-    FeatureCollectionContext,
-  );
+  const { routedMapRef } = useContext(TopicMapContext);
+  const { clusteringOptions } = useContext(FeatureCollectionContext);
+
+  const { additionalStylingInfo } = useContext(TopicMapStylingContext);
+
   useEffect(() => {
     getGazData(setGazData);
   }, []);
 
-  useEffect(() => {
-    if (markerSymbolSize) {
-      setClusteringOptions({
-        ...clusteringOptions,
-        iconCreateFunction: getPoiClusterIconCreatorFunction({
-          svgSize: markerSymbolSize,
-          poiColors,
-        }),
-      });
-    }
-  }, [markerSymbolSize]);
+  // useEffect(() => {
+  //   if (additionalStylingInfo) {
+  //     console.log("changeClusteringOptions", additionalStylingInfo);
+
+  //     setClusteringOptions({
+  //       ...clusteringOptions,
+  //       iconCreateFunction: getClusterIconCreatorFunction({
+  //         featureRenderingOption: additionalStylingInfo.featureRenderingOption,
+  //       }),
+  //     });
+
+  //   }
+  // }, [additionalStylingInfo]);
+
+  const featureCollectionProps = {
+    clusteringOptions: {
+      iconCreateFunction: getClusterIconCreatorFunction({
+        svgSize: 35,
+        featureRenderingOption: additionalStylingInfo.featureRenderingOption,
+      }),
+    },
+    styler: (
+      svgSize,
+      colorizer = getColorForProperties,
+      appMode,
+      secondarySelection,
+      _additionalStylingInfoWillBeOverridden,
+    ) =>
+      getFeatureStyler(
+        svgSize,
+        (colorizer = getColorForProperties),
+        appMode,
+        secondarySelection,
+        {
+          featureRenderingOption: additionalStylingInfo.featureRenderingOption,
+        },
+      ),
+  };
 
   return (
     <TopicMapComponent
       gazData={gazData}
-      modalMenu={<Menu />}
+      modalMenu={
+        <Menu previewFeatureCollectionProps={featureCollectionProps} />
+      }
       locatorControl={true}
       gazetteerSearchPlaceholder={searchTextPlaceholder}
       gazetteerHitTrigger={(hits) => {
@@ -63,9 +95,16 @@ const Stadtplankarte = ({ poiColors }) => {
       infoBox={
         <GenericInfoBoxFromFeature
           pixelwidth={350}
+          headerColorizer={(feature, featureRenderingOption) => {
+            return getColorForProperties(
+              feature?.properties,
+              featureRenderingOption,
+            );
+          }}
           config={{
             displaySecondaryInfoAction: false,
             city: "Wuppertal",
+            header: "Kita",
             navigator: {
               noun: {
                 singular: "Kita",
@@ -78,9 +117,12 @@ const Stadtplankarte = ({ poiColors }) => {
         />
       }
     >
-      <FeatureCollection></FeatureCollection>
+      <FeatureCollection
+        key={`feature_${additionalStylingInfo.featureRenderingOption}`}
+        {...featureCollectionProps}
+      ></FeatureCollection>
     </TopicMapComponent>
   );
 };
 
-export default Stadtplankarte;
+export default KitaKarte;

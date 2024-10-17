@@ -1,11 +1,12 @@
 import Color from "color";
-import React from "react";
+import React, { useContext } from "react";
 import { addSVGToProps } from "react-cismap/tools/svgHelper";
 
 import { getColorForProperties } from "./styler";
 import { constants } from "./constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faUser } from "@fortawesome/free-solid-svg-icons";
+import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
 
 const getSignature = (properties) => {
   if (properties.signatur) {
@@ -42,7 +43,7 @@ const getHoursString = (properties) => {
   }
 };
 
-const convertItemToFeature = async (itemIn, poiColors) => {
+const convertItemToFeature = async (itemIn) => {
   let clonedItem = JSON.parse(
     JSON.stringify({
       ...itemIn,
@@ -59,11 +60,10 @@ const convertItemToFeature = async (itemIn, poiColors) => {
   );
 
   let item = await addSVGToProps(clonedItem, (i) => getSignature(i));
-  const headerColor = Color(getColorForProperties(item, poiColors));
+  const headerColor = Color(getColorForProperties(item));
   const alter = getAgeString(item);
   const stunden = getHoursString(item);
   const info = {
-    header: "Kita",
     title: item.name,
     additionalInfo: item.info,
     subtitle: () => (
@@ -119,9 +119,3 @@ const convertItemToFeature = async (itemIn, poiColors) => {
 };
 
 export default convertItemToFeature;
-
-export const getConvertItemToFeatureWithPOIColors = (poiColors) => {
-  return async (itemIn) => {
-    return await convertItemToFeature(itemIn, poiColors);
-  };
-};

@@ -20,6 +20,18 @@ import {
 } from "@carma-collab/wuppertal/kita-finder";
 import versionData from "../version.json";
 import { getApplicationVersion } from "@carma-commons/utils";
+import { Form } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getFeatureRenderingOption,
+  setFeatureRenderingOption,
+} from "./store/slices/ui";
+import { constants as kitasConstants } from "./helper/constants";
+import {
+  TopicMapStylingDispatchContext,
+  TopicMapStylingContext,
+} from "react-cismap/contexts/TopicMapStylingContextProvider";
+import { getColorForProperties } from "./helper/styler";
 
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];
@@ -27,8 +39,10 @@ const getDefaultFilterConfiguration = (lebenslagen) => {
   return { positiv, negativ };
 };
 
-const Menu = () => {
+const Menu = ({ previewFeatureCollectionProps }) => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
+  const { setMarkerSymbolSize } = useContext(TopicMapStylingDispatchContext);
+  const { markerSymbolSize } = useContext(TopicMapStylingContext);
   const {
     filterState,
     filterMode,
@@ -40,10 +54,37 @@ const Menu = () => {
     FeatureCollectionDispatchContext,
   );
 
+  const { setAdditionalStylingInfo } = useContext(
+    TopicMapStylingDispatchContext,
+  );
+
   const { items } = useContext(FeatureCollectionContext);
+
+  const dispatch = useDispatch();
+  const featureRenderingOption = useSelector(getFeatureRenderingOption);
 
   if ((filterState === undefined) & (items !== undefined)) {
     setFilterState(getDefaultFilterConfiguration(itemsDictionary?.lebenslagen));
+  }
+
+  const previewFeatureCollectionDisplayProps = {};
+
+  // since previewFeatureCollectionProps are props that are passed to the FeatureCollection component
+  // but the DefaultSettingsPanel is using them in a FeatureCollectionDisplay we need to change it to
+  // previewFeatureCollectionDisplayProps
+
+  if (previewFeatureCollectionProps) {
+    if (previewFeatureCollectionProps.clusteringOptions) {
+      previewFeatureCollectionDisplayProps.clusterOptions =
+        previewFeatureCollectionProps.clusteringOptions;
+    }
+    if (previewFeatureCollectionProps.styler) {
+      previewFeatureCollectionDisplayProps.style =
+        previewFeatureCollectionProps.styler(
+          markerSymbolSize,
+          getColorForProperties,
+        );
+    }
   }
 
   // const getFilterHeader = () => {
@@ -88,7 +129,76 @@ const Menu = () => {
             sectionBsStyle={FilterStyle}
             sectionContent={<FilterUI />}
           />,
-          <DefaultSettingsPanel key="settings" />,
+          <DefaultSettingsPanel
+            key={"settings" + featureRenderingOption}
+            previewMapPosition="lat=51.27486777766875&lng=7.213025708847476&zoom=10"
+            previewFeatureCollectionDisplayProps={
+              previewFeatureCollectionDisplayProps
+            }
+            sparseSettingsSectionsExtensions={[
+              ,
+              <Form>
+                <label
+                  style={{
+                    display: "inline-block",
+                    maxWidth: "100%",
+                    marginBottom: "5px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Zeichenvorschrift
+                </label>
+                <br />
+                <Form.Check
+                  type="radio"
+                  readOnly={true}
+                  id="radio_traegertyp"
+                  onClick={(e) => {
+                    setAdditionalStylingInfo({
+                      featureRenderingOption:
+                        kitasConstants.FEATURE_RENDERING_BY_TRAEGERTYP,
+                    });
+                    dispatch(
+                      setFeatureRenderingOption(
+                        kitasConstants.FEATURE_RENDERING_BY_TRAEGERTYP,
+                      ),
+                    );
+                  }}
+                  checked={
+                    featureRenderingOption ===
+                    kitasConstants.FEATURE_RENDERING_BY_TRAEGERTYP
+                  }
+                  inline
+                  label="nach Trägertyp"
+                />
+
+                <br />
+                <Form.Check
+                  type="radio"
+                  readOnly={true}
+                  id="radio_profil"
+                  onClick={(e) => {
+                    setAdditionalStylingInfo({
+                      featureRenderingOption:
+                        kitasConstants.FEATURE_RENDERING_BY_PROFIL,
+                    });
+
+                    dispatch(
+                      setFeatureRenderingOption(
+                        kitasConstants.FEATURE_RENDERING_BY_PROFIL,
+                      ),
+                    );
+                  }}
+                  checked={
+                    featureRenderingOption ===
+                    kitasConstants.FEATURE_RENDERING_BY_PROFIL
+                  }
+                  inline
+                  label="nach Profil (Inklusionsschwerpunkt j/n)"
+                />
+              </Form>,
+            ]}
+          />,
           <KompaktanleitungSection />,
           <GenericDigitalTwinReferenceSection />,
         ]}
