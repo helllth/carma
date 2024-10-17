@@ -86,7 +86,11 @@ export function paramsToObject(entries: URLSearchParams) {
   return result;
 }
 
-export const parseToMapLayer = async (layer: Item, forceWMS: boolean) => {
+export const parseToMapLayer = async (
+  layer: Item,
+  forceWMS: boolean,
+  opacity?: number,
+) => {
   let newLayer: Layer;
   const id = layer.id.startsWith("fav_") ? layer.id.slice(4) : layer.id;
 
@@ -110,7 +114,7 @@ export const parseToMapLayer = async (layer: Item, forceWMS: boolean) => {
         title: layer.title,
         id: id,
         layerType: "vector",
-        opacity: 1.0,
+        opacity: opacity || 1.0,
         description: layer.description,
         conf: carmaConf,
         queryable: isNaN(layer.queryable)
@@ -136,7 +140,7 @@ export const parseToMapLayer = async (layer: Item, forceWMS: boolean) => {
             title: layer.title,
             id: id,
             layerType: "wmts",
-            opacity: 1.0,
+            opacity: opacity || 1.0,
             description: layer.description,
             conf: carmaConf!,
             visible: true,

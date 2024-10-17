@@ -209,6 +209,7 @@ export const LibModal = ({
                         const updatedLayer = await utils.parseToMapLayer(
                           foundLayer,
                           false,
+                          activeLayer.opacity,
                         );
 
                         const shouldUpdate = !isEqual(
