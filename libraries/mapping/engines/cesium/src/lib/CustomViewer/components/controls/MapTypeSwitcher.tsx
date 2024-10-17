@@ -30,7 +30,7 @@ export const MapTypeSwitcher = ({ onComplete, forceEnabled, duration }: Props) =
       isMode2d,
     );
     if (isMode2d) {
-      transitionToMode3d();
+      await transitionToMode3d();
     } else {
       transitionToMode2d();
     }

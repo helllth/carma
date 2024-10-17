@@ -1,5 +1,12 @@
 // WEB MAPS TO CESIUM
-import { Cartesian3, Math as CesiumMath, Viewer } from "cesium";
+import {
+  Cartesian3,
+  Cartographic,
+  Math as CesiumMath,
+  sampleTerrainMostDetailed,
+  TerrainProvider,
+  Viewer,
+} from "cesium";
 import type { Map as LeafletMap } from "leaflet";
 
 import {
@@ -10,20 +17,26 @@ import {
 import { isLeafletZoomValid } from "./leafletHelpers";
 import { getCesiumCameraPixelDimensionForDistance } from "./cesiumCamera";
 
-export const leafletToCesium = (
+export const leafletToCesium = async (
   leaflet: LeafletMap,
   viewer: Viewer,
   {
     epsilon = 0.5,
     limit = 5,
     cause = "not specified",
+    surfaceProvider,
+    terrainProvider,
     onComplete,
+    fallbackHeight = 150, // min height for local terrain
   }: {
     epsilon?: number;
     limit?: number;
     cause?: string;
     onComplete?: Function;
-  } = {},
+    surfaceProvider: TerrainProvider | null;
+    terrainProvider: TerrainProvider | null;
+    fallbackHeight?: number;
+  },
 ) => {
   if (!viewer) {
     console.warn("No viewer available for transition");
@@ -70,52 +83,61 @@ export const leafletToCesium = (
 
   const resolutionRatio = targetPixelResolution / baseComputedPixelResolution;
 
-  const baseHeight = START_DISTANCE * resolutionRatio;
-
-  console.log("xxx baseComputedHeight", baseHeight, resolutionRatio);
-
+  const computedDistance = START_DISTANCE * resolutionRatio;
 
   let currentPixelResolution = getScenePixelSize(viewer).value;
 
   if (currentPixelResolution === null) {
     console.warn("No pixel size found for camera position");
     return false;
-  } else {
-    console.info(
-      `L2C [2D3D|CESIUM|CAMERA] cause: ${cause} lat: ${lat} lng: ${lng} z: ${zoom} px: ${targetPixelResolution} dpr: ${window.devicePixelRatio}, resScale: ${viewer.resolutionScale} heights[base,current]:`,
-      baseHeight,
-      currentPixelResolution,
-    );
   }
 
   const { camera } = viewer;
 
-  let targetHeight = camera.positionCartographic.height;
-
-  if (targetHeight > 50000) {
-    console.warn(
-      "zoom request viewer height too high, applying base height",
-      baseHeight,
-      targetHeight,
-    );
-    targetHeight = 200 + baseHeight;
-  }
-  if (targetHeight < 200) {
-    console.warn("targetHeight too low setting to min height", 200);
-    targetHeight = 200;
-  }
-
-  console.info(
-    `L2C [2D3D|CESIUM|CAMERA] cause: ${cause} lat: ${lat} lng: ${lng} z: ${zoom} px: ${targetPixelResolution} dpr: ${window.devicePixelRatio}, resScale: ${viewer.resolutionScale} heights[base,target]:`,
-    baseHeight,
-    targetHeight,
+  const cameraGroundPosition = Cartographic.fromRadians(
+    lngRad,
+    latRad,
+    fallbackHeight,
   );
 
-  camera.setView({
-    destination: Cartesian3.fromRadians(lngRad, latRad, targetHeight),
-  });
+  if (surfaceProvider) {
+    const [surfaceSample] = await sampleTerrainMostDetailed(surfaceProvider, [
+      cameraGroundPosition,
+    ]);
+    console.log("surfaceSample", surfaceSample, cameraGroundPosition);
+  } else if (terrainProvider) {
+    const [terrainSample] = await sampleTerrainMostDetailed(terrainProvider, [
+      Cartographic.fromRadians(lngRad, latRad),
+    ]);
+    console.log("terrainSample", terrainSample, cameraGroundPosition);
+  } else {
+    console.info(
+      "no surface or terrain provider available, using fallback height",
+    );
+  }
 
-  // Get the ground position directly under the camera
+  const cameraDestinationCartographic = cameraGroundPosition.clone();
+  cameraDestinationCartographic.height += computedDistance;
+
+  const destination = Cartographic.toCartesian(cameraDestinationCartographic);
+
+  console.info(
+    `L2C [2D3D|CESIUM|CAMERA] cause: ${cause} lat: ${lat} lng: ${lng} z: ${zoom}`,
+  );
+  console.log("L2C [2D3D|CESIUM|CAMERA] destination", destination);
+  console.log(
+    "L2C [2D3D|CESIUM|CAMERA] cameraDestinationCartographic",
+    cameraDestinationCartographic.height,
+  );
+  console.log(
+    "L2C [2D3D|CESIUM|CAMERA] cameraGroundPosition",
+    cameraGroundPosition.height,
+  );
+  console.log("L2C [2D3D|CESIUM|CAMERA] computedDistance", computedDistance);
+
+  window.requestAnimationFrame(() => {
+    camera.setView({ destination });
+  });
 
   const cameraPositionAtStart = camera.position.clone();
   let { cameraHeightAboveGround, groundHeight } =
@@ -129,12 +151,7 @@ export const leafletToCesium = (
       console.warn(
         "Maximum height finding iterations reached with no result, restoring last Cesium camera position.",
       );
-      console.log(
-        "L2C [2D3D] iterate",
-        iterations,
-        targetHeight,
-        cameraPositionAtStart,
-      );
+      console.log("L2C [2D3D] iterate", iterations, cameraPositionAtStart);
       camera.setView({ destination: cameraPositionAtStart });
       return false;
     }
@@ -142,14 +159,23 @@ export const leafletToCesium = (
     cameraHeightAboveGround *= adjustmentFactor;
     const newCameraHeight = cameraHeightAboveGround + groundHeight;
 
+    const updatedCameraDestinationCartographic = Cartographic.fromRadians(
+      lngRad,
+      latRad,
+      newCameraHeight,
+    );
+    const updatedDestination = Cartographic.toCartesian(
+      updatedCameraDestinationCartographic,
+    );
+
     console.log(
       "L2C [2D3D|CESIUM|CAMERA] setview",
       iterations,
-      targetHeight,
       newCameraHeight,
+      updatedDestination,
     );
     camera.setView({
-      destination: Cartesian3.fromRadians(lngRad, latRad, newCameraHeight),
+      destination: updatedDestination,
     });
     const newResolution = getScenePixelSize(viewer).value;
     if (newResolution === null) {

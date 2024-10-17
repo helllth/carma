@@ -40,7 +40,7 @@ export const useMapTransition = ({
   const dispatch = useDispatch();
   const topicMapContext = useContext<typeof TopicMapContext>(TopicMapContext);
 
-  const { viewer } = useCesiumContext();
+  const { viewer, surfaceProvider, terrainProvider } = useCesiumContext();
   const leaflet = topicMapContext.routedMapRef?.leafletMap?.leafletElement;
 
   if (duration === undefined) {
@@ -56,7 +56,7 @@ export const useMapTransition = ({
 
   const isTransitioning = useViewerIsTransitioning();
 
-  const transitionToMode3d = () => {
+  const transitionToMode3d = async () => {
     if (!viewer || !leaflet) {
       console.warn("cesium or leaflet not available");
       return null;
@@ -104,9 +104,11 @@ export const useMapTransition = ({
       }
     };
 
-    leafletToCesium(leaflet, viewer, {
+    await leafletToCesium(leaflet, viewer, {
       cause: "SwitchMapMode to 3d",
       onComplete: () => setTimeout(onCompleteAnimatedTo3d, 100),
+      terrainProvider,
+      surfaceProvider,
     });
   };
 
