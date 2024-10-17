@@ -79,6 +79,7 @@ type CustomViewerProps = {
 
 const DEFAULT_RESOLUTION_SCALE = 1;
 export const TRANSITION_DELAY = 1000;
+const CESIUM_TARGET_FRAME_RATE = 120;
 
 function CustomViewer(props: CustomViewerProps) {
   const { viewer, setViewer, imageryLayer } = useCesiumContext();
@@ -291,7 +292,7 @@ function CustomViewer(props: CustomViewerProps) {
         baseLayerPicker={false}
         fullscreenButton={false}
         geocoder={false}
-        targetFrameRate={60}
+        targetFrameRate={CESIUM_TARGET_FRAME_RATE}
         homeButton={false}
         infoBox={false}
         sceneModePicker={false}
