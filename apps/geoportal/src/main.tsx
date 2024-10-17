@@ -4,6 +4,7 @@ import { RouterProvider, createHashRouter } from "react-router-dom";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 
+import { TweakpaneProvider } from "@carma-commons/debug";
 import { suppressReactCismapErrors } from "@carma-commons/utils";
 
 import App from "./app/App";
@@ -29,18 +30,20 @@ const root = createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <PersistGate loading={null} persistor={persistor}>
     <Provider store={store}>
-      <RouterProvider
-        router={createHashRouter([
-          {
-            path: "/",
-            element: <App />,
-          },
-          {
-            path: "/publish",
-            element: <App published={true} />,
-          },
-        ])}
-      />
+      <TweakpaneProvider>
+        <RouterProvider
+          router={createHashRouter([
+            {
+              path: "/",
+              element: <App />,
+            },
+            {
+              path: "/publish",
+              element: <App published={true} />,
+            },
+          ])}
+        />
+      </TweakpaneProvider>
     </Provider>
   </PersistGate>,
 );

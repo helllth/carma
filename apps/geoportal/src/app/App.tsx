@@ -13,8 +13,6 @@ import { TopicMapContextProvider } from "react-cismap/contexts/TopicMapContextPr
 
 // Monorepo Packages
 import { backgroundSettings } from "@carma-collab/wuppertal/geoportal";
-
-import { TweakpaneProvider } from "@carma-commons/debug";
 import {
   BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
   WUPP_TERRAIN_PROVIDER,
@@ -46,10 +44,8 @@ import {
   getUIOverlayTourMode,
   toggleShowOverlayTour,
   setUIAllowChanges,
-  setUIMode,
   setUIShowLayerButtons,
   setUIShowLayerHideButtons,
-  UIMode,
 } from "./store/slices/ui";
 
 // Side-Effect Imports
@@ -159,18 +155,16 @@ function App({ published }: { published?: boolean }) {
             imageryProvider: BASEMAP_METROPOLRUHR_WMS_GRAUBLAU,
           }}
         >
-          <TweakpaneProvider>
-            <ErrorBoundary FallbackComponent={AppErrorFallback}>
-              <div
-                className="flex flex-col w-full "
-                style={{ height: "100dvh" }}
-              >
-                {!published && <TopNavbar />}
-                <MapMeasurement />
-                <GeoportalMap />
-              </div>
-            </ErrorBoundary>
-          </TweakpaneProvider>
+          <ErrorBoundary FallbackComponent={AppErrorFallback}>
+            <div
+              className="flex flex-col w-full "
+              style={{ height: "100dvh" }}
+            >
+              {!published && <TopNavbar />}
+              <MapMeasurement />
+              <GeoportalMap />
+            </div>
+          </ErrorBoundary>
         </CesiumContextProvider>
       </TopicMapContextProvider>
     </OverlayTourProvider>

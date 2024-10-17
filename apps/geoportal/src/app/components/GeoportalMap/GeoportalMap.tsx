@@ -3,13 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
 import { Tooltip } from "antd";
-import {
-  getUIAllow3d,
-  getUIMode,
-  getUIShowLayerButtons,
-  toggleUIMode,
-  UIMode,
-} from "../../store/slices/ui.ts";
+
 import {
   Control,
   ControlButtonStyler,
@@ -37,9 +31,15 @@ import GenericModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplic
 
 import {
   getCollabedHelpComponentConfig,
+  geoElements,
   tooltipText,
 } from "@carma-collab/wuppertal/geoportal";
+import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
+
+import { useTweakpaneCtx } from "@carma-commons/debug";
 import { getApplicationVersion } from "@carma-commons/utils";
+import { useOverlayHelper } from "@carma-commons/ui/lib-helper-overlay";
+
 import {
   CustomViewer,
   MapTypeSwitcher,
@@ -85,6 +85,13 @@ import {
   setStartDrawing,
   setBackgroundLayer,
 } from "../../store/slices/mapping.ts";
+import {
+  getUIAllow3d,
+  getUIMode,
+  getUIShowLayerButtons,
+  toggleUIMode,
+  UIMode,
+} from "../../store/slices/ui.ts";
 
 import FeatureInfoBox from "../feature-info/FeatureInfoBox.tsx";
 import LayerWrapper from "../layers/LayerWrapper.tsx";
@@ -95,14 +102,16 @@ import LocateControlComponent from "./controls/LocateControlComponent.tsx";
 import { createCismapLayers, onClickTopicMap } from "./topicmap.utils.ts";
 import { getUrlPrefix } from "./utils";
 
+import { addCssToOverlayHelperItem } from "../../helper/overlayHelper.ts";
 import { CESIUM_CONFIG, LEAFLET_CONFIG } from "../../config/app.config";
 
 import "../leaflet.css";
 import "cesium/Build/Cesium/Widgets/widgets.css";
-import { useOverlayHelper } from "@carma-commons/ui/lib-helper-overlay";
-import { geoElements } from "@carma-collab/wuppertal/geoportal";
-import { getCollabedHelpComponentConfig as getCollabedHelpElementsConfig } from "@carma-collab/wuppertal/helper-overlay";
-import { addCssToOverlayHelperItem } from "../../helper/overlayHelper.ts";
+
+// TODO remove counter once rerenders are under control
+let rerenderCount: number = 0;
+let lastRenderTimeStamp: number = Date.now();
+let lastRenderInterval: number = 0;
 
 export const GeoportalMap = () => {
   const dispatch = useDispatch();
@@ -146,6 +155,23 @@ export const GeoportalMap = () => {
 
   useOverlayHelper(infoBoxOverlay);
 
+ useTweakpaneCtx(
+    {
+      title: "GeoportalMap",
+    },
+    {
+      rerenderCount,
+      lastRenderInterval,
+      dpr: window.devicePixelRatio,
+      resolutionScale: viewer ? viewer.resolutionScale : 0,
+    },
+    [
+      { name: "rerenderCount", readonly: true, format: (v) => v.toFixed(0) },
+      { name: "lastRenderInterval", readonly: true, format: (v) => v.toFixed(0) },
+      { name: "dpr", readonly: true, format: (v) => v.toFixed(1) },
+      { name: "resolutionScale", readonly: true, format: (v) => v.toFixed(1) },
+    ],
+  );
   const {
     routedMapRef,
     referenceSystem,
@@ -239,6 +265,9 @@ export const GeoportalMap = () => {
   // TODO Move out Controls to own component
 
   console.info("RENDER: [GEOPORTAL] MAP");
+  rerenderCount++;
+  lastRenderInterval = Date.now() - lastRenderTimeStamp;
+  lastRenderTimeStamp = Date.now();
 
   return (
     <ControlLayout onHeightResize={setLayoutHeight} ifStorybook={false}>
@@ -330,9 +359,8 @@ export const GeoportalMap = () => {
                 ref={tourRefLabels.measurement}
               >
                 <img
-                  src={`${getUrlPrefix()}${
-                    isModeMeasurement ? "measure-active.png" : "measure.png"
-                  }`}
+                  src={`${getUrlPrefix()}${isModeMeasurement ? "measure-active.png" : "measure.png"
+                    }`}
                   alt="Measure"
                   className="w-6"
                 />
