@@ -1,11 +1,12 @@
 import Color from "color";
-import React from "react";
+import React, { useContext } from "react";
 import { addSVGToProps } from "react-cismap/tools/svgHelper";
 
 import { getColorForProperties } from "./styler";
 import { constants } from "./constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faUser } from "@fortawesome/free-solid-svg-icons";
+import { TopicMapStylingContext } from "react-cismap/contexts/TopicMapStylingContextProvider";
 
 const getSignature = (properties) => {
   if (properties.signatur) {
@@ -63,7 +64,6 @@ const convertItemToFeature = async (itemIn) => {
   const alter = getAgeString(item);
   const stunden = getHoursString(item);
   const info = {
-    header: "Kita",
     title: item.name,
     additionalInfo: item.info,
     subtitle: () => (
@@ -95,7 +95,7 @@ const convertItemToFeature = async (itemIn) => {
     ),
   };
   item.info = info;
-  // item.color = headerColor;
+  item.color = headerColor;
   const id = item.id;
   const type = "Feature";
   const selected = false;

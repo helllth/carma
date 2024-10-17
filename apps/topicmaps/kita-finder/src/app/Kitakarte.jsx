@@ -15,13 +15,19 @@ import {
   InfoBoxTextContent,
   InfoBoxTextTitle,
 } from "@carma-collab/wuppertal/kita-finder";
-import { getClusterIconCreatorFunction } from "./helper/styler";
+import {
+  getClusterIconCreatorFunction,
+  getColorForProperties,
+  getFeatureStyler,
+} from "./helper/styler";
+import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 
 const KitaKarte = () => {
   const [gazData, setGazData] = useState([]);
   const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
     FeatureCollectionDispatchContext,
   );
+  const { routedMapRef } = useContext(TopicMapContext);
   const { clusteringOptions } = useContext(FeatureCollectionContext);
 
   const { additionalStylingInfo } = useContext(TopicMapStylingContext);
@@ -30,21 +36,51 @@ const KitaKarte = () => {
     getGazData(setGazData);
   }, []);
 
-  useEffect(() => {
-    if (additionalStylingInfo) {
-      setClusteringOptions({
-        ...clusteringOptions,
-        iconCreateFunction: getClusterIconCreatorFunction({
+  // useEffect(() => {
+  //   if (additionalStylingInfo) {
+  //     console.log("changeClusteringOptions", additionalStylingInfo);
+
+  //     setClusteringOptions({
+  //       ...clusteringOptions,
+  //       iconCreateFunction: getClusterIconCreatorFunction({
+  //         featureRenderingOption: additionalStylingInfo.featureRenderingOption,
+  //       }),
+  //     });
+
+  //   }
+  // }, [additionalStylingInfo]);
+
+  const featureCollectionProps = {
+    clusteringOptions: {
+      iconCreateFunction: getClusterIconCreatorFunction({
+        svgSize: 35,
+        featureRenderingOption: additionalStylingInfo.featureRenderingOption,
+      }),
+    },
+    styler: (
+      svgSize,
+      colorizer = getColorForProperties,
+      appMode,
+      secondarySelection,
+      _additionalStylingInfoWillBeOverridden,
+    ) =>
+      getFeatureStyler(
+        svgSize,
+        (colorizer = getColorForProperties),
+        appMode,
+        secondarySelection,
+        {
           featureRenderingOption: additionalStylingInfo.featureRenderingOption,
-        }),
-      });
-    }
-  }, [additionalStylingInfo]);
+        },
+      ),
+  };
 
   return (
     <TopicMapComponent
       gazData={gazData}
-      modalMenu={<Menu />}
+      modalMenu={
+        <Menu previewFeatureCollectionProps={featureCollectionProps} />
+      }
       locatorControl={true}
       gazetteerSearchPlaceholder={searchTextPlaceholder}
       gazetteerHitTrigger={(hits) => {
@@ -59,9 +95,16 @@ const KitaKarte = () => {
       infoBox={
         <GenericInfoBoxFromFeature
           pixelwidth={350}
+          headerColorizer={(feature, featureRenderingOption) => {
+            return getColorForProperties(
+              feature?.properties,
+              featureRenderingOption,
+            );
+          }}
           config={{
             displaySecondaryInfoAction: false,
             city: "Wuppertal",
+            header: "Kita",
             navigator: {
               noun: {
                 singular: "Kita",
@@ -76,6 +119,7 @@ const KitaKarte = () => {
     >
       <FeatureCollection
         key={`feature_${additionalStylingInfo.featureRenderingOption}`}
+        {...featureCollectionProps}
       ></FeatureCollection>
     </TopicMapComponent>
   );

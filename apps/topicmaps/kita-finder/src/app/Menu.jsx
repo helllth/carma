@@ -31,6 +31,7 @@ import {
   TopicMapStylingDispatchContext,
   TopicMapStylingContext,
 } from "react-cismap/contexts/TopicMapStylingContextProvider";
+import { getColorForProperties } from "./helper/styler";
 
 const getDefaultFilterConfiguration = (lebenslagen) => {
   const positiv = [...lebenslagen];
@@ -38,7 +39,7 @@ const getDefaultFilterConfiguration = (lebenslagen) => {
   return { positiv, negativ };
 };
 
-const Menu = () => {
+const Menu = ({ previewFeatureCollectionProps }) => {
   const { setAppMenuActiveMenuSection } = useContext(UIDispatchContext);
   const { setMarkerSymbolSize } = useContext(TopicMapStylingDispatchContext);
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
@@ -64,6 +65,26 @@ const Menu = () => {
 
   if ((filterState === undefined) & (items !== undefined)) {
     setFilterState(getDefaultFilterConfiguration(itemsDictionary?.lebenslagen));
+  }
+
+  const previewFeatureCollectionDisplayProps = {};
+
+  // since previewFeatureCollectionProps are props that are passed to the FeatureCollection component
+  // but the DefaultSettingsPanel is using them in a FeatureCollectionDisplay we need to change it to
+  // previewFeatureCollectionDisplayProps
+
+  if (previewFeatureCollectionProps) {
+    if (previewFeatureCollectionProps.clusteringOptions) {
+      previewFeatureCollectionDisplayProps.clusterOptions =
+        previewFeatureCollectionProps.clusteringOptions;
+    }
+    if (previewFeatureCollectionProps.styler) {
+      previewFeatureCollectionDisplayProps.style =
+        previewFeatureCollectionProps.styler(
+          markerSymbolSize,
+          getColorForProperties,
+        );
+    }
   }
 
   // const getFilterHeader = () => {
@@ -109,7 +130,11 @@ const Menu = () => {
             sectionContent={<FilterUI />}
           />,
           <DefaultSettingsPanel
-            key="settings"
+            key={"settings" + featureRenderingOption}
+            previewMapPosition="lat=51.27486777766875&lng=7.213025708847476&zoom=10"
+            previewFeatureCollectionDisplayProps={
+              previewFeatureCollectionDisplayProps
+            }
             sparseSettingsSectionsExtensions={[
               ,
               <Form>
@@ -138,7 +163,6 @@ const Menu = () => {
                         kitasConstants.FEATURE_RENDERING_BY_TRAEGERTYP,
                       ),
                     );
-                    setMarkerSymbolSize(markerSymbolSize + 0.0000001);
                   }}
                   checked={
                     featureRenderingOption ===
@@ -164,7 +188,6 @@ const Menu = () => {
                         kitasConstants.FEATURE_RENDERING_BY_PROFIL,
                       ),
                     );
-                    setMarkerSymbolSize(markerSymbolSize + 0.0000001);
                   }}
                   checked={
                     featureRenderingOption ===

@@ -39,17 +39,11 @@ function App() {
           "https://wupp-topicmaps-data.cismet.de/data/kitas.data.json"
         }
         createFeatureItemsDictionary={createItemsDictionary}
-        getFeatureStyler={getFeatureStyler}
+        // getFeatureStyler={getFeatureStyler}
         convertItemToFeature={convertItemToFeature}
         itemFilterFunction={itemFilterFunction}
         titleFactory={titleFactory}
         referenceSystemDefinition={MappingConstants.proj4crs25832def}
-        clusteringOptions={{
-          iconCreateFunction: getClusterIconCreatorFunction({
-            svgSize: 35,
-            featureRenderingOption,
-          }),
-        }}
         mapEPSGCode="25832"
         referenceSystem={MappingConstants.crs25832}
         filterState={{
@@ -61,7 +55,7 @@ function App() {
           ...filters,
         }}
         additionalStylingInfo={{ featureRenderingOption }}
-        getColorFromProperties={getColorForProperties}
+        // getColorFromProperties={getColorForProperties}
       >
         <KitaKarte />
       </TopicMapContextProvider>
