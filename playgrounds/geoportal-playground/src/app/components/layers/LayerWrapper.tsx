@@ -36,6 +36,7 @@ import { useOverlayHelper } from "@carma-commons/ui/lib-helper-overlay";
 const LayerWrapper = () => {
   const layerButtonTour = useOverlayHelper({
     primary: {
+      key: "Buttons",
       containerPos: "center",
       contentPos: "center",
       content: <div>Layer Buttons</div>,

@@ -63,6 +63,7 @@ const TopNavbar = () => {
   const mode = useSelector(getMode);
   const menuTourRef = useOverlayHelper({
     primary: {
+      key: "Menüleiste",
       containerPos: "center",
       contentPos: "center",
       content: <div>Menüleiste</div>,
@@ -70,6 +71,7 @@ const TopNavbar = () => {
   });
   const hintergrundTourRef = useOverlayHelper({
     primary: {
+      key: "Hintergrund",
       containerPos: "center",
       contentPos: "center",
       content: <div>Hintergrund</div>,
