@@ -91,7 +91,6 @@ const TopNavbar = () => {
 
   const isMode2d = useViewerIsMode2d();
   const baseUrl = window.location.origin + window.location.pathname;
-
   const handleToggleTour = () => {
     dispatch(toggleShowOverlayTour(!tourMode));
   };
