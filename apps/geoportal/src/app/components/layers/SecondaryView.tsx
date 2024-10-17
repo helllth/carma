@@ -92,15 +92,18 @@ const SecondaryView = forwardRef<Ref, SecondaryViewProps>(({}, ref) => {
         }
       });
 
-      if (removedOtherLayer) {
-        return;
-      }
-
       layerButtons.forEach((layerButton, i) => {
         if (layerButton.contains(event.target as Node)) {
           newLayerIndex = i - 1;
         }
       });
+
+      if (removedOtherLayer) {
+        if (newLayerIndex === selectedLayerIndex) {
+          dispatch(setSelectedLayerIndexNoSelection());
+        }
+        return;
+      }
       if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
         const currentLayerIndex = selectedLayerIndex;
         console.log(
