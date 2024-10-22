@@ -6,7 +6,7 @@
           "dev": {
             "pages": {
               "org": "helllth",
-              "prj": "topicmaps-stadtplan-wuppertal-live-deployment"
+              "prj": "topicmaps-stadtplan-wuppertal-dev-deployment"
             }
           },
           "live": {
@@ -33,13 +33,13 @@
           "dev": {
             "pages": {
               "org": "helllth",
-              "prj": "floodingmap-live-deployment"
+              "prj": "floodingmap-dev-deployment"
             }
           },
           "live": {
             "pages": {
               "org": "helllth",
-              "prj": "floodingmap-dev-deployment"
+              "prj": "floodingmap-live-deployment"
             }
           }
         },
