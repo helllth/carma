@@ -1,6 +1,6 @@
 name: Deployment
 
-run-name: ${{ inputs.project-name || github.event.head_commit.message }}
+#run-name: ${{ inputs.project-name || github.event.head_commit.message }}
 
 on:
   workflow_dispatch:
