@@ -583,9 +583,9 @@ jobs:
           # Read project-specific deployment config
           target="${{ github.event.inputs.target || 'dev' }}"
           config=$(cat deployment-config.json)
-          baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual[$target].base // "null"')
-          orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual[$target].pages.org // "null"')
-          prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual[$target].pages.prj // "null"')
+          baseUrl=$(echo "$config" | jq -r --arg project "$project_name" --arg target "$target" '.projects[$project].deployment.manual[$target].base // "null"')
+          orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" --arg target "$target" '.projects[$project].deployment.manual[$target].pages.org // "null"')
+          prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" --arg target "$target" '.projects[$project].deployment.manual[$target].pages.prj // "null"')
           projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
 
           # If baseUrl is not set, construct it from orgDeploy and prjDeploy
