@@ -1,6 +1,6 @@
 name: Deployment
 
-#run-name: ${{ inputs.project-name || github.event.head_commit.message }}
+run-name: ${{ github.event_name == 'workflow_dispatch' ? format('{0} -- {1}-deployment', github.event.inputs['project-name'], github.event.inputs.target) : format('{0} -- automatic {1} deployment', github.event.head_commit.message, github.ref_name) }}
 
 on:
   workflow_dispatch:
@@ -26,16 +26,6 @@ on:
       - dev
 
 jobs:
-  set-run-name:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set the run name dynamically
-        run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "RUN_NAME=${{ github.event.inputs.project-name }} -- ${{ github.event.inputs.target }}-deployment" >> $GITHUB_ENV
-          else
-            echo "RUN_NAME=${{ github.event.head_commit.message }} -- automatic ${{ github.ref_name }} deployment" >> $GITHUB_ENV
-          fi
   determine_projects:
     if: "github.event.inputs.project-name == '' && !contains(github.event.head_commit.message, 'skip-deploy') && !contains(github.event.head_commit.message, 'no-deploy')"
     runs-on: ubuntu-latest
