@@ -526,42 +526,54 @@ jobs:
           INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ github.event.inputs.project-name }}:container
         shell: bash
 
-  all_projects_build:
-    if: ${{ github.event.inputs.project-name == '*' }}
+all_projects_build:
+  if: ${{ github.event.inputs.project-name == '*' }}
+  runs-on: ubuntu-latest
+  permissions:
+    contents: write
+    pages: write
+    id-token: write
+  outputs:
+    project_list: ${{ steps.get_all_projects.outputs.project_list }}
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: "recursive"
+
+    - name: Update Submodules
+      run: git submodule update --remote --recursive
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: "npm"
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Get all projects from deployment configuration
+      id: get_all_projects
+      run: |
+        config=$(cat deployment-config.json)
+        project_keys=$(echo "$config" | jq -r '.projects | keys | @json')
+        echo "::set-output name=project_list::$project_keys"
+
+  # Once the project list is obtained, it's passed as output from the above steps
+  build_each_project:
+    needs: all_projects_build
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
     strategy:
       matrix:
-        project: ${{ fromJson(steps.get_all_projects.outputs.project_list) }}
-
+        project: ${{ fromJson(needs.all_projects_build.outputs.project_list) }} # Use output from previous job
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: "recursive"
-
-      - name: Update Submodules
-        run: git submodule update --remote --recursive
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Get all projects from deployment configuration
-        id: get_all_projects
-        run: |
-          config=$(cat deployment-config.json)
-          project_keys=$(echo "$config" | jq -r '.projects | keys | @json')
-          echo "::set-output name=project_list::$project_keys"
 
       - name: Build and Deploy Project
         run: |
@@ -607,21 +619,3 @@ jobs:
           else
             echo "Skipping deployment for project: $project_name (no valid repository)"
           fi
-
-      - name: Log in to Docker Hub
-        if: ${{ github.event.inputs['create-docker-image'] == 'true' }}
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-      - name: Build Docker container if needed
-        if: ${{ github.event.inputs['create-docker-image'] == 'true' }}
-        run: |
-          containerImage=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual[$target].container.image // "null"')
-          if [ "${containerImage}" != "null" ]; then
-            echo "Building Docker container for $containerImage"
-            docker build -t $containerImage .
-            docker push $containerImage
-          else
-            echo "No Docker image configured for project: $project_name"
