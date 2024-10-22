@@ -688,6 +688,7 @@ jobs:
           echo "SRC_PATH: $SRC_PATH"
           echo "SRC_MD5: $SRC_MD5"
           echo "CONTAINER_IMAGE: $CONTAINER_IMAGE"
+          echo "TARGET: $TARGET"
           echo -----------------------------------
 
       - name: Debug version.json
