@@ -587,6 +587,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: create nx-cloud.env
+        run: |
+          echo "NX_CLOUD_ACCESS_TOKEN=${{ secrets.NX_CLOUD_ACCESS_TOKEN }}" >> nx-cloud.env
+      - name: Install Nx globally
+        run: npm install -g nx@20.0.3
+
       - name: Build and Deploy Project
         run: |
           echo "Building and deploying project: ${{ matrix.project }}"
