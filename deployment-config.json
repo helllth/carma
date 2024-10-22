@@ -33,7 +33,7 @@
           "dev": {
             "pages": {
               "org": "helllth",
-              "prj": "loodingmap-live-deployment"
+              "prj": "floodingmap-live-deployment"
             }
           },
           "live": {
