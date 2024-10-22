@@ -3,9 +3,17 @@
     "stadtplan": {
       "deployment": {
         "manual": {
-          "pages": {
-            "org": "helllth",
-            "prj": "topicmaps-stadtplan-wuppertal-live-deployment"
+          "dev": {
+            "pages": {
+              "org": "helllth",
+              "prj": "topicmaps-stadtplan-wuppertal-live-deployment"
+            }
+          },
+          "live": {
+            "pages": {
+              "org": "helllth",
+              "prj": "topicmaps-stadtplan-wuppertal-live-deployment"
+            }
           }
         },
         "auto": {
@@ -22,9 +30,17 @@
     "floodingmap-wuppertal": {
       "deployment": {
         "manual": {
-          "pages": {
-            "org": "helllth",
-            "prj": "floodingmap-live-deployment"
+          "dev": {
+            "pages": {
+              "org": "helllth",
+              "prj": "loodingmap-live-deployment"
+            }
+          },
+          "live": {
+            "pages": {
+              "org": "helllth",
+              "prj": "floodingmap-dev-deployment"
+            }
           }
         },
         "auto": {
