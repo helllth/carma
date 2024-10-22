@@ -3,9 +3,10 @@ name: Deployment
 #run-name: ${{ inputs.project-name || github.event.head_commit.message }}
 #run-name: ${{ inputs.project-name }} ${{ github.event.inputs.target }}-deployment || ${{ github.event.head_commit.message }}
 run-name: >
-  ${{ github.event_name == 'workflow_dispatch' 
-      ? (inputs['project-name'] + ' -- ' + inputs['target'] + '-deployment') 
-      : (github.event.head_commit.message + ' -- automatic ' + github.ref_name + ' deployment') }}
+  ${{ github.event_name == 'workflow_dispatch' && inputs['project-name'] != '' && inputs['target'] != '' 
+      ? inputs['project-name'] + ' -- ' + inputs.target + '-deployment' 
+      : github.event.head_commit.message + ' -- automatic ' + github.ref_name + ' deployment' }}
+
 on:
   workflow_dispatch:
     inputs:
