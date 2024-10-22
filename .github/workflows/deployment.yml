@@ -341,7 +341,7 @@ jobs:
         shell: bash
   single_build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.project-name != '' }}
+    if: ${{ github.event.inputs.project-name != '' && github.event.inputs.project-name != '*' }}
     permissions:
       contents: write
       pages: write
