@@ -542,17 +542,17 @@ jobs:
           fetch-depth: 0
           submodules: "recursive"
 
-      - name: Update Submodules
-        run: git submodule update --remote --recursive
+      # - name: Update Submodules
+      #   run: git submodule update --remote --recursive
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
+      #     cache: "npm"
 
-      - name: Install dependencies
-        run: npm install
+      # - name: Install dependencies
+      #   run: npm install
 
       - name: Get all projects from deployment configuration
         id: get_all_projects
@@ -574,6 +574,18 @@ jobs:
         with:
           fetch-depth: 0
           submodules: "recursive"
+
+      - name: Update Submodules
+        run: git submodule update --remote --recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Build and Deploy Project
         run: |
