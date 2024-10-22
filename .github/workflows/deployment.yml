@@ -1,7 +1,9 @@
 name: Deployment
 
-run-name: ${{ github.event.head_commit.message }}${{ inputs.project-name }} ${{ github.event.inputs.target }}-deployment
-
+run-name: >
+  ${{ github.event.head_commit.message }}
+  ${{ inputs['project-name'] }}
+  ${{ github.event.inputs.target || github.ref_name }}-deployment
 on:
   workflow_dispatch:
     inputs:
