@@ -533,9 +533,29 @@ jobs:
       contents: write
       pages: write
       id-token: write
+    outputs:
+      project_list: ${{ steps.get_all_projects.outputs.project_list }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
+
+      - name: Get all projects from deployment configuration
+        id: get_all_projects
+        run: |
+          config=$(cat deployment-config.json)
+          project_keys=$(echo "$config" | jq -r '.projects | keys | @json')
+          echo "::set-output name=project_list::$project_keys"
+
+  # Once the project list is obtained, it's passed as output from the above steps
+  build_each_project:
+    needs: all_projects_build
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        project: ${{ fromJson(needs.all_projects_build.outputs.project_list) }} # Use the project list from the previous step
+        project: ${{ fromJson(needs.all_projects_build.outputs.project_list) }} # Use output from previous job
     steps:
       - uses: actions/checkout@v4
         with:
@@ -729,4 +749,4 @@ jobs:
         if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
         run: |
           INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ matrix.project }}:container
-      shell: bash
+        shell: bash
