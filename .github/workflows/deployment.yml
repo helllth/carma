@@ -1,6 +1,7 @@
 name: Deployment
 
-run-name: ${{ github.event_name == 'workflow_dispatch' ? format('{0} -- {1}-deployment', github.event.inputs['project-name'], github.event.inputs.target) : format('{0} -- automatic {1} deployment', github.event.head_commit.message, github.ref_name) }}
+run-name: ${{ github.event_name == 'workflow_dispatch' && inputs['project-name'] && inputs['target'] ? inputs['project-name'] + ' -- ' + inputs['target'] + '-deployment' : github.event.head_commit.message + ' -- automatic ' + github.ref_name + ' deployment' }}
+
 
 on:
   workflow_dispatch:
