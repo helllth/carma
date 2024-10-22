@@ -533,80 +533,47 @@ jobs:
       contents: write
       pages: write
       id-token: write
-    outputs:
-      project_list: ${{ steps.get_all_projects.outputs.project_list }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          submodules: "recursive"
-
-      # - name: Update Submodules
-      #   run: git submodule update --remote --recursive
-
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 20
-      #     cache: "npm"
-
-      # - name: Install dependencies
-      #   run: npm install
-
-      - name: Get all projects from deployment configuration
-        id: get_all_projects
-        run: |
-          config=$(cat deployment-config.json)
-          project_keys=$(echo "$config" | jq -r '.projects | keys | @json')
-          echo "::set-output name=project_list::$project_keys"
-
-  # Once the project list is obtained, it's passed as output from the above steps
-  build_each_project:
-    needs: all_projects_build
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        project: ${{ fromJson(needs.all_projects_build.outputs.project_list) }} # Use output from previous job
+        project: ${{ fromJson(needs.all_projects_build.outputs.project_list) }} # Use the project list from the previous step
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: "recursive"
+          submodules: "recursive" # Fetch all submodules recursively
 
       - name: Update Submodules
         run: git submodule update --remote --recursive
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: create nx-cloud.env
+      - name: add cismet-dev registry secret to .npmrc
+        shell: bash
         run: |
-          echo "NX_CLOUD_ACCESS_TOKEN=${{ secrets.NX_CLOUD_ACCESS_TOKEN }}" >> nx-cloud.env
-      - name: Install Nx globally
-        run: npm install -g nx@20.0.3
+          touch .npmrc
+          echo "${{ secrets.CISMET_DEV_REGISTRY_SECRET_4_DOT_NPMRC }}" >> .npmrc
 
-      - name: Build and Deploy Project
+      - name: Get properties from json
+        id: get_props_from_json
         run: |
-          echo "Building and deploying project: ${{ matrix.project }}"
+          config=$(cat deployment-config.json) 
           project_name="${{ matrix.project }}"
-
-          # Read project-specific deployment config
           target="${{ github.event.inputs.target || 'dev' }}"
-          config=$(cat deployment-config.json)
+
+          # Fetch properties dynamically based on the target (dev or live)
+          deploymentManual=$(echo "$config" | jq -r --arg project "$project_name" --arg target "$target" '.projects[$project].deployment.manual[$target].repo // "null"')
           baseUrl=$(echo "$config" | jq -r --arg project "$project_name" --arg target "$target" '.projects[$project].deployment.manual[$target].base // "null"')
           orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" --arg target "$target" '.projects[$project].deployment.manual[$target].pages.org // "null"')
           prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" --arg target "$target" '.projects[$project].deployment.manual[$target].pages.prj // "null"')
           projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
+          srcPath=".${projectPath#./dist}/src"
 
-          # If baseUrl is not set, construct it from orgDeploy and prjDeploy
+          # Generate MD5 hash for versioning
+          srcMD5="$(echo -n $(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum | cut -f 1 -d ' ')$(md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' '))"
+          srcMD5short="${srcMD5:0:4}"
+
+          # Fetch container image from the deployment configuration
+          containerImage=$(echo "$config" | jq -r --arg project "$project_name" --arg target "$target" '.projects[$project].deployment.manual[$target].container.image // "null"')
+
+          # Determine the base URL
           if [ "${baseUrl}" = "null" ]; then
             if [ "${orgDeploy}" = "null" ]; then
               baseUrl="/"
@@ -617,23 +584,149 @@ jobs:
             baseUrl="${baseUrl}"
           fi
 
-          echo "Building project: $project_name"
-          echo "Base URL: $baseUrl"
-          echo "Project Path: $projectPath"
-
-          # Run the Nx build command for the project
-          npx nx run $project_name:build --configuration=production --base="$baseUrl"
-
-          # Deploy the built project using GH Pages
-          external_repository="${orgDeploy}/${prjDeploy}"
-          if [ "$external_repository" != "null/null" ]; then
-            echo "Deploying to $external_repository"
-            npx nx run $project_name:deploy
-            uses: peaceiris/actions-gh-pages@v3
-            with:
-              personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
-              external_repository: $external_repository
-              publish_dir: $projectPath
+          # Determine the deployment project
+          if [ "${deploymentManual}" = "null" ]; then
+            deployment_project="${orgDeploy}/${prjDeploy}"
           else
-            echo "Skipping deployment for project: $project_name (no valid repository)"
+            deployment_project="${deploymentManual}"
           fi
+
+          # Set environment variables
+          echo "PROJECT_NAME=${project_name}" >> $GITHUB_ENV
+          echo "EXTERNAL_REPO=${deployment_project}" >> $GITHUB_ENV
+          echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
+          echo "BASE_URL=${baseUrl}" >> $GITHUB_ENV
+          echo "ORG_DEPLOY=${orgDeploy}" >> $GITHUB_ENV
+          echo "PRJ_DEPLOY=${prjDeploy}" >> $GITHUB_ENV
+          echo "SRC_MD5=${srcMD5}" >> $GITHUB_ENV
+          echo "SRC_MD5_SHORT=${srcMD5short}" >> $GITHUB_ENV
+          echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV
+          echo "CONTAINER_IMAGE=${containerImage}" >> $GITHUB_ENV
+          echo "TARGET=${target}" >> $GITHUB_ENV
+
+        shell: bash
+
+      - name: Create the version number
+        id: update_version_number
+        if: ${{ github.event.inputs.target != 'dev' }} # Skip version manipulation for dev deployments
+        run: |
+          if [[ -f "$SRC_PATH/version.json" ]]; then
+            if [[ -n "${{ github.event.inputs.version-manipulator }}" ]]; then
+              cp "$SRC_PATH/version.json" /tmp/package.json
+              cd /tmp
+              npm version ${{ github.event.inputs.version-manipulator }} --no-git-tag-version --allow-same-version
+              cd -
+              cp /tmp/package.json "$SRC_PATH/version.json"
+              echo "version_changed=true" >> $GITHUB_ENV
+            else
+              echo "No version-manipulator input provided. Version information will not be updated."
+              echo "version_changed=false" >> $GITHUB_ENV
+            fi
+          else
+            echo "No version.json file found. Version information will not be updated."
+            echo "version_changed=false" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Commit version.json changes
+        if: env.version_changed == 'true' && github.event.inputs.target != 'dev' # Only commit if version was updated and target is not dev
+        run: |
+          git config --global user.email "902348742+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+
+          git add "$SRC_PATH/version.json"
+          git commit -m "Update version.json based on ${{ github.event.inputs.version-manipulator }}"
+          git push origin dev
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+
+      - name: Create version.json if it doesn't exist
+        run: |
+          if [[ ! -f "$SRC_PATH/version.json" ]]; then
+            echo '{"version": "0.0.0"}' > "$SRC_PATH/version.json"
+          fi
+        shell: bash
+
+      - name: Add further info to version.json
+        run: |
+          jq --arg md5 "$SRC_MD5" --arg triggered "$TARGET" \
+          '. + {md5: $md5, triggered: $triggered}' \
+          "$SRC_PATH/version.json" > /tmp/version.json
+
+          mv /tmp/version.json "$SRC_PATH/version.json"
+        shell: bash
+
+      - name: Debug Outputs
+        run: |
+          echo -----------------------------------
+          echo "-- Project name is: $PROJECT_NAME"
+          echo "ORG_DEPLOY: $ORG_DEPLOY"
+          echo "PROJECT_PATH: $PRJ_DEPLOY"
+          echo "BASE_URL: $BASE_URL"
+          echo "EXTERNAL_REPO: $EXTERNAL_REPO"
+          echo "SRC_PATH: $SRC_PATH"
+          echo "SRC_MD5: $SRC_MD5"
+          echo "CONTAINER_IMAGE: $CONTAINER_IMAGE"
+          echo -----------------------------------
+
+      - name: Debug version.json
+        run: |
+          cat $SRC_PATH/version.json
+
+      - name: Set version (deprecated)
+        run: |
+          if [[ -f "$SRC_PATH/version.js" ]]; then
+            sed -i "s/%APPLICATION_VERSION%/$SRC_MD5_SHORT/" $SRC_PATH/version.js
+          else
+            if [[ -f "$SRC_PATH/app/version.js" ]]; then
+              sed -i "s/%APPLICATION_VERSION%/$SRC_MD5_SHORT/" $SRC_PATH/app/version.js
+            else
+              echo "No version.js file found. Version information will not be updated."
+            fi
+          fi
+
+      - name: Set hash (deprecated)
+        run: |
+          if [[ -f "$SRC_PATH/version.js" ]]; then
+            sed -i "s/%APPLICATION_HASH%/$SRC_MD5/" $SRC_PATH/version.js
+          else
+            if [[ -f "$SRC_PATH/app/version.js" ]]; then
+              sed -i "s/%APPLICATION_HASH%/$SRC_MD5/" $SRC_PATH/app/version.js
+            else
+              echo "No version.js file found. Hash information will not be updated."
+            fi
+          fi
+
+      - name: create nx-cloud.env
+        run: |
+          echo "NX_CLOUD_ACCESS_TOKEN=${{ secrets.NX_CLOUD_ACCESS_TOKEN }}" >> nx-cloud.env
+
+      - name: Install Nx
+        run: npm install nx@17.2.8
+
+      - name: Build project
+        run: |
+          npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}"
+        shell: bash
+
+      - name: Deploy
+        if: env.EXTERNAL_REPO != 'null' && env.EXTERNAL_REPO != '' && env.EXTERNAL_REPO != 'null/null'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
+          external_repository: ${{ env.EXTERNAL_REPO }}
+          publish_dir: ${{ env.PROJECT_PATH }}
+
+      - name: Log in to Docker Hub
+        if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build container if container image is set
+        if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
+        run: |
+          INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ matrix.project }}:container
+      shell: bash
