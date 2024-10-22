@@ -526,40 +526,40 @@ jobs:
           INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ github.event.inputs.project-name }}:container
         shell: bash
 
-all_projects_build:
-  if: ${{ github.event.inputs.project-name == '*' }}
-  runs-on: ubuntu-latest
-  permissions:
-    contents: write
-    pages: write
-    id-token: write
-  outputs:
-    project_list: ${{ steps.get_all_projects.outputs.project_list }}
-  steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        submodules: "recursive"
+  all_projects_build:
+    if: ${{ github.event.inputs.project-name == '*' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    outputs:
+      project_list: ${{ steps.get_all_projects.outputs.project_list }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
 
-    - name: Update Submodules
-      run: git submodule update --remote --recursive
+      - name: Update Submodules
+        run: git submodule update --remote --recursive
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: "npm"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Get all projects from deployment configuration
-      id: get_all_projects
-      run: |
-        config=$(cat deployment-config.json)
-        project_keys=$(echo "$config" | jq -r '.projects | keys | @json')
-        echo "::set-output name=project_list::$project_keys"
+      - name: Get all projects from deployment configuration
+        id: get_all_projects
+        run: |
+          config=$(cat deployment-config.json)
+          project_keys=$(echo "$config" | jq -r '.projects | keys | @json')
+          echo "::set-output name=project_list::$project_keys"
 
   # Once the project list is obtained, it's passed as output from the above steps
   build_each_project:
