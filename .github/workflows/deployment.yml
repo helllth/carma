@@ -42,23 +42,17 @@ jobs:
       id-token: write
 
     steps:
-      # Step 1: Checkout the repository to access its files
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: "recursive" # Fetch all submodules recursively
+          submodules: "recursive"
       - name: Update Submodules
         run: git submodule update --remote --recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "npm"
-      - name: add cismet-dev registry secret to .npmrc
-        shell: bash
-        run: |
-          touch .npmrc
-          echo "${{ secrets.CISMET_DEV_REGISTRY_SECRET_4_DOT_NPMRC }}" >> .npmrc
       - name: Install dependencies
         run: npm install
 
@@ -160,7 +154,7 @@ jobs:
   build:
     needs: determine_projects
     runs-on: ubuntu-latest
-    if: ${{ needs.determine_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == ''  && needs.determine_projects.outputs.project_list != '[]' }}
+    if: ${{ needs.determine_projects.outputs.is_affected == 'true' && github.event.inputs.project-name == '' && needs.determine_projects.outputs.project_list != '[]' }}
 
     permissions:
       contents: write
@@ -168,14 +162,16 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        project: ${{fromJson(needs.determine_projects.outputs.project_list)}}
+        project: ${{ fromJson(needs.determine_projects.outputs.project_list) }}
 
     steps:
+      # The steps for building and deploying the projects
+      # using the same matrix logic for each project...
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: "recursive" # Fetch all submodules recursively
+          submodules: "recursive"
       - name: Update Submodules
         run: git submodule update --remote --recursive
       - uses: actions/setup-node@v4
@@ -529,3 +525,103 @@ jobs:
         run: |
           INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ github.event.inputs.project-name }}:container
         shell: bash
+
+  all_projects_build:
+    if: ${{ github.event.inputs.project-name == '*' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    strategy:
+      matrix:
+        project: ${{ fromJson(steps.get_all_projects.outputs.project_list) }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
+
+      - name: Update Submodules
+        run: git submodule update --remote --recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Get all projects from deployment configuration
+        id: get_all_projects
+        run: |
+          config=$(cat deployment-config.json)
+          project_keys=$(echo "$config" | jq -r '.projects | keys | @json')
+          echo "::set-output name=project_list::$project_keys"
+
+      - name: Build and Deploy Project
+        run: |
+          echo "Building and deploying project: ${{ matrix.project }}"
+          project_name="${{ matrix.project }}"
+
+          # Read project-specific deployment config
+          target="${{ github.event.inputs.target || 'dev' }}"
+          config=$(cat deployment-config.json)
+          baseUrl=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual[$target].base // "null"')
+          orgDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual[$target].pages.org // "null"')
+          prjDeploy=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual[$target].pages.prj // "null"')
+          projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath')
+
+          # If baseUrl is not set, construct it from orgDeploy and prjDeploy
+          if [ "${baseUrl}" = "null" ]; then
+            if [ "${orgDeploy}" = "null" ]; then
+              baseUrl="/"
+            else
+              baseUrl="https://${orgDeploy}.github.io/${prjDeploy}/"
+            fi
+          else
+            baseUrl="${baseUrl}"
+          fi
+
+          echo "Building project: $project_name"
+          echo "Base URL: $baseUrl"
+          echo "Project Path: $projectPath"
+
+          # Run the Nx build command for the project
+          npx nx run $project_name:build --configuration=production --base="$baseUrl"
+
+          # Deploy the built project using GH Pages
+          external_repository="${orgDeploy}/${prjDeploy}"
+          if [ "$external_repository" != "null/null" ]; then
+            echo "Deploying to $external_repository"
+            npx nx run $project_name:deploy
+            uses: peaceiris/actions-gh-pages@v3
+            with:
+              personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
+              external_repository: $external_repository
+              publish_dir: $projectPath
+          else
+            echo "Skipping deployment for project: $project_name (no valid repository)"
+          fi
+
+      - name: Log in to Docker Hub
+        if: ${{ github.event.inputs['create-docker-image'] == 'true' }}
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build Docker container if needed
+        if: ${{ github.event.inputs['create-docker-image'] == 'true' }}
+        run: |
+          containerImage=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].deployment.manual[$target].container.image // "null"')
+          if [ "${containerImage}" != "null" ]; then
+            echo "Building Docker container for $containerImage"
+            docker build -t $containerImage .
+            docker push $containerImage
+          else
+            echo "No Docker image configured for project: $project_name"
