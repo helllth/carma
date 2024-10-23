@@ -31,7 +31,7 @@ on:
 
 jobs:
   determine_projects:
-    if: "github.event.inputs['project-name'] || github.event.client_payload['project-name'] == '' && !contains(github.event.head_commit.message, 'skip-deploy') && !contains(github.event.head_commit.message, 'no-deploy')"
+    if: "(github.event.inputs['project-name'] || github.event.client_payload['project-name']) == '' && !contains(github.event.head_commit.message, 'skip-deploy') && !contains(github.event.head_commit.message, 'no-deploy')"
     runs-on: ubuntu-latest
     outputs:
       project_list: ${{ steps.set_up_matrix.outputs.project_list }}
@@ -156,7 +156,7 @@ jobs:
   build:
     needs: determine_projects
     runs-on: ubuntu-latest
-    if: ${{ needs.determine_projects.outputs.is_affected == 'true' && github.event.inputs['project-name'] || github.event.client_payload['project-name'] == '' && needs.determine_projects.outputs.project_list != '[]' }}
+    if: ${{ needs.determine_projects.outputs.is_affected == 'true' && (github.event.inputs['project-name'] || github.event.client_payload['project-name']) == '' && needs.determine_projects.outputs.project_list != '[]' }}
 
     permissions:
       contents: write
@@ -343,7 +343,7 @@ jobs:
         shell: bash
   single_build:
     runs-on: ubuntu-latest
-    if: ${{ (github.event.inputs['project-name'] != '' || github.event.client_payload['project-name'] != '') && (github.event.inputs['project-name']  != '*' || github.event.client_payload['project-name'] != '*') }}
+    if: ${{ (github.event.inputs['project-name'] !|| github.event.client_payload['project-name']) != '' && (github.event.inputs['project-name'] || github.event.client_payload['project-name']) != '*' }}
     permissions:
       contents: write
       pages: write
@@ -416,7 +416,7 @@ jobs:
         shell: bash
       - name: Create the version number
         id: update_version_number
-        if: ${{ github.event.inputs.target != 'dev' || github.event.client_payload.target != 'dev' }} # Skip version manipulation for dev deployments
+        if: ${{ (github.event.inputs.target || github.event.client_payload.target) != 'dev' }} # Skip version manipulation for dev deployments
         run: |
           if [[ -f "$SRC_PATH/version.json" ]]; then
             if [[ -n "${{ (github.event.inputs['version-manipulator'] || github.event.client_payload['version-manipulator']) }}" ]]; then
@@ -529,7 +529,7 @@ jobs:
         shell: bash
 
   all_projects_build:
-    if: ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] == '*' }}
+    if: ${{ (github.event.inputs['project-name'] || github.event.client_payload['project-name']) == '*' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
