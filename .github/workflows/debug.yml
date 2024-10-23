@@ -1,9 +1,9 @@
-name: Debugging Deployment
+name: Deployment
 
 run-name: >
   ${{ github.event.head_commit.message || 'Triggered Deployment' }}
-  ${{ env.PROJECT_NAME }} --
-  ${{ env.TARGET }}-deployment
+  ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] }} --
+  ${{ github.event.inputs.target || github.event.client_payload.target || github.ref_name }}-deployment
 
 on:
   workflow_dispatch:
@@ -35,13 +35,21 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      PROJECT_NAME: ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] || 'Unknown Project' }}
-      TARGET: ${{ github.event.inputs.target || github.event.client_payload.target || github.ref_name }}
-      VERSION_MANIPULATOR: ${{ github.event.inputs['version-manipulator'] || github.event.client_payload['version-manipulator'] || 'not provided' }}
-      #CREATE_DOCKER_IMAGE: ${{ github.event.inputs['create-docker-image'] != '' ? github.event.inputs['create-docker-image'] : github.event.client_payload['create-docker-image'] }}
-
     steps:
+      - name: Set environment variables
+        run: |
+          echo "PROJECT_NAME=${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] || 'Unknown Project' }}" >> $GITHUB_ENV
+          echo "TARGET=${{ github.event.inputs.target || github.event.client_payload.target || github.ref_name }}" >> $GITHUB_ENV
+          echo "VERSION_MANIPULATOR=${{ github.event.inputs['version-manipulator'] || github.event.client_payload['version-manipulator'] || 'not provided' }}" >> $GITHUB_ENV
+
+          if [ "${{ github.event.inputs['create-docker-image'] }}" != "" ]; then
+            echo "CREATE_DOCKER_IMAGE=${{ github.event.inputs['create-docker-image'] }}" >> $GITHUB_ENV
+          elif [ "${{ github.event.client_payload['create-docker-image'] }}" != "" ]; then
+            echo "CREATE_DOCKER_IMAGE=${{ github.event.client_payload['create-docker-image'] }}" >> $GITHUB_ENV
+          else
+            echo "CREATE_DOCKER_IMAGE=false" >> $GITHUB_ENV
+          fi
+
       - name: Echo deployment details
         run: |
           echo "Project Name: $PROJECT_NAME"
