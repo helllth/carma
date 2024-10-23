@@ -38,22 +38,22 @@ jobs:
     steps:
       - name: Set environment variables
         run: |
-          echo "INPUT.PROJECT_NAME=${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] || '' }}" >> $GITHUB_ENV
-          echo "INPUT.TARGET=${{ github.event.inputs.target || github.event.client_payload.target || github.ref_name }}" >> $GITHUB_ENV
-          echo "INPUT.VERSION_MANIPULATOR=${{ github.event.inputs['version-manipulator'] || github.event.client_payload['version-manipulator'] || 'not provided' }}" >> $GITHUB_ENV
+          echo "INPUT__PROJECT_NAME=${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] || '' }}" >> $GITHUB_ENV
+          echo "INPUT__TARGET=${{ github.event.inputs.target || github.event.client_payload.target || github.ref_name }}" >> $GITHUB_ENV
+          echo "INPUT__VERSION_MANIPULATOR=${{ github.event.inputs['version-manipulator'] || github.event.client_payload['version-manipulator'] || 'not provided' }}" >> $GITHUB_ENV
 
           if [ "${{ github.event.inputs['create-docker-image'] }}" != "" ]; then
-            echo "INPUT.CREATE_DOCKER_IMAGE=${{ github.event.inputs['create-docker-image'] }}" >> $GITHUB_ENV
+            echo "INPUT__CREATE_DOCKER_IMAGE=${{ github.event.inputs['create-docker-image'] }}" >> $GITHUB_ENV
           elif [ "${{ github.event.client_payload['create-docker-image'] }}" != "" ]; then
-            echo "INPUT.CREATE_DOCKER_IMAGE=${{ github.event.client_payload['create-docker-image'] }}" >> $GITHUB_ENV
+            echo "INPUT__CREATE_DOCKER_IMAGE=${{ github.event.client_payload['create-docker-image'] }}" >> $GITHUB_ENV
           else
-            echo "INPUT.CREATE_DOCKER_IMAGE=false" >> $GITHUB_ENV
+            echo "INPUT__CREATE_DOCKER_IMAGE=false" >> $GITHUB_ENV
           fi
 
       - name: Echo deployment details
         run: |
-          echo "Project Name: $INPUT.PROJECT_NAME"
-          echo "Target: $INPUT.TARGET"
-          echo "Version Manipulator: $INPUT.VERSION_MANIPULATOR"
-          echo "Create Docker Image: $INPUT.CREATE_DOCKER_IMAGE"
+          echo "Project Name: $INPUT__PROJECT_NAME"
+          echo "Target: $INPUT__TARGET"
+          echo "Version Manipulator: $INPUT__VERSION_MANIPULATOR"
+          echo "Create Docker Image: $INPUT__CREATE_DOCKER_IMAGE"
         shell: bash
