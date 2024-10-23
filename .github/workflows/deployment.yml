@@ -26,6 +26,8 @@ on:
   push:
     branches:
       - dev
+  repository_dispatch:
+    types: [trigger-workflow]
 
 jobs:
   determine_projects:
