@@ -2,7 +2,7 @@ name: Deployment
 
 run-name: >
   ${{ github.event.head_commit.message }}
-  ${{ github.event.inputs['project-name'] }} --
+  ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] }} --
   ${{ github.event.inputs.target || github.ref_name }}-deployment
 on:
   workflow_dispatch:
@@ -31,7 +31,7 @@ on:
 
 jobs:
   determine_projects:
-    if: "github.event.inputs['project-name'] == '' && !contains(github.event.head_commit.message, 'skip-deploy') && !contains(github.event.head_commit.message, 'no-deploy')"
+    if: "github.event.inputs['project-name'] || github.event.client_payload['project-name'] == '' && !contains(github.event.head_commit.message, 'skip-deploy') && !contains(github.event.head_commit.message, 'no-deploy')"
     runs-on: ubuntu-latest
     outputs:
       project_list: ${{ steps.set_up_matrix.outputs.project_list }}
@@ -156,7 +156,7 @@ jobs:
   build:
     needs: determine_projects
     runs-on: ubuntu-latest
-    if: ${{ needs.determine_projects.outputs.is_affected == 'true' && github.event.inputs['project-name'] == '' && needs.determine_projects.outputs.project_list != '[]' }}
+    if: ${{ needs.determine_projects.outputs.is_affected == 'true' && github.event.inputs['project-name'] || github.event.client_payload['project-name'] == '' && needs.determine_projects.outputs.project_list != '[]' }}
 
     permissions:
       contents: write
@@ -343,7 +343,7 @@ jobs:
         shell: bash
   single_build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs['project-name'] != '' && github.event.inputs['project-name'] != '*' }}
+    if: ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] != '' && github.event.inputs['project-name'] || github.event.client_payload['project-name'] != '*' }}
     permissions:
       contents: write
       pages: write
@@ -364,7 +364,7 @@ jobs:
         id: get_props_from_json
         run: |
           config=$(cat deployment-config.json) 
-          project_name="${{ github.event.inputs['project-name'] }}"
+          project_name="${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] }}"
           target="${{ github.event.inputs.target }}"
 
           # Fetch properties dynamically based on the target (dev or live)
@@ -507,7 +507,7 @@ jobs:
         run: npm install nx@17.2.8
       - name: Build project
         run: |
-          npx nx run ${{ github.event.inputs['project-name'] }}:build --configuration=production --base="${{ env.BASE_URL }}"
+          npx nx run ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] }}:build --configuration=production --base="${{ env.BASE_URL }}"
         shell: bash
       - name: Deploy
         if: env.EXTERNAL_REPO != 'null' && env.EXTERNAL_REPO != '' && env.EXTERNAL_REPO != 'null/null'
@@ -525,11 +525,11 @@ jobs:
       - name: Build container if container image is set
         if: env.CONTAINER_IMAGE != 'null' && env.CONTAINER_IMAGE != ''
         run: |
-          INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ github.event.inputs['project-name'] }}:container
+          INPUT_PLATFORMS="linux/amd64" INPUT_TAGS="${{ env.CONTAINER_IMAGE }}${{ env.SRC_MD5_SHORT }},${{ env.CONTAINER_IMAGE }}latest" npx nx run ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] }}:container
         shell: bash
 
   all_projects_build:
-    if: ${{ github.event.inputs['project-name'] == '*' }}
+    if: ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] == '*' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
