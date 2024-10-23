@@ -33,7 +33,7 @@ on:
     types: [trigger-workflow]
 
 jobs:
-  deploy:
+  env-prepare:
     runs-on: ubuntu-latest
     steps:
       - name: Set environment variables
@@ -49,11 +49,13 @@ jobs:
           else
             echo "INPUT__CREATE_DOCKER_IMAGE=false" >> $GITHUB_ENV
           fi
-
-      - name: Echo deployment details
+  build:
+    needs: env-prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use environment variables from env-prepare
         run: |
-          echo "Project Name: $INPUT__PROJECT_NAME"
-          echo "Target: $INPUT__TARGET"
-          echo "Version Manipulator: $INPUT__VERSION_MANIPULATOR"
-          echo "Create Docker Image: $INPUT__CREATE_DOCKER_IMAGE"
-        shell: bash
+          echo "Project Name: ${{ needs.env-prepare.outputs.project_name }}"
+          echo "Target: ${{ needs.env-prepare.outputs.target }}"
+          echo "Version Manipulator: ${{ needs.env-prepare.outputs.version_manipulator }}"
+          echo "Create Docker Image: ${{ needs.env-prepare.outputs.create_docker_image }}"
