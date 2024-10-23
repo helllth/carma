@@ -1,16 +1,51 @@
-name: Dispatch Event Workflow
+name: Deployment
+
+run-name: >
+  ${{ github.event.head_commit.message || 'Triggered Deployment' }}
+  ${{ env.PROJECT_NAME }} --
+  ${{ env.TARGET }}-deployment
 
 on:
+  workflow_dispatch:
+    inputs:
+      project-name:
+        description: "Please enter a project name"
+        required: true
+      version-manipulator:
+        description: "Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease (Will change the version number of the project.)"
+        required: false
+      target:
+        type: choice
+        description: "Where should I deploy?"
+        options:
+          - live
+          - dev
+      create-docker-image:
+        type: boolean
+        description: Create a Docker image? 🐳
+        required: false
+
+  push:
+    branches:
+      - dev
+
   repository_dispatch:
     types: [trigger-workflow]
 
 jobs:
-  example_job:
+  deploy:
     runs-on: ubuntu-latest
+    env:
+      PROJECT_NAME: ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] || 'Unknown Project' }}
+      TARGET: ${{ github.event.inputs.target || github.event.client_payload.target || github.ref_name }}
+      VERSION_MANIPULATOR: ${{ github.event.inputs['version-manipulator'] || github.event.client_payload['version-manipulator'] || 'not provided' }}
+      CREATE_DOCKER_IMAGE: ${{ github.event.inputs['create-docker-image'] != '' ? github.event.inputs['create-docker-image'] : github.event.client_payload['create-docker-image'] }}
+
     steps:
-      - name: Echo event type
+      - name: Echo deployment details
         run: |
-          echo "Event Type: ${{ github.event.action }}"
-          echo "Project Name: ${{ github.event.client_payload.project-name }}"
-          echo "Target: ${{ github.event.client_payload.target }}"
+          echo "Project Name: $PROJECT_NAME"
+          echo "Target: $TARGET"
+          echo "Version Manipulator: $VERSION_MANIPULATOR"
+          echo "Create Docker Image: $CREATE_DOCKER_IMAGE"
         shell: bash
