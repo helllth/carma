@@ -39,7 +39,7 @@ jobs:
       PROJECT_NAME: ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] || 'Unknown Project' }}
       TARGET: ${{ github.event.inputs.target || github.event.client_payload.target || github.ref_name }}
       VERSION_MANIPULATOR: ${{ github.event.inputs['version-manipulator'] || github.event.client_payload['version-manipulator'] || 'not provided' }}
-      CREATE_DOCKER_IMAGE: ${{ github.event.inputs['create-docker-image'] != '' ? github.event.inputs['create-docker-image'] : github.event.client_payload['create-docker-image'] }}
+      #CREATE_DOCKER_IMAGE: ${{ github.event.inputs['create-docker-image'] != '' ? github.event.inputs['create-docker-image'] : github.event.client_payload['create-docker-image'] }}
 
     steps:
       - name: Echo deployment details
