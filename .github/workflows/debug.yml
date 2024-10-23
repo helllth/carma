@@ -2,17 +2,15 @@ name: Dispatch Event Workflow
 
 on:
   repository_dispatch:
-    types: [trigger-workflow]  # This should match the event_type you send
+    types: [trigger-workflow]
 
 jobs:
   example_job:
     runs-on: ubuntu-latest
     steps:
       - name: Echo event type
-        run: echo "Event Type: ${{ github.event.action }}"
-
-      - name: Echo project name
-        run: echo "Project Name: ${{ github.event.client_payload.project-name }}"
-
-      - name: Echo target environment
-        run: echo "Target: ${{ github.event.client_payload.target }}"
+        run: |
+          echo "Event Type: ${{ github.event.action }}"
+          echo "Project Name: ${{ github.event.client_payload.project-name }}"
+          echo "Target: ${{ github.event.client_payload.target }}"
+        shell: bash
