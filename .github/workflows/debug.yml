@@ -38,9 +38,9 @@ jobs:
     steps:
       - name: Set environment variables
         run: |
-          echo "INPUT__PROJECT_NAME=${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] || '' }}" >> $GITHUB_ENV
+          echo "INPUT__PROJECT_NAME=${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] }}" >> $GITHUB_ENV
           echo "INPUT__TARGET=${{ github.event.inputs.target || github.event.client_payload.target || github.ref_name }}" >> $GITHUB_ENV
-          echo "INPUT__VERSION_MANIPULATOR=${{ github.event.inputs['version-manipulator'] || github.event.client_payload['version-manipulator'] || 'not provided' }}" >> $GITHUB_ENV
+          echo "INPUT__VERSION_MANIPULATOR=${{ github.event.inputs['version-manipulator'] || github.event.client_payload['version-manipulator']  }}" >> $GITHUB_ENV
 
           if [ "${{ github.event.inputs['create-docker-image'] }}" != "" ]; then
             echo "INPUT__CREATE_DOCKER_IMAGE=${{ github.event.inputs['create-docker-image'] }}" >> $GITHUB_ENV
