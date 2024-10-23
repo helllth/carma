@@ -1,4 +1,4 @@
-name: Deployment
+name: Debugging Deployment
 
 run-name: >
   ${{ github.event.head_commit.message || 'Triggered Deployment' }}
