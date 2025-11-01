@@ -131,11 +131,12 @@ jobs:
             fi
           done
           
-          # Convert to JSON array
+          # Convert to JSON array (compact, single-line)
           if [ ${#valid_array[@]} -gt 0 ]; then
-            valid_projects=$(printf '%s\n' "${valid_array[@]}" | jq -R . | jq -s .)
+            valid_projects=$(printf '%s\n' "${valid_array[@]}" | jq -R . | jq -s -c .)
             echo "has_projects=true" >> $GITHUB_OUTPUT
           else
+            valid_projects="[]"
             echo "has_projects=false" >> $GITHUB_OUTPUT
           fi
           
