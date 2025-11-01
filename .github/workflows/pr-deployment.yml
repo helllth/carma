@@ -9,12 +9,13 @@ on:
     types: [opened, synchronize, reopened, edited]
 
 jobs:
-  parse_pr_description:
+  preparation:
     runs-on: ubuntu-latest
     outputs:
       project_list: ${{ steps.parse_deploy_projects.outputs.project_list }}
       has_projects: ${{ steps.parse_deploy_projects.outputs.has_projects }}
       node-modules-cache-key: ${{ steps.node-cache-key.outputs.key }}
+      pr_number: ${{ github.event.pull_request.number }}
 
     permissions:
       contents: read
@@ -164,7 +165,7 @@ jobs:
       - name: Summary
         run: |
           {
-            echo "## 🚀 PR Deployment - Phase 1"
+            echo "## 🚀 PR Deployment - Preparation"
             echo ""
             echo "### Parsed Projects"
             echo ""
@@ -188,3 +189,173 @@ jobs:
               echo '```'
             fi
           } >> $GITHUB_STEP_SUMMARY
+
+  build:
+    needs: preparation
+    runs-on: ubuntu-latest
+    if: ${{ needs.preparation.outputs.has_projects == 'true' && needs.preparation.outputs.project_list != '[]' }}
+
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.preparation.outputs.project_list) }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
+
+      - name: Update Submodules
+        run: git submodule update --remote --recursive
+
+      - name: Print Collaboration Version numbers
+        run: |
+          echo "-------------------------------"
+          echo "All Collaboration Submodules:"
+          echo
+          find libraries -type f -name "package.json" -path "*/*-submodule/package.json" \
+          -exec sh -c 'dir=$(dirname "$1"); echo "$(basename "$dir"): $(grep -m1 \"version\" "$1" | sed -E "s/[[:space:]]*\"version\":[[:space:]]*\"([^\"]+)\",/\\1/")"' _ {} \;
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Read project config
+        id: read_project_config
+        run: echo "::set-output name=config::$(cat deployment-config.json)"
+        shell: bash
+
+      - name: Process deploy steps
+        id: process_deploy_steps
+        run: |
+          config=$(cat deployment-config.json)
+
+          project_name="${{ matrix.project }}"
+          pr_number="${{ needs.preparation.outputs.pr_number }}"
+
+          # Get PR deployment configuration
+          pr_org=$(echo "$config" | jq -r '.["pr-deployment-project"].org')
+          pr_prj=$(echo "$config" | jq -r '.["pr-deployment-project"].prj')
+
+          # Get project path
+          projectPath=$(echo "$config" | jq -r --arg project "$project_name" '.projects[$project].projectPath // "null"')
+
+          if [ "${projectPath}" = "null" ]; then
+            echo "Error: Project path not found for $project_name"
+            exit 1
+          fi
+
+          srcPath=".${projectPath#./dist}/src"
+          echo "srcPath: $srcPath"
+
+          # Calculate MD5 for versioning
+          srcMD5="$(echo -n $(find $srcPath -type f -exec md5sum {} \; | sort -k 2 | md5sum | cut -f 1 -d ' ')$(md5sum package.json package-lock.json | md5sum | cut -f 1 -d ' ') | md5sum | cut -f 1 -d ' ')"
+          srcMD5short="${srcMD5:0:4}"
+
+          # Set base URL for PR deployment
+          baseUrl="https://${pr_org}.github.io/${pr_prj}/${pr_number}/${project_name}/"
+
+          # Set deployment repository
+          deployment_project="${pr_org}/${pr_prj}"
+
+          echo "PROJECT_NAME=${{ matrix.project }}" >> $GITHUB_ENV
+          echo "EXTERNAL_REPO=${deployment_project}" >> $GITHUB_ENV
+          echo "BASE_URL=${baseUrl}" >> $GITHUB_ENV
+          echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
+          echo "PR_ORG=${pr_org}" >> $GITHUB_ENV
+          echo "PR_PRJ=${pr_prj}" >> $GITHUB_ENV
+          echo "PR_NUMBER=${pr_number}" >> $GITHUB_ENV
+          echo "SRC_MD5=${srcMD5}" >> $GITHUB_ENV
+          echo "SRC_MD5_SHORT=${srcMD5short}" >> $GITHUB_ENV
+          echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV
+          echo "TARGET=pr.${pr_number}" >> $GITHUB_ENV
+
+        shell: bash
+
+      - name: Create version.json if it doesn't exist
+        run: |
+          if [[ ! -f "$SRC_PATH/version.json" ]]; then
+            echo '{"version": "0.0.0"}' > "$SRC_PATH/version.json"
+          fi
+        shell: bash
+
+      - name: Add further info to version.json
+        run: |
+          jq --arg md5 "$SRC_MD5" --arg triggered "$TARGET" \
+          '. + {md5: $md5, triggered: $triggered}' \
+          "$SRC_PATH/version.json" > /tmp/version.json
+
+          mv /tmp/version.json "$SRC_PATH/version.json"
+        shell: bash
+
+      - name: Read version from version.json
+        run: |
+          version=$(jq -r '.version // "0.0.0"' "$SRC_PATH/version.json")
+          echo "VERSION=$version" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Debug Outputs
+        run: |
+          echo -----------------------------------
+          echo "-- Project name is: $PROJECT_NAME"
+          echo "PR_ORG: $PR_ORG"
+          echo "PR_PRJ: $PR_PRJ"
+          echo "PR_NUMBER: $PR_NUMBER"
+          echo "BASE_URL: $BASE_URL"
+          echo "EXTERNAL_REPO: $EXTERNAL_REPO"
+          echo "PROJECT_PATH: $PROJECT_PATH"
+          echo "SRC_PATH: $SRC_PATH"
+          echo "SRC_MD5: $SRC_MD5"
+          echo "TARGET: $TARGET"
+          echo "VERSION: $VERSION"
+          echo -----------------------------------
+
+      - name: Debug version.json
+        run: |
+          cat $SRC_PATH/version.json
+
+      - name: create nx-cloud.env
+        run: |
+          echo "NX_CLOUD_ACCESS_TOKEN=${{ secrets.NX_CLOUD_ACCESS_TOKEN }}" >> nx-cloud.env
+
+      - name: add cismet-dev registry secret to .npmrc
+        shell: bash
+        run: |
+          touch .npmrc
+          echo "${{ secrets.CISMET_DEV_REGISTRY_SECRET_4_DOT_NPMRC }}" >> .npmrc
+
+      - name: Restore node_modules from cache
+        id: build-job-node-cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ needs.preparation.outputs.node-modules-cache-key }}
+
+      - name: Install dependencies
+        if: steps.build-job-node-cache.outputs.cache-hit != 'true'
+        run: npm install
+
+      - name: Build project
+        run: |
+          npx nx run ${{ matrix.project }}:build --configuration=production --base="${{ env.BASE_URL }}" --output-style=stream-without-prefixes
+        shell: bash
+
+      - name: Deploy to PR deployment repository
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.CISMET_CI_DEPLOY_PAT }}
+          external_repository: ${{ env.EXTERNAL_REPO }}
+          publish_dir: ${{ env.PROJECT_PATH }}
+          destination_dir: ${{ env.PR_NUMBER }}/${{ matrix.project }}
+          keep_files: true
+
+      - name: Comment deployment URL
+        run: |
+          echo "✅ Deployed ${{ matrix.project }} to: ${{ env.BASE_URL }}"
