@@ -1,5 +1,8 @@
 {
-  "pr-deployment-project": "carma-pr-deployment",
+  "pr-deployment-project": {
+    "org": "cismet",
+    "prj": "carma-pr-deployments"
+  },
   "projects": {
     "stadtplan": {
       "deployment": {
