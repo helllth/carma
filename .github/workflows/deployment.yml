@@ -32,7 +32,7 @@ on:
 
   push:
     branches:
-      - dev
+      - dev-disabled
   repository_dispatch:
     types: [trigger-workflow]
 
