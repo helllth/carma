@@ -1,7 +1,7 @@
 name: PR Deployment
 
 run-name: >
-  🔍 PR #${{ github.event.pull_request.number }} - 
+  🚀 Deploy PR #${{ github.event.pull_request.number }} - 
   ${{ github.event.pull_request.title }}
 
 on:
@@ -10,6 +10,7 @@ on:
 
 jobs:
   preparation:
+    name: 🔍 Parse & Prepare Deployment
     runs-on: ubuntu-latest
     outputs:
       project_list: ${{ steps.parse_deploy_projects.outputs.project_list }}
@@ -191,6 +192,7 @@ jobs:
           } >> $GITHUB_STEP_SUMMARY
 
   build:
+    name: 🚀 Deploy ${{ matrix.project }}
     needs: preparation
     runs-on: ubuntu-latest
     if: ${{ needs.preparation.outputs.has_projects == 'true' && needs.preparation.outputs.project_list != '[]' }}
