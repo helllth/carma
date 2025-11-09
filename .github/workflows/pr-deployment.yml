@@ -365,9 +365,10 @@ jobs:
             const projectName = '${{ matrix.project }}';
             const deployUrl = '${{ env.BASE_URL }}';
             const prNumber = ${{ github.event.pull_request.number }};
+            const commitSha = '${{ github.sha }}';
             
             // Create comment body
-            const commentBody = `### 🚀 Deployed \`${projectName}\`\n\n✅ **Preview URL:** ${deployUrl}\n\n_Deployment triggered by commit ${{ github.sha.substring(0, 7) }}_`;
+            const commentBody = `### 🚀 Deployed \`${projectName}\`\n\n✅ **Preview URL:** ${deployUrl}\n\n_Deployment triggered by commit ${commitSha.substring(0, 7)}_`;
             
             // Post comment to PR
             await github.rest.issues.createComment({
