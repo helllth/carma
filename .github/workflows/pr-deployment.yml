@@ -358,6 +358,45 @@ jobs:
           destination_dir: ${{ env.PR_NUMBER }}/${{ matrix.project }}
           keep_files: true
 
-      - name: Comment deployment URL
+      - name: Comment deployment URL on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const projectName = '${{ matrix.project }}';
+            const deployUrl = '${{ env.BASE_URL }}';
+            const prNumber = ${{ github.event.pull_request.number }};
+            
+            // Create comment body
+            const commentBody = `### 🚀 Deployed \`${projectName}\`\n\n✅ **Preview URL:** ${deployUrl}\n\n_Deployment triggered by commit ${{ github.sha.substring(0, 7) }}_`;
+            
+            // Post comment to PR
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: commentBody
+            });
+
+      - name: Deployment Summary
         run: |
-          echo "✅ Deployed ${{ matrix.project }} to: ${{ env.BASE_URL }}"
+          {
+            echo "## 🚀 Deployment Complete: \`${{ matrix.project }}\`"
+            echo ""
+            echo "### Preview URL"
+            echo ""
+            echo "🔗 **[${{ matrix.project }}](${{ env.BASE_URL }})**"
+            echo ""
+            echo "### Deployment Details"
+            echo ""
+            echo "- **Project:** \`${{ matrix.project }}\`"
+            echo "- **PR Number:** #${{ env.PR_NUMBER }}"
+            echo "- **Target Repository:** \`${{ env.EXTERNAL_REPO }}\`"
+            echo "- **Base URL:** ${{ env.BASE_URL }}"
+            echo "- **Version:** ${{ env.VERSION }}"
+            echo "- **MD5:** \`${{ env.SRC_MD5_SHORT }}\`"
+            echo "- **Triggered by:** ${{ env.TARGET }}"
+            echo ""
+            echo "---"
+            echo ""
+            echo "_Deployed from commit [\`${{ github.sha }}\`](${{ github.event.repository.html_url }}/commit/${{ github.sha }})_"
+          } >> $GITHUB_STEP_SUMMARY
