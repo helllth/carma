@@ -71,30 +71,30 @@ jobs:
         run: |
           # Get PR description
           PR_BODY='${{ github.event.pull_request.body }}'
-          
+
           echo "==================================="
           echo "PR Description:"
           echo "$PR_BODY"
           echo "==================================="
-          
+
           # Extract deploy array using grep and sed
           # Looking for pattern: deploy: ["project1","project2"]
           DEPLOY_LINE=$(echo "$PR_BODY" | grep -o 'deploy:[[:space:]]*\[.*\]' || echo "")
-          
+
           echo "Found deploy line: $DEPLOY_LINE"
-          
+
           if [ -z "$DEPLOY_LINE" ]; then
             echo "No deploy directive found in PR description"
             echo "project_list=[]" >> $GITHUB_OUTPUT
             echo "has_projects=false" >> $GITHUB_OUTPUT
             exit 0
           fi
-          
+
           # Extract the JSON array part
           PROJECTS_JSON=$(echo "$DEPLOY_LINE" | sed -E 's/deploy:[[:space:]]*(\[.*\])/\1/')
-          
+
           echo "Extracted JSON: $PROJECTS_JSON"
-          
+
           # Validate it's valid JSON
           if ! echo "$PROJECTS_JSON" | jq empty 2>/dev/null; then
             echo "Invalid JSON format in deploy directive"
@@ -102,25 +102,25 @@ jobs:
             echo "has_projects=false" >> $GITHUB_OUTPUT
             exit 0
           fi
-          
+
           # Load deployment configuration to validate projects exist
           config=$(cat deployment-config.json)
           deployment_projects=$(echo "$config" | jq -r '.projects | keys | .[]')
-          
+
           echo "==================================="
           echo "Available projects in deployment-config.json:"
           echo "$deployment_projects"
           echo "==================================="
-          
+
           # Parse requested projects and validate them
           requested_projects=$(echo "$PROJECTS_JSON" | jq -r '.[]')
           valid_projects="[]"
-          
+
           echo "==================================="
           echo "Requested projects from PR:"
           echo "$requested_projects"
           echo "==================================="
-          
+
           # Build array of valid projects
           valid_array=()
           for project in $requested_projects; do
@@ -132,7 +132,7 @@ jobs:
               echo "❌ Project '$project' NOT found in deployment configuration - skipping"
             fi
           done
-          
+
           # Convert to JSON array (compact, single-line)
           if [ ${#valid_array[@]} -gt 0 ]; then
             valid_projects=$(printf '%s\n' "${valid_array[@]}" | jq -R . | jq -s -c .)
@@ -141,12 +141,12 @@ jobs:
             valid_projects="[]"
             echo "has_projects=false" >> $GITHUB_OUTPUT
           fi
-          
+
           echo "==================================="
           echo "Valid projects to deploy:"
           echo "$valid_projects"
           echo "==================================="
-          
+
           echo "project_list=$valid_projects" >> $GITHUB_OUTPUT
 
       - name: Echo parsed projects (Phase 1)
@@ -167,6 +167,8 @@ jobs:
         run: |
           {
             echo "## 🚀 PR Deployment - Preparation"
+            echo ""
+            echo "📋 [Pull Request #${{ github.event.pull_request.number }}](${{ github.event.pull_request.html_url }})"
             echo ""
             echo "### Parsed Projects"
             echo ""
@@ -230,11 +232,6 @@ jobs:
           node-version: 20
           cache: "npm"
 
-      - name: Read project config
-        id: read_project_config
-        run: echo "::set-output name=config::$(cat deployment-config.json)"
-        shell: bash
-
       - name: Process deploy steps
         id: process_deploy_steps
         run: |
@@ -268,15 +265,11 @@ jobs:
           # Set deployment repository
           deployment_project="${pr_org}/${pr_prj}"
 
-          echo "PROJECT_NAME=${{ matrix.project }}" >> $GITHUB_ENV
           echo "EXTERNAL_REPO=${deployment_project}" >> $GITHUB_ENV
           echo "BASE_URL=${baseUrl}" >> $GITHUB_ENV
           echo "PROJECT_PATH=${projectPath}" >> $GITHUB_ENV
-          echo "PR_ORG=${pr_org}" >> $GITHUB_ENV
-          echo "PR_PRJ=${pr_prj}" >> $GITHUB_ENV
           echo "PR_NUMBER=${pr_number}" >> $GITHUB_ENV
           echo "SRC_MD5=${srcMD5}" >> $GITHUB_ENV
-          echo "SRC_MD5_SHORT=${srcMD5short}" >> $GITHUB_ENV
           echo "SRC_PATH=${srcPath}" >> $GITHUB_ENV
           echo "TARGET=pr.${pr_number}" >> $GITHUB_ENV
 
@@ -303,26 +296,6 @@ jobs:
           version=$(jq -r '.version // "0.0.0"' "$SRC_PATH/version.json")
           echo "VERSION=$version" >> $GITHUB_ENV
         shell: bash
-
-      - name: Debug Outputs
-        run: |
-          echo -----------------------------------
-          echo "-- Project name is: $PROJECT_NAME"
-          echo "PR_ORG: $PR_ORG"
-          echo "PR_PRJ: $PR_PRJ"
-          echo "PR_NUMBER: $PR_NUMBER"
-          echo "BASE_URL: $BASE_URL"
-          echo "EXTERNAL_REPO: $EXTERNAL_REPO"
-          echo "PROJECT_PATH: $PROJECT_PATH"
-          echo "SRC_PATH: $SRC_PATH"
-          echo "SRC_MD5: $SRC_MD5"
-          echo "TARGET: $TARGET"
-          echo "VERSION: $VERSION"
-          echo -----------------------------------
-
-      - name: Debug version.json
-        run: |
-          cat $SRC_PATH/version.json
 
       - name: create nx-cloud.env
         run: |
@@ -367,10 +340,10 @@ jobs:
             const deployUrl = '${{ env.BASE_URL }}';
             const prNumber = ${{ github.event.pull_request.number }};
             const commitSha = '${{ github.sha }}';
-            
+
             // Create comment body
             const commentBody = `### 🚀 Deployed \`${projectName}\`\n\n✅ **Preview URL:** ${deployUrl}\n\n_Deployment triggered by commit ${commitSha.substring(0, 7)}_`;
-            
+
             // Post comment to PR
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -384,21 +357,11 @@ jobs:
           {
             echo "## 🚀 Deployment Complete: \`${{ matrix.project }}\`"
             echo ""
-            echo "### Preview URL"
-            echo ""
-            echo "🔗 **[${{ matrix.project }}](${{ env.BASE_URL }})**"
-            echo ""
-            echo "### Deployment Details"
-            echo ""
-            echo "- **Project:** \`${{ matrix.project }}\`"
-            echo "- **PR Number:** #${{ env.PR_NUMBER }}"
-            echo "- **Target Repository:** \`${{ env.EXTERNAL_REPO }}\`"
-            echo "- **Base URL:** ${{ env.BASE_URL }}"
-            echo "- **Version:** ${{ env.VERSION }}"
-            echo "- **MD5:** \`${{ env.SRC_MD5_SHORT }}\`"
-            echo "- **Triggered by:** ${{ env.TARGET }}"
+            echo "#### Preview URL: ${{ env.BASE_URL }}"
             echo ""
             echo "---"
+            echo ""
+            echo "📋 [View Pull Request #${{ env.PR_NUMBER }}](${{ github.event.repository.html_url }}/pull/${{ env.PR_NUMBER }})"
             echo ""
             echo "_Deployed from commit [\`${{ github.sha }}\`](${{ github.event.repository.html_url }}/commit/${{ github.sha }})_"
           } >> $GITHUB_STEP_SUMMARY
