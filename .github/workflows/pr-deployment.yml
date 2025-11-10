@@ -342,7 +342,7 @@ jobs:
             const commitSha = '${{ github.sha }}';
 
             // Create comment body
-            const commentBody = `### 🚀 Deployed \`${projectName}\`\n\n✅ **Preview URL:** ${deployUrl}\n\n_Deployment triggered by commit ${commitSha.substring(0, 7)}_`;
+            const commentBody = `### 🚀 Deployed \`${projectName}\`\n\n✅ **Preview URL:** ${deployUrl}\n\n_Based on commit ${commitSha.substring(0, 7)}_`;
 
             // Post comment to PR
             await github.rest.issues.createComment({
